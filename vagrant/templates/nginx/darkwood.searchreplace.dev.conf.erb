@@ -1,0 +1,45 @@
+server
+{
+    server_name <%= server_name %>;
+    root        <%= root %>;
+
+    access_log  /var/log/nginx/<%= @file %>.access.log;
+    error_log   /var/log/nginx/<%= @file %>.error.log;
+
+    #client_max_body_size 100M;
+    #fastcgi_read_timeout 1800;
+
+    index <%= index %>;
+
+    location /
+    {
+        autoindex on;
+        # try_files $uri $uri/ /<%= index %>;
+    }
+
+    location ~* \.(js|css|png|jpe?g|gif|ico)$
+    {
+        expires max;
+        # log_not_found off;
+        # access_log off;
+        # add_header Pragma public;
+        # add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+    }
+
+    # remove the robots line if you want to use virtual robots.txt
+    location = /robots.txt  { access_log off; log_not_found off; }
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    # this prevents hidden files (beginning with a period) from being served
+    location ~ /\.          { access_log off; log_not_found off; deny all; }
+
+    location ~ \.php$
+    {
+        # try_files $uri = 404;
+
+        include fastcgi_params;
+        fastcgi_index <%= index %>;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+    }
+}

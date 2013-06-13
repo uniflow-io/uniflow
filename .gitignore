@@ -1,0 +1,35 @@
+# Mac
+.DS_Store
+._.DS_Store
+
+# Vagrant
+.vagrant
+vagrant/.librarian
+vagrant/.tmp
+vagrant/modules
+
+# PhpStorm
+.idea
+
+# Matyotools
+node/MatyoTools/node_modules
+
+# Beautifier
+php/Beautifier/test.beautified.php
+php/Beautifier/test.beautifier.log
+
+# CS-Fixer
+php/CS-Fixer/vendor
+
+# Harvest
+php/Harvest/web/bundles/
+php/Harvest/app/bootstrap.php.cache
+php/Harvest/app/config/parameters.yml
+php/Harvest/app/cache/*
+php/Harvest/app/logs/*
+php/Harvest/build/
+php/Harvest/vendor
+
+# SearchReplace
+php/SearchReplace/tests
+php/SearchReplace/vendor
