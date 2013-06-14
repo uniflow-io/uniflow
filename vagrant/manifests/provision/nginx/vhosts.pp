@@ -19,9 +19,9 @@ class provision::nginx::vhosts
   }
 
   nginx::vhost { "searchreplace.darkwood.dev":
-    root     => "${sites_dir}/php/SearchReplace",
+    root     => "${sites_dir}/web",
     file     => "darkwood.searchreplace.dev",
-    index    => "index.php",
+    index    => "index.html",
     template => "${nginx_dir}/darkwood.searchreplace.dev.conf.erb"
   }
 }
