@@ -11,6 +11,8 @@ server
 
     index <%= index %>;
 
+    sendfile off; # fix virtual-box shared folder issue
+
     location /
     {
         autoindex on;

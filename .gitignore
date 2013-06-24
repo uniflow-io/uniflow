@@ -8,5 +8,8 @@ vagrant/.librarian
 vagrant/.tmp
 vagrant/modules
 
+# Node
+node_modules
+
 # PhpStorm
 .idea

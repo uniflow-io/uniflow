@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/main.css">
 
-        <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="js/lib/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -66,7 +66,6 @@
                     <textarea rows="12" id="output"></textarea>
                </div>
             </div>
-            <button id="valid" class="btn btn-large btn-block btn-primary" type="button">Ok</button>
 
             <hr>
 
@@ -76,12 +75,8 @@
 
         </div> <!-- /container -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-
-        <script src="js/vendor/bootstrap.min.js"></script>
-
-        <script src="js/main.js"></script>
+        <script>window.app={scripts:['app/index']}</script>
+        <script src="js/lib/require.min.js" data-main="js/main" async></script>
 
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
