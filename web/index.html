@@ -59,12 +59,8 @@
         <div class="container">
 
             <div class="row">
-                <div class="span6">
-                    <textarea rows="12" id="input"></textarea>
-                </div>
-                <div class="span6">
-                    <textarea rows="12" id="output"></textarea>
-               </div>
+                <div id="input" class="span6"></div>
+                <div id="output" class="span6"></div>
             </div>
 
             <hr>
@@ -77,6 +73,8 @@
 
         <script>window.app={scripts:['app/index']}</script>
         <script src="js/lib/require.min.js" data-main="js/main" async></script>
+
+        <script src="http://localhost:35729/livereload.js"></script>
 
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
