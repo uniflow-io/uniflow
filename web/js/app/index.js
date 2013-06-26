@@ -1,7 +1,12 @@
 (function() {
   define(['jquery', 'ace/ace', 'bootstrap'], function($, ace) {
-    ace.edit('input');
-    return ace.edit('output');
+    var input, output;
+    input = ace.edit('input');
+    output = ace.edit('output');
+    console.log('coco', 'dodo');
+    return input.on('change', function() {
+      return output.setValue(input.getValue(), -1);
+    });
   });
 
 }).call(this);

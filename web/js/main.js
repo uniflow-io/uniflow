@@ -7,7 +7,8 @@
       app: '../app',
       jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min',
       bootstrap: 'bootstrap.min'
-    }
+    },
+    urlArgs: "bust=" + (new Date()).getTime()
   });
 
   if (window.app == null) {

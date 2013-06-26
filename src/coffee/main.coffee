@@ -9,6 +9,7 @@ requirejs.config
     app: '../app'
     jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min'
     bootstrap: 'bootstrap.min'
+  urlArgs: "bust=" +  (new Date()).getTime()
 
 # This should be defined before
 window.app ?= {}
