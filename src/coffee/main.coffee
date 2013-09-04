@@ -7,9 +7,11 @@ requirejs.config
   baseUrl: '/js/lib'
   paths:
     app: '../app'
-    jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min'
+    jquery: ['//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min','jquery-1.10.1.min']
     bootstrap: 'bootstrap.min'
   urlArgs: "bust=" +  (new Date()).getTime()
+  shim:
+    bootstrap: ['jquery']
 
 # This should be defined before
 window.app ?= {}

@@ -45,6 +45,6 @@ define(function(require, exports, module) {
  * @returns {*}
  */
 exports.searchreplace = function(input, filter) {
-    return input;
+    return filter(input);
 };
 });
