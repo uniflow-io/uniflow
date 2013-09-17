@@ -13,3 +13,7 @@ node_modules
 
 # PhpStorm
 .idea
+
+# grunt
+web/build
+web/tests/selenium/*.tap
