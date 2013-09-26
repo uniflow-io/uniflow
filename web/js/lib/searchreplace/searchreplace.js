@@ -6,7 +6,7 @@ The main class required to get started with searchreplace
 
 
 (function() {
-  define(function(require, exports, module) {
+  define(function() {
     "use strict";
     /*
     searchreplace
@@ -16,7 +16,7 @@ The main class required to get started with searchreplace
     @returns {*}
     */
 
-    return exports.searchreplace = function(input, filter) {
+    return function(input, filter) {
       if (filter) {
         return filter(input);
       }

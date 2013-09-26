@@ -30,14 +30,12 @@ The main class required to get started with searchreplace
 
 @class DefaultFilter
 ###
-define (require, exports, module) ->
+define ->
   "use strict"
 
   ###
-  searchreplace
-  
   @param {*} input
   @returns {*}
   ###
-  exports.searchreplace = (input) ->
+  (input) ->
     input

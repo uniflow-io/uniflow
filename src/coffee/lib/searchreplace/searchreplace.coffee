@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class SearchReplace
 ###
-define (require, exports, module) ->
+define () ->
   "use strict"
 
   ###
@@ -40,5 +40,5 @@ define (require, exports, module) ->
   @param filter
   @returns {*}
   ###
-  exports.searchreplace = (input, filter) ->
+  (input, filter) ->
     filter input if filter

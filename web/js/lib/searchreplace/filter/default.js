@@ -6,16 +6,14 @@ The main class required to get started with searchreplace
 
 
 (function() {
-  define(function(require, exports, module) {
+  define(function() {
     "use strict";
     /*
-    searchreplace
-    
     @param {*} input
     @returns {*}
     */
 
-    return exports.searchreplace = function(input) {
+    return function(input) {
       return input;
     };
   });

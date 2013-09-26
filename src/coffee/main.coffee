@@ -6,12 +6,15 @@
 requirejs.config
   baseUrl: '/js/lib'
   paths:
-    app: '../app'
-    jquery: ['//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min','jquery-1.10.1.min']
-    bootstrap: 'bootstrap.min'
+    'app': '../app'
+    'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min','jquery-1.10.1.min']
+    'bootstrap': 'bootstrap.min'
+    'php': 'php/PHP'
+    'php.xhr': 'php/xhr'
   urlArgs: "bust=" +  (new Date()).getTime()
   shim:
-    bootstrap: ['jquery']
+    'bootstrap': ['jquery']
+    'php.xhr': ['php']
 
 # This should be defined before
 window.app ?= {}

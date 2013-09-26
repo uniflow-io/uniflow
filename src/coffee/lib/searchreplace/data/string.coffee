@@ -34,4 +34,4 @@ define (require, exports, module) ->
   "use strict"
 
   exports.new = (data) ->
-    return data;
+    data
