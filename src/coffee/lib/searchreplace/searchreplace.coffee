@@ -41,4 +41,4 @@ define (require, exports, module) ->
   @returns {*}
   ###
   exports.searchreplace = (input, filter) ->
-    filter input
+    filter input if filter

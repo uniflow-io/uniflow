@@ -1,17 +1,24 @@
 (function() {
-  define(['jquery', 'ace/ace', 'bootstrap', 'searchreplace/searchreplace'], function($, ace) {
-    var filters, input, output, searchreplace;
-    filters = $('#filters');
-    filters.on('change', function() {
-      return console.log($(this).val());
-    });
+  define(['jquery', 'ace/ace', 'searchreplace/searchreplace', 'bootstrap'], function($, ace, searchreplace) {
+    var applyFilter, changeFilter, filter, input, output;
     input = ace.edit('input');
     output = ace.edit('output');
-    searchreplace = require(['searchreplace/searchreplace'], function(sp) {
-      return console.log(sp);
+    filter = null;
+    applyFilter = function() {
+      return output.setValue(searchreplace(input.getValue(), filter), -1);
+    };
+    changeFilter = function(name) {
+      return require(['searchreplace/filter/' + name], function(newFilter) {
+        filter = newFilter;
+        return applyFilter();
+      });
+    };
+    changeFilter('default');
+    $('#filters').on('change', function() {
+      return changeFilter($(this).val());
     });
     return input.on('change', function() {
-      return output.setValue(input.getValue(), -1);
+      return applyFilter();
     });
   });
 

@@ -17,7 +17,9 @@ The main class required to get started with searchreplace
     */
 
     return exports.searchreplace = function(input, filter) {
-      return filter(input);
+      if (filter) {
+        return filter(input);
+      }
     };
   });
 

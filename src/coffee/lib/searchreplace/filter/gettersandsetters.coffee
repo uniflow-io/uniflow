@@ -40,4 +40,4 @@ define (require, exports, module) ->
   @returns {*}
   ###
   exports.searchreplace = (input) ->
-    input
+    'coucou'

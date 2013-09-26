@@ -16,7 +16,7 @@ The main class required to get started with searchreplace
     */
 
     return exports.searchreplace = function(input) {
-      return input;
+      return 'coucou';
     };
   });
 
