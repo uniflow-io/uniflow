@@ -30,20 +30,22 @@ The main class required to get started with searchreplace
 
 @class GettersAndSettersFilter
 ###
-define ['php', 'php.xhr'], ->
+define ['searchreplace/filter', 'php', 'php.xhr'], ->
   "use strict"
 
-  ###
-  @param {*} input
-  @returns {*}
-  ###
-  (input) ->
-    path = window.location.pathname
-    opts =
-      SERVER:
-        SCRIPT_FILENAME: path.substring(0, path.length - 1)
-      filesystem: new PHP.Adapters.XHRFileSystem()
+  class SRGetterAndSettersFilter extends SRFilter
+    ###
+    @param {*} input
+    @returns {*}
+    ###
+    update: (input) ->
+      path = window.location.pathname
+      opts =
+        SERVER:
+          SCRIPT_FILENAME: path.substring(0, path.length - 1)
+        filesystem: new PHP.Adapters.XHRFileSystem()
 
-    php = new PHP(input, opts)
-    php.vm.OUTPUT_BUFFER
+      php = new PHP(input, opts)
+      php.vm.OUTPUT_BUFFER
 
+  SRGetterAndSettersFilter

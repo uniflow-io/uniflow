@@ -8,19 +8,29 @@ The main class required to get started with searchreplace
 (function() {
   define(function() {
     "use strict";
-    /*
-    searchreplace
-    
-    @param {*} input
-    @param filter
-    @returns {*}
-    */
-
-    return function(input, filter) {
-      if (filter) {
-        return filter(input);
+    var SRBase;
+    SRBase = (function() {
+      function SRBase() {
+        this.pointer = null;
+        this.datas = null;
+        this.filters = {};
       }
-    };
+
+      SRBase.prototype.add = function(input, filter) {};
+
+      SRBase.prototype.update = function(pointer) {
+        if (pointer == null) {
+          pointer = null;
+        }
+        if (filter) {
+          return filter(input);
+        }
+      };
+
+      return SRBase;
+
+    })();
+    return SRBase;
   });
 
 }).call(this);

@@ -33,9 +33,9 @@ The main class required to get started with searchreplace
 define ->
   "use strict"
 
-  ###
-  @param {*} input
-  @returns {*}
-  ###
-  (input) ->
-    input
+  class SRData
+    constructor: (@data = null) ->
+    set: (@data) -> @
+    get: -> @data
+
+  SRData
