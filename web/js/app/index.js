@@ -1,8 +1,10 @@
 (function() {
   define(['jquery', 'ace/ace', 'searchreplace/searchreplace', 'bootstrap'], function($, ace, searchreplace) {
-    var applyFilter, changeFilter, filter, input, output;
+    var applyFilter, changeFilter, filter, input, output, sr;
     input = ace.edit('input');
     output = ace.edit('output');
+    sr = new SRBase();
+    sr.add('filter');
     filter = null;
     applyFilter = function() {
       return output.setValue(searchreplace(input.getValue(), filter), -1);

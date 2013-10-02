@@ -30,18 +30,35 @@ The main class required to get started with searchreplace
 
 @class SearchReplace
 ###
-define ->
+define ['searchreplace/lib/simple-graph'], (graph) ->
   "use strict"
 
   class SRBase
     constructor: ->
+      @nodeId = 1
       @pointer = null
-      @datas = null
+      @datas = {}
       @filters = {}
 
-    add: (input, filter) ->
+    addNode: ->
+      @nodeId++
+      graph(@nodeId)
 
-    update: (pointer = null) ->
-      filter input if filter
+    add: (filter, @pointer = null) ->
+      @pointer = @addNode() if @pointer is null
+      a = @pointer.id
+      @pointer = @pointer.attach(@addNode())
+      b = @pointer.id
+
+      @filters[a] ?= {}
+      @filters[a][b] = filter
+
+      @
+
+    update: (@pointer = null) ->
+      
+
+      @
+
 
   SRBase

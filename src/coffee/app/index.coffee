@@ -2,6 +2,9 @@ define ['jquery','ace/ace','searchreplace/searchreplace','bootstrap'], ($, ace, 
   input = ace.edit 'input'
   output = ace.edit 'output'
 
+  sr = new SRBase()
+  sr.add 'filter'
+
   filter = null
 
   applyFilter = ->

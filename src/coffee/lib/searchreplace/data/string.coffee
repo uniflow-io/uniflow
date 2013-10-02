@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class StringData
 ###
-define ['searchreplace/data'], ->
+define ['searchreplace/data/data'], ->
   "use strict"
 
   class SRStringData extends SRData

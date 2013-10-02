@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class GettersAndSettersFilter
 ###
-define ['searchreplace/filter', 'php', 'php.xhr'], ->
+define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
   "use strict"
 
   class SRPHPFilter extends SRFilter

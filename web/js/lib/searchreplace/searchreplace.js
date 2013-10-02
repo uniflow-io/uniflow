@@ -6,25 +6,41 @@ The main class required to get started with searchreplace
 
 
 (function() {
-  define(function() {
+  define(['searchreplace/lib/simple-graph'], function(graph) {
     "use strict";
     var SRBase;
     SRBase = (function() {
       function SRBase() {
+        this.nodeId = 1;
         this.pointer = null;
-        this.datas = null;
+        this.datas = {};
         this.filters = {};
       }
 
-      SRBase.prototype.add = function(input, filter) {};
+      SRBase.prototype.addNode = function() {
+        this.nodeId++;
+        return graph(this.nodeId);
+      };
+
+      SRBase.prototype.add = function(filter, pointer) {
+        var a, b, _base;
+        this.pointer = pointer != null ? pointer : null;
+        if (this.pointer === null) {
+          this.pointer = this.addNode();
+        }
+        a = this.pointer.id;
+        this.pointer = this.pointer.attach(this.addNode());
+        b = this.pointer.id;
+        if ((_base = this.filters)[a] == null) {
+          _base[a] = {};
+        }
+        this.filters[a][b] = filter;
+        return this;
+      };
 
       SRBase.prototype.update = function(pointer) {
-        if (pointer == null) {
-          pointer = null;
-        }
-        if (filter) {
-          return filter(input);
-        }
+        this.pointer = pointer != null ? pointer : null;
+        return this;
       };
 
       return SRBase;
