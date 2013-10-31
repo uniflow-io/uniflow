@@ -56,7 +56,6 @@ define ['searchreplace/lib/simple-graph'], (graph) ->
       @
 
     update: (@pointer = null) ->
-      
 
       @
 

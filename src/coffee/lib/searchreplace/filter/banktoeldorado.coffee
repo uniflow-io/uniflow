@@ -28,12 +28,12 @@
 ###
 The main class required to get started with searchreplace
 
-@class GettersAndSettersFilter
+@class BankToEldoradoFilter
 ###
 define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
   "use strict"
 
-  class SRGettersAndSettersFilter extends SRFilter
+  class SRBankToEldoradoFilter extends SRFilter
     ###
     @param {*} input
     @returns {*}
@@ -48,4 +48,4 @@ define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
       php = new PHP(input, opts)
       php.vm.OUTPUT_BUFFER
 
-  SRGettersAndSettersFilter
+  SRBankToEldoradoFilter

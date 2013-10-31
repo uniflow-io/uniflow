@@ -1,7 +1,7 @@
 /*
 The main class required to get started with searchreplace
 
-@class GettersAndSettersFilter
+@class BankToEldoradoFilter
 */
 
 
@@ -11,12 +11,12 @@ The main class required to get started with searchreplace
 
   define(['searchreplace/filter/filter', 'php', 'php.xhr'], function() {
     "use strict";
-    var SRGettersAndSettersFilter, _ref;
-    SRGettersAndSettersFilter = (function(_super) {
-      __extends(SRGettersAndSettersFilter, _super);
+    var SRBankToEldoradoFilter, _ref;
+    SRBankToEldoradoFilter = (function(_super) {
+      __extends(SRBankToEldoradoFilter, _super);
 
-      function SRGettersAndSettersFilter() {
-        _ref = SRGettersAndSettersFilter.__super__.constructor.apply(this, arguments);
+      function SRBankToEldoradoFilter() {
+        _ref = SRBankToEldoradoFilter.__super__.constructor.apply(this, arguments);
         return _ref;
       }
 
@@ -26,7 +26,7 @@ The main class required to get started with searchreplace
       */
 
 
-      SRGettersAndSettersFilter.prototype.update = function(input) {
+      SRBankToEldoradoFilter.prototype.update = function(input) {
         var opts, path, php;
         path = window.location.pathname;
         opts = {
@@ -39,10 +39,10 @@ The main class required to get started with searchreplace
         return php.vm.OUTPUT_BUFFER;
       };
 
-      return SRGettersAndSettersFilter;
+      return SRBankToEldoradoFilter;
 
     })(SRFilter);
-    return SRGettersAndSettersFilter;
+    return SRBankToEldoradoFilter;
   });
 
 }).call(this);

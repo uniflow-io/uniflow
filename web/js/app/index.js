@@ -3,7 +3,7 @@
     var applyFilter, changeFilter, filter, input, output, sr;
     input = ace.edit('input');
     output = ace.edit('output');
-    sr = new SRBase();
+    sr = new searchreplace();
     sr.add('filter');
     filter = null;
     applyFilter = function() {
