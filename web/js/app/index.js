@@ -1,13 +1,14 @@
 (function() {
-  define(['jquery', 'ace/ace', 'searchreplace/searchreplace', 'bootstrap'], function($, ace, searchreplace) {
-    var applyFilter, changeFilter, filter, input, output, sr;
+  define(['jquery', 'ace/ace', 'searchreplace/searchreplace', 'bootstrap'], function($, ace, SRBase) {
+    var applyFilter, changeFilter, filter, input, output;
     input = ace.edit('input');
     output = ace.edit('output');
-    sr = new searchreplace();
-    sr.add('filter');
     filter = null;
     applyFilter = function() {
-      return output.setValue(searchreplace(input.getValue(), filter), -1);
+      var f, value;
+      f = new filter();
+      value = f.update(input.getValue());
+      return output.setValue(value, -1);
     };
     changeFilter = function(name) {
       return require(['searchreplace/filter/' + name], function(newFilter) {
@@ -15,7 +16,7 @@
         return applyFilter();
       });
     };
-    changeFilter('default');
+    changeFilter('filter');
     $('#filters').on('change', function() {
       return changeFilter($(this).val());
     });

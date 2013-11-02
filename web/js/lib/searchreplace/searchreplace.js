@@ -6,7 +6,7 @@ The main class required to get started with searchreplace
 
 
 (function() {
-  define(['searchreplace/lib/simple-graph'], function(graph) {
+  define(['searchreplace/lib/simple-graph'], function(Graph) {
     "use strict";
     var SRBase;
     SRBase = (function() {
@@ -19,7 +19,7 @@ The main class required to get started with searchreplace
 
       SRBase.prototype.addNode = function() {
         this.nodeId++;
-        return graph(this.nodeId);
+        return new Graph('srid:' + this.nodeId);
       };
 
       SRBase.prototype.add = function(filter, pointer) {

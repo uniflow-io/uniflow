@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class BankToEldoradoFilter
 ###
-define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
+define ['searchreplace/filter/filter', 'php', 'php.xhr'], (SRFilter) ->
   "use strict"
 
   class SRBankToEldoradoFilter extends SRFilter

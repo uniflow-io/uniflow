@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class SearchReplace
 ###
-define ['searchreplace/lib/simple-graph'], (graph) ->
+define ['searchreplace/lib/simple-graph'], (Graph) ->
   "use strict"
 
   class SRBase
@@ -42,7 +42,7 @@ define ['searchreplace/lib/simple-graph'], (graph) ->
 
     addNode: ->
       @nodeId++
-      graph(@nodeId)
+      new Graph('srid:'+@nodeId)
 
     add: (filter, @pointer = null) ->
       @pointer = @addNode() if @pointer is null
@@ -58,6 +58,5 @@ define ['searchreplace/lib/simple-graph'], (graph) ->
     update: (@pointer = null) ->
 
       @
-
 
   SRBase
