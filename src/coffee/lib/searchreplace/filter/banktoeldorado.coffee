@@ -30,7 +30,7 @@ The main class required to get started with searchreplace
 
 @class BankToEldoradoFilter
 ###
-define ['searchreplace/filter/filter', 'php', 'php.xhr'], (SRFilter) ->
+define ['searchreplace/filter/filter', 'jquery'], (SRFilter, $) ->
   "use strict"
 
   class SRBankToEldoradoFilter extends SRFilter
@@ -39,13 +39,28 @@ define ['searchreplace/filter/filter', 'php', 'php.xhr'], (SRFilter) ->
     @returns {*}
     ###
     update: (input) ->
-      path = window.location.pathname
-      opts =
-        SERVER:
-          SCRIPT_FILENAME: path.substring(0, path.length - 1)
-        filesystem: new PHP.Adapters.XHRFileSystem()
+      lines = []
+      $input = $(input)
+      $lines = $input.find('tr')
+      $lines.each (i)->
+        return if i == 0
 
-      php = new PHP(input, opts)
-      php.vm.OUTPUT_BUFFER
+        $tr = $(@)
+
+        data =
+          'datecompta': $tr.find('td:eq(0) .itemFormReadOnly').text()
+          'libelleop' : $tr.find('td:eq(1) .itemFormReadOnly').text()
+          'ref'       : $tr.find('td:eq(2) .itemFormReadOnly').text()
+          'dateope'   : $tr.find('td:eq(3) .itemFormReadOnly').text()
+          'dateval'   : $tr.find('td:eq(4) .itemFormReadOnly').text()
+          'debit'     : $tr.find('td:eq(5) .itemFormReadOnly').text()
+          'credit'    : $tr.find('td:eq(6) .itemFormReadOnly').text()
+
+        line = []
+        $.map data, (v)->
+          line.push(v)
+        lines.push(line.join("\t"))
+
+      lines.join("\n")
 
   SRBankToEldoradoFilter

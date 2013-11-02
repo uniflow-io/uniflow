@@ -16,7 +16,7 @@
         return applyFilter();
       });
     };
-    changeFilter('filter');
+    changeFilter('banktoeldorado');
     $('#filters').on('change', function() {
       return changeFilter($(this).val());
     });

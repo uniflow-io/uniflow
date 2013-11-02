@@ -16,7 +16,7 @@ define ['jquery','ace/ace','searchreplace/searchreplace','bootstrap'], ($, ace, 
     require ['searchreplace/filter/' + name], (newFilter) ->
       filter = newFilter
       applyFilter()
-  changeFilter('filter')
+  changeFilter('banktoeldorado')
 
   $('#filters').on 'change', -> changeFilter($(@).val())
 
