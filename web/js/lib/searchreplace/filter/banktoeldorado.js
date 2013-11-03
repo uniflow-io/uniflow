@@ -28,7 +28,7 @@ The main class required to get started with searchreplace
 
       SRBankToEldoradoFilter.prototype.update = function(input) {
         var $input, $lines, lines;
-        lines = [];
+        lines = ['!type Bank'];
         $input = $(input);
         $lines = $input.find('tr');
         $lines.each(function(i) {
@@ -43,14 +43,22 @@ The main class required to get started with searchreplace
             'ref': $tr.find('td:eq(2) .itemFormReadOnly').text(),
             'dateope': $tr.find('td:eq(3) .itemFormReadOnly').text(),
             'dateval': $tr.find('td:eq(4) .itemFormReadOnly').text(),
-            'debit': $tr.find('td:eq(5) .itemFormReadOnly').text(),
-            'credit': $tr.find('td:eq(6) .itemFormReadOnly').text()
+            'debit': $tr.find('td:eq(5) .itemFormReadOnly').text().replace(' ', ''),
+            'credit': $tr.find('td:eq(6) .itemFormReadOnly').text().replace(' ', '')
           };
-          line = [];
-          $.map(data, function(v) {
-            return line.push(v);
-          });
-          return lines.push(line.join("\t"));
+          line = ['D' + data['dateval'], 'T' + (data['debit'] !== '' ? '-' + data['debit'] : '+' + data['credit']), 'N' + data['ref'], 'M' + data['libelleop']];
+          /*
+          label = data['libelleop']
+          if label.match /(MONOPRIX|FRANPRIX)/
+            line.push 'L' + 'Alimentation quotidienne'
+          else if label.match /SNCF/
+            line.push 'L' + 'Transports'
+          else if label.match /BIG YOUTH/
+            line.push 'L' + 'Salaire'
+          */
+
+          line.push('^');
+          return lines = lines.concat(line);
         });
         return lines.join("\n");
       };
