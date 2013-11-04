@@ -178,6 +178,10 @@
     };
   };
 
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = Graph;
+  }
+
   Graph.prototype.attach = attach;
 
   Graph.prototype.indexOf = indexOf;

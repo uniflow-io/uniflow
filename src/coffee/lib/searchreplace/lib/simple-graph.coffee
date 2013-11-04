@@ -3,7 +3,7 @@
 #
 # Graph constructor (new is optional)
 # param string id - required
-# 
+#
 Graph = (id) ->
   return new Graph(id)  unless this instanceof Graph
   throw new Error("Graph() requires non-empty string id argument.")  if not id or typeof id isnt "string"
@@ -13,7 +13,7 @@ Graph = (id) ->
 
 #
 # attach child to current graph
-# 
+#
 attach = (node) ->
   graph = this
   unless ~graph.indexOf(node.id)
@@ -23,7 +23,7 @@ attach = (node) ->
 
 #
 # return index of child with matching id
-# 
+#
 indexOf = (id) ->
   graph = this
   i = 0
@@ -35,7 +35,7 @@ indexOf = (id) ->
 
 #
 # detach child with matching id
-# 
+#
 detach = (id) ->
   graph = this
   node = false
@@ -62,7 +62,7 @@ remove = (id) ->
 # find all graphs in subgraph that depend on graph with given id.
 # param string id - required id for the target graph.
 # return a visitor with the results field as array of ids of graphs that depend on the target subgraph.
-# 
+#
 dependants = (id) ->
   graph = this
   visitor = graph.visitor((graph) ->
@@ -74,7 +74,7 @@ dependants = (id) ->
 #
 # find all graphs in subgraph that the graph with given id depends on.
 # return a visitor with the results field as array of ids of graphs under the target subgraph.
-# 
+#
 subgraph = ->
   graph = this
   id = graph.id
@@ -86,7 +86,7 @@ subgraph = ->
 
 #
 # size returns the number of results in the current graph *including the current graph*
-# 
+#
 size = ->
   graph = this
   graph.subgraph().results.length + 1
@@ -95,7 +95,7 @@ size = ->
 # find child or descendant with matching id
 # uses the visitor in order to avoid throwing errors
 # a single match terminates search
-# 
+#
 find = (id) ->
   graph = this
   node = false
@@ -114,21 +114,21 @@ find = (id) ->
 # ch. 7 of Visualizing Data by Ben Fry, O'Reilly, 2007
 # Graph.prototype.list = list;
 # function list(depth) {
-#  
+#
 #  var out = [];
-#  
+#
 #  (typeof depth == 'number' && depth >= 0) || (depth = 0)
-#  
+#
 #  for (var i = 0; i < depth; i++) {
 #      out.push('  '); // console
 #  }
-#  
+#
 #  out.push(this.id); // console
-#  
+#
 #  if (this.edges.length) {
-#  
+#
 #    out.push(':\n');
-#    
+#
 #    for (var i = 0; i < this.edges.length; i++) {
 #      out.push(this.edges[i].list(depth + 1)); // ye olde recursion...
 #    }
@@ -136,7 +136,7 @@ find = (id) ->
 #  } else {
 #    out.push('\n');
 #  }
-#  
+#
 #  return out.join('');
 # }
 #
@@ -144,7 +144,7 @@ find = (id) ->
 #
 # alternate version of list iterator - shows deficiency of depth first traversal
 # uses the visitor.after() post-process callback approach
-# 
+#
 list = ->
   graph = this
   id = graph.id
@@ -188,7 +188,7 @@ resolve = (visitor) ->
   visitor.visiting[id] = 1
   visitor.process graph  if typeof visitor.process is "function"
 
-  # descend if didn't call done() 
+  # descend if didn't call done()
   unless visitor.exit
     i = 0
 
@@ -208,7 +208,7 @@ resolve = (visitor) ->
 # TODO - looks like visitor wants to emerge as its own type
 #          not sure if visitor should be an external object with visitor.visit(graph) api,
 #          or should continue with graph.resolve(visitor)...
-# 
+#
 visitor = (fn) ->
   ids: []
   results: []
@@ -220,6 +220,7 @@ visitor = (fn) ->
   process: fn
   after: null
 
+module.exports = Graph  if typeof module isnt "undefined" and module.exports
 Graph::attach = attach
 Graph::indexOf = indexOf
 Graph::detach = detach
@@ -239,14 +240,14 @@ Graph::visitor = visitor
 #     this.postprocess || (this.postprocess = []);
 #     this.postprocess.push(fn);
 # }
-# 
+#
 # assignment:
-# 
+#
 # visitor.after(fn);
-# 
-# 
+#
+#
 # then in resolve():
-# 
+#
 # if (visitor.postprocess) {
 #     for (var i = 0; i < visitor.postprocess.length; ++i) {
 #         visitor.postprocess[i](graph);

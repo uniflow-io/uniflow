@@ -56,9 +56,14 @@ define ['searchreplace/lib/simple-graph'], (graph) ->
       @
 
     update: (@pointer = null) ->
-      
+      @data[@pointer.id] ?= new SRData()
+      @pointer.resolve(graph.visitor((g) ->
+        a = g.id
+        for edge in g.edges
+          b = edge.id
+          @data[b] = @filters[a][b].update @data[a]
+      ))
 
       @
-
 
   SRBase
