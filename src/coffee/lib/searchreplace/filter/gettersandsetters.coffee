@@ -30,10 +30,10 @@ The main class required to get started with searchreplace
 
 @class GettersAndSettersFilter
 ###
-define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
+define ['searchreplace/filter/filter', 'php', 'php.xhr'], (SRFilter) ->
   "use strict"
 
-  class SRGetterAndSettersFilter extends SRFilter
+  class SRGettersAndSettersFilter extends SRFilter
     ###
     @param {*} input
     @returns {*}
@@ -48,4 +48,4 @@ define ['searchreplace/filter/filter', 'php', 'php.xhr'], ->
       php = new PHP(input, opts)
       php.vm.OUTPUT_BUFFER
 
-  SRGetterAndSettersFilter
+  SRGettersAndSettersFilter

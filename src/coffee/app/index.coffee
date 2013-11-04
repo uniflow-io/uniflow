@@ -11,13 +11,15 @@ define ['jquery','ace/ace','searchreplace/base','bootstrap'], ($, ace, SRBase) -
   filter = null
 
   applyFilter = ->
-    output.setValue searchreplace(input.getValue(), filter), -1
+    f = new filter()
+    value = f.update(input.getValue())
+    output.setValue value, -1
 
   changeFilter = (name) ->
     require ['searchreplace/filter/' + name], (newFilter) ->
       filter = newFilter
       applyFilter()
-  changeFilter('default')
+  changeFilter('filter')
 
   $('#filters').on 'change', -> changeFilter($(@).val())
   ###
