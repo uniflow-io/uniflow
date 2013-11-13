@@ -9,7 +9,6 @@ The main class required to get started with searchreplace
   define(['searchreplace/lib/simple-graph'], function(graph) {
     "use strict";
     var SRBase;
-    console.log(graph);
     SRBase = (function() {
       function SRBase() {
         this.nodeId = 1;
