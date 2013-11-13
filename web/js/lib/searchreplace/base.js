@@ -6,7 +6,7 @@ The main class required to get started with searchreplace
 
 
 (function() {
-  define(['searchreplace/lib/simple-graph'], function(graph) {
+  define(['searchreplace/lib/nested-graph'], function(graph) {
     "use strict";
     var SRBase;
     SRBase = (function() {

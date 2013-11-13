@@ -1,4 +1,4 @@
-# js2coffee from https://github.com/dfkaye/simple-graph
+# js2coffee from https://github.com/dfkaye/nested-graph
 
 #
 # Graph constructor (new is optional)
@@ -138,7 +138,7 @@ find = (id) ->
 #  }
 #
 #  return out.join('');
-# }
+#}
 #
 
 #
@@ -219,7 +219,6 @@ visitor = (fn) ->
 
   process: fn
   after: null
-
 module.exports = Graph  if typeof module isnt "undefined" and module.exports
 Graph::attach = attach
 Graph::indexOf = indexOf
@@ -234,24 +233,24 @@ Graph::resolve = resolve
 Graph::visitor = visitor
 
 #
-# {
-#   ...
-#   after: fn(fn) {
-#     this.postprocess || (this.postprocess = []);
-#     this.postprocess.push(fn);
-# }
+#    {
+#      ...
+#      after: fn(fn) {
+#        this.postprocess || (this.postprocess = []);
+#        this.postprocess.push(fn);
+#    }
 #
-# assignment:
+#    assignment:
 #
-# visitor.after(fn);
+#    visitor.after(fn);
 #
 #
-# then in resolve():
+#    then in resolve():
 #
-# if (visitor.postprocess) {
-#     for (var i = 0; i < visitor.postprocess.length; ++i) {
-#         visitor.postprocess[i](graph);
-#     }
-# }
+#    if (visitor.postprocess) {
+#        for (var i = 0; i < visitor.postprocess.length; ++i) {
+#            visitor.postprocess[i](graph);
+#        }
+#    }
 #
 #

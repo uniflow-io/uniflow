@@ -10,7 +10,7 @@ The main class required to get started with searchreplace
 
 @class SearchReplace
 ###
-define ['searchreplace/lib/simple-graph'], (graph) ->
+define ['searchreplace/lib/nested-graph'], (graph) ->
   "use strict"
 
   class SRBase
