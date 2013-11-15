@@ -1,12 +1,10 @@
 (function() {
-  define(['jquery', 'ace/ace', 'searchreplace/base', 'bootstrap'], function($, ace, SRBase) {
-    var input, output, sr;
+  define(['jquery', 'ace/ace', 'bootstrap', 'searchreplace/graph', 'searchreplace/data/string'], function($, ace, bootstrap, SRGraph, SRStringData) {
+    var input, inputStringData, output, outputStringData;
     input = ace.edit('input');
     output = ace.edit('output');
-    sr = new SRBase();
-    return require(['searchreplace/filter/filter'], function(filter) {
-      return sr.set(filter);
-    });
+    inputStringData = new SRGraph(new SRStringData());
+    return outputStringData = new SRGraph(new SRStringData());
     /*
     filter = null
     

@@ -1,6 +1,4 @@
 /*
-The main class required to get started with searchreplace
-
 @class DefaultFilter
 */
 

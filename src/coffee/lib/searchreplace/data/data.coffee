@@ -6,8 +6,6 @@
 # file that was distributed with this source code.
 
 ###
-The main class required to get started with searchreplace
-
 @class DefaultFilter
 ###
 define ->

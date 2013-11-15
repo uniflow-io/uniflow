@@ -6,11 +6,9 @@
 # file that was distributed with this source code.
 
 ###
-The main class required to get started with searchreplace
-
 @class StringData
 ###
-define ['searchreplace/data/data'], ->
+define ['searchreplace/data/data'], (SRData) ->
   "use strict"
 
   class SRStringData extends SRData

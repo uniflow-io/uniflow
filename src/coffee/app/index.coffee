@@ -1,9 +1,17 @@
-define ['jquery','ace/ace','searchreplace/base','bootstrap'], ($, ace, SRBase) ->
+define [
+  'jquery',
+  'ace/ace',
+  'bootstrap',
+  'searchreplace/graph',
+  'searchreplace/data/string',
+], ($, ace, bootstrap,SRGraph, SRStringData) ->
   input = ace.edit 'input'
   output = ace.edit 'output'
 
-  sr = new SRBase()
-  require ['searchreplace/filter/filter'], (filter) -> sr.set filter
+  inputStringData = new SRGraph(new SRStringData());
+  outputStringData = new SRGraph(new SRStringData());
+
+  #require ['searchreplace/filter/filter'], (filter) -> sr.set filter
 
   ###
   filter = null
