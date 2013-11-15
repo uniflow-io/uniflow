@@ -32,7 +32,7 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
       # pointer to the current node
       @pointer = null
 
-      # datas nodes and egdes filters
+      # nodes datas and egdes filters
       @datas = {}
       @filters = {}
 
@@ -40,7 +40,7 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
       public method
       add a filter beetween two node and position the pointer
     ###
-    add: (filter, @pointer = null) ->
+    add: (filter, @pointer = null, update = true) ->
       @pointer = _addNode() if @pointer is null
       a = @pointer.id
       @pointer = @pointer.attach(_addNode())
@@ -49,7 +49,24 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
       @filters[a] ?= {}
       @filters[a][b] = filter
 
+      @update() if update
+
       @
+
+    ###
+      public method
+      remove a filter given pointer
+    ###
+    remove: (@pointer = null) ->
+
+
+    ###
+      public method
+      set a filter given pointer
+    ###
+    set: (filter, @pointer = null, update = true) ->
+      @add(filter, @pointer, update)
+      @remove(@pointer)
 
     ###
       public method

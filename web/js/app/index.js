@@ -1,35 +1,31 @@
 (function() {
   define(['jquery', 'ace/ace', 'searchreplace/base', 'bootstrap'], function($, ace, SRBase) {
-    var applyFilter, changeFilter, filter, input, output;
+    var input, output, sr;
     input = ace.edit('input');
     output = ace.edit('output');
+    sr = new SRBase();
+    return require(['searchreplace/filter/filter'], function(filter) {
+      return sr.set(filter);
+    });
     /*
-    sr = new SRBase()
-    require ['searchreplace/filter/filter'], (filter) ->
-      sr.add filter
-      sr.update()
+    filter = null
+    
+    applyFilter = ->
+      f = new filter()
+      value = f.update(input.getValue())
+      output.setValue value, -1
+    
+    changeFilter = (name) ->
+      require ['searchreplace/filter/' + name], (newFilter) ->
+        filter = newFilter
+        applyFilter()
+    changeFilter('filter')
+    
+    $('#filters').on 'change', -> changeFilter($(@).val())
+    
+    input.on 'change', () -> applyFilter()
     */
 
-    filter = null;
-    applyFilter = function() {
-      var f, value;
-      f = new filter();
-      value = f.update(input.getValue());
-      return output.setValue(value, -1);
-    };
-    changeFilter = function(name) {
-      return require(['searchreplace/filter/' + name], function(newFilter) {
-        filter = newFilter;
-        return applyFilter();
-      });
-    };
-    changeFilter('filter');
-    $('#filters').on('change', function() {
-      return changeFilter($(this).val());
-    });
-    return input.on('change', function() {
-      return applyFilter();
-    });
   });
 
 }).call(this);

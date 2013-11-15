@@ -2,13 +2,10 @@ define ['jquery','ace/ace','searchreplace/base','bootstrap'], ($, ace, SRBase) -
   input = ace.edit 'input'
   output = ace.edit 'output'
 
-  ###
   sr = new SRBase()
-  require ['searchreplace/filter/filter'], (filter) ->
-    sr.add filter
-    sr.update()
-  ###
+  require ['searchreplace/filter/filter'], (filter) -> sr.set filter
 
+  ###
   filter = null
 
   applyFilter = ->
@@ -25,3 +22,4 @@ define ['jquery','ace/ace','searchreplace/base','bootstrap'], ($, ace, SRBase) -
   $('#filters').on 'change', -> changeFilter($(@).val())
 
   input.on 'change', () -> applyFilter()
+  ###

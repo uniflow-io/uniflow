@@ -42,9 +42,12 @@ The main class required to get started with searchreplace
       */
 
 
-      SRBase.prototype.add = function(filter, pointer) {
+      SRBase.prototype.add = function(filter, pointer, update) {
         var a, b, _base;
         this.pointer = pointer != null ? pointer : null;
+        if (update == null) {
+          update = true;
+        }
         if (this.pointer === null) {
           this.pointer = _addNode();
         }
@@ -55,7 +58,35 @@ The main class required to get started with searchreplace
           _base[a] = {};
         }
         this.filters[a][b] = filter;
+        if (update) {
+          this.update();
+        }
         return this;
+      };
+
+      /*
+        public method
+        remove a filter given pointer
+      */
+
+
+      SRBase.prototype.remove = function(pointer) {
+        this.pointer = pointer != null ? pointer : null;
+      };
+
+      /*
+        public method
+        set a filter given pointer
+      */
+
+
+      SRBase.prototype.set = function(filter, pointer, update) {
+        this.pointer = pointer != null ? pointer : null;
+        if (update == null) {
+          update = true;
+        }
+        this.add(filter, this.pointer, update);
+        return this.remove(this.pointer);
       };
 
       /*
