@@ -14,20 +14,36 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
   "use strict"
 
   class SRBase
+    ###
+      private property
+      @var integer manage node unicity
+    ###
+    _nodeId = 1
+
+    ###
+      private method
+      add a new unique node
+    ###
+    _addNode = ->
+      _nodeId++
+      graph(_nodeId)
+
     constructor: ->
-      @nodeId = 1
+      # pointer to the current node
       @pointer = null
+
+      # datas nodes and egdes filters
       @datas = {}
       @filters = {}
 
-    addNode: ->
-      @nodeId++
-      graph(@nodeId)
-
+    ###
+      public method
+      add a filter beetween two node and position the pointer
+    ###
     add: (filter, @pointer = null) ->
-      @pointer = @addNode() if @pointer is null
+      @pointer = _addNode() if @pointer is null
       a = @pointer.id
-      @pointer = @pointer.attach(@addNode())
+      @pointer = @pointer.attach(_addNode())
       b = @pointer.id
 
       @filters[a] ?= {}
@@ -35,13 +51,17 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
 
       @
 
+    ###
+      public method
+      update data from filter and pointer
+    ###
     update: (@pointer = null) ->
-      @data[@pointer.id] ?= new SRData()
+      @datas[@pointer.id] ?= new SRData()
       @pointer.resolve(graph.visitor((g) ->
         a = g.id
         for edge in g.edges
           b = edge.id
-          @data[b] = @filters[a][b].update @data[a]
+          @datas[b] = @filters[a][b].update @datas[a]
       ))
 
       @

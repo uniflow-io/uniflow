@@ -10,26 +10,46 @@ The main class required to get started with searchreplace
     "use strict";
     var SRBase;
     SRBase = (function() {
+      /*
+        private property
+        @var integer manage node unicity
+      */
+
+      var _addNode, _nodeId;
+
+      _nodeId = 1;
+
+      /*
+        private method
+        add a new unique node
+      */
+
+
+      _addNode = function() {
+        _nodeId++;
+        return graph(_nodeId);
+      };
+
       function SRBase() {
-        this.nodeId = 1;
         this.pointer = null;
         this.datas = {};
         this.filters = {};
       }
 
-      SRBase.prototype.addNode = function() {
-        this.nodeId++;
-        return graph(this.nodeId);
-      };
+      /*
+        public method
+        add a filter beetween two node and position the pointer
+      */
+
 
       SRBase.prototype.add = function(filter, pointer) {
         var a, b, _base;
         this.pointer = pointer != null ? pointer : null;
         if (this.pointer === null) {
-          this.pointer = this.addNode();
+          this.pointer = _addNode();
         }
         a = this.pointer.id;
-        this.pointer = this.pointer.attach(this.addNode());
+        this.pointer = this.pointer.attach(_addNode());
         b = this.pointer.id;
         if ((_base = this.filters)[a] == null) {
           _base[a] = {};
@@ -38,10 +58,16 @@ The main class required to get started with searchreplace
         return this;
       };
 
+      /*
+        public method
+        update data from filter and pointer
+      */
+
+
       SRBase.prototype.update = function(pointer) {
         var _base, _name;
         this.pointer = pointer != null ? pointer : null;
-        if ((_base = this.data)[_name = this.pointer.id] == null) {
+        if ((_base = this.datas)[_name = this.pointer.id] == null) {
           _base[_name] = new SRData();
         }
         this.pointer.resolve(graph.visitor(function(g) {
@@ -52,7 +78,7 @@ The main class required to get started with searchreplace
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             edge = _ref[_i];
             b = edge.id;
-            _results.push(this.data[b] = this.filters[a][b].update(this.data[a]));
+            _results.push(this.datas[b] = this.filters[a][b].update(this.datas[a]));
           }
           return _results;
         }));
