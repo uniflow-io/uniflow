@@ -4,10 +4,9 @@
 
 
 (function() {
-  define(['searchreplace/lib/nested-graph'], function(Graph) {
+  define(['nested-graph'], function(Graph) {
     "use strict";
     var SRGraph;
-    console.log(Graph);
     SRGraph = (function() {
       /*
         private property

@@ -178,10 +178,6 @@
     };
   };
 
-  if (typeof module !== "undefined" && module.exports) {
-    module.exports = Graph;
-  }
-
   Graph.prototype.attach = attach;
 
   Graph.prototype.indexOf = indexOf;
@@ -203,5 +199,13 @@
   Graph.prototype.resolve = resolve;
 
   Graph.prototype.visitor = visitor;
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = Graph;
+  } else if (typeof define === "function" && define.amd) {
+    define("nested-graph", [], function() {
+      return Graph;
+    });
+  }
 
 }).call(this);

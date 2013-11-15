@@ -219,7 +219,6 @@ visitor = (fn) ->
 
   process: fn
   after: null
-module.exports = Graph  if typeof module isnt "undefined" and module.exports
 Graph::attach = attach
 Graph::indexOf = indexOf
 Graph::detach = detach
@@ -231,6 +230,11 @@ Graph::find = find
 Graph::list = list
 Graph::resolve = resolve
 Graph::visitor = visitor
+
+if typeof module isnt "undefined" and module.exports
+  module.exports = Graph
+else if typeof define is "function" and define.amd
+  define "nested-graph", [], -> Graph
 
 #
 #    {

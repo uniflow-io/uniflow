@@ -8,9 +8,9 @@
 ###
 @class SRGraph
 ###
-define ['searchreplace/lib/nested-graph'], (Graph) ->
+define ['nested-graph'], (Graph) ->
   "use strict"
-  console.log Graph
+
   class SRGraph
     ###
       private property
