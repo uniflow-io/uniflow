@@ -7,6 +7,7 @@
   define(['searchreplace/lib/nested-graph'], function(Graph) {
     "use strict";
     var SRGraph;
+    console.log(Graph);
     SRGraph = (function() {
       /*
         private property
@@ -30,6 +31,7 @@
 
       function SRGraph(data) {
         this.data = data;
+        this.graph = {};
         this.filters = {};
       }
 

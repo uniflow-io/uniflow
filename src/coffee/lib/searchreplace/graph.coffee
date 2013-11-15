@@ -10,7 +10,7 @@
 ###
 define ['searchreplace/lib/nested-graph'], (Graph) ->
   "use strict"
-
+  console.log Graph
   class SRGraph
     ###
       private property
@@ -26,7 +26,10 @@ define ['searchreplace/lib/nested-graph'], (Graph) ->
       _nodeId++
       Graph(_nodeId)
 
-    constructor: (@data)->
+    constructor: (@data) ->
+      #graph
+      @graph = {}
+
       #egdes filters
       @filters = {}
 

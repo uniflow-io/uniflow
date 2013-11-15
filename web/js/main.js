@@ -5,7 +5,7 @@
     baseUrl: '/js/lib',
     paths: {
       'app': '../app',
-      'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min', 'jquery-1.10.1.min'],
+      'jquery': ['//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min', 'jquery-1.10.2.min'],
       'bootstrap': 'bootstrap.min',
       'php': 'php/PHP',
       'php.xhr': 'php/xhr'
