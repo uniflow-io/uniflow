@@ -8,26 +8,21 @@ define [
   input = ace.edit 'input'
   output = ace.edit 'output'
 
-  inputStringData = new SRGraph(new SRStringData());
-  outputStringData = new SRGraph(new SRStringData());
+  inputGraph = new SRGraph(new SRStringData(input.getValue()));
+  outputGraph = new SRGraph(new SRStringData(output.getValue()));
 
-  #require ['searchreplace/filter/filter'], (filter) -> sr.set filter
+  update = ->
+    inputGraph.update()
+    output.setValue outputGraph.data.get(), -1
 
-  ###
-  filter = null
+  $('#filters').on 'change', ->
+    require ['searchreplace/filter/' + $(@).val()], (SRFilter) ->
+      inputGraph.detach(outputGraph)
+      inputGraph.attach(new SRFilter(), outputGraph)
+      update()
 
-  applyFilter = ->
-    f = new filter()
-    value = f.update(input.getValue())
-    output.setValue value, -1
+  $('#filters').trigger('change')
 
-  changeFilter = (name) ->
-    require ['searchreplace/filter/' + name], (newFilter) ->
-      filter = newFilter
-      applyFilter()
-  changeFilter('filter')
-
-  $('#filters').on 'change', -> changeFilter($(@).val())
-
-  input.on 'change', () -> applyFilter()
-  ###
+  input.on 'change', () ->
+    inputGraph.data.set(input.getValue())
+    update()

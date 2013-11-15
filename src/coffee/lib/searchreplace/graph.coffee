@@ -42,4 +42,11 @@ define ['searchreplace/lib/nested-graph'], (Graph) ->
     ###
     detach: (graph) ->
 
+    ###
+      public method
+      update the graph
+    ###
+    update: ->
+
+
   SRGraph

@@ -49,6 +49,14 @@
 
       SRGraph.prototype.detach = function(graph) {};
 
+      /*
+        public method
+        update the graph
+      */
+
+
+      SRGraph.prototype.update = function() {};
+
       return SRGraph;
 
     })();
