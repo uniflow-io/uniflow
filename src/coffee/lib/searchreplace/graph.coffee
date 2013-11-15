@@ -8,48 +8,61 @@
 ###
 @class SRGraph
 ###
-define ['nested-graph'], (Graph) ->
+define ['nested-graph'], (g) ->
   "use strict"
 
   class SRGraph
     ###
       private property
-      @var integer manage node unicity
+      @var integer unique id managment
     ###
-    _nodeId = 1
+    _uId = 0
 
     ###
       private method
-      add a new unique node
+      add a new unique graph
     ###
-    _addNode = ->
-      _nodeId++
-      Graph(_nodeId)
+    _uGraph = ->
+      _uId++
+      new g('sr_' + _uId)
 
     constructor: (@data) ->
       #graph
-      @graph = {}
+      @graph = _uGraph()
+      @graph.ref = @
 
       #egdes filters
       @filters = {}
 
     ###
       public method
-      attach a filter to current graph
+      attach a filter to node
     ###
-    attach: (filter, graph) ->
+    attach: (filter, node) ->
+      @graph.attach node.graph
+      @filters[node.graph.id] = filter
+      node
 
     ###
       public method
-      remove a filter given graph
+      remove a filter from node
     ###
-    detach: (graph) ->
+    detach: (node) ->
+      delete @filters[node.graph.id] if @graph.detach node.graph.id
+      node
 
     ###
       public method
       update the graph
     ###
     update: ->
+      i = 0
 
+      while i < @graph.edges.length
+        filter = @filters[@graph.edges[i].id]
+        data = filter.update(@data.get())
+        @graph.edges[i].ref.data.set(data)
+
+        ++i
 
   SRGraph

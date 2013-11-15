@@ -10,6 +10,7 @@ Graph = (id) ->
   graph = this
   graph.id = id
   graph.edges = []
+  graph
 
 #
 # attach child to current graph

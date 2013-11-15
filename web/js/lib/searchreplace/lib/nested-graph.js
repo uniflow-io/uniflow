@@ -11,7 +11,8 @@
     }
     graph = this;
     graph.id = id;
-    return graph.edges = [];
+    graph.edges = [];
+    return graph;
   };
 
   attach = function(node) {
