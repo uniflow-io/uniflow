@@ -65,7 +65,8 @@ The main class required to get started with searchreplace
 
 
       SRBase.prototype.update = function(pointer) {
-        var _base, _name;
+        var _base, _name,
+          _this = this;
         this.pointer = pointer != null ? pointer : null;
         if ((_base = this.datas)[_name = this.pointer.id] == null) {
           _base[_name] = new SRData();
@@ -78,7 +79,7 @@ The main class required to get started with searchreplace
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             edge = _ref[_i];
             b = edge.id;
-            _results.push(this.datas[b] = this.filters[a][b].update(this.datas[a]));
+            _results.push(_this.datas[b] = _this.filters[a][b].update(_this.datas[a]));
           }
           return _results;
         }));

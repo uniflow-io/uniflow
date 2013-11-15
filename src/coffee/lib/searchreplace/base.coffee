@@ -57,7 +57,7 @@ define ['searchreplace/lib/nested-graph'], (graph) ->
     ###
     update: (@pointer = null) ->
       @datas[@pointer.id] ?= new SRData()
-      @pointer.resolve(graph.visitor((g) ->
+      @pointer.resolve(graph.visitor((g) =>
         a = g.id
         for edge in g.edges
           b = edge.id
