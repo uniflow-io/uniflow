@@ -2,9 +2,21 @@ define [
   'jquery',
   'ace/ace',
   'bootstrap',
+  'searchreplace',
   'searchreplace/graph',
   'searchreplace/data/string',
-], ($, ace, bootstrap,SRGraph, SRStringData) ->
+], ($, ace, bootstrap, searchreplace, SRGraph, SRStringData) ->
+  # Load some graph definition into NoFlo
+  noflo = require 'noflo'
+  noflo.graph.loadFBP "'Hello, World!' -> IN Display(Output)", (graph) ->
+
+    # Make all included component libraries available
+    graph.baseDir = "/searchreplace"
+
+    # Create the live NoFlo network
+    noflo.createNetwork graph, (network) ->
+      console.log "Network created"
+
   input = ace.edit 'input'
   output = ace.edit 'output'
 

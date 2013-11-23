@@ -1,6 +1,13 @@
 (function() {
-  define(['jquery', 'ace/ace', 'bootstrap', 'searchreplace/graph', 'searchreplace/data/string'], function($, ace, bootstrap, SRGraph, SRStringData) {
-    var input, inputGraph, output, outputGraph, update;
+  define(['jquery', 'ace/ace', 'bootstrap', 'searchreplace', 'searchreplace/graph', 'searchreplace/data/string'], function($, ace, bootstrap, searchreplace, SRGraph, SRStringData) {
+    var input, inputGraph, noflo, output, outputGraph, update;
+    noflo = require('noflo');
+    noflo.graph.loadFBP("'Hello, World!' -> IN Display(Output)", function(graph) {
+      graph.baseDir = "/searchreplace";
+      return noflo.createNetwork(graph, function(network) {
+        return console.log("Network created");
+      });
+    });
     input = ace.edit('input');
     output = ace.edit('output');
     inputGraph = new SRGraph(new SRStringData(input.getValue()));

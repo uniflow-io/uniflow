@@ -74,7 +74,7 @@ module.exports = (grunt) ->
           action: 'install'
 
     component_build:
-      noflo:
+      searchreplace:
         output: './web/js/lib/'
         config: './component.json'
         scripts: true
@@ -89,8 +89,8 @@ module.exports = (grunt) ->
   # https://github.com/anthonyshort/component-coffee/issues/3
     combine:
       web:
-        input: 'web/js/lib/noflo.js'
-        output: 'web/js/lib/noflo.js'
+        input: 'web/js/lib/searchreplace.js'
+        output: 'web/js/lib/searchreplace.js'
         tokens: [
           token: '.coffee'
           string: '.js'
@@ -217,7 +217,7 @@ module.exports = (grunt) ->
   @loadNpmTasks 'grunt-contrib-cssmin'
 
   # tasks
-  @registerTask 'noflo:web', ['component:web','component_build:noflo','combine:web']
+  @registerTask 'noflo:web', ['component:web','component_build:searchreplace','combine:web']
   @registerTask 'compile:web', ['notify:compile','coffee:web','less:web','noflo:web']
 
   @registerTask 'web', ['compile:web','watch']
