@@ -1,0 +1,23 @@
+{
+  "name": "searchreplace",
+  "description": "SearchReplace tool",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "repo": "math/searchreplace",
+  "version": "0.1.0",
+  "keywords": [
+  ],
+  "dependencies": {
+    "noflo/noflo": "*"
+  },
+  "scripts": [
+    "components/Replace.coffee"
+  ],
+  "json": [
+    "component.json"
+  ],
+  "noflo": {
+    "components": {
+      "Replace": "components/Replace.coffee"
+    }
+  }
+}

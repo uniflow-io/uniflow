@@ -4,9 +4,6 @@
 
 # Vagrant
 .vagrant
-vagrant/.librarian
-vagrant/.tmp
-vagrant/modules
 
 # Node
 node_modules
@@ -17,3 +14,4 @@ node_modules
 # grunt
 web/build
 web/tests/selenium/*.tap
+components/*/

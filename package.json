@@ -1,13 +1,28 @@
 {
-  "name": "grunt-init-project",
-  "version": "0.0.1",
-  "description": "Grunt-init file for project",
+  "name": "searchreplace",
+  "description": "SearchReplace tool",
+  "version": "0.0.2",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo91@gmail.com"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "",
-  "license": "BSD",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "LICENSE-MIT"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://searchreplace.darkwood.fr.git"
+  },
+  "dependencies": {
+    "noflo": "~0.4.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jade": "~0.5.0",
@@ -23,6 +38,15 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-coffeelint": "0.0.7",
-    "grunt-selenium": "~0.4.15"
-  }
+    "grunt-selenium": "~0.4.15",
+    "grunt-cafe-mocha": "~0.1.2",
+    "grunt-mocha-phantomjs": "~0.2.2",
+    "grunt-component-build": "~0.2.7",
+    "grunt-combine": "~0.8.3",
+    "grunt-component": "~0.1.2",
+    "chai": "~1.5.0",
+    "mocha": "~1.9.0",
+    "component-json": "~0.1.4"
+  },
+  "keywords": []
 }

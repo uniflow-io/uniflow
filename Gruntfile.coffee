@@ -7,9 +7,9 @@ module.exports = (grunt) ->
 
   livereload = 35729
 
-  grunt.initConfig
-  
-    pkg: grunt.file.readJSON("package.json")
+  @initConfig
+
+    pkg: @file.readJSON("package.json")
 
     connect:
       server:
@@ -41,16 +41,24 @@ module.exports = (grunt) ->
         src: '<%= grunt.task.current.files %>'
         rename: (base, src) ->
           src
-            .replace(/^src\/(.*)$/, 'web/$1')
-            .replace(/coffee/g, 'js')
+          .replace(/^src\/(.*)$/, 'web/$1')
+          .replace(/coffee/g, 'js')
       web:
-        files: grunt.file.expandMapping(['src/coffee/**/*.coffee', '!node_modules/**/*.coffee'], '',
+        files: @file.expandMapping(['src/coffee/**/*.coffee', '!node_modules/**/*.coffee'], '',
           expand: true
           rename: (base, src) ->
             src
-              .replace(/^src\/(.*)$/, 'web/$1')
-              .replace(/coffee/g, 'js')
+            .replace(/^src\/(.*)$/, 'web/$1')
+            .replace(/coffee/g, 'js')
         )
+      spec:
+        options:
+          bare: true
+        expand: true
+        cwd: 'spec'
+        src: ['**.coffee']
+        dest: 'spec'
+        ext: '.js'
 
     less:
       changed:
@@ -60,9 +68,37 @@ module.exports = (grunt) ->
         files:
           'web/css/main.css': 'src/less/main.less'
 
+    component:
+      web:
+        options:
+          action: 'install'
+
+    component_build:
+      noflo:
+        output: './web/js/lib/'
+        config: './component.json'
+        scripts: true
+        styles: false
+        plugins: ['coffee']
+        configure: (builder) ->
+          # Enable Component plugins
+          json = require 'component-json'
+          builder.use json()
+
+  # Fix broken Component aliases, as mentioned in
+  # https://github.com/anthonyshort/component-coffee/issues/3
+    combine:
+      web:
+        input: 'web/js/lib/noflo.js'
+        output: 'web/js/lib/noflo.js'
+        tokens: [
+          token: '.coffee'
+          string: '.js'
+        ]
+
     watch:
       coffee:
-        files: ['src/coffee/**/*.coffee']
+        files: ['src/coffee/**/*.coffee', 'spec/*.coffee', 'components/*.coffee']
         tasks: ['coffee:web','notify:coffee']
         nospawn: true
       less:
@@ -82,7 +118,19 @@ module.exports = (grunt) ->
         options:
           livereload: livereload
 
-    # QA tools
+  # QA tools
+    cafemocha:
+      nodejs:
+        src: ['spec/*.coffee']
+        options:
+          reporter: 'dot'
+
+    mocha_phantomjs:
+      options:
+        output: 'spec/result.xml'
+        reporter: 'dot'
+      all: ['spec/runner.html']
+
     jshint:
       all: ['web/**/js/*.js', '!node_modules/**/*.js']
       options:
@@ -103,7 +151,7 @@ module.exports = (grunt) ->
         eqnull:   true
 
     coffeelint:
-      app: ['src/coffee/**/*.coffee']
+      app: ['src/coffee/**/*.coffee, components/*.coffee']
       options:
         max_line_length:
           level: 'ignore'
@@ -115,7 +163,7 @@ module.exports = (grunt) ->
         files:
           'web/tests/selenium/result.tap': ['web/tests/selenium/**/*.suite']
 
-    # build
+  # build
     clean:
       build: ['web/build']
 
@@ -145,26 +193,37 @@ module.exports = (grunt) ->
           dest: './'
         ]
 
-  grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-less'
-  grunt.loadNpmTasks 'grunt-contrib-jshint'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.loadNpmTasks 'grunt-contrib-connect'
-  grunt.loadNpmTasks 'grunt-contrib-clean'
-  grunt.loadNpmTasks 'grunt-contrib-copy'
-  grunt.loadNpmTasks 'grunt-contrib-uglify'
-  grunt.loadNpmTasks 'grunt-contrib-cssmin'
-  grunt.loadNpmTasks 'grunt-notify'
-  grunt.loadNpmTasks 'grunt-coffeelint'
-  grunt.loadNpmTasks 'grunt-selenium'
+  # web
+  @loadNpmTasks 'grunt-contrib-coffee'
+  @loadNpmTasks 'grunt-contrib-less'
+  @loadNpmTasks 'grunt-component'
+  @loadNpmTasks 'grunt-component-build'
+  @loadNpmTasks 'grunt-combine'
+  @loadNpmTasks 'grunt-contrib-jshint'
+  @loadNpmTasks 'grunt-contrib-watch'
+  @loadNpmTasks 'grunt-contrib-connect'
 
-  # Custom Tasks
-  grunt.registerTask 'compile:web', ['notify:compile','coffee:web','less:web']
+  # qa
+  @loadNpmTasks 'grunt-cafe-mocha'
+  @loadNpmTasks 'grunt-mocha-phantomjs'
+  @loadNpmTasks 'grunt-notify'
+  @loadNpmTasks 'grunt-coffeelint'
+  @loadNpmTasks 'grunt-selenium'
 
-  grunt.registerTask 'build', ['clean:build','copy:build','uglify:build','cssmin:build']
-  grunt.registerTask 'web', ['compile:web','watch']
-  grunt.registerTask 'qa', ['jshint','coffeelint','selenium']
+  # build
+  @loadNpmTasks 'grunt-contrib-clean'
+  @loadNpmTasks 'grunt-contrib-copy'
+  @loadNpmTasks 'grunt-contrib-uglify'
+  @loadNpmTasks 'grunt-contrib-cssmin'
 
-  grunt.registerTask 'default', ['web']
+  # tasks
+  @registerTask 'noflo:web', ['component:web','component_build:noflo','combine:web']
+  @registerTask 'compile:web', ['notify:compile','coffee:web','less:web','noflo:web']
+
+  @registerTask 'web', ['compile:web','watch']
+  @registerTask 'qa', ['jshint','coffeelint','selenium','cafemocha','mocha_phantomjs']
+  @registerTask 'build', ['clean:build','copy:build','uglify:build','cssmin:build']
+
+  @registerTask 'default', ['web']
 
   true
