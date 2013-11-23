@@ -20,9 +20,7 @@ define ['searchreplace/filter/filter', 'jquery'], (SRFilter, $) ->
       lines = ['!type Bank']
       $input = $(input)
       $lines = $input.find('tr')
-      $lines.each (i)->
-        return if i == 0
-
+      $lines.each ->
         $tr = $(@)
 
         data =
@@ -35,7 +33,7 @@ define ['searchreplace/filter/filter', 'jquery'], (SRFilter, $) ->
           'credit'    : $tr.find('td:eq(6) .itemFormReadOnly').text().replace(' ', '')
 
         line = [
-          'D' + data['dateval'],
+          'D' + data['datecompta'],
           'T' + if data['debit'] isnt '' then '-' + data['debit'] else '+' + data['credit'],
           'N' + data['ref'],
           'M' + data['libelleop']

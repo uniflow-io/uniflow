@@ -29,11 +29,8 @@
         lines = ['!type Bank'];
         $input = $(input);
         $lines = $input.find('tr');
-        $lines.each(function(i) {
+        $lines.each(function() {
           var $tr, data, line;
-          if (i === 0) {
-            return;
-          }
           $tr = $(this);
           data = {
             'datecompta': $tr.find('td:eq(0) .itemFormReadOnly').text(),
@@ -44,7 +41,7 @@
             'debit': $tr.find('td:eq(5) .itemFormReadOnly').text().replace(' ', ''),
             'credit': $tr.find('td:eq(6) .itemFormReadOnly').text().replace(' ', '')
           };
-          line = ['D' + data['dateval'], 'T' + (data['debit'] !== '' ? '-' + data['debit'] : '+' + data['credit']), 'N' + data['ref'], 'M' + data['libelleop']];
+          line = ['D' + data['datecompta'], 'T' + (data['debit'] !== '' ? '-' + data['debit'] : '+' + data['credit']), 'N' + data['ref'], 'M' + data['libelleop']];
           /*
           label = data['libelleop']
           if label.match /(MONOPRIX|FRANPRIX)/
