@@ -12,7 +12,7 @@ define [
   update = ->
     graph = new noflo.Graph
     graph.baseDir = "/searchreplace"
-    graph.addNode 'Replace', 'SRComponent'
+    graph.addNode 'Replace', $('#filters').val()
     graph.addNode 'Fun', 'Callback'
     graph.addEdge 'Replace', 'out', 'Fun', 'in'
     graph.addInitial (data) ->
