@@ -10,11 +10,17 @@ define [
   output = ace.edit 'output'
 
   update = ->
-    noflo.graph.loadFBP "'Hello, World!' -> IN Display(Output)", (graph) ->
-      graph.baseDir = "/searchreplace"
-      graph.addInitial input.getValue(), 'Display', 'in'
-      noflo.createNetwork graph, (network) ->
-        console.log "Network created"
+    graph = new noflo.Graph
+    graph.baseDir = "/searchreplace"
+    graph.addNode 'Replace', 'Output'
+    graph.addNode 'Fun', 'Callback'
+    graph.addEdge 'Replace', 'out', 'Fun', 'in'
+    graph.addInitial (data) ->
+      output.setValue data, -1
+    , 'Fun', 'callback'
+    graph.addInitial input.getValue(), 'Replace', 'in'
+    noflo.createNetwork graph, (network) ->
+      #console.log "Network created"
 
     output.setValue '', -1
 

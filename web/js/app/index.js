@@ -5,13 +5,17 @@
     input = ace.edit('input');
     output = ace.edit('output');
     update = function() {
-      noflo.graph.loadFBP("'Hello, World!' -> IN Display(Output)", function(graph) {
-        graph.baseDir = "/searchreplace";
-        graph.addInitial(input.getValue(), 'Display', 'in');
-        return noflo.createNetwork(graph, function(network) {
-          return console.log("Network created");
-        });
-      });
+      var graph;
+      graph = new noflo.Graph;
+      graph.baseDir = "/searchreplace";
+      graph.addNode('Replace', 'Output');
+      graph.addNode('Fun', 'Callback');
+      graph.addEdge('Replace', 'out', 'Fun', 'in');
+      graph.addInitial(function(data) {
+        return output.setValue(data, -1);
+      }, 'Fun', 'callback');
+      graph.addInitial(input.getValue(), 'Replace', 'in');
+      noflo.createNetwork(graph, function(network) {});
       return output.setValue('', -1);
     };
     $('#filters').on('change', function() {});
