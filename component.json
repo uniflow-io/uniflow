@@ -11,14 +11,14 @@
     "noflo/noflo-core": "*"
   },
   "scripts": [
-    "components/SRReplace.coffee"
+    "components/SRComponent.coffee"
   ],
   "json": [
     "component.json"
   ],
   "noflo": {
     "components": {
-      "SRReplace": "components/SRReplace.coffee"
+      "SRComponent": "components/SRComponent.coffee"
     }
   }
 }

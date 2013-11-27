@@ -5716,36 +5716,51 @@ exports.getComponent = function() {
 require.register("noflo-noflo-core/component.json", function(exports, require, module){
 module.exports = JSON.parse('{"name":"noflo-core","description":"NoFlo Essentials","repo":"noflo/noflo-core","version":"0.1.0","author":{"name":"Henri Bergius","email":"henri.bergius@iki.fi"},"contributors":[{"name":"Kenneth Kan","email":"kenhkan@gmail.com"},{"name":"Ryan Shaw","email":"ryanshaw@unc.edu"}],"keywords":[],"dependencies":{"noflo/noflo":"*","component/underscore":"*"},"scripts":["components/Callback.js","components/DisconnectAfterPacket.js","components/Drop.js","components/Group.js","components/Kick.js","components/Merge.js","components/Output.js","components/Repeat.js","components/RepeatAsync.js","components/Split.js","components/RunInterval.js","components/MakeFunction.js","index.js"],"json":["component.json"],"noflo":{"components":{"Callback":"components/Callback.js","DisconnectAfterPacket":"components/DisconnectAfterPacket.js","Drop":"components/Drop.js","Group":"components/Group.js","Kick":"components/Kick.js","Merge":"components/Merge.js","Output":"components/Output.js","Repeat":"components/Repeat.js","RepeatAsync":"components/RepeatAsync.js","Split":"components/Split.js","RunInterval":"components/RunInterval.js","MakeFunction":"components/MakeFunction.js"}}}');
 });
-require.register("searchreplace/components/Replace.js", function(exports, require, module){
-var Replace, noflo,
+require.register("searchreplace/components/SRComponent.js", function(exports, require, module){
+var SRComponent, noflo,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 noflo = require('noflo');
 
-Replace = (function(_super) {
-  __extends(Replace, _super);
+SRComponent = (function(_super) {
+  __extends(SRComponent, _super);
 
-  function Replace() {
+  SRComponent.prototype.description = 'SRComponent component base';
+
+  SRComponent.prototype.icon = 'SRComponent';
+
+  function SRComponent() {
+    var _this = this;
     this.inPorts = {
-      "in": new noflo.Port
+      "in": new noflo.ArrayPort('all')
     };
     this.outPorts = {
-      out: new noflo.Port
+      out: new noflo.Port('all')
     };
+    this.inPorts["in"].on('data', function(data) {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.send(data);
+      }
+    });
+    this.inPorts["in"].on('disconnect', function() {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.disconnect();
+      }
+    });
   }
 
-  return Replace;
+  return SRComponent;
 
 })(noflo.Component);
 
 exports.getComponent = function() {
-  return new Replace;
+  return new SRComponent();
 };
 
 });
 require.register("searchreplace/component.json", function(exports, require, module){
-module.exports = JSON.parse('{"name":"searchreplace","description":"SearchReplace tool","author":"Mathieu Ledru <matyo91@gmail.com>","repo":"math/searchreplace","version":"0.1.0","keywords":[],"dependencies":{"noflo/noflo":"*","noflo/noflo-core":"*"},"scripts":["components/Replace.js"],"json":["component.json"],"noflo":{"components":{"Replace":"components/Replace.js"}}}');
+module.exports = JSON.parse('{"name":"searchreplace","description":"SearchReplace tool","author":"Mathieu Ledru <matyo91@gmail.com>","repo":"math/searchreplace","version":"0.1.0","keywords":[],"dependencies":{"noflo/noflo":"*","noflo/noflo-core":"*"},"scripts":["components/SRComponent.js"],"json":["component.json"],"noflo":{"components":{"SRComponent":"components/SRComponent.js"}}}');
 });
 require.alias("noflo-noflo/src/lib/Graph.js", "searchreplace/deps/noflo/src/lib/Graph.js");
 require.alias("noflo-noflo/src/lib/InternalSocket.js", "searchreplace/deps/noflo/src/lib/InternalSocket.js");

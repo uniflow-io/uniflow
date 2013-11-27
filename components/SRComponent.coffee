@@ -1,8 +1,8 @@
 noflo = require 'noflo'
 
-class SRReplace extends noflo.Component
-  description: 'SRReplace component base'
-  icon: 'SRReplace'
+class SRComponent extends noflo.Component
+  description: 'SRComponent component base'
+  icon: 'SRComponent'
 
   constructor: ->
     @inPorts =
@@ -17,4 +17,4 @@ class SRReplace extends noflo.Component
     @inPorts.in.on 'disconnect', =>
       @outPorts.out.disconnect() if @outPorts.out.isAttached()
 
-exports.getComponent = -> new SRReplace()
+exports.getComponent = -> new SRComponent()

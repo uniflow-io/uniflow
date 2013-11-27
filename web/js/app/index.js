@@ -8,7 +8,7 @@
       var graph;
       graph = new noflo.Graph;
       graph.baseDir = "/searchreplace";
-      graph.addNode('Replace', 'Output');
+      graph.addNode('Replace', 'SRComponent');
       graph.addNode('Fun', 'Callback');
       graph.addEdge('Replace', 'out', 'Fun', 'in');
       graph.addInitial(function(data) {
