@@ -16,6 +16,8 @@
     "components/SRPHP.coffee",
     "components/SRGettersAndSetters.coffee",
     "components/SRBankToEldorado.coffee",
+
+    //libs - AMD
     "web/js/lib/php/PHP.js",
     "web/js/lib/php/xhr.js"
   ],
