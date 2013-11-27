@@ -15,7 +15,9 @@
     "components/SRComponent.coffee",
     "components/SRPHP.coffee",
     "components/SRGettersAndSetters.coffee",
-    "components/SRBankToEldorado.coffee"
+    "components/SRBankToEldorado.coffee",
+    "web/js/lib/php/PHP.js",
+    "web/js/lib/php/xhr.js"
   ],
   "json": [
     "component.json"

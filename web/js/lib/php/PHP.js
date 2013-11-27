@@ -15161,3 +15161,10 @@ PHP.Locales = {
     
     
 };
+
+//AMD
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = PHP;
+    }
+}

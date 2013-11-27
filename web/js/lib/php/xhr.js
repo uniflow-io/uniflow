@@ -4,6 +4,7 @@
 * @website http://hertzen.com
  */
 
+var PHP = require('/searchreplace/web/js/lib/php/PHP');
 
 PHP.Adapters.XHRFileSystem = function() {
     /*
