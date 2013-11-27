@@ -2,11 +2,12 @@
   "name": "searchreplace",
   "description": "SearchReplace tool",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
-  "repo": "math/searchreplace",
+  "repo": "darkwood/searchreplace",
   "version": "0.1.0",
   "keywords": [
   ],
   "dependencies": {
+    "component/jquery": "*",
     "noflo/noflo": "*",
     "noflo/noflo-core": "*"
   },
