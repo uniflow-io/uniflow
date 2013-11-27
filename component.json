@@ -11,14 +11,20 @@
     "noflo/noflo-core": "*"
   },
   "scripts": [
-    "components/SRComponent.coffee"
+    "components/SRComponent.coffee",
+    "components/SRPHP.coffee",
+    "components/SRGettersAndSetters.coffee",
+    "components/SRBankToEldorado.coffee"
   ],
   "json": [
     "component.json"
   ],
   "noflo": {
     "components": {
-      "SRComponent": "components/SRComponent.coffee"
+      "SRComponent": "components/SRComponent.coffee",
+      "SRPHP": "components/SRPHP.coffee",
+      "SRGettersAndSetters": "components/SRGettersAndSetters.coffee",
+      "SRBankToEldorado": "components/SRBankToEldorado.coffee"
     }
   }
 }

@@ -22,9 +22,8 @@ define [
     noflo.createNetwork graph, (network) ->
       #console.log "Network created"
 
-    output.setValue '', -1
-
   $('#filters').on 'change', ->
+    update()
 
   $('#filters').trigger('change')
 

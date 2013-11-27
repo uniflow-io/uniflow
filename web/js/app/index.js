@@ -15,10 +15,11 @@
         return output.setValue(data, -1);
       }, 'Fun', 'callback');
       graph.addInitial(input.getValue(), 'Replace', 'in');
-      noflo.createNetwork(graph, function(network) {});
-      return output.setValue('', -1);
+      return noflo.createNetwork(graph, function(network) {});
     };
-    $('#filters').on('change', function() {});
+    $('#filters').on('change', function() {
+      return update();
+    });
     $('#filters').trigger('change');
     return input.on('change', function() {
       input.getValue();

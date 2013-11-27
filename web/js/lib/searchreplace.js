@@ -5759,8 +5759,137 @@ exports.getComponent = function() {
 };
 
 });
+require.register("searchreplace/components/SRPHP.js", function(exports, require, module){
+var SRPHP, noflo,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+noflo = require('noflo');
+
+SRPHP = (function(_super) {
+  __extends(SRPHP, _super);
+
+  SRPHP.prototype.description = 'SRPHP component base';
+
+  SRPHP.prototype.icon = 'SRPHP';
+
+  function SRPHP() {
+    var _this = this;
+    this.inPorts = {
+      "in": new noflo.ArrayPort('all')
+    };
+    this.outPorts = {
+      out: new noflo.Port('all')
+    };
+    this.inPorts["in"].on('data', function(data) {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.send(data);
+      }
+    });
+    this.inPorts["in"].on('disconnect', function() {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.disconnect();
+      }
+    });
+  }
+
+  return SRPHP;
+
+})(noflo.Component);
+
+exports.getComponent = function() {
+  return new SRPHP();
+};
+
+});
+require.register("searchreplace/components/SRGettersAndSetters.js", function(exports, require, module){
+var SRGettersAndSetters, noflo,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+noflo = require('noflo');
+
+SRGettersAndSetters = (function(_super) {
+  __extends(SRGettersAndSetters, _super);
+
+  SRGettersAndSetters.prototype.description = 'SRGettersAndSetters component base';
+
+  SRGettersAndSetters.prototype.icon = 'SRGettersAndSetters';
+
+  function SRGettersAndSetters() {
+    var _this = this;
+    this.inPorts = {
+      "in": new noflo.ArrayPort('all')
+    };
+    this.outPorts = {
+      out: new noflo.Port('all')
+    };
+    this.inPorts["in"].on('data', function(data) {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.send(data);
+      }
+    });
+    this.inPorts["in"].on('disconnect', function() {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.disconnect();
+      }
+    });
+  }
+
+  return SRGettersAndSetters;
+
+})(noflo.Component);
+
+exports.getComponent = function() {
+  return new SRGettersAndSetters();
+};
+
+});
+require.register("searchreplace/components/SRBankToEldorado.js", function(exports, require, module){
+var SRBankToEldorado, noflo,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+noflo = require('noflo');
+
+SRBankToEldorado = (function(_super) {
+  __extends(SRBankToEldorado, _super);
+
+  SRBankToEldorado.prototype.description = 'SRBankToEldorado component base';
+
+  SRBankToEldorado.prototype.icon = 'SRBankToEldorado';
+
+  function SRBankToEldorado() {
+    var _this = this;
+    this.inPorts = {
+      "in": new noflo.ArrayPort('all')
+    };
+    this.outPorts = {
+      out: new noflo.Port('all')
+    };
+    this.inPorts["in"].on('data', function(data) {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.send(data);
+      }
+    });
+    this.inPorts["in"].on('disconnect', function() {
+      if (_this.outPorts.out.isAttached()) {
+        return _this.outPorts.out.disconnect();
+      }
+    });
+  }
+
+  return SRBankToEldorado;
+
+})(noflo.Component);
+
+exports.getComponent = function() {
+  return new SRBankToEldorado();
+};
+
+});
 require.register("searchreplace/component.json", function(exports, require, module){
-module.exports = JSON.parse('{"name":"searchreplace","description":"SearchReplace tool","author":"Mathieu Ledru <matyo91@gmail.com>","repo":"math/searchreplace","version":"0.1.0","keywords":[],"dependencies":{"noflo/noflo":"*","noflo/noflo-core":"*"},"scripts":["components/SRComponent.js"],"json":["component.json"],"noflo":{"components":{"SRComponent":"components/SRComponent.js"}}}');
+module.exports = JSON.parse('{"name":"searchreplace","description":"SearchReplace tool","author":"Mathieu Ledru <matyo91@gmail.com>","repo":"math/searchreplace","version":"0.1.0","keywords":[],"dependencies":{"noflo/noflo":"*","noflo/noflo-core":"*"},"scripts":["components/SRComponent.js","components/SRPHP.js","components/SRGettersAndSetters.js","components/SRBankToEldorado.js"],"json":["component.json"],"noflo":{"components":{"SRComponent":"components/SRComponent.js","SRPHP":"components/SRPHP.js","SRGettersAndSetters":"components/SRGettersAndSetters.js","SRBankToEldorado":"components/SRBankToEldorado.js"}}}');
 });
 require.alias("noflo-noflo/src/lib/Graph.js", "searchreplace/deps/noflo/src/lib/Graph.js");
 require.alias("noflo-noflo/src/lib/InternalSocket.js", "searchreplace/deps/noflo/src/lib/InternalSocket.js");
