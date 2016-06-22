@@ -12,6 +12,6 @@ node_modules
 .idea
 
 # grunt
-web/build
-web/tests/selenium/*.tap
-components/*/
+old/web/build
+old/web/tests/selenium/*.tap
+old/components/*/
