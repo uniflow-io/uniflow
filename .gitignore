@@ -1,15 +1,25 @@
-# Mac
+# MAC OS
 .DS_Store
 ._.DS_Store
 
-# Vagrant
-.vagrant
-
-# Node
+# NPM
 node_modules
+*.log
+npm-debug.log*
 
 # PhpStorm
 .idea
+
+# Vagrant
+/.vagrant
+/puphpet/files/dot/ssh/id_rsa
+/puphpet/files/dot/ssh/id_rsa.pem
+/puphpet/files/dot/ssh/id_rsa.ppk
+/puphpet/files/dot/ssh/id_rsa.pub
+/puphpet/files/dot/ssh/root_id_rsa
+/puphpet/files/dot/ssh/root_id_rsa.pem
+/puphpet/files/dot/ssh/root_id_rsa.ppk
+/puphpet/files/dot/ssh/root_id_rsa.pub
 
 # grunt
 old/web/build
