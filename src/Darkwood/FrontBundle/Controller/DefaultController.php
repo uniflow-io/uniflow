@@ -37,8 +37,6 @@ class DefaultController extends Controller
 
     public function homeAction(Request $request)
     {
-        return $this->render('FrontBundle:pages:home.html.twig', array(
-
-        ));
+        return $this->render('FrontBundle::layout.html.twig');
     }
 }
