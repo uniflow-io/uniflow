@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forte htacces IT</title>
+</head>
+<body>
+<div id="text"></div>
+<script>
+    (function() {
+        var txt =
+                "node/249396	laboratoires/la-nostra-storia	http://www.fortepharma.com/it/laboratori/la-nostra-storia \
+                node/249397	laboratoires/la-nostra-mission-il-nostro-impegno	http://www.fortepharma.com/it/laboratori/la-nostra-mission \
+                node/249398	laboratoires/una-presenza-internazionale	http://www.fortepharma.com/it/laboratori/internazionale \
+                node/249399	laboratoires/forte-pharma-sintesi	http://www.fortepharma.com/it/laboratori/in-breve \
+                node/35368	schede-consigli/la-cronobiologia	http://www.fortepharma.com/it/controllo-del-peso/scheda-di-suggerimenti/la-cronobiologia \
+                node/35369	schede-consigli/gli-integratori-alimentari	http://www.fortepharma.com/it/scheda-di-suggerimenti/gli-integratori-alimentari \
+                node/35429	crediti	http://www.fortepharma.com/it/avvertenze-legali \
+                node/35435	profilo-di-controllo-del-peso	http://www.fortepharma.com/it/controllo-del-peso \
+                node/35436	profilo-di-controllo-del-peso-0	http://www.fortepharma.com/it/controllo-del-peso \
+                node/40077	schede-consigli/l-imc-fornisce-una-valutazione-esatta-della-corpulenza	http://www.fortepharma.com/it/controllo-del-peso/scheda-di-suggerimenti/l-imc-una-valutazione-affidabile-del-tuo-peso \
+                node/53714	schede-consigli/la-stanchezza	http://www.fortepharma.com/it/energia/scheda-di-suggerimenti/la-stanchezza \
+                node/236417	page/bozza-menzioni-relative-ai-cookies	http://www.fortepharma.com/it/avvertenze-legali \
+                node/35385	controllo-del-peso/drenanti	http://www.fortepharma.com/it/controllo-del-peso/prodotti \
+                node/35386	controllo-del-peso/riducenti/turboslim-24	http://www.fortepharma.com/it/controllo-del-peso/prodotti/turboslim-24-forte \
+                node/35390	controllo-del-peso/drenanti-e-riducenti/turboslim-drenante	http://www.fortepharma.com/it/controllo-del-peso/prodotti/turboslim-drenante \
+                node/35396	controllo-del-peso/drenanti/turboslim-drenante-compresse	http://www.fortepharma.com/it/controllo-del-peso/prodotti \
+                node/35397	controllo-del-peso/riducenti/turboslim-15	http://www.fortepharma.com/it/controllo-del-peso/prodotti \
+                node/147761	controllo-del-peso/riducenti	http://www.fortepharma.com/it/controllo-del-peso/prodotti \
+                node/189479	energia/una-marcia-piu	http://www.fortepharma.com/it/energia/prodotti \
+                node/189480	energia/una-marcia-piu/energie-taurine-power	http://www.fortepharma.com/it/energia/prodotti/energia-taurina-power \
+                node/189481	energia/una-marcia-piu/energie-v4g-compresse	http://www.fortepharma.com/it/energia/prodotti/vitalita-4g-dynamisant \
+                node/189482	bellezza/capelli	http://www.fortepharma.com/it/ \
+                node/189484	controllo-del-peso/adiuvanti-la-linea	http://www.fortepharma.com/it/controllo-del-peso/prodotti \
+                node/189485	controllo-del-peso/adiuvanti-la-linea/calorilight	http://www.fortepharma.com/it/controllo-del-peso/prodotti/calorilight \
+                node/35379	energia	http://www.fortepharma.com/it/energia \
+                node/35384	controllo-del-peso	http://www.fortepharma.com/it/controllo-del-peso";
+        var list = txt.split("                 ");
+        var textEl = document.getElementById('text');
+        var content = '';
+        for (var i = 0; i < list.length; i++) {
+            var rows = list[i].split('\t');
+
+            content += '    RewriteRule ^'+rows[0]+'(.*)$ '+rows[2]+' [R=301,L] <br />\
+            RewriteRule ^'+rows[1]+'(.*)$ '+rows[2]+' [R=301,L] <br /> <br />'
+        }
+        textEl.innerHTML = content;
+    })();
+</script>
+</body>
+</html>
