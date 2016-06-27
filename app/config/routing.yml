@@ -3,5 +3,4 @@ _liip_imagine:
 
 front:
     resource: '@FrontBundle/Resources/config/routing.yml'
-    type: be_simple_i18n
     prefix:   /

@@ -6,5 +6,5 @@ remove_trailing_slash:
   methods: [GET]
 
 home:
-  locales:  { fr: '/', en: '/en', de: '/de' }
+  path: /
   defaults: { _controller: FrontBundle:Default:home }
