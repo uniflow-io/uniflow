@@ -27,12 +27,64 @@
         "symfony/polyfill-apcu": "^1.0",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "^2.0"
+        "incenteev/composer-parameter-handler": "^2.0",
+
+        "stof/doctrine-extensions-bundle": "~1.1@dev",
+        "doctrine/doctrine-fixtures-bundle": "@stable",
+        "doctrine/data-fixtures" : "@stable",
+        "doctrine/doctrine-migrations-bundle": "@stable",
+        "doctrine/migrations": "@stable",
+        "knplabs/knp-paginator-bundle": "@stable",
+        "whiteoctober/breadcrumbs-bundle": "@stable",
+        "symfony/assetic-bundle": "@stable",
+        "liip/imagine-bundle": "@stable",
+        "besimple/i18n-routing-bundle": "dev-master",
+        "cache/adapter-bundle": "@stable",
+        "cache/filesystem-adapter": "@stable",
+        "cache/doctrine-adapter": "@stable",
+        "cache/psr-6-doctrine-bridge": "@stable",
+        "vich/uploader-bundle": "@stable",
+        "twig/extensions": "@stable",
+
+        "darkwood/core-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "willdurand/faker-bundle": "@stable"
     },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "darkwood/core-bundle",
+                "version": "dev-master",
+                "dist": {
+                    "url": "src/darkwood-core-bundle.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": {"Darkwood\\CoreBundle": ""}
+                },
+                "target-dir": "Darkwood/CoreBundle"
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "besimple/i18n-routing-bundle",
+                "version": "dev-master",
+                "dist": {
+                    "url": "src/besimple-i18n-routing-bundle.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": {"BeSimple\\I18nRoutingBundle": ""}
+                },
+                "target-dir": "BeSimple/I18nRoutingBundle"
+            }
+        }
+    ],
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

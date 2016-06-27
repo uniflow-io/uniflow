@@ -1,10 +1,10 @@
 remove_trailing_slash:
-    path: /{url}
-    defaults: { _controller: FrontBundle:Default:removeTrailingSlash }
-    requirements:
-        url: .*/$
-    methods: [GET]
+  path: /{url}
+  defaults: { _controller: FrontBundle:Common:removeTrailingSlash }
+  requirements:
+    url: .*/$
+  methods: [GET]
 
 home:
-    path:     /
-    defaults: { _controller: FrontBundle:Default:index }
+  locales:  { fr: '/', en: '/en', de: '/de' }
+  defaults: { _controller: FrontBundle:Default:home }

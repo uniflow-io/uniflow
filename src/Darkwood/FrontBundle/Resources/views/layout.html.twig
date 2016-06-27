@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}" class="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ page.title }}</title>
+    <meta name="description" content="{{ page.seoDescription }}">
+    <meta name="keywords" content="{{ page.seoKeywords }}">
+
+    <link rel="author" href="{{ asset('/humans.txt') }}" />
+    <meta name="Owner" content="Mathieu Ledru"/>
+    <meta name="Author" content="Mathieu Ledru"/>
+    <meta name="Publisher" content="Mathieu Ledru"/>
+    <meta name="Date-Creation-yyyymmdd" content="20051005"/>
+
+    {# google webmaster tool -#}
+    <meta name="google-site-verification" content="LJqS0GX15gkq-lSFKr_tuWRfw-EUz4rgZR1LoEvzpKU" />
+
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ path(page.page.site.ref ~ '_sitemap_xml') }}" />
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="{{ path(page.page.site.ref ~ '_rss') }}" />
+
+    {# social share facebook -#}
+    <meta property="og:site_name" content="{{ data.site.ref|default('') }}">
+    <meta property="og:title" content="{{ data.meta.facebook.title|default('') }}">
+    <meta property="og:description" content="{{ data.meta.facebook.description|default('') }}">
+    <meta property="og:url" content="{{ data.meta.facebook.url|default('') }}">
+    <meta property="og:type" content="{{ data.meta.facebook.type|default('') }}">
+    <meta property="og:image" content="{{ absolute_url(data.meta.facebook.src.desktop|default('/bundles/front/common/images/site/cover.png')) }}">
+    <meta property="og:locale" content="{{ app.request.locale }}">
+
+    {# social share twitter -#}
+    <meta name="twitter:card" content="{{ data.meta.twitter.card|default('') }}">
+    <meta name="twitter:site" content="{{ data.meta.twitter.site|default('') }}">
+    <meta name="twitter:title" content="{{ data.meta.twitter.title|default('') }}">
+    <meta name="twitter:description" content="{{ data.meta.twitter.description|default('') }}">
+    <meta name="twitter:image:src" content="{{ absolute_url(data.meta.twitter.src.desktop|default('/bundles/front/common/images/site/cover.png')) }}">
+
+    {{ render(controller('FrontBundle:Common:hreflangs', { 'ref': page.page.ref })) }}
+
+    {% block css -%}
+    {% stylesheets filter='cssrewrite' filter='?uglifycss' output='css/darkwood.min.css'
+        'bundles/front/common/js/bootstrap-3.3.6/css/bootstrap.css'
+        'bundles/front/common/js/font-awesome-4.6.1/css/font-awesome.css'
+        'bundles/front/common/js/bootstrap-social/bootstrap-social.css'
+        'bundles/front/common/js/jquery-ui-1.11.4/jquery-ui.css'
+        'bundles/front/common/css/components/layout.css'
+        'bundles/front/common/css/components/theme.css'
+        'bundles/front/common/css/components/theme-darkwood.css'
+        'bundles/front/common/css/components/theme-sky.css'
+        'bundles/front/common/css/components/theme-photos.css'
+        'bundles/front/common/css/components/nav-menu-blue.css'
+        'bundles/front/common/css/components/nav-menu-brown.css'
+        'bundles/front/common/css/components/nav-menu-dark.css'
+        'bundles/front/common/css/components/navbar-transparent.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    {% endblock %}
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="{% block layout %}layout{% endblock %}">
+
+    {% block body %}{% endblock %}
+
+    {% block javascript -%}
+    <!-- google analytics -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', '{{ page.page.site.gaId }}']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- facebook integration -->
+    <script type="text/javascript">
+        var facebookContext = {
+            'appId': '{{ facebook_app_id }}',
+            'fbPhpUser' : '',
+            'locale': '{{ app.request.locale }}',
+            'url_connect': '{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}'
+        };
+    </script>
+
+    <!-- scripts -->
+    {% javascripts filter='?uglifyjs2' output='js/darkwood.min.js'
+        'bundles/front/common/js/jquery.js'
+        'bundles/front/common/js/jquery-ui-1.11.4/jquery-ui.js'
+        'bundles/front/common/js/bootstrap-3.3.6/js/bootstrap.js'
+        'bundles/front/common/js/darkwood.js'
+        'bundles/front/common/js/facebook.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% endblock %}
+
+</body>
+</html>

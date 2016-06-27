@@ -4,16 +4,40 @@
 parameters:
     database_host:     127.0.0.1
     database_port:     ~
-    database_name:     symfony
+    database_name:     darkwood
     database_user:     root
-    database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
+    database_password: root
 
     mailer_transport:  smtp
-    mailer_host:       127.0.0.1
+    mailer_host:      'localhost:1025'
     mailer_user:       ~
     mailer_password:   ~
 
     # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            a545b4729708f24e3dc1ebde34e2edd8
+
+    cookie_domain:     .darkwood.dev
+
+    trusted_proxies:   [127.0.0.1]
+
+    hosts_darkwood:    www.darkwood.dev
+    hosts_apps:        apps.darkwood.dev
+    hosts_photos:      photos.darkwood.dev
+    hosts_blog:        blog.darkwood.dev
+    hosts_me:          me.darkwood.dev
+    hosts_admin:       admin.darkwood.dev
+    hosts_cdn:         cdn.darkwood.dev
+
+    facebook_app_id: 121225051255583
+    facebook_app_secret: c2f4902bd1bee7382e9b16b4c03396f7
+
+    redis_host: 127.0.0.1
+    redis_port: 6379
+
+    recaptcha_public_key: 6LdYLxETAAAAAGvaRgUIb5NpEtfp10AFX6b46Z1D
+    recaptcha_private_key: 6LdYLxETAAAAAF-KQmBI1MCcMqzEnuLVHKZV_K6Y
+
+    binary_jpegoptim: /usr/bin/jpegoptim
+    binary_optipng:   /usr/bin/optipng
+    binary_uglifycss: /usr/bin/uglifycss
+    binary_uglifyjs:  /usr/bin/uglifyjs

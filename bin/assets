@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo ""
+echo ""
+echo "[1;96m-------------------- [00m"
+echo "[1;96m----------- DEPLOY ASSETS [00m"
+echo "[1;96m-------------------- [00m"
+
+
+echo ""
+echo ""
+echo "[1;93m----------- INSTALL ASSETS [00m"
+echo ""
+
+php bin/console assets:install web --symlink
+
+
+#echo ""
+#echo ""
+#echo "[1;93m----------- ASSETIC DUMP [00m"
+#echo ""
+
+php bin/console assetic:dump --env=prod --no-debug

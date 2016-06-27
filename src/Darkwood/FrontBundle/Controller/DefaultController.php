@@ -2,16 +2,27 @@
 
 namespace Darkwood\FrontBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Darkwood\FrontBundle\Entity\Contact;
+use Darkwood\FrontBundle\Entity\Page;
+use Darkwood\FrontBundle\Entity\PageTranslation;
+use Darkwood\FrontBundle\Form\Type\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
+/**
+ * Class DefaultController.
+ */
 class DefaultController extends Controller
 {
     /**
-     * Remove slash and redirect 301
+     * Remove slash and redirect 301.
      *
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function removeTrailingSlashAction(Request $request)
@@ -24,11 +35,10 @@ class DefaultController extends Controller
         return $this->redirect($url, 301);
     }
 
-    public function indexAction(Request $request)
+    public function homeAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
-        ]);
+        return $this->render('FrontBundle:pages:home.html.twig', array(
+
+        ));
     }
 }

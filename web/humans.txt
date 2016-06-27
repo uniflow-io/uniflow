@@ -1,0 +1,24 @@
+# humanstxt.org
+# The humans responsible & technology colophon
+
+      ____                     __                                      __
+     /\  _`\                  /\ \                                    /\ \
+     \ \ \/\ \     __     _ __\ \ \/'\   __  __  __    ___     ___    \_\ \
+      \ \ \ \ \  /'__`\  /\`'__\ \ , <  /\ \/\ \/\ \  / __`\  / __`\  /'_` \
+       \ \ \_\ \/\ \L\.\_\ \ \/ \ \ \\`\\ \ \_/ \_/ \/\ \L\ \/\ \L\ \/\ \L\ \
+        \ \____/\ \__/.\_\\ \_\  \ \_\ \_\ \___x___/'\ \____/\ \____/\ \___,_\
+         \/___/  \/__/\/_/ \/_/   \/_/\/_/\/__//__/   \/___/  \/___/  \/__,_ /
+
+
+# DARKWOOD
+
+Darkwood est un site personnel réalisé et maintenu entièrement avec amour par une seule personne (DA, Front, Back).
+
+# HUMANS
+
+Mathieu Ledru: @matyo91
+
+# SITE
+
+Standards: HTML5, CSS3, Bootstrap, Javascript, Symfony
+Software: Git, PHPStorm

@@ -1,9 +1,22 @@
-# Learn more about services, parameters and containers at
-# http://symfony.com/doc/current/book/service_container.html
 parameters:
-#    parameter_name: value
+    dw.doctrineCache.class: Cache\Bridge\DoctrineCacheBridge
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    dw.defaultCache:
+        class: '%dw.doctrineCache.class%'
+        arguments: [ '@cache.provider.defaultCache' ]
+
+    twig.extension.text:
+       class: Twig_Extensions_Extension_Text
+       tags:
+           - { name: twig.extension }
+
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.string_loader:
+        class: Twig_Extension_StringLoader
+        tags:
+            - { name: twig.extension }

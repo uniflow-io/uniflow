@@ -1,3 +1,7 @@
+_liip_imagine:
+    resource: '@LiipImagineBundle/Resources/config/routing.xml'
+
 front:
-    resource: "@FrontBundle/Resources/config/routing.yml"
+    resource: '@FrontBundle/Resources/config/routing.yml'
+    type: be_simple_i18n
     prefix:   /
