@@ -1,6 +1,0 @@
-_liip_imagine:
-    resource: '@LiipImagineBundle/Resources/config/routing.xml'
-
-front:
-    resource: '@FrontBundle/Resources/config/routing.yml'
-    prefix:   /

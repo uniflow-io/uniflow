@@ -1,6 +1,0 @@
-#!/bin/sh
-
-sh ./bin/cache
-sh ./bin/assets
-sh ./bin/fixture
-#sh ./bin/test
