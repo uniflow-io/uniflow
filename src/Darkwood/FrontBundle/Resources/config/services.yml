@@ -1,6 +1,9 @@
 parameters:
     # Services Class
+    dw.component.sftp.class: Darkwood\FrontBundle\Components\SFTPComponent
 
     # Entities Class
 
 services:
+    dw.component.sftp:
+        class: '%dw.component.sftp.class%'
