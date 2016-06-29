@@ -7,5 +7,5 @@
 
     var a = new Coucou();
     a.dodo();
-
+    require('dede');
 })();
