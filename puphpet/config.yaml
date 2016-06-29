@@ -180,7 +180,7 @@ apache:
             servername: searchreplace.darkwood.dev
             serveraliases:
                 - searchreplace.darkwood.dev
-            docroot: /var/www/back/web
+            docroot: /var/www/web
             port: '80'
             setenv:
                 - 'APP_ENV dev'
@@ -196,7 +196,7 @@ apache:
             ssl_cipher: ''
             directories:
                 avd_g5se2rem48wp:
-                    path: /var/www/back/web
+                    path: /var/www/web
                     options:
                         - Indexes
                         - FollowSymlinks
