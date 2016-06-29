@@ -27,19 +27,19 @@ old/web/tests/selenium/*.tap
 old/components/*/
 
 # Symfony
-/app/config/parameters.yml
-/build/
-/phpunit.xml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
-/vendor/
-/web/bundles/
+/back/app/config/parameters.yml
+/back/build/
+/back/phpunit.xml
+/back/var/*
+!/back/var/cache
+/back/var/cache/*
+!back/var/cache/.gitkeep
+!/back/var/logs
+/back/var/logs/*
+!back/var/logs/.gitkeep
+!/back/var/sessions
+/back/var/sessions/*
+!back/var/sessions/.gitkeep
+!back/var/SymfonyRequirements.php
+/back/vendor/
+/back/web/bundles/
