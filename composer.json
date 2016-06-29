@@ -45,6 +45,8 @@
         "cache/psr-6-doctrine-bridge": "@stable",
         "vich/uploader-bundle": "@stable",
         "twig/extensions": "@stable",
+        "oneup/flysystem-bundle": "@stable",
+        "league/flysystem-sftp": "@stable",
 
         "darkwood/core-bundle": "dev-master"
     },
