@@ -1,0 +1,283 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    liip_imagine.jpegoptim.binary: '%binary_jpegoptim%'
+    liip_imagine.optipng.binary: '%binary_optipng%'
+    locale: fr
+
+framework:
+    #esi:             ~
+    translator:      { fallbacks: ['%locale%'] }
+    secret:          '%secret%'
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  '%locale%'
+    trusted_hosts:   ~
+    trusted_proxies: '%trusted_proxies%'
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+        cookie_domain: '%cookie_domain%'
+    fragments:       ~
+    http_method_override: true
+    assets:
+        packages:
+            cdn:
+                base_urls: ['http://%hosts_cdn%']
+
+core:
+    cache:
+        random_percent: 10  # +/- random_pourcent %
+        # durees de mises en caches en secondes
+        esi:
+        data:
+            sitemap: 43200 # 12h
+            social:  1800  # 30 min
+            page:    120   # 2 min
+            brick:   180   # 3 min
+            router:  43200 # 12h
+    device: ~
+
+# Twig Configuration
+twig:
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+cache_adapter:
+    providers:
+        defaultCache:
+            factory: 'cache.factory.doctrine_filesystem'
+            options:
+                directory: '%kernel.cache_dir%/datacache'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     '%database_host%'
+        port:     '%database_port%'
+        dbname:   '%database_name%'
+        user:     '%database_user%'
+        password: '%database_password%'
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: '%kernel.root_dir%/data/data.db3'
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     '%database_path%'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        entity_managers:
+            default:
+                auto_mapping: true
+                mappings:
+                    gedmo_translatable:
+                        type: annotation
+                        prefix: Gedmo\Translatable\Entity
+                        dir: '%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity'
+                        alias: GedmoTranslatable # this one is optional and will default to the name set for the mapping
+                        is_bundle: false
+                    gedmo_translator:
+                        type: annotation
+                        prefix: Gedmo\Translator\Entity
+                        dir: '%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity'
+                        alias: GedmoTranslator # this one is optional and will default to the name set for the mapping
+                        is_bundle: false
+                    gedmo_loggable:
+                        type: annotation
+                        prefix: Gedmo\Loggable\Entity
+                        dir: '%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity'
+                        alias: GedmoLoggable # this one is optional and will default to the name set for the mapping
+                        is_bundle: false
+                    gedmo_tree:
+                        type: annotation
+                        prefix: Gedmo\Tree\Entity
+                        dir: '%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity'
+                        alias: GedmoTree # this one is optional and will default to the name set for the mapping
+                        is_bundle: false
+                dql:
+                    numeric_functions:
+                        DEGREES: Darkwood\CoreBundle\Query\Mysql\Degrees
+                        ACOS: Darkwood\CoreBundle\Query\Mysql\Acos
+                        SIN: Darkwood\CoreBundle\Query\Mysql\Sin
+                        RADIANS: Darkwood\CoreBundle\Query\Mysql\Radians
+                        COS: Darkwood\CoreBundle\Query\Mysql\Cos
+                        RAND: Darkwood\CoreBundle\Query\Mysql\Rand
+
+stof_doctrine_extensions:
+    default_locale: en
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            translatable: true
+            loggable: true
+            sluggable: true
+            sortable: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host:      '%mailer_host%'
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
+    spool:     { type: memory }
+
+# Paginator
+knp_paginator:
+    page_range: 5                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: AdminBundle:partials:sliding.html.twig     # sliding pagination controls template
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+
+# Breadcrumb
+white_october_breadcrumbs:
+    separator: ''
+    separatorClass: 'divider'
+
+# Vich uploader
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        users:
+            uri_prefix:         /media/users
+            upload_destination: '%kernel.root_dir%/../web/media/users'
+            namer:              vich_uploader.namer_uniqid
+        sites:
+            uri_prefix:         /media/sites
+            upload_destination: '%kernel.root_dir%/../web/media/sites'
+            namer:              vich_uploader.namer_uniqid
+        pages:
+            uri_prefix:         /media/pages/images
+            upload_destination: '%kernel.root_dir%/../web/media/pages/images'
+            namer:              vich_uploader.namer_uniqid
+        thumbnailPages:
+            uri_prefix:         /media/pages/thumbnails
+            upload_destination: '%kernel.root_dir%/../web/media/pages/thumbnails'
+            namer:              vich_uploader.namer_uniqid
+        twitterPages:
+            uri_prefix:         /media/pages/twitters
+            upload_destination: '%kernel.root_dir%/../web/media/pages/twitters'
+            namer:              vich_uploader.namer_uniqid
+        ogPages:
+            uri_prefix:         /media/pages/ogs
+            upload_destination: '%kernel.root_dir%/../web/media/pages/ogs'
+            namer:              vich_uploader.namer_uniqid
+        news:
+            uri_prefix:         /media/news
+            upload_destination: '%kernel.root_dir%/../web/media/news'
+            namer:              vich_uploader.namer_uniqid
+        articles:
+            uri_prefix:         /media/articles
+            upload_destination: '%kernel.root_dir%/../web/media/articles'
+            namer:              vich_uploader.namer_uniqid
+        armors:
+            uri_prefix:         /media/armors
+            upload_destination: '%kernel.root_dir%/../web/media/armors'
+            namer:              vich_uploader.namer_uniqid
+        classes:
+            uri_prefix:         /media/classes
+            upload_destination: '%kernel.root_dir%/../web/media/classes'
+            namer:              vich_uploader.namer_uniqid
+        enemies:
+            uri_prefix:         /media/enemies
+            upload_destination: '%kernel.root_dir%/../web/media/enemies'
+            namer:              vich_uploader.namer_uniqid
+        gems:
+            uri_prefix:         /media/gems
+            upload_destination: '%kernel.root_dir%/../web/media/gems'
+            namer:              vich_uploader.namer_uniqid
+        gems:
+            uri_prefix:         /media/gems
+            upload_destination: '%kernel.root_dir%/../web/media/gems'
+            namer:              vich_uploader.namer_uniqid
+        potions:
+            uri_prefix:         /media/potions
+            upload_destination: '%kernel.root_dir%/../web/media/potions'
+            namer:              vich_uploader.namer_uniqid
+        swords:
+            uri_prefix:         /media/swords
+            upload_destination: '%kernel.root_dir%/../web/media/swords'
+            namer:              vich_uploader.namer_uniqid
+        bannerApps:
+            uri_prefix:         /media/apps/banners
+            upload_destination: '%kernel.root_dir%/../web/media/apps/banners'
+            namer:              vich_uploader.namer_uniqid
+
+# assetic
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
+        uglifyjs2:
+            bin: '%binary_uglifyjs%'
+        uglifycss:
+            bin: '%binary_uglifycss%'
+
+# Liip thumbnails
+liip_imagine:
+    resolvers:
+        default:
+            web_path:
+                web_root:     '%kernel.root_dir%/../web'
+                cache_prefix: media/cache
+    loaders:
+        default:
+            filesystem:
+                data_root:  '%kernel.root_dir%/../web'
+
+    filter_sets:
+        default:
+            post_processors:
+                jpegoptim: {}
+                optipng: {}
+
+        admin_vichy:
+            filters:
+                thumbnail: { size: [250, 250], mode: outbound }
+            post_processors:
+                jpegoptim: {}
+                optipng: {}
+
+        admin_list:
+            filters:
+                thumbnail: { size: [50, 50], mode: outbound }
+            post_processors:
+                jpegoptim: {}
+                optipng: {}
+
+        user:
+            filters:
+                thumbnail: { size: [50, 50], mode: outbound }
+            post_processors:
+                jpegoptim: {}
+                optipng: {}
+
+        user_profile:
+            filters:
+                thumbnail: { size: [256, 256], mode: outbound }
+            post_processors:
+                jpegoptim: {}
+                optipng: {}

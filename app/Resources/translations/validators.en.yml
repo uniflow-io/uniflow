@@ -1,0 +1,21 @@
+form:
+  general:
+    required:     Champs requis
+    url:          Ce n'est pas une url correcte
+    short:        This value should be {{ limit }} or less.
+    long:         This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.
+    notpicture:   Le fichier n'est pas une image
+    notvideo:     Le fichier n'est pas au format mp4
+    maxSizeVideo: Lefichier dépasse les 100Mo maximum
+
+    invalid:
+      password:   Les mots de passe ne correspondent pas
+      date:       Date invalide
+      email:      E-mail invalide
+      phone:      Téléphone invalide
+
+common:
+  comment:
+    required_email: You must write an email !
+    required_user: You must be logged !
+    required_content: You must write a comment !

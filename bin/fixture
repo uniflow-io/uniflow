@@ -1,0 +1,48 @@
+#!/bin/sh
+
+php bin/console doctrine:cache:clear-metadata
+php bin/console doctrine:cache:clear-query
+php bin/console doctrine:cache:clear-result
+
+echo ""
+echo ""
+echo "[1;93m----------- DESTROY DB [00m"
+echo ""
+
+php bin/console doctrine:database:drop --force
+
+
+echo ""
+echo ""
+echo "[1;93m----------- CREATE DB  [00m"
+echo ""
+
+php bin/console doctrine:database:create
+
+
+echo ""
+echo ""
+echo "[1;93m----------- IMPORT DB  [00m"
+echo ""
+
+cat /var/www/vagrant/mysql/darkwood.sql | mysql -u root -proot darkwood
+
+echo ""
+echo ""
+echo "[1;93m----------- SCHEMA UPDATE  [00m"
+echo ""
+
+php bin/console doctrine:schema:update --force
+
+
+#echo ""
+#echo ""
+#echo "[1;93m----------- FIXTURES LOAD  [00m"
+#echo ""
+#
+#php bin/console doctrine:fixtures:load --append
+
+# IF YOU WANT TO DUMP DB
+# preprod
+# ssh -C lolita@194.177.36.196 mysqldump -u lolita lolita | mysql -u root -proot lolita
+# rsync -e ssh -avz --delete-after lolita@194.177.36.196:/var/www/lolita-lempicka.bigyouth.net/web/uploads /var/www/web

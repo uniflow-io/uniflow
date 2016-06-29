@@ -1,0 +1,10 @@
+remove_trailing_slash:
+  path: /{url}
+  defaults: { _controller: FrontBundle:Common:removeTrailingSlash }
+  requirements:
+    url: .*/$
+  methods: [GET]
+
+home:
+  path: /
+  defaults: { _controller: FrontBundle:Default:home }
