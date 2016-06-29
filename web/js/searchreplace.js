@@ -1,11 +1,6 @@
 (function() {
-    class Coucou {
-        dodo() {
-            console.log('cocuo ded');
-        }
-    }
-
-    var a = new Coucou();
-    a.dodo();
-    require('dede');
+    new Vue({
+        el: '#content',
+        template: '<p>ee <text-component></text-component></p>'
+    })
 })();
