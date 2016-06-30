@@ -8,7 +8,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 
 class SFTPComponent extends BaseService
 {
-    public function read($file)
+    public function read($config, $path)
     {
         $sftpAdapter = new SftpAdapter(array(
             'host' => 'localhost',
@@ -18,6 +18,6 @@ class SFTPComponent extends BaseService
             'privateKey' => __DIR__ . '/../../../../puphpet/files/dot/ssh/my_id_rsa',
         ));
         $sftp = new Filesystem($sftpAdapter);
-        $a = $sftp->read($file);
+        return $sftp->read($path);
     }
 }
