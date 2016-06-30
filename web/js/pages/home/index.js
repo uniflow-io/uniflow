@@ -1,4 +1,4 @@
-(function() {
+define(['vuejs', 'superagent'], function(Vue, superagent) {
     Vue.component('home-page', function(resolve) {
         superagent
             .get('/js/pages/home/template.html')
@@ -10,4 +10,4 @@
                 resolve(component);
             });
     })
-})();
+});

@@ -1,4 +1,4 @@
-(function() {
+define(['vuejs', 'superagent'], function(Vue, superagent) {
     Vue.component('text-component', function(resolve) {
         superagent
             .get('/js/components/text/template.html')
@@ -10,4 +10,4 @@
                 resolve(component);
             });
     })
-})();
+});

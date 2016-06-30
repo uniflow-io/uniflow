@@ -37,8 +37,6 @@ class DefaultController extends Controller
 
     public function homeAction(Request $request)
     {
-        $this->get('dw.component.sftp')->read('darkwood/searchreplace/src/Darkwood/FrontBundle/Resources/config/services.yml');
-
         return $this->render('FrontBundle::layout.html.twig');
     }
 }

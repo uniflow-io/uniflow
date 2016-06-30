@@ -14,7 +14,8 @@ class SFTPComponent extends BaseService
             'host' => 'localhost',
             'port' =>  2222,
             'username' => 'math',
-            'root' => '/Users/math/Sites'
+            'root' => '/Users/math/Sites',
+            'privateKey' => __DIR__ . '/../../../../puphpet/files/dot/ssh/my_id_rsa',
         ));
         $sftp = new Filesystem($sftpAdapter);
         $a = $sftp->read($file);
