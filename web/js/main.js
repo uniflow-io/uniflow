@@ -23,5 +23,5 @@ requirejs([
         el: '#content',
         template: '<home-page></home-page>'
     });
-    
+
 });
