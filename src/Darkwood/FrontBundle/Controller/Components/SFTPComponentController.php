@@ -3,6 +3,7 @@
 namespace Darkwood\FrontBundle\Controller\Components;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +33,8 @@ class SFTPComponentController extends Controller
 
         $path = $request->get('path');
 
-        return $this->get('dw.component.sftp')->read($config, $path);
+        return new JsonResponse(array(
+            'content' => $this->get('dw.component.sftp')->read($config, $path)
+        ));
     }
 }

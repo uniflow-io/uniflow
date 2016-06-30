@@ -7,4 +7,4 @@ remove_trailing_slash:
 
 component_sftp_read:
   path:   /read
-  defaults: { _controller: FrontBundle:Default:home }
+  defaults: { _controller: FrontBundle:Components/SFTPComponent:read }

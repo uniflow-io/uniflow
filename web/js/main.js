@@ -9,7 +9,8 @@ requirejs.config({
     paths: {
         polyfill: 'libs/polyfill.min',
         vuejs: 'libs/vue.min',
-        superagent: 'libs/superagent.min'
+        superagent: 'libs/superagent.min',
+        jquery: 'libs/jquery.min'
     }
 });
 
