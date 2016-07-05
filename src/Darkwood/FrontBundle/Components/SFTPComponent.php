@@ -8,6 +8,17 @@ use League\Flysystem\Sftp\SftpAdapter;
 
 class SFTPComponent extends BaseService
 {
+    public function check($config)
+    {
+        $sftpAdapter = new SftpAdapter($config);
+        if ( ! $sftpAdapter->isConnected()) {
+            $sftpAdapter->disconnect();
+            $sftpAdapter->connect();
+        }
+
+        return $sftpAdapter->isConnected();
+    }
+
     public function read($config, $path)
     {
         $sftpAdapter = new SftpAdapter($config);

@@ -16,6 +16,8 @@ requirejs.config({
 
 requirejs([
     'vuejs',
+    'components/sftp/index',
+    'components/symfony/index',
     'components/translation/index',
     'pages/home/index'
 ], function(Vue) {

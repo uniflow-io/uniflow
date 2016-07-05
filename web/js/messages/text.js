@@ -1,5 +1,5 @@
 define([], function() {
-    class MessageText {
+    class TextMessage {
         constructor() {
             this.text = null;
         }
@@ -13,5 +13,5 @@ define([], function() {
         }
     }
 
-    return MessageText;
+    return TextMessage;
 });

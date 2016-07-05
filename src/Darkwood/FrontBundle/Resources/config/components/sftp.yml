@@ -5,6 +5,10 @@ remove_trailing_slash:
     url: .*/$
   methods: [GET]
 
+component_sftp_check:
+  path:   /check
+  defaults: { _controller: FrontBundle:Components/SFTPComponent:check }
+
 component_sftp_read:
   path:   /read
   defaults: { _controller: FrontBundle:Components/SFTPComponent:read }
