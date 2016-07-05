@@ -1,4 +1,4 @@
-define(['vuejs', 'superagent'], function(Vue, superagent) {
+define(['vuejs', 'superagent', 'services/server'], function(Vue, superagent, server) {
     Vue.component('translation-component', function(resolve) {
         superagent
             .get('/js/components/translation/template.html')
@@ -12,24 +12,25 @@ define(['vuejs', 'superagent'], function(Vue, superagent) {
                             'username': 'math',
                             'root': '/Users/math/Sites',
                             'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa',
-                            'symfonyPath': '/Users/math/Sites/decleor',
-                            'content': 'coucuo'
+                            'symfonyPath': '/decleor',
+                            'content': null
                         }
                     },
 
                     methods: {
                         onSubmit: function() {
-                            superagent.post('/component/sftp/read')
+                            superagent.post(server.getUrl() + '/component/sftp/read')
+                                .type('form')
                                 .send({
                                     'host': this.host,
                                     'port':  this.port,
                                     'username': this.username,
-                                    'root': this.root,
+                                    'root': this.root + this.symfonyPath,
                                     'privateKey': this.privateKey,
-                                    'path': '/Users/math/Sites/darkwood/searchreplace/app/Resources/translations/messages.de.yml'
+                                    'path': 'app/Resources/translations/messages.fr.yml'
                                 }).end((err, res) => {
                                     console.log(res);
-                                    this.content = 'eezd';
+                                    this.content = res.body.content;
                                 });
                         }
                     }

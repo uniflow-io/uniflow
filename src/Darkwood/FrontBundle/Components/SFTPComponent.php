@@ -10,13 +10,7 @@ class SFTPComponent extends BaseService
 {
     public function read($config, $path)
     {
-        $sftpAdapter = new SftpAdapter(array(
-            'host' => 'localhost',
-            'port' =>  2222,
-            'username' => 'math',
-            'root' => '/Users/math/Sites',
-            'privateKey' => __DIR__ . '/../../../../puphpet/files/dot/ssh/my_id_rsa',
-        ));
+        $sftpAdapter = new SftpAdapter($config);
         $sftp = new Filesystem($sftpAdapter);
         return $sftp->read($path);
     }
