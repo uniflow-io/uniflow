@@ -1,4 +1,4 @@
-requirejs.config({
+/*requirejs.config({
     //By default load any module IDs from js/lib
     baseUrl: 'js',
     //except, if the module ID starts with "app",
@@ -9,6 +9,7 @@ requirejs.config({
     paths: {
         polyfill: 'libs/polyfill.min',
         vuejs: 'libs/vue.min',
+        vuerouter: 'libs/vue-router.min',
         superagent: 'libs/superagent.min',
         jquery: 'libs/jquery.min'
     }
@@ -16,15 +17,33 @@ requirejs.config({
 
 requirejs([
     'vuejs',
-    'components/sftp/index',
-    'components/symfony/index',
-    'components/translation/index',
-    'pages/home/index'
-], function(Vue) {
+    'vuerouter',
+    'sections/layout/index'
+], function(Vue, VueRouter, LayoutSection) {
+    Vue.use(VueRouter);
 
-    new Vue({
-        el: '#content',
-        template: '<home-page></home-page>'
-    });
+    var router = new VueRouter();
 
+    router.start(LayoutSection, '#content');
+});
+*/
+
+SystemJS.config({
+    baseURL: '/js',
+    map: {
+        'plugin-babel': 'libs/systemjs-plugin-babel/plugin-babel.js',
+        'systemjs-babel-build': 'libs/systemjs-plugin-babel/systemjs-babel-browser.js'
+    },
+    transpiler: 'plugin-babel',
+    meta: {
+        '*.js': {
+            babelOptions: {
+                stage0: true,
+                es2015: true
+            }
+        }
+    }
+});
+SystemJS.import('app.js').then(function() {
+    console.log('dede');
 });

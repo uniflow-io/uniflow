@@ -44,8 +44,8 @@
 <div id="content"></div>
 
 
-<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
-<script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>
+{#<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
+<script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>#}
 
 {#<script src="{{ asset('js/libs/jquery.min.js') }}"></script>
 <script src="{{ asset('js/libs/bootstrap.min.js') }}"></script>#}
@@ -56,5 +56,8 @@
 {#<script src="{{ asset('js/components/text/index.js') }}"></script>
 <script src="{{ asset('js/pages/home/index.js') }}"></script>
 <script src="{{ asset('js/searchreplace.js') }}"></script>#}
+
+<script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
+<script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>
