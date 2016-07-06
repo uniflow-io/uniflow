@@ -1,13 +1,6 @@
-define(['vuejs', 'superagent'], function(Vue, superagent) {
-    Vue.component('faq-page', function(resolve) {
-        superagent
-            .get('/js/pages/faq/template.html')
-            .end(function(err, res) {
-                var component = Vue.extend({
-                    template: res.text
-                });
+import Vue from 'vue'
+import template from './template.html!text'
 
-                resolve(component);
-            });
-    })
+export default Vue.extend({
+    template: template
 });
