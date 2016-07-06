@@ -1,5 +1,5 @@
 class ServerService {
-    getUrl() {
+    getBaseUrl() {
         return '/app_dev.php';
     }
 }

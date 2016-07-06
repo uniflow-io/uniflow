@@ -8,7 +8,7 @@ class SFTPMessage {
 
     check() {
         return new Promise((resolve, reject) => {
-            request.post(serverService.getUrl() + '/component/sftp/check')
+            request.post(serverService.getBaseUrl() + '/component/sftp/check')
                 .type('form')
                 .send(this.config)
                 .end((err, res) => {
@@ -28,7 +28,7 @@ class SFTPMessage {
             var data = this.config;
             data['path'] = path;
 
-            request.post(serverService.getUrl() + '/component/sftp/read')
+            request.post(serverService.getBaseUrl() + '/component/sftp/read')
                 .type('form')
                 .send(data)
                 .end((err, res) => {

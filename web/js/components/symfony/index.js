@@ -11,7 +11,7 @@ export default Vue.extend({
 
     methods: {
         onSubmit: function() {
-            superagent.post(server.getUrl() + '/component/sftp/check')
+            superagent.post(server.getBaseUrl() + '/component/sftp/check')
                 .type('form')
                 .send({
                     'host': this.host,
