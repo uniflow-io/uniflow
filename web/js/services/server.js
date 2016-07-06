@@ -1,7 +1,7 @@
-class Server {
+class ServerService {
     getUrl() {
         return '/app_dev.php';
     }
 }
 
-export default Server
+export default new ServerService();

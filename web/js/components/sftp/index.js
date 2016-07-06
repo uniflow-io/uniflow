@@ -1,39 +1,34 @@
-define(['vuejs', 'superagent', 'messages/sftp'], function(Vue, superagent, SFTPMessage) {
-    Vue.component('sftp-component', function(resolve) {
-        superagent
-            .get('/js/components/sftp/template.html')
-            .end(function(err, res) {
-                var component = Vue.extend({
-                    template: res.text,
-                    data() {
-                        return {
-                            config: {
-                                'host': 'localhost',
-                                'port':  2222,
-                                'username': 'math',
-                                'root': '/Users/math/Sites',
-                                'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
-                            }
-                        }
-                    },
+import Vue from 'vue'
+import template from './template.html!text'
 
-                    methods: {
-                        onSubmit: function() {
-                            var message = new SFTPMessage(this.config);
-                            message.check().then(function(data) {
-                                if(data) {
-                                    return message.read('/decleor/app/Resources/translations/messages.fr.yml');
-                                }
+import SFTPMessage from 'messages/sftp.js'
 
-                                return null;
-                            }).then(function(data) {
-                                console.log(data);
-                            });
-                        }
-                    }
-                });
+export default Vue.extend({
+    template: template,
+    data() {
+        return {
+            config: {
+                'host': 'localhost',
+                'port':  2222,
+                'username': 'math',
+                'root': '/Users/math/Sites',
+                'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
+            }
+        }
+    },
 
-                resolve(component);
+    methods: {
+        onSubmit: function() {
+            var message = new SFTPMessage(this.config);
+            message.check().then(function(data) {
+                if(data) {
+                    return message.read('/decleor/app/Resources/translations/messages.fr.yml');
+                }
+
+                return null;
+            }).then(function(data) {
+                console.log(data);
             });
-    })
+        }
+    }
 });
