@@ -1,6 +1,9 @@
 import Vue from 'vue'
+import VueRouter from 'vue-router'
+import LayoutSection from './sections/layout/index.js'
 
-new Vue({
-    el: '#content',
-    template: 'coucou'
-});
+Vue.use(VueRouter);
+
+var router = new VueRouter();
+
+router.start(LayoutSection, '#content');

@@ -33,6 +33,7 @@ SystemJS.config({
     map: {
         'plugin-babel': 'libs/systemjs-plugin-babel/plugin-babel.js',
         'systemjs-babel-build': 'libs/systemjs-plugin-babel/systemjs-babel-browser.js',
+        'text': 'libs/systemjs-plugin-text/text.js',
         'vue': 'libs/vue.min.js',
         'vue-router': 'libs/vue-router.min.js',
         'superagent': 'libs/superagent.min.js',
