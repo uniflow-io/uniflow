@@ -32,18 +32,21 @@ SystemJS.config({
     baseURL: '/js',
     map: {
         'plugin-babel': 'libs/systemjs-plugin-babel/plugin-babel.js',
-        'systemjs-babel-build': 'libs/systemjs-plugin-babel/systemjs-babel-browser.js'
+        'systemjs-babel-build': 'libs/systemjs-plugin-babel/systemjs-babel-browser.js',
+        'vue': 'libs/vue.min.js',
+        'vue-router': 'libs/vue-router.min.js',
+        'superagent': 'libs/superagent.min.js',
+        'jquery': 'libs/jquery.min.js'
     },
     transpiler: 'plugin-babel',
     meta: {
         '*.js': {
             babelOptions: {
                 stage0: true,
+                stage1: true,
                 es2015: true
             }
         }
     }
 });
-SystemJS.import('app.js').then(function() {
-    console.log('dede');
-});
+SystemJS.import('app.js');

@@ -1,11 +1,6 @@
-import Server from 'services/server.js'
+import Vue from 'vue'
 
-class Coucou {
-
-    a() {
-        console.log('dede ss dsd');
-    }
-}
-
-(new Coucou()).a();
-console.log((new Server()).getUrl());
+new Vue({
+    el: '#content',
+    template: 'coucou'
+});
