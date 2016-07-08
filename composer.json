@@ -38,7 +38,7 @@
         "whiteoctober/breadcrumbs-bundle": "@stable",
         "symfony/assetic-bundle": "@stable",
         "liip/imagine-bundle": "@stable",
-        "besimple/i18n-routing-bundle": "dev-master",
+        "besimple/i18n-routing-bundle": "@dev",
         "cache/adapter-bundle": "@stable",
         "cache/filesystem-adapter": "@stable",
         "cache/doctrine-adapter": "@stable",
@@ -69,21 +69,6 @@
                     "psr-0": {"Darkwood\\CoreBundle": ""}
                 },
                 "target-dir": "Darkwood/CoreBundle"
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "besimple/i18n-routing-bundle",
-                "version": "dev-master",
-                "dist": {
-                    "url": "src/besimple-i18n-routing-bundle.zip",
-                    "type": "zip"
-                },
-                "autoload": {
-                    "psr-0": {"BeSimple\\I18nRoutingBundle": ""}
-                },
-                "target-dir": "BeSimple/I18nRoutingBundle"
             }
         }
     ],
