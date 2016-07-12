@@ -28,7 +28,8 @@ export default Vue.extend({
 
                 return null;
             }).then((data) => {
-                this.content = data;
+                //this.content = data;
+                this.$dispatch('message', data);
             });
         }
     }

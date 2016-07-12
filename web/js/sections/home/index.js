@@ -16,6 +16,15 @@ export default Vue.extend({
             }]
         };
     },
+    events: {
+        'message': function(data) {
+            console.log(data);
+
+            this.items.push({
+                component: 'sftp-component'
+            });
+        }
+    },
     components: {
         'sftp-component': SFTPComponent
     }
