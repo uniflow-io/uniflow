@@ -13,7 +13,8 @@ export default Vue.extend({
                 'username': 'math',
                 'root': '/Users/math/Sites',
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
-            }
+            },
+            content: null
         }
     },
 
@@ -26,8 +27,8 @@ export default Vue.extend({
                 }
 
                 return null;
-            }).then(function(data) {
-                console.log(data);
+            }).then((data) => {
+                this.content = data;
             });
         }
     }
