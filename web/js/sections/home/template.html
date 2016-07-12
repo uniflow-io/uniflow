@@ -15,7 +15,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <div v-for="item in items" is="sftp-component"></div>
+                <div v-for="item in items" is="{{ item.component }}"></div>
             </div>
         </div>
     </section>
