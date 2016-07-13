@@ -15,10 +15,11 @@ export default Vue.extend({
     },
     events: {
         'message': function(data) {
-            console.log(data);
+            //console.log(data);
 
             this.items.push({
-                component: 'yaml-component'
+                component: 'yaml-component',
+                message: data
             });
         }
     },
