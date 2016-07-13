@@ -1,8 +1,8 @@
 <div class="box box-info">
-    <div class="box-header with-border">
-        <h3 class="box-title">SFTP</h3>
-    </div>
     <form class="form-horizontal" @submit.prevent="onSubmit">
+        <div class="box-header with-border">
+            <h3 class="box-title">SFTP</h3>
+        </div>
         <div class="box-body">
             <div class="form-group">
                 <label for="host{{ _uid }}" class="col-sm-2 control-label">Host</label>
@@ -43,6 +43,5 @@
         <div class="box-footer">
             <button type="submit" class="btn btn-info pull-right">Fetch</button>
         </div>
-        <pre class="prettyprint"><code class="lang-html">{{ content }}</code></pre>
     </form>
 </div>

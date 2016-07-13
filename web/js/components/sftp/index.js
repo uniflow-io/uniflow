@@ -13,12 +13,14 @@ export default Vue.extend({
                 'username': 'math',
                 'root': '/Users/math/Sites',
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
-            },
-            content: null
+            }
         }
     },
 
     methods: {
+        handle: function(data) {
+
+        },
         onSubmit: function() {
             var message = new SFTPMessage(this.config);
             message.check().then(function(data) {
