@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import './directives/select2.js'
+
 import LayoutSection from './sections/layout/index.js'
 import HomeSection from './sections/home/index.js'
 import FAQSection from './sections/faq/index.js'

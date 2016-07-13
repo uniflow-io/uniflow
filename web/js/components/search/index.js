@@ -5,7 +5,11 @@ export default Vue.extend({
     template: template,
     data() {
         return {
-            search: null
+            search: null,
+            options: [
+                { id: 1, text: 'hello' },
+                { id: 2, text: 'what' }
+            ]
         }
     },
 
