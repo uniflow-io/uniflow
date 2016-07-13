@@ -38,7 +38,7 @@ SystemJS.config({
         'vue-router': 'libs/vue-router.min.js',
         'superagent': 'libs/superagent.min.js',
         'jquery': 'libs/jquery.min.js',
-        'select2': 'libs/plugins/select2/select2.min.js'
+        'select2': 'libs/plugins/select2/select2.full.min.js'
     },
     transpiler: 'plugin-babel',
     meta: {
