@@ -3,20 +3,20 @@ import template from './template.html!text'
 
 import SFTPComponent from 'components/sftp/index.js';
 import YAMLComponent from 'components/yaml/index.js';
+import SearchComponent from 'components/search/index.js';
 
 export default Vue.extend({
     template: template,
     data: function() {
         return {
             items: [{
-                component: 'sftp-component'
+                component: 'search-component'
             }]
         };
     },
     events: {
         'message': function(data) {
             //console.log(data);
-            console.log(this.items);
 
             this.items.push({
                 component: 'yaml-component',
@@ -26,6 +26,7 @@ export default Vue.extend({
     },
     components: {
         'sftp-component': SFTPComponent,
-        'yaml-component': YAMLComponent
+        'yaml-component': YAMLComponent,
+        'search-component': SearchComponent
     }
 });
