@@ -13,17 +13,22 @@ export default Vue.extend({
                 'username': 'math',
                 'root': '/Users/math/Sites',
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
-            }
+            },
+            fetchStatus: true
         }
     },
 
     methods: {
-        handle: function(data) {
-
-        },
         onSubmit: function() {
             var message = new SFTPMessage(this.config);
-            message.check().then(function(data) {
+            message.check().then((data) => {
+                if(data == true) {
+                    this.fetchStatus = true;
+                    this.$dispatch('message', message);
+                }
+            }, () => {
+                this.fetchStatus = false;
+            });/*.then(function(data) {
                 if(data) {
                     return message.read('/decleor/app/Resources/translations/messages.fr.yml');
                 }
@@ -32,7 +37,7 @@ export default Vue.extend({
             }).then((data) => {
                 //this.content = data;
                 this.$dispatch('message', data);
-            });
+            });*/
         }
     }
 });

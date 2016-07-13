@@ -41,7 +41,9 @@
             </div>
         </div>
         <div class="box-footer">
-            <button type="submit" class="btn btn-info pull-right">Fetch</button>
+
+            <button type="submit" v-if="fetchStatus === true" class="btn btn-info pull-right"><i class="fa fa-fw fa-refresh"></i> Fetch</button>
+            <button type="submit" v-if="fetchStatus === false" class="btn btn-danger pull-right"><i class="fa fa-fw fa-exclamation"></i> Fetch</button>
         </div>
     </form>
 </div>
