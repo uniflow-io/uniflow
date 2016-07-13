@@ -16,6 +16,7 @@ export default Vue.extend({
     events: {
         'message': function(data) {
             //console.log(data);
+            console.log(this.items);
 
             this.items.push({
                 component: 'yaml-component',
