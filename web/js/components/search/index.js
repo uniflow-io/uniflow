@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-export default Vue.extend({
+var component = Vue.extend({
     template: template,
     data() {
         return {
@@ -17,3 +17,7 @@ export default Vue.extend({
 
     }
 });
+
+Vue.component('search-component', component);
+
+export default component;

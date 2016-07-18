@@ -3,7 +3,7 @@ import template from './template.html!text'
 
 import SFTPMessage from 'messages/sftp.js'
 
-export default Vue.extend({
+var component = Vue.extend({
     template: template,
     data() {
         return {
@@ -41,3 +41,7 @@ export default Vue.extend({
         }
     }
 });
+
+Vue.component('sftp-component', component);
+
+export default component;
