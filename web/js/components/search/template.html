@@ -9,7 +9,6 @@
 
                 <div class="col-sm-10">
                     <select v-select2="selected" class="form-control select2" id="search{{ _uid }}"  v-model="search" style="width: 100%">
-                        <option value="0">default</option>
                         <option v-for="o in options" :value="o.id">{{ o.text }}</option>
                     </select>
                 </div>
