@@ -19,6 +19,6 @@ var component = Vue.extend({
     }
 });
 
-Vue.component('yaml-component', component);
+Vue.component('yaml-message-ui', component);
 
 export default component;

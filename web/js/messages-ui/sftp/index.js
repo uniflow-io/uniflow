@@ -42,6 +42,6 @@ var component = Vue.extend({
     }
 });
 
-Vue.component('sftp-component', component);
+Vue.component('sftp-message-ui', component);
 
 export default component;
