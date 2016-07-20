@@ -24,7 +24,7 @@ export default Vue.extend({
 
     methods: {
         onSubmit: function() {
-            console.log(this.search);
+            console.log('qdsq', this.search);
         }
     }
 });

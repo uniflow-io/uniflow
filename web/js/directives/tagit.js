@@ -4,16 +4,14 @@ import 'tagit'
 
 Vue.directive('tagit', {
     twoWay: true,
-    params: ['value'],
-    priority: -1,
 
     bind: function () {
-        var self = this;
+        console.log(this.tags);
 
         $(this.el)
             .tagit()
             .on('change', () => {
-                self.set(this.value)
+                this.set(this.el.value)
             })
     },
     update: function (value) {
