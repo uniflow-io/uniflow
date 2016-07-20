@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import template from './template.html!text'
-import $ from 'jquery'
 
-import SearchComponent from './search/index.js'
+import SearchMessage from '../../messages/search.js';
 
-import SearchMessage from '../../messages/search.js'
-
+import SearchMessageUI from '../../messages-ui/search/index.js';
 import SFTPMessageUI from '../../messages-ui/sftp/index.js';
 import YAMLMessageUI from '../../messages-ui/yaml/index.js';
 
 var messageUIs = {
+    'search': SearchMessageUI,
     'sftp': SFTPMessageUI,
     'yaml': YAMLMessageUI
 };
@@ -26,6 +25,8 @@ var dependComponents = function(messageType) {
 
     for (var key in messageUIs) {
         if(messageUIs.hasOwnProperty(key)) {
+            console.log(messageUIs[key]);
+
             options[key + '-message-ui'] = key;
         }
     }
@@ -40,7 +41,7 @@ export default Vue.extend({
             title: 'Trads add',
             tags: ['decleor', 'traductions'],
             stack: [{
-                component: 'search-component',
+                component: 'search-message-ui',
                 message: new SearchMessage(dependComponents())
             }]
         };
@@ -53,10 +54,13 @@ export default Vue.extend({
                     component: data.search,
                     message: data.message
                 });
+            } else {
+                this.stack.push({
+                    component: 'search-message-ui',
+                    message: new SearchMessage(dependComponents(data), data)
+                });
             }
         }
     },
-    components: $.extend({
-        'search-component': SearchComponent,
-    }, components)
+    components: components
 });
