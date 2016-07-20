@@ -6,8 +6,6 @@ Vue.directive('tagit', {
     twoWay: true,
 
     bind: function () {
-        console.log(this.tags);
-
         $(this.el)
             .tagit()
             .on('change', () => {

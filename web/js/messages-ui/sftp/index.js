@@ -20,7 +20,7 @@ export default Vue.extend({
 
     methods: {
         handle: function () {
-
+            console.log('handle sftp');
         },
         onSubmit: function() {
             var message = new SFTPMessage(this.config);

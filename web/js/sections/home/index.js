@@ -1,25 +1,36 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import $ from 'jquery'
 
 import SearchComponent from './search/index.js'
+
+import SearchMessage from '../../messages/search.js'
 
 import SFTPMessageUI from '../../messages-ui/sftp/index.js';
 import YAMLMessageUI from '../../messages-ui/yaml/index.js';
 
-var messageUIs = [SFTPMessageUI, YAMLMessageUI];
-
-var components = {
-    'search-component': SearchComponent,
+var messageUIs = {
+    'sftp': SFTPMessageUI,
+    'yaml': YAMLMessageUI
 };
-for(var i = 0; i < messageUIs.length; i++) {
-    components['message-ui-'+i] = messageUIs[i];
+
+var components = {};
+for (var key in messageUIs) {
+    if(messageUIs.hasOwnProperty(key)) {
+        components[key + '-message-ui'] = messageUIs[key];
+    }
 }
 
 var dependComponents = function(messageType) {
-    return {
-        'message-ui-0': 'SFTPMessageUI',
-        'message-ui-1': 'YAMLMessageUI'
+    var options = {};
+
+    for (var key in messageUIs) {
+        if(messageUIs.hasOwnProperty(key)) {
+            options[key + '-message-ui'] = key;
+        }
     }
+
+    return options;
 };
 
 export default Vue.extend({
@@ -30,7 +41,7 @@ export default Vue.extend({
             tags: ['decleor', 'traductions'],
             stack: [{
                 component: 'search-component',
-                message: dependComponents()
+                message: new SearchMessage(dependComponents())
             }]
         };
     },
@@ -44,5 +55,7 @@ export default Vue.extend({
             });
         }
     },
-    components: components
+    components: $.extend({
+        'search-component': SearchComponent,
+    }, components)
 });

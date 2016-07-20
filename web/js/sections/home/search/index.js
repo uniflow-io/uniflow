@@ -7,10 +7,10 @@ export default Vue.extend({
     created: function() {
         this.options = [];
 
-        for (var key in this.message) {
-            if( this.message.hasOwnProperty(key) ) {
+        for (var key in this.message.options) {
+            if( this.message.options.hasOwnProperty(key) ) {
                 this.options.push({
-                    id: key, text: this.message[key]
+                    id: key, text: this.message.options[key]
                 });
             }
         }
