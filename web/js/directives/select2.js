@@ -12,7 +12,7 @@ Vue.directive('select2', {
         var self = this;
         $(this.el)
             .select2()
-            .on('change', function () {
+            .on('change', () => {
                 self.set(this.value)
             })
     },
