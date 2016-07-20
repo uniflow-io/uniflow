@@ -10,6 +10,8 @@ export default Vue.extend({
     template: template,
     data: function() {
         return {
+            title: 'Trads add',
+            tags: ['decleor', 'traductions'],
             items: [{
                 component: 'search-component'
             }]

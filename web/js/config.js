@@ -38,7 +38,9 @@ SystemJS.config({
         'vue-router': 'libs/vue-router.min.js',
         'superagent': 'libs/superagent.min.js',
         'jquery': 'libs/jquery.min.js',
-        'select2': 'libs/plugins/select2/select2.full.min.js'
+        'jquery-ui': 'libs/plugins/jQueryUI/jquery-ui.min.js',
+        'select2': 'libs/plugins/select2/select2.full.min.js',
+        'tagit': 'libs/plugins/tagit/js/tag-it.min.js'
     },
     transpiler: 'plugin-babel',
     meta: {
@@ -48,6 +50,9 @@ SystemJS.config({
                 stage1: true,
                 es2015: true
             }
+        },
+        'tagit': {
+            deps: ['jquery', 'jquery-ui']
         }
     }
 });
