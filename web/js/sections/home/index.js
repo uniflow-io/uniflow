@@ -47,12 +47,13 @@ export default Vue.extend({
     },
     events: {
         'message': function(data) {
-            //console.log(data);
-
-            this.items.push({
-                component: 'yaml-component',
-                message: data
-            });
+            if(data instanceof SearchMessage) {
+                this.stack.pop();
+                this.stack.push({
+                    component: data.search,
+                    message: data.message
+                });
+            }
         }
     },
     components: $.extend({
