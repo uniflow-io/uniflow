@@ -3,7 +3,7 @@ import template from './template.html!text'
 
 import SFTPMessage from 'messages/sftp.js'
 
-var component = Vue.extend({
+export default Vue.extend({
     template: template,
     data() {
         return {
@@ -19,6 +19,9 @@ var component = Vue.extend({
     },
 
     methods: {
+        handle: function () {
+
+        },
         onSubmit: function() {
             var message = new SFTPMessage(this.config);
             message.check().then((data) => {
@@ -29,19 +32,15 @@ var component = Vue.extend({
             }, () => {
                 this.fetchStatus = false;
             });/*.then(function(data) {
-                if(data) {
-                    return message.read('/decleor/app/Resources/translations/messages.fr.yml');
-                }
+             if(data) {
+             return message.read('/decleor/app/Resources/translations/messages.fr.yml');
+             }
 
-                return null;
-            }).then((data) => {
-                //this.content = data;
-                this.$dispatch('message', data);
-            });*/
+             return null;
+             }).then((data) => {
+             //this.content = data;
+             this.$dispatch('message', data);
+             });*/
         }
     }
 });
-
-Vue.component('sftp-message-ui', component);
-
-export default component;

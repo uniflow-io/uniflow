@@ -3,7 +3,7 @@ import template from './template.html!text'
 
 import SFTPMessage from 'messages/sftp.js'
 
-var component = Vue.extend({
+export default Vue.extend({
     template: template,
     props: ['message'],
     data() {
@@ -18,7 +18,3 @@ var component = Vue.extend({
     methods: {
     }
 });
-
-Vue.component('yaml-message-ui', component);
-
-export default component;
