@@ -16,6 +16,7 @@ var messageUIs = {
 var components = {};
 for (var key in messageUIs) {
     if(messageUIs.hasOwnProperty(key)) {
+
         components[key + '-message-ui'] = messageUIs[key];
     }
 }
@@ -25,9 +26,9 @@ var dependComponents = function(messageType) {
 
     for (var key in messageUIs) {
         if(messageUIs.hasOwnProperty(key)) {
-            console.log(messageUIs[key]);
-
-            options[key + '-message-ui'] = key;
+            if(messageUIs[key].prototype.constructor.options.methods.handle(messageType)) {
+                options[key + '-message-ui'] = key;
+            }
         }
     }
 

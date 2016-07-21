@@ -5,6 +5,9 @@ import SFTPMessage from 'messages/sftp.js'
 
 export default Vue.extend({
     template: template,
+    created: function() {
+        this.handle(this.message);
+    },
     data() {
         return {
             config: {
@@ -17,10 +20,9 @@ export default Vue.extend({
             fetchStatus: true
         }
     },
-
     methods: {
-        handle: function () {
-            console.log('handle sftp');
+        handle: function (message) {
+            return message === undefined;
         },
         onSubmit: function() {
             var message = new SFTPMessage(this.config);

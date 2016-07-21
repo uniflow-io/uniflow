@@ -17,7 +17,7 @@ export default Vue.extend({
 
     methods: {
         handle: function () {
-            console.log('handle yaml');
+            return false;
         }
     }
 });
