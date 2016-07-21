@@ -2,9 +2,11 @@ import Vue from 'vue'
 import template from './template.html!text'
 
 import SFTPMessage from 'messages/sftp.js'
+import TextMessage from 'messages/text.js'
 
 export default Vue.extend({
     template: template,
+    props: ['message'],
     created: function() {
         this.handle(this.message);
     },
@@ -17,6 +19,8 @@ export default Vue.extend({
                 'root': '/Users/math/Sites',
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
             },
+            path: '/decleor/app/Resources/translations/messages.fr.yml',
+            isFile: false,
             fetchStatus: true
         }
     },
@@ -24,25 +28,28 @@ export default Vue.extend({
         handle: function (message) {
             return message === undefined;
         },
-        onSubmit: function() {
+        onSubmit: function(e) {
             var message = new SFTPMessage(this.config);
-            message.check().then((data) => {
-                if(data == true) {
-                    this.fetchStatus = true;
-                    this.$dispatch('message', message);
-                }
-            }, () => {
-                this.fetchStatus = false;
-            });/*.then(function(data) {
-             if(data) {
-             return message.read('/decleor/app/Resources/translations/messages.fr.yml');
-             }
-
-             return null;
-             }).then((data) => {
-             //this.content = data;
-             this.$dispatch('message', data);
-             });*/
+            message
+                .check()
+                .then((data) => {
+                    if(data == true) {
+                        this.fetchStatus = true;
+                    }
+                }, () => {
+                    this.fetchStatus = false;
+                }).then(() => {
+                    if(this.isFile) {
+                        message
+                            .read(this.path)
+                            .then((data) => {
+                                this.$dispatch('message', new TextMessage(data));
+                            });
+                    } else {
+                        this.$dispatch('message', message);
+                    }
+                })
+            ;
         }
     }
 });

@@ -1,17 +1,15 @@
-define([], function() {
-    class TextMessage {
-        constructor() {
-            this.text = null;
-        }
-
-        getText() {
-            return this.text;
-        }
-
-        setText(text) {
-            this.text = text;
-        }
+class TextMessage {
+    constructor(text) {
+        this.text = text;
     }
 
-    return TextMessage;
-});
+    getText() {
+        return this.text;
+    }
+
+    setText(text) {
+        this.text = text;
+    }
+}
+
+export default TextMessage;
