@@ -17,7 +17,6 @@ export default Vue.extend({
     methods: {
         handle: function (message) {
             if(message instanceof TextMessage) {
-                console.log(message);
                 this.content = message.text;
 
                 return true;
