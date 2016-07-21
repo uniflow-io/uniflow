@@ -5,12 +5,14 @@ import SearchMessage from '../../messages/search.js';
 
 import SearchMessageUI from '../../messages-ui/search/index.js';
 import SFTPMessageUI from '../../messages-ui/sftp/index.js';
+import TextMessageUI from '../../messages-ui/text/index.js';
 import YAMLMessageUI from '../../messages-ui/yaml/index.js';
 
 var messageUIs = {
     'search': SearchMessageUI,
     'sftp': SFTPMessageUI,
-    'yaml': YAMLMessageUI
+    'yaml': YAMLMessageUI,
+    'text': TextMessageUI
 };
 
 var components = {};
