@@ -6,8 +6,12 @@ remove_trailing_slash:
   methods: [GET]
 
 component_sftp:
-  resource: '@FrontBundle/Resources/config/components/sftp.yml'
+  resource: '@FrontBundle/Resources/config/routing/components/sftp.yml'
   prefix:   /component/sftp
+
+history:
+  resource: '@FrontBundle/Resources/config/routing/history.yml'
+  prefix:   /history
 
 home:
   path: /

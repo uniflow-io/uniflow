@@ -49,14 +49,14 @@ class Tag
      *
      * @ORM\ManyToMany(targetEntity="Darkwood\FrontBundle\Entity\History", mappedBy="tags", cascade={"persist"})
      */
-    protected $historys;
+    protected $histories;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->historys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString() {
@@ -136,31 +136,31 @@ class Tag
     }
 
     /**
-     * Add historys
+     * Add histories
      *
      * @param \Darkwood\FrontBundle\Entity\History $history
      * @return Tag
      */
     public function addHistory(\Darkwood\FrontBundle\Entity\History $history)
     {
-        $this->historys[] = $history;
+        $this->histories[] = $history;
 
         return $this;
     }
 
     /**
-     * Remove historys
+     * Remove histories
      *
      * @param \Darkwood\FrontBundle\Entity\History $history
      */
     public function removeHistory(\Darkwood\FrontBundle\Entity\History $history)
     {
-        $this->historys->removeElement($history);
+        $this->histories->removeElement($history);
     }
 
-    public function removeAllHistorys()
+    public function removeAllHistories()
     {
-        foreach($this->getHistorys() as $history)
+        foreach($this->getHistories() as $history)
         {
             $this->removeHistory($history);
         }
@@ -169,8 +169,8 @@ class Tag
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getHistorys()
+    public function getHistories()
     {
-        return $this->historys;
+        return $this->histories;
     }
 }
