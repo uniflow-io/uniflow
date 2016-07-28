@@ -66,8 +66,27 @@ class LoadHistoryData extends AbstractFixture implements FixtureInterface, Conta
      */
     public function load(ObjectManager $manager)
     {
+        $tags = array(
+            $this->getReference('tag-Traduction'),
+            $this->getReference('tag-Decleor'),
+        );
+
         $history = new History();
         $history->setTitle('Trads add');
+        $history->addTag($tags[0]);
+
+        $this->container->get('dw.history')->save($history);
+
+        $history = new History();
+        $history->setTitle('Trads add 1');
+        $history->addTag($tags[0]);
+        $history->addTag($tags[1]);
+
+        $this->container->get('dw.history')->save($history);
+
+        $history = new History();
+        $history->setTitle('Trads add 2');
+        $history->addTag($tags[1]);
 
         $this->container->get('dw.history')->save($history);
     }

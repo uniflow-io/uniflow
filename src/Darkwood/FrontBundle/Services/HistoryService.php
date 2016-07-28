@@ -59,8 +59,16 @@ class HistoryService extends BaseService
 
         foreach ($histories as $history)
         {
+            $tags = array();
+
+            foreach ($history->getTags() as $tag)
+            {
+                $tags[] = $tag->getTitle();
+            }
+
             $data[] = array(
-                'title' => $history->getTitle()
+                'title' => $history->getTitle(),
+                'tags' => $tags,
             );
         }
 

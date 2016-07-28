@@ -55,7 +55,7 @@ class History
     protected $updated;
 
     /**
-     * @var ArrayCollection
+     * @var Tag[]
      *
      * @ORM\ManyToMany(targetEntity="Darkwood\FrontBundle\Entity\Tag", inversedBy="historys", cascade={"persist"})
      * @ORM\JoinTable(name="dw_history_tag")
@@ -204,7 +204,7 @@ class History
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Tag[]
      */
     public function getTags()
     {

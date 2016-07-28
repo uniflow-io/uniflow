@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import request from 'superagent'
+import serverService from 'services/server.js'
 
 import SearchMessage from '../../messages/search.js';
 
@@ -55,8 +57,17 @@ export default Vue.extend({
             stack: [{
                 component: 'search-message-ui',
                 message: new SearchMessage(dependComponents())
-            }]
+            }],
+            history: []
         };
+    },
+    created: function() {
+        request.get(serverService.getBaseUrl() + '/history/list')
+            .end((err, res) => {
+                if(!err) {
+                    this.history = res.body;
+                }
+            });
     },
     events: {
         'message': function(data) {
