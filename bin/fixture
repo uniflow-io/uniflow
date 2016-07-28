@@ -20,12 +20,12 @@ echo ""
 php bin/console doctrine:database:create
 
 
-echo ""
-echo ""
-echo "[1;93m----------- IMPORT DB  [00m"
-echo ""
-
-cat /var/www/vagrant/mysql/darkwood.sql | mysql -u root -proot darkwood
+#echo ""
+#echo ""
+#echo "[1;93m----------- IMPORT DB  [00m"
+#echo ""
+#
+#cat /var/www/vagrant/mysql/darkwood.sql | mysql -u root -proot darkwood
 
 echo ""
 echo ""
@@ -35,12 +35,12 @@ echo ""
 php bin/console doctrine:schema:update --force
 
 
-#echo ""
-#echo ""
-#echo "[1;93m----------- FIXTURES LOAD  [00m"
-#echo ""
-#
-#php bin/console doctrine:fixtures:load --append
+echo ""
+echo ""
+echo "[1;93m----------- FIXTURES LOAD  [00m"
+echo ""
+
+php bin/console doctrine:fixtures:load --append
 
 # IF YOU WANT TO DUMP DB
 # preprod

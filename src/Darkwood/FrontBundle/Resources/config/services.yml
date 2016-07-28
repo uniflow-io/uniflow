@@ -4,11 +4,11 @@ parameters:
 
     # Services Class
     dw.tag.class:                       Darkwood\FrontBundle\Services\TagService
-    dw.page.class:                      Darkwood\FrontBundle\Services\HistoryService
+    dw.history.class:                      Darkwood\FrontBundle\Services\HistoryService
 
     # Entities Class
     dw.entity.tag.class:                 Darkwood\FrontBundle\Entity\Tag
-    dw.entity.page.class:                Darkwood\FrontBundle\Entity\History
+    dw.entity.history.class:                Darkwood\FrontBundle\Entity\History
 
 services:
     dw.component.sftp:
@@ -20,8 +20,8 @@ services:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
             - [ addRepository, [ tagRepository, %dw.entity.tag.class% ] ]
             
-    dw.page:
-        class: %dw.page.class%
+    dw.history:
+        class: %dw.history.class%
         calls:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
-            - [ addRepository, [ pageRepository, %dw.entity.page.class% ] ]
+            - [ addRepository, [ historyRepository, %dw.entity.history.class% ] ]

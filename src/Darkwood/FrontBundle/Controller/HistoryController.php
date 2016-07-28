@@ -14,10 +14,7 @@ class HistoryController extends Controller
 {
     public function listAction(Request $request)
     {
-        $data = array(
-            'error' => false,
-            'result' => false,
-        );
+        $data = $this->get('dw.history')->getHistory();
 
         return new JsonResponse($data);
     }

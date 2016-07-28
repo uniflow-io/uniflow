@@ -50,4 +50,20 @@ class HistoryService extends BaseService
         $this->getEntityManager()->remove($history);
         $this->getEntityManager()->flush();
     }
+
+    public function getHistory()
+    {
+        $histories = $this->historyRepository->findAll();
+
+        $data = array();
+
+        foreach ($histories as $history)
+        {
+            $data[] = array(
+                'title' => $history->getTitle()
+            );
+        }
+
+        return $data;
+    }
 }
