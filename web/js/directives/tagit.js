@@ -16,6 +16,6 @@ Vue.directive('tagit', {
         $(this.el).val(value).trigger('change')
     },
     unbind: function () {
-        $(this.el).off().select2('destroy')
+        $(this.el).off().tagit('destroy')
     }
 });
