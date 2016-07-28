@@ -15,14 +15,13 @@ export default Vue.extend({
         }
     },
     methods: {
+        handleTypes: function() {
+            return [TextMessage];
+        },
         handle: function (message) {
             if(message instanceof TextMessage) {
                 this.content = message.text;
-
-                return true;
             }
-
-            return false;
         }
     }
 });

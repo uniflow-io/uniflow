@@ -17,6 +17,9 @@ export default Vue.extend({
     },
 
     methods: {
+        handleTypes: function() {
+            return [SearchMessage];
+        },
         handle: function (message) {
             if(message instanceof SearchMessage) {
                 this.options = [];
@@ -28,11 +31,7 @@ export default Vue.extend({
                         });
                     }
                 }
-
-                return true;
             }
-
-            return false;
         },
         onSubmit: function() {
             if(this.search) {

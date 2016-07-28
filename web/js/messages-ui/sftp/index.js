@@ -25,8 +25,10 @@ export default Vue.extend({
         }
     },
     methods: {
+        handleTypes: function() {
+            return [undefined];
+        },
         handle: function (message) {
-            return message === undefined;
         },
         onSubmit: function(e) {
             var message = new SFTPMessage(this.config);

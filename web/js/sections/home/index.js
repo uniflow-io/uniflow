@@ -30,7 +30,14 @@ var dependComponents = function(messageType) {
 
     for (var key in messageUIs) {
         if(messageUIs.hasOwnProperty(key)) {
-            if(messageUIs[key].prototype.constructor.options.methods.handle(messageType)) {
+            var canHandleTyle = false;
+            var handleTypes = messageUIs[key].prototype.constructor.options.methods.handleTypes();
+            for(var i = 0; i < handleTypes.length; i++) {
+                if(messageType === handleTypes[i] || messageType instanceof handleTypes[i]) {
+                    canHandleTyle = true;
+                }
+            }
+            if(canHandleTyle) {
                 options[key + '-message-ui'] = key;
             }
         }
