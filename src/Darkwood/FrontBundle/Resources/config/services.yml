@@ -1,9 +1,27 @@
 parameters:
-    # Services Class
+    # Components Class
     dw.component.sftp.class: Darkwood\FrontBundle\Components\SFTPComponent
 
+    # Services Class
+    dw.tag.class:                       Darkwood\FrontBundle\Services\TagService
+    dw.page.class:                      Darkwood\FrontBundle\Services\HistoryService
+
     # Entities Class
+    dw.entity.tag.class:                 Darkwood\FrontBundle\Entity\Tag
+    dw.entity.page.class:                Darkwood\FrontBundle\Entity\History
 
 services:
     dw.component.sftp:
         class: '%dw.component.sftp.class%'
+        
+    dw.tag:
+        class: %dw.tag.class%
+        calls:
+            - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
+            - [ addRepository, [ tagRepository, %dw.entity.tag.class% ] ]
+            
+    dw.page:
+        class: %dw.page.class%
+        calls:
+            - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
+            - [ addRepository, [ pageRepository, %dw.entity.page.class% ] ]
