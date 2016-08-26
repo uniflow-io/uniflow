@@ -35,7 +35,7 @@ var dependComponents = function(messageType) {
             var canHandleTyle = false;
             var handleTypes = messageUIs[key].prototype.constructor.options.methods.handleTypes();
             for(var i = 0; i < handleTypes.length; i++) {
-                if(messageType === handleTypes[i] || messageType instanceof handleTypes[i]) {
+                if(undefined === handleTypes[i] || messageType === handleTypes[i] || messageType instanceof handleTypes[i]) {
                     canHandleTyle = true;
                 }
             }
