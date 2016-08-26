@@ -26,7 +26,11 @@ export default Vue.extend({
             }
         },
         onSubmit: function(e) {
-            var replaceContent = this.content.replace(this.search, this.replace);
+            var replaceAll = function(search, replace) {
+                return this.split(search).join(replace);
+            };
+
+            var replaceContent = replaceAll.call(this.content, this.search, this.replace);
             this.$dispatch('message', new TextMessage(replaceContent));
         }
     }
