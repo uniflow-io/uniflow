@@ -13,7 +13,8 @@ export default Vue.extend({
         return {
             content: null,
             search: null,
-            replace: null
+            replace: null,
+            regexp: false,
         }
     },
     methods: {

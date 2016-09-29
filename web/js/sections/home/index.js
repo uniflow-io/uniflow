@@ -1,22 +1,22 @@
 import Vue from 'vue'
 import template from './template.html!text'
 import request from 'superagent'
-import serverService from 'services/server.js'
+import serverService from '../../services/server.js'
 
 import SearchMessage from '../../messages/search.js';
 
-import SearchMessageUI from '../../messages-ui/search/index.js';
-import SFTPMessageUI from '../../messages-ui/sftp/index.js';
-import TextMessageUI from '../../messages-ui/text/index.js';
-import YAMLMessageUI from '../../messages-ui/yaml/index.js';
-import ReplaceMessageUI from '../../messages-ui/replace/index.js';
+import SearchMessageUI from '../../messages-ui/core/search/index.js';
+import SFTPMessageUI from '../../messages-ui/core/sftp/index.js';
+import TextMessageUI from '../../messages-ui/core/text/index.js';
+import YAMLMessageUI from '../../messages-ui/core/yaml/index.js';
+import ReplaceMessageUI from '../../messages-ui/core/replace/index.js';
 
 var messageUIs = {
-    'search': SearchMessageUI,
-    'sftp': SFTPMessageUI,
-    'yaml': YAMLMessageUI,
-    'text': TextMessageUI,
-    'replace': ReplaceMessageUI
+    'core-search': SearchMessageUI,
+    'core-sftp': SFTPMessageUI,
+    'core-yaml': YAMLMessageUI,
+    'core-text': TextMessageUI,
+    'core-replace': ReplaceMessageUI
 };
 
 var components = {};
@@ -55,7 +55,7 @@ export default Vue.extend({
             title: 'Trads add',
             tags: ['decleor', 'traductions'],
             stack: [{
-                component: 'search-message-ui',
+                component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
             }],
             history: []
@@ -79,7 +79,7 @@ export default Vue.extend({
                 });
             } else {
                 this.stack.push({
-                    component: 'search-message-ui',
+                    component: 'core-search-message-ui',
                     message: new SearchMessage(dependComponents(data), data)
                 });
             }

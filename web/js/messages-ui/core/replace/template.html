@@ -18,6 +18,13 @@
                     <input type="text" class="form-control" id="replace{{ _uid }}" v-model="replace" placeholder="Replace">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="regexp{{ _uid }}" class="col-sm-2 control-label">Is Regular Expression</label>
+
+                <div class="col-sm-10">
+                    <input type="checkbox" class="form-control" id="regexp{{ _uid }}" v-model="regexp" placeholder="Is Regular Expression">
+                </div>
+            </div>
         </div>
         <div class="box-footer">
             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-refresh"></i> Send</button>

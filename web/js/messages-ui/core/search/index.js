@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-import SearchMessage from '../../messages/search.js';
+import SearchMessage from '../../../messages/search.js';
 
 export default Vue.extend({
     template: template,
