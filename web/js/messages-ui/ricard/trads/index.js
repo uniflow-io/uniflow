@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
+import SFTPMessage from '../../../messages/sftp.js'
+
 export default Vue.extend({
     template: template,
     props: ['message'],
@@ -27,7 +29,12 @@ export default Vue.extend({
 
         },
         onSubmit: function(e) {
-            console.log('coucou');
+            var message = new SFTPMessage(this.config);
+            message
+                .check()
+                .then((data) => {
+                    console.log('dede', data);
+                });
         }
     }
 });
