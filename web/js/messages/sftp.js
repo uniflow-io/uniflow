@@ -42,6 +42,26 @@ class SFTPMessage {
                 });
         });
     }
+
+    tree(path) {
+        return new Promise((resolve, reject) => {
+            var data = this.config;
+            data['path'] = path;
+
+            request.post(serverService.getBaseUrl() + '/component/sftp/tree')
+                .type('form')
+                .send(data)
+                .end((err, res) => {
+                    if(err) {
+                        reject(err);
+                    } else if(res.body.error) {
+                        reject(res.body.message);
+                    } else {
+                        resolve(res.body.tree);
+                    }
+                });
+        });
+    }
 }
 
 export default SFTPMessage;

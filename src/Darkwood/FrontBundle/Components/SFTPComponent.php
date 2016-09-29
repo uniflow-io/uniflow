@@ -25,4 +25,27 @@ class SFTPComponent extends BaseService
         $sftp = new Filesystem($sftpAdapter);
         return $sftp->read($path);
     }
+
+    public function tree($config, $path)
+    {
+        $sftpAdapter = new SftpAdapter($config);
+        $sftp = new Filesystem($sftpAdapter);
+
+        $tree = array();
+
+        $list = $sftp->listContents($path);
+        foreach ($list as $item) {
+            $leaf = array(
+                'file' => $item['filename']
+            );
+
+            if($item['type'] == 'dir') {
+                $leaf['children'] = $this->tree($config, $item['path']);
+            }
+
+            $tree[] = $leaf;
+        }
+
+        return $tree;
+    }
 }

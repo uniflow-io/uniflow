@@ -71,4 +71,24 @@ class SFTPComponentController extends Controller
 
         return new JsonResponse($data);
     }
+
+    public function treeAction(Request $request)
+    {
+        $config = $this->getConfig($request);
+        $path = $request->get('path');
+
+        $data = array(
+            'error' => false,
+            'content' => null,
+        );
+
+        try {
+            $data['tree'] = $this->get('dw.component.sftp')->tree($config, $path);
+        } catch(\Exception $e) {
+            $data['error'] = true;
+            $data['message'] = $e->getMessage();
+        }
+
+        return new JsonResponse($data);
+    }
 }

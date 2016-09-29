@@ -18,7 +18,9 @@ export default Vue.extend({
                 'root': '/Users/math/Sites',
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
             },
-            content: null
+            content: null,
+            projectDir: '/ricard/ricard/back',
+            viewsDir: '/src/Bigyouth/AdminBundle/Resources/views/Content/Boutique'
         }
     },
     methods: {
@@ -30,10 +32,11 @@ export default Vue.extend({
         },
         onSubmit: function(e) {
             var message = new SFTPMessage(this.config);
+
             message
-                .check()
+                .tree(this.projectDir + this.viewsDir)
                 .then((data) => {
-                    console.log('dede', data);
+                    console.log('tree', data);
                 });
         }
     }

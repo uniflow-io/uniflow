@@ -5,3 +5,7 @@ component_sftp_check:
 component_sftp_read:
   path:   /read
   defaults: { _controller: FrontBundle:Components/SFTPComponent:read }
+
+component_sftp_tree:
+  path:   /tree
+  defaults: { _controller: FrontBundle:Components/SFTPComponent:tree }
