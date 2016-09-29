@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-import TextMessage from '../../../messages/text.js'
-
 export default Vue.extend({
     template: template,
     props: ['message'],
@@ -11,17 +9,25 @@ export default Vue.extend({
     },
     data() {
         return {
+            config: {
+                'host': 'localhost',
+                'port':  2222,
+                'username': 'math',
+                'root': '/Users/math/Sites',
+                'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
+            },
             content: null
         }
     },
     methods: {
         handleTypes: function() {
-            return [TextMessage];
+            return [undefined];
         },
         handle: function (message) {
-            if(message instanceof TextMessage) {
-                this.content = message.text;
-            }
+
+        },
+        onSubmit: function(e) {
+            console.log('coucou');
         }
     }
 });

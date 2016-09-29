@@ -1,3 +1,5 @@
 #!/bin/sh
 
+# reverse tunnel for making ssh bridge
+
 echo "ssh -i puphpet/files/dot/ssh/id_rsa -R 2222:localhost:22 vagrant@44.44.44.54"

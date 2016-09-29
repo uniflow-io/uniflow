@@ -5,18 +5,22 @@ import serverService from '../../services/server.js'
 
 import SearchMessage from '../../messages/search.js';
 
-import SearchMessageUI from '../../messages-ui/core/search/index.js';
-import SFTPMessageUI from '../../messages-ui/core/sftp/index.js';
-import TextMessageUI from '../../messages-ui/core/text/index.js';
-import YAMLMessageUI from '../../messages-ui/core/yaml/index.js';
-import ReplaceMessageUI from '../../messages-ui/core/replace/index.js';
+import CoreSearchMessageUI from '../../messages-ui/core/search/index.js';
+import CoreSFTPMessageUI from '../../messages-ui/core/sftp/index.js';
+import CoreTextMessageUI from '../../messages-ui/core/text/index.js';
+import CoreYAMLMessageUI from '../../messages-ui/core/yaml/index.js';
+import CoreReplaceMessageUI from '../../messages-ui/core/replace/index.js';
+
+import RicardTradsMessageUI from '../../messages-ui/ricard/trads/index.js';
 
 var messageUIs = {
-    'core-search': SearchMessageUI,
-    'core-sftp': SFTPMessageUI,
-    'core-yaml': YAMLMessageUI,
-    'core-text': TextMessageUI,
-    'core-replace': ReplaceMessageUI
+    'core-search': CoreSearchMessageUI,
+    'core-sftp': CoreSFTPMessageUI,
+    'core-yaml': CoreYAMLMessageUI,
+    'core-text': CoreTextMessageUI,
+    'core-replace': CoreReplaceMessageUI,
+
+    'ricard-trads': RicardTradsMessageUI,
 };
 
 var components = {};
@@ -56,6 +60,9 @@ export default Vue.extend({
             tags: ['decleor', 'traductions'],
             stack: [{
                 component: 'core-search-message-ui',
+                message: new SearchMessage(dependComponents())
+            }, {
+                component: 'ricard-trads-message-ui',
                 message: new SearchMessage(dependComponents())
             }],
             history: []

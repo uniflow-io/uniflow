@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-import SFTPMessage from 'messages/sftp.js'
-import TextMessage from 'messages/text.js'
+import SFTPMessage from '../../../messages/sftp.js'
+import TextMessage from '../../../messages/text.js'
 
 export default Vue.extend({
     template: template,
