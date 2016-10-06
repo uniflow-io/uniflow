@@ -20,7 +20,8 @@ export default Vue.extend({
             },
             content: null,
             projectDir: '/decleor',
-            viewsDir: '/src/Bigyouth/AdminBundle/Resources/views/FlagshipPage'
+            viewsDir: '/src/Bigyouth/AdminBundle/Resources/views/FlagshipPage',
+            progress: null
         }
     },
     methods: {
@@ -31,12 +32,16 @@ export default Vue.extend({
 
         },
         onSubmit: function(e) {
+            this.progress = 0;
             var message = new SFTPMessage(this.config);
 
             message
                 .tree(this.projectDir + this.viewsDir)
                 .then((data) => {
+                    this.progress = 20;
                     console.log('tree', data);
+                }).then(() => {
+                    this.progress = 100;
                 });
         }
     }
