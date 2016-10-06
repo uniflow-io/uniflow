@@ -11,7 +11,7 @@ import CoreTextMessageUI from '../../messages-ui/core/text/index.js';
 import CoreYAMLMessageUI from '../../messages-ui/core/yaml/index.js';
 import CoreReplaceMessageUI from '../../messages-ui/core/replace/index.js';
 
-import RicardTradsMessageUI from '../../messages-ui/ricard/trads/index.js';
+import DecleorTradsMessageUI from '../../messages-ui/decleor/trads/index.js';
 
 var messageUIs = {
     'core-search': CoreSearchMessageUI,
@@ -20,7 +20,7 @@ var messageUIs = {
     'core-text': CoreTextMessageUI,
     'core-replace': CoreReplaceMessageUI,
 
-    'ricard-trads': RicardTradsMessageUI,
+    'decleor-trads': DecleorTradsMessageUI,
 };
 
 var components = {};
@@ -62,7 +62,7 @@ export default Vue.extend({
                 component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
             }, {
-                component: 'ricard-trads-message-ui',
+                component: 'decleor-trads-message-ui',
                 message: new SearchMessage(dependComponents())
             }],
             history: []

@@ -19,8 +19,8 @@ export default Vue.extend({
                 'privateKey': '/var/www/puphpet/files/dot/ssh/my_id_rsa'
             },
             content: null,
-            projectDir: '/ricard/ricard/back',
-            viewsDir: '/src/Bigyouth/AdminBundle/Resources/views/Content/Boutique'
+            projectDir: '/decleor',
+            viewsDir: '/src/Bigyouth/AdminBundle/Resources/views/FlagshipPage'
         }
     },
     methods: {
