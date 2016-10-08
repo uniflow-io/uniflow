@@ -58,13 +58,13 @@ export default Vue.extend({
         return {
             title: 'Trads add',
             tags: ['decleor', 'traductions'],
-            stack: [/*{
+            stack: [{
                 component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
             }, {
                 component: 'decleor-trads-message-ui',
                 message: new SearchMessage(dependComponents())
-            }*/],
+            }],
             history: []
         };
     },

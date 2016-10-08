@@ -5,17 +5,17 @@ import 'tagit'
 Vue.directive('tagit', {
     twoWay: true,
 
-    bind: function () {
-        $(this.el)
+    inserted: function (el, binding) {
+        $(el)
             .tagit()
             .on('change', () => {
-                this.set(this.el.value)
+                binding.value = el.value;
             })
     },
-    update: function (value) {
-        $(this.el).val(value).trigger('change')
+    update: function (el, value) {
+        $(el).val(value).trigger('change')
     },
-    unbind: function () {
-        $(this.el).off().tagit('destroy')
+    unbind: function (el) {
+        $(el).off().tagit('destroy')
     }
 });

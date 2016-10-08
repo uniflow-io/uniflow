@@ -5,17 +5,17 @@ import 'select2'
 Vue.directive('select2', {
     twoWay: true,
 
-    bind: function () {
-        $(this.el)
+    inserted: function (el, binding) {
+        $(el)
             .select2()
             .on('change', () => {
-                this.set(this.el.value)
+                binding.value = el.value;
             })
     },
-    update: function (value) {
-        $(this.el).val(value).trigger('change')
+    update: function (el, value) {
+        $(el).val(value).trigger('change')
     },
-    unbind: function () {
-        $(this.el).off().select2('destroy')
+    unbind: function (el) {
+        $(el).off().select2('destroy')
     }
 });
