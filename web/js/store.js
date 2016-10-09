@@ -5,12 +5,13 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        count: 0
+        history: []
     },
     mutations: {
-        increment (state) {
-            state.count++
-        }
+
+    },
+    actions: {
+        
     }
 });
 
