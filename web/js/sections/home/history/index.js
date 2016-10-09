@@ -1,21 +1,14 @@
 import Vue from 'vue'
 import template from './template.html!text'
-import request from 'superagent'
-import serverService from '../../../services/server.js'
 
 export default Vue.extend({
     template: template,
-    data: function() {
+    computed: function() {
         return {
-            history: []
+            history: this.$store.history.items
         };
     },
     created: function() {
-        request.get(serverService.getBaseUrl() + '/history/list')
-            .end((err, res) => {
-                if(!err) {
-                    this.history = res.body;
-                }
-            });
+        this.$store.dispatch('getHistory')
     }
 });
