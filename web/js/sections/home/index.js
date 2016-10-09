@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import template from './template.html!text'
-import request from 'superagent'
-import serverService from '../../services/server.js'
 
 import SearchMessage from '../../messages/search.js';
+
+import History from './history/index.js'
 
 import CoreSearchMessageUI from '../../messages-ui/core/search/index.js';
 import CoreSFTPMessageUI from '../../messages-ui/core/sftp/index.js';
@@ -23,7 +23,9 @@ var messageUIs = {
     'decleor-trads': DecleorTradsMessageUI,
 };
 
-var components = {};
+var components = {
+    'history': History
+};
 for (var key in messageUIs) {
     if(messageUIs.hasOwnProperty(key)) {
 
@@ -67,14 +69,6 @@ export default Vue.extend({
             }],
             history: []
         };
-    },
-    created: function() {
-        request.get(serverService.getBaseUrl() + '/history/list')
-            .end((err, res) => {
-                if(!err) {
-                    this.history = res.body;
-                }
-            });
     },
     events: {
         'message': function(data) {
