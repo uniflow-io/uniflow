@@ -10,13 +10,14 @@ const store = new Vuex.Store({
     modules: {
         history: {
             state: {
-                items: {}
+                items: {},
+                current: null,
             },
             mutations: {
-                clear: function(state) {
+                clearHistory: function(state) {
                     state.items = {};
                 },
-                update: function(state, item) {
+                updateHistory: function(state, item) {
                     state.items[item.id] = item;
                 }
             },
@@ -32,6 +33,9 @@ const store = new Vuex.Store({
                                 }
                             }
                         });
+                },
+                getDetailHistory: function(context) {
+
                 }
             }
         }
