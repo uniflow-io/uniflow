@@ -40,6 +40,7 @@ export default Vue.extend({
                 .then((data) => {
                     this.progress = 20;
                     console.log('tree', data);
+
                 }).then(() => {
                     this.progress = 100;
                 });
