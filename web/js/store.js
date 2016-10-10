@@ -10,14 +10,14 @@ const store = new Vuex.Store({
     modules: {
         history: {
             state: {
-                items: []
+                items: {}
             },
             mutations: {
                 clear: function(state) {
-                    state.items = [];
+                    state.items = {};
                 },
-                add: function(state, item) {
-                    state.items.push(item);
+                update: function(state, item) {
+                    state.items[item.id] = item;
                 }
             },
             actions: {
@@ -28,7 +28,7 @@ const store = new Vuex.Store({
                                 context.commit('clear');
 
                                 for(var i = 0; i < res.body.length; i++) {
-                                    context.commit('add', res.body[i]);
+                                    context.commit('update', res.body[i]);
                                 }
                             }
                         });

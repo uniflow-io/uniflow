@@ -67,8 +67,11 @@ class HistoryService extends BaseService
             }
 
             $data[] = array(
+                'id' => $history->getId(),
                 'title' => $history->getTitle(),
                 'tags' => $tags,
+                'created' => $history->getCreated()->format('c'),
+                'updated' => $history->getUpdated()->format('c'),
             );
         }
 
