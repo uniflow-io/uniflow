@@ -54,8 +54,6 @@ export default Vue.extend({
     template: template,
     data: function() {
         return {
-            title: 'Trads add',
-            tags: ['decleor', 'traductions'],
             stack: [{
                 component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
@@ -64,6 +62,11 @@ export default Vue.extend({
                 message: new SearchMessage(dependComponents())
             }]
         };
+    },
+    computed: {
+        history: function() {
+            return this.$store.getters.currentHistory;
+        }
     },
     events: {
         'message': function(data) {

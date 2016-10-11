@@ -12,8 +12,8 @@ Vue.directive('select2', {
                 binding.value = el.value;
             })
     },
-    update: function (el, value) {
-        $(el).val(value).trigger('change')
+    update: function (el, binding) {
+        $(el).val(binding.value).trigger('change')
     },
     unbind: function (el) {
         $(el).off().select2('destroy')

@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 export default Vue.extend({
     created: function () {
-        this.$store.dispatch('getHistory')
+        this.$store.dispatch('fetchHistory')
     },
     computed: {
         history: function() {
@@ -12,7 +12,7 @@ export default Vue.extend({
     watch: {
         history: {
             handler: function (val, oldVal) {
-                console.log(val, oldVal);
+                console.log('historyManagerWatch', val, oldVal);
             },
             deep: true
         }

@@ -12,8 +12,24 @@ Vue.directive('tagit', {
                 binding.value = el.value;
             })
     },
-    update: function (el, value) {
-        $(el).val(value).trigger('change')
+    update: function (el, binding) {
+        if(binding.value) {
+            var tags = $(el).tagit("assignedTags"), i;
+
+            for (i = 0; i < binding.value.length; i++) {
+                if(tags.indexOf(binding.value[i]) == -1)
+                {
+                    $(el).tagit("createTag", binding.value[i]);
+                }
+            }
+
+            for (i = 0; i < tags.length; i++) {
+                if(binding.value.indexOf(tags[i]) == -1)
+                {
+                    $(el).tagit("removeTagByLabel", binding.value[i]);
+                }
+            }
+        }
     },
     unbind: function (el) {
         $(el).off().tagit('destroy')

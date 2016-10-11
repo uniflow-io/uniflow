@@ -13,16 +13,25 @@ const store = new Vuex.Store({
                 items: {},
                 current: null,
             },
+            getters: {
+                currentHistory: function(state) {
+                    return state.current ? state.items[state.current] : {};
+                }
+            },
             mutations: {
                 clearHistory: function(state) {
                     state.items = {};
                 },
                 updateHistory: function(state, item) {
                     state.items[item.id] = item;
+
+                    if(state.current === null) {
+                        state.current = item.id;
+                    }
                 }
             },
             actions: {
-                getHistory: function(context) {
+                fetchHistory: function(context) {
                     request.get(serverService.getBaseUrl() + '/history/list')
                         .end((err, res) => {
                             if(!err) {
