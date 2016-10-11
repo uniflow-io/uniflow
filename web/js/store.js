@@ -26,10 +26,10 @@ const store = new Vuex.Store({
                     request.get(serverService.getBaseUrl() + '/history/list')
                         .end((err, res) => {
                             if(!err) {
-                                context.commit('clear');
+                                context.commit('clearHistory');
 
                                 for(var i = 0; i < res.body.length; i++) {
-                                    context.commit('update', res.body[i]);
+                                    context.commit('updateHistory', res.body[i]);
                                 }
                             }
                         });
