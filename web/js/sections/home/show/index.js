@@ -54,6 +54,9 @@ export default Vue.extend({
     template: template,
     data: function() {
         return {
+            toto: {
+                ee: 'dee'
+            },
             stack: [{
                 component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
@@ -64,8 +67,27 @@ export default Vue.extend({
         };
     },
     computed: {
-        history: function() {
-            return this.$store.getters.currentHistory;
+        history: {
+            get: function () {
+                return this.$store.getters.currentHistory;
+            },
+            set: function (value) {
+                console.log('de ', value)
+            }
+        }
+    },
+    watch: {
+        'toto': {
+            handler: function (value, mutation) {
+                console.log('dee', value);
+            },
+            deep: true
+        },
+        'history': {
+            handler: function (value, mutation) {
+                console.log('dee', value);
+            },
+            deep: true
         }
     },
     events: {
