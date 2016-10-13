@@ -64,13 +64,8 @@ export default Vue.extend({
         };
     },
     computed: {
-        history: {
-            get: function () {
-                return this.$store.getters.currentHistory;
-            },
-            set: function (value) {
-                console.log('de ', value)
-            }
+        history: function () {
+            return this.$store.getters.currentHistory;
         }
     },
     events: {

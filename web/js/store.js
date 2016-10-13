@@ -15,7 +15,7 @@ const store = new Vuex.Store({
             },
             getters: {
                 currentHistory: function(state) {
-                    return state.current ? state.items[state.current] : {};
+                    return state.current ? state.items[state.current] : null;
                 }
             },
             mutations: {
@@ -24,10 +24,9 @@ const store = new Vuex.Store({
                 },
                 updateHistory: function(state, item) {
                     state.items[item.id] = item;
-
-                    if(state.current === null) {
-                        state.current = item.id;
-                    }
+                },
+                setCurrentHistory: function (state, current) {
+                    state.current = current;
                 }
             },
             actions: {
@@ -39,6 +38,10 @@ const store = new Vuex.Store({
 
                                 for(var i = 0; i < res.body.length; i++) {
                                     context.commit('updateHistory', res.body[i]);
+                                }
+
+                                if(res.body.length > 0) {
+                                    context.commit('setCurrentHistory', res.body[0].id);
                                 }
                             }
                         });

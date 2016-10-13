@@ -9,5 +9,10 @@ export default Vue.extend({
     components: {
         'history': History,
         'show': Show
+    },
+    computed: {
+        currentHistory: function () {
+            return this.$store.state.history.current;
+        }
     }
 });
