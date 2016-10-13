@@ -11,8 +11,8 @@ export default Vue.extend({
         'show': Show
     },
     computed: {
-        currentHistory: function () {
-            return this.$store.state.history.current;
+        history: function () {
+            return this.$store.getters.currentHistory;
         }
-    }
+    },
 });
