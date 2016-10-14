@@ -8,8 +8,9 @@ import FAQSection from './sections/faq/index.js'
 
 const router = new VueRouter({
     routes: [
-        { path: '/', component: HomeSection },
-        { path: '/faq', component: FAQSection }
+        { name: 'home', path: '/', component: HomeSection },
+        { name: 'faq', path: '/faq', component: FAQSection },
+        { name: 'homeDetail', path: '/detail/:id', component: HomeSection }
     ]
 });
 

@@ -25,7 +25,7 @@
                             </div>
                         </form>
                     </li>
-                    <li v-for="item in history"><a href="#">{{ item.title }} <span v-for="tag in item.tags" class="badge">{{ tag }}</span></a></li>
+                    <li v-for="item in history"><router-link :to="{ name: 'homeDetail', params: { id: item.id }}">{{ item.title }} <span v-for="tag in item.tags" class="badge">{{ tag }}</span></router-link></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
