@@ -18,7 +18,7 @@
                     <label for="info_tags_{{ _uid }}" class="col-sm-2 control-label">Tags</label>
 
                     <div class="col-sm-10">
-                        <input v-tagit="history.tags" type="text" class="form-control" id="info_tags_{{ _uid }}" placeholder="Tags" />
+                        <tagit v-model="history.tags" type="text" class="form-control" id="info_tags_{{ _uid }}" placeholder="Tags" />
                     </div>
                 </div>
 
