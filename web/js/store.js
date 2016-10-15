@@ -23,7 +23,7 @@ const store = new Vuex.Store({
                     state.items = {};
                 },
                 updateHistory: function(state, item) {
-                    state.items[item.id] = item;
+                    Vue.set(state.items, item.id, item);
                 },
                 setCurrentHistory: function (state, current) {
                     state.current = current;
