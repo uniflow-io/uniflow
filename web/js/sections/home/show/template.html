@@ -24,6 +24,9 @@
 
             </form>
         </div>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-fw fa-play"></i> Play</button>
+        </div>
     </div>
 
     <div v-for="item in stack" :is="item.component" :message="item.message"></div>
