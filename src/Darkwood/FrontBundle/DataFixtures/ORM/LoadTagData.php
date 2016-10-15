@@ -53,6 +53,10 @@ class LoadTagData extends AbstractFixture implements FixtureInterface, Container
         $this->createTag(array(
             'title' => 'Decleor',
         ));
+
+        $this->createTag(array(
+            'title' => 'Ricard',
+        ));
     }
 
     public function createTag($datas = array())

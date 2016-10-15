@@ -69,6 +69,7 @@ class LoadHistoryData extends AbstractFixture implements FixtureInterface, Conta
         $tags = array(
             $this->getReference('tag-Traduction'),
             $this->getReference('tag-Decleor'),
+            $this->getReference('tag-Ricard'),
         );
 
         $history = new History();
@@ -87,6 +88,13 @@ class LoadHistoryData extends AbstractFixture implements FixtureInterface, Conta
         $history = new History();
         $history->setTitle('Trads add 2');
         $history->addTag($tags[1]);
+
+        $this->container->get('dw.history')->save($history);
+
+        $history = new History();
+        $history->setTitle('Trads ricard');
+        $history->addTag($tags[0]);
+        $history->addTag($tags[2]);
 
         $this->container->get('dw.history')->save($history);
     }

@@ -26,7 +26,7 @@ Vue.directive('tagit', {
             for (i = 0; i < tags.length; i++) {
                 if(binding.value.indexOf(tags[i]) == -1)
                 {
-                    $(el).tagit("removeTagByLabel", binding.value[i]);
+                    $(el).tagit("removeTagByLabel", tags[i]);
                 }
             }
         }
