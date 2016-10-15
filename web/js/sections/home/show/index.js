@@ -84,10 +84,5 @@ export default Vue.extend({
             }
         }
     },
-    methods: {
-        updateHistory (e) {
-            this.$store.commit('updateHistory', this.history)
-        }
-    },
     components: components
 });

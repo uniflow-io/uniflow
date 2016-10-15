@@ -10,8 +10,8 @@ Vue.component('tagit', {
         $(this.$el)
             .val(this.value)
             .tagit({ data: this.options })
-            .on('change', () => {
-                vm.$emit('input', this.value)
+            .on('change', function() {
+                vm.$emit('input', $(this).tagit("assignedTags"));
             })
     },
     watch: {
