@@ -31,20 +31,22 @@ const store = new Vuex.Store({
             },
             actions: {
                 fetchHistory: function(context) {
-                    request.get(serverService.getBaseUrl() + '/history/list')
-                        .end((err, res) => {
-                            if(!err) {
-                                context.commit('clearHistory');
+                    return new Promise((resolve, reject) => {
+                        request.get(serverService.getBaseUrl() + '/history/list')
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    context.commit('clearHistory');
 
-                                for(var i = 0; i < res.body.length; i++) {
-                                    context.commit('updateHistory', res.body[i]);
-                                }
+                                    for (var i = 0; i < res.body.length; i++) {
+                                        context.commit('updateHistory', res.body[i]);
+                                    }
 
-                                if(res.body.length > 0) {
-                                    context.commit('setCurrentHistory', res.body[0].id);
+                                    resolve();
                                 }
-                            }
-                        });
+                            });
+                    });
                 },
                 getDetailHistory: function(context) {
 
