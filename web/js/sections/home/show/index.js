@@ -57,9 +57,6 @@ export default Vue.extend({
             stack: [{
                 component: 'core-search-message-ui',
                 message: new SearchMessage(dependComponents())
-            }, {
-                component: 'decleor-trads-message-ui',
-                message: new SearchMessage(dependComponents())
             }]
         };
     },
