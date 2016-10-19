@@ -8,4 +8,3 @@ vagrant up
 
 scp -i puphpet/files/dot/ssh/id_rsa ~/.ssh/id_rsa vagrant@searchreplace.darkwood.dev:~/.ssh/id_rsa
 scp -i puphpet/files/dot/ssh/id_rsa ~/.ssh/id_rsa.pub vagrant@searchreplace.darkwood.dev:~/.ssh/id_rsa.pub
-
