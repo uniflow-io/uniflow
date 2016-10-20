@@ -9,7 +9,9 @@
 
                 <div class="col-sm-10">
                     <select2 v-model="search" class="form-control" id="search{{ _uid }}" style="width: 100%">
-                        <option v-for="o in options" :value="o.id">{{ o.text }}</option>
+                        <optgroup v-for="(options, group) in optionGroups" :label="group">
+                            <option v-for="o in options" :value="o.id">{{ o.text }}</option>
+                        </optgroup>
                     </select2>
                 </div>
             </div>
