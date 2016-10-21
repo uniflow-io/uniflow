@@ -7,6 +7,7 @@ Vue.component('select2', {
     template: '<select><slot></slot></select>',
     mounted: function () {
         var vm = this;
+        console.log(this.$el);
         $(this.$el)
             .val(this.value)
             .select2({ data: this.options })

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import $ from 'jquery'
 
 import components from '../../../../noflo/components.js';
 
@@ -25,6 +26,9 @@ export default Vue.extend({
                 });
             }
         }
+    },
+    mounted: function () {
+        $('#s').select2();
     },
     methods: {
         onSubmit: function() {
