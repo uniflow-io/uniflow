@@ -16,7 +16,10 @@ Vue.component('select2', {
     },
     watch: {
         value: function (value) {
-            $(this.$el).select2('val', value)
+            //$(this.$el).select2('val', value)
+
+            $(this.$el).val(value);
+            $(this.$el).trigger('change.select2');
         },
         options: function (options) {
             $(this.$el).select2({ data: options })

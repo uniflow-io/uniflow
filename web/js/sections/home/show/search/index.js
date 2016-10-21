@@ -27,16 +27,15 @@ export default Vue.extend({
             }
         }
     },
-    mounted: function () {
-        $('#s').select2();
-    },
     methods: {
         onSubmit: function() {
-            if(this.search) {
+            this.search = 'core-replace';
+
+            /*if(this.search) {
                 this.message.search = this.search;
 
                 this.$dispatch('message', this.message);
-            }
+            }*/
         }
     }
 });
