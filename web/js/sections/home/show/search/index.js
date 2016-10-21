@@ -29,7 +29,9 @@ export default Vue.extend({
     },
     methods: {
         onSubmit: function() {
-            this.$store.commit('pushFlow', this.search);
+            if(this.search) {
+                this.$store.commit('pushFlow', this.search);
+            }
         }
     }
 });
