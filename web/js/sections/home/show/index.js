@@ -6,11 +6,6 @@ import components from '../../../noflo/components.js';
 
 export default Vue.extend({
     template: template,
-    data: function() {
-        return {
-            stack: []
-        };
-    },
     computed: {
         history: function () {
             return this.$store.getters.currentHistory;
@@ -18,8 +13,8 @@ export default Vue.extend({
         uiStack: function () {
             var uiStack = ['search'];
 
-            for(var i = 0; i < this.stack.length; i ++) {
-                uiStack.push(this.stack[i]);
+            for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                uiStack.push(this.$store.state.flow.stack[i]);
                 uiStack.push('search');
             }
 

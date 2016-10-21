@@ -8,6 +8,16 @@ import serverService from './services/server.js'
 
 const store = new Vuex.Store({
     modules: {
+        flow: {
+            state: {
+                stack: []
+            },
+            mutations: {
+                pushFlow: function (state, item) {
+                    state.stack.push(item);
+                }
+            }
+        },
         history: {
             state: {
                 items: {},

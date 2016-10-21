@@ -29,13 +29,7 @@ export default Vue.extend({
     },
     methods: {
         onSubmit: function() {
-            this.search = 'core-replace';
-
-            /*if(this.search) {
-                this.message.search = this.search;
-
-                this.$dispatch('message', this.message);
-            }*/
+            this.$store.commit('pushFlow', this.search);
         }
     }
 });
