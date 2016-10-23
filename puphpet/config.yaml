@@ -3,8 +3,8 @@ vagrantfile:
     vm:
         provider:
             local:
-                box: puphpet/debian75-x64
-                box_url: puphpet/debian75-x64
+                box: puphpet/ubuntu1604-x64
+                box_url: puphpet/ubuntu1604-x64
                 box_version: '0'
                 chosen_virtualizer: virtualbox
                 virtualizers:
@@ -15,13 +15,13 @@ vagrantfile:
                     vmware:
                         numvcpus: 1
                     parallels:
-                        use_linked_clone: 0
+                        linked_clone: 0
                         check_guest_tools: 0
                         update_guest_tools: 0
                 machines:
-                    vflm_ahqfyul15egt:
-                        id: searchreplace
-                        hostname: searchreplace
+                    vflm_yznqhz8iluz6:
+                        id: uniflow
+                        hostname: uniflow
                         network:
                             private_network: 44.44.44.54
                         memory: '512'
@@ -29,12 +29,14 @@ vagrantfile:
         provision:
             puppet:
                 manifests_path: puphpet/puppet/manifests
-                module_path: puphpet/puppet/modules
+                module_path:
+                    - puphpet/puppet/modules
+                    - puphpet/puppet/manifests
                 options:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
         synced_folder:
-            vflsf_xgs8n4ajgcgi:
+            vflsf_009pzqts6xqw:
                 source: ./
                 target: /var/www
                 sync_type: nfs
@@ -105,25 +107,22 @@ cron:
 nginx:
     install: '0'
     settings:
+        version: present
         default_vhost: 1
-        proxy_buffer_size: 128k
         proxy_buffers: '4 256k'
+        proxy_buffer_size: 128k
         proxy_connect_timeout: 600s
         proxy_send_timeout: 600s
         proxy_read_timeout: 600s
         names_hash_bucket_size: 128
     upstreams: {  }
     vhosts:
-        nxv_okxppd3mej0d:
+        nxv_dl1n9ek09g14:
             server_name: awesome.dev
             server_aliases:
                 - www.awesome.dev
             www_root: /var/www/awesome
             listen_port: '80'
-            index_files:
-                - index.html
-                - index.htm
-                - index.php
             client_max_body_size: 1m
             ssl: '0'
             ssl_cert: ''
@@ -134,7 +133,8 @@ nginx:
             rewrite_to_https: '1'
             spdy: '1'
             locations:
-                nxvl_1a8yxrgv912u:
+                nxvl_4z6a8jebr1r3:
+                    www_root: ''
                     location: /
                     try_files:
                         - $uri
@@ -145,7 +145,8 @@ nginx:
                     fastcgi_split_path: ''
                     proxy: ''
                     proxy_redirect: ''
-                nxvl_17u28rfddcqd:
+                nxvl_92gfnbcadh62:
+                    www_root: ''
                     location: '~ \.php$'
                     try_files:
                         - $uri
@@ -176,10 +177,10 @@ apache:
         - proxy_fcgi
         - rewrite
     vhosts:
-        av_94irhn3e1gkl:
-            servername: searchreplace.darkwood.dev
+        av_4f9cjbkdm6qb:
+            servername: uniflow.darkwood.dev
             serveraliases:
-                - searchreplace.darkwood.dev
+                - uniflow.darkwood.dev
             docroot: /var/www/web
             port: '80'
             setenv:
@@ -195,7 +196,7 @@ apache:
             ssl_protocol: ''
             ssl_cipher: ''
             directories:
-                avd_g5se2rem48wp:
+                avd_zp0758pcbm7u:
                     path: /var/www/web
                     options:
                         - Indexes
@@ -207,7 +208,7 @@ apache:
                         - 'all granted'
                     custom_fragment: ''
                     files_match:
-                        avdfm_b3dn0c2iracw:
+                        avdfm_hopcozl5z2ly:
                             path: \.php$
                             sethandler: 'proxy:fcgi://127.0.0.1:9000'
                             custom_fragment: ''
@@ -221,7 +222,7 @@ letsencrypt:
 php:
     install: '1'
     settings:
-        version: '56'
+        version: '5.6'
     modules:
         php:
             - cli
@@ -242,7 +243,7 @@ php:
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
-        phpfp_g9wgtchn6749:
+        phpfp_3eth8yvij094:
             ini:
                 prefix: www
                 listen: '127.0.0.1:9000'
@@ -286,14 +287,14 @@ drush:
 ruby:
     install: '1'
     versions:
-        rv_x10yvgjvh143:
+        rv_yu92ma7jpdsv:
             default: '1'
             bundler: '1'
             version: 1.9.3
             gems:
-              - deep_merge@1.0.1
-              - activesupport@4.2.6
-              - vine@0.2
+                - deep_merge@1.0.1
+                - activesupport@4.2.6
+                - vine@0.2
 python:
     install: '1'
     packages: {  }
@@ -305,7 +306,6 @@ nodejs:
     npm_packages: {  }
 hhvm:
     install: '0'
-    nightly: 0
     composer: '1'
     composer_home: ''
     settings: {  }
@@ -326,15 +326,15 @@ mariadb:
         override_options: {  }
     adminer: 0
     users:
-        mariadbnu_vxee6c1ol9p2:
+        mariadbnu_ra2l13xzxe4d:
             name: dbuser
             password: '123'
     databases:
-        mariadbnd_ns1goltb02g9:
+        mariadbnd_urvtn8cx3noo:
             name: dbname
             sql: ''
     grants:
-        mariadbng_aotry6gn7sjv:
+        mariadbng_p3snnfvspzot:
             user: dbuser
             table: '*.*'
             privileges:
@@ -409,7 +409,7 @@ elastic_search:
         version: 2.3.1
         java_install: true
     instances:
-        esi_kzydgoz4d6ea:
+        esi_99fyvuaqehbg:
             name: es-01
 solr:
     install: '0'
