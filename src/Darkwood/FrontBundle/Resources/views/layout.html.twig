@@ -46,8 +46,9 @@
     <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+{% block content %}
 <div id="app"></div>
-
+{% endblock %}
 
 {#<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
 <script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>#}
