@@ -138,6 +138,27 @@ swiftmailer:
     password:  '%mailer_password%'
     spool:     { type: memory }
 
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: Darkwood\UserBundle\Entity\User
+    from_email:
+        address:        noreply@darkwood.fr
+        sender_name:    Darkwood
+    service:
+        mailer: fos_user.mailer.twig_swift
+    registration:
+        confirmation:
+            enabled:    true
+            template:   UserBundle:Registration:email.txt.twig
+        form:
+            type: user_registration
+    from_email:
+        address:        contact@darkwood.fr
+        sender_name:    Darkwood
+    service:
+        mailer: fos_user.mailer.twig_swift
+
 # Paginator
 knp_paginator:
     page_range: 5                      # default page range used in pagination control

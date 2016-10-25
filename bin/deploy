@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#if [ "$1" = "push" ]; then
+#
+#ssh 136389@git.dc0.gpaas.net 'deploy www.darkwood.fr.git master'
+#
+#elif [ "$1" = "console" ]; then
+#
+#gandi paas console Darkwood
+#
+#elif [ "$1" = "ssh" ]; then
+#
+#ssh 136389@console.dc0.gpaas.net
+#
+#else
+#
+#SYMFONY_ENV=prod bin/composer install --no-dev --optimize-autoloader
+#php bin/console cache:clear --env=prod --no-debug
+#bin/console doctrine:schema:update --env=prod --force
+#php bin/console assetic:dump --env=prod --no-debug
+#
+#fi
+
+if [ "$1" = "ssh" ]; then
+
+ssh math@www.darkwood.fr
+
+else
+
+ssh math@www.darkwood.fr << CMD
+
+cd /var/www/uniflow.darkwood.fr
+
+sudo service mysql restart
+sudo service varnish restart
+sudo service nginx restart
+sudo service redis restart
+
+git pull
+SYMFONY_ENV=prod bin/composer install --no-dev --optimize-autoloader
+redis-cli flushall
+php bin/console cache:clear --env=prod --no-debug
+bin/console doctrine:schema:update --env=prod --force
+php bin/console assetic:dump --env=prod --no-debug
+
+CMD
+
+fi

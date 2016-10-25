@@ -1,0 +1,20 @@
+parameters:
+
+    # Services Class
+    dw.user.class:                   Darkwood\UserBundle\Services\UserService
+
+    # Entities Class
+    dw.entity.user.class:            Darkwood\UserBundle\Entity\User
+
+    dw.user.authentication.handler.success.class: Darkwood\UserBundle\Security\LoginSuccessHandler
+
+services:
+    dw.user.authentication.handler.success:
+        class: '%dw.user.authentication.handler.success.class%'
+        arguments: ["@router"]
+        tags:
+            - { name: monolog.logger, channel: security }
+
+    dw.user:
+        class: '%dw.user.class%'
+        arguments: ['@doctrine.orm.entity_manager']
