@@ -1,6 +1,12 @@
 class ServerService {
     getBaseUrl() {
-        return '/app_dev.php';
+        var env = window.location.href.match(/app_dev\.php/) ? 'dev' : 'prod';
+
+        if(env == 'dev') {
+            return '/app_dev.php';
+        }
+
+        return '';
     }
 }
 
