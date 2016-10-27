@@ -2,7 +2,7 @@ import Vue from 'vue'
 import template from './template.html!text'
 
 import Search from './search/index.js'
-import components from '../../../noflo/components.js';
+import components from '../../../uniflow/components.js';
 
 export default Vue.extend({
     template: template,
