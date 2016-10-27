@@ -11,7 +11,7 @@ export default Vue.extend({
     },
     data() {
         return {
-            content: null
+            code: null
         }
     },
     methods: {
@@ -20,11 +20,11 @@ export default Vue.extend({
         },
         handle: function (message) {
             if(message instanceof TextMessage) {
-                this.content = message.text;
+                this.code = message.text;
             }
         },
         onSubmit: function(e) {
-            this.$dispatch('message', new TextMessage(this.content));
+            this.$dispatch('message', new TextMessage(this.code));
         }
     }
 });
