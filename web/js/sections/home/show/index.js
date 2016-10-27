@@ -21,6 +21,11 @@ export default Vue.extend({
             return uiStack;
         }
     },
+    methods: {
+        run: function () {
+            console.log('run js');
+        }
+    },
     components: Object.assign({}, components, {
         'search': Search
     })

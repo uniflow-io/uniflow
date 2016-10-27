@@ -25,9 +25,24 @@
             </form>
         </div>
         <div class="box-footer">
-            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-fw fa-play"></i> Play</button>
         </div>
     </div>
 
-    <div v-for="item in uiStack" :is="item"></div>
+    <ul class="timeline">
+        <!-- timeline time label -->
+        <li class="time-label">
+          <span class="bg-green">
+            <a type="submit" class="btn btn-success pull-right" @click.prevent="run"><i class="fa fa-fw fa-play"></i> Play</a>
+          </span>
+        </li>
+        <li v-for="item in uiStack">
+            <i class="fa fa-play bg-blue"></i>
+
+            <div class="timeline-item">
+                <div class="timeline-body">
+                    <div :is="item"></div>
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
