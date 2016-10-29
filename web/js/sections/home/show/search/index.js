@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import template from './template.html!text'
-import $ from 'jquery'
 
 import components from '../../../../uniflow/components.js';
 
@@ -8,7 +7,7 @@ export default Vue.extend({
     template: template,
     data() {
         return {
-            search: null,
+            search: 'core-javascript',
             optionGroups: {}
         }
     },
