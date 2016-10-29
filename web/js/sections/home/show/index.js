@@ -31,8 +31,8 @@ export default Vue.extend({
         }
     },
     methods: {
-        run: function () {
-            console.log('run js');
+        run: function (index) {
+            console.log('run js', index);
         },
         onPush: function(search, index) {
             this.$store.commit('pushFlow', {
