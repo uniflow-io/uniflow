@@ -13,6 +13,9 @@ export default Vue.extend({
     methods: {
         onDelete: function () {
             this.$emit('pop');
+        },
+        onExecute: function (resolve, reject) {
+            resolve(this.code);
         }
     }
 });

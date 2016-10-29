@@ -32,7 +32,26 @@ export default Vue.extend({
     },
     methods: {
         run: function (index) {
-            console.log('run js', index);
+            var indexes = [], i;
+            if(index) {
+                indexes = [index];
+            } else {
+                for(i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                    indexes.push(i);
+                }
+            }
+
+            /*for(i = 0; i < indexes.length; i++) {
+                Promise
+                    .resolve()
+                    .then(() => {
+
+                    }).then(() => {
+                        console.log('run js', index);
+                    }).then(() => {
+
+                    });
+            }*/
         },
         onPush: function(search, index) {
             this.$store.commit('pushFlow', {

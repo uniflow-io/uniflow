@@ -38,7 +38,7 @@
         <li v-for="item in uiStack">
             <i v-if="item.component != 'search'" class="fa fa-play bg-blue" @click.prevent="run(item.index)"></i>
 
-            <div class="timeline-item">
+            <div class="timeline-item" v-class="{'bg-green': item.active}">
                 <div class="timeline-body">
                     <div :is="item.component" @push="onPush(arguments[0], item.index)" @pop="onPop(item.index)"></div>
                 </div>
