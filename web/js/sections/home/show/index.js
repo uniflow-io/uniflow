@@ -11,11 +11,20 @@ export default Vue.extend({
             return this.$store.getters.currentHistory;
         },
         uiStack: function () {
-            var uiStack = ['search'];
+            var uiStack = [{
+                component: 'search',
+                index: 0
+            }];
 
             for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
-                uiStack.push(this.$store.state.flow.stack[i]);
-                uiStack.push('search');
+                uiStack.push({
+                    component: this.$store.state.flow.stack[i],
+                    index: i
+                });
+                uiStack.push({
+                    component: 'search',
+                    index: i + 1
+                });
             }
 
             return uiStack;
@@ -24,6 +33,12 @@ export default Vue.extend({
     methods: {
         run: function () {
             console.log('run js');
+        },
+        onPush: function(search, index) {
+            this.$store.commit('pushFlow', {
+                item: search,
+                index: index
+            });
         }
     },
     components: Object.assign({}, components, {

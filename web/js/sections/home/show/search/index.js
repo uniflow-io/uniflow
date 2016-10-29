@@ -29,7 +29,7 @@ export default Vue.extend({
     methods: {
         onSubmit: function() {
             if(this.search) {
-                this.$store.commit('pushFlow', this.search);
+                this.$emit('search', this.search);
             }
         }
     }

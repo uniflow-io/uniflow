@@ -13,8 +13,8 @@ const store = new Vuex.Store({
                 stack: []
             },
             mutations: {
-                pushFlow: function (state, item) {
-                    state.stack.push(item);
+                pushFlow: function (state, payload) {
+                    state.stack.splice(payload.index, 0, payload.item);
                 }
             }
         },
