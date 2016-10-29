@@ -5,16 +5,15 @@ import TextMessage from '../../../messages/text.js'
 
 export default Vue.extend({
     template: template,
-    props: ['message'],
-    created: function() {
-        this.handle(this.message);
-    },
     data() {
         return {
             content: null
         }
     },
     methods: {
+        onDelete: function () {
+            this.$emit('pop');
+        },
         handleTypes: function() {
             return [undefined, TextMessage];
         },

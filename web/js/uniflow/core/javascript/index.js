@@ -5,7 +5,6 @@ import TextMessage from '../../../messages/text.js'
 
 export default Vue.extend({
     template: template,
-    props: ['message'],
     data() {
         return {
             code: null
