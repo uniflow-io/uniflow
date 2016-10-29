@@ -12,5 +12,8 @@ export default Vue.extend({
         }
     },
     methods: {
+        onDelete: function () {
+            this.$emit('pop');
+        }
     }
 });

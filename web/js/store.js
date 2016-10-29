@@ -15,6 +15,9 @@ const store = new Vuex.Store({
             mutations: {
                 pushFlow: function (state, payload) {
                     state.stack.splice(payload.index, 0, payload.item);
+                },
+                popFlow: function (state, payload) {
+                    state.stack.splice(payload.index, 1);
                 }
             }
         },

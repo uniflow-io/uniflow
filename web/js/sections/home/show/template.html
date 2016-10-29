@@ -40,7 +40,7 @@
 
             <div class="timeline-item">
                 <div class="timeline-body">
-                    <div :is="item.component" @search="onPush(arguments[0], item.index)"></div>
+                    <div :is="item.component" @push="onPush(arguments[0], item.index)" @pop="onPop(item.index)"></div>
                 </div>
             </div>
         </li>

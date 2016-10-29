@@ -39,6 +39,11 @@ export default Vue.extend({
                 item: search,
                 index: index
             });
+        },
+        onPop: function(index) {
+            this.$store.commit('popFlow', {
+                index: index
+            });
         }
     },
     components: Object.assign({}, components, {
