@@ -14,10 +14,15 @@ const store = new Vuex.Store({
             },
             mutations: {
                 pushFlow: function (state, payload) {
-                    state.stack.splice(payload.index, 0, payload.item);
+                    state.stack.splice(payload.index, 0, {
+                        component: payload.component
+                    });
                 },
                 popFlow: function (state, payload) {
                     state.stack.splice(payload.index, 1);
+                },
+                updateFlow: function (state, payload) {
+                    state.stack[payload.index].data = payload.data;
                 }
             }
         },

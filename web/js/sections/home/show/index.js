@@ -18,7 +18,7 @@ export default Vue.extend({
 
             for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
                 uiStack.push({
-                    component: this.$store.state.flow.stack[i],
+                    component: this.$store.state.flow.stack[i].component,
                     index: i
                 });
                 uiStack.push({
@@ -53,14 +53,20 @@ export default Vue.extend({
                     });
             }*/
         },
-        onPush: function(search, index) {
+        onPush: function(component, index) {
             this.$store.commit('pushFlow', {
-                item: search,
+                component: component,
                 index: index
             });
         },
         onPop: function(index) {
             this.$store.commit('popFlow', {
+                index: index
+            });
+        },
+        onUpdate: function(data, index) {
+            this.$store.commit('updateFlow', {
+                data: data,
                 index: index
             });
         }

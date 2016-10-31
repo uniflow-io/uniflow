@@ -10,7 +10,21 @@ export default Vue.extend({
             code: null
         }
     },
+    watch: {
+        code: function () {
+            this.onUpdate();
+        }
+    },
     methods: {
+        serialise: function () {
+            return this.code;
+        },
+        deserialise: function (data) {
+            this.code = data;
+        },
+        onUpdate: function () {
+            this.$emit('update', this.serialise());
+        },
         onDelete: function () {
             this.$emit('pop');
         },

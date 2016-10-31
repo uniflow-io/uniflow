@@ -29,7 +29,6 @@
     </div>
 
     <ul class="timeline">
-        <!-- timeline time label -->
         <li class="time-label">
           <span class="bg-green">
             <a class="btn btn-success pull-right" @click.prevent="run()"><i class="fa fa-fw fa-play"></i> Play</a>
@@ -40,7 +39,12 @@
 
             <div class="timeline-item" v-class="{'bg-green': item.active}">
                 <div class="timeline-body">
-                    <div :is="item.component" @push="onPush(arguments[0], item.index)" @pop="onPop(item.index)"></div>
+                    <div :is="item.component"
+                         @push="onPush(arguments[0], item.index)"
+                         @pop="onPop(item.index)"
+                         @update="onUpdate(arguments[0], item.index)"
+                    >
+                    </div>
                 </div>
             </div>
         </li>
