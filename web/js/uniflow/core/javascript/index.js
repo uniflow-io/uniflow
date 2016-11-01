@@ -4,11 +4,18 @@ import template from './template.html!text'
 import TextMessage from '../../../messages/text.js'
 
 export default Vue.extend({
+    props: ['bus'],
     template: template,
     data() {
         return {
             code: null
         }
+    },
+    created: function () {
+        this.bus.$on('execute', this.onExecute);
+    },
+    destroyed: function () {
+        this.bus.$off('execute', this.onExecute);
     },
     watch: {
         code: function () {
@@ -29,7 +36,8 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (resolve, reject) {
-            resolve(this.code);
+            console.log('coucou');
+            //resolve(this.code);
         }
     }
 });

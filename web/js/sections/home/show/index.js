@@ -19,6 +19,7 @@ export default Vue.extend({
             for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
                 uiStack.push({
                     component: this.$store.state.flow.stack[i].component,
+                    bus: this.$store.state.flow.stack[i].bus,
                     index: i
                 });
                 uiStack.push({
@@ -41,17 +42,24 @@ export default Vue.extend({
                 }
             }
 
-            /*for(i = 0; i < indexes.length; i++) {
-                Promise
-                    .resolve()
-                    .then(() => {
-
-                    }).then(() => {
-                        console.log('run js', index);
-                    }).then(() => {
-
+            var run = Promise.resolve();
+            for(i = 0; i < indexes.length; i++) {
+                ((index) => {
+                    run.then(() => {
+                        return Promise.resolve()
+                            .then(() => {
+                                console.log('before run '+index);
+                            }).then(() => {
+                                console.log('run js '+ index);
+                                return this.$store.state.flow.stack[index].bus.$emit('execute');
+                            }).then(() => {
+                                console.log('after run '+index);
+                            });
                     });
-            }*/
+                })(i);
+            }
+
+            return run;
         },
         onPush: function(component, index) {
             this.$store.commit('pushFlow', {

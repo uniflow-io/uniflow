@@ -39,7 +39,7 @@
 
             <div class="timeline-item" v-class="{'bg-green': item.active}">
                 <div class="timeline-body">
-                    <div :is="item.component"
+                    <div :is="item.component" :bus="item.bus"
                          @push="onPush(arguments[0], item.index)"
                          @pop="onPop(item.index)"
                          @update="onUpdate(arguments[0], item.index)"
