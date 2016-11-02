@@ -33,33 +33,26 @@ export default Vue.extend({
     },
     methods: {
         run: function (index) {
-            var indexes = [], i;
-            if(index) {
-                indexes = [index];
-            } else {
-                for(i = 0; i < this.$store.state.flow.stack.length; i ++) {
+            var indexes = [];
+            if(index === undefined) {
+                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
                     indexes.push(i);
                 }
+            } else {
+                indexes.push(index);
             }
 
-            var run = Promise.resolve();
-            for(i = 0; i < indexes.length; i++) {
-                ((index) => {
-                    run.then(() => {
-                        return Promise.resolve()
-                            .then(() => {
-                                console.log('before run '+index);
-                            }).then(() => {
-                                console.log('run js '+ index);
-                                return this.$store.state.flow.stack[index].bus.$emit('execute');
-                            }).then(() => {
-                                console.log('after run '+index);
-                            });
+            return indexes.reduce((promise, index) => {
+                return promise
+                    .then(() => {
+                        console.log('before run '+index);
+                    }).then(() => {
+                        console.log('run js '+ index);
+                        return this.$store.state.flow.stack[index].bus.$emit('execute');
+                    }).then(() => {
+                        console.log('after run '+index);
                     });
-                })(i);
-            }
-
-            return run;
+            }, Promise.resolve());
         },
         onPush: function(component, index) {
             this.$store.commit('pushFlow', {

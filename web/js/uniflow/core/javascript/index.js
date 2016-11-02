@@ -36,7 +36,7 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (resolve, reject) {
-            console.log('coucou');
+            console.log('code '+this.code);
             //resolve(this.code);
         }
     }
