@@ -6,6 +6,11 @@ import components from '../../../uniflow/components.js';
 
 export default Vue.extend({
     template: template,
+    data: function () {
+        return {
+            runIndex: null
+        }
+    },
     computed: {
         history: function () {
             return this.$store.getters.currentHistory;
@@ -17,11 +22,15 @@ export default Vue.extend({
             }];
 
             for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                var item = this.$store.state.flow.stack[i];
+
                 uiStack.push({
-                    component: this.$store.state.flow.stack[i].component,
-                    bus: this.$store.state.flow.stack[i].bus,
+                    component: item.component,
+                    bus: item.bus,
+                    active: this.runIndex == i,
                     index: i
                 });
+
                 uiStack.push({
                     component: 'search',
                     index: i + 1
@@ -45,12 +54,22 @@ export default Vue.extend({
             return indexes.reduce((promise, index) => {
                 return promise
                     .then(() => {
-                        console.log('before run '+index);
+                        return new Promise((resolve) => {
+                            this.runIndex = index;
+                            setTimeout(function () {
+                                resolve();
+                            }, 1000);
+                        });
                     }).then(() => {
                         console.log('run js '+ index);
                         return this.$store.state.flow.stack[index].bus.$emit('execute');
                     }).then(() => {
-                        console.log('after run '+index);
+                        return new Promise((resolve) => {
+                            this.runIndex = null;
+                            setTimeout(function () {
+                                resolve();
+                            }, 1000);
+                        });
                     });
             }, Promise.resolve());
         },
