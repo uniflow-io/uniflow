@@ -12,9 +12,11 @@ export default Vue.extend({
         }
     },
     created: function () {
+        this.bus.$on('reset', this.deserialise);
         this.bus.$on('execute', this.onExecute);
     },
     destroyed: function () {
+        this.bus.$off('reset', this.deserialise);
         this.bus.$off('execute', this.onExecute);
     },
     watch: {
@@ -27,6 +29,7 @@ export default Vue.extend({
             return this.code;
         },
         deserialise: function (data) {
+            console.log('deserialise '+data);
             this.code = data;
         },
         onUpdate: function () {

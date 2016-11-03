@@ -77,6 +77,15 @@ export default Vue.extend({
                 component: component,
                 index: index
             });
+
+            this.$nextTick(() => {
+                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                    var item = this.$store.state.flow.stack[i];
+                    console.log('tick '+ item.data);
+
+                    item.bus.$emit('reset', item.data);
+                }
+            });
         },
         onPop: function(index) {
             this.$store.commit('popFlow', {
