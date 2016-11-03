@@ -78,13 +78,20 @@ export default Vue.extend({
                 index: index
             });
 
-            this.$nextTick(() => {
-                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
-                    var item = this.$store.state.flow.stack[i];
-                    console.log('tick '+ item.data);
+            var stack = this.$store.state.flow.stack.slice(0);
+            this.$store.state.flow.stack = [];
 
-                    item.bus.$emit('reset', item.data);
-                }
+            this.$nextTick(() => {
+                this.$store.state.flow.stack = stack;
+
+                this.$nextTick(() => {
+                    for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                        var item = this.$store.state.flow.stack[i];
+                        console.log('tick '+ item.data);
+
+                        item.bus.$emit('reset', item.data);
+                    }
+                });
             });
         },
         onPop: function(index) {
