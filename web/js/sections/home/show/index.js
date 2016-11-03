@@ -56,19 +56,18 @@ export default Vue.extend({
                     .then(() => {
                         return new Promise((resolve) => {
                             this.runIndex = index;
-                            setTimeout(function () {
-                                resolve();
-                            }, 1000);
+                            setTimeout(() => {
+                                this.$nextTick(resolve);
+                            }, 500);
                         });
                     }).then(() => {
-                        console.log('run js '+ index);
                         return this.$store.state.flow.stack[index].bus.$emit('execute');
                     }).then(() => {
                         return new Promise((resolve) => {
-                            this.runIndex = null;
-                            setTimeout(function () {
-                                resolve();
-                            }, 1000);
+                            setTimeout(() => {
+                                this.runIndex = null;
+                                this.$nextTick(resolve);
+                            }, 500);
                         });
                     });
             }, Promise.resolve());
