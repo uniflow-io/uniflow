@@ -87,8 +87,6 @@ export default Vue.extend({
                 this.$nextTick(() => {
                     for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
                         var item = this.$store.state.flow.stack[i];
-                        console.log('tick '+ item.data);
-
                         item.bus.$emit('reset', item.data);
                     }
                 });

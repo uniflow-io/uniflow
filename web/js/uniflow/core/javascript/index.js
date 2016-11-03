@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-import TextMessage from '../../../messages/text.js'
-
 export default Vue.extend({
     props: ['bus'],
     template: template,
@@ -29,7 +27,6 @@ export default Vue.extend({
             return this.code;
         },
         deserialise: function (data) {
-            console.log('deserialise '+data);
             this.code = data;
         },
         onUpdate: function () {
