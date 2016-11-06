@@ -51,6 +51,13 @@ export default Vue.extend({
                 indexes.push(index);
             }
 
+            var runner = {
+                context: {},
+                eval: function (code) {
+                    return function() { return eval(code); }.call(runner.context);
+                }
+            };
+
             return indexes.reduce((promise, index) => {
                 return promise
                     .then(() => {
@@ -61,7 +68,7 @@ export default Vue.extend({
                             }, 500);
                         });
                     }).then(() => {
-                        return this.$store.state.flow.stack[index].bus.$emit('execute');
+                        return this.$store.state.flow.stack[index].bus.$emit('execute', runner);
                     }).then(() => {
                         return new Promise((resolve) => {
                             setTimeout(() => {

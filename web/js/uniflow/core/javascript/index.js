@@ -35,9 +35,9 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
-        onExecute: function (resolve, reject) {
+        onExecute: function (runner) {
             console.log('code '+this.code);
-            //resolve(this.code);
+            runner.eval(this.code);
         }
     }
 });
