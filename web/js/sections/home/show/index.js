@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import Interpreter from 'acorn-interpreter'
 
 import Search from './search/index.js'
 import components from '../../../uniflow/components.js';
@@ -51,10 +52,20 @@ export default Vue.extend({
                 indexes.push(index);
             }
 
+            console.log(Interpreter);
+
             var runner = {
-                context: {},
+                interpreter: null,
                 eval: function (code) {
-                    return function() { return eval(code); }.call(runner.context);
+                    if(code === undefined) return;
+
+                    if(runner.interpreter) {
+                        runner.interpreter.appendCode(code);
+                    } else {
+                        runner.interpreter = new Interpreter(code);
+                    }
+
+                    return runner.interpreter.run();
                 }
             };
 
