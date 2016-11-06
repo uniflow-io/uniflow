@@ -36,7 +36,6 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (runner) {
-            console.log('code '+this.code);
             runner.eval(this.code);
         }
     }

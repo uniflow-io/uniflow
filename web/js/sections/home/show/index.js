@@ -52,8 +52,6 @@ export default Vue.extend({
                 indexes.push(index);
             }
 
-            console.log(Interpreter);
-
             var runner = {
                 interpreter: null,
                 eval: function (code) {
