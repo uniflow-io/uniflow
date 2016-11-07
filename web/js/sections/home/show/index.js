@@ -58,7 +58,7 @@ export default Vue.extend({
                 eval: function (code) {
                     if(code === undefined) return;
 
-                    var babelCode = babel.transform(code, {
+                    var babelCode = Babel.transform(code, {
                         presets: [
                             'es2015',
                             'es2015-loose',
