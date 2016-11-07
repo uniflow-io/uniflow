@@ -2,41 +2,29 @@ import Vue from 'vue'
 import $ from 'jquery'
 import ace from 'ace'
 
-Vue.component('tagit', {
-    //props: ['options', 'value'],
-    template: '<textarea />',
+Vue.component('ace', {
+    props: ['value', 'width', 'height'],
+    template: '<div :style="{height: height ? height + \'px\' : \'100%\',width: width ? width + \'px\' : \'100%\'}" ><div />',
     mounted: function () {
         var vm = this;
-        /*$(this.$el)
-            .val(this.value)
-            .tagit({ data: this.options })
-            .on('change', function() {
-                vm.$emit('input', $(this).tagit("assignedTags"));
-            })*/
+        $(this.$el).val(this.value);
+        var editor = vm.editor = ace.edit(this.$el);
+        editor.on('change', function() {
+            //vm.value = editor.getValue();
+            vm.$emit('input', editor.getValue())
+        })
+
+        var session = editor.getSession();
+        //session.setMode('ace/mode/javascript');
+        session.setUseSoftTabs(true);
+        session.setTabSize(2);
     },
-    /*watch: {
+    watch: {
         value: function (value) {
-            var tags = $(this.$el).tagit("assignedTags"), i;
-
-            for (i = 0; i < value.length; i++) {
-                if(tags.indexOf(value[i]) == -1)
-                {
-                    $(this.$el).tagit("createTag", value[i]);
-                }
-            }
-
-            for (i = 0; i < tags.length; i++) {
-                if(value.indexOf(tags[i]) == -1)
-                {
-                    $(this.$el).tagit("removeTagByLabel", tags[i]);
-                }
-            }
-        },
-        options: function (options) {
-            $(this.$el).tagit({ data: options })
+            //this.editor.setValue(value, 1);
         }
-    },*/
+    },
     destroyed: function () {
-        $(this.$el).off().tagit('destroy')
+        this.editor.destroy();
     }
 });
