@@ -24,6 +24,22 @@ const store = new Vuex.Store({
                 },
                 updateFlow: function (state, payload) {
                     state.stack[payload.index].data = payload.data;
+                },
+                setFlow: function (state, stack) {
+                    state.stack = stack;
+                }
+            },
+            actions: {
+                setFlow: function (context, stack) {
+                    return new Promise((resolve) => {
+                        context.commit('setFlow', []);
+
+                        Vue.nextTick(() => {
+                            context.commit('setFlow', stack.slice(0));
+
+                            Vue.nextTick(resolve);
+                        });
+                    });
                 }
             }
         },
@@ -67,8 +83,8 @@ const store = new Vuex.Store({
                             });
                     });
                 },
-                getDetailHistory: function(context) {
-
+                setCurrentHistory: function (context, current) {
+                    context.commit('setCurrentHistory', current);
                 }
             }
         }

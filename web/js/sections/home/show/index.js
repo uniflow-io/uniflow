@@ -112,18 +112,11 @@ export default Vue.extend({
                 index: index
             });
 
-            var stack = this.$store.state.flow.stack.slice(0);
-            this.$store.state.flow.stack = [];
-
-            this.$nextTick(() => {
-                this.$store.state.flow.stack = stack;
-
-                this.$nextTick(() => {
-                    for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
-                        var item = this.$store.state.flow.stack[i];
-                        item.bus.$emit('reset', item.data);
-                    }
-                });
+            this.$store.dispatch('setFlow', this.$store.state.flow.stack).then(() => {
+                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                    var item = this.$store.state.flow.stack[i];
+                    item.bus.$emit('reset', item.data);
+                }
             });
         },
         onPop: function(index) {
