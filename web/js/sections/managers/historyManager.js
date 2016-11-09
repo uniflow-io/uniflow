@@ -57,19 +57,26 @@ export default Vue.extend({
     },
     methods: {
         serialiseFlowData: function (data) {
-            data = data.slice(0);
+            var rawData = [];
 
             for(let i = 0; i < data.length; i++) {
-                delete data[i].bus
+                rawData.push({
+                    component: data[i].component,
+                    data: data[i].data
+                });
             }
 
-            return data;
+            return rawData;
         },
-        deserialiseFlowData: function (data) {
-            data = data.slice(0);
+        deserialiseFlowData: function (rawData) {
+            var data = [];
 
-            for(let i = 0; i < data.length; i++) {
-                data[i].bus = new Vue();
+            for(let i = 0; i < rawData.length; i++) {
+                data.push({
+                    component: rawData[i].component,
+                    data: rawData[i].data,
+                    bus: new Vue()
+                });
             }
 
             return data;
