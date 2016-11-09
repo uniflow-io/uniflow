@@ -27,7 +27,7 @@ export default Vue.extend({
         },
         history: {
             handler: function (val, oldVal) {
-                console.log('historyManagerWatch', val, oldVal);
+                //console.log('historyManagerWatch', val, oldVal);
             },
             deep: true
         }
