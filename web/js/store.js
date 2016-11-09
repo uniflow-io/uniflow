@@ -85,6 +85,8 @@ const store = new Vuex.Store({
                 },
                 setCurrentHistory: function (context, current) {
                     context.commit('setCurrentHistory', current);
+
+                    return Promise.resolve(current);
                 }
             }
         }

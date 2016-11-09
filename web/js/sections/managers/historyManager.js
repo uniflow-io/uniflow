@@ -61,8 +61,9 @@ export default Vue.extend({
                     }
                 })
                 .then(() => {
-                    this.$store.dispatch('setCurrentHistory', current);
-
+                    return this.$store.dispatch('setCurrentHistory', current);
+                })
+                .then(() => {
                     return this.$store.dispatch('setFlow', []);
                 })
                 .then(() => {
