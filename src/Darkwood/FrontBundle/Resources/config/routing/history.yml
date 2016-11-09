@@ -1,3 +1,16 @@
 history_list:
   path:   /list
   defaults: { _controller: FrontBundle:History:list }
+
+history_new:
+  path:   /create
+  defaults: { _controller: FrontBundle:History:create }
+
+history_edit:
+  path:   /edit/{id}
+  defaults: { _controller: FrontBundle:History:edit }
+
+history_delete:
+  path:   /delete/{id}
+  defaults: { _controller: FrontBundle:History:delete }
+

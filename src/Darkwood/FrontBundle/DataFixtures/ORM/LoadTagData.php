@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Load user's fixtures
  *
- * @package Bigyouth\SiteBundle\DataFixtures\ORM
+ * @package Darkwood\SiteBundle\DataFixtures\ORM
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class LoadTagData extends AbstractFixture implements FixtureInterface, ContainerAwareInterface, OrderedFixtureInterface

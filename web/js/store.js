@@ -83,6 +83,21 @@ const store = new Vuex.Store({
                             });
                     });
                 },
+                newHistory: function (context, item) {
+                    return new Promise((resolve, reject) => {
+                        request.post(serverService.getBaseUrl() + '/history/create')
+                            .send(item)
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    context.commit('updateHistory', res.body);
+
+                                    resolve();
+                                }
+                            });
+                    });
+                },
                 setCurrentHistory: function (context, current) {
                     context.commit('setCurrentHistory', current);
 

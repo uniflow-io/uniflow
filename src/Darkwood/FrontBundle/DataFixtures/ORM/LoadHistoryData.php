@@ -41,7 +41,7 @@ use Zend\I18n\Validator\DateTime;
  *
  * Load user's fixtures
  *
- * @package Bigyouth\SiteBundle\DataFixtures\ORM
+ * @package Darkwood\SiteBundle\DataFixtures\ORM
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class LoadHistoryData extends AbstractFixture implements FixtureInterface, ContainerAwareInterface, OrderedFixtureInterface

@@ -15,7 +15,11 @@ export default Vue.extend({
     },
     methods: {
         onSearch: function () {
-            console.log(this.search);
+            if(this.search) {
+                this.$store.dispatch('newHistory', {
+                    'title': this.search
+                });
+            }
         }
     }
 });

@@ -51,6 +51,32 @@ class HistoryService extends BaseService
         $this->getEntityManager()->flush();
     }
 
+    public function findOne($id = null)
+    {
+        return $this->historyRepository->findOne($id);
+    }
+
+    public function getJsonHistory(History $history)
+    {
+        $tags = array();
+
+        foreach ($history->getTags() as $tag)
+        {
+            $tags[] = $tag->getTitle();
+        }
+
+        $created = $history->getCreated();
+        $updated = $history->getUpdated();
+
+        return array(
+            'id' => $history->getId(),
+            'title' => $history->getTitle(),
+            'tags' => $tags,
+            'created' => $created instanceof \DateTime ? $created->format('c') : null,
+            'updated' => $updated instanceof \DateTime ? $updated->format('c') : null,
+        );
+    }
+
     public function getHistory()
     {
         $histories = $this->historyRepository->findAll();
@@ -59,20 +85,7 @@ class HistoryService extends BaseService
 
         foreach ($histories as $history)
         {
-            $tags = array();
-
-            foreach ($history->getTags() as $tag)
-            {
-                $tags[] = $tag->getTitle();
-            }
-
-            $data[] = array(
-                'id' => $history->getId(),
-                'title' => $history->getTitle(),
-                'tags' => $tags,
-                'created' => $history->getCreated()->format('c'),
-                'updated' => $history->getUpdated()->format('c'),
-            );
+            $data[] = $this->getJsonHistory($history);
         }
 
         return $data;
