@@ -93,7 +93,7 @@ const store = new Vuex.Store({
                                 } else {
                                     context.commit('updateHistory', res.body);
 
-                                    resolve();
+                                    resolve(res.body);
                                 }
                             });
                     });

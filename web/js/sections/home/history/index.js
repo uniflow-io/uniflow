@@ -18,6 +18,8 @@ export default Vue.extend({
             if(this.search) {
                 this.$store.dispatch('newHistory', {
                     'title': this.search
+                }).then((item) => {
+                    this.$store.dispatch('setCurrentHistory', item.id);
                 });
             }
         }
