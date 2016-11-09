@@ -37,19 +37,19 @@ export default Vue.extend({
         current: function (val, oldVal) {
             Promise.resolve()
                 .then(() => {
-                    var currentHistory = this.$store.state.history.items[oldVal];
-                    if(currentHistory) {
-                        currentHistory.data = this.serialiseFlowData(this.$store.state.flow.stack);
-                        return this.$store.commit('updateHistory', currentHistory);
+                    var item = this.$store.state.history.items[oldVal];
+                    if(item) {
+                        item.data = this.serialiseFlowData(this.$store.state.flow.stack);
+                        return this.$store.commit('updateHistory', item);
                     }
                 })
                 .then(() => {
                     return this.$store.dispatch('setFlow', []);
                 })
                 .then(() => {
-                    var currentHistory = this.$store.state.history.items[val];
-                    if(currentHistory && currentHistory.data) {
-                        return this.$store.dispatch('setFlow', this.deserialiseFlowData(currentHistory.data));
+                    var item = this.$store.state.history.items[val];
+                    if(item && item.data) {
+                        return this.$store.dispatch('setFlow', this.deserialiseFlowData(item.data));
                     }
                 })
             ;
