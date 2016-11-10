@@ -85,7 +85,38 @@ class HistoryController extends Controller
 
         return $this->manage($request, $entity);
     }
-    
+
+    public function getDataAction(Request $request, $id)
+    {
+        $entity = $this->get('dw.history')->findOne($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find History entity.');
+        }
+
+        return new JsonResponse(array('data' => $entity->getData()));
+    }
+
+    public function setDataAction(Request $request, $id)
+    {
+        $entity = $this->get('dw.history')->findOne($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find History entity.');
+        }
+
+        if ('POST' === $request->getMethod()) {
+            $content = $request->getContent();
+            $entity->setData($content);
+
+            $this->get('dw.history')->save($entity);
+
+            return new JsonResponse(true);
+        }
+
+        return new JsonResponse(false, 400);
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $entity = $this->get('dw.history')->findOne($id);

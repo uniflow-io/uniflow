@@ -8,6 +8,9 @@ import components from '../../../uniflow/components.js';
 
 export default Vue.extend({
     template: template,
+    created: function () {
+        this.onFetchFlowData();
+    },
     data: function () {
         return {
             runIndex: null
@@ -46,18 +49,8 @@ export default Vue.extend({
         }
     },
     watch: {
-        'history.id': function (val) {
-            Promise.resolve()
-                .then(() => {
-                    return this.$store.dispatch('setFlow', []);
-                })
-                .then(() => {
-                    var item = this.$store.state.history.items[val];
-                    if(item && item.data) {
-                        return this.$store.dispatch('setFlow', this.deserialiseFlowData(item.data));
-                    }
-                })
-            ;
+        'history.id': function () {
+            this.onFetchFlowData();
         },
         'history.title': function () {
             this.onUpdate();
@@ -140,9 +133,11 @@ export default Vue.extend({
                 });
             }
 
-            return rawData;
+            return JSON.stringify(rawData);
         },
         deserialiseFlowData: function (rawData) {
+            rawData = JSON.parse(rawData);
+
             var data = [];
 
             for(let i = 0; i < rawData.length; i++) {
@@ -167,11 +162,15 @@ export default Vue.extend({
                     item.bus.$emit('reset', item.data);
                 }
             });
+
+            this.onUpdateFlowData();
         },
         onPopFlow: function(index) {
             this.$store.commit('popFlow', {
                 index: index
             });
+
+            this.onUpdateFlowData();
         },
         onUpdateFlow: function(data, index) {
             this.$store.commit('updateFlow', {
@@ -179,7 +178,33 @@ export default Vue.extend({
                 index: index
             });
 
+            this.onUpdateFlowData();
+        },
+        onFetchFlowData: function () {
+            var id = this.history.id;
+
+            Promise.resolve()
+                .then(() => {
+                    return this.$store.dispatch('setFlow', []);
+                })
+                .then(() => {
+                    if(this.$store.state.history.items[id].data) {
+                        return this.$store.state.history.items[id].data;
+                    }
+
+                    return this.$store.dispatch('getHistoryData', this.$store.state.history.items[id]);
+                })
+                .then((data) => {
+                    if(!data) return;
+
+                    this.$store.state.history.items[id].data = data;
+                    return this.$store.dispatch('setFlow', this.deserialiseFlowData(data));
+                })
+            ;
+        },
+        onUpdateFlowData: function () {
             this.history.data = this.serialiseFlowData(this.stack);
+            this.$store.dispatch('setHistoryData', this.history)
         },
         onUpdate: function () {
             this.$store.dispatch('updateHistory', this.history)

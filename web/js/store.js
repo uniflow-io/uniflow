@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import _ from 'lodash'
 
 Vue.use(Vuex);
 
@@ -111,7 +110,7 @@ const store = new Vuex.Store({
                             });
                     });
                 },
-                updateHistory: _.debounce(function (context, item) {
+                updateHistory: function (context, item) {
                     var data = {
                         title: item.title,
                         tags: item.tags
@@ -130,7 +129,32 @@ const store = new Vuex.Store({
                                 }
                             });
                     });
-                }, 500),
+                },
+                getHistoryData: function (context, item) {
+                    return new Promise((resolve, reject) => {
+                        request.get(serverService.getBaseUrl() + '/history/getData/'+item.id)
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(res.body.data);
+                                }
+                            });
+                    });
+                },
+                setHistoryData: function (context, item) {
+                    return new Promise((resolve, reject) => {
+                        request.post(serverService.getBaseUrl() + '/history/setData/'+item.id)
+                            .send(item.data)
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(res.body);
+                                }
+                            });
+                    });
+                },
                 deleteHistory: function (context, item) {
                     return new Promise((resolve, reject) => {
                         request.del(serverService.getBaseUrl() + '/history/delete/'+item.id)

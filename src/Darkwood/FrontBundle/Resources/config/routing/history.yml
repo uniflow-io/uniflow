@@ -10,6 +10,14 @@ history_edit:
   path:   /edit/{id}
   defaults: { _controller: FrontBundle:History:edit }
 
+history_get_data:
+  path:   /getData/{id}
+  defaults: { _controller: FrontBundle:History:getData }
+
+history_set_data:
+  path:   /setData/{id}
+  defaults: { _controller: FrontBundle:History:setData }
+
 history_delete:
   path:   /delete/{id}
   defaults: { _controller: FrontBundle:History:delete }

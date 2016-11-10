@@ -63,6 +63,13 @@ class History
     protected $tags;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $data;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -209,5 +216,29 @@ class History
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     *
+     * @return History
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }

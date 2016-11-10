@@ -51,6 +51,10 @@ class HistoryService extends BaseService
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param integer $id
+     * @return History
+     */
     public function findOne($id = null)
     {
         return $this->historyRepository->findOne($id);
