@@ -2,6 +2,7 @@ import Vue from 'vue'
 import template from './template.html!text'
 import Interpreter from 'acorn-interpreter'
 import {Babel} from 'babel'
+import _ from 'lodash'
 
 import Search from './search/index.js'
 import components from '../../../uniflow/components.js';
@@ -156,12 +157,13 @@ export default Vue.extend({
                 index: index
             });
 
-            this.$store.dispatch('setFlow', this.stack).then(() => {
-                for(var i = 0; i < this.stack.length; i ++) {
-                    var item = this.stack[i];
-                    item.bus.$emit('reset', item.data);
-                }
-            });
+            this.$store.dispatch('setFlow', this.stack)
+                .then(() => {
+                    for(var i = 0; i < this.stack.length; i ++) {
+                        var item = this.stack[i];
+                        item.bus.$emit('reset', item.data);
+                    }
+                });
 
             this.onUpdateFlowData();
         },
@@ -180,7 +182,7 @@ export default Vue.extend({
 
             this.onUpdateFlowData();
         },
-        onFetchFlowData: function () {
+        onFetchFlowData: _.debounce(function () {
             var id = this.history.id;
 
             Promise.resolve()
@@ -200,15 +202,21 @@ export default Vue.extend({
                     this.$store.state.history.items[id].data = data;
                     return this.$store.dispatch('setFlow', this.deserialiseFlowData(data));
                 })
+                .then(() => {
+                    for(var i = 0; i < this.stack.length; i ++) {
+                        var item = this.stack[i];
+                        item.bus.$emit('reset', item.data);
+                    }
+                });
             ;
-        },
-        onUpdateFlowData: function () {
+        }, 500),
+        onUpdateFlowData: _.debounce(function () {
             this.history.data = this.serialiseFlowData(this.stack);
             this.$store.dispatch('setHistoryData', this.history)
-        },
-        onUpdate: function () {
+        }, 500),
+        onUpdate: _.debounce(function () {
             this.$store.dispatch('updateHistory', this.history)
-        },
+        }, 500),
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)
         }
