@@ -208,7 +208,6 @@ export default Vue.extend({
                         item.bus.$emit('reset', item.data);
                     }
                 });
-            ;
         }, 500),
         onUpdateFlowData: _.debounce(function () {
             this.history.data = this.serialiseFlowData(this.stack);
