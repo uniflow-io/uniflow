@@ -47,13 +47,13 @@ class TagTransformer implements DataTransformerInterface
     {
         $tags = new ArrayCollection();
 
-        foreach($arrayTags as $tag){
+        foreach($arrayTags as $tagTitle){
 
-            $tag = $this->tagService->findOneByTag($tag);
+            $tag = $this->tagService->findOneByTag($tagTitle);
 
             if(!$tag){
                 $tag = new Tag();
-                $tag->setTitle($tag);
+                $tag->setTitle($tagTitle);
                 $this->tagService->save($tag);
             }
 
