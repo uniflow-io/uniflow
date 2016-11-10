@@ -43,6 +43,19 @@ export default Vue.extend({
         }
     },
     watch: {
+        'history.id': function (val) {
+            Promise.resolve()
+                .then(() => {
+                    return this.$store.dispatch('setFlow', []);
+                })
+                .then(() => {
+                    var item = this.$store.state.history.items[val];
+                    if(item && item.data) {
+                        return this.$store.dispatch('setFlow', this.deserialiseFlowData(item.data));
+                    }
+                })
+            ;
+        },
         'history.title': function () {
             this.onUpdate();
         },
@@ -114,6 +127,31 @@ export default Vue.extend({
                     });
             }, Promise.resolve());
         },
+        serialiseFlowData: function (data) {
+            var rawData = [];
+
+            for(let i = 0; i < data.length; i++) {
+                rawData.push({
+                    component: data[i].component,
+                    data: data[i].data
+                });
+            }
+
+            return rawData;
+        },
+        deserialiseFlowData: function (rawData) {
+            var data = [];
+
+            for(let i = 0; i < rawData.length; i++) {
+                data.push({
+                    component: rawData[i].component,
+                    data: rawData[i].data,
+                    bus: new Vue()
+                });
+            }
+
+            return data;
+        },
         onPushFlow: function(component, index) {
             this.$store.commit('pushFlow', {
                 component: component,
@@ -137,6 +175,8 @@ export default Vue.extend({
                 data: data,
                 index: index
             });
+
+            this.history.data = this.serialiseFlowData(this.$store.state.flow.stack);
         },
         onUpdate: function () {
             this.$store.dispatch('updateHistory', this.history)
