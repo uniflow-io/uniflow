@@ -2,8 +2,8 @@
 
 namespace Darkwood\FrontBundle\Form;
 
-use Darkwood\ContentBundle\Form\Page\Articles\PushSliderType;
-use Darkwood\ContentBundle\Form\PageType;
+use Darkwood\FrontBundle\Form\Transformer\TagTransformer;
+use Darkwood\FrontBundle\Services\TagService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -23,6 +23,20 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 class HistoryType extends AbstractType
 {
     /**
+     * @var TagService
+     */
+    protected $tagService;
+
+    /**
+     * TagTransformer constructor.
+     * @param $tagService
+     */
+    public function __construct($tagService)
+    {
+        $this->tagService = $tagService;
+    }
+
+    /**
      * Build Form
      *
      * @param FormBuilderInterface $builder
@@ -31,6 +45,14 @@ class HistoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', TextType::class);
+        $builder->add('tags', CollectionType::class, array(
+            'entry_type' => TextType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+        ));
+
+        $tagsTransformer = new TagTransformer($this->tagService);
+        $builder->get('tags')->addModelTransformer($tagsTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)

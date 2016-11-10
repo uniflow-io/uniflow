@@ -93,7 +93,8 @@ const store = new Vuex.Store({
                 },
                 createHistory: function (context, item) {
                     var data = {
-                        title: item.title
+                        title: item.title,
+                        tags: item.tags
                     };
 
                     return new Promise((resolve, reject) => {
@@ -112,7 +113,8 @@ const store = new Vuex.Store({
                 },
                 updateHistory: _.debounce(function (context, item) {
                     var data = {
-                        title: item.title
+                        title: item.title,
+                        tags: item.tags
                     };
 
                     return new Promise((resolve, reject) => {

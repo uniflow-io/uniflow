@@ -4,11 +4,14 @@ parameters:
 
     # Services Class
     dw.tag.class:                       Darkwood\FrontBundle\Services\TagService
-    dw.history.class:                      Darkwood\FrontBundle\Services\HistoryService
+    dw.history.class:                   Darkwood\FrontBundle\Services\HistoryService
 
     # Entities Class
-    dw.entity.tag.class:                 Darkwood\FrontBundle\Entity\Tag
-    dw.entity.history.class:                Darkwood\FrontBundle\Entity\History
+    dw.entity.tag.class:                Darkwood\FrontBundle\Entity\Tag
+    dw.entity.history.class:            Darkwood\FrontBundle\Entity\History
+
+    # Transformers Class
+    dw.form.history.class:           Darkwood\FrontBundle\Form\HistoryType
 
 services:
     dw.component.sftp:
@@ -25,3 +28,9 @@ services:
         calls:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
             - [ addRepository, [ historyRepository, %dw.entity.history.class% ] ]
+
+    dw.form.history:
+        class: "%dw.form.history.class%"
+        arguments: ["@dw.tag"]
+        tags:
+            - { name: form.type }
