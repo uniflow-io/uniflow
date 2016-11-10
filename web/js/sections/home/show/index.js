@@ -17,14 +17,17 @@ export default Vue.extend({
         history: function () {
             return this.$store.getters.currentHistory;
         },
+        stack: function() {
+            return this.$store.state.flow.stack;
+        },
         uiStack: function () {
             var uiStack = [{
                 component: 'search',
                 index: 0
             }];
 
-            for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
-                var item = this.$store.state.flow.stack[i];
+            for(var i = 0; i < this.stack.length; i ++) {
+                var item = this.stack[i];
 
                 uiStack.push({
                     component: item.component,
@@ -67,7 +70,7 @@ export default Vue.extend({
         run: function (index) {
             var indexes = [];
             if(index === undefined) {
-                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
+                for(var i = 0; i < this.stack.length; i ++) {
                     indexes.push(i);
                 }
             } else {
@@ -116,7 +119,7 @@ export default Vue.extend({
                             }, 500);
                         });
                     }).then(() => {
-                        return this.$store.state.flow.stack[index].bus.$emit('execute', runner);
+                        return this.stack[index].bus.$emit('execute', runner);
                     }).then(() => {
                         return new Promise((resolve) => {
                             setTimeout(() => {
@@ -158,9 +161,9 @@ export default Vue.extend({
                 index: index
             });
 
-            this.$store.dispatch('setFlow', this.$store.state.flow.stack).then(() => {
-                for(var i = 0; i < this.$store.state.flow.stack.length; i ++) {
-                    var item = this.$store.state.flow.stack[i];
+            this.$store.dispatch('setFlow', this.stack).then(() => {
+                for(var i = 0; i < this.stack.length; i ++) {
+                    var item = this.stack[i];
                     item.bus.$emit('reset', item.data);
                 }
             });
@@ -176,7 +179,7 @@ export default Vue.extend({
                 index: index
             });
 
-            this.history.data = this.serialiseFlowData(this.$store.state.flow.stack);
+            this.history.data = this.serialiseFlowData(this.stack);
         },
         onUpdate: function () {
             this.$store.dispatch('updateHistory', this.history)
