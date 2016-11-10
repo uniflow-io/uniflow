@@ -106,7 +106,7 @@ export default Vue.extend({
                     });
             }, Promise.resolve());
         },
-        onPush: function(component, index) {
+        onPushFlow: function(component, index) {
             this.$store.commit('pushFlow', {
                 component: component,
                 index: index
@@ -119,12 +119,12 @@ export default Vue.extend({
                 }
             });
         },
-        onPop: function(index) {
+        onPopFlow: function(index) {
             this.$store.commit('popFlow', {
                 index: index
             });
         },
-        onUpdate: function(data, index) {
+        onUpdateFlow: function(data, index) {
             this.$store.commit('updateFlow', {
                 data: data,
                 index: index
