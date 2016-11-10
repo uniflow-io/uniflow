@@ -2,6 +2,7 @@
 
 namespace Darkwood\FrontBundle\Repository;
 use Darkwood\CoreBundle\Repository\BaseRepository;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Class TagRepository
@@ -22,5 +23,19 @@ class TagRepository extends BaseRepository
         $query = $qb->getQuery();
 
         return $query->getOneOrNullResult();
+    }
+
+    public function findOrphan()
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('e')
+        ;
+
+        $qb->leftJoin('e.histories', 'h')
+            ->andWhere('h.id IS NULL');
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
     }
 }

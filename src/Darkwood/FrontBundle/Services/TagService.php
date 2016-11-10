@@ -48,6 +48,15 @@ class TagService extends BaseService
         $this->getEntityManager()->flush();
     }
 
+    public function clean()
+    {
+        $tags = $this->tagRepository->findOrphan();
+
+        foreach ($tags as $tag) {
+            $this->remove($tag);
+        }
+    }
+
     public function findOneByTag($tag)
     {
         return $this->tagRepository->findOneByTag($tag);
