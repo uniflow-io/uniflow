@@ -8,6 +8,7 @@ SystemJS.config({
         'vuex': 'libs/vuex.min.js',
         'vue-router': 'libs/vue-router.min.js',
         'superagent': 'libs/superagent.min.js',
+        'axios': 'libs/axios.min.js',
         'jquery': 'libs/jquery.min.js',
         'jquery-ui': 'libs/plugins/jQueryUI/jquery-ui.min.js',
         'select2': 'libs/plugins/select2/select2.full.min.js',
