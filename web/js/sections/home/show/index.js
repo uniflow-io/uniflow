@@ -42,6 +42,14 @@ export default Vue.extend({
             return uiStack;
         }
     },
+    watch: {
+        'history.title': function () {
+            this.onUpdate();
+        },
+        'history.tags': function () {
+            this.onUpdate();
+        }
+    },
     methods: {
         run: function (index) {
             var indexes = [];
@@ -129,6 +137,9 @@ export default Vue.extend({
                 data: data,
                 index: index
             });
+        },
+        onUpdate: function () {
+            this.$store.dispatch('updateHistory', this.history)
         },
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)

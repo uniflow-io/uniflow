@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import _ from 'lodash'
 
 Vue.use(Vuex);
 
@@ -91,9 +92,13 @@ const store = new Vuex.Store({
                     });
                 },
                 createHistory: function (context, item) {
+                    var data = {
+                        title: item.title
+                    };
+
                     return new Promise((resolve, reject) => {
                         request.post(serverService.getBaseUrl() + '/history/create')
-                            .send(item)
+                            .send(data)
                             .end((error, res) => {
                                 if (error) {
                                     reject(error);
@@ -105,6 +110,25 @@ const store = new Vuex.Store({
                             });
                     });
                 },
+                updateHistory: _.debounce(function (context, item) {
+                    var data = {
+                        title: item.title
+                    };
+
+                    return new Promise((resolve, reject) => {
+                        request.post(serverService.getBaseUrl() + '/history/edit/'+item.id)
+                            .send(data)
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    //context.commit('updateHistory', res.body);
+
+                                    resolve(res.body);
+                                }
+                            });
+                    });
+                }, 500),
                 deleteHistory: function (context, item) {
                     return new Promise((resolve, reject) => {
                         request.del(serverService.getBaseUrl() + '/history/delete/'+item.id)
