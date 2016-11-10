@@ -60,6 +60,13 @@ const store = new Vuex.Store({
                 updateHistory: function(state, item) {
                     Vue.set(state.items, item.id, item);
                 },
+                deleteHistory: function(state, item) {
+                    if(item.id == state.current) {
+                        state.current = null;
+                    }
+
+                    Vue.delete(state.items, item.id);
+                },
                 setCurrentHistory: function (state, current) {
                     state.current = current;
                 }
@@ -83,7 +90,7 @@ const store = new Vuex.Store({
                             });
                     });
                 },
-                newHistory: function (context, item) {
+                createHistory: function (context, item) {
                     return new Promise((resolve, reject) => {
                         request.post(serverService.getBaseUrl() + '/history/create')
                             .send(item)
@@ -92,6 +99,20 @@ const store = new Vuex.Store({
                                     reject(error);
                                 } else {
                                     context.commit('updateHistory', res.body);
+
+                                    resolve(res.body);
+                                }
+                            });
+                    });
+                },
+                deleteHistory: function (context, item) {
+                    return new Promise((resolve, reject) => {
+                        request.del(serverService.getBaseUrl() + '/history/delete/'+item.id)
+                            .end((error, res) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    context.commit('deleteHistory', item);
 
                                     resolve(res.body);
                                 }

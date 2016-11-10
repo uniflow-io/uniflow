@@ -94,5 +94,7 @@ class HistoryController extends Controller
         }
 
         $this->get('dw.history')->remove($entity);
+
+        return new JsonResponse($this->get('dw.history')->getJsonHistory($entity));
     }
 }

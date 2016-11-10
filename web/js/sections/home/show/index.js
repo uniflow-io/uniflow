@@ -129,6 +129,9 @@ export default Vue.extend({
                 data: data,
                 index: index
             });
+        },
+        onDelete: function () {
+            this.$store.dispatch('deleteHistory', this.history)
         }
     },
     components: Object.assign({}, components, {

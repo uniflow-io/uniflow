@@ -16,7 +16,7 @@ export default Vue.extend({
     methods: {
         onSearch: function () {
             if(this.search) {
-                this.$store.dispatch('newHistory', {
+                this.$store.dispatch('createHistory', {
                     'title': this.search
                 }).then((item) => {
                     this.$store.dispatch('setCurrentHistory', item.id);
