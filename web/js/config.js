@@ -14,7 +14,7 @@ SystemJS.config({
         'select2': 'libs/plugins/select2/select2.full.min.js',
         'tagit': 'libs/plugins/tagit/js/tag-it.min.js',
         'lodash': 'libs/lodash.min.js',
-        'acorn-interpreter': 'libs/acorn_interpreter.min.js',
+        'acorn-interpreter': 'libs/acorn/acorn_interpreter.min.js',
         'babel': 'libs/babel.min.js',
         'ace': 'libs/ace/ace.js'
     },
@@ -35,7 +35,7 @@ SystemJS.config({
         },
         'babel': {
             exports: ['Babel']
-        }
+        },
     }
 });
 SystemJS.import('app.js');

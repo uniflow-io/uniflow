@@ -3,9 +3,12 @@ import template from './template.html!text'
 import Interpreter from 'acorn-interpreter'
 import {Babel} from 'babel'
 import _ from 'lodash'
+import axios from 'axios'
 
 import Search from './search/index.js'
 import components from '../../../uniflow/components.js';
+
+var cachedPolyfillJS = null;
 
 export default Vue.extend({
     template: template,
@@ -76,30 +79,48 @@ export default Vue.extend({
                 eval: function (code) {
                     if(code === undefined) return;
 
-                    var babelCode = Babel.transform(code, {
-                        presets: [
-                            'es2015',
-                            'es2015-loose',
-                            'es2016',
-                            'es2017',
-                            'latest',
-                            'react',
-                            'stage-0',
-                            'stage-1',
-                            'stage-2',
-                            'stage-3'
-                        ],
-                        filename: 'repl',
-                        babelrc: false,
-                    });
+                    return Promise.resolve()
+                        .then(() => {
+                            //get polyfill
+                            if(cachedPolyfillJS) return cachedPolyfillJS;
 
-                    if(runner.interpreter) {
-                        runner.interpreter.appendCode(babelCode);
-                    } else {
-                        runner.interpreter = new Interpreter(code);
-                    }
+                            return axios.get('/js/libs/babel-polyfill.js')
+                                .then(function(response) {
+                                    return response.data;
+                                })
+                        })
+                        .then((polyfillJS) => {
+                            console.log(polyfillJS);
 
-                    return runner.interpreter.run();
+                            var babelCode = Babel.transform(code, {
+                                presets: [
+                                    'es2015',
+                                    'es2015-loose',
+                                    'es2016',
+                                    'es2017',
+                                    'latest',
+                                    'react',
+                                    'stage-0',
+                                    'stage-1',
+                                    'stage-2',
+                                    'stage-3'
+                                ],
+                                filename: 'repl',
+                                babelrc: false,
+                            });
+
+                            if(runner.interpreter) {
+                                runner.interpreter.appendCode(babelCode);
+                            } else {
+                                //prepend polyfill
+                                babelCode += polyfillJS + babelCode;
+
+                                runner.interpreter = new Interpreter(babelCode);
+                            }
+
+                            return runner.interpreter.run();
+                        })
+                    ;
                 }
             };
 
