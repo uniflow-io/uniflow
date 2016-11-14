@@ -84,14 +84,14 @@ export default Vue.extend({
                             //get polyfill
                             if(cachedPolyfillJS) return cachedPolyfillJS;
 
-                            return axios.get('/js/libs/babel-polyfill.js')
+                            return axios.get('/js/libs/babel-polyfill.min.js')
                                 .then(function(response) {
-                                    return response.data;
+                                    cachedPolyfillJS = response.data;
+
+                                    return cachedPolyfillJS;
                                 })
                         })
                         .then((polyfillJS) => {
-                            console.log(polyfillJS);
-
                             var babelCode = Babel.transform(code, {
                                 presets: [
                                     'es2015',
