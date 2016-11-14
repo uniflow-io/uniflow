@@ -92,6 +92,11 @@ export default Vue.extend({
                                 })
                         })
                         .then((polyfillJS) => {
+                            //prepend polyfill
+                            if(runner.interpreter === null) {
+                                code = polyfillJS + code;
+                            }
+
                             var babelCode = Babel.transform(code, {
                                 presets: [
                                     'es2015',
@@ -112,9 +117,6 @@ export default Vue.extend({
                             if(runner.interpreter) {
                                 runner.interpreter.appendCode(babelCode);
                             } else {
-                                //prepend polyfill
-                                babelCode += polyfillJS + babelCode;
-
                                 runner.interpreter = new Interpreter(babelCode);
                             }
 
