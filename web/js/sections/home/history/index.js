@@ -9,7 +9,7 @@ export default Vue.extend({
         }
     },
     computed: {
-        orderedHistory: function() {
+        filteredHistory: function() {
             var keys = Object.keys(this.$store.state.history.items);
 
             if(this.search) {
