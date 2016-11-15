@@ -82,7 +82,7 @@ export default Vue.extend({
                     return Promise.resolve()
                         .then(() => {
                             return '';
-                            
+
                             //get polyfill
                             /*if(cachedPolyfillJS) return cachedPolyfillJS;
 
@@ -117,9 +117,25 @@ export default Vue.extend({
                             });
 
                             if(runner.interpreter) {
-                                runner.interpreter.appendCode(babelCode);
+                                runner.interpreter.appendCode(babelCode.code);
                             } else {
-                                runner.interpreter = new Interpreter(babelCode);
+                                var init = function(interpreter, scope) {
+
+                                    var initConsole = function() {
+                                        var consoleObj = this.createObject(this.OBJECT);
+                                        this.setProperty(scope, 'console', consoleObj);
+
+                                        var wrapper = function(value) {
+                                            var nativeObj = interpreter.pseudoToNative(value);
+                                            return interpreter.createPrimitive(console.log(nativeObj));
+                                        };
+                                        this.setProperty(consoleObj, 'log', this.createNativeFunction(wrapper));
+                                    };
+                                    initConsole.call(interpreter);
+
+                                };
+
+                                runner.interpreter = new Interpreter(babelCode.code, init);
                             }
 
                             return runner.interpreter.run();
