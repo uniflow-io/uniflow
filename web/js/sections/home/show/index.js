@@ -50,6 +50,11 @@ export default Vue.extend({
             }
 
             return uiStack;
+        },
+        tagsOptions: function () {
+            return {
+                availableTags: this.$store.getters.tags
+            }
         }
     },
     watch: {

@@ -9,8 +9,12 @@ export default Vue.extend({
         }
     },
     computed: {
-        history: function() {
-            return this.$store.state.history.items
+        orderedHistory: function() {
+            var items = this.$store.state.history.items
+
+            console.log(items)
+
+            return items;
         }
     },
     methods: {

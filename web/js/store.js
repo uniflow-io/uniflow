@@ -51,6 +51,18 @@ const store = new Vuex.Store({
             getters: {
                 currentHistory: function(state) {
                     return state.current ? state.items[state.current] : null;
+                },
+                tags: function (state) {
+                    var tags = Object.keys(state.items).reduce(function(previous, key) {
+                        return previous.concat(state.items[key].tags);
+                    }, []);
+
+                    //filter unique
+                    tags = tags.filter(function(value, index, self) {
+                        return self.indexOf(value) === index;
+                    });
+
+                    return tags;
                 }
             },
             mutations: {
