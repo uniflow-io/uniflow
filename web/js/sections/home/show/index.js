@@ -256,8 +256,11 @@ export default Vue.extend({
                 });
         }, 500),
         onUpdateFlowData: _.debounce(function () {
-            this.history.data = this.serialiseFlowData(this.stack);
-            this.$store.dispatch('setHistoryData', this.history)
+            var data = this.serialiseFlowData(this.stack);
+            if(this.history.data != data) {
+                this.history.data = data;
+                this.$store.dispatch('setHistoryData', this.history)
+            }
         }, 500),
         onUpdate: _.debounce(function () {
             this.$store.dispatch('updateHistory', this.history)
