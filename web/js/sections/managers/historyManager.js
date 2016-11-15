@@ -17,9 +17,6 @@ export default Vue.extend({
     computed: {
         history: function() {
             return this.$store.state.history.items
-        },
-        current: function() {
-            return this.$store.state.history.current
         }
     },
     watch: {

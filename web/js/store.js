@@ -144,7 +144,11 @@ const store = new Vuex.Store({
                                 if (error) {
                                     reject(error);
                                 } else {
-                                    //context.commit('updateHistory', res.body);
+                                    /*var item = res.body;
+                                    item.created = moment(item.created);
+                                    item.updated = moment(item.updated);
+
+                                    context.commit('updateHistory', item);*/
 
                                     resolve(res.body);
                                 }
