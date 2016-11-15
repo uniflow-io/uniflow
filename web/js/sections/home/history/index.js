@@ -11,6 +11,18 @@ export default Vue.extend({
     computed: {
         orderedHistory: function() {
             var keys = Object.keys(this.$store.state.history.items);
+
+            if(this.search) {
+                keys = keys.filter((key) => {
+                    var item = this.$store.state.history.items[key];
+                    var words = item.title;
+                    words += item.tags.join('');
+                    words = words.toLowerCase();
+
+                    return words.indexOf(this.search) !== -1;
+                });
+            }
+
             keys.sort((keyA, keyB) => {
                 var itemA = this.$store.state.history.items[keyA],
                     itemB = this.$store.state.history.items[keyB];
@@ -18,13 +30,9 @@ export default Vue.extend({
                 return itemB.updated.diff(itemA.updated);
             });
 
-            var items = {}, key, i;
-            for(i = 0; i < keys.length; i++) {
-                key = keys[i];
-                items['sorted'+key] = this.$store.state.history.items[key];
-            }
-
-            return items;
+            return keys.map((key) => {
+                return this.$store.state.history.items[key];
+            });
         }
     },
     methods: {
