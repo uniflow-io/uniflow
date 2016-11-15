@@ -20,7 +20,6 @@ Vue.component('ace', {
     },
     watch: {
         value: function (value) {
-
             if(value !== undefined && value != this.editor.getValue()) {
                 this.editor.setValue(value, 1);
             }
