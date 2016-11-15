@@ -16,7 +16,8 @@ SystemJS.config({
         'lodash': 'libs/lodash.min.js',
         'acorn-interpreter': 'libs/acorn/acorn_interpreter.min.js',
         'babel': 'libs/babel.min.js',
-        'ace': 'libs/ace/ace.js'
+        'ace': 'libs/ace/ace.js',
+        'moment': 'libs/momentjs/moment.min.js'
     },
     transpiler: 'plugin-babel',
     meta: {

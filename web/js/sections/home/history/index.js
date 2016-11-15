@@ -10,9 +10,19 @@ export default Vue.extend({
     },
     computed: {
         orderedHistory: function() {
-            var items = this.$store.state.history.items
+            var keys = Object.keys(this.$store.state.history.items);
+            keys.sort((keyA, keyB) => {
+                var itemA = this.$store.state.history.items[keyA],
+                    itemB = this.$store.state.history.items[keyB];
 
-            console.log(items)
+                return itemB.updated.diff(itemA.updated);
+            });
+
+            var items = {}, key, i;
+            for(i = 0; i < keys.length; i++) {
+                key = keys[i];
+                items['sorted'+key] = this.$store.state.history.items[key];
+            }
 
             return items;
         }

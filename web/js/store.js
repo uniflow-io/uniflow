@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import moment from 'moment'
 
 Vue.use(Vuex);
 
@@ -94,7 +95,11 @@ const store = new Vuex.Store({
                                     context.commit('clearHistory');
 
                                     for (var i = 0; i < res.body.length; i++) {
-                                        context.commit('updateHistory', res.body[i]);
+                                        var item = res.body[i];
+                                        item.created = moment(item.created);
+                                        item.updated = moment(item.updated);
+
+                                        context.commit('updateHistory', item);
                                     }
 
                                     resolve();
