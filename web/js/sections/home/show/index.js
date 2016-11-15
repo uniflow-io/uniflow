@@ -81,15 +81,17 @@ export default Vue.extend({
 
                     return Promise.resolve()
                         .then(() => {
+                            return '';
+                            
                             //get polyfill
-                            if(cachedPolyfillJS) return cachedPolyfillJS;
+                            /*if(cachedPolyfillJS) return cachedPolyfillJS;
 
                             return axios.get('/js/libs/babel-polyfill.min.js')
                                 .then(function(response) {
                                     cachedPolyfillJS = response.data;
 
                                     return cachedPolyfillJS;
-                                })
+                                })*/
                         })
                         .then((polyfillJS) => {
                             //prepend polyfill
