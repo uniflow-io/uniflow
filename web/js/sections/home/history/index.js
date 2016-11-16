@@ -16,7 +16,7 @@ export default Vue.extend({
                 keys = keys.filter((key) => {
                     var item = this.$store.state.history.items[key];
                     var words = item.title;
-                    words += item.tags.join('');
+                    words += item.tags.join(' ');
                     words = words.toLowerCase();
 
                     return words.indexOf(this.search) !== -1;
