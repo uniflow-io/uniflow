@@ -4,7 +4,7 @@ import History from './models/history.js'
 
 Vue.use(Vuex);
 
-import request from 'superagent'
+import request from 'axios'
 import serverService from './services/server.js'
 
 const store = new Vuex.Store({
@@ -86,24 +86,17 @@ const store = new Vuex.Store({
             },
             actions: {
                 fetchHistory: function(context) {
-                    return new Promise((resolve, reject) => {
-                        request.get(serverService.getBaseUrl() + '/history/list')
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    context.commit('clearHistory');
+                    return request
+                        .get(serverService.getBaseUrl() + '/history/list')
+                        .then((response) => {
+                            context.commit('clearHistory');
 
-                                    for (var i = 0; i < res.body.length; i++) {
-                                        var item = new History(res.body[i]);
+                            for (var i = 0; i < response.data.length; i++) {
+                                var item = new History(response.data[i]);
 
-                                        context.commit('updateHistory', item);
-                                    }
-
-                                    resolve();
-                                }
-                            });
-                    });
+                                context.commit('updateHistory', item);
+                            }
+                        });
                 },
                 createHistory: function (context, item) {
                     var data = {
@@ -111,21 +104,15 @@ const store = new Vuex.Store({
                         tags: item.tags
                     };
 
-                    return new Promise((resolve, reject) => {
-                        request.post(serverService.getBaseUrl() + '/history/create')
-                            .send(data)
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    var item = new History(res.body);
+                    return request
+                        .post(serverService.getBaseUrl() + '/history/create', data)
+                        .then((response) => {
+                            var item = new History(response.data);
 
-                                    context.commit('updateHistory', item);
+                            context.commit('updateHistory', item);
 
-                                    resolve(item);
-                                }
-                            });
-                    });
+                            return item;
+                        });
                 },
                 updateHistory: function (context, item) {
                     var data = {
@@ -133,60 +120,38 @@ const store = new Vuex.Store({
                         tags: item.tags
                     };
 
-                    return new Promise((resolve, reject) => {
-                        request.post(serverService.getBaseUrl() + '/history/edit/'+item.id)
-                            .send(data)
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    var item = new History(res.body);
+                    return request
+                        .post(serverService.getBaseUrl() + '/history/edit/'+item.id, data)
+                        .then((response) => {
+                            var item = new History(response.data);
 
-                                    //context.commit('updateHistory', item);
+                            //context.commit('updateHistory', item);
 
-                                    resolve(item);
-                                }
-                            });
-                    });
+                            return item;
+                        });
                 },
                 getHistoryData: function (context, item) {
-                    return new Promise((resolve, reject) => {
-                        request.get(serverService.getBaseUrl() + '/history/getData/'+item.id)
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(res.body.data);
-                                }
-                            });
-                    });
+                    return request
+                        .get(serverService.getBaseUrl() + '/history/getData/'+item.id)
+                        .then((response) => {
+                            return response.data.data;
+                        });
                 },
                 setHistoryData: function (context, item) {
-                    return new Promise((resolve, reject) => {
-                        request.post(serverService.getBaseUrl() + '/history/setData/'+item.id)
-                            .send(item.data)
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(res.body);
-                                }
-                            });
-                    });
+                    return request
+                        .post(serverService.getBaseUrl() + '/history/setData/'+item.id, item.data)
+                        .then((response) => {
+                            return response.data;
+                        });
                 },
                 deleteHistory: function (context, item) {
-                    return new Promise((resolve, reject) => {
-                        request.del(serverService.getBaseUrl() + '/history/delete/'+item.id)
-                            .end((error, res) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    context.commit('deleteHistory', item);
+                    return request
+                        .del(serverService.getBaseUrl() + '/history/delete/'+item.id)
+                        .then((response) => {
+                            context.commit('deleteHistory', item);
 
-                                    resolve(res.body);
-                                }
-                            });
-                    });
+                            return response.data;
+                        });
                 },
                 setCurrentHistory: function (context, current) {
                     context.commit('setCurrentHistory', current);
