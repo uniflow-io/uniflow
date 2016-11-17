@@ -125,7 +125,7 @@ const store = new Vuex.Store({
                         .then((response) => {
                             var item = new History(response.data);
 
-                            //context.commit('updateHistory', item);
+                            context.commit('updateHistory', item);
 
                             return item;
                         });

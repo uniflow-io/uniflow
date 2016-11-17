@@ -236,9 +236,22 @@ export default Vue.extend({
                 this.$store.dispatch('setHistoryData', this.history)
             }
         }, 500),
-        onUpdate: _.debounce(function () {
-            this.$store.dispatch('updateHistory', this.history);
-        }, 500),
+        onUpdate: (function() {
+            var silence = false;
+
+            return _.debounce(function () {
+                if(silence) return;
+
+                silence = true;
+                this.$store
+                    .dispatch('updateHistory', this.history)
+                    .then(() => {
+                        this.$nextTick(function() {
+                            silence = false;
+                        });
+                    });
+            }, 500);
+        })(),
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)
         }
