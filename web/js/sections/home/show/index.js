@@ -58,14 +58,28 @@ export default Vue.extend({
         }
     },
     watch: {
+        history: {
+            handler: function (newHistory, lastHistory) {
+                if(newHistory.id != lastHistory.id) {
+                    this.onFetchFlowData();
+                } else if(!newHistory.equal(lastHistory)) {
+                    //this.onUpdate();
+                }
+
+                console.log(newHistory.id + ':' + newHistory.title, lastHistory.id + ':' + lastHistory.title)
+            },
+            deep: true
+        },
         'history.id': function () {
             this.onFetchFlowData();
         },
-        'history.title': function () {
-            this.onUpdate();
+        'history.title': function (before, now) {
+            console.log('title', before, now, this.history.id);
+            //this.onUpdate();
         },
-        'history.tags': function () {
-            this.onUpdate();
+        'history.tags': function (before, now) {
+            console.log('tags', before, now, this.history.id);
+            //this.onUpdate();
         }
     },
     methods: {
@@ -170,33 +184,6 @@ export default Vue.extend({
                     });
             }, Promise.resolve());
         },
-        serialiseFlowData: function (data) {
-            var rawData = [];
-
-            for(let i = 0; i < data.length; i++) {
-                rawData.push({
-                    component: data[i].component,
-                    data: data[i].data
-                });
-            }
-
-            return JSON.stringify(rawData);
-        },
-        deserialiseFlowData: function (rawData) {
-            rawData = JSON.parse(rawData);
-
-            var data = [];
-
-            for(let i = 0; i < rawData.length; i++) {
-                data.push({
-                    component: rawData[i].component,
-                    data: rawData[i].data,
-                    bus: new Vue()
-                });
-            }
-
-            return data;
-        },
         onPushFlow: function(component, index) {
             this.$store.commit('pushFlow', {
                 component: component,
@@ -229,24 +216,24 @@ export default Vue.extend({
             this.onUpdateFlowData();
         },
         onFetchFlowData: _.debounce(function () {
-            var id = this.history.id;
+            var history = this.history;
 
             Promise.resolve()
                 .then(() => {
                     return this.$store.dispatch('setFlow', []);
                 })
                 .then(() => {
-                    if(this.$store.state.history.items[id].data) {
-                        return this.$store.state.history.items[id].data;
+                    if(history.data) {
+                        return history.data;
                     }
 
-                    return this.$store.dispatch('getHistoryData', this.$store.state.history.items[id]);
+                    return this.$store.dispatch('getHistoryData', history);
                 })
                 .then((data) => {
                     if(!data) return;
 
-                    this.$store.state.history.items[id].data = data;
-                    return this.$store.dispatch('setFlow', this.deserialiseFlowData(data));
+                    history.data = data;
+                    return this.$store.dispatch('setFlow', history.deserialiseFlowData());
                 })
                 .then(() => {
                     for(var i = 0; i < this.stack.length; i ++) {
@@ -256,14 +243,14 @@ export default Vue.extend({
                 });
         }, 500),
         onUpdateFlowData: _.debounce(function () {
-            var data = this.serialiseFlowData(this.stack);
-            if(this.history.data != data) {
-                this.history.data = data;
+            var data = this.history.data;
+            this.history.serialiseFlowData(this.stack);
+            if(this.history.data !== data) {
                 this.$store.dispatch('setHistoryData', this.history)
             }
         }, 500),
         onUpdate: _.debounce(function () {
-            this.$store.dispatch('updateHistory', this.history)
+            this.$store.dispatch('updateHistory', this.history);
         }, 500),
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)

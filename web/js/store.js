@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import moment from 'moment'
+import History from './models/history.js'
 
 Vue.use(Vuex);
 
@@ -95,9 +95,7 @@ const store = new Vuex.Store({
                                     context.commit('clearHistory');
 
                                     for (var i = 0; i < res.body.length; i++) {
-                                        var item = res.body[i];
-                                        item.created = moment(item.created);
-                                        item.updated = moment(item.updated);
+                                        var item = new History(res.body[i]);
 
                                         context.commit('updateHistory', item);
                                     }
@@ -120,9 +118,7 @@ const store = new Vuex.Store({
                                 if (error) {
                                     reject(error);
                                 } else {
-                                    var item = res.body;
-                                    item.created = moment(item.created);
-                                    item.updated = moment(item.updated);
+                                    var item = new History(res.body);
 
                                     context.commit('updateHistory', item);
 
@@ -144,13 +140,11 @@ const store = new Vuex.Store({
                                 if (error) {
                                     reject(error);
                                 } else {
-                                    /*var item = res.body;
-                                    item.created = moment(item.created);
-                                    item.updated = moment(item.updated);
+                                    var item = new History(res.body);
 
-                                    context.commit('updateHistory', item);*/
+                                    //context.commit('updateHistory', item);
 
-                                    resolve(res.body);
+                                    resolve(item);
                                 }
                             });
                     });
