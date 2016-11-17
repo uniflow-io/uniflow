@@ -6,22 +6,20 @@ Vue.component('tagit', {
     props: ['options', 'value'],
     template: '<input />',
     mounted: function () {
-        var vm = this;
-        vm.silence = false;
+        this.silence = false;
 
         $(this.$el)
             .val(this.value)
             .tagit(this.options)
-            .on('change', function() {
-                if(vm.silence) return;
+            .on('change', () => {
+                if(this.silence) return;
 
-                vm.$emit('input', $(this).tagit('assignedTags'));
+                this.$emit('input', $(this.$el).tagit('assignedTags'));
             })
     },
     watch: {
         value: function (value) {
-            var vm = this;
-            vm.silence = true;
+            this.silence = true;
 
             var tags = $(this.$el).tagit('assignedTags'), i;
 
@@ -39,7 +37,7 @@ Vue.component('tagit', {
                 }
             }
 
-            vm.silence = false;
+            this.silence = false;
         },
         options: function (options) {
             $(this.$el).tagit(options)
