@@ -60,26 +60,13 @@ export default Vue.extend({
     watch: {
         history: {
             handler: function (newHistory, lastHistory) {
-                if(newHistory.id != lastHistory.id) {
+                if(newHistory.id == lastHistory.id) {
+                    this.onUpdate();
+                } else {
                     this.onFetchFlowData();
-                } else if(!newHistory.equal(lastHistory)) {
-                    //this.onUpdate();
                 }
-
-                console.log(newHistory.id + ':' + newHistory.title, lastHistory.id + ':' + lastHistory.title)
             },
             deep: true
-        },
-        'history.id': function () {
-            this.onFetchFlowData();
-        },
-        'history.title': function (before, now) {
-            console.log('title', before, now, this.history.id);
-            //this.onUpdate();
-        },
-        'history.tags': function (before, now) {
-            console.log('tags', before, now, this.history.id);
-            //this.onUpdate();
         }
     },
     methods: {
