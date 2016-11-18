@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import History from './models/history.js'
+import moment from 'moment'
 
 Vue.use(Vuex);
 
@@ -141,6 +142,10 @@ const store = new Vuex.Store({
                     return request
                         .post(serverService.getBaseUrl() + '/history/setData/'+item.id, item.data)
                         .then((response) => {
+                            item.updated = moment();
+
+                            context.commit('updateHistory', item);
+
                             return response.data;
                         });
                 },
