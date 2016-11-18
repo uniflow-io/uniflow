@@ -235,7 +235,6 @@ export default Vue.extend({
             }
         }, 500),
         onUpdateTitle: function (e) {
-            console.log(e)
             this.history.title = e.target.value;
             this.onUpdate();
         },
