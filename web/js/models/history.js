@@ -37,20 +37,6 @@ class History {
 
         return data;
     }
-
-    equal(history) {
-        var data = {
-            id: this.id,
-            title: this.title,
-            tags: this.tags
-        }, historyData = {
-            id: history.id,
-            title: history.title,
-            tags: history.tags
-        };
-
-        return JSON.stringify(data) === JSON.stringify(historyData);
-    }
 }
 
 export default History;

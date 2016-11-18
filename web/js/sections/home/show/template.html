@@ -13,7 +13,7 @@
                     <label for="info_title_{{ _uid }}" class="col-sm-2 control-label">Title</label>
 
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="info_title_{{ _uid }}" v-model="history.title" placeholder="Titre" />
+                        <input type="text" class="form-control" id="info_title_{{ _uid }}" :value="history.title" @input="onUpdateTitle" placeholder="Titre" />
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                     <label for="info_tags_{{ _uid }}" class="col-sm-2 control-label">Tags</label>
 
                     <div class="col-sm-10">
-                        <tagit v-model="history.tags" :options="tagsOptions" type="text" class="form-control" id="info_tags_{{ _uid }}" placeholder="Tags" />
+                        <tagit type="text" class="form-control" id="info_tags_{{ _uid }}" :value="history.tags" @input="onUpdateTags" :options="tagsOptions" placeholder="Tags" />
                     </div>
                 </div>
 

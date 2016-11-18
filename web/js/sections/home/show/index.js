@@ -60,9 +60,7 @@ export default Vue.extend({
     watch: {
         history: {
             handler: function (newHistory, lastHistory) {
-                if(newHistory.id == lastHistory.id) {
-                    this.onUpdate();
-                } else {
+                if(newHistory.id != lastHistory.id) {
                     this.onFetchFlowData();
                 }
             },
@@ -236,22 +234,18 @@ export default Vue.extend({
                 this.$store.dispatch('setHistoryData', this.history)
             }
         }, 500),
-        onUpdate: (function() {
-            var silence = false;
-
-            return _.debounce(function () {
-                if(silence) return;
-
-                silence = true;
-                this.$store
-                    .dispatch('updateHistory', this.history)
-                    .then(() => {
-                        this.$nextTick(function() {
-                            silence = false;
-                        });
-                    });
-            }, 500);
-        })(),
+        onUpdateTitle: function (e) {
+            console.log(e)
+            this.history.title = e.target.value;
+            this.onUpdate();
+        },
+        onUpdateTags: function (tags) {
+            this.history.tags = tags;
+            this.onUpdate();
+        },
+        onUpdate: _.debounce(function () {
+            this.$store.dispatch('updateHistory', this.history)
+        }, 500),
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)
         }
