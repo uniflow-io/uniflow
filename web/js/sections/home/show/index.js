@@ -231,6 +231,8 @@ export default Vue.extend({
             var data = this.history.data;
             this.history.serialiseFlowData(this.stack);
             if(this.history.data !== data) {
+                this.onUpdate();
+
                 this.$store.dispatch('setHistoryData', this.history)
             }
         }, 500),
