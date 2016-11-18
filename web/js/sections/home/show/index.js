@@ -155,7 +155,7 @@ export default Vue.extend({
                             this.runIndex = index;
                             setTimeout(() => {
                                 this.$nextTick(resolve);
-                            }, 500);
+                            }, 100);
                         });
                     }).then(() => {
                         return this.stack[index].bus.$emit('execute', runner);
@@ -164,7 +164,7 @@ export default Vue.extend({
                             setTimeout(() => {
                                 this.runIndex = null;
                                 this.$nextTick(resolve);
-                            }, 500);
+                            }, 100);
                         });
                     });
             }, Promise.resolve());
