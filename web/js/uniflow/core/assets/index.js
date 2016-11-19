@@ -6,7 +6,8 @@ export default Vue.extend({
     template: template,
     data() {
         return {
-            code: null
+            variable: null,
+            assets: []
         }
     },
     created: function () {
@@ -17,17 +18,12 @@ export default Vue.extend({
         this.bus.$off('reset', this.deserialise);
         this.bus.$off('execute', this.onExecute);
     },
-    watch: {
-        code: function () {
-            this.onUpdate();
-        }
-    },
     methods: {
         serialise: function () {
-            return this.code;
+            return JSON.stringify(this.assets);
         },
         deserialise: function (data) {
-            this.code = data;
+            this.code = data ? JSON.parse(data) : [];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -36,7 +32,9 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (runner) {
-            runner.eval(this.code);
+            if(this.variable) {
+                runner.eval('var ' + this.variable + ' = [];');
+            }
         }
     }
 });
