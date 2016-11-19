@@ -18,12 +18,17 @@ export default Vue.extend({
         this.bus.$off('reset', this.deserialise);
         this.bus.$off('execute', this.onExecute);
     },
+    watch: {
+        variable: function () {
+            this.onUpdate();
+        }
+    },
     methods: {
         serialise: function () {
-            return JSON.stringify(this.assets);
+            return JSON.stringify([this.variable, this.assets]);
         },
         deserialise: function (data) {
-            this.code = data ? JSON.parse(data) : [];
+            [this.variable, this.code] = data ? JSON.parse(data) : [null, []];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
