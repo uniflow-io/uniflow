@@ -48,6 +48,17 @@ export default Vue.extend({
                 this.onUpdate();
             });
         },
+        onUpdateFile: function () {
+            this.onUpdate();
+        },
+        onDownloadFile: function (index) {
+            
+        },
+        onRemoveFile: function (index) {
+            this.assets.splice(index, 1);
+
+            this.onUpdate();
+        },
         serialise: function () {
             return LZString.compressToEncodedURIComponent(JSON.stringify([this.variable, this.assets]));
         },
