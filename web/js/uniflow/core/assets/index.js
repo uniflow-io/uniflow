@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import LZString from 'lz-string'
 
 export default Vue.extend({
     props: ['bus'],
@@ -24,11 +25,34 @@ export default Vue.extend({
         }
     },
     methods: {
+        onFiles: function (e) {
+            var files = [];
+            for (var i= 0; i < e.target.files.length; i++) {
+                files.push(e.target.files[0]);
+            }
+
+            return files.reduce((promise, file) => {
+                return promise.then(() => {
+                    return new Promise((resolve, error) => {
+                        var reader = new FileReader();
+                        reader.onerror = error;
+                        reader.onload = (e) => {
+                            resolve(this.assets.push([file.name, e.target.result]));
+                        };
+                        reader.readAsText(file);
+                    })
+                });
+            }, Promise.resolve()).then(() => {
+                e.target.value = '';
+
+                this.onUpdate();
+            });
+        },
         serialise: function () {
-            return JSON.stringify([this.variable, this.assets]);
+            return LZString.compressToEncodedURIComponent(JSON.stringify([this.variable, this.assets]));
         },
         deserialise: function (data) {
-            [this.variable, this.code] = data ? JSON.parse(data) : [null, []];
+            [this.variable, this.assets] = data ? JSON.parse(LZString.decompressFromEncodedURIComponent(data)) : [null, []];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -38,7 +62,10 @@ export default Vue.extend({
         },
         onExecute: function (runner) {
             if(this.variable) {
-                runner.eval('var ' + this.variable + ' = [];');
+                var assets = this.assets.reduce(function (data, asset) {
+                    return data.push(asset[1]);
+                }, []);
+                runner.eval('var ' + this.variable + ' = '+ JSON.stringify(assets) +';');
             }
         }
     }

@@ -18,7 +18,7 @@
                 <label for="assets{{ _uid }}" class="col-sm-2 control-label">Assets</label>
 
                 <div class="col-sm-10">
-                    <input id="assets{{ _uid }}" type="file" class="form-control" />
+                    <input id="assets{{ _uid }}" type="file" multiple @change="onFiles" class="form-control" />
                 </div>
             </div>
         </div>
