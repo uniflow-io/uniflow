@@ -52,7 +52,16 @@ export default Vue.extend({
             this.onUpdate();
         },
         onDownloadFile: function (index) {
-            
+            var a = document.createElement("a"),
+                blob = new Blob([this.assets[index][1]], {type: "octet/stream"}),
+                url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = this.assets[index][0];
+            a.style = "display: none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
         },
         onRemoveFile: function (index) {
             this.assets.splice(index, 1);
