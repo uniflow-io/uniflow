@@ -83,7 +83,8 @@ export default Vue.extend({
         onExecute: function (runner) {
             if(this.variable) {
                 var assets = this.assets.reduce(function (data, asset) {
-                    return data.push(asset[1]);
+                    data.push(asset[1]);
+                    return data;
                 }, []);
                 runner.eval('var ' + this.variable + ' = '+ JSON.stringify(assets) +';');
             }
