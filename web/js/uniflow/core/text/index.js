@@ -1,29 +1,46 @@
 import Vue from 'vue'
 import template from './template.html!text'
 
-import TextMessage from '../../../messages/text.js'
-
 export default Vue.extend({
+    props: ['bus'],
     template: template,
     data() {
         return {
-            content: null
+            variable: null,
+            text: null
+        }
+    },
+    created: function () {
+        this.bus.$on('reset', this.deserialise);
+        this.bus.$on('execute', this.onExecute);
+    },
+    destroyed: function () {
+        this.bus.$off('reset', this.deserialise);
+        this.bus.$off('execute', this.onExecute);
+    },
+    watch: {
+        variable: function () {
+            this.onUpdate();
+        },
+        text: function () {
+            this.onUpdate();
         }
     },
     methods: {
+        serialise: function () {
+            return this.text;
+        },
+        deserialise: function (data) {
+            this.text = data;
+        },
+        onUpdate: function () {
+            this.$emit('update', this.serialise());
+        },
         onDelete: function () {
             this.$emit('pop');
         },
-        handleTypes: function() {
-            return [undefined, TextMessage];
-        },
-        handle: function (message) {
-            if(message instanceof TextMessage) {
-                this.content = message.text;
-            }
-        },
-        onSubmit: function(e) {
-            this.$dispatch('message', new TextMessage(this.content));
+        onExecute: function (runner) {
+            runner.eval(this.text);
         }
     }
 });

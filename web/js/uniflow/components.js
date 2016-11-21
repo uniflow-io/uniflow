@@ -10,8 +10,8 @@ import DecleorTrads from './decleor/trads/index.js';
 export default {
     'core-javascript': CoreJavascript,
     'core-assets': CoreAssets,
-    /*'core-text': CoreText,
-    'core-sftp': CoreSFTP,
+    'core-text': CoreText,
+    /*'core-sftp': CoreSFTP,
     'core-yaml': CoreYAML,
     'core-replace': CoreReplace,
     'decleor-trads': DecleorTrads,*/

@@ -1,5 +1,5 @@
 <div class="box box-info">
-    <form class="form-horizontal" @submit.prevent="onSubmit">
+    <form class="form-horizontal">
         <div class="box-header with-border">
             <h3 class="box-title">Text</h3>
             <div class="box-tools pull-right">
@@ -8,15 +8,20 @@
         </div>
         <div class="box-body">
             <div class="form-group">
-                <label for="content{{ _uid }}" class="col-sm-2 control-label">Text</label>
+                <label for="variable{{ _uid }}" class="col-sm-2 control-label">Variable</label>
 
                 <div class="col-sm-10">
-                    <textarea class="form-control" id="content{{ _uid }}" v-model="content" placeholder="Content"></textarea>
+                    <input id="variable{{ _uid }}" type="text" v-model="variable" class="form-control" />
                 </div>
             </div>
-        </div>
-        <div class="box-footer">
-            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-refresh"></i> Send</button>
+
+            <div class="form-group">
+                <label for="text{{ _uid }}" class="col-sm-2 control-label">Text</label>
+
+                <div class="col-sm-10">
+                    <ace class="form-control" id="text{{ _uid }}" v-model="text" placeholder="Text" height="200"></ace>
+                </div>
+            </div>
         </div>
     </form>
 </div>
