@@ -31,7 +31,7 @@ export default Vue.extend({
             return [this.variable, this.text];
         },
         deserialise: function (data) {
-            [this.variable, this.text] = data;
+            [this.variable, this.text] = data ? data : [null, null];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
