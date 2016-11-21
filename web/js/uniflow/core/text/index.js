@@ -28,10 +28,10 @@ export default Vue.extend({
     },
     methods: {
         serialise: function () {
-            return this.text;
+            return [this.variable, this.text];
         },
         deserialise: function (data) {
-            this.text = data;
+            [this.variable, this.text] = data;
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
