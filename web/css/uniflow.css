@@ -17,3 +17,7 @@
     padding-top: 12px;
     padding-bottom: 12px;
 }
+
+.form-group-last {
+    margin-bottom: 0px;
+}
