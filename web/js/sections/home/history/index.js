@@ -33,6 +33,9 @@ export default Vue.extend({
             return keys.map((key) => {
                 return this.$store.state.history.items[key];
             });
+        },
+        history: function () {
+            return this.$store.getters.currentHistory;
         }
     },
     methods: {
