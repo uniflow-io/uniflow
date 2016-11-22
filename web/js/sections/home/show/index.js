@@ -4,6 +4,7 @@ import Interpreter from 'acorn-interpreter'
 import {Babel} from 'babel'
 import _ from 'lodash'
 import axios from 'axios'
+import History from '../../../models/history.js'
 
 import Search from './search/index.js'
 import components from '../../../uniflow/components.js';
@@ -252,6 +253,19 @@ export default Vue.extend({
         onUpdate: _.debounce(function () {
             this.$store.dispatch('updateHistory', this.history)
         }, 500),
+        onDuplicate: function () {
+            var history = new History(this.history);
+            history.title += ' Copy';
+
+            this.$store.dispatch('createHistory', history)
+                .then((item) => {
+                    history.id = item.id;
+                    return this.$store.dispatch('setHistoryData', history);
+                })
+                .then(() => {
+                    return this.$store.dispatch('setCurrentHistory', history.id);
+                });
+        },
         onDelete: function () {
             this.$store.dispatch('deleteHistory', this.history)
         }

@@ -17,9 +17,17 @@ export default Vue.extend({
     computed: {
         history: function() {
             return this.$store.state.history.items
+        },
+        current: function() {
+            return this.$store.state.history.current
         }
     },
     watch: {
+        current: function (id) {
+            if(id) {
+                this.$router.push({ name: 'homeDetail', params: { id: id }});
+            }
+        },
         '$route': function(to) {
             if(to.name == 'homeDetail') {
                 this.$store.dispatch('setCurrentHistory', to.params.id);

@@ -151,7 +151,7 @@ const store = new Vuex.Store({
                 },
                 deleteHistory: function (context, item) {
                     return request
-                        .del(serverService.getBaseUrl() + '/history/delete/'+item.id)
+                        .delete(serverService.getBaseUrl() + '/history/delete/'+item.id)
                         .then((response) => {
                             context.commit('deleteHistory', item);
 

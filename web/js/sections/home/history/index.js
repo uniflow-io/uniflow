@@ -39,9 +39,10 @@ export default Vue.extend({
         onSearch: function () {
             if(this.search) {
                 this.$store.dispatch('createHistory', {
-                    'title': this.search
+                    'title': this.search,
+                    'tags': []
                 }).then((item) => {
-                    this.$store.dispatch('setCurrentHistory', item.id);
+                    return this.$store.dispatch('setCurrentHistory', item.id);
                 });
             }
         }
