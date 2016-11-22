@@ -40,7 +40,13 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (runner) {
-            runner.eval(this.text);
+            if(this.variable) {
+                if(runner.hasValue(this.variable)) {
+                    this.text = runner.getValue(this.variable).data;
+                } else {
+                    runner.eval('var ' + this.variable + ' = "' + this.text + '";');
+                }
+            }
         }
     }
 });

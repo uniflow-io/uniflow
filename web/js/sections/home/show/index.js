@@ -78,73 +78,72 @@ export default Vue.extend({
                 indexes.push(index);
             }
 
+            //get polyfill
+            /*if(cachedPolyfillJS) return cachedPolyfillJS;
+
+             return axios.get('/js/libs/babel-polyfill.min.js')
+             .then(function(response) {
+             cachedPolyfillJS = response.data;
+
+             return cachedPolyfillJS;
+             })*/
+
+            var interpreter = new Interpreter('', function(interpreter, scope) {
+                var initConsole = function() {
+                    var consoleObj = this.createObject(this.OBJECT);
+                    this.setProperty(scope, 'console', consoleObj);
+
+                    var wrapper = function(value) {
+                        var nativeObj = interpreter.pseudoToNative(value);
+                        return interpreter.createPrimitive(console.log(nativeObj));
+                    };
+                    this.setProperty(consoleObj, 'log', this.createNativeFunction(wrapper));
+                };
+                initConsole.call(interpreter);
+            });
+
             var runner = {
-                interpreter: null,
+                hasValue: function (variable) {
+                    var scope = interpreter.getScope();
+                    var nameStr = variable.toString();
+                    while (scope) {
+                        if (nameStr in scope.properties) {
+                            return true;
+                        }
+                        scope = scope.parentScope;
+                    }
+
+                    return false;
+                },
+                getValue: function (variable) {
+                    return interpreter.getValue(variable);
+                },
+                setValue: function (variable, value) {
+                    return interpreter.setValue(variable, value);
+                },
                 eval: function (code) {
                     if(code === undefined) return;
 
-                    return Promise.resolve()
-                        .then(() => {
-                            return '';
+                    var babelCode = Babel.transform(code, {
+                        presets: [
+                            'es2015',
+                            'es2015-loose',
+                            'es2016',
+                            'es2017',
+                            'latest',
+                            'react',
+                            'stage-0',
+                            'stage-1',
+                            'stage-2',
+                            'stage-3'
+                        ],
+                        filename: 'repl',
+                        babelrc: false,
+                    });
 
-                            //get polyfill
-                            /*if(cachedPolyfillJS) return cachedPolyfillJS;
+                    interpreter.appendCode(babelCode.code);
 
-                            return axios.get('/js/libs/babel-polyfill.min.js')
-                                .then(function(response) {
-                                    cachedPolyfillJS = response.data;
-
-                                    return cachedPolyfillJS;
-                                })*/
-                        })
-                        .then((polyfillJS) => {
-                            //prepend polyfill
-                            if(runner.interpreter === null) {
-                                code = polyfillJS + code;
-                            }
-
-                            var babelCode = Babel.transform(code, {
-                                presets: [
-                                    'es2015',
-                                    'es2015-loose',
-                                    'es2016',
-                                    'es2017',
-                                    'latest',
-                                    'react',
-                                    'stage-0',
-                                    'stage-1',
-                                    'stage-2',
-                                    'stage-3'
-                                ],
-                                filename: 'repl',
-                                babelrc: false,
-                            });
-
-                            if(runner.interpreter) {
-                                runner.interpreter.appendCode(babelCode.code);
-                            } else {
-                                var init = function(interpreter, scope) {
-
-                                    var initConsole = function() {
-                                        var consoleObj = this.createObject(this.OBJECT);
-                                        this.setProperty(scope, 'console', consoleObj);
-
-                                        var wrapper = function(value) {
-                                            var nativeObj = interpreter.pseudoToNative(value);
-                                            return interpreter.createPrimitive(console.log(nativeObj));
-                                        };
-                                        this.setProperty(consoleObj, 'log', this.createNativeFunction(wrapper));
-                                    };
-                                    initConsole.call(interpreter);
-
-                                };
-
-                                runner.interpreter = new Interpreter(babelCode.code, init);
-                            }
-
-                            return runner.interpreter.run();
-                        })
-                    ;
+                    return interpreter.run();
                 }
             };
 
