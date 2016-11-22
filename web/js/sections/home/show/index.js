@@ -189,6 +189,14 @@ export default Vue.extend({
                 index: index
             });
 
+            this.$store.dispatch('setFlow', this.stack)
+                .then(() => {
+                    for(var i = 0; i < this.stack.length; i ++) {
+                        var item = this.stack[i];
+                        item.bus.$emit('reset', item.data);
+                    }
+                });
+
             this.onUpdateFlowData();
         },
         onUpdateFlow: function(data, index) {
