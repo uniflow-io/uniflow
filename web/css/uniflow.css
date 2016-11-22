@@ -17,3 +17,17 @@
     padding-top: 12px;
     padding-bottom: 12px;
 }
+
+/** page home **/
+#home .form-horizontal .form-group:last-child {
+    margin-bottom: 0px;
+}
+
+#home .timeline-item .box {
+    margin-bottom: 0px;
+}
+
+#home .timeline-item.component .timeline-body {
+    padding: 0px;
+}
+

@@ -27,8 +27,6 @@
 
             </form>
         </div>
-        <div class="box-footer">
-        </div>
     </div>
 
     <ul class="timeline">
@@ -40,7 +38,7 @@
         <li v-for="item in uiStack">
             <i v-if="item.component != 'search'" class="fa fa-play bg-blue" @click.prevent="run(item.index)"></i>
 
-            <div class="timeline-item" :class="{'bg-green': item.active}">
+            <div class="timeline-item" :class="{'bg-green': item.active, 'component':(item.component != 'search')}">
                 <div class="timeline-body">
                     <div :is="item.component" :bus="item.bus"
                          @push="onPushFlow(arguments[0], item.index)"
