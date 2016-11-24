@@ -44,7 +44,7 @@ export default Vue.extend({
                 if(runner.hasValue(this.variable)) {
                     this.text = runner.getValue(this.variable).data;
                 } else {
-                    runner.eval('var ' + this.variable + ' = "' + this.text + '";');
+                    runner.setValue(this.variable, runner.createValue(this.text));
                 }
             }
         }

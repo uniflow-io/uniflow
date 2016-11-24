@@ -122,6 +122,9 @@ export default Vue.extend({
                 setValue: function (variable, value) {
                     return interpreter.setValue(variable, value);
                 },
+                createValue: function (value) {
+                    return interpreter.createPrimitive(value);
+                },
                 eval: function (code) {
                     if(code === undefined) return;
 
