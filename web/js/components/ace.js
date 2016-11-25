@@ -3,10 +3,12 @@ import $ from 'jquery'
 import ace from 'ace'
 
 Vue.component('ace', {
-    props: ['value', 'width', 'height'],
+    props: ['value', 'width', 'height', 'mode'],
     template: '<div :style="{height: height ? height + \'px\' : \'100%\',width: width ? width + \'px\' : \'100%\'}" ><div />',
     mounted: function () {
         this.silence = false;
+
+        ace.config.set('basePath', '/js/libs/ace');
         this.editor = ace.edit(this.$el);
         this.editor.$blockScrolling = Infinity;
         this.editor.on('change', () => {
@@ -16,9 +18,12 @@ Vue.component('ace', {
         });
 
         let session = this.editor.getSession();
-        //session.setMode('ace/mode/javascript');
         session.setUseSoftTabs(true);
         session.setTabSize(2);
+
+        if(this.mode) {
+            session.setMode('ace/mode/' + this.mode);
+        }
     },
     watch: {
         value: function (value) {
@@ -27,6 +32,11 @@ Vue.component('ace', {
                 this.editor.setValue(value, 1);
                 this.silence = false;
             }
+        }
+    },
+    methods: {
+        setMode: function (mode) {
+            session.setMode('ace/mode/' + mode);
         }
     },
     destroyed: function () {
