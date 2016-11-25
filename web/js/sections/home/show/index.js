@@ -9,7 +9,7 @@ import History from '../../../models/history.js'
 import Search from './search/index.js'
 import components from '../../../uniflow/components.js';
 
-var cachedPolyfillJS = null;
+let cachedPolyfillJS = null;
 
 export default Vue.extend({
     template: template,
@@ -29,13 +29,13 @@ export default Vue.extend({
             return this.$store.state.flow.stack;
         },
         uiStack: function () {
-            var uiStack = [{
+            let uiStack = [{
                 component: 'search',
                 index: 0
             }];
 
-            for(var i = 0; i < this.stack.length; i ++) {
-                var item = this.stack[i];
+            for(let i = 0; i < this.stack.length; i ++) {
+                let item = this.stack[i];
 
                 uiStack.push({
                     component: item.component,
@@ -70,9 +70,9 @@ export default Vue.extend({
     },
     methods: {
         run: function (index) {
-            var indexes = [];
+            let indexes = [];
             if(index === undefined) {
-                for(var i = 0; i < this.stack.length; i ++) {
+                for(let i = 0; i < this.stack.length; i ++) {
                     indexes.push(i);
                 }
             } else {
@@ -89,13 +89,13 @@ export default Vue.extend({
              return cachedPolyfillJS;
              })*/
 
-            var interpreter = new Interpreter('', function(interpreter, scope) {
-                var initConsole = function() {
-                    var consoleObj = this.createObject(this.OBJECT);
+            let interpreter = new Interpreter('', function(interpreter, scope) {
+                let initConsole = function() {
+                    let consoleObj = this.createObject(this.OBJECT);
                     this.setProperty(scope, 'console', consoleObj);
 
-                    var wrapper = function(value) {
-                        var nativeObj = interpreter.pseudoToNative(value);
+                    let wrapper = function(value) {
+                        let nativeObj = interpreter.pseudoToNative(value);
                         return interpreter.createPrimitive(console.log(nativeObj));
                     };
                     this.setProperty(consoleObj, 'log', this.createNativeFunction(wrapper));
@@ -103,10 +103,10 @@ export default Vue.extend({
                 initConsole.call(interpreter);
             });
 
-            var runner = {
+            let runner = {
                 hasValue: function (variable) {
-                    var scope = interpreter.getScope();
-                    var nameStr = variable.toString();
+                    let scope = interpreter.getScope();
+                    let nameStr = variable.toString();
                     while (scope) {
                         if (nameStr in scope.properties) {
                             return true;
@@ -128,7 +128,7 @@ export default Vue.extend({
                 eval: function (code) {
                     if(code === undefined) return;
 
-                    var babelCode = Babel.transform(code, {
+                    let babelCode = Babel.transform(code, {
                         presets: [
                             'es2015',
                             'es2015-loose',
@@ -180,8 +180,8 @@ export default Vue.extend({
 
             this.$store.dispatch('setFlow', this.stack)
                 .then(() => {
-                    for(var i = 0; i < this.stack.length; i ++) {
-                        var item = this.stack[i];
+                    for(let i = 0; i < this.stack.length; i ++) {
+                        let item = this.stack[i];
                         item.bus.$emit('reset', item.data);
                     }
                 });
@@ -195,8 +195,8 @@ export default Vue.extend({
 
             this.$store.dispatch('setFlow', this.stack)
                 .then(() => {
-                    for(var i = 0; i < this.stack.length; i ++) {
-                        var item = this.stack[i];
+                    for(let i = 0; i < this.stack.length; i ++) {
+                        let item = this.stack[i];
                         item.bus.$emit('reset', item.data);
                     }
                 });
@@ -212,7 +212,7 @@ export default Vue.extend({
             this.onUpdateFlowData();
         },
         onFetchFlowData: _.debounce(function () {
-            var history = this.history;
+            let history = this.history;
 
             Promise.resolve()
                 .then(() => {
@@ -232,14 +232,14 @@ export default Vue.extend({
                     return this.$store.dispatch('setFlow', history.deserialiseFlowData());
                 })
                 .then(() => {
-                    for(var i = 0; i < this.stack.length; i ++) {
-                        var item = this.stack[i];
+                    for(let i = 0; i < this.stack.length; i ++) {
+                        let item = this.stack[i];
                         item.bus.$emit('reset', item.data);
                     }
                 });
         }, 500),
         onUpdateFlowData: _.debounce(function () {
-            var data = this.history.data;
+            let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
             if(this.history.data !== data) {
                 this.$store.dispatch('setHistoryData', this.history)
@@ -257,7 +257,7 @@ export default Vue.extend({
             this.$store.dispatch('updateHistory', this.history)
         }, 500),
         onDuplicate: function () {
-            var history = new History(this.history);
+            let history = new History(this.history);
             history.title += ' Copy';
 
             this.$store.dispatch('createHistory', history)

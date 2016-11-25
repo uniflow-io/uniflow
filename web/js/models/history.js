@@ -10,7 +10,7 @@ class History {
     }
 
     serialiseFlowData(data) {
-        var objData = [];
+        let objData = [];
 
         for(let i = 0; i < data.length; i++) {
             objData.push({
@@ -23,9 +23,9 @@ class History {
     }
 
     deserialiseFlowData() {
-        var objData = JSON.parse(this.data);
+        let objData = JSON.parse(this.data);
 
-        var data = [];
+        let data = [];
 
         for(let i = 0; i < objData.length; i++) {
             data.push({

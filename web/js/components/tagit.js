@@ -21,7 +21,7 @@ Vue.component('tagit', {
         value: function (value) {
             this.silence = true;
 
-            var tags = $(this.$el).tagit('assignedTags'), i;
+            let tags = $(this.$el).tagit('assignedTags'), i;
 
             for (i = 0; i < value.length; i++) {
                 if(tags.indexOf(value[i]) == -1)

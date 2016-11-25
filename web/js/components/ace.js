@@ -15,7 +15,7 @@ Vue.component('ace', {
             this.$emit('input', this.editor.getValue())
         });
 
-        var session = this.editor.getSession();
+        let session = this.editor.getSession();
         //session.setMode('ace/mode/javascript');
         session.setUseSoftTabs(true);
         session.setTabSize(2);

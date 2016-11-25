@@ -55,7 +55,7 @@ const store = new Vuex.Store({
                     return state.current ? state.items[state.current] : null;
                 },
                 tags: function (state) {
-                    var tags = Object.keys(state.items).reduce(function(previous, key) {
+                    let tags = Object.keys(state.items).reduce(function(previous, key) {
                         return previous.concat(state.items[key].tags);
                     }, []);
 
@@ -92,15 +92,15 @@ const store = new Vuex.Store({
                         .then((response) => {
                             context.commit('clearHistory');
 
-                            for (var i = 0; i < response.data.length; i++) {
-                                var item = new History(response.data[i]);
+                            for (let i = 0; i < response.data.length; i++) {
+                                let item = new History(response.data[i]);
 
                                 context.commit('updateHistory', item);
                             }
                         });
                 },
                 createHistory: function (context, item) {
-                    var data = {
+                    let data = {
                         title: item.title,
                         tags: item.tags
                     };
@@ -108,7 +108,7 @@ const store = new Vuex.Store({
                     return request
                         .post(serverService.getBaseUrl() + '/history/create', data)
                         .then((response) => {
-                            var item = new History(response.data);
+                            let item = new History(response.data);
 
                             context.commit('updateHistory', item);
 
@@ -116,7 +116,7 @@ const store = new Vuex.Store({
                         });
                 },
                 updateHistory: function (context, item) {
-                    var data = {
+                    let data = {
                         title: item.title,
                         tags: item.tags
                     };
@@ -124,7 +124,7 @@ const store = new Vuex.Store({
                     return request
                         .post(serverService.getBaseUrl() + '/history/edit/'+item.id, data)
                         .then((response) => {
-                            var item = new History(response.data);
+                            let item = new History(response.data);
 
                             context.commit('updateHistory', item);
 

@@ -6,7 +6,7 @@ Vue.component('select2', {
     props: ['options', 'value'],
     template: '<select><slot></slot></select>',
     mounted: function () {
-        var vm = this;
+        let vm = this;
         vm.silence = false;
         $(this.$el)
             .val(this.value)
@@ -19,7 +19,7 @@ Vue.component('select2', {
     },
     watch: {
         value: function (value) {
-            var vm = this;
+            let vm = this;
             //$(this.$el).select2('val', value)
 
             vm.silence = true;

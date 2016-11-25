@@ -30,7 +30,7 @@ export default Vue.extend({
         handle: function (message) {
         },
         onSubmit: function(e) {
-            var message = new SFTPMessage(this.config);
+            let message = new SFTPMessage(this.config);
             message
                 .check()
                 .then((data) => {

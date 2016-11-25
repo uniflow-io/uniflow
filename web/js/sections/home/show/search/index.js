@@ -12,9 +12,9 @@ export default Vue.extend({
         }
     },
     created: function() {
-        for(var key in components) {
+        for(let key in components) {
             if(components.hasOwnProperty(key)) {
-                var [group, label] = key.split('-');
+                let [group, label] = key.split('-');
 
                 if(!this.optionGroups[group]) {
                     this.optionGroups[group] = [];

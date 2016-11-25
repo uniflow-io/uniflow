@@ -26,15 +26,15 @@ export default Vue.extend({
     },
     methods: {
         onFiles: function (e) {
-            var files = [];
-            for (var i= 0; i < e.target.files.length; i++) {
+            let files = [];
+            for (let i= 0; i < e.target.files.length; i++) {
                 files.push(e.target.files[0]);
             }
 
             return files.reduce((promise, file) => {
                 return promise.then(() => {
                     return new Promise((resolve, error) => {
-                        var reader = new FileReader();
+                        let reader = new FileReader();
                         reader.onerror = error;
                         reader.onload = (e) => {
                             resolve(this.assets.push([file.name, e.target.result]));
@@ -52,7 +52,7 @@ export default Vue.extend({
             this.onUpdate();
         },
         onDownloadFile: function (index) {
-            var a = document.createElement("a"),
+            let a = document.createElement("a"),
                 blob = new Blob([this.assets[index][1]], {type: "octet/stream"}),
                 url = window.URL.createObjectURL(blob);
             a.href = url;
@@ -82,7 +82,7 @@ export default Vue.extend({
         },
         onExecute: function (runner) {
             if(this.variable) {
-                var assets = this.assets.reduce(function (data, asset) {
+                let assets = this.assets.reduce(function (data, asset) {
                     data.push(asset[1]);
                     return data;
                 }, []);

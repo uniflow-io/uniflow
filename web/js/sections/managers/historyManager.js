@@ -6,9 +6,9 @@ export default Vue.extend({
             if(this.$route.name == 'homeDetail') {
                 this.$store.dispatch('setCurrentHistory', this.$route.params.id);
             } else {
-                var keys = Object.keys(this.history);
+                let keys = Object.keys(this.history);
                 if(keys.length > 0) {
-                    var item = this.history[keys[0]];
+                    let item = this.history[keys[0]];
                     this.$store.dispatch('setCurrentHistory', item.id);
                 }
             }

@@ -25,7 +25,7 @@ class SFTPMessage {
 
     read(path) {
         return new Promise((resolve, reject) => {
-            var data = this.config;
+            let data = this.config;
             data['path'] = path;
 
             request.post(serverService.getBaseUrl() + '/component/sftp/read')
@@ -45,7 +45,7 @@ class SFTPMessage {
 
     tree(path) {
         return new Promise((resolve, reject) => {
-            var data = this.config;
+            let data = this.config;
             data['path'] = path;
 
             request.post(serverService.getBaseUrl() + '/component/sftp/tree')

@@ -32,7 +32,7 @@ export default Vue.extend({
         },
         onSubmit: function(e) {
             this.progress = 0;
-            var message = new SFTPMessage(this.config);
+            let message = new SFTPMessage(this.config);
 
             message
                 .tree(this.projectDir + this.viewsDir)
