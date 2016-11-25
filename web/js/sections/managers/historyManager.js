@@ -7,6 +7,14 @@ export default Vue.extend({
                 this.$store.dispatch('setCurrentHistory', this.$route.params.id);
             } else {
                 let keys = Object.keys(this.history);
+
+                keys.sort((keyA, keyB) => {
+                    let itemA = this.history[keyA],
+                        itemB = this.history[keyB];
+
+                    return itemB.updated.diff(itemA.updated);
+                });
+
                 if(keys.length > 0) {
                     let item = this.history[keys[0]];
                     this.$store.dispatch('setCurrentHistory', item.id);
