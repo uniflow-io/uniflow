@@ -123,7 +123,7 @@ export default Vue.extend({
                     return interpreter.setValue(variable, value);
                 },
                 createValue: function (value) {
-                    return interpreter.createPrimitive(value);
+                    return interpreter.nativeToPseudo(value);
                 },
                 eval: function (code) {
                     if(code === undefined) return;

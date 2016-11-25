@@ -86,7 +86,7 @@ export default Vue.extend({
                     data.push(asset[1]);
                     return data;
                 }, []);
-                runner.eval('var ' + this.variable + ' = '+ JSON.stringify(assets) +';');
+                runner.setValue(this.variable, runner.createValue(assets));
             }
         }
     }
