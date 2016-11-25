@@ -34,11 +34,6 @@ Vue.component('ace', {
             }
         }
     },
-    methods: {
-        setMode: function (mode) {
-            session.setMode('ace/mode/' + mode);
-        }
-    },
     destroyed: function () {
         this.editor.destroy();
     }
