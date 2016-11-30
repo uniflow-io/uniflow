@@ -5,14 +5,10 @@ import CoreText from './core/text/index.js';
 import CoreYAML from './core/yaml/index.js';
 import CoreReplace from './core/replace/index.js';
 
-import DecleorTrads from './decleor/trads/index.js';
+import DecleorTrads from './old/trads/index.js';
 
 export default {
     'core-javascript': CoreJavascript,
     'core-assets': CoreAssets,
     'core-text': CoreText,
-    /*'core-sftp': CoreSFTP,
-    'core-yaml': CoreYAML,
-    'core-replace': CoreReplace,
-    'decleor-trads': DecleorTrads,*/
 };
