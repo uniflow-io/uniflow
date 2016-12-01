@@ -25,8 +25,8 @@
                 </div>
             </div>
         </div>
-        <div class="box-footer">
-            <a class="btn btn-primary pull-right"><i class="fa fa-play"></i> Continue</a>
+        <div v-if="prompt" class="box-footer">
+            <a class="btn btn-primary pull-right" @click.prevent="onContinue"><i class="fa fa-play"></i> Continue</a>
         </div>
     </form>
 </div>

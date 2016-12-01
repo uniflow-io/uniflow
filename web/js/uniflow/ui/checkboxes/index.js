@@ -7,7 +7,8 @@ export default Vue.extend({
     data() {
         return {
             variable: null,
-            checkboxes: {'coco': true, 'dodo': false}
+            checkboxes: {},
+            prompt: false
         }
     },
     created: function () {
@@ -39,10 +40,13 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
+        onContinue: function() {
+            this.prompt = false;
+        },
         onExecute: function (runner) {
             if(this.variable && runner.hasValue(this.variable)) {
-                var values = runner.getValue(this.variable).data;
-
+                let values = runner.getValue(this.variable).data;
+                
                 runner.setValue(this.variable, runner.createValue(this.checkboxes));
             }
         }
