@@ -7,7 +7,8 @@ export default Vue.extend({
     data() {
         return {
             variable: null,
-            select: null
+            choices: [],
+            selected: null
         }
     },
     created: function () {
@@ -22,16 +23,19 @@ export default Vue.extend({
         variable: function () {
             this.onUpdate();
         },
-        select: function () {
-            this.onUpdate();
+        checkboxes: {
+            handler: function () {
+                this.onUpdate();
+            },
+            deep: true
         }
     },
     methods: {
         serialise: function () {
-            return [this.variable, this.select];
+            return [this.variable, this.choices, this.selected];
         },
         deserialise: function (data) {
-            [this.variable, this.select] = data ? data : [null, null];
+            [this.variable, this.choices, this.selected] = data ? data : [null, [], null];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -40,12 +44,10 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (runner) {
-            if(this.variable) {
-                if(runner.hasValue(this.variable)) {
-                    this.select = runner.getValue(this.variable);
-                } else {
-                    runner.setValue(this.variable, this.select);
-                }
+            if(this.variable && runner.hasValue(this.variable)) {
+                this.choices = runner.getValue(this.variable);
+
+                runner.setValue(this.variable, this.selected);
             }
         }
     }

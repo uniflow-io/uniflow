@@ -7,8 +7,7 @@ export default Vue.extend({
     data() {
         return {
             variable: null,
-            checkboxes: {},
-            prompt: false
+            checkboxes: {}
         }
     },
     created: function () {
@@ -35,16 +34,13 @@ export default Vue.extend({
             return [this.variable, this.checkboxes];
         },
         deserialise: function (data) {
-            [this.variable, this.checkboxes] = data ? data : [null, null];
+            [this.variable, this.checkboxes] = data ? data : [null, {}];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
         },
         onDelete: function () {
             this.$emit('pop');
-        },
-        onContinue: function() {
-            this.prompt = false;
         },
         onExecute: function (runner) {
             if(this.variable && runner.hasValue(this.variable)) {
