@@ -23,11 +23,11 @@ export default Vue.extend({
         variable: function () {
             this.onUpdate();
         },
-        checkboxes: {
-            handler: function () {
-                this.onUpdate();
-            },
-            deep: true
+        choices: function () {
+            this.onUpdate();
+        },
+        selected: function () {
+            this.onUpdate();
         }
     },
     methods: {
