@@ -23,8 +23,11 @@ export default Vue.extend({
         variable: function () {
             this.onUpdate();
         },
-        checkboxes: function () {
-            this.onUpdate();
+        checkboxes: {
+            handler: function () {
+                this.onUpdate();
+            },
+            deep: true
         }
     },
     methods: {
@@ -32,7 +35,7 @@ export default Vue.extend({
             return [this.variable, this.checkboxes];
         },
         deserialise: function (data) {
-            //[this.variable, this.checkboxes] = data ? data : [null, null];
+            [this.variable, this.checkboxes] = data ? data : [null, null];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -45,9 +48,19 @@ export default Vue.extend({
         },
         onExecute: function (runner) {
             if(this.variable && runner.hasValue(this.variable)) {
-                let values = runner.getValue(this.variable).data;
-                
-                runner.setValue(this.variable, runner.createValue(this.checkboxes));
+                let values = runner.getValue(this.variable);
+
+                let checkboxes = {};
+                for (let i = 0; i < values.length; i++) {
+                    checkboxes[values[i]] = this.checkboxes[values[i]] || false
+                }
+                this.checkboxes = checkboxes;
+
+                values = values.filter((value) => {
+                    return checkboxes[value];
+                });
+
+                runner.setValue(this.variable, values);
             }
         }
     }

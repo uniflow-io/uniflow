@@ -42,9 +42,9 @@ export default Vue.extend({
         onExecute: function (runner) {
             if(this.variable) {
                 if(runner.hasValue(this.variable)) {
-                    this.text = runner.getValue(this.variable).data;
+                    this.text = runner.getValue(this.variable);
                 } else {
-                    runner.setValue(this.variable, runner.createValue(this.text));
+                    runner.setValue(this.variable, this.text);
                 }
             }
         }

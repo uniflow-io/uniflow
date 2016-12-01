@@ -117,13 +117,10 @@ export default Vue.extend({
                     return false;
                 },
                 getValue: function (variable) {
-                    return interpreter.getValue(variable);
+                    return interpreter.pseudoToNative(interpreter.getValue(variable));
                 },
                 setValue: function (variable, value) {
-                    return interpreter.setValue(variable, value);
-                },
-                createValue: function (value) {
-                    return interpreter.nativeToPseudo(value);
+                    return interpreter.setValue(variable, interpreter.nativeToPseudo(value));
                 },
                 eval: function (code) {
                     if(code === undefined) return;
