@@ -3,7 +3,7 @@
         <div class="box-header with-border">
             <h3 class="box-title">Checkboxes</h3>
             <div class="box-tools pull-right">
-                <a type="button" class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
+                <a class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
             </div>
         </div>
         <div class="box-body">
@@ -19,9 +19,14 @@
                 <label for="checkboxes{{ _uid }}" class="col-sm-2 control-label">Checkboxes</label>
 
                 <div class="col-sm-10">
-                    <ace class="form-control" id="text{{ _uid }}" v-model="checkboxes" placeholder="Checkboxes" height="200"></ace>
+                    <div v-for="(checked, checkbox) in checkboxes" class="checkbox">
+                        <label><input type="checkbox" v-model="checkboxes[checkbox]"> {{ checkbox }}</label>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="box-footer">
+            <a class="btn btn-primary pull-right"><i class="fa fa-play"></i> Continue</a>
         </div>
     </form>
 </div>

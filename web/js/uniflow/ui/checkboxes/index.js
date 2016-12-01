@@ -7,7 +7,7 @@ export default Vue.extend({
     data() {
         return {
             variable: null,
-            checkboxes: null
+            checkboxes: {'coco': true, 'dodo': false}
         }
     },
     created: function () {
@@ -31,7 +31,7 @@ export default Vue.extend({
             return [this.variable, this.checkboxes];
         },
         deserialise: function (data) {
-            [this.variable, this.checkboxes] = data ? data : [null, null];
+            //[this.variable, this.checkboxes] = data ? data : [null, null];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -40,12 +40,10 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onExecute: function (runner) {
-            if(this.variable) {
-                if(runner.hasValue(this.variable)) {
-                    this.checkboxes = runner.getValue(this.variable).data;
-                } else {
-                    runner.setValue(this.variable, runner.createValue(this.checkboxes));
-                }
+            if(this.variable && runner.hasValue(this.variable)) {
+                var values = runner.getValue(this.variable).data;
+
+                runner.setValue(this.variable, runner.createValue(this.checkboxes));
             }
         }
     }
