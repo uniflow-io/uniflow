@@ -12,6 +12,7 @@ SystemJS.config({
         'jquery': 'libs/jquery.min.js',
         'jquery-ui': 'libs/plugins/jQueryUI/jquery-ui.min.js',
         'select2': 'libs/plugins/select2/select2.full.min.js',
+        'icheck': 'libs/plugins/iCheck/icheck.min.js',
         'tagit': 'libs/plugins/tagit/js/tag-it.min.js',
         'lodash': 'libs/lodash.min.js',
         'acorn-interpreter': 'libs/acorn/acorn_interpreter.min.js',

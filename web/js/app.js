@@ -6,6 +6,7 @@ import router from './router.js'
 import './components/select2.js'
 import './components/tagit.js'
 import './components/ace.js'
+import './components/icheckbox.js'
 
 import LayoutSection from './sections/layout/index.js'
 
