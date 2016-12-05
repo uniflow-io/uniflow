@@ -245,8 +245,9 @@ export default Vue.extend({
         onUpdateFlowData: function () {
             let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
+            console.log('datas', data, this.history.data)
             if(this.history.data !== data) {
-                console.log(this.history.id, data, this.history.data)
+                console.log('save:' +this.history.id);
                 throw new Error();
                 this.$store.dispatch('setHistoryData', this.history)
             }
