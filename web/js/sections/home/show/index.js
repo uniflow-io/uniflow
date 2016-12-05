@@ -223,6 +223,13 @@ export default Vue.extend({
                     return this.$store.dispatch('getHistoryData', history);
                 })
                 .then((data) => {
+                    return new Promise(function (resolve) {
+                        setTimeout(function() {
+                            resolve(data)
+                        }, 3000);
+                    });
+                })
+                .then((data) => {
                     if(!data) return;
 
                     history.data = data;
@@ -235,13 +242,15 @@ export default Vue.extend({
                     }
                 });
         }, 500),
-        onUpdateFlowData: _.debounce(function () {
+        onUpdateFlowData: function () {
             let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
             if(this.history.data !== data) {
+                console.log(this.history.id, data, this.history.data)
+                throw new Error();
                 this.$store.dispatch('setHistoryData', this.history)
             }
-        }, 500),
+        },
         onUpdateTitle: function (e) {
             this.history.title = e.target.value;
             this.onUpdate();
