@@ -208,7 +208,7 @@ export default Vue.extend({
 
             this.onUpdateFlowData();
         },
-        onFetchFlowData: _.debounce(function () {
+        onFetchFlowData: function () {
             let history = this.history;
 
             Promise.resolve()
@@ -223,32 +223,27 @@ export default Vue.extend({
                     return this.$store.dispatch('getHistoryData', history);
                 })
                 .then((data) => {
-                    return new Promise(function (resolve) {
-                        setTimeout(function() {
-                            resolve(data)
-                        }, 3000);
-                    });
-                })
-                .then((data) => {
                     if(!data) return;
 
                     history.data = data;
-                    return this.$store.dispatch('setFlow', history.deserialiseFlowData());
+
+                    if(history.id != this.history.id) return;
+
+                    return this.$store
+                        .dispatch('setFlow', history.deserialiseFlowData())
+                        .then(() => {
+                            for(let i = 0; i < this.stack.length; i ++) {
+                                let item = this.stack[i];
+                                item.bus.$emit('reset', item.data);
+                            }
+                        });
                 })
-                .then(() => {
-                    for(let i = 0; i < this.stack.length; i ++) {
-                        let item = this.stack[i];
-                        item.bus.$emit('reset', item.data);
-                    }
-                });
-        }, 500),
+
+        },
         onUpdateFlowData: function () {
             let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
-            console.log('datas', data, this.history.data)
             if(this.history.data !== data) {
-                console.log('save:' +this.history.id);
-                throw new Error();
                 this.$store.dispatch('setHistoryData', this.history)
             }
         },
