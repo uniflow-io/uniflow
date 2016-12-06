@@ -226,14 +226,19 @@ export default Vue.extend({
                     if(!data) return;
 
                     history.data = data;
-                    return this.$store.dispatch('setFlow', history.deserialiseFlowData());
+
+                    if(history.id != this.history.id) return;
+
+                    return this.$store
+                        .dispatch('setFlow', history.deserialiseFlowData())
+                        .then(() => {
+                            for(let i = 0; i < this.stack.length; i ++) {
+                                let item = this.stack[i];
+                                item.bus.$emit('reset', item.data);
+                            }
+                        });
                 })
-                .then(() => {
-                    for(let i = 0; i < this.stack.length; i ++) {
-                        let item = this.stack[i];
-                        item.bus.$emit('reset', item.data);
-                    }
-                });
+
         }, 500),
         onUpdateFlowData: _.debounce(function () {
             let data = this.history.data;
