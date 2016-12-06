@@ -169,20 +169,22 @@ export default Vue.extend({
                     });
             }, Promise.resolve());
         },
+        setFlow: function (stack) {
+            return this.$store.dispatch('setFlow', stack)
+                .then(() => {
+                    for(let i = 0; i < stack.length; i ++) {
+                        let item = stack[i];
+                        item.bus.$emit('reset', item.data);
+                    }
+                });
+        },
         onPushFlow: function(component, index) {
             this.$store.commit('pushFlow', {
                 component: component,
                 index: index
             });
 
-            this.$store.dispatch('setFlow', this.stack)
-                .then(() => {
-                    for(let i = 0; i < this.stack.length; i ++) {
-                        let item = this.stack[i];
-                        item.bus.$emit('reset', item.data);
-                    }
-                });
-
+            this.setFlow(this.stack);
             this.onUpdateFlowData();
         },
         onPopFlow: function(index) {
@@ -190,14 +192,7 @@ export default Vue.extend({
                 index: index
             });
 
-            this.$store.dispatch('setFlow', this.stack)
-                .then(() => {
-                    for(let i = 0; i < this.stack.length; i ++) {
-                        let item = this.stack[i];
-                        item.bus.$emit('reset', item.data);
-                    }
-                });
-
+            this.setFlow(this.stack);
             this.onUpdateFlowData();
         },
         onUpdateFlow: function(data, index) {
@@ -229,14 +224,7 @@ export default Vue.extend({
 
                     if(history.id != this.history.id) return;
 
-                    return this.$store
-                        .dispatch('setFlow', history.deserialiseFlowData())
-                        .then(() => {
-                            for(let i = 0; i < this.stack.length; i ++) {
-                                let item = this.stack[i];
-                                item.bus.$emit('reset', item.data);
-                            }
-                        });
+                    return this.setFlow(history.deserialiseFlowData());
                 })
 
         }, 500),
