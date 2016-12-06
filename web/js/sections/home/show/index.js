@@ -208,7 +208,7 @@ export default Vue.extend({
 
             this.onUpdateFlowData();
         },
-        onFetchFlowData: function () {
+        onFetchFlowData: _.debounce(function () {
             let history = this.history;
 
             Promise.resolve()
@@ -239,14 +239,14 @@ export default Vue.extend({
                         });
                 })
 
-        },
-        onUpdateFlowData: function () {
+        }, 500),
+        onUpdateFlowData: _.debounce(function () {
             let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
             if(this.history.data !== data) {
                 this.$store.dispatch('setHistoryData', this.history)
             }
-        },
+        }, 500),
         onUpdateTitle: function (e) {
             this.history.title = e.target.value;
             this.onUpdate();
