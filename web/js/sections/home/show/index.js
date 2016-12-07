@@ -238,7 +238,6 @@ export default Vue.extend({
                             }
                         });
                 })
-
         }, 500),
         onUpdateFlowData: _.debounce(function () {
             let data = this.history.data;
