@@ -18,7 +18,8 @@ export default Vue.extend({
     },
     data: function () {
         return {
-            runIndex: null
+            fetchedId: null,
+            runIndex: null,
         }
     },
     computed: {
@@ -226,8 +227,13 @@ export default Vue.extend({
 
                     return this.setFlow(history.deserialiseFlowData());
                 })
+                .then(() => {
+                    this.fetchedId = history.id;
+                })
         }, 500),
         onUpdateFlowData: _.debounce(function () {
+            if(this.history.id != this.fetchedId) return;
+
             let data = this.history.data;
             this.history.serialiseFlowData(this.stack);
             if(this.history.data !== data) {
