@@ -226,7 +226,6 @@ export default Vue.extend({
 
                     return this.setFlow(history.deserialiseFlowData());
                 })
-
         }, 500),
         onUpdateFlowData: _.debounce(function () {
             let data = this.history.data;
