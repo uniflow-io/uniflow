@@ -65,10 +65,6 @@ export default Vue.extend({
                 }
                 this.textlist = textlist;
 
-                values = values.filter((value) => {
-                    return textlist[value];
-                });
-
                 runner.setValue(this.variable, values);
             }
         }
