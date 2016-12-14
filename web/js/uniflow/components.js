@@ -3,6 +3,7 @@ import CoreAssets from './core/assets/index.js';
 import CoreText from './core/text/index.js';
 import UICheckBoxes from './ui/checkboxes/index.js';
 import UISelect from './ui/select/index.js';
+import UITextList from './ui/textlist/index.js';
 
 export default {
     'core-javascript': CoreJavascript,
@@ -10,4 +11,5 @@ export default {
     'core-text': CoreText,
     'ui-checkboxes': UICheckBoxes,
     'ui-select': UISelect,
+    'ui-textlist': UITextList,
 };
