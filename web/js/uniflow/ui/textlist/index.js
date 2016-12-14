@@ -42,6 +42,19 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
+        onUpdateText: function () {
+            this.onUpdate();
+        },
+        onRemoveText: function (index) {
+            this.textlist.splice(index, 1);
+
+            this.onUpdate();
+        },
+        onAddText: function () {
+            this.textlist.push('');
+
+            this.onUpdate();
+        },
         onExecute: function (runner) {
             if(this.variable && runner.hasValue(this.variable)) {
                 let values = runner.getValue(this.variable);

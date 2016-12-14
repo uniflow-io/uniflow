@@ -18,7 +18,7 @@
             <div class="form-group" v-for="(text, index) in textlist">
                 <div class="col-sm-10 col-sm-offset-2">
                     <div class="input-group">
-                        <input type="text" v-model="text[0]" @input="onUpdateText(index)" class="form-control">
+                        <input type="text" v-model="textlist[index]" @input="onUpdateText(index)" class="form-control">
                         <span class="input-group-addon" @click.prevent="onRemoveText(index)"><i class="fa fa-times"></i></span>
                     </div>
                 </div>
