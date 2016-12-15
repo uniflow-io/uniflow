@@ -57,15 +57,11 @@ export default Vue.extend({
         },
         onExecute: function (runner) {
             if(this.variable && runner.hasValue(this.variable)) {
-                let values = runner.getValue(this.variable);
-
-                let textlist = [];
-                for (let i = 0; i < values.length; i++) {
-                    textlist[values[i]] = this.textlist[values[i]] || false
+                if(runner.hasValue(this.variable)) {
+                    this.textlist = runner.getValue(this.variable);
+                } else {
+                    runner.setValue(this.variable, this.textlist);
                 }
-                this.textlist = textlist;
-
-                runner.setValue(this.variable, values);
             }
         }
     }
