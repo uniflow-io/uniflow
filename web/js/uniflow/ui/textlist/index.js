@@ -56,7 +56,7 @@ export default Vue.extend({
             this.onUpdate();
         },
         onExecute: function (runner) {
-            if(this.variable && runner.hasValue(this.variable)) {
+            if(this.variable) {
                 if(runner.hasValue(this.variable)) {
                     this.textlist = runner.getValue(this.variable);
                 } else {
