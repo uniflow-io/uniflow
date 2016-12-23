@@ -248,6 +248,10 @@ export default Vue.extend({
             this.history.tags = tags;
             this.onUpdate();
         },
+        onUpdateDescription: function(description) {
+            this.history.description = description;
+            this.onUpdate();
+        },
         onUpdate: _.debounce(function () {
             this.$store.dispatch('updateHistory', this.history)
         }, 500),

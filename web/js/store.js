@@ -102,7 +102,8 @@ const store = new Vuex.Store({
                 createHistory: function (context, item) {
                     let data = {
                         title: item.title,
-                        tags: item.tags
+                        tags: item.tags,
+                        description: item.description
                     };
 
                     return request
@@ -118,7 +119,8 @@ const store = new Vuex.Store({
                 updateHistory: function (context, item) {
                     let data = {
                         title: item.title,
-                        tags: item.tags
+                        tags: item.tags,
+                        description: item.description
                     };
 
                     return request

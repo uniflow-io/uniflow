@@ -50,6 +50,7 @@ class HistoryType extends AbstractType
             'allow_add' => true,
             'allow_delete' => true,
         ));
+        $builder->add('description', TextareaType::class);
 
         $tagsTransformer = new TagTransformer($this->tagService);
         $builder->get('tags')->addModelTransformer($tagsTransformer);

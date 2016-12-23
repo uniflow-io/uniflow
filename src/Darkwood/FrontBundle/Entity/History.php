@@ -63,6 +63,11 @@ class History
     protected $tags;
 
     /**
+     * @ORM\Column(type="text", nullable=false)
+     */
+    protected $description;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=true)
@@ -216,6 +221,26 @@ class History
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Set Description
+     *
+     * @param $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get Description
+     *
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

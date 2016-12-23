@@ -76,6 +76,7 @@ class HistoryService extends BaseService
             'id' => $history->getId(),
             'title' => $history->getTitle(),
             'tags' => $tags,
+            'description' => $history->getDescription(),
             'created' => $created instanceof \DateTime ? $created->format('c') : null,
             'updated' => $updated instanceof \DateTime ? $updated->format('c') : null,
         );
