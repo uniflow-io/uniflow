@@ -10,6 +10,9 @@ Vue.component('ace', {
 
         ace.config.set('basePath', '/js/libs/ace');
         this.editor = ace.edit(this.$el);
+        if(this.value !== undefined) {
+            this.editor.setValue(this.value);
+        }
         this.editor.$blockScrolling = Infinity;
         this.editor.on('change', () => {
             if(this.silence) return;
