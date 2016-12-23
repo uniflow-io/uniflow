@@ -10,10 +10,10 @@ Vue.component('ace', {
 
         ace.config.set('basePath', '/js/libs/ace');
         this.editor = ace.edit(this.$el);
+        this.editor.$blockScrolling = Infinity;
         if(this.value) {
             this.editor.setValue(this.value, 1);
         }
-        this.editor.$blockScrolling = Infinity;
         this.editor.on('change', () => {
             if(this.silence) return;
 
