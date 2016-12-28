@@ -63,7 +63,7 @@ class History
     protected $tags;
 
     /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
 
