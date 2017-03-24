@@ -23,11 +23,11 @@
 
 if [ "$1" = "ssh" ]; then
 
-ssh math@www.darkwood.fr
+ssh math@darkwood.fr
 
 else
 
-ssh math@www.darkwood.fr << CMD
+ssh math@darkwood.fr << CMD
 
 cd /var/www/uniflow.darkwood.fr
 
