@@ -1,7 +1,1 @@
-define(function(require, exports, module) {
-"use strict";
-
-exports.snippetText = require("../requirejs/text!./html_elixir.snippets");
-exports.scope = "html_elixir";
-
-});
+ace.define("ace/snippets/html_elixir",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="html_elixir"})
