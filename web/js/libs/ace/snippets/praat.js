@@ -1,1 +1,7 @@
-ace.define("ace/snippets/praat",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="praat"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./praat.snippets");
+exports.scope = "praat";
+
+});

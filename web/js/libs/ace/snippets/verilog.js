@@ -1,1 +1,7 @@
-ace.define("ace/snippets/verilog",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="verilog"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./verilog.snippets");
+exports.scope = "verilog";
+
+});

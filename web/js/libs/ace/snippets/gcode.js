@@ -1,1 +1,7 @@
-ace.define("ace/snippets/gcode",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="gcode"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./gcode.snippets");
+exports.scope = "gcode";
+
+});

@@ -1,1 +1,7 @@
-ace.define("ace/snippets/abap",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="abap"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./abap.snippets");
+exports.scope = "abap";
+
+});

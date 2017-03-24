@@ -1,1 +1,7 @@
-ace.define("ace/snippets/space",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="space"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./space.snippets");
+exports.scope = "space";
+
+});

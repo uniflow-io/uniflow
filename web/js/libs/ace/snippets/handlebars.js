@@ -1,1 +1,7 @@
-ace.define("ace/snippets/handlebars",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="handlebars"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./handlebars.snippets");
+exports.scope = "handlebars";
+
+});

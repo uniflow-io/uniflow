@@ -1,1 +1,7 @@
-ace.define("ace/snippets/lucene",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="lucene"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./lucene.snippets");
+exports.scope = "lucene";
+
+});

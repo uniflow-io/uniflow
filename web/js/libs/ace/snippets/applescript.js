@@ -1,1 +1,7 @@
-ace.define("ace/snippets/applescript",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="applescript"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./applescript.snippets");
+exports.scope = "applescript";
+
+});

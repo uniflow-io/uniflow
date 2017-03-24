@@ -1,1 +1,7 @@
-ace.define("ace/snippets/forth",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="forth"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./forth.snippets");
+exports.scope = "forth";
+
+});

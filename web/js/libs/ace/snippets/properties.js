@@ -1,1 +1,7 @@
-ace.define("ace/snippets/properties",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="properties"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./properties.snippets");
+exports.scope = "properties";
+
+});

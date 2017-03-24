@@ -1,1 +1,7 @@
-ace.define("ace/snippets/jade",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="jade"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./jade.snippets");
+exports.scope = "jade";
+
+});

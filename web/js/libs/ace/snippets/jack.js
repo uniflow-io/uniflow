@@ -1,1 +1,7 @@
-ace.define("ace/snippets/jack",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="jack"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./jack.snippets");
+exports.scope = "jack";
+
+});

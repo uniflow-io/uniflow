@@ -1,1 +1,7 @@
-ace.define("ace/snippets/rhtml",["require","exports","module"],function(e,t,n){"use strict";t.snippetText=undefined,t.scope="rhtml"})
+define(function(require, exports, module) {
+"use strict";
+
+exports.snippetText = require("../requirejs/text!./rhtml.snippets");
+exports.scope = "rhtml";
+
+});
