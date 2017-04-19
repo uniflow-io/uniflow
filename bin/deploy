@@ -16,7 +16,7 @@ sudo service nginx restart
 sudo service redis restart
 
 git pull
-SYMFONY_ENV=prod bin/composer install --no-dev --optimize-autoloader
+SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader
 redis-cli flushall
 php bin/console cache:clear --env=prod --no-debug
 bin/console doctrine:schema:update --env=prod --force
