@@ -1,0 +1,23 @@
+#!/bin/bash
+
+IFS="/" read -ra PARTS <<< "$(pwd)"
+COUNT=$((${#PARTS[@]}-1))
+
+LASTFOLDER=${PARTS[$COUNT]}
+
+# MANAGE FOLDER WHERE RUN.SH IS LAUNCHED
+EXECFOLDER="install/"
+
+if [ "$LASTFOLDER" = "install" ]; then
+    LASTFOLDER=${PARTS[$(($COUNT-1))]}
+    EXECFOLDER=""
+fi
+
+## COPY NEW CONF
+CONFNAME="$EXECFOLDER$LASTFOLDER.conf";
+DEFAULTCONF="vhost.conf.dist"
+
+# CREATE NEW CONF
+sed "s/CONF_FOLDER/$LASTFOLDER/g" $EXECFOLDER$DEFAULTCONF > $CONFNAME
+
+echo "Vhost created! ($LASTFOLDER.conf)"
