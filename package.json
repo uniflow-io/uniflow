@@ -7,5 +7,8 @@
   "license": "MIT",
   "dependencies": {
     "socket.io": "^2.0.4"
+  },
+  "scripts": {
+    "server": "node server/index.js"
   }
 }
