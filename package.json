@@ -1,0 +1,11 @@
+{
+  "name": "uniflow",
+  "version": "1.0.0",
+  "main": "server/index.js",
+  "repository": "git+ssh://math@darkwood.fr:/home/math/git/uniflow.git",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^2.0.4"
+  }
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Socket IO testing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+</head>
+<body>
+<script>
+    (function() {
+        var socket = io('http://localhost:3128');
+        socket.emit('message', 'coucou');
+        socket.on('message', function(msg){
+            console.log(msg)
+        });
+    })();
+</script>
+</body>
+</html>
