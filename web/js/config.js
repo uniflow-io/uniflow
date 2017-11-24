@@ -19,7 +19,8 @@ SystemJS.config({
         'babel': 'libs/babel.min.js',
         'ace': 'libs/ace/ace.js',
         'moment': 'libs/momentjs/moment.min.js',
-        'lz-string': 'libs/lz-string.js'
+        'lz-string': 'libs/lz-string.js',
+        'socket.io': 'libs/socket.io/socket.io.slim.js'
     },
     transpiler: 'plugin-babel',
     meta: {
