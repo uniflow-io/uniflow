@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import template from './template.html!text'
+import io from 'socket.io';
 
 export default Vue.extend({
     props: ['bus'],
@@ -7,7 +8,8 @@ export default Vue.extend({
     data() {
         return {
             variable: null,
-            textlist: []
+            host: null,
+            port: null
         }
     },
     created: function () {
@@ -24,19 +26,19 @@ export default Vue.extend({
         variable: function () {
             this.onUpdate();
         },
-        textlist: {
-            handler: function () {
-                this.onUpdate();
-            },
-            deep: true
+        host: function () {
+            this.onUpdate();
+        },
+        port: function () {
+            this.onUpdate();
         }
     },
     methods: {
         serialise: function () {
-            return [this.variable, this.textlist];
+            return [this.variable, this.host, this.port];
         },
         deserialise: function (data) {
-            [this.variable, this.textlist] = data ? data : [null, []];
+            [this.variable, this.host, this.port] = data ? data : [null, null];
         },
         onUpdate: function () {
             this.$emit('update', this.serialise());
@@ -44,29 +46,15 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
-        onUpdateText: function () {
-            this.onUpdate();
-        },
-        onRemoveText: function (index) {
-            this.textlist.splice(index, 1);
-
-            this.onUpdate();
-        },
-        onAddText: function () {
-            this.textlist.push('');
-
-            this.onUpdate();
-        },
         onCompile: function(interpreter) {
 
         },
         onExecute: function (runner) {
             if(this.variable) {
-                if(runner.hasValue(this.variable)) {
-                    this.textlist = runner.getValue(this.variable);
-                } else {
-                    runner.setValue(this.variable, this.textlist);
-                }
+                let socket = function(text) {
+                    return io('http://'+this.host+':'+this.port);
+                };
+                runner.setValue(this.variable, socket);
             }
         }
     }

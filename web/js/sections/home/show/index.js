@@ -103,6 +103,9 @@ export default Vue.extend({
                 };
                 initConsole.call(interpreter);
             });
+            for(let i = 0; i < this.stack.length; i ++) {
+                this.stack[index].bus.$emit('compile', interpreter);
+            }
 
             let runner = {
                 hasValue: function (variable) {
