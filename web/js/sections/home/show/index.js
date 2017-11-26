@@ -90,22 +90,23 @@ export default Vue.extend({
              return cachedPolyfillJS;
              })*/
 
-            let interpreter = new Interpreter('', function(interpreter, scope) {
+            let interpreter = new Interpreter('', (interpreter, scope) => {
                 let initConsole = function() {
-                    let consoleObj = this.createObject(this.OBJECT);
-                    this.setProperty(scope, 'console', consoleObj);
+                    let consoleObj = interpreter.createObject(interpreter.OBJECT);
+                    interpreter.setProperty(scope, 'console', consoleObj);
 
                     let wrapper = function(value) {
                         let nativeObj = interpreter.pseudoToNative(value);
                         return interpreter.createPrimitive(console.log(nativeObj));
                     };
-                    this.setProperty(consoleObj, 'log', this.createNativeFunction(wrapper));
+                    interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
                 };
                 initConsole.call(interpreter);
+
+                indexes.reduce((stack, index) => {
+                    stack[index].bus.$emit('compile', interpreter, scope);
+                }, this.stack);
             });
-            for(let i = 0; i < this.stack.length; i ++) {
-                this.stack[index].bus.$emit('compile', interpreter);
-            }
 
             let runner = {
                 hasValue: function (variable) {

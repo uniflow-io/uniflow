@@ -46,8 +46,44 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
-        onCompile: function(interpreter) {
+        onCompile: function(interpreter, scope) {
+            console.log(interpreter)
+            let obj = {};
 
+            let wrapper = function(var_args) {
+                if (interpreter.calledWithNew()) {
+                    // Called as new IO().
+                    var newIO = this;
+                } else {
+                    // Called as IO().
+                    var newIO = interpreter.createObjectProto(obj.IO_PROTO);
+                }
+                var first = arguments[0];
+                if (arguments.length === 1 && typeof first === 'number') {
+                    if (isNaN(Interpreter.legalArrayLength(first))) {
+                        interpreter.throwException(interpreter.RANGE_ERROR,
+                            'Invalid array length');
+                    }
+                    newIO.properties.length = first;
+                } else {
+                    for (var i = 0; i < arguments.length; i++) {
+                        newIO.properties[i] = arguments[i];
+                    }
+                    newIO.properties.length = i;
+                }
+                return newIO;
+            };
+            obj.IO = interpreter.createNativeFunction(wrapper, true);
+            obj.IO_PROTO = obj.IO.properties['prototype'];
+            interpreter.setProperty(scope, 'IO', obj.IO);
+
+            // Static methods on Array.
+            /*wrapper = function(obj) {
+                return obj && obj.class === 'Array';
+            };
+            interpreter.setProperty(obj.IO, 'isArray',
+                this.createNativeFunction(wrapper, false),
+                Interpreter.NONENUMERABLE_DESCRIPTOR)*/
         },
         onExecute: function (runner) {
             if(this.variable) {

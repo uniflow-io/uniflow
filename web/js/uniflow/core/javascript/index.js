@@ -37,7 +37,7 @@ export default Vue.extend({
         onDelete: function () {
             this.$emit('pop');
         },
-        onCompile: function(interpreter) {
+        onCompile: function(interpreter, scope) {
 
         },
         onExecute: function (runner) {
