@@ -47,10 +47,9 @@ export default Vue.extend({
             this.$emit('pop');
         },
         onCompile: function(interpreter, scope) {
-            console.log(interpreter)
             let obj = {};
 
-            let wrapper = function(var_args) {
+            let wrapper = function(url) {
                 if (interpreter.calledWithNew()) {
                     // Called as new IO().
                     var newIO = this;
@@ -58,40 +57,27 @@ export default Vue.extend({
                     // Called as IO().
                     var newIO = interpreter.createObjectProto(obj.IO_PROTO);
                 }
-                var first = arguments[0];
-                if (arguments.length === 1 && typeof first === 'number') {
-                    if (isNaN(Interpreter.legalArrayLength(first))) {
-                        interpreter.throwException(interpreter.RANGE_ERROR,
-                            'Invalid array length');
-                    }
-                    newIO.properties.length = first;
-                } else {
-                    for (var i = 0; i < arguments.length; i++) {
-                        newIO.properties[i] = arguments[i];
-                    }
-                    newIO.properties.length = i;
-                }
+                this.data = io(url);
                 return newIO;
             };
             obj.IO = interpreter.createNativeFunction(wrapper, true);
             obj.IO_PROTO = obj.IO.properties['prototype'];
             interpreter.setProperty(scope, 'IO', obj.IO);
 
-            // Static methods on Array.
-            /*wrapper = function(obj) {
-                return obj && obj.class === 'Array';
+            wrapper = function(eventName, callback) {
+                this.data.on(eventName, callback);
+                return this;
             };
-            interpreter.setProperty(obj.IO, 'isArray',
-                this.createNativeFunction(wrapper, false),
-                Interpreter.NONENUMERABLE_DESCRIPTOR)*/
+            interpreter.setProperty(obj.IO, 'on', interpreter.createNativeFunction(wrapper, false))
+
+            wrapper = function(eventName, args) {
+                this.data.emit(eventName, args);
+                return this;
+            };
+            interpreter.setProperty(obj.IO, 'emit', interpreter.createNativeFunction(wrapper, false))
         },
         onExecute: function (runner) {
-            if(this.variable) {
-                let socket = function(text) {
-                    return io('http://'+this.host+':'+this.port);
-                };
-                runner.setValue(this.variable, socket);
-            }
+            runner.eval('var ' + this.variable + ' = new IO(\'http://'+this.host+':'+this.port+'\')')
         }
     }
 });

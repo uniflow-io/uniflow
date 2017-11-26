@@ -105,6 +105,8 @@ export default Vue.extend({
 
                 indexes.reduce((stack, index) => {
                     stack[index].bus.$emit('compile', interpreter, scope);
+
+                    return stack
                 }, this.stack);
             });
 
