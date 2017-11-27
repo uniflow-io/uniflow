@@ -10,10 +10,10 @@ ssh math@darkwood.fr << CMD
 
 cd /var/www/uniflow.darkwood.fr
 
-sudo service mysql restart
-sudo service varnish restart
-sudo service nginx restart
-sudo service redis restart
+#sudo service mysql restart
+#sudo service varnish restart
+#sudo service nginx restart
+#sudo service redis restart
 
 git pull
 SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader
