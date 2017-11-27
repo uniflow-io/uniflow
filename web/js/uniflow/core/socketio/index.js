@@ -59,11 +59,16 @@ export default Vue.extend({
                 };
                 interpreter.setProperty(newIO, 'on', interpreter.createNativeFunction(wrapper, false));
 
-                wrapper = function(eventName, args) {
-                    socket.emit(eventName, args);
-                    return this;
+                wrapper = function(eventName) {
+                    let args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+                    let callback = arguments[arguments.length - 1];
+                    args.push(function(data) {
+                        console.log('emit data', data)
+                        callback(data)
+                    });
+                    socket.emit.apply(socket, args);
                 };
-                interpreter.setProperty(newIO, 'emit', interpreter.createNativeFunction(wrapper, false));
+                interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(wrapper, false));
 
                 return newIO;
             };

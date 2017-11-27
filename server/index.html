@@ -9,9 +9,11 @@
 <script>
     (function() {
         var socket = io('http://localhost:3128');
-        socket.emit('read', '/Users/math/Sites/darkwood/uniflow/server/index.html');
+        socket.emit('read', '/Users/math/Sites/darkwood/uniflow/server/index.html', function(content) {
+            console.log('emit', content)
+        });
         socket.on('read', function(content){
-            console.log(content)
+            console.log('read', content)
         });
     })();
 </script>

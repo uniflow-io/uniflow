@@ -7,12 +7,12 @@ io.on('connection', function(socket){
     socket.on('disconnect', function(){
         console.log('user disconnected');
     });
-    socket.on('read', function(path){
+    socket.on('read', function(path, callback){
         fs.readFile(path, 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
-            io.emit('read', data);
+            callback(data)
         });
     });
 });
