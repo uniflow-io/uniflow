@@ -50,18 +50,12 @@ export default Vue.extend({
             let obj = {};
 
             let wrapper = function(url) {
-                if (interpreter.calledWithNew()) {
-                    // Called as new IO().
-                    var newIO = this;
-                } else {
-                    // Called as IO().
-                    var newIO = interpreter.createObjectProto(obj.IO_PROTO);
-                }
+                let newIO = interpreter.createObjectProto(obj.IO_PROTO);
                 this.data = io(url);
                 return newIO;
             };
             obj.IO = interpreter.createNativeFunction(wrapper, true);
-            obj.IO_PROTO = obj.IO.properties['prototype'];
+            obj.IO_PROTO = interpreter.getProperty(obj.IO, 'prototype');
             interpreter.setProperty(scope, 'IO', obj.IO);
 
             wrapper = function(eventName, callback) {
