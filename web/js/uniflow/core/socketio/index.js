@@ -77,7 +77,7 @@ export default Vue.extend({
             interpreter.setProperty(scope, 'IO', obj.IO);
         },
         onExecute: function (runner) {
-            runner.eval('var ' + this.variable + ' = new IO(\'http://'+this.host+':'+this.port+'\')')
+            runner.eval('var ' + this.variable + ' = new IO(\'https://'+this.host+':'+this.port+'\')')
         }
     }
 });
