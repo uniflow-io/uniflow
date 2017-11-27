@@ -51,24 +51,25 @@ export default Vue.extend({
 
             let wrapper = function(url) {
                 let newIO = interpreter.createObjectProto(obj.IO_PROTO);
-                this.data = io(url);
+                let socket = io(url);
+
+                wrapper = function(eventName, callback) {
+                    socket.on(eventName, callback);
+                    return this;
+                };
+                interpreter.setProperty(newIO, 'on', interpreter.createNativeFunction(wrapper, false));
+
+                wrapper = function(eventName, args) {
+                    socket.emit(eventName, args);
+                    return this;
+                };
+                interpreter.setProperty(newIO, 'emit', interpreter.createNativeFunction(wrapper, false));
+
                 return newIO;
             };
             obj.IO = interpreter.createNativeFunction(wrapper, true);
             obj.IO_PROTO = interpreter.getProperty(obj.IO, 'prototype');
             interpreter.setProperty(scope, 'IO', obj.IO);
-
-            wrapper = function(eventName, callback) {
-                this.data.on(eventName, callback);
-                return this;
-            };
-            interpreter.setProperty(obj.IO, 'on', interpreter.createNativeFunction(wrapper, false));
-
-            wrapper = function(eventName, args) {
-                this.data.emit(eventName, args);
-                return this;
-            };
-            interpreter.setProperty(obj.IO, 'emit', interpreter.createNativeFunction(wrapper, false));
         },
         onExecute: function (runner) {
             runner.eval('var ' + this.variable + ' = new IO(\'http://'+this.host+':'+this.port+'\')')
