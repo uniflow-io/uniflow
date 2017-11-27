@@ -62,13 +62,13 @@ export default Vue.extend({
                 this.data.on(eventName, callback);
                 return this;
             };
-            interpreter.setProperty(obj.IO, 'on', interpreter.createNativeFunction(wrapper, false))
+            interpreter.setProperty(obj.IO, 'on', interpreter.createNativeFunction(wrapper, false));
 
             wrapper = function(eventName, args) {
                 this.data.emit(eventName, args);
                 return this;
             };
-            interpreter.setProperty(obj.IO, 'emit', interpreter.createNativeFunction(wrapper, false))
+            interpreter.setProperty(obj.IO, 'emit', interpreter.createNativeFunction(wrapper, false));
         },
         onExecute: function (runner) {
             runner.eval('var ' + this.variable + ' = new IO(\'http://'+this.host+':'+this.port+'\')')
