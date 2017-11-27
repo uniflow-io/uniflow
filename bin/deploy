@@ -17,7 +17,7 @@ cd /var/www/uniflow.darkwood.fr
 
 git pull
 SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader
-redis-cli flushall
+#redis-cli flushall
 php bin/console cache:clear --env=prod --no-debug
 bin/console doctrine:schema:update --env=prod --force
 php bin/console assetic:dump --env=prod --no-debug
