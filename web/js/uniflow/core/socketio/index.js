@@ -63,8 +63,8 @@ export default Vue.extend({
                     let args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
                     let callback = arguments[arguments.length - 1];
                     args.push(function(data) {
-                        console.log('emit data', data)
-                        callback(data)
+                        callback(data);
+                        interpreter.run();
                     });
                     socket.emit.apply(socket, args);
                 };
