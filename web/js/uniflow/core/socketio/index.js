@@ -63,7 +63,7 @@ export default Vue.extend({
                     let args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
                     let callback = arguments[arguments.length - 1];
                     args.push(function(data) {
-                        callback(data);
+                        callback(interpreter.nativeToPseudo(data));
                         interpreter.run();
                     });
                     socket.emit.apply(socket, args);
