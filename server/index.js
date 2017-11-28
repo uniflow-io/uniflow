@@ -1,6 +1,21 @@
 const fs = require('fs-extra')
-const Server = require('socket.io');
-const io = new Server();
+const https = require('https')
+const express = require('express')
+const IO = require('socket.io');
+
+var app = express();
+
+var options = {
+    key: fs.readFileSync(__dirname + '/file.key'),
+    cert: fs.readFileSync(__dirname + '/file.crt')
+};
+var serverPort = 3128;
+var server = https.createServer(options, app);
+var io = IO(server);
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
 
 io.on('connection', function (socket) {
     /*console.log('a user connected');
@@ -36,4 +51,6 @@ io.on('connection', function (socket) {
     });
 });
 
-io.listen(3128);
+server.listen(serverPort, function() {
+    console.log('server up and running at %s port', serverPort);
+});
