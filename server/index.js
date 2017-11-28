@@ -50,13 +50,18 @@ io.on('connection', function (socket) {
         })
     });
 
-    socket.on('list', function (path, recursive, callback) {
+    socket.on('list', function (path, recursive = false, showDirectory = false, callback) {
         let walk = function (dir) {
             let files    = fs.readdirSync(dir),
                 filelist = [];
             files.forEach(function (file) {
-                if (recursive && fs.statSync(dir + file).isDirectory()) {
-                    filelist = filelist.concat(walk(dir + file + '/'));
+                if (fs.statSync(dir + file).isDirectory()) {
+                    if(showDirectory) {
+                        filelist.push(dir + file + '/');
+                    }
+                    if (recursive) {
+                        filelist = filelist.concat(walk(dir + file + '/'));
+                    }
                 } else {
                     filelist.push(dir + file);
                 }
