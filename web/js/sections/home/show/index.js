@@ -124,10 +124,10 @@ export default Vue.extend({
                     return false;
                 },
                 getValue: function (variable) {
-                    return interpreter.pseudoToNative(interpreter.getValue(variable));
+                    return interpreter.pseudoToNative(interpreter.getValueFromScope(variable));
                 },
                 setValue: function (variable, value) {
-                    return interpreter.setValue(variable, interpreter.nativeToPseudo(value));
+                    return interpreter.setValueToScope(variable, interpreter.nativeToPseudo(value));
                 },
                 eval: function (code) {
                     if(code === undefined) return;
