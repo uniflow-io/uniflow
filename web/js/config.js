@@ -15,7 +15,8 @@ SystemJS.config({
         'icheck': 'libs/plugins/iCheck/icheck.min.js',
         'tagit': 'libs/plugins/tagit/js/tag-it.min.js',
         'lodash': 'libs/lodash.min.js',
-        'acorn-interpreter': 'libs/acorn/acorn_interpreter.min.js',
+        'acorn': 'libs/acorn/acorn.js',
+        'acorn-interpreter': 'libs/acorn/interpreter.js',
         'babel': 'libs/babel.min.js',
         'ace': 'libs/ace/ace.js',
         'moment': 'libs/momentjs/moment.min.js',
@@ -34,7 +35,11 @@ SystemJS.config({
         'tagit': {
             deps: ['jquery', 'jquery-ui']
         },
+        'acorn': {
+            exports: 'acorn'
+        },
         'acorn-interpreter': {
+            deps: ['acorn'],
             exports: 'Interpreter'
         },
         'babel': {
