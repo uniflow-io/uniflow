@@ -1,0 +1,36 @@
+<div class="box box-info">
+    <form class="form-horizontal">
+        <div class="box-header with-border">
+            <h3 class="box-title">Object</h3>
+            <div class="box-tools pull-right">
+                <a class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <label for="variable{{ _uid }}" class="col-sm-2 control-label">Variable</label>
+
+                <div class="col-sm-10">
+                    <input id="variable{{ _uid }}" type="text" v-model="variable" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="form-group" v-for="(item, index) in keyvaluelist">
+                <div class="col-sm-4 col-sm-offset-2">
+                    <input type="text" v-model="keyvaluelist[index].key" @input="onUpdateItem(index)"
+                           class="form-control" placeholder="key">
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="text" v-model="keyvaluelist[index].value" @input="onUpdateItem(index)"
+                               class="form-control" placeholder="value">
+                        <span class="input-group-addon" @click.prevent="onRemoveItem(index)"><i class="fa fa-times"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <button type="submit" @click.prevent="onAddItem()" class="btn btn-info pull-right"></i> Add Item</button>
+        </div>
+    </form>
+</div>
