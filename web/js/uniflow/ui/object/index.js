@@ -33,10 +33,10 @@ export default Vue.extend({
     },
     methods: {
         transform: function () {
-            return this.keyvaluelist.reduce(function(object, item) {
-                if(item.key) {
+            return this.keyvaluelist.reduce(function (object, item) {
+                if (item.key) {
                     let value = item.value
-                    if(Number.isInteger(value)) {
+                    if (Number.isInteger(value)) {
                         value = Number.parseInt(value)
                     }
 
@@ -46,10 +46,13 @@ export default Vue.extend({
             }, {})
         },
         reverseTransform: function (object) {
-            this.keyvaluelist = Object.entries(object).reduce(function(list, item) {
-                list.push(item[0], item[1])
-                return list
-            }, [])
+            this.keyvaluelist.splice
+                .apply(this.keyvaluelist, [
+                    0, this.keyvaluelist.length
+                ].concat(Object.entries(object).reduce(function (list, item) {
+                    list.push({key: item[0], value: item[1]})
+                    return list
+                }, [])))
         },
         serialise: function () {
             let object = this.transform()
