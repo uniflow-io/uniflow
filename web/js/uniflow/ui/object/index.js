@@ -4,10 +4,10 @@ import template from './template.html!text'
 let scope = {};
 
 (function (scope) {
-    scope.format = function() {
+    scope.format = function () {
         let message = arguments[0]
-        let args = Array.prototype.slice.call(arguments, 1);
-        return message.replace(/{(\d+)}/g, function(match, number) {
+        let args    = Array.prototype.slice.call(arguments, 1);
+        return message.replace(/{(\d+)}/g, function (match, number) {
             return typeof args[number] !== undefined
                 ? args[number]
                 : match
@@ -552,24 +552,40 @@ export default Vue.extend({
             return this.keyvaluelist.reduce(function (object, item) {
                 if (item.key) {
                     let value = item.value
-                    if (Number.isInteger(value)) {
+                    if (/^[0-9]+$/.test(value)) {
                         value = Number.parseInt(value)
                     }
 
-                    accessor.setValue(object, item.key, value)
+                    try {
+                        accessor.setValue(object, item.key, value)
+                    } catch (e) {
+
+                    }
                 }
                 return object
             }, {})
         },
         reverseTransform: function (object) {
-            var flatten = function (data, prefix = '') {
+            var flatten = function (data, accessors = []) {
                 return Object
                     .entries(data)
                     .reduce(function (list, item) {
-                        if(typeof item[1] === 'object') {
-                            list = list.concat(flatten(item[1], '.'))
+                        if (typeof item[1] === 'object') {
+                            list = list.concat(flatten(item[1], accessors.concat([item[0]])))
                         } else {
-                            list.push({key: prefix + item[0], value: item[1]})
+                            let key = item[0];
+                            for(let i = accessors.length - 1; i >= 0 ; i--) {
+                                if(key[0] !== '[') {
+                                    key = '.' + key
+                                }
+
+                                if(/^[0-9]+$/.test(accessors[i])) {
+                                    key = '[' + accessors[i] + ']' + key
+                                } else {
+                                    key = accessors[i] + key
+                                }
+                            }
+                            list.push({key: key, value: item[1]})
                         }
                         return list
                     }, [])
