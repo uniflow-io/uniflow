@@ -1,7 +1,9 @@
-const fs      = require('fs-extra')
-const https   = require('https')
-const express = require('express')
-const IO      = require('socket.io');
+const fs      = require('fs-extra');
+const https   = require('https');
+const express = require('express');
+
+const IO    = require('socket.io');
+const robot = require('robotjs');
 
 let app = express();
 
@@ -23,7 +25,7 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
     });*/
 
-    socket.on('read', function (path, callback) {
+    socket.on('filesystem.read', function (path, callback) {
         fs.readFile(path, 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
@@ -32,7 +34,7 @@ io.on('connection', function (socket) {
         });
     });
 
-    socket.on('write', function (path, content, callback) {
+    socket.on('filesystem.write', function (path, content, callback) {
         fs.writeFile(path, content, 'utf8', function (err, data) {
             if (err) {
                 return console.log(err);
@@ -41,7 +43,7 @@ io.on('connection', function (socket) {
         });
     });
 
-    socket.on('copy', function (pathFrom, pathTo, callback) {
+    socket.on('filesystem.copy', function (pathFrom, pathTo, callback) {
         fs.copy(pathFrom, pathTo, function (err) {
             if (err) {
                 return console.log(err);
@@ -50,13 +52,13 @@ io.on('connection', function (socket) {
         })
     });
 
-    socket.on('list', function (path, recursive = false, showDirectory = false, callback) {
+    socket.on('filesystem.list', function (path, recursive = false, showDirectory = false, callback) {
         let walk = function (dir) {
             let files    = fs.readdirSync(dir),
                 filelist = [];
             files.forEach(function (file) {
                 if (fs.statSync(dir + file).isDirectory()) {
-                    if(showDirectory) {
+                    if (showDirectory) {
                         filelist.push(dir + file + '/');
                     }
                     if (recursive) {
@@ -72,6 +74,12 @@ io.on('connection', function (socket) {
 
         callback(walk(path))
     });
+
+    socket.on('mouse.move', function (x, y, callback) {
+        robot.moveMouse(x, y)
+
+        callback()
+    })
 });
 
 server.listen(serverPort, function () {
