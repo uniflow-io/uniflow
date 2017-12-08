@@ -5,51 +5,48 @@
     <div class="container-fluid content content-login">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
-
-                <div class="col-sm-6 col-sm-offset-3">
-                    <div class="box box-default">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">{{ 'user.register.title'| trans }}</h3>
-                        </div>
-                        <div class="box-body">
-                            {% for type, messages in app.session.flashBag.all %}
-                                {% for message in messages %}
-                                    <div class="{{ type }}">
-                                        {{ message|trans({}, 'FOSUserBundle') }}
-                                    </div>
-                                {% endfor %}
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{ 'user.register.title'| trans }}</h3>
+                    </div>
+                    <div class="box-body">
+                        {% for type, messages in app.session.flashBag.all %}
+                            {% for message in messages %}
+                                <div class="{{ type }}">
+                                    {{ message|trans({}, 'FOSUserBundle') }}
+                                </div>
                             {% endfor %}
+                        {% endfor %}
 
-                            <form action="{{ path('fos_user_registration_register') }}" method="post" novalidate>
+                        <form action="{{ path('fos_user_registration_register') }}" method="post" novalidate>
 
-                                {{ form_widget(form._token) }}
+                            {{ form_widget(form._token) }}
 
-                                <div class="form-group col-sm-12">
-                                    {{ form_errors(form.email) }}
-                                    {{ form_widget(form.email, {'attr':{'class':'form-control', 'placeholder': ('user.register.email'| trans) } }) }}
-                                </div>
+                            <div class="form-group col-sm-12">
+                                {{ form_errors(form.email) }}
+                                {{ form_widget(form.email, {'attr':{'class':'form-control', 'placeholder': ('user.register.email'| trans) } }) }}
+                            </div>
 
-                                <div class="form-group col-sm-12">
-                                    {{ form_errors(form.plainPassword) }}
-                                    {{ form_widget(form.plainPassword, {'attr':{'class':'form-control', 'placeholder': ('user.register.password'| trans)} }) }}
-                                </div>
+                            <div class="form-group col-sm-12">
+                                {{ form_errors(form.plainPassword) }}
+                                {{ form_widget(form.plainPassword, {'attr':{'class':'form-control', 'placeholder': ('user.register.password'| trans)} }) }}
+                            </div>
 
-                                <div class="form-group col-sm-12">
-                                    <button type="submit"
-                                            class="btn btn-primary btn-block btn-flat">{{ 'user.register.submit'| trans }}</button>
-                                </div>
+                            <div class="form-group col-sm-12">
+                                <button type="submit"
+                                        class="btn btn-primary btn-block btn-flat">{{ 'user.register.submit'| trans }}</button>
+                            </div>
 
-                                <div class="form-group col-sm-12">
-                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
-                                       class="btn btn-info btn-block btn-flat">{{ 'user.login.facebook'| trans }}</a>
-                                </div>
+                            <div class="form-group col-sm-12">
+                                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
+                                   class="btn btn-info btn-block btn-flat">{{ 'user.login.facebook'| trans }}</a>
+                            </div>
 
-                                {#<div class="form-group col-sm-12">
-                                    <a href="#" class="btn btn-info btn-block btn-flat">{{ 'user.login.meetup'| trans }}</a>
-                                </div>#}
+                            {#<div class="form-group col-sm-12">
+                                <a href="#" class="btn btn-info btn-block btn-flat">{{ 'user.login.meetup'| trans }}</a>
+                            </div>#}
 
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
