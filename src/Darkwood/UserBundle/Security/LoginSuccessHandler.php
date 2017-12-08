@@ -57,12 +57,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if (empty($redirectUrl)) {
             $redirectUrl = $request->headers->get('Referer');
             if (strpos($redirectUrl, 'login') !== false) {
-                $redirectUrl = $this->router->generate('back_home', array(), true);
+                $redirectUrl = $this->router->generate('home', array(), true);
             }
         }
 
         if ($this->securityAuthorizationChecker->isGranted('ROLE_BACK')) {
-            $redirectUrl = $this->router->generate('back_home', array(), true);
+            $redirectUrl = $this->router->generate('home', array(), true);
         }
 
         $response = new RedirectResponse($redirectUrl);
