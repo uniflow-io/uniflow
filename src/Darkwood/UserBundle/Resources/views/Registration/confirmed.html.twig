@@ -1,0 +1,15 @@
+{% extends "@Front/layout.html.twig" %}
+
+{% block body %}
+
+    <div class="container-fluid content content-login">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <h2>{{ 'user.register.confirmed'| trans }}</h2>
+
+                <p><a href="{{ path('home') }}">{{ 'user.register.goBack'|trans }}</a></p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -26,14 +26,14 @@ class User extends BaseUser
     /**
      * Firstname.
      *
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, nullable=true)
      */
     protected $firstName;
 
     /**
      * Lastname.
      *
-     * @ORM\Column(length=255)
+     * @ORM\Column(length=255, nullable=true)
      */
     protected $lastName;
 

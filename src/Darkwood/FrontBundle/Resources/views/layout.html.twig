@@ -8,7 +8,7 @@
     <title>Uniflow</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('js/libs/plugins/bootstrap/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/libs/plugins/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
@@ -40,7 +40,8 @@
     <link rel="stylesheet" href="{{ asset('dist/css/skins/_all-skins.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/uniflow.css') }}">
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900,900i|Lustria|Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900,900i|Lustria|Playfair+Display:400,400i,700,700i,900,900i"
+          rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,7 +54,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2319330-13"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-2319330-13');
@@ -61,29 +66,32 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Uniflow</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-
-            <div class="navbar-right infos">
-                {% if app.user %}
-                    <p class="text-right"><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-off logout" aria-hidden="true"></span></a> <a href="{{ path('fos_user_profile_edit') }}">{{ app.user.firstName }} {{ app.user.lastName }}</a></p>
-                {% else %}
-                    <p class="text-right"><a href="{{ path('fos_user_security_login') }}"><span class="glyphicon glyphicon-log-in login" aria-hidden="true"></span> {{ 'user.login.title' | trans }}</a></p>
-                {% endif %}
+<div class="wrapper">
+    <header class="main-header">
+        <a href="{{ path('home') }}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini">Uniflow</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">Uniflow</span>
+        </a>
+        <nav class="navbar" style="margin-left: 230px;">
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    {% if app.user %}
+                        <li><a href="{{ path('fos_user_security_logout') }}"><span
+                                        class="glyphicon glyphicon-off logout" aria-hidden="true"></span></a></li>
+                        <li><a
+                                    href="{{ path('fos_user_profile_edit') }}">{{ app.user.email }}</a></li>
+                    {% else %}
+                        <li><a href="{{ path('fos_user_security_login') }}"><span
+                                        class="glyphicon glyphicon-log-in login"
+                                        aria-hidden="true"></span> {{ 'user.login.title' | trans }}</a></li>
+                    {% endif %}
+                </ul>
             </div>
-        </div>
-    </div>
-</nav>
+        </nav>
+    </header>
+</div>
 
 {% block body %}
     <div id="app"></div>

@@ -11,6 +11,8 @@ user:
         submit: Register
         email: email
         password: password
+        confirmed: You are now registered
+        goBack: Start use
     profile:
         title: Profile
         email: email

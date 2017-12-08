@@ -152,7 +152,7 @@ fos_user:
             type: Darkwood\UserBundle\Form\Type\ProfileFormType
     registration:
         confirmation:
-            enabled:    true
+            enabled: false
         form:
             type: Darkwood\UserBundle\Form\Type\RegistrationFormType
     from_email:
