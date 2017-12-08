@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-    ServerName uniflow.darkwood.dev
-    ServerAlias www.uniflow.darkwood.dev
+    ServerName uniflow.darkwood.localhost
+    ServerAlias www.uniflow.darkwood.localhost
 
     ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://by_php-fpm:9000/var/www/CONF_FOLDER/web/$1
 
