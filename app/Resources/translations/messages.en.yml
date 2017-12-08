@@ -3,8 +3,8 @@ user:
         title: Connection
         remember_me: Remember me
         submit: Login
-        facebook: facebook
-        meetup: meetup
+        facebook: Facebook Login
+        meetup: Meetup Login
     register:
         title: Register
         new: Register a new account
