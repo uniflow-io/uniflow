@@ -2,16 +2,18 @@
 
 namespace Darkwood\UserBundle\Services;
 
+use Darkwood\CoreBundle\Services\BaseService;
 use Darkwood\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Darkwood\UserBundle\Repository\UserRepository;
+use FOS\UserBundle\Model\UserManager;
 
 /**
  * Class UserService
  * `
  * Object manager of user.
  */
-class UserService
+class UserService extends BaseService
 {
     /**
      * Repository

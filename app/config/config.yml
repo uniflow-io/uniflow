@@ -147,12 +147,14 @@ fos_user:
         sender_name:    Darkwood
     service:
         mailer: fos_user.mailer.twig_swift
+    profile:
+        form:
+            type: Darkwood\UserBundle\Form\Type\ProfileFormType
     registration:
         confirmation:
             enabled:    true
-            template:   UserBundle:Registration:email.txt.twig
         form:
-            type: user_registration
+            type: Darkwood\UserBundle\Form\Type\RegistrationFormType
     from_email:
         address:        contact@darkwood.fr
         sender_name:    Darkwood

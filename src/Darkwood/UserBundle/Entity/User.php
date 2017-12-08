@@ -38,6 +38,11 @@ class User extends BaseUser
     protected $lastName;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $facebookId;
+
+    /**
      * Creation.
      *
      * @var \DateTime
@@ -63,6 +68,17 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function __toString()
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function setEmail($email)
+    {
+        $this->setUsername($email);
+        return parent::setEmail($email);
     }
 
     /**
@@ -121,6 +137,30 @@ class User extends BaseUser
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * Set facebookId
+     *
+     * @param string $facebookId
+     *
+     * @return User
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * Get facebookId
+     *
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
     }
 
     /**
