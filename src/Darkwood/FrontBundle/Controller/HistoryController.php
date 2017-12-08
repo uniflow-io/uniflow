@@ -4,10 +4,12 @@ namespace Darkwood\FrontBundle\Controller;
 
 use Darkwood\FrontBundle\Form\HistoryType;
 use Darkwood\FrontBundle\Entity\History;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class SFTPComponentController.
@@ -16,7 +18,12 @@ class HistoryController extends Controller
 {
     public function listAction(Request $request)
     {
-        $data = $this->get('dw.history')->getHistory();
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $data = $this->get('dw.history')->getHistory($user);
 
         return new JsonResponse($data);
     }
@@ -65,8 +72,14 @@ class HistoryController extends Controller
      */
     public function createAction(Request $request)
     {
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
         $entity = new History();
         $entity->setCreated(new \DateTime());
+        $entity->setUser($user);
 
         return $this->manage($request, $entity);
     }
@@ -77,7 +90,12 @@ class HistoryController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $entity = $this->get('dw.history')->findOne($id);
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $entity = $this->get('dw.history')->findOneByUser($user, $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find History entity.');
@@ -88,7 +106,12 @@ class HistoryController extends Controller
 
     public function getDataAction(Request $request, $id)
     {
-        $entity = $this->get('dw.history')->findOne($id);
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $entity = $this->get('dw.history')->findOneByUser($user, $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find History entity.');
@@ -99,7 +122,12 @@ class HistoryController extends Controller
 
     public function setDataAction(Request $request, $id)
     {
-        $entity = $this->get('dw.history')->findOne($id);
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $entity = $this->get('dw.history')->findOneByUser($user, $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find History entity.');
@@ -119,7 +147,12 @@ class HistoryController extends Controller
 
     public function deleteAction(Request $request, $id)
     {
-        $entity = $this->get('dw.history')->findOne($id);
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $entity = $this->get('dw.history')->findOneByUser($user, $id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find History entity.');

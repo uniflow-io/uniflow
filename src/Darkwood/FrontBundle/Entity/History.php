@@ -3,6 +3,7 @@
 namespace Darkwood\FrontBundle\Entity;
 
 use Darkwood\FrontBundle\Annotation as Templated;
+use Darkwood\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -37,6 +38,12 @@ class History
      * @ORM\Column(length=255, unique=true)
      */
     protected $slug;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Darkwood\UserBundle\Entity\User", inversedBy="histories", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
+     */
+    protected $user;
 
     /**
      * @var \Datetime $created
@@ -79,17 +86,18 @@ class History
      */
     public function __construct()
     {
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getTitle();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -99,7 +107,7 @@ class History
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -132,6 +140,30 @@ class History
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set user
+     *
+     * @param User $user
+     *
+     * @return History
+     */
+    public function setUser(User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -209,8 +241,7 @@ class History
 
     public function removeAllTags()
     {
-        foreach($this->getTags() as $tag)
-        {
+        foreach ($this->getTags() as $tag) {
             $this->removeTag($tag);
         }
     }

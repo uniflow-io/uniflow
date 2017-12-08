@@ -4,6 +4,7 @@ namespace Darkwood\FrontBundle\Services;
 use Darkwood\CoreBundle\Services\BaseService;
 use Darkwood\FrontBundle\Entity\History;
 use Darkwood\FrontBundle\Repository\HistoryRepository;
+use Darkwood\UserBundle\Entity\User;
 
 /**
  * Class HistoryService
@@ -52,12 +53,13 @@ class HistoryService extends BaseService
     }
 
     /**
-     * @param integer $id
+     * @param User|null $user
+     * @param null $id
      * @return History
      */
-    public function findOne($id = null)
+    public function findOneByUser(User $user, $id = null)
     {
-        return $this->historyRepository->findOne($id);
+        return $this->historyRepository->findOneByUser($user, $id);
     }
 
     public function getJsonHistory(History $history)
@@ -82,9 +84,9 @@ class HistoryService extends BaseService
         );
     }
 
-    public function getHistory()
+    public function getHistory(User $user)
     {
-        $histories = $this->historyRepository->findAll();
+        $histories = $this->historyRepository->findByUser($user);
 
         $data = array();
 

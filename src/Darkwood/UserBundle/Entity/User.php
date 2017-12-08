@@ -2,6 +2,8 @@
 
 namespace Darkwood\UserBundle\Entity;
 
+use Darkwood\FrontBundle\Entity\History;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -43,6 +45,11 @@ class User extends BaseUser
     protected $facebookId;
 
     /**
+     * @ORM\OneToMany(targetEntity="Darkwood\FrontBundle\Entity\History", mappedBy="user", cascade={"persist"})
+     */
+    protected $histories;
+
+    /**
      * Creation.
      *
      * @var \DateTime
@@ -68,6 +75,8 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        
+        $this->histories = new ArrayCollection();
     }
 
     public function __toString()
@@ -161,6 +170,37 @@ class User extends BaseUser
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * @param History $history
+     * @return $this
+     */
+    public function addHistory(History $history)
+    {
+        $this->histories[] = $history;
+
+        $history->setUser($this);
+
+        return $this;
+    }
+
+    /**
+     * @param History $history
+     */
+    public function removeHistory(History $history)
+    {
+        $this->histories->removeElement($history);
+
+        $history->setUser(null);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getHistories()
+    {
+        return $this->histories;
     }
 
     /**

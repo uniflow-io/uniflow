@@ -3,6 +3,7 @@
 namespace Darkwood\FrontBundle\Repository;
 use Darkwood\CoreBundle\Repository\BaseRepository;
 use Darkwood\FrontBundle\Entity\History;
+use Darkwood\UserBundle\Entity\User;
 
 /**
  * Class HistoryRepository
@@ -12,20 +13,20 @@ use Darkwood\FrontBundle\Entity\History;
 class HistoryRepository extends BaseRepository
 {
     /**
-     * Find one for edit profile
-     *
-     * @param $id
-     * @return mixed
+     * @param User $user
+     * @param null $id
+     * @return History
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOne($id = null)
+    public function findOneByUser(User $user, $id = null)
     {
-        $qb = $this->createQueryBuilder('e')
-            ->select('e')
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
         ;
 
         if($id) {
-            $qb->where('e.id = :id')
-                ->setParameter('id', $id);
+            $qb->andWhere('h.id = :id')->setParameter('id', $id);
         } else {
             $qb->setMaxResults(1);
         }
@@ -36,12 +37,15 @@ class HistoryRepository extends BaseRepository
     }
 
     /**
+     * @param User $user
      * @return History[]
      */
-    public function findAll()
+    public function findByUser(User $user)
     {
         $qb = $this->createQueryBuilder('h')
-            ->select('h');
+            ->select('h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
+        ;
 
         return $qb->getQuery()->getResult();
     }
