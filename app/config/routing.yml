@@ -1,8 +1,23 @@
 _liip_imagine:
     resource: '@LiipImagineBundle/Resources/config/routing.xml'
 
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+fos_user:
+    resource: '@FOSUserBundle/Resources/config/routing/all.xml'
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+facebook_login:
+    path: /login/check-facebook
 
 front:
     resource: '@FrontBundle/Resources/config/routing.yml'

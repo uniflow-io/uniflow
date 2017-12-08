@@ -1,21 +1,18 @@
-form:
-  general:
-    required:     Champs requis
-    url:          Ce n'est pas une url correcte
-    short:        This value should be {{ limit }} or less.
-    long:         This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.
-    notpicture:   Le fichier n'est pas une image
-    notvideo:     Le fichier n'est pas au format mp4
-    maxSizeVideo: Lefichier dépasse les 100Mo maximum
+errors:
+    password: sorry, the passwords didn't match
+    unique: sorry, this email is already used
+    required: sorry, this field is mandatory
+    short: sorry, the value you set is too short
+    long: sorry, the value you set is too long
+    mail: sorry, this is not a valid e-mail
+    slug: sorry, this is not a valid slug
+    form: the form has errors
+    size: the file you tried to upload is too large
+    file: the file you tried to upload is invalid
 
-    invalid:
-      password:   Les mots de passe ne correspondent pas
-      date:       Date invalide
-      email:      E-mail invalide
-      phone:      Téléphone invalide
+    event:
+        facebookEventUnique: This facebook event is already used
 
-common:
-  comment:
-    required_email: You must write an email !
-    required_user: You must be logged !
-    required_content: You must write a comment !
+    facebookPage:
+        unique: This facebook page is already used
+

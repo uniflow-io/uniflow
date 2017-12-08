@@ -21,6 +21,9 @@ parameters:
 
     trusted_proxies:   [127.0.0.1]
 
+    facebook_app_id: ~
+    facebook_app_secret: ~
+
     hosts_darkwood:    www.darkwood.dev
     hosts_apps:        apps.darkwood.dev
     hosts_photos:      photos.darkwood.dev
@@ -28,9 +31,6 @@ parameters:
     hosts_me:          me.darkwood.dev
     hosts_admin:       admin.darkwood.dev
     hosts_cdn:         cdn.darkwood.dev
-
-    facebook_app_id: 121225051255583
-    facebook_app_secret: c2f4902bd1bee7382e9b16b4c03396f7
 
     redis_host: 127.0.0.1
     redis_port: 6379

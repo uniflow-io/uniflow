@@ -14,49 +14,76 @@ use Darkwood\UserBundle\Repository\UserRepository;
 class UserService
 {
     /**
-     * @var EntityManager
-     */
-    private $em;
-
-    /**
+     * Repository
+     *
      * @var UserRepository
      */
-    private $userRepository;
+    protected $userRepository;
 
     /**
-     * @param EntityManager $em
+     * Manager
+     *
+     * @var UserManager Fos
      */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-        $this->userRepository = $em->getRepository('UserBundle:User');
-    }
+    protected $userManager;
 
     /**
-     * Save a user.
+     * Save a user
      *
      * @param User $user
      */
     public function save(User $user)
     {
-        $this->em->persist($user);
-        $this->em->flush();
+        // Save user
+        $user->setUpdated(new \DateTime());
+
+        $this->userManager->updatePassword($user);
+        $this->userManager->updateUser($user);
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+
+        $this->clearResultCache();
     }
 
     /**
-     * Remove one user.
+     * Remove one user
      *
      * @param User $user
      */
     public function remove(User $user)
     {
-        $this->em->remove($user);
-        $this->em->flush();
+        $this->getEntityManager()->remove($user);
+        $this->getEntityManager()->flush();
     }
 
+    /**
+     * @return User[]
+     */
     public function findAll()
     {
         return $this->userRepository->findAll();
+    }
+
+    /**
+     * Find user by id for edit profile
+     *
+     * @param string $id
+     *
+     * @return User
+     */
+    public function findOne($id = null)
+    {
+        return $this->userRepository->findOne($id);
+    }
+
+    /**
+     * @param array $filters
+     * @return \Doctrine\ORM\Query
+     */
+    public function getQueryForSearch($filters = array())
+    {
+        return $this->userRepository->queryForSearch($filters);
     }
 
     public function findOneByUsername($username)

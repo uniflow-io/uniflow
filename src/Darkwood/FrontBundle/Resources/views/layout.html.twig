@@ -8,7 +8,8 @@
     <title>Uniflow</title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('js/libs/plugins/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/libs/plugins/bootstrap/css/bootstrap.css') }}">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
     <!-- Ionicons -->
@@ -30,12 +31,16 @@
     <link rel="stylesheet" href="{{ asset('js/libs/plugins/daterangepicker/daterangepicker-bs3.css') }}">
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="{{ asset('js/libs/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/AdminLTE.min.css') }}">
+
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset('dist/css/skins/_all-skins.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/uniflow.css') }}">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900,900i|Lustria|Playfair+Display:400,400i,700,700i,900,900i" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,22 +50,24 @@
     <![endif]-->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-<div id="app"></div>
+{% block body %}
+    <div id="app"></div>
 
-{#<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
-<script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>#}
+    {#<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
+    <script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>#}
 
-{#<script src="{{ asset('js/libs/jquery.min.js') }}"></script>
-<script src="{{ asset('js/libs/bootstrap.min.js') }}"></script>#}
-{#<script src="{{ asset('js/libs/vue.min.js') }}"></script>
-<script src="{{ asset('js/libs/superagent.min.js') }}"></script>#}
-{#<script src="{{ asset('js/libs/require.min.js') }}"></script>#}
+    {#<script src="{{ asset('js/libs/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/libs/bootstrap.min.js') }}"></script>#}
+    {#<script src="{{ asset('js/libs/vue.min.js') }}"></script>
+    <script src="{{ asset('js/libs/superagent.min.js') }}"></script>#}
+    {#<script src="{{ asset('js/libs/require.min.js') }}"></script>#}
 
-{#<script src="{{ asset('js/components/text/index.js') }}"></script>
-<script src="{{ asset('js/pages/home/index.js') }}"></script>
-<script src="{{ asset('js/uniflow.js') }}"></script>#}
+    {#<script src="{{ asset('js/components/text/index.js') }}"></script>
+    <script src="{{ asset('js/pages/home/index.js') }}"></script>
+    <script src="{{ asset('js/uniflow.js') }}"></script>#}
 
-<script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
-<script src="{{ asset('js/config.js') }}"></script>
+    <script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
+    <script src="{{ asset('js/config.js') }}"></script>
+{% endblock %}
 </body>
 </html>

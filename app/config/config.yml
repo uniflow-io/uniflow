@@ -8,7 +8,7 @@ imports:
 parameters:
     liip_imagine.jpegoptim.binary: '%binary_jpegoptim%'
     liip_imagine.optipng.binary: '%binary_optipng%'
-    locale: fr
+    locale: en
 
 framework:
     #esi:             ~
@@ -175,6 +175,24 @@ knp_paginator:
 white_october_breadcrumbs:
     separator: ''
     separatorClass: 'divider'
+
+hwi_oauth:
+    firewall_names: [main]
+    fosub:
+        # try 30 times to check if a username is available (foo, foo1, foo2 etc)
+        username_iterations: 30
+
+        # mapping between resource owners (see below) and properties
+        properties:
+            facebook: facebookId
+    resource_owners:
+        facebook:
+            type:                facebook
+            client_id:           '%facebook_app_id%'
+            client_secret:       '%facebook_app_secret%'
+            infos_url:           'https://graph.facebook.com/me?fields=id,name,email,picture.type(large)'
+            paths:
+                email:           email
 
 # Vich uploader
 vich_uploader:

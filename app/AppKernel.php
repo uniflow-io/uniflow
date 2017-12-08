@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new BeSimple\I18nRoutingBundle\BeSimpleI18nRoutingBundle(),
             new Cache\AdapterBundle\CacheAdapterBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 
             # core
             new Darkwood\CoreBundle\CoreBundle(),

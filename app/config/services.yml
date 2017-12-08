@@ -2,6 +2,12 @@ parameters:
     dw.doctrineCache.class: Cache\Bridge\DoctrineCacheBridge
 
 services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        #public: false
+
     dw.defaultCache:
         class: '%dw.doctrineCache.class%'
         arguments: [ '@cache.provider.defaultCache' ]

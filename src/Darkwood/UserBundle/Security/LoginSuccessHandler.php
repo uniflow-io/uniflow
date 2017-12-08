@@ -2,33 +2,41 @@
 
 namespace Darkwood\UserBundle\Security;
 
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Httpfoundation\Response;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
-/**
- * The LoginSuccessHandler class is call after authentication.
- */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**
-     * Router.
+     * Router
      *
      * @var Router
      */
     protected $router;
 
     /**
-     * Initialize authentication.
+     * @var AuthorizationChecker
+     */
+    protected $securityAuthorizationChecker;
+
+    /**
+     * Initialize authentication
      *
      * @param Router          $router   Router
+     * @param AuthorizationChecker $securityAuthorizationChecker
+     *
+     * @return void
      */
-    public function __construct($router)
+    public function __construct($router, $securityAuthorizationChecker)
     {
         $this->router = $router;
+        $this->securityAuthorizationChecker = $securityAuthorizationChecker;
     }
 
     /**
@@ -38,28 +46,26 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      * @param Request        $request Request
      * @param TokenInterface $token   Token
      *
-     * @return RedirectResponse
+     * @return Response
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         $session = $request->getSession();
 
         // redirect the user to where they were before the login process begun.
-        $refererUrl = $session->get('login_redirect');
-        if (!empty($refererUrl)) {
-            $redirectUrl = $refererUrl;
-        } else {
+        $redirectUrl = $request->get('_target_path', $session->get('login_redirect'));
+        if (empty($redirectUrl)) {
             $redirectUrl = $request->headers->get('Referer');
             if (strpos($redirectUrl, 'login') !== false) {
-                $redirectUrl = $this->router->generate('home', array(), true);
+                $redirectUrl = $this->router->generate('back_home', array(), true);
             }
         }
 
+        if ($this->securityAuthorizationChecker->isGranted('ROLE_BACK')) {
+            $redirectUrl = $this->router->generate('back_home', array(), true);
+        }
+
         $response = new RedirectResponse($redirectUrl);
-
-        // Generate new security token
-        $session->set('token', md5(uniqid(rand(), true)));
-
         return $response;
     }
 }
