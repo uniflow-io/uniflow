@@ -34,6 +34,11 @@ services:
         tags:
             - { name: form.type, alias: darkwood_user_registration }
 
+    Darkwood\UserBundle\EventListener\ProfileEditListener:
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_subscriber }
+
     wd.user.provider.fos_userbundle_bridge:
         class: Darkwood\UserBundle\Security\Core\FOSUBUserProvider
         arguments:
