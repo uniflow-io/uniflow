@@ -31,6 +31,7 @@ framework:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
         cookie_domain: '%cookie_domain%'
+        cookie_secure: '%cookie_secure%'
     fragments:       ~
     http_method_override: true
     assets:
