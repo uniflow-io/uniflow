@@ -8,7 +8,6 @@ imports:
 parameters:
     liip_imagine.jpegoptim.binary: '%binary_jpegoptim%'
     liip_imagine.optipng.binary: '%binary_optipng%'
-    locale: en
 
 framework:
     #esi:             ~

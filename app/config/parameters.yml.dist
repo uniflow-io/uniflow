@@ -9,13 +9,13 @@ parameters:
     database_user: root
     database_password: root
 
-    mailer_transport:  smtp
-    mailer_host:      'localhost:1025'
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_transport: smtp
+    mailer_host: 'by_mailhog:1025'
+    mailer_user: noreply@darkwood.fr
+    mailer_password: null
 
-    # A secret key that's used to generate certain security-related tokens
-    secret:            a545b4729708f24e3dc1ebde34e2edd8
+    secret: a545b4729708f24e3dc1ebde34e2edd8
+    locale: en
 
     cookie_domain: .darkwood.localhost
     cookie_secure: false
