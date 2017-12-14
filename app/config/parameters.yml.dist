@@ -17,7 +17,8 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            a545b4729708f24e3dc1ebde34e2edd8
 
-    cookie_domain:     .darkwood.localhost
+    cookie_domain: .darkwood.localhost
+    cookie_secure: false
 
     trusted_proxies:   [127.0.0.1]
 
