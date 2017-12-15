@@ -18,4 +18,4 @@ SystemJS.config({
         },
     }
 });
-SystemJS.import('App.js');
+SystemJS.import('index.js');
