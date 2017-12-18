@@ -110,7 +110,10 @@
     <script src="{{ asset('js/uniflow.js') }}"></script>#}
 
     <script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
-    <script src="{{ asset('js/config.js') }}"></script>
+    <script src="{{ asset('jspm.config.js') }}"></script>
+    <script>
+        SystemJS.import('uniflow')
+    </script>
 {% endblock %}
 
 </body>
