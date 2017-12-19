@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
 
-import App from 'uniflow/App'
+import App from './App'
 
 render(<App />, document.getElementById('app'))

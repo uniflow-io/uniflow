@@ -51,7 +51,9 @@ SystemJS.config({
             "meta": {
                 "*.js": {
                     "babelOptions": {
-                        "plugins": ["babel-plugin-transform-react-jsx"]
+                        "plugins": [
+                            "babel-plugin-transform-react-jsx"
+                        ]
                     }
                 }
             }
@@ -73,6 +75,7 @@ SystemJS.config({
         "domain": "npm:jspm-nodelibs-domain@0.2.1",
         "events": "npm:jspm-nodelibs-events@0.2.2",
         "fs": "npm:jspm-nodelibs-fs@0.2.1",
+        "history": "npm:history@4.7.2",
         "http": "npm:jspm-nodelibs-http@0.2.0",
         "https": "npm:jspm-nodelibs-https@0.2.2",
         "os": "npm:jspm-nodelibs-os@0.2.2",
@@ -80,6 +83,7 @@ SystemJS.config({
         "process": "npm:jspm-nodelibs-process@0.2.1",
         "react": "npm:react@16.2.0",
         "react-dom": "npm:react-dom@16.2.0",
+        "react-router-dom": "npm:react-router-dom@4.2.2",
         "stream": "npm:jspm-nodelibs-stream@0.2.1",
         "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.2",
         "url": "npm:jspm-nodelibs-url@0.2.1",
@@ -450,6 +454,51 @@ SystemJS.config({
             "map": {
                 "inherits": "npm:inherits@2.0.3",
                 "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
+            }
+        },
+        "npm:react-router-dom@4.2.2": {
+            "map": {
+                "warning": "npm:warning@3.0.0",
+                "loose-envify": "npm:loose-envify@1.3.1",
+                "prop-types": "npm:prop-types@15.6.0",
+                "invariant": "npm:invariant@2.2.2",
+                "history": "npm:history@4.7.2",
+                "react-router": "npm:react-router@4.2.0"
+            }
+        },
+        "npm:warning@3.0.0": {
+            "map": {
+                "loose-envify": "npm:loose-envify@1.3.1"
+            }
+        },
+        "npm:history@4.7.2": {
+            "map": {
+                "invariant": "npm:invariant@2.2.2",
+                "warning": "npm:warning@3.0.0",
+                "loose-envify": "npm:loose-envify@1.3.1",
+                "value-equal": "npm:value-equal@0.4.0",
+                "resolve-pathname": "npm:resolve-pathname@2.2.0"
+            }
+        },
+        "npm:invariant@2.2.2": {
+            "map": {
+                "loose-envify": "npm:loose-envify@1.3.1"
+            }
+        },
+        "npm:react-router@4.2.0": {
+            "map": {
+                "loose-envify": "npm:loose-envify@1.3.1",
+                "prop-types": "npm:prop-types@15.6.0",
+                "history": "npm:history@4.7.2",
+                "invariant": "npm:invariant@2.2.2",
+                "warning": "npm:warning@3.0.0",
+                "hoist-non-react-statics": "npm:hoist-non-react-statics@2.3.1",
+                "path-to-regexp": "npm:path-to-regexp@1.7.0"
+            }
+        },
+        "npm:path-to-regexp@1.7.0": {
+            "map": {
+                "isarray": "npm:isarray@0.0.1"
             }
         }
     }

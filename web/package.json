@@ -15,7 +15,9 @@
     "name": "uniflow",
     "main": "index.js",
     "dependencies": {
-      "react-dom": "npm:react-dom@^16.2.0"
+      "history": "npm:history@^4.7.2",
+      "react-dom": "npm:react-dom@^16.2.0",
+      "react-router-dom": "npm:react-router-dom@^4.2.2"
     },
     "devDependencies": {
       "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@^6.24.1",
