@@ -6,6 +6,10 @@ const routes = {
         exact: true,
         component: Home,
     },
+    logged: {
+        path: '/_=_',
+        component: Home,
+    },
     credits: {
         path: '/faq',
         component: FAQ,
