@@ -4,13 +4,13 @@ import {
     Route,
     Link
 } from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
+//import createBrowserHistory from 'history/createBrowserHistory'
 import routes from './routes'
 
-const history = createBrowserHistory()
+//const history = createBrowserHistory()
 
 export default () => (
-    <HashRouter history={history}>
+    <HashRouter>
         <div>
             <history-manager></history-manager>
 
@@ -22,10 +22,10 @@ export default () => (
                         <div className="navbar-custom-menu">
                             <ul className="nav navbar-nav">
                                 <li>
-                                    <Link to="/" activeClassName="active">Home</Link>
+                                    <Link to="/">Home</Link>
                                 </li>
                                 <li>
-                                    <Link to="/faq" activeClassName="active">FAQ</Link>
+                                    <Link to="/faq">FAQ</Link>
                                 </li>
                             </ul>
                         </div>
