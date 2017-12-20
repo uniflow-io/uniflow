@@ -1,23 +1,23 @@
 import React from 'react'
 
 export default () => (
-    <div class="content-wrapper">
+    <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section class="content-header">
+        <section className="content-header">
             <h1>
                 FAQ
                 <small>Control panel</small>
             </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">FAQ</li>
+            <ol className="breadcrumb">
+                <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
+                <li className="active">FAQ</li>
             </ol>
         </section>
 
         {/* Main content */}
-        <section class="content">
-            <div class="row">
-                <div class="col-md-12">
+        <section className="content">
+            <div className="row">
+                <div className="col-md-12">
 
                     <h3>Why ?</h3>
                     {/*p>
