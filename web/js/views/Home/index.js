@@ -1,4 +1,6 @@
 import React from 'react'
+import History from './History/index'
+import Show from './Show/index'
 
 export default () => (
     <div id="home" className="content-wrapper">
@@ -9,7 +11,7 @@ export default () => (
                 <small>Control panel</small>
             </h1>
             <ol className="breadcrumb">
-                <li><a href="#"><i className="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#"><i className="fa fa-dashboard" /> Home</a></li>
                 <li className="active">Dashboard</li>
             </ol>
         </section>
@@ -19,12 +21,12 @@ export default () => (
             <div className="row">
                 <div className="col-md-2">
 
-                    <history />
+                    <History />
 
                 </div>
                 <div className="col-md-10">
 
-                    <show v-if="history" />
+                    <Show v-if="history" />
 
                 </div>
             </div>

@@ -50,8 +50,8 @@ export default () => (
                 <aside className="control-sidebar control-sidebar-dark">
                     {/* Create the tabs */}
                     <ul className="nav nav-tabs nav-justified control-sidebar-tabs">
-                        <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i className="fa fa-home"></i></a></li>
-                        <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i className="fa fa-gears"></i></a></li>
+                        <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i className="fa fa-home" /></a></li>
+                        <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i className="fa fa-gears" /></a></li>
                     </ul>
                     {/* Tab panes */}
                     <div className="tab-content">
@@ -61,7 +61,7 @@ export default () => (
                             <ul className="control-sidebar-menu">
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <i className="menu-icon fa fa-birthday-cake bg-red"></i>
+                                        <i className="menu-icon fa fa-birthday-cake bg-red" />
 
                                         <div className="menu-info">
                                             <h4 className="control-sidebar-subheading">Langdon's Birthday</h4>
@@ -72,7 +72,7 @@ export default () => (
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <i className="menu-icon fa fa-user bg-yellow"></i>
+                                        <i className="menu-icon fa fa-user bg-yellow" />
 
                                         <div className="menu-info">
                                             <h4 className="control-sidebar-subheading">Frodo Updated His Profile</h4>
@@ -83,7 +83,7 @@ export default () => (
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <i className="menu-icon fa fa-envelope-o bg-light-blue"></i>
+                                        <i className="menu-icon fa fa-envelope-o bg-light-blue" />
 
                                         <div className="menu-info">
                                             <h4 className="control-sidebar-subheading">Nora Joined Mailing List</h4>
@@ -94,7 +94,7 @@ export default () => (
                                 </li>
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <i className="menu-icon fa fa-file-code-o bg-green"></i>
+                                        <i className="menu-icon fa fa-file-code-o bg-green" />
 
                                         <div className="menu-info">
                                             <h4 className="control-sidebar-subheading">Cron Job 254 Executed</h4>
@@ -116,7 +116,7 @@ export default () => (
                                         </h4>
 
                                         <div className="progress progress-xxs">
-                                            <div className="progress-bar progress-bar-danger" style={{ width: "70%" }}></div>
+                                            <div className="progress-bar progress-bar-danger" style={{ width: "70%" }} />
                                         </div>
                                     </a>
                                 </li>
@@ -128,7 +128,7 @@ export default () => (
                                         </h4>
 
                                         <div className="progress progress-xxs">
-                                            <div className="progress-bar progress-bar-success" style={{ width: "95%" }}></div>
+                                            <div className="progress-bar progress-bar-success" style={{ width: "95%" }} />
                                         </div>
                                     </a>
                                 </li>
@@ -140,7 +140,7 @@ export default () => (
                                         </h4>
 
                                         <div className="progress progress-xxs">
-                                            <div className="progress-bar progress-bar-warning" style={{ width: "50%" }}></div>
+                                            <div className="progress-bar progress-bar-warning" style={{ width: "50%" }} />
                                         </div>
                                     </a>
                                 </li>
@@ -152,7 +152,7 @@ export default () => (
                                         </h4>
 
                                         <div className="progress progress-xxs">
-                                            <div className="progress-bar progress-bar-primary" style={{ width: "68%" }}></div>
+                                            <div className="progress-bar progress-bar-primary" style={{ width: "68%" }} />
                                         </div>
                                     </a>
                                 </li>
@@ -226,7 +226,7 @@ export default () => (
                                 <div className="form-group">
                                     <label className="control-sidebar-subheading">
                                         Delete chat history
-                                        <a href="javascript:void(0)" className="text-red pull-right"><i className="fa fa-trash-o"></i></a>
+                                        <a href="javascript:void(0)" className="text-red pull-right"><i className="fa fa-trash-o" /></a>
                                     </label>
                                 </div>
                                 {/* /.form-group */}
@@ -238,7 +238,7 @@ export default () => (
                 {/* /.control-sidebar */}
                 {/* Add the sidebar's background. This div must be placed
                      immediately after the control sidebar */}
-                <div className="control-sidebar-bg"></div>
+                <div className="control-sidebar-bg" />
             </div>
         </div>
     </HashRouter>
