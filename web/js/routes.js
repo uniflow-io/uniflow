@@ -1,8 +1,9 @@
-import {Home, FAQ} from './views/index'
+import { FAQ, Home } from './views/index'
 
 const routes = {
     home: {
         path: '/',
+        exact: true,
         component: Home,
     },
     credits: {

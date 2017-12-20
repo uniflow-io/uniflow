@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Router,
+    HashRouter,
     Route,
     Link
 } from 'react-router-dom'
@@ -9,14 +9,8 @@ import routes from './routes'
 
 const history = createBrowserHistory()
 
-const About = () => (
-    <div>
-        <h2>About</h2>
-    </div>
-)
-
 export default () => (
-    <Router history={history}>
+    <HashRouter history={history}>
         <div>
             <history-manager></history-manager>
 
@@ -28,13 +22,10 @@ export default () => (
                         <div className="navbar-custom-menu">
                             <ul className="nav navbar-nav">
                                 <li>
-                                    <Link to="/">Home</Link>
+                                    <Link to="/" activeClassName="active">Home</Link>
                                 </li>
                                 <li>
-                                    <Link to="/faq">FAQ</Link>
-                                </li>
-                                <li>
-                                    <Link to="/about">About</Link>
+                                    <Link to="/faq" activeClassName="active">FAQ</Link>
                                 </li>
                             </ul>
                         </div>
@@ -45,7 +36,6 @@ export default () => (
                 {Object.values(routes).map(route => (
                     <Route key={route.path} {...route} />
                 ))}
-                <Route path="/about" component={About}/>
 
                 {/* /.content-wrapper */}
                 {/*footer className="main-footer">
@@ -251,5 +241,5 @@ export default () => (
                 <div className="control-sidebar-bg"></div>
             </div>
         </div>
-    </Router>
+    </HashRouter>
 )
