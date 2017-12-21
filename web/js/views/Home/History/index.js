@@ -3,20 +3,12 @@ import {Link} from 'react-router-dom'
 import {pathTo} from 'uniflow/routes'
 import moment from 'moment'
 
-let id = 2;
+let id = 1;
 
 export default class History extends Component {
     state = {
         search: '',
-        items: {
-            1: {
-                id: 1,
-                title: 'coucou',
-                tags: ['deed'],
-                description: 'description',
-                updated: moment()
-            }
-        },
+        items: {},
         current: null
     }
 
