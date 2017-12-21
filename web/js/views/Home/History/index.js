@@ -71,7 +71,7 @@ export default class History extends Component {
         }
 
         const isActive = (state, item) => {
-            return (state.current && state.curent.id === item.id) ? 'active' : ''
+            return (state.current && state.current.id === item.id) ? 'active' : ''
         }
 
         return (
