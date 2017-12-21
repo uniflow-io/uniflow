@@ -27,9 +27,17 @@ export default class History extends Component {
     onSubmit = (event) => {
         event.preventDefault();
 
+        this.state.items[id] = {
+            id: '1',
+            title: this.state.search,
+            tags: ['deed'],
+            description: 'description',
+            updated: moment()
+        }
 
+        this.setState({items: this.state.items})
 
-        id ++;
+        id++;
     }
 
     render() {
@@ -40,10 +48,12 @@ export default class History extends Component {
                 keys = keys.filter((key) => {
                     let item  = state.items[key];
                     let words = item.title;
-                    words += item.tags.join(' ');
-                    words     = words.toLowerCase();
+                    for(let i = 0; i < item.tags.length; i++) {
+                        words += ' ' + item.tags[i];
+                    }
+                    words = words.toLowerCase();
 
-                    return words.indexOf(this.search) !== -1;
+                    return words.indexOf(state.search) !== -1;
                 });
             }
 
@@ -95,7 +105,8 @@ export default class History extends Component {
                                 </li>
                                 {filteredHistory(this.state).map((item, i) => (
                                     <li className={isActive(this.state, item)} key={i}>
-                                        <Link to={pathTo('homeDetail', {id: item.id})}>{item.title} {item.tags.map((tag, j) => (
+                                        <Link
+                                            to={pathTo('homeDetail', {id: item.id})}>{item.title} {item.tags.map((tag, j) => (
                                             <span key={j} className="badge">{tag}</span>
                                         ))}</Link>
                                     </li>
