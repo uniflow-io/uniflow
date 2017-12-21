@@ -10,7 +10,7 @@ export default class History extends Component {
         search: '',
         items: {
             1: {
-                id: '1',
+                id: 1,
                 title: 'coucou',
                 tags: ['deed'],
                 description: 'description',
@@ -27,15 +27,16 @@ export default class History extends Component {
     onSubmit = (event) => {
         event.preventDefault();
 
-        this.state.items[id] = {
-            id: '1',
+        let item = {}
+        item[id] = {
+            id: id,
             title: this.state.search,
             tags: ['deed'],
             description: 'description',
             updated: moment()
         }
 
-        this.setState({items: this.state.items})
+        this.setState({items: {...this.state.items, ...item}})
 
         id++;
     }
