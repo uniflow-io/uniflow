@@ -1,66 +1,109 @@
-import React from 'react'
+import React, { Component } from 'react'
+import moment from 'moment'
 
-export default () => (
-    <div>
-        {/*<div class="box box-primary">
-        <div class="box-header with-border">
-            <h3 class="box-title">Infos</h3>
-            <div class="box-tools pull-right">
-                <a class="btn btn-box-tool" @click.prevent="onDuplicate"><i class="fa fa-clone"></i></a>
-                <a class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
+export default class Show extends Component {
+    state = {
+        stack: [],
+        history: {
+            id: 1,
+            title: 'sample',
+            tags: ['deed'],
+            description: 'description',
+            updated: moment()
+        }
+    }
+
+    run = (event, index) => {
+        event.preventDefault()
+    }
+
+    onUpdateTitle = (event) => {
+        event.preventDefault()
+
+        this.setState({history: {...this.state.history, ...{title: event.target.value}}})
+    }
+
+    onUpdateTags = (event) => {
+        event.preventDefault()
+    }
+
+    onUpdateDescription = (event) => {
+        event.preventDefault()
+    }
+
+    onDuplicate = (event) => {
+        event.preventDefault()
+    }
+
+    onDelete = (event) => {
+        event.preventDefault()
+    }
+    
+    render() {
+        return (
+            <div>
+                <div className="box box-primary">
+                    <div className="box-header with-border">
+                        <h3 className="box-title">Infos</h3>
+                        <div className="box-tools pull-right">
+                            <a className="btn btn-box-tool" onClick={this.onDuplicate}><i className="fa fa-clone" /></a>
+                            <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
+                        </div>
+                    </div>
+                    <div className="box-body">
+                        <form className="form-horizontal">
+            
+                            <div className="form-group">
+                                <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 control-label">Title</label>
+            
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control" id="info_title_{{ _uid }}" value={this.state.history.title} onChange={this.onUpdateTitle} placeholder="Title" />
+                                </div>
+                            </div>
+            
+                            <div className="form-group">
+                                <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
+            
+                                <div className="col-sm-10">
+                                    {/*<tagit type="text" className="form-control" id="info_tags_{{ _uid }}" value="" onInput={this.onUpdateTags} options="tagsOptions" placeholder="Tags" />*/}
+                                </div>
+                            </div>
+            
+                            <div className="form-group">
+                                <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 control-label">Description</label>
+            
+                                <div className="col-sm-10">
+                                    {/*<ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onInput={this.onUpdateDescription} placeholder="Text" height="200"></ace>*/}
+                                </div>
+                            </div>
+            
+                        </form>
+                    </div>
+                </div>
+            
+                <ul className="timeline">
+                    <li className="time-label">
+                      <span className="bg-green">
+                        <a className="btn btn-success pull-right" onClick={this.run}><i className="fa fa-fw fa-play" /> Play</a>
+                      </span>
+                    </li>
+                    {/*<li v-for="item in uiStack">
+                        <i v-if="item.component != 'search'" className="fa fa-play bg-blue" @click.prevent="run(item.index)" />
+            
+                        <div className="timeline-item" :className="{'bg-green': item.active, 'component':(item.component != 'search')}">
+                            <div className="timeline-body">
+                                <div :is="item.component" :bus="item.bus"
+                                     @push="onPushFlow(arguments[0], item.index)"
+                                     @pop="onPopFlow(item.index)"
+                                     @update="onUpdateFlow(arguments[0], item.index)"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                    </li>*/}
+                </ul>
             </div>
-        </div>
-        <div class="box-body">
-            <form class="form-horizontal">
-
-                <div class="form-group">
-                    <label for="info_title_{{ _uid }}" class="col-sm-2 control-label">Title</label>
-
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="info_title_{{ _uid }}" :value="history.title" @input="onUpdateTitle" placeholder="Title" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="info_tags_{{ _uid }}" class="col-sm-2 control-label">Tags</label>
-
-                    <div class="col-sm-10">
-                        <tagit type="text" class="form-control" id="info_tags_{{ _uid }}" :value="history.tags" @input="onUpdateTags" :options="tagsOptions" placeholder="Tags" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="info_description_{{ _uid }}" class="col-sm-2 control-label">Description</label>
-
-                    <div class="col-sm-10">
-                        <ace class="form-control" id="info_description_{{ _uid }}" v-model="history.description" @input="onUpdateDescription" placeholder="Text" height="200"></ace>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-    <ul class="timeline">
-        <li class="time-label">
-          <span class="bg-green">
-            <a class="btn btn-success pull-right" @click.prevent="run()"><i class="fa fa-fw fa-play"></i> Play</a>
-          </span>
-        </li>
-        <li v-for="item in uiStack">
-            <i v-if="item.component != 'search'" class="fa fa-play bg-blue" @click.prevent="run(item.index)"></i>
-
-            <div class="timeline-item" :class="{'bg-green': item.active, 'component':(item.component != 'search')}">
-                <div class="timeline-body">
-                    <div :is="item.component" :bus="item.bus"
-                         @push="onPushFlow(arguments[0], item.index)"
-                         @pop="onPopFlow(item.index)"
-                         @update="onUpdateFlow(arguments[0], item.index)"
-                    >
-                    </div>
-                </div>
-            </div>
-        </li>
-    </ul>*/}
-    </div>
-)
+        )
+    }
+}
+    
