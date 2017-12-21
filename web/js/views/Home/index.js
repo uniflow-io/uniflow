@@ -19,12 +19,12 @@ export default () => (
         {/* Main content */}
         <section className="content">
             <div className="row">
-                <div className="col-md-2">
+                <div className="col-sm-2">
 
                     <History />
 
                 </div>
-                <div className="col-md-10">
+                <div className="col-sm-10">
 
                     <Show v-if="history" />
 
