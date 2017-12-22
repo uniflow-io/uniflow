@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import { Ace } from 'uniflow/components/index'
+import { Ace, TagIt } from 'uniflow/components/index'
 
 export default class Show extends Component {
     state = {
@@ -23,8 +23,9 @@ export default class Show extends Component {
         this.onUpdate();
     }
 
-    onUpdateTags = (event) => {
-
+    onUpdateTags = (tags) => {
+        this.setState({history: {...this.state.history, ...{tags: tags}}})
+        this.onUpdate();
     }
 
     onUpdateDescription = (description) => {
@@ -70,7 +71,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
             
                                 <div className="col-sm-10">
-                                    {/*<tagit type="text" className="form-control" id="info_tags_{{ _uid }}" value="" onInput={this.onUpdateTags} options="tagsOptions" placeholder="Tags" />*/}
+                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value="" onChange={this.onUpdateTags} options="tagsOptions" placeholder="Tags" />
                                 </div>
                             </div>
             
