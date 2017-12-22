@@ -1,6 +1,7 @@
 SystemJS.config({
     paths: {
         "npm:": "jspm_packages/npm/",
+        "github:": "jspm_packages/github/",
         "uniflow/": "js/"
     },
     browserConfig: {
@@ -64,10 +65,10 @@ SystemJS.config({
                 "*.js": {
                     "babelOptions": {
                         "presets": [
-                            "babel-preset-flow",
+                            "babel-preset-flow"
                         ],
                         "plugins": [
-                            "babel-plugin-transform-react-jsx",
+                            "babel-plugin-transform-react-jsx"
                         ]
                     }
                 }
@@ -79,9 +80,11 @@ SystemJS.config({
 SystemJS.config({
     packageConfigPaths: [
         "npm:@*/*.json",
-        "npm:*.json"
+        "npm:*.json",
+        "github:*/*.json"
     ],
     map: {
+        "ace": "github:ajaxorg/ace-builds@1.2.9",
         "assert": "npm:jspm-nodelibs-assert@0.2.1",
         "buffer": "npm:jspm-nodelibs-buffer@0.2.3",
         "child_process": "npm:jspm-nodelibs-child_process@0.2.1",

@@ -15,6 +15,7 @@
     "name": "uniflow",
     "main": "index.js",
     "dependencies": {
+      "ace": "github:ajaxorg/ace-builds@^1.2.9",
       "history": "npm:history@^4.7.2",
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
@@ -50,6 +51,28 @@
       "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
     },
     "overrides": {
+      "github:ajaxorg/ace-builds@1.2.9": {
+        "main": "ace",
+        "format": "global",
+        "directories": {
+          "lib": "src-noconflict"
+        },
+        "map": {
+          "ace": "."
+        },
+        "meta": {
+          "ace.js": {
+            "exports": "ace",
+            "format": "global"
+          },
+          "*.js": {
+            "deps": [
+              "ace/ace"
+            ],
+            "format": "global"
+          }
+        }
+      },
       "npm:browserify-zlib@0.1.4": {
         "dependencies": {
           "readable-stream": "^2.0.2",

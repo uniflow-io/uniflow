@@ -28,8 +28,13 @@ export default class Show extends Component {
         event.preventDefault()
     }
 
-    onUpdateDescription = (event) => {
-        event.preventDefault()
+    onUpdateDescription = (description) => {
+        this.state.history.description = description;
+        this.onUpdate();
+    }
+
+    onUpdate = () => {
+
     }
 
     onDuplicate = (event) => {
@@ -74,7 +79,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 control-label">Description</label>
             
                                 <div className="col-sm-10">
-                                    <Ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onInput={this.onUpdateDescription} placeholder="Text" height="200" />
+                                    <Ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onChange={this.onUpdateDescription} placeholder="Text" height="200" />
                                 </div>
                             </div>
             
