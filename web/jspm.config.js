@@ -10,7 +10,8 @@ SystemJS.config({
         "map": {
             "plugin-babel": "npm:systemjs-plugin-babel@0.0.25",
             "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@6.24.1",
-            "core-js": "npm:core-js@2.5.3"
+            "core-js": "npm:core-js@2.5.3",
+            "babel-preset-flow": "npm:babel-preset-flow@6.23.0"
         },
         "packages": {
             "npm:babel-plugin-transform-react-jsx@6.24.1": {
@@ -40,6 +41,17 @@ SystemJS.config({
                     "to-fast-properties": "npm:to-fast-properties@1.0.3",
                     "lodash": "npm:lodash@4.17.4"
                 }
+            },
+            "npm:babel-preset-flow@6.23.0": {
+                "map": {
+                    "babel-plugin-transform-flow-strip-types": "npm:babel-plugin-transform-flow-strip-types@6.22.0"
+                }
+            },
+            "npm:babel-plugin-transform-flow-strip-types@6.22.0": {
+                "map": {
+                    "babel-runtime": "npm:babel-runtime@6.26.0",
+                    "babel-plugin-syntax-flow": "npm:babel-plugin-syntax-flow@6.18.0"
+                }
             }
         }
     },
@@ -51,8 +63,11 @@ SystemJS.config({
             "meta": {
                 "*.js": {
                     "babelOptions": {
+                        "presets": [
+                            "babel-preset-flow",
+                        ],
                         "plugins": [
-                            "babel-plugin-transform-react-jsx"
+                            "babel-plugin-transform-react-jsx",
                         ]
                     }
                 }

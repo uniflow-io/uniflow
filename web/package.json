@@ -23,6 +23,7 @@
     },
     "devDependencies": {
       "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@^6.24.1",
+      "babel-preset-flow": "npm:babel-preset-flow@^6.23.0",
       "core-js": "npm:core-js@^2.5.3",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.25"
     },

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import { Ace } from 'uniflow/components/index'
 
 export default class Show extends Component {
     state = {
@@ -73,7 +74,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 control-label">Description</label>
             
                                 <div className="col-sm-10">
-                                    {/*<ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onInput={this.onUpdateDescription} placeholder="Text" height="200"></ace>*/}
+                                    <Ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onInput={this.onUpdateDescription} placeholder="Text" height="200" />
                                 </div>
                             </div>
             
