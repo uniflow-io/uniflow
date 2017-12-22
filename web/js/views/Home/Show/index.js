@@ -19,17 +19,16 @@ export default class Show extends Component {
     }
 
     onUpdateTitle = (event) => {
-        event.preventDefault()
-
         this.setState({history: {...this.state.history, ...{title: event.target.value}}})
+        this.onUpdate();
     }
 
     onUpdateTags = (event) => {
-        event.preventDefault()
+
     }
 
     onUpdateDescription = (description) => {
-        this.state.history.description = description;
+        this.setState({history: {...this.state.history, ...{description: description}}})
         this.onUpdate();
     }
 
