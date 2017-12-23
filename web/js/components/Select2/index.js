@@ -5,6 +5,7 @@ import 'select2'
 type Props = {
     value: string,
     options?: [],
+    style?: {},
     children: ({}) => React.Component
 }
 
@@ -50,10 +51,10 @@ export default class Ace extends Component<Props> {
     }
 
     render() {
-        const { children } = this.props
+        const { children, style } = this.props
 
         return (
-            <select ref={container => (this.container = container)}>{ children }</select>
+            <select ref={container => (this.container = container)} style={style}>{ children }</select>
         )
     }
 }

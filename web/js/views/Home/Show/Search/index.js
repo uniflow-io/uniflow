@@ -49,10 +49,14 @@ export default class Search extends Component {
                     <label htmlFor="search{{ _uid }}" className="col-sm-2 control-label">Component</label>
 
                     <div className="col-sm-9">
-                        <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style="width: 100%">
-                            {/*<optgroup v-for="(options, group) in optionGroups" :label="group">
-                                <option v-for="o in options" :value="o.id">{{ o.text }}</option>
-                            </optgroup>*/}
+                        <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
+                            {Object.keys(this.optionGroups).map((group) => (
+                                <optgroup key={group} label={group}>
+                                    {this.optionGroups[group].map((option) => (
+                                        <option key={option.id} value={option.id}>{ option.text }</option>
+                                    ))}
+                                </optgroup>
+                            ))}
                         </Select2>
                     </div>
                     <div className="col-sm-1">

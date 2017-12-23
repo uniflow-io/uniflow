@@ -106,6 +106,7 @@ SystemJS.config({
         "react": "npm:react@16.2.0",
         "react-dom": "npm:react-dom@16.2.0",
         "react-router-dom": "npm:react-router-dom@4.2.2",
+        "select2": "github:select2/select2@4.0.5",
         "stream": "npm:jspm-nodelibs-stream@0.2.1",
         "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.2",
         "tag-it": "npm:tag-it@2.0.0",
@@ -522,6 +523,11 @@ SystemJS.config({
         "npm:path-to-regexp@1.7.0": {
             "map": {
                 "isarray": "npm:isarray@0.0.1"
+            }
+        },
+        "github:select2/select2@4.0.5": {
+            "map": {
+                "jquery": "npm:jquery@3.2.1"
             }
         }
     }

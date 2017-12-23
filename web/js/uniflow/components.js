@@ -18,4 +18,13 @@
 //    'ui-textlist': UITextList,
 //};
 
-export default {}
+export default {
+    'core-javascript': 'ee',
+    'core-assets': 'ee',
+    'core-text': 'ee',
+    'core-socketio': 'ee',
+    'ui-checkboxes': 'ee',
+    'ui-object': 'ee',
+    'ui-select': 'ee',
+    'ui-textlist': 'ee',
+}
