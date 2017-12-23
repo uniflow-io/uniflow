@@ -1,0 +1,22 @@
+<div class="box box-info">
+    <form class="form-horizontal" @submit.prevent="onSubmit">
+        <div class="box-header with-border">
+            <h3 class="box-title">Decleor parse trads</h3>
+            <div class="box-tools pull-right">
+                <a class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <div class="box-body">
+            <p>parse trads</p>
+            <div v-if="progress !== null" class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: progress + '%' }">
+                    <span class="sr-only">{{ progress }}% Complete</span>
+                </div>
+            </div>
+            <pre class="prettyprint"><code class="lang-html">{{ content }}</code></pre>
+        </div>
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-refresh"></i> Send</button>
+        </div>
+    </form>
+</div>

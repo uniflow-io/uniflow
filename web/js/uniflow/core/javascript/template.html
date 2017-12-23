@@ -1,0 +1,19 @@
+<div class="box box-info">
+    <form class="form-horizontal">
+        <div class="box-header with-border">
+            <h3 class="box-title">Javascript</h3>
+            <div class="box-tools pull-right">
+                <a class="btn btn-box-tool" @click.prevent="onDelete"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <label for="code{{ _uid }}" class="col-sm-2 control-label">Code</label>
+
+                <div class="col-sm-10">
+                    <ace class="form-control" id="code{{ _uid }}" v-model="code" placeholder="Code" height="200" mode="javascript"></ace>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

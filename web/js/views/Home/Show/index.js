@@ -1,6 +1,19 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { Ace, TagIt } from 'uniflow/components/index'
+import Search from './Search/index'
+import components from 'uniflow/uniflow/components';
+
+class UiComponent extends Component {
+    components = Object.assign({}, components, {
+        'search': Search
+    })
+
+    render() {
+        const TagName = this.components[this.props.tag || 'foo'];
+        return <TagName />
+    }
+}
 
 export default class Show extends Component {
     state = {
@@ -19,8 +32,6 @@ export default class Show extends Component {
     run = (event, index) => {
         event.preventDefault()
     }
-
-
 
     onUpdateTitle = (event) => {
         this.setState({history: {...this.state.history, ...{title: event.target.value}}})
@@ -48,7 +59,7 @@ export default class Show extends Component {
     onDelete = (event) => {
         event.preventDefault()
     }
-    
+
     render() {
         const history = (() => {
             return this.state.history;
@@ -101,55 +112,59 @@ export default class Show extends Component {
                     </div>
                     <div className="box-body">
                         <form className="form-horizontal">
-            
+
                             <div className="form-group">
                                 <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 control-label">Title</label>
-            
+
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" id="info_title_{{ _uid }}" value={history.title} onChange={this.onUpdateTitle} placeholder="Title" />
                                 </div>
                             </div>
-            
+
                             <div className="form-group">
                                 <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
-            
+
                                 <div className="col-sm-10">
                                     <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value={history.tags} onChange={this.onUpdateTags} options={tagsOptions} placeholder="Tags" />
                                 </div>
                             </div>
-            
+
                             <div className="form-group">
                                 <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 control-label">Description</label>
-            
+
                                 <div className="col-sm-10">
                                     <Ace className="form-control" id="info_description_{{ _uid }}" value={history.description} onChange={this.onUpdateDescription} placeholder="Text" height="200" />
                                 </div>
                             </div>
-            
+
                         </form>
                     </div>
                 </div>
-            
+
                 <ul className="timeline">
                     <li className="time-label">
                       <span className="bg-green">
                         <a className="btn btn-success pull-right" onClick={this.run}><i className="fa fa-fw fa-play" /> Play</a>
                       </span>
                     </li>
-                    {/*<li v-for="item in uiStack">
-                        <i v-if="item.component != 'search'" className="fa fa-play bg-blue" @click.prevent="run(item.index)" />
-            
-                        <div className="timeline-item" :className="{'bg-green': item.active, 'component':(item.component != 'search')}">
+                    {uiStack.map((item, i) => (
+                    <li key={i}>
+                        {item.component !== 'search' && (
+                            <i className="fa fa-play bg-blue" onClick={this.run(item.index)} />
+                        )}
+
+                        <div className={"timeline-item" + (item.active ? ' bg-green' : '') + (item.component !== 'search' ? ' component' : '')}>
                             <div className="timeline-body">
-                                <div :is="item.component" :bus="item.bus"
+                                <UiComponent tag={item.component} />
+                                {/*<div :is="item.component" :bus="item.bus"
                                      @push="onPushFlow(arguments[0], item.index)"
                                      @pop="onPopFlow(item.index)"
                                      @update="onUpdateFlow(arguments[0], item.index)"
-                                >
-                                </div>
+                                />*/}
                             </div>
                         </div>
-                    </li>*/}
+                    </li>
+                    ))}
                 </ul>
             </div>
         )
