@@ -1,4 +1,4 @@
-//import CoreJavascript from './core/javascript/index.js';
+import CoreJavascript from './core/javascript/index.js';
 //import CoreAssets from './core/assets/index.js';
 //import CoreText from './core/text/index.js';
 //import CoreSocketIO from './core/socketio/index.js';
@@ -19,12 +19,5 @@
 //};
 
 export default {
-    'core-javascript': 'ee',
-    'core-assets': 'ee',
-    'core-text': 'ee',
-    'core-socketio': 'ee',
-    'ui-checkboxes': 'ee',
-    'ui-object': 'ee',
-    'ui-select': 'ee',
-    'ui-textlist': 'ee',
+    'core-javascript': CoreJavascript,
 }
