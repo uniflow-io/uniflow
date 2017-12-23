@@ -43,7 +43,6 @@ export default class Search extends Component {
         const { search } = this.state
 
         return (
-            <div>search
             <form className="form-horizontal" onSubmit={this.onSubmit}>
                 <div className="form-group">
                     <label htmlFor="search{{ _uid }}" className="col-sm-2 control-label">Component</label>
@@ -64,7 +63,6 @@ export default class Search extends Component {
                     </div>
                 </div>
             </form>
-            </div>
         )
     }
 }
