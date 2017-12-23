@@ -17,10 +17,13 @@
     "dependencies": {
       "ace": "github:ajaxorg/ace-builds@^1.2.9",
       "history": "npm:history@^4.7.2",
+      "jquery": "npm:jquery@^3.2.1",
+      "jquery-ui": "npm:jquery-ui@^1.12.1",
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
       "react-dom": "npm:react-dom@^16.2.0",
-      "react-router-dom": "npm:react-router-dom@^4.2.2"
+      "react-router-dom": "npm:react-router-dom@^4.2.2",
+      "tag-it": "npm:tag-it@^2.0.0"
     },
     "devDependencies": {
       "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@^6.24.1",
@@ -87,6 +90,9 @@
           "test.js"
         ]
       },
+      "npm:jquery@3.2.1": {
+        "format": "amd"
+      },
       "npm:lodash@4.17.4": {
         "map": {
           "buffer": "@empty",
@@ -101,6 +107,21 @@
       },
       "npm:safe-buffer@5.1.1": {
         "browser": "index.js"
+      },
+      "npm:tag-it@2.0.0": {
+        "format": "global",
+        "main": "js/tag-it.js",
+        "meta": {
+          "js/tag-it.js": {
+            "deps": [
+              "jquery",
+              "jquery-ui",
+              "jquery-ui/ui/widgets/autocomplete"
+            ],
+            "exports": "$",
+            "format": "global"
+          }
+        }
       }
     }
   }

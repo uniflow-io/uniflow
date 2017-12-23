@@ -46,6 +46,10 @@ export default class Show extends Component {
     }
     
     render() {
+        const tagsOptions = {
+            availableTags: ['coucou', 'dodo']
+        }
+
         return (
             <div>
                 <div className="box box-primary">
@@ -71,7 +75,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
             
                                 <div className="col-sm-10">
-                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value="" onChange={this.onUpdateTags} options="tagsOptions" placeholder="Tags" />
+                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value={this.state.history.tags} onChange={this.onUpdateTags} options={tagsOptions} placeholder="Tags" />
                                 </div>
                             </div>
             

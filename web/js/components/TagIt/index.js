@@ -1,71 +1,71 @@
 import React, { Component } from 'react'
-import ace from 'ace'
+import $ from 'jquery'
+import 'tag-it';
+//import 'aehlke/tag-it/css/jquery.tagit.css!';
+//import 'jquery-ui/themes/flick/jquery-ui.css!';
 
 type Props = {
     value: string,
-    width?: number,
-    height?: number,
-    mode?: string
+    options?: [],
 }
 
 export default class Ace extends Component<Props> {
     componentDidMount() {
         const {
             value,
-            mode
+            options
         } = this.props;
 
         this.silent = false;
 
-        //ace.config.set('basePath', '/js/libs/ace')
-        this.editor = ace.edit(this.container);
-        this.editor.$blockScrolling = Infinity;
-        if(value) {
-            this.editor.setValue(value, 1);
-        }
-        this.editor.on('change', (event) => {
-            if (this.props.onChange && !this.silent) {
-                const value = this.editor.getValue();
-                this.props.onChange(value, event);
-            }
-        });
-
-        let session = this.editor.getSession();
-        session.setUseSoftTabs(true);
-        session.setTabSize(2);
-
-        if(mode) {
-            session.setMode('ace/mode/' + mode);
-        }
+        $(this.container)
+            .val(value)
+            .tagit(options)
+            .on('change', (event) => {
+                if (this.props.onChange && !this.silent) {
+                    const value = $(this.container).tagit('assignedTags');
+                    this.props.onChange(value, event);
+                }
+            })
     }
 
     componentWillUnmount() {
-        this.editor.destroy();
-        this.editor = null;
+        $(this.container).off().tagit('destroy')
     }
 
     componentWillReceiveProps(nextProps) {
         const oldProps = this.props;
 
-        if (this.editor && this.editor.getValue() !== nextProps.value) {
-            // editor.setValue is a synchronous function call, change event is emitted before setValue return.
+        if(nextProps.value !== oldProps.value) {
             this.silent = true;
-            const pos = this.editor.session.selection.toJSON();
-            this.editor.setValue(nextProps.value, 1);
-            this.editor.session.selection.fromJSON(pos);
+
+            let tags = $(this.container).tagit('assignedTags'), i;
+
+            for (i = 0; i < nextProps.value.length; i++) {
+                if(tags.indexOf(nextProps.value[i]) === -1)
+                {
+                    $(this.container).tagit('createTag', nextProps.value[i]);
+                }
+            }
+
+            for (i = 0; i < tags.length; i++) {
+                if(nextProps.value.indexOf(tags[i]) === -1)
+                {
+                    $(this.container).tagit('removeTagByLabel', tags[i]);
+                }
+            }
+
             this.silent = false;
+        }
+
+        if(nextProps.options !== oldProps.options) {
+            $(this.container).tagit(nextProps.options)
         }
     }
 
     render() {
-        const { width, height } = this.props
-
         return (
-            <div ref={container => (this.container = container)}
-                 style={{
-                height: height ? height + 'px' : '100%',
-                width: width ? width + 'px' : '100%'
-            }} />
+            <input ref={container => (this.container = container)} />
         )
     }
 }
