@@ -11,12 +11,16 @@ export default class Show extends Component {
             tags: ['deed'],
             description: 'description',
             updated: moment()
-        }
+        },
+        fetchedId: null,
+        runIndex: null,
     }
 
     run = (event, index) => {
         event.preventDefault()
     }
+
+
 
     onUpdateTitle = (event) => {
         this.setState({history: {...this.state.history, ...{title: event.target.value}}})
@@ -46,9 +50,44 @@ export default class Show extends Component {
     }
     
     render() {
-        const tagsOptions = {
-            availableTags: ['coucou', 'dodo']
-        }
+        const history = (() => {
+            return this.state.history;
+        })()
+
+        const stack = (() => {
+            return this.state.stack;
+        })()
+
+        const uiStack = (() => {
+            let uiStack = [{
+                component: 'search',
+                index: 0
+            }];
+
+            for(let i = 0; i < stack.length; i ++) {
+                let item = stack[i];
+
+                uiStack.push({
+                    component: item.component,
+                    bus: item.bus,
+                    active: this.state.runIndex === i,
+                    index: i
+                });
+
+                uiStack.push({
+                    component: 'search',
+                    index: i + 1
+                });
+            }
+
+            return uiStack;
+        })()
+
+        const tagsOptions = (() => {
+            return {
+                availableTags: ['coucou', 'dodo']
+            }
+        })()
 
         return (
             <div>
@@ -67,7 +106,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 control-label">Title</label>
             
                                 <div className="col-sm-10">
-                                    <input type="text" className="form-control" id="info_title_{{ _uid }}" value={this.state.history.title} onChange={this.onUpdateTitle} placeholder="Title" />
+                                    <input type="text" className="form-control" id="info_title_{{ _uid }}" value={history.title} onChange={this.onUpdateTitle} placeholder="Title" />
                                 </div>
                             </div>
             
@@ -75,7 +114,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
             
                                 <div className="col-sm-10">
-                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value={this.state.history.tags} onChange={this.onUpdateTags} options={tagsOptions} placeholder="Tags" />
+                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}" value={history.tags} onChange={this.onUpdateTags} options={tagsOptions} placeholder="Tags" />
                                 </div>
                             </div>
             
@@ -83,7 +122,7 @@ export default class Show extends Component {
                                 <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 control-label">Description</label>
             
                                 <div className="col-sm-10">
-                                    <Ace className="form-control" id="info_description_{{ _uid }}" value={this.state.history.description} onChange={this.onUpdateDescription} placeholder="Text" height="200" />
+                                    <Ace className="form-control" id="info_description_{{ _uid }}" value={history.description} onChange={this.onUpdateDescription} placeholder="Text" height="200" />
                                 </div>
                             </div>
             
