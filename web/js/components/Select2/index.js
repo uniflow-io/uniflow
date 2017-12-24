@@ -9,7 +9,7 @@ type Props = {
     children: ({}) => React.Component
 }
 
-export default class Ace extends Component<Props> {
+export default class Select2 extends Component<Props> {
     componentDidMount() {
         const {
             value,
@@ -23,7 +23,7 @@ export default class Ace extends Component<Props> {
             .select2({ data: options })
             .on('change', (event) => {
                 if (this.props.onChange && !this.silent) {
-                    const value = this.value;
+                    const value = $(event.currentTarget).val();
                     this.props.onChange(value, event);
                 }
             })

@@ -9,7 +9,7 @@ type Props = {
     options?: [],
 }
 
-export default class Ace extends Component<Props> {
+export default class TagIt extends Component<Props> {
     componentDidMount() {
         const {
             value,
