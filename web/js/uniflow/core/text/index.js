@@ -52,8 +52,8 @@ export default class CoreText extends Component<Props> {
         this.setState({variable: variable, text: text})
     }
 
-    onChangeVariable = (variable) => {
-        this.setState({variable: variable})
+    onChangeVariable = (event) => {
+        this.setState({variable: event.target.value})
 
         this.onUpdate()
     }
@@ -79,11 +79,11 @@ export default class CoreText extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        if(this.variable) {
-            if(runner.hasValue(this.variable)) {
-                this.text = runner.getValue(this.variable);
+        if(this.state.variable) {
+            if(runner.hasValue(this.state.variable)) {
+                this.state.text = runner.getValue(this.state.variable);
             } else {
-                runner.setValue(this.variable, this.text);
+                runner.setValue(this.state.variable, this.state.text);
             }
         }
     }
