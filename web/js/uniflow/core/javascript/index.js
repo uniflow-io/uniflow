@@ -6,9 +6,18 @@ type Props = {
     bus: Bus
 }
 
+let id = 1
+
 export default class CoreJavascript extends Component<Props> {
     state = {
         code: ''
+    }
+
+    constructor(props) {
+        super(props)
+
+        this.id = id
+        id++
     }
 
     componentDidMount() {
@@ -27,12 +36,26 @@ export default class CoreJavascript extends Component<Props> {
         bus.off('execute', this.onExecute);
     }
 
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if(nextProps.bus !== oldProps.bus) {
+            oldProps.bus.off('reset', this.deserialise);
+            oldProps.bus.off('compile', this.onCompile);
+            oldProps.bus.off('execute', this.onExecute);
+
+            nextProps.bus.on('reset', this.deserialise);
+            nextProps.bus.on('compile', this.onCompile);
+            nextProps.bus.on('execute', this.onExecute);
+        }
+    }
+
     serialise = () => {
         return this.state.code
     }
 
     deserialise = (data) => {
-        this.state.code = data || ''
+        this.setState({code: data || ''})
     }
 
     onChange = (code) => {
@@ -66,7 +89,7 @@ export default class CoreJavascript extends Component<Props> {
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Javascript</h3>
+                        <h3 className="box-title">Javascript {this.id}</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>

@@ -40,12 +40,12 @@ export default class Show extends Component {
     }
 
     setFlow = (stack) => {
-        this.setState({stack: stack})
-
-        for(let i = 0; i < stack.length; i ++) {
-            let item = stack[i];
-            item.bus.emit('reset', item.data);
-        }
+        this.setState({stack: stack}, () => {
+            for(let i = 0; i < stack.length; i ++) {
+                let item = stack[i];
+                item.bus.emit('reset', item.data);
+            }
+        })
     }
 
     onPushFlow = (component, index) => {
