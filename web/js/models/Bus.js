@@ -5,4 +5,3 @@ export default class Bus extends EventEmitter {
         this.removeListener(eventName, listener)
     }
 }
-    

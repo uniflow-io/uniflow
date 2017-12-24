@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Ace } from 'uniflow/components/index'
-import Bus from 'uniflow/utils/Bus'
+import { Bus } from 'uniflow/models/index'
 
 type Props = {
     bus: Bus
