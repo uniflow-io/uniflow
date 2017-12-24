@@ -11,11 +11,13 @@ class UiComponent extends Component {
     })
 
     render() {
-        const TagName = this.components[this.props.tag || 'foo'];
-        return <TagName bus={this.props.bus}
-                        onPush={this.props.onPush}
-                        onPop={this.props.onPop}
-                        onUpdate={this.props.onUpdate} />
+        const { tag, bus, onPush, onPop, onUpdate} = this.props
+        const TagName = this.components[tag];
+
+        return <TagName bus={bus}
+                        onPush={onPush}
+                        onPop={onPop}
+                        onUpdate={onUpdate} />
     }
 }
 
@@ -38,7 +40,12 @@ export default class Show extends Component {
     }
 
     setFlow = (stack) => {
+        this.setState({stack: stack})
 
+        for(let i = 0; i < stack.length; i ++) {
+            let item = stack[i];
+            item.bus.emit('reset', item.data);
+        }
     }
 
     onPushFlow = (component, index) => {
@@ -61,6 +68,9 @@ export default class Show extends Component {
     }
 
     onUpdateFlow = (data, index) => {
+        this.state.stack[index].data = data;
+        this.setState({stack: this.state.stack})
+
         this.onUpdateFlowData()
     }
 

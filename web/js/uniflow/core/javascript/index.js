@@ -32,7 +32,7 @@ export default class CoreJavascript extends Component<Props> {
     }
 
     deserialise = (data) => {
-        this.state.code = data
+        this.state.code = data || ''
     }
 
     onChange = (code) => {
