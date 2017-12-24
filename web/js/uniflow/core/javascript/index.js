@@ -80,7 +80,7 @@ export default class CoreJavascript extends Component<Props> {
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Javascript {this.id}</h3>
+                        <h3 className="box-title">Javascript</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>

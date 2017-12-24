@@ -1,6 +1,6 @@
 import CoreJavascript from './core/javascript/index.js';
 //import CoreAssets from './core/assets/index.js';
-//import CoreText from './core/text/index.js';
+import CoreText from './core/text/index.js';
 //import CoreSocketIO from './core/socketio/index.js';
 //import UICheckBoxes from './ui/checkboxes/index.js';
 //import UIObject from './ui/object/index.js';
@@ -20,4 +20,5 @@ import CoreJavascript from './core/javascript/index.js';
 
 export default {
     'core-javascript': CoreJavascript,
+    'core-text': CoreText,
 }
