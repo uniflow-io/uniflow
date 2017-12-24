@@ -40,7 +40,106 @@ export default class Show extends Component {
     }
 
     run = (event, index) => {
-        //event.preventDefault()
+        event.preventDefault()
+
+        let indexes = [];
+        if(index === undefined) {
+            for(let i = 0; i < this.state.stack.length; i ++) {
+                indexes.push(i);
+            }
+        } else {
+            indexes.push(index);
+        }
+
+        //get polyfill
+        /*if(cachedPolyfillJS) return cachedPolyfillJS;
+
+         return axios.get('/js/libs/babel-polyfill.min.js')
+         .then(function(response) {
+         cachedPolyfillJS = response.data;
+
+         return cachedPolyfillJS;
+         })*/
+
+        let interpreter = new Interpreter('', (interpreter, scope) => {
+            let initConsole = function() {
+                let consoleObj = interpreter.createObject(interpreter.OBJECT);
+                interpreter.setProperty(scope, 'console', consoleObj);
+
+                let wrapper = function(value) {
+                    let nativeObj = interpreter.pseudoToNative(value);
+                    return interpreter.createPrimitive(console.log(nativeObj));
+                };
+                interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
+            };
+            initConsole.call(interpreter);
+
+            indexes.reduce((stack, index) => {
+                stack[index].bus.emit('compile', interpreter, scope);
+
+                return stack
+            }, this.state.stack);
+        });
+
+        let runner = {
+            hasValue: function (variable) {
+                let scope = interpreter.getScope();
+                let nameStr = variable.toString();
+                while (scope) {
+                    if (nameStr in scope.properties) {
+                        return true;
+                    }
+                    scope = scope.parentScope;
+                }
+
+                return false;
+            },
+            getValue: function (variable) {
+                return interpreter.pseudoToNative(interpreter.getValueFromScope(variable));
+            },
+            setValue: function (variable, value) {
+                return interpreter.setValueToScope(variable, interpreter.nativeToPseudo(value));
+            },
+            eval: function (code) {
+                if(code === undefined) return;
+
+                let babelCode = Babel.transform(code, {
+                    presets: [
+                        'es2015',
+                        'es2015-loose',
+                        'es2016',
+                        'es2017',
+                        'latest',
+                        'react',
+                        'stage-0',
+                        'stage-1',
+                        'stage-2',
+                        'stage-3'
+                    ],
+                    filename: 'repl',
+                    babelrc: false,
+                });
+
+                interpreter.appendCode(babelCode.code);
+
+                return interpreter.run();
+            }
+        };
+
+        return indexes.reduce((promise, index) => {
+            return promise
+                .then(() => {
+                    return new Promise((resolve) => {
+                        this.setState({runIndex: index}, resolve);
+                    });
+                }).then(() => {
+                    return this.state.stack[index].bus.emit('execute', runner);
+                }).then(() => {
+                    return new Promise((resolve) => {
+                        this.setState({runIndex: null}, resolve);
+                    });
+                });
+        }, Promise.resolve());
     }
 
     setFlow = (stack) => {
@@ -203,7 +302,7 @@ export default class Show extends Component {
                     {uiStack.map((item, i) => (
                     <li key={i}>
                         {item.component !== 'search' && (
-                            <i className="fa fa-play bg-blue" onClick={this.run(item.index)} />
+                            <i className="fa fa-play bg-blue" onClick={(event) => {this.run(event, item.index)}} />
                         )}
 
                         <div className={"timeline-item" + (item.active ? ' bg-green' : '') + (item.component !== 'search' ? ' component' : '')}>

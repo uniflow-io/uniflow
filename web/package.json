@@ -155,6 +155,9 @@
       "github:NeilFraser/JS-Interpreter@master": {
         "main": "interpreter.js",
         "meta": {
+          "acorn.js": {
+            "exports": "acorn"
+          },
           "interpreter.js": {
             "deps": ["github:NeilFraser/JS-Interpreter@master/acorn"],
             "exports": "Interpreter"
