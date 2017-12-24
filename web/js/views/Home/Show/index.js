@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import Interpreter from 'acorn-interpreter'
-import {Babel} from 'babel'
+import { transform } from 'babel'
 import _ from 'lodash'
 import axios from 'axios'
 import { Ace, TagIt } from 'uniflow/components/index'
@@ -103,7 +103,7 @@ export default class Show extends Component {
             eval: function (code) {
                 if(code === undefined) return;
 
-                let babelCode = Babel.transform(code, {
+                /*let babelCode = transform(code, {
                     presets: [
                         'es2015',
                         'es2015-loose',
@@ -120,7 +120,9 @@ export default class Show extends Component {
                     babelrc: false,
                 });
 
-                interpreter.appendCode(babelCode.code);
+                interpreter.appendCode(babelCode.code);*/
+
+                interpreter.appendCode(code);
 
                 return interpreter.run();
             }

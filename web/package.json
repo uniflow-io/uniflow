@@ -159,7 +159,9 @@
             "exports": "acorn"
           },
           "interpreter.js": {
-            "deps": ["github:NeilFraser/JS-Interpreter@master/acorn"],
+            "deps": [
+              "github:NeilFraser/JS-Interpreter@master/acorn"
+            ],
             "exports": "Interpreter"
           }
         }
