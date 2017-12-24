@@ -6,18 +6,9 @@ type Props = {
     bus: Bus
 }
 
-let id = 1
-
 export default class CoreJavascript extends Component<Props> {
     state = {
         code: ''
-    }
-
-    constructor(props) {
-        super(props)
-
-        this.id = id
-        id++
     }
 
     componentDidMount() {
