@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Ace } from 'uniflow/components/index'
+import Bus from 'uniflow/utils/Bus'
 
 type Props = {
-    bus: Object
+    bus: Bus
 }
 
 export default class CoreJavascript extends Component<Props> {
@@ -10,12 +11,52 @@ export default class CoreJavascript extends Component<Props> {
         code: ''
     }
 
+    componentDidMount() {
+        const { bus } = this.props
+
+        bus.on('reset', this.deserialise);
+        bus.on('compile', this.onCompile);
+        bus.on('execute', this.onExecute);
+    }
+
+    componentWillUnmount() {
+        const { bus } = this.props
+
+        bus.off('reset', this.deserialise);
+        bus.off('compile', this.onCompile);
+        bus.off('execute', this.onExecute);
+    }
+
+    serialise = () => {
+        return this.state.code
+    }
+
+    deserialise = (data) => {
+        this.state.code = data
+    }
+
     onChange = (code) => {
         this.setState({code: code})
+
+        this.onUpdate()
+    }
+
+    onUpdate = () => {
+        this.props.onUpdate(this.serialise())
     }
 
     onDelete = (event) => {
         event.preventDefault()
+
+        this.props.onPop()
+    }
+
+    onCompile = (interpreter, scope) => {
+
+    }
+
+    onExecute = (runner) => {
+        runner.eval(this.state.code)
     }
 
     render() {

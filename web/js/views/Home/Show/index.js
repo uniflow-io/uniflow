@@ -3,6 +3,7 @@ import moment from 'moment'
 import { Ace, TagIt } from 'uniflow/components/index'
 import Search from './Search/index'
 import components from 'uniflow/uniflow/components';
+import Bus from 'uniflow/utils/Bus'
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {
@@ -43,7 +44,7 @@ export default class Show extends Component {
     onPushFlow = (component, index) => {
         this.state.stack.splice(index, 0, {
             component: component,
-            bus: {}
+            bus: new Bus()
         })
         this.setState({stack: this.state.stack})
 
@@ -52,8 +53,8 @@ export default class Show extends Component {
     }
 
     onPopFlow = (index) => {
-        /*this.state.stack.splice(index, 1)
-        this.setState({stack: this.state.stack})*/
+        this.state.stack.splice(index, 1)
+        this.setState({stack: this.state.stack})
 
         this.setFlow(this.state.stack);
         this.onUpdateFlowData()
@@ -195,7 +196,7 @@ export default class Show extends Component {
                             <div className="timeline-body">
                                 <UiComponent tag={item.component} bus={item.bus}
                                              onPush={(component) => {this.onPushFlow(component, item.index)}}
-                                             onPop={this.onPopFlow(item.index)}
+                                             onPop={() => {this.onPopFlow(item.index)}}
                                              onUpdate={(data) => {this.onUpdateFlow(data, item.index)}} />
                             </div>
                         </div>

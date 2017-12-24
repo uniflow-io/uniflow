@@ -91,7 +91,7 @@ SystemJS.config({
         "constants": "npm:jspm-nodelibs-constants@0.2.1",
         "crypto": "npm:jspm-nodelibs-crypto@0.2.1",
         "domain": "npm:jspm-nodelibs-domain@0.2.1",
-        "events": "npm:jspm-nodelibs-events@0.2.2",
+        "events": "github:jspm/nodelibs-events@0.2.2",
         "fs": "npm:jspm-nodelibs-fs@0.2.1",
         "history": "npm:history@4.7.2",
         "http": "npm:jspm-nodelibs-http@0.2.0",
