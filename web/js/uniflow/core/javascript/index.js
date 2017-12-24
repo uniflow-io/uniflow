@@ -7,7 +7,7 @@ type Props = {
 
 export default class CoreJavascript extends Component<Props> {
     state = {
-        code: null
+        code: ''
     }
 
     onChange = (code) => {
