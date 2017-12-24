@@ -17,7 +17,7 @@ export default class Ace extends Component<Props> {
 
         this.silent = false;
 
-        //ace.config.set('basePath', '/js/libs/ace')
+        ace.config.set('basePath', '/jspm_packages/github/ajaxorg/ace-builds@1.2.9')
         this.editor = ace.edit(this.container);
         this.editor.$blockScrolling = Infinity;
         if(value) {
