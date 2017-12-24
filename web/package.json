@@ -16,9 +16,13 @@
     "main": "index.js",
     "dependencies": {
       "ace": "github:ajaxorg/ace-builds@^1.2.9",
+      "acorn-interpreter": "github:NeilFraser/JS-Interpreter@master",
+      "axios": "npm:axios@^0.17.1",
+      "babel": "npm:babel-core@^6.26.0",
       "history": "npm:history@^4.7.2",
       "jquery": "npm:jquery@^3.2.1",
       "jquery-ui": "npm:jquery-ui@^1.12.1",
+      "lodash": "npm:lodash@^4.17.4",
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
       "react-dom": "npm:react-dom@^16.2.0",
@@ -39,16 +43,18 @@
       "constants": "npm:jspm-nodelibs-constants@^0.2.0",
       "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
       "domain": "npm:jspm-nodelibs-domain@^0.2.0",
-      "events": "github:jspm/nodelibs-events@^0.2.2",
+      "events": "npm:jspm-nodelibs-events@^0.2.0",
       "fs": "npm:jspm-nodelibs-fs@^0.2.0",
       "http": "npm:jspm-nodelibs-http@^0.2.0",
       "https": "npm:jspm-nodelibs-https@^0.2.0",
+      "module": "npm:jspm-nodelibs-module@^0.2.0",
       "os": "npm:jspm-nodelibs-os@^0.2.0",
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "npm:jspm-nodelibs-process@^0.2.0",
       "react": "npm:react@^16.0.0",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
+      "tty": "npm:jspm-nodelibs-tty@^0.2.0",
       "url": "npm:jspm-nodelibs-url@^0.2.0",
       "util": "npm:jspm-nodelibs-util@^0.2.0",
       "vm": "npm:jspm-nodelibs-vm@^0.2.0",
@@ -91,6 +97,23 @@
           "_stream_transform": "readable-stream/transform"
         }
       },
+      "npm:debug@2.6.9": {
+        "main": "src/browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./src/browser.js": {
+            "node": "./src/node.js"
+          },
+          "./node.js": {
+            "browser": "./src/browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
       "npm:inherits@2.0.3": {
         "ignore": [
           "test.js"
@@ -126,6 +149,15 @@
             ],
             "exports": "$",
             "format": "global"
+          }
+        }
+      },
+      "github:NeilFraser/JS-Interpreter@master": {
+        "main": "interpreter.js",
+        "meta": {
+          "interpreter.js": {
+            "deps": ["github:NeilFraser/JS-Interpreter@master/acorn"],
+            "exports": "Interpreter"
           }
         }
       }
