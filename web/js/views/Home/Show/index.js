@@ -11,7 +11,10 @@ class UiComponent extends Component {
 
     render() {
         const TagName = this.components[this.props.tag || 'foo'];
-        return <TagName />
+        return <TagName bus={this.props.bus}
+                        onPush={this.props.onPush}
+                        onPop={this.props.onPop}
+                        onUpdate={this.props.onUpdate} />
     }
 }
 
@@ -30,7 +33,42 @@ export default class Show extends Component {
     }
 
     run = (event, index) => {
-        event.preventDefault()
+        //event.preventDefault()
+    }
+
+    setFlow = (stack) => {
+
+    }
+
+    onPushFlow = (component, index) => {
+        this.state.stack.splice(index, 0, {
+            component: component,
+            bus: {}
+        })
+        this.setState({stack: this.state.stack})
+
+        this.setFlow(this.state.stack);
+        this.onUpdateFlowData()
+    }
+
+    onPopFlow = (index) => {
+        /*this.state.stack.splice(index, 1)
+        this.setState({stack: this.state.stack})*/
+
+        this.setFlow(this.state.stack);
+        this.onUpdateFlowData()
+    }
+
+    onUpdateFlow = (data, index) => {
+        this.onUpdateFlowData()
+    }
+
+    onFetchFlowData = () => {
+
+    }
+
+    onUpdateFlowData = () => {
+
     }
 
     onUpdateTitle = (event) => {
@@ -155,12 +193,10 @@ export default class Show extends Component {
 
                         <div className={"timeline-item" + (item.active ? ' bg-green' : '') + (item.component !== 'search' ? ' component' : '')}>
                             <div className="timeline-body">
-                                <UiComponent tag={item.component} />
-                                {/*<div :is="item.component" :bus="item.bus"
-                                     @push="onPushFlow(arguments[0], item.index)"
-                                     @pop="onPopFlow(item.index)"
-                                     @update="onUpdateFlow(arguments[0], item.index)"
-                                />*/}
+                                <UiComponent tag={item.component} bus={item.bus}
+                                             onPush={(component) => {this.onPushFlow(component, item.index)}}
+                                             onPop={this.onPopFlow(item.index)}
+                                             onUpdate={(data) => {this.onUpdateFlow(data, item.index)}} />
                             </div>
                         </div>
                     </li>
