@@ -96,7 +96,9 @@ SystemJS.config({
         "process": "npm:jspm-nodelibs-process@0.2.1",
         "react": "npm:react@16.2.0",
         "react-dom": "npm:react-dom@16.2.0",
+        "react-redux": "npm:react-redux@5.0.6",
         "react-router-dom": "npm:react-router-dom@4.2.2",
+        "redux": "npm:redux@3.7.2",
         "select2": "github:select2/select2@4.0.5",
         "stream": "npm:jspm-nodelibs-stream@0.2.1",
         "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.2",
@@ -702,6 +704,24 @@ SystemJS.config({
         "npm:debug@3.1.0": {
             "map": {
                 "ms": "npm:ms@2.0.0"
+            }
+        },
+        "npm:redux@3.7.2": {
+            "map": {
+                "loose-envify": "npm:loose-envify@1.3.1",
+                "lodash-es": "npm:lodash-es@4.17.4",
+                "lodash": "npm:lodash@4.17.4",
+                "symbol-observable": "npm:symbol-observable@1.1.0"
+            }
+        },
+        "npm:react-redux@5.0.6": {
+            "map": {
+                "invariant": "npm:invariant@2.2.2",
+                "lodash": "npm:lodash@4.17.4",
+                "loose-envify": "npm:loose-envify@1.3.1",
+                "lodash-es": "npm:lodash-es@4.17.4",
+                "prop-types": "npm:prop-types@15.6.0",
+                "hoist-non-react-statics": "npm:hoist-non-react-statics@2.3.1"
             }
         }
     }

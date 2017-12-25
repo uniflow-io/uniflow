@@ -26,6 +26,7 @@
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
       "react-dom": "npm:react-dom@^16.2.0",
+      "react-redux": "npm:react-redux@^5.0.6",
       "react-router-dom": "npm:react-router-dom@^4.2.2",
       "select2": "github:select2/select2@^4.0.5",
       "tag-it": "npm:tag-it@^2.0.0"
@@ -52,6 +53,7 @@
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "npm:jspm-nodelibs-process@^0.2.0",
       "react": "npm:react@^16.0.0",
+      "redux": "npm:redux@^3.7.2",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
       "tty": "npm:jspm-nodelibs-tty@^0.2.0",
