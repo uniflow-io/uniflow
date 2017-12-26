@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {pathTo} from 'uniflow/routes'
-import moment from 'moment'
 import {connect} from 'react-redux'
 import {createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
-
-let id = 1;
 
 class History extends Component {
     state = {
@@ -19,23 +16,15 @@ class History extends Component {
     onSubmit = (event) => {
         event.preventDefault();
 
-        this.props.dispatch(createHistory())
+        this.props
+            .dispatch(createHistory({
+                'title': this.state.search,
+                'tags': [],
+                'description': ''
+            }))
             .then((item) => {
                 return this.props.dispatch(setCurrentHistory(item.id))
             })
-
-        let item = {}
-        item[id] = {
-            id: id,
-            title: this.state.search,
-            tags: ['deed'],
-            description: 'description',
-            updated: moment()
-        }
-
-        this.setState({items: {...this.state.items, ...item}})
-
-        id++;
     }
 
     render() {
