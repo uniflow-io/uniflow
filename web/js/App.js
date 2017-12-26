@@ -5,13 +5,17 @@ import {
     Link
 } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import thunk from 'redux-thunk';
+import { createStore, applyMiddleware } from 'redux'
 //import createBrowserHistory from 'history/createBrowserHistory'
 import routes from './routes'
 import reducers from './reducers/index'
 
 //const history = createBrowserHistory()
-let store = createStore(reducers)
+let store = createStore(
+    reducers,
+    applyMiddleware(thunk)
+)
 
 export default () => (
     <Provider store={store}>

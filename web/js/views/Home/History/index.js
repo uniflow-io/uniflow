@@ -2,14 +2,14 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {pathTo} from 'uniflow/routes'
 import moment from 'moment'
+import {connect} from 'react-redux'
+import {createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
 
 let id = 1;
 
-export default class History extends Component {
+class History extends Component {
     state = {
-        search: '',
-        items: {},
-        current: null
+        search: ''
     }
 
     onChange = (event) => {
@@ -18,6 +18,11 @@ export default class History extends Component {
 
     onSubmit = (event) => {
         event.preventDefault();
+
+        this.props.dispatch(createHistory())
+            .then((item) => {
+                return this.props.dispatch(setCurrentHistory(item.id))
+            })
 
         let item = {}
         item[id] = {
@@ -34,36 +39,36 @@ export default class History extends Component {
     }
 
     render() {
-        const filteredHistory = (state) => {
-            let keys = Object.keys(state.items);
+        const filteredHistory = (history) => {
+            let keys = Object.keys(history.items);
 
-            if (state.search) {
+            if (this.state.search) {
                 keys = keys.filter((key) => {
-                    let item  = state.items[key];
+                    let item  = history.items[key];
                     let words = item.title;
-                    for(let i = 0; i < item.tags.length; i++) {
+                    for (let i = 0; i < item.tags.length; i++) {
                         words += ' ' + item.tags[i];
                     }
                     words = words.toLowerCase();
 
-                    return words.indexOf(state.search) !== -1;
+                    return words.indexOf(this.state.search) !== -1;
                 });
             }
 
             keys.sort((keyA, keyB) => {
-                let itemA = state.items[keyA],
-                    itemB = state.items[keyB];
+                let itemA = history.items[keyA],
+                    itemB = history.items[keyB];
 
                 return itemB.updated.diff(itemA.updated);
             });
 
             return keys.map((key) => {
-                return state.items[key];
+                return history.items[key];
             });
         }
 
-        const isActive = (state, item) => {
-            return (state.current && state.current.id === item.id) ? 'active' : ''
+        const isActive = (history, item) => {
+            return (history.current === item.id) ? 'active' : ''
         }
 
         return (
@@ -96,8 +101,8 @@ export default class History extends Component {
                                         </div>
                                     </form>
                                 </li>
-                                {filteredHistory(this.state).map((item, i) => (
-                                    <li className={isActive(this.state, item)} key={i}>
+                                {filteredHistory(this.props.history).map((item, i) => (
+                                    <li className={isActive(this.props.history, item)} key={i}>
                                         <Link
                                             to={pathTo('homeDetail', {id: item.id})}>{item.title} {item.tags.map((tag, j) => (
                                             <span key={j} className="badge">{tag}</span>
@@ -113,3 +118,7 @@ export default class History extends Component {
         )
     }
 }
+
+export default connect(state => ({
+    history: state.history
+}))(History)

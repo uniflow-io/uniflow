@@ -99,6 +99,7 @@ SystemJS.config({
         "react-redux": "npm:react-redux@5.0.6",
         "react-router-dom": "npm:react-router-dom@4.2.2",
         "redux": "npm:redux@3.7.2",
+        "redux-thunk": "npm:redux-thunk@2.2.0",
         "select2": "github:select2/select2@4.0.5",
         "stream": "npm:jspm-nodelibs-stream@0.2.1",
         "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.2",
