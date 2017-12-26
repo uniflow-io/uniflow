@@ -1,12 +1,11 @@
+import request from 'axios'
+import serverService from 'uniflow/services/server'
+import History from 'uniflow/models/History'
 import {
     CLEAR_HISTORY,
-    FETCH_HISTORY,
-    CREATE_HISTORY,
     UPDATE_HISTORY,
     DELETE_HISTORY,
     SET_CURRENT_HISTORY,
-    GET_HISTORY_DATA,
-    SET_HISTORY_DATA,
 } from './actionsTypes'
 
 export const clearHistory = () => {
@@ -20,9 +19,22 @@ export const fetchHistory = () => {
     }
 }
 export const createHistory = (item) => {
-    return {
-        type: CREATE_HISTORY,
-        item
+    return (dispatch) => {
+        let data = {
+            title: item.title,
+            tags: item.tags,
+            description: item.description
+        };
+
+        return request
+            .post(serverService.getBaseUrl() + '/history/create', data)
+            .then((response) => {
+                let item = new History(response.data);
+
+                dispatch(updateHistory(item));
+
+                return item;
+            });
     }
 }
 export const updateHistory = (item) => {
