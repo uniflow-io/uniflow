@@ -1,33 +1,57 @@
 import {
-    PUSH_FLOW,
-    POP_FLOW,
-    UPDATE_FLOW,
-    SET_FLOW,
+    CLEAR_HISTORY,
+    FETCH_HISTORY,
+    CREATE_HISTORY,
+    UPDATE_HISTORY,
+    DELETE_HISTORY,
+    SET_CURRENT_HISTORY,
+    GET_HISTORY_DATA,
+    SET_HISTORY_DATA,
 } from './actionsTypes'
 
-export const pushFlow = (index, component) => {
+export const clearHistory = () => {
     return {
-        type: PUSH_FLOW,
-        index,
-        component
+        type: CLEAR_HISTORY
     }
 }
-export const popFlow = (index) => {
+export const fetchHistory = () => {
     return {
-        type: POP_FLOW,
-        index
+        type: FETCH_HISTORY
     }
 }
-export const updateFlow = (index, data) => {
+export const createHistory = (item) => {
     return {
-        type: UPDATE_FLOW,
-        index,
-        data
+        type: CREATE_HISTORY,
+        item
     }
 }
-export const setFlow = (stack) => {
+export const updateHistory = (item) => {
     return {
-        type: SET_FLOW,
-        stack
+        type: UPDATE_HISTORY,
+        item
+    }
+}
+export const deleteHistory = (item) => {
+    return {
+        type: DELETE_HISTORY,
+        item
+    }
+}
+export const setCurrentHistory = (current) => {
+    return {
+        type: SET_CURRENT_HISTORY,
+        current
+    }
+}
+export const getHistoryData = (item) => {
+    return {
+        type: GET_HISTORY_DATA,
+        item
+    }
+}
+export const setHistoryData = (item) => {
+    return {
+        type: SET_HISTORY_DATA,
+        item
     }
 }
