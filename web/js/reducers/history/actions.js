@@ -1,6 +1,7 @@
 import request from 'axios'
 import serverService from 'uniflow/services/server'
 import History from 'uniflow/models/History'
+import moment from 'moment'
 import {
     COMMIT_CLEAR_HISTORY,
     COMMIT_UPDATE_HISTORY,

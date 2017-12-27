@@ -322,4 +322,3 @@ export default class Show extends Component {
         )
     }
 }
-    
