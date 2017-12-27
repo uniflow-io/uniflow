@@ -1,8 +1,8 @@
 import {
-    CLEAR_HISTORY,
-    UPDATE_HISTORY,
-    DELETE_HISTORY,
-    SET_CURRENT_HISTORY,
+    COMMIT_CLEAR_HISTORY,
+    COMMIT_UPDATE_HISTORY,
+    COMMIT_DELETE_HISTORY,
+    COMMIT_SET_CURRENT_HISTORY,
 } from './actionsTypes'
 
 const defaultState = {
@@ -12,16 +12,26 @@ const defaultState = {
 
 const history = (state = defaultState, action) => {
     switch (action.type) {
-        case CLEAR_HISTORY:
-            return state;
-        case UPDATE_HISTORY:
-            return state;
-        case DELETE_HISTORY:
-            return state;
-        case SET_CURRENT_HISTORY:
-            context.commit('setCurrentHistory', current);
-
-            return Promise.resolve(current);
+        case COMMIT_CLEAR_HISTORY:
+            return {
+                ...state,
+                items: {}
+            }
+        case COMMIT_UPDATE_HISTORY:
+            state.items[action.item.id] = action.item
+            return {
+                ...state,
+            }
+        case COMMIT_DELETE_HISTORY:
+            delete state.items[action.item.id]
+            return {
+                ...state
+            }
+        case COMMIT_SET_CURRENT_HISTORY:
+            return {
+                ...state,
+                current: action.current
+            }
         default:
             return state
     }

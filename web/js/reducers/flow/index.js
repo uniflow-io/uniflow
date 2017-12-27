@@ -1,26 +1,26 @@
 import {
-    PUSH_FLOW,
-    POP_FLOW,
-    UPDATE_FLOW,
-    SET_FLOW,
+    COMMIT_PUSH_FLOW,
+    COMMIT_POP_FLOW,
+    COMMIT_UPDATE_FLOW,
+    COMMIT_SET_FLOW,
 } from './actionsTypes'
 
 const defaultState = []
 
 const flow = (state = defaultState, action) => {
     switch (action.type) {
-        case PUSH_FLOW:
+        case COMMIT_PUSH_FLOW:
             return [
                 ...state.splice(action.index, 0, {
                     component: action.component,
                     bus: new Vue()
                 })
             ]
-        case POP_FLOW:
+        case COMMIT_POP_FLOW:
             return [
                 ...state.splice(action.index, 1)
             ]
-        case UPDATE_FLOW:
+        case COMMIT_UPDATE_FLOW:
             return state.map((item, index) => {
                 if (index !== action.index) {
                     return item;
@@ -31,7 +31,7 @@ const flow = (state = defaultState, action) => {
                     ...action.data
                 };
             })
-        case SET_FLOW:
+        case COMMIT_SET_FLOW:
             return [
                 ...state
             ]

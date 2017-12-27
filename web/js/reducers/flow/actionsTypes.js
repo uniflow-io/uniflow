@@ -1,4 +1,4 @@
-export const PUSH_FLOW = 'PUSH_FLOW'
-export const POP_FLOW = 'POP_FLOW'
-export const UPDATE_FLOW = 'UPDATE_FLOW'
-export const SET_FLOW = 'SET_FLOW'
+export const COMMIT_PUSH_FLOW = 'COMMIT_PUSH_FLOW'
+export const COMMIT_POP_FLOW = 'COMMIT_POP_FLOW'
+export const COMMIT_UPDATE_FLOW = 'COMMIT_UPDATE_FLOW'
+export const COMMIT_SET_FLOW = 'COMMIT_SET_FLOW'

@@ -1,33 +1,33 @@
 import {
-    PUSH_FLOW,
-    POP_FLOW,
-    UPDATE_FLOW,
-    SET_FLOW,
+    COMMIT_PUSH_FLOW,
+    COMMIT_POP_FLOW,
+    COMMIT_UPDATE_FLOW,
+    COMMIT_SET_FLOW,
 } from './actionsTypes'
 
-export const pushFlow = (index, component) => {
+export const commitPushFlow = (index, component) => {
     return {
-        type: PUSH_FLOW,
+        type: COMMIT_PUSH_FLOW,
         index,
         component
     }
 }
-export const popFlow = (index) => {
+export const commitPopFlow = (index) => {
     return {
-        type: POP_FLOW,
+        type: COMMIT_POP_FLOW,
         index
     }
 }
-export const updateFlow = (index, data) => {
+export const commitUpdateFlow = (index, data) => {
     return {
-        type: UPDATE_FLOW,
+        type: COMMIT_UPDATE_FLOW,
         index,
         data
     }
 }
-export const setFlow = (stack) => {
+export const commitSetFlow = (stack) => {
     return {
-        type: SET_FLOW,
+        type: COMMIT_SET_FLOW,
         stack
     }
 }
