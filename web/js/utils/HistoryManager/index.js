@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
-import { withRouter, matchPath } from 'react-router'
+import {withRouter, matchPath} from 'react-router'
 import routes from 'uniflow/routes'
+import {pathTo} from 'uniflow/routes'
 
 type Props = {
     children: React.Node
@@ -10,7 +11,7 @@ type Props = {
 
 class HistoryManager extends Component<Props> {
     componentDidMount() {
-        const { location, history } = this.props
+        const {location, history} = this.props
 
         this.historyUnlisten = history.listen((location, action) => {
             const match = matchPath(location.pathname, {
@@ -18,7 +19,8 @@ class HistoryManager extends Component<Props> {
                 exact: true
             })
             if (match) {
-                this.props.dispatch(setCurrentHistory(parseInt(match.params.id)))
+                const current = parseInt(match.params.id)
+                this.props.dispatch(setCurrentHistory(current))
             }
         })
 
@@ -28,7 +30,8 @@ class HistoryManager extends Component<Props> {
                 exact: true
             })
             if (match) {
-                this.props.dispatch(setCurrentHistory(parseInt(match.params.id)))
+                const current = parseInt(match.params.id)
+                this.props.dispatch(setCurrentHistory(current))
             } else {
                 let keys = Object.keys(this.props.items)
 
@@ -42,6 +45,9 @@ class HistoryManager extends Component<Props> {
                 if (keys.length > 0) {
                     let item = this.props.items[keys[0]]
                     this.props.dispatch(setCurrentHistory(item.id))
+                        .then(() => {
+                            history.push(pathTo('homeDetail', {id: item.id}))
+                        })
                 }
             }
         })
