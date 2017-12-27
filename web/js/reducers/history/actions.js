@@ -56,7 +56,7 @@ export const fetchHistory = () => {
         return request
             .get(serverService.getBaseUrl() + '/history/list')
             .then((response) => {
-                dispatch(commitClearHistory(item));
+                dispatch(commitClearHistory());
 
                 for (let i = 0; i < response.data.length; i++) {
                     let item = new History(response.data[i]);

@@ -10,6 +10,7 @@ import { createStore, applyMiddleware } from 'redux'
 //import createBrowserHistory from 'history/createBrowserHistory'
 import routes from './routes'
 import reducers from './reducers/index'
+import HistoryManager from './utils/HistoryManager/index'
 
 //const history = createBrowserHistory()
 let store = createStore(
@@ -21,7 +22,7 @@ export default () => (
     <Provider store={store}>
         <HashRouter>
             <div>
-                <history-manager></history-manager>
+                <HistoryManager />
 
                 <div className="wrapper">
 
