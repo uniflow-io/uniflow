@@ -13,7 +13,7 @@ class HistoryManager extends Component<Props> {
     componentDidMount() {
         const {location, history} = this.props
 
-        this.historyUnlisten = history.listen((location, action) => {
+        this.historyUnlisten = history.listen((location) => {
             const match = matchPath(location.pathname, {
                 path: routes.homeDetail.path,
                 exact: true
