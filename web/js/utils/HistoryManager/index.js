@@ -58,7 +58,6 @@ class HistoryManager extends Component<Props> {
 
 export default connect(state => {
     return {
-        items: state.history.items,
-        current: state.history.current
+        items: state.history.items
     }
 })(withRouter(HistoryManager))
