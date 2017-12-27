@@ -1,8 +1,10 @@
 import React from 'react'
 import History from './History/index'
 import Show from './Show/index'
+import {getCurrentHistory} from 'uniflow/reducers/history/actions'
+import {connect} from 'react-redux'
 
-export default () => (
+const Home = (props) => (
     <div id="home" className="content-wrapper">
         {/* Content Header (Page header) */}
         <section className="content-header">
@@ -26,7 +28,9 @@ export default () => (
                 </div>
                 <div className="col-sm-10">
 
-                    <Show v-if="history" />
+                    {props.history && (
+                        <Show />
+                    )}
 
                 </div>
             </div>
@@ -34,3 +38,9 @@ export default () => (
         {/* /.content */}
     </div>
 )
+
+export default connect(state => {
+    return {
+        history: getCurrentHistory(state.history)
+    }
+})(Home)

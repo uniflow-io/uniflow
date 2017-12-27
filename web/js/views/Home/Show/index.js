@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import moment from 'moment'
 import Interpreter from 'acorn-interpreter'
 import { transform } from 'babel'
 import _ from 'lodash'
@@ -8,6 +7,8 @@ import { Ace, TagIt } from 'uniflow/components/index'
 import { Bus } from 'uniflow/models/index'
 import Search from './Search/index'
 import components from 'uniflow/uniflow/components';
+import {getCurrentHistory} from 'uniflow/reducers/history/actions'
+import {connect} from 'react-redux'
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {
@@ -25,18 +26,14 @@ class UiComponent extends Component {
     }
 }
 
-export default class Show extends Component {
+class Show extends Component {
     state = {
-        stack: [],
-        history: {
-            id: 1,
-            title: 'sample',
-            tags: ['deed'],
-            description: 'description',
-            updated: moment()
-        },
         fetchedId: null,
         runIndex: null,
+    }
+
+    componentDidMount() {
+        this.onFetchFlowData()
     }
 
     run = (event, index) => {
@@ -216,11 +213,11 @@ export default class Show extends Component {
 
     render() {
         const history = (() => {
-            return this.state.history;
+            return this.props.history;
         })()
 
         const stack = (() => {
-            return this.state.stack;
+            return this.props.stack;
         })()
 
         const uiStack = (() => {
@@ -229,8 +226,8 @@ export default class Show extends Component {
                 index: 0
             }];
 
-            for(let i = 0; i < stack.length; i ++) {
-                let item = stack[i];
+            for(let i = 0; i < this.props.stack.length; i ++) {
+                let item = this.props.stack[i];
 
                 uiStack.push({
                     component: item.component,
@@ -322,3 +319,10 @@ export default class Show extends Component {
         )
     }
 }
+
+export default connect(state => {
+    return {
+        history: getCurrentHistory(state.history),
+        stack: state.flow
+    }
+})(Show)
