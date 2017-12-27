@@ -12,6 +12,16 @@ class HistoryManager extends Component<Props> {
     componentDidMount() {
         const { location, history } = this.props
 
+        this.historyUnlisten = history.listen((location, action) => {
+            const match = matchPath(location.pathname, {
+                path: routes.homeDetail.path,
+                exact: true
+            })
+            if (match) {
+                this.props.dispatch(setCurrentHistory(parseInt(match.params.id)))
+            }
+        })
+
         this.props.dispatch(fetchHistory()).then(() => {
             const match = matchPath(location.pathname, {
                 path: routes.homeDetail.path,
@@ -35,6 +45,10 @@ class HistoryManager extends Component<Props> {
                 }
             }
         })
+    }
+
+    componentWillUnmount() {
+        this.historyUnlisten()
     }
 
     render() {
