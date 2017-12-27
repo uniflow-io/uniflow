@@ -97,6 +97,7 @@ SystemJS.config({
         "react": "npm:react@16.2.0",
         "react-dom": "npm:react-dom@16.2.0",
         "react-redux": "npm:react-redux@5.0.6",
+        "react-router": "npm:react-router@4.2.0",
         "react-router-dom": "npm:react-router-dom@4.2.2",
         "redux": "npm:redux@3.7.2",
         "redux-thunk": "npm:redux-thunk@2.2.0",
