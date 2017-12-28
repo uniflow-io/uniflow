@@ -286,7 +286,7 @@ class Show extends Component {
     }
 
     render() {
-        const {history} = this.props;
+        const {history, tags} = this.props;
 
         const uiStack = (() => {
             let uiStack = [{
@@ -314,7 +314,7 @@ class Show extends Component {
         })()
 
         const tagsOptions = {
-            availableTags: this.props.tags
+            availableTags: tags
         }
 
         return (
