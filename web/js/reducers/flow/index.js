@@ -1,3 +1,4 @@
+import {Bus} from 'uniflow/models/index'
 import {
     COMMIT_PUSH_FLOW,
     COMMIT_POP_FLOW,
@@ -10,16 +11,16 @@ const defaultState = []
 const flow = (state = defaultState, action) => {
     switch (action.type) {
         case COMMIT_PUSH_FLOW:
-            return [
-                ...state.splice(action.index, 0, {
-                    component: action.component,
-                    bus: new Vue()
-                })
-            ]
+            let newStatePush = state.slice()
+            newStatePush.splice(action.index, 0, {
+                component: action.component,
+                bus: new Bus()
+            })
+            return newStatePush
         case COMMIT_POP_FLOW:
-            return [
-                ...state.splice(action.index, 1)
-            ]
+            let newStatePop = state.slice()
+            newStatePop.splice(action.index, 1)
+            return newStatePop
         case COMMIT_UPDATE_FLOW:
             return state.map((item, index) => {
                 if (index !== action.index) {
@@ -28,7 +29,7 @@ const flow = (state = defaultState, action) => {
 
                 return {
                     ...item,
-                    ...action.data
+                    ...{data: action.data}
                 };
             })
         case COMMIT_SET_FLOW:

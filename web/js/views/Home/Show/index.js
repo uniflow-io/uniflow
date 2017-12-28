@@ -4,9 +4,15 @@ import {transform} from 'babel'
 import _ from 'lodash'
 import axios from 'axios'
 import {Ace, TagIt} from 'uniflow/components/index'
-import {Bus, History} from 'uniflow/models/index'
+import {History} from 'uniflow/models/index'
 import Search from './Search/index'
 import components from 'uniflow/uniflow/components';
+import {
+    commitPushFlow,
+    commitPopFlow,
+    commitUpdateFlow,
+    commitSetFlow
+} from 'uniflow/reducers/flow/actions'
 import {
     getCurrentHistory,
     commitUpdateHistory,
@@ -150,38 +156,42 @@ class Show extends Component {
     }
 
     setFlow = (stack) => {
-        this.setState({stack: stack}, () => {
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
-                item.bus.emit('reset', item.data);
-            }
-        })
+        this.props
+            .dispatch(commitSetFlow(stack))
+            .then(() => {
+                for (let i = 0; i < stack.length; i++) {
+                    let item = stack[i];
+                    item.bus.emit('reset', item.data);
+                }
+            })
     }
 
-    onPushFlow = (component, index) => {
-        this.state.stack.splice(index, 0, {
-            component: component,
-            bus: new Bus()
-        })
-        this.setState({stack: this.state.stack})
-
-        this.setFlow(this.state.stack);
-        this.onUpdateFlowData()
+    onPushFlow = (index, component) => {
+        this.props
+            .dispatch(commitPushFlow(index, component))
+            .then(() => {
+                return this.setFlow(this.props.stack);
+            }).then(() => {
+                this.onUpdateFlowData()
+            })
     }
 
     onPopFlow = (index) => {
-        this.state.stack.splice(index, 1)
-        this.setState({stack: this.state.stack})
-
-        this.setFlow(this.state.stack);
-        this.onUpdateFlowData()
+        this.props
+            .dispatch(commitPopFlow(index))
+            .then(() => {
+                return this.setFlow(this.props.stack);
+            }).then(() => {
+                this.onUpdateFlowData()
+            })
     }
 
-    onUpdateFlow = (data, index) => {
-        this.state.stack[index].data = data;
-        this.setState({stack: this.state.stack})
-
-        this.onUpdateFlowData()
+    onUpdateFlow = (index, data) => {
+        this.props
+            .dispatch(commitUpdateFlow(index, data))
+            .then(() => {
+                this.onUpdateFlowData()
+            })
     }
 
     onFetchFlowData = () => {
@@ -193,21 +203,24 @@ class Show extends Component {
     }
 
     onUpdateTitle = (event) => {
-        this.props.dispatch(commitUpdateHistory({...this.props.history, ...{title: event.target.value}}))
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{title: event.target.value}}))
             .then(() => {
                 this.onUpdate()
             })
     }
 
     onUpdateTags = (tags) => {
-        this.props.dispatch(commitUpdateHistory({...this.props.history, ...{tags: tags}}))
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{tags: tags}}))
             .then(() => {
                 this.onUpdate()
             })
     }
 
     onUpdateDescription = (description) => {
-        this.props.dispatch(commitUpdateHistory({...this.props.history, ...{description: description}}))
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{description: description}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -339,13 +352,13 @@ class Show extends Component {
                                 <div className="timeline-body">
                                     <UiComponent tag={item.component} bus={item.bus}
                                                  onPush={(component) => {
-                                                     this.onPushFlow(component, item.index)
+                                                     this.onPushFlow(item.index, component)
                                                  }}
                                                  onPop={() => {
                                                      this.onPopFlow(item.index)
                                                  }}
                                                  onUpdate={(data) => {
-                                                     this.onUpdateFlow(data, item.index)
+                                                     this.onUpdateFlow(item.index, data)
                                                  }}/>
                                 </div>
                             </div>
