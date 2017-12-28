@@ -15,6 +15,7 @@ import {
 } from 'uniflow/reducers/flow/actions'
 import {
     getCurrentHistory,
+    getTags,
     commitUpdateHistory,
     createHistory,
     updateHistory,
@@ -312,11 +313,9 @@ class Show extends Component {
             return uiStack;
         })()
 
-        const tagsOptions = (() => {
-            return {
-                availableTags: ['coucou', 'dodo']
-            }
-        })()
+        const tagsOptions = {
+            availableTags: this.props.tags
+        }
 
         return (
             <div>
@@ -405,6 +404,7 @@ class Show extends Component {
 export default connect(state => {
     return {
         history: getCurrentHistory(state.history),
+        tags: getTags(state.history),
         stack: state.flow
     }
 })(Show)
