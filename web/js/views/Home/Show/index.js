@@ -65,7 +65,7 @@ class Show extends Component {
 
         let indexes = [];
         if (index === undefined) {
-            for (let i = 0; i < this.state.stack.length; i++) {
+            for (let i = 0; i < this.props.stack.length; i++) {
                 indexes.push(i);
             }
         } else {
@@ -99,7 +99,7 @@ class Show extends Component {
                 stack[index].bus.emit('compile', interpreter, scope);
 
                 return stack
-            }, this.state.stack);
+            }, this.props.stack);
         });
 
         let runner = {
@@ -156,7 +156,7 @@ class Show extends Component {
                         this.setState({runIndex: index}, resolve);
                     });
                 }).then(() => {
-                    return this.state.stack[index].bus.emit('execute', runner);
+                    return this.props.stack[index].bus.emit('execute', runner);
                 }).then(() => {
                     return new Promise((resolve) => {
                         this.setState({runIndex: null}, resolve);
