@@ -52,6 +52,14 @@ class Show extends Component {
         this.onFetchFlowData()
     }
 
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if(nextProps.history.id !== oldProps.history.id) {
+            this.onFetchFlowData();
+        }
+    }
+
     run = (event, index) => {
         event.preventDefault()
 

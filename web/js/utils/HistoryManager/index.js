@@ -45,12 +45,17 @@ class HistoryManager extends Component<Props> {
                 if (keys.length > 0) {
                     let item = this.props.items[keys[0]]
                     this.props.dispatch(setCurrentHistory(item.id))
-                        .then(() => {
-                            history.push(pathTo('homeDetail', {id: item.id}))
-                        })
                 }
             }
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if(nextProps.current !== oldProps.current) {
+            this.props.history.push(pathTo('homeDetail', {id: nextProps.current}))
+        }
     }
 
     componentWillUnmount() {
@@ -64,6 +69,7 @@ class HistoryManager extends Component<Props> {
 
 export default connect(state => {
     return {
-        items: state.history.items
+        items: state.history.items,
+        current: state.history.current
     }
 })(withRouter(HistoryManager))
