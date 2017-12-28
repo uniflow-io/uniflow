@@ -28,26 +28,38 @@ export const getTags = (state) => {
 }
 
 export const commitClearHistory = () => {
-    return {
-        type: COMMIT_CLEAR_HISTORY
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_CLEAR_HISTORY
+        })
+        return Promise.resolve()
     }
 }
 export const commitUpdateHistory = (item) => {
-    return {
-        type: COMMIT_UPDATE_HISTORY,
-        item
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_UPDATE_HISTORY,
+            item
+        })
+        return Promise.resolve()
     }
 }
 export const commitDeleteHistory = (item) => {
-    return {
-        type: COMMIT_DELETE_HISTORY,
-        item
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_DELETE_HISTORY,
+            item
+        })
+        return Promise.resolve()
     }
 }
 export const commitSetCurrentHistory = (current) => {
-    return {
-        type: COMMIT_SET_CURRENT_HISTORY,
-        current
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_SET_CURRENT_HISTORY,
+            current
+        })
+        return Promise.resolve()
     }
 }
 

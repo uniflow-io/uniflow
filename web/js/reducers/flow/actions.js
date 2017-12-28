@@ -6,28 +6,40 @@ import {
 } from './actionsTypes'
 
 export const commitPushFlow = (index, component) => {
-    return {
-        type: COMMIT_PUSH_FLOW,
-        index,
-        component
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_PUSH_FLOW,
+            index,
+            component
+        })
+        return Promise.resolve()
     }
 }
 export const commitPopFlow = (index) => {
-    return {
-        type: COMMIT_POP_FLOW,
-        index
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_POP_FLOW,
+            index
+        })
+        return Promise.resolve()
     }
 }
 export const commitUpdateFlow = (index, data) => {
-    return {
-        type: COMMIT_UPDATE_FLOW,
-        index,
-        data
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_UPDATE_FLOW,
+            index,
+            data
+        })
+        return Promise.resolve()
     }
 }
 export const commitSetFlow = (stack) => {
-    return {
-        type: COMMIT_SET_FLOW,
-        stack
+    return (dispatch) => {
+        dispatch({
+            type: COMMIT_SET_FLOW,
+            stack
+        })
+        return Promise.resolve()
     }
 }

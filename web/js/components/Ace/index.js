@@ -51,7 +51,7 @@ export default class Ace extends Component<Props> {
             // editor.setValue is a synchronous function call, change event is emitted before setValue return.
             this.silent = true;
             const pos = this.editor.session.selection.toJSON();
-            this.editor.setValue(nextProps.value, 1);
+            this.editor.setValue(nextProps.value || '', 1);
             this.editor.session.selection.fromJSON(pos);
             this.silent = false;
         }
