@@ -1,3 +1,4 @@
+import Bus from './Bus'
 import moment from 'moment'
 
 export default class History {
@@ -30,7 +31,7 @@ export default class History {
             data.push({
                 component: objData[i].component,
                 data: objData[i].data,
-                bus: new Vue()
+                bus: new Bus()
             });
         }
 

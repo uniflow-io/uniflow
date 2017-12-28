@@ -33,9 +33,7 @@ const flow = (state = defaultState, action) => {
                 };
             })
         case COMMIT_SET_FLOW:
-            return [
-                ...state
-            ]
+            return action.stack.slice()
         default:
             return state
     }

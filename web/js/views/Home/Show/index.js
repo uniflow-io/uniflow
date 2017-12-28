@@ -19,6 +19,7 @@ import {
     createHistory,
     updateHistory,
     deleteHistory,
+    getHistoryData,
     setHistoryData,
     setCurrentHistory
 } from 'uniflow/reducers/history/actions'
@@ -194,13 +195,44 @@ class Show extends Component {
             })
     }
 
-    onFetchFlowData = () => {
+    onFetchFlowData = _.debounce(() => {
+        let { history } = this.props;
 
-    }
+        Promise.resolve()
+            .then(() => {
+                return this.props.dispatch(commitSetFlow([]));
+            })
+            .then(() => {
+                if(history.data) {
+                    return history.data;
+                }
 
-    onUpdateFlowData = () => {
+                return this.props.dispatch(getHistoryData(history));
+            })
+            .then((data) => {
+                if(!data) return;
 
-    }
+                history.data = data;
+
+                if(history.id !== this.props.history.id) return;
+
+                return this.setFlow(history.deserialiseFlowData());
+            })
+            .then(() => {
+                this.setState({fetchedId: history.id})
+            })
+    }, 500)
+
+    onUpdateFlowData = _.debounce(() => {
+        let {history, stack} = this.props
+        if(history.id !== this.state.fetchedId) return;
+
+        let data = history.data;
+        history.serialiseFlowData(stack);
+        if(history.data !== data) {
+            this.props.dispatch(setHistoryData(history))
+        }
+    }, 500)
 
     onUpdateTitle = (event) => {
         this.props
