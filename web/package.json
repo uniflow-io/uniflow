@@ -20,6 +20,7 @@
       "axios": "npm:axios@^0.17.1",
       "babel-standalone": "npm:babel-standalone@^6.26.0",
       "history": "npm:history@^4.7.2",
+      "icheck": "github:fronteed/iCheck@^1.0.2",
       "jquery": "npm:jquery@^3.2.1",
       "jquery-ui": "npm:jquery-ui@^1.12.1",
       "lodash": "npm:lodash@^4.17.4",
@@ -84,6 +85,33 @@
           "*.js": {
             "deps": [
               "ace/ace"
+            ],
+            "format": "global"
+          }
+        }
+      },
+      "github:fronteed/iCheck@1.0.2": {
+        "main": "icheck.js",
+        "registry": "jspm",
+        "format": "global",
+        "files": [
+          "icheck.js",
+          "icheck.min.js",
+          "skins/**/*"
+        ],
+        "dependencies": {
+          "jquery": "npm:jquery"
+        },
+        "meta": {
+          "icheck.js": {
+            "deps": [
+              "jquery"
+            ],
+            "format": "global"
+          },
+          "icheck.min.js": {
+            "deps": [
+              "jquery"
             ],
             "format": "global"
           }

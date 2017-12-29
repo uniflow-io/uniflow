@@ -1,68 +1,139 @@
-import Vue from 'vue'
-import template from './template.html!text'
+import React, {Component} from 'react'
+import {Bus} from 'uniflow/models/index'
+import { ICheckBox } from 'uniflow/components/index'
 
-export default Vue.extend({
-    props: ['bus'],
-    template: template,
-    data() {
-        return {
-            variable: null,
-            checkboxes: {}
-        }
-    },
-    created: function () {
-        this.bus.$on('reset', this.deserialise);
-        this.bus.$on('compile', this.onCompile);
-        this.bus.$on('execute', this.onExecute);
-    },
-    destroyed: function () {
-        this.bus.$off('reset', this.deserialise);
-        this.bus.$off('compile', this.onCompile);
-        this.bus.$off('execute', this.onExecute);
-    },
-    watch: {
-        variable: function () {
-            this.onUpdate();
-        },
-        checkboxes: {
-            handler: function () {
-                this.onUpdate();
-            },
-            deep: true
-        }
-    },
-    methods: {
-        serialise: function () {
-            return [this.variable, this.checkboxes];
-        },
-        deserialise: function (data) {
-            [this.variable, this.checkboxes] = data ? data : [null, {}];
-        },
-        onUpdate: function () {
-            this.$emit('update', this.serialise());
-        },
-        onDelete: function () {
-            this.$emit('pop');
-        },
-        onCompile: function(interpreter, scope) {
+type Props = {
+    bus: Bus
+}
 
-        },
-        onExecute: function (runner) {
-            if(this.variable && runner.hasValue(this.variable)) {
-                let values = runner.getValue(this.variable);
+export default class UICheckBoxes extends Component<Props> {
+    state = {
+        variable: null,
+        checkboxes: {}
+    }
 
-                let checkboxes = {};
-                for (let i = 0; i < values.length; i++) {
-                    checkboxes[values[i]] = this.checkboxes[values[i]] || false
-                }
-                this.checkboxes = checkboxes;
+    componentDidMount() {
+        const {bus} = this.props
 
-                values = values.filter((value) => {
-                    return checkboxes[value];
-                });
+        bus.on('reset', this.deserialise);
+        bus.on('compile', this.onCompile);
+        bus.on('execute', this.onExecute);
+    }
 
-                runner.setValue(this.variable, values);
-            }
+    componentWillUnmount() {
+        const {bus} = this.props
+
+        bus.off('reset', this.deserialise);
+        bus.off('compile', this.onCompile);
+        bus.off('execute', this.onExecute);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if (nextProps.bus !== oldProps.bus) {
+            oldProps.bus.off('reset', this.deserialise);
+            oldProps.bus.off('compile', this.onCompile);
+            oldProps.bus.off('execute', this.onExecute);
+
+            nextProps.bus.on('reset', this.deserialise);
+            nextProps.bus.on('compile', this.onCompile);
+            nextProps.bus.on('execute', this.onExecute);
         }
     }
-});
+
+    serialise = () => {
+        return [this.state.variable, this.state.checkboxes]
+    }
+
+    deserialise = (data) => {
+        let [variable, checkboxes] = data ? data : [null, {}];
+
+        this.setState({variable: variable, checkboxes: checkboxes})
+    }
+
+    onChangeVariable = (event) => {
+        this.setState({variable: event.target.value})
+
+        this.onUpdate()
+    }
+
+    onChangeCheckBox = (value, checkbox) => {
+        let checkboxes = this.state.checkboxes
+        checkboxes[checkbox] = value
+        this.setState({checkboxes: checkboxes})
+
+        this.onUpdate();
+    }
+
+    onUpdate = () => {
+        this.props.onUpdate(this.serialise())
+    }
+
+    onDelete = (event) => {
+        event.preventDefault()
+
+        this.props.onPop()
+    }
+
+    onCompile = (interpreter, scope) => {
+
+    }
+
+    onExecute = (runner) => {
+        if(this.state.variable && runner.hasValue(this.state.variable)) {
+            let values = runner.getValue(this.state.variable);
+
+            let checkboxes = {};
+            for (let i = 0; i < values.length; i++) {
+                checkboxes[values[i]] = this.state.checkboxes[values[i]] || false
+            }
+            this.setState({checkboxes: checkboxes})
+            this.onUpdate()
+
+            values = values.filter((value) => {
+                return checkboxes[value];
+            });
+
+            runner.setValue(this.state.variable, values);
+        }
+    }
+
+    render() {
+        const {variable, checkboxes} = this.state
+
+        return (
+            <div className="box box-info">
+                <form className="form-horizontal">
+                    <div className="box-header with-border">
+                        <h3 className="box-title">Checkboxes</h3>
+                        <div className="box-tools pull-right">
+                            <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
+                        </div>
+                    </div>
+                    <div className="box-body">
+                        <div className="form-group">
+                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Variable</label>
+
+                            <div className="col-sm-10">
+                                <input id="variable{{ _uid }}" type="text" value={variable || ''} onChange={this.onChangeVariable} className="form-control"/>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="checkboxes{{ _uid }}" className="col-sm-2 control-label">Checkboxes</label>
+
+                            <div className="col-sm-10">
+                                {Object.keys(checkboxes).map((checkbox) => (
+                                    <div key={checkbox} className="checkbox">
+                                        <label><ICheckBox value={checkboxes[checkbox]} onChange={(value) => {this.onChangeCheckBox(value, checkbox)}} />{checkbox}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+}

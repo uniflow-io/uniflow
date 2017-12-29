@@ -99,6 +99,7 @@ SystemJS.config({
         "history": "npm:history@4.7.2",
         "http": "npm:jspm-nodelibs-http@0.2.0",
         "https": "npm:jspm-nodelibs-https@0.2.2",
+        "icheck": "github:fronteed/iCheck@1.0.2",
         "jquery": "npm:jquery@3.2.1",
         "jquery-ui": "npm:jquery-ui@1.12.1",
         "lodash": "npm:lodash@4.17.4",
@@ -657,6 +658,11 @@ SystemJS.config({
                 "async-limiter": "npm:async-limiter@1.0.0",
                 "safe-buffer": "npm:safe-buffer@5.1.1",
                 "ultron": "npm:ultron@1.1.1"
+            }
+        },
+        "github:fronteed/iCheck@1.0.2": {
+            "map": {
+                "jquery": "npm:jquery@3.2.1"
             }
         }
     }
