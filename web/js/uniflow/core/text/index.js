@@ -8,8 +8,8 @@ type Props = {
 
 export default class CoreText extends Component<Props> {
     state = {
-        variable: '',
-        text: ''
+        variable: null,
+        text: null
     }
 
     componentDidMount() {
@@ -47,7 +47,7 @@ export default class CoreText extends Component<Props> {
     }
 
     deserialise = (data) => {
-        let [variable, text] = data ? data : ['', ''];
+        let [variable, text] = data ? data : [null, null];
 
         this.setState({variable: variable, text: text})
     }

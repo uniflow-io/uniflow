@@ -8,7 +8,7 @@ type Props = {
 
 export default class CoreJavascript extends Component<Props> {
     state = {
-        code: ''
+        code: null
     }
 
     componentDidMount() {
@@ -46,7 +46,7 @@ export default class CoreJavascript extends Component<Props> {
     }
 
     deserialise = (data) => {
-        this.setState({code: data || ''})
+        this.setState({code: data})
     }
 
     onChange = (code) => {
