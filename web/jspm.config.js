@@ -117,6 +117,7 @@ SystemJS.config({
         "redux": "npm:redux@3.7.2",
         "redux-thunk": "npm:redux-thunk@2.2.0",
         "select2": "github:select2/select2@4.0.5",
+        "socket.io-client": "npm:socket.io-client@2.0.4",
         "stream": "npm:jspm-nodelibs-stream@0.2.1",
         "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.2",
         "tag-it": "npm:tag-it@2.0.0",
@@ -573,6 +574,89 @@ SystemJS.config({
                 "lodash-es": "npm:lodash-es@4.17.4",
                 "prop-types": "npm:prop-types@15.6.0",
                 "hoist-non-react-statics": "npm:hoist-non-react-statics@2.3.1"
+            }
+        },
+        "npm:socket.io-client@2.0.4": {
+            "map": {
+                "component-emitter": "npm:component-emitter@1.2.1",
+                "indexof": "npm:indexof@0.0.1",
+                "component-bind": "npm:component-bind@1.0.0",
+                "backo2": "npm:backo2@1.0.2",
+                "base64-arraybuffer": "npm:base64-arraybuffer@0.1.5",
+                "parseqs": "npm:parseqs@0.0.5",
+                "object-component": "npm:object-component@0.0.3",
+                "parseuri": "npm:parseuri@0.0.5",
+                "to-array": "npm:to-array@0.1.4",
+                "debug": "npm:debug@2.6.9",
+                "has-cors": "npm:has-cors@1.1.0",
+                "engine.io-client": "npm:engine.io-client@3.1.4",
+                "socket.io-parser": "npm:socket.io-parser@3.1.2"
+            }
+        },
+        "npm:engine.io-client@3.1.4": {
+            "map": {
+                "has-cors": "npm:has-cors@1.1.0",
+                "parseqs": "npm:parseqs@0.0.5",
+                "parseuri": "npm:parseuri@0.0.5",
+                "component-emitter": "npm:component-emitter@1.2.1",
+                "debug": "npm:debug@2.6.9",
+                "indexof": "npm:indexof@0.0.1",
+                "xmlhttprequest-ssl": "npm:xmlhttprequest-ssl@1.5.4",
+                "node-xmlhttprequest-ssl": "npm:xmlhttprequest-ssl@1.5.4",
+                "component-inherit": "npm:component-inherit@0.0.3",
+                "ws": "npm:ws@3.3.3",
+                "node-ws": "npm:ws@3.3.3",
+                "yeast": "npm:yeast@0.1.2",
+                "engine.io-parser": "npm:engine.io-parser@2.1.2"
+            }
+        },
+        "npm:socket.io-parser@3.1.2": {
+            "map": {
+                "debug": "npm:debug@2.6.9",
+                "component-emitter": "npm:component-emitter@1.2.1",
+                "isarray": "npm:isarray@2.0.1",
+                "has-binary2": "npm:has-binary2@1.0.2"
+            }
+        },
+        "npm:parseuri@0.0.5": {
+            "map": {
+                "better-assert": "npm:better-assert@1.0.2"
+            }
+        },
+        "npm:parseqs@0.0.5": {
+            "map": {
+                "better-assert": "npm:better-assert@1.0.2"
+            }
+        },
+        "npm:debug@2.6.9": {
+            "map": {
+                "ms": "npm:ms@2.0.0"
+            }
+        },
+        "npm:has-binary2@1.0.2": {
+            "map": {
+                "isarray": "npm:isarray@2.0.1"
+            }
+        },
+        "npm:engine.io-parser@2.1.2": {
+            "map": {
+                "base64-arraybuffer": "npm:base64-arraybuffer@0.1.5",
+                "has-binary2": "npm:has-binary2@1.0.2",
+                "arraybuffer.slice": "npm:arraybuffer.slice@0.0.7",
+                "blob": "npm:blob@0.0.4",
+                "after": "npm:after@0.8.2"
+            }
+        },
+        "npm:better-assert@1.0.2": {
+            "map": {
+                "callsite": "npm:callsite@1.0.0"
+            }
+        },
+        "npm:ws@3.3.3": {
+            "map": {
+                "async-limiter": "npm:async-limiter@1.0.0",
+                "safe-buffer": "npm:safe-buffer@5.1.1",
+                "ultron": "npm:ultron@1.1.1"
             }
         }
     }

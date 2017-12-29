@@ -32,6 +32,7 @@
       "react-router-dom": "npm:react-router-dom@^4.2.2",
       "redux-thunk": "npm:redux-thunk@^2.2.0",
       "select2": "github:select2/select2@^4.0.5",
+      "socket.io-client": "npm:socket.io-client@^2.0.4",
       "tag-it": "npm:tag-it@^2.0.0"
     },
     "devDependencies": {
@@ -100,6 +101,23 @@
         },
         "map": {
           "_stream_transform": "readable-stream/transform"
+        }
+      },
+      "npm:debug@2.6.9": {
+        "main": "src/browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./src/browser.js": {
+            "node": "./src/node.js"
+          },
+          "./node.js": {
+            "browser": "./src/browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
         }
       },
       "npm:inherits@2.0.3": {

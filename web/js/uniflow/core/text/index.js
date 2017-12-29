@@ -105,7 +105,7 @@ export default class CoreText extends Component<Props> {
                             <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Variable</label>
 
                             <div className="col-sm-10">
-                                <input id="variable{{ _uid }}" type="text" value={variable} onChange={this.onChangeVariable} className="form-control" />
+                                <input id="variable{{ _uid }}" type="text" value={variable || ''} onChange={this.onChangeVariable} className="form-control" />
                             </div>
                         </div>
 
