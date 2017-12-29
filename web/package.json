@@ -18,7 +18,7 @@
       "ace": "github:ajaxorg/ace-builds@^1.2.9",
       "acorn-interpreter": "github:NeilFraser/JS-Interpreter@master",
       "axios": "npm:axios@^0.17.1",
-      "babel": "npm:babel-core@^6.26.0",
+      "babel-standalone": "npm:babel-standalone@^6.26.0",
       "history": "npm:history@^4.7.2",
       "jquery": "npm:jquery@^3.2.1",
       "jquery-ui": "npm:jquery-ui@^1.12.1",
@@ -99,23 +99,6 @@
         },
         "map": {
           "_stream_transform": "readable-stream/transform"
-        }
-      },
-      "npm:debug@2.6.9": {
-        "main": "src/browser.js",
-        "jspmNodeConversion": false,
-        "format": "cjs",
-        "map": {
-          "./src/browser.js": {
-            "node": "./src/node.js"
-          },
-          "./node.js": {
-            "browser": "./src/browser.js"
-          },
-          "fs": "@node/fs",
-          "net": "@node/net",
-          "tty": "@node/tty",
-          "util": "@node/util"
         }
       },
       "npm:inherits@2.0.3": {
