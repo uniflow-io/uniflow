@@ -143,8 +143,6 @@ class Show extends Component {
 
                 interpreter.appendCode(babelCode.code);
 
-                interpreter.appendCode(code);
-
                 return interpreter.run();
             }
         };
