@@ -102,6 +102,7 @@ SystemJS.config({
         "jquery": "npm:jquery@3.2.1",
         "jquery-ui": "npm:jquery-ui@1.12.1",
         "lodash": "npm:lodash@4.17.4",
+        "lz-string": "npm:lz-string@1.4.4",
         "module": "npm:jspm-nodelibs-module@0.2.1",
         "moment": "npm:moment@2.20.1",
         "os": "npm:jspm-nodelibs-os@0.2.2",

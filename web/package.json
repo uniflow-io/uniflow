@@ -23,6 +23,7 @@
       "jquery": "npm:jquery@^3.2.1",
       "jquery-ui": "npm:jquery-ui@^1.12.1",
       "lodash": "npm:lodash@^4.17.4",
+      "lz-string": "npm:lz-string@^1.4.4",
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
       "react-dom": "npm:react-dom@^16.2.0",

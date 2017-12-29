@@ -49,7 +49,7 @@ export default class CoreJavascript extends Component<Props> {
         this.setState({code: data})
     }
 
-    onChange = (code) => {
+    onChangeCode = (code) => {
         this.setState({code: code})
 
         this.onUpdate()
@@ -90,7 +90,7 @@ export default class CoreJavascript extends Component<Props> {
                             <label htmlFor="code{{ _uid }}" className="col-sm-2 control-label">Code</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="code{{ _uid }}" value={code} onChange={this.onChange} placeholder="Code" height="200" mode="javascript" />
+                                <Ace className="form-control" id="code{{ _uid }}" value={code} onChange={this.onChangeCode} placeholder="Code" height="200" mode="javascript" />
                             </div>
                         </div>
                     </div>
