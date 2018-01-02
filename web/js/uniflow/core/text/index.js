@@ -81,7 +81,7 @@ export default class CoreText extends Component<Props> {
     onExecute = (runner) => {
         if(this.state.variable) {
             if(runner.hasValue(this.state.variable)) {
-                this.state.text = runner.getValue(this.state.variable);
+                this.setState({text: runner.getValue(this.state.variable)})
             } else {
                 runner.setValue(this.state.variable, this.state.text);
             }
