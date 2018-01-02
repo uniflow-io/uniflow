@@ -5,11 +5,7 @@ import CoreSocketIO from './core/socketio/index.js';
 import UICheckBoxes from './ui/checkboxes/index.js';
 import UIObject from './ui/object/index.js';
 import UISelect from './ui/select/index.js';
-//import UITextList from './ui/textlist/index.js';
-//
-//export default {
-//    'ui-textlist': UITextList,
-//};
+import UITextList from './ui/textlist/index.js';
 
 export default {
     'core-javascript': CoreJavascript,
@@ -19,4 +15,5 @@ export default {
     'ui-checkboxes': UICheckBoxes,
     'ui-object': UIObject,
     'ui-select': UISelect,
+    'ui-textlist': UITextList,
 }

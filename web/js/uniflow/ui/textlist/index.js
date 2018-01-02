@@ -1,73 +1,161 @@
-import Vue from 'vue'
-import template from './template.html!text'
+import React, {Component} from 'react'
+import {Bus} from 'uniflow/models/index'
+import LZString from 'lz-string'
 
-export default Vue.extend({
-    props: ['bus'],
-    template: template,
-    data() {
-        return {
-            variable: null,
-            textlist: []
+type Props = {
+    bus: Bus
+}
+
+export default class UITextList extends Component<Props> {
+    state = {
+        variable: null,
+        textlist: []
+    }
+
+    componentDidMount() {
+        const {bus} = this.props
+
+        bus.on('reset', this.deserialise);
+        bus.on('compile', this.onCompile);
+        bus.on('execute', this.onExecute);
+    }
+
+    componentWillUnmount() {
+        const {bus} = this.props
+
+        bus.off('reset', this.deserialise);
+        bus.off('compile', this.onCompile);
+        bus.off('execute', this.onExecute);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if (nextProps.bus !== oldProps.bus) {
+            oldProps.bus.off('reset', this.deserialise);
+            oldProps.bus.off('compile', this.onCompile);
+            oldProps.bus.off('execute', this.onExecute);
+
+            nextProps.bus.on('reset', this.deserialise);
+            nextProps.bus.on('compile', this.onCompile);
+            nextProps.bus.on('execute', this.onExecute);
         }
-    },
-    created: function () {
-        this.bus.$on('reset', this.deserialise);
-        this.bus.$on('compile', this.onCompile);
-        this.bus.$on('execute', this.onExecute);
-    },
-    destroyed: function () {
-        this.bus.$off('reset', this.deserialise);
-        this.bus.$off('compile', this.onCompile);
-        this.bus.$off('execute', this.onExecute);
-    },
-    watch: {
-        variable: function () {
-            this.onUpdate();
-        },
-        textlist: {
-            handler: function () {
-                this.onUpdate();
-            },
-            deep: true
-        }
-    },
-    methods: {
-        serialise: function () {
-            return [this.variable, this.textlist];
-        },
-        deserialise: function (data) {
-            [this.variable, this.textlist] = data ? data : [null, []];
-        },
-        onUpdate: function () {
-            this.$emit('update', this.serialise());
-        },
-        onDelete: function () {
-            this.$emit('pop');
-        },
-        onUpdateText: function () {
-            this.onUpdate();
-        },
-        onRemoveText: function (index) {
-            this.textlist.splice(index, 1);
+    }
 
-            this.onUpdate();
-        },
-        onAddText: function () {
-            this.textlist.push('');
+    serialise = () => {
+        return [this.state.variable, this.state.textlist];
+    }
 
-            this.onUpdate();
-        },
-        onCompile: function(interpreter, scope) {
+    deserialise = (data) => {
+        let [variable, textlist] = data ? data : [null, []];
 
-        },
-        onExecute: function (runner) {
-            if(this.variable) {
-                if(runner.hasValue(this.variable)) {
-                    this.textlist = runner.getValue(this.variable);
-                } else {
-                    runner.setValue(this.variable, this.textlist);
+        this.setState({variable: variable, textlist: textlist})
+    }
+
+    onChangeVariable = (event) => {
+        this.setState({variable: event.target.value})
+
+        this.onUpdate()
+    }
+
+    onAddText = (event) => {
+        event.preventDefault()
+
+        let newStateTextlists = this.state.textlist.slice()
+        newStateTextlists.push('')
+        this.setState({textlist: newStateTextlists})
+
+        this.onUpdate();
+    }
+
+    onUpdateText = (event, index) => {
+        this.setState({
+            textlist: this.state.textlist.map((value, i) => {
+                if (i !== index) {
+                    return value;
                 }
+
+                return event.target.value;
+            })
+        })
+
+        this.onUpdate();
+    }
+
+    onRemoveText = (event, index) => {
+        let newStateTextlists = this.state.textlist.slice()
+        newStateTextlists.splice(index, 1)
+        this.setState({textlist: newStateTextlists})
+
+        this.onUpdate();
+    }
+
+    onUpdate = () => {
+        this.props.onUpdate(this.serialise())
+    }
+
+    onDelete = (event) => {
+        event.preventDefault()
+
+        this.props.onPop()
+    }
+
+    onCompile = (interpreter, scope) => {
+
+    }
+
+    onExecute = (runner) => {
+        if (this.state.variable) {
+            if (runner.hasValue(this.state.variable)) {
+                this.setState({textlist: runner.getValue(this.state.variable)}, this.onUpdate)
+            } else {
+                runner.setValue(this.state.variable, this.state.textlist);
             }
         }
     }
-});
+
+    render() {
+        const {variable, textlist} = this.state
+
+        return (
+            <div className="box box-info">
+                <form className="form-horizontal">
+                    <div className="box-header with-border">
+                        <h3 className="box-title">Text List</h3>
+                        <div className="box-tools pull-right">
+                            <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times"/></a>
+                        </div>
+                    </div>
+                    <div className="box-body">
+                        <div className="form-group">
+                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Variable</label>
+
+                            <div className="col-sm-10">
+                                <input id="variable{{ _uid }}" type="text" value={variable || ''} onChange={this.onChangeVariable} className="form-control"/>
+                            </div>
+                        </div>
+
+                        {textlist.map((value, index) => (
+                        <div key={index}  className="form-group">
+                            <div className="col-sm-10 col-sm-offset-2">
+                                <div className="input-group">
+                                    <input type="text" value={textlist[index]} onChange={(event) => {
+                                        this.onUpdateText(event, index)
+                                    }}
+                                           className="form-control"/>
+                                    <span className="input-group-addon" onClick={(event) => {
+                                        this.onRemoveText(event, index)
+                                    }}><i className="fa fa-times"/></span>
+                                </div>
+                            </div>
+                        </div>
+                        ))}
+                    </div>
+                    <div className="box-footer">
+                        <button type="submit" onClick={this.onAddText} className="btn btn-info pull-right"> Add Text</button>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+}
