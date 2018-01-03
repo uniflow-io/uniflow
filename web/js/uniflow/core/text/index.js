@@ -53,15 +53,11 @@ export default class CoreText extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onChangeText = (text) => {
-        this.setState({text: text})
-
-        this.onUpdate()
+        this.setState({text: text}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -81,7 +77,7 @@ export default class CoreText extends Component<Props> {
     onExecute = (runner) => {
         if(this.state.variable) {
             if(runner.hasValue(this.state.variable)) {
-                this.setState({text: runner.getValue(this.state.variable)})
+                this.setState({text: runner.getValue(this.state.variable)}, this.onUpdate)
             } else {
                 runner.setValue(this.state.variable, this.state.text);
             }

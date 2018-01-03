@@ -54,21 +54,15 @@ export default class CoreSocketIO extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onChangeHost = (event) => {
-        this.setState({host: event.target.value})
-
-        this.onUpdate()
+        this.setState({host: event.target.value}, this.onUpdate)
     }
 
     onChangePort = (event) => {
-        this.setState({port: event.target.value})
-
-        this.onUpdate()
+        this.setState({port: event.target.value}, this.onUpdate)
     }
 
     onUpdate = () => {

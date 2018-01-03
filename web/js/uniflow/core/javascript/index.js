@@ -50,9 +50,7 @@ export default class CoreJavascript extends Component<Props> {
     }
 
     onChangeCode = (code) => {
-        this.setState({code: code})
-
-        this.onUpdate()
+        this.setState({code: code}, this.onUpdate)
     }
 
     onUpdate = () => {

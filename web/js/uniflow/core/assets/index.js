@@ -53,9 +53,7 @@ export default class CoreAssets extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onFiles = (event) => {
@@ -75,8 +73,7 @@ export default class CoreAssets extends Component<Props> {
                     reader.onload = (e) => {
                         let newStateAssets = this.state.assets.slice()
                         newStateAssets.push([file.name, e.target.result])
-                        this.setState({assets: newStateAssets})
-                        resolve();
+                        this.setState({assets: newStateAssets}, resolve)
                     };
                     reader.readAsText(file);
                 })
@@ -108,17 +105,13 @@ export default class CoreAssets extends Component<Props> {
             }
 
             return [event.target.value, asset[1]];
-        })})
-
-        this.onUpdate();
+        })}, this.onUpdate)
     }
 
     onRemoveFile = (event, index) => {
         let newStateAssets = this.state.assets.slice()
         newStateAssets.splice(index, 1)
-        this.setState({assets: newStateAssets})
-
-        this.onUpdate();
+        this.setState({assets: newStateAssets}, this.onUpdate)
     }
 
     onUpdate = () => {
