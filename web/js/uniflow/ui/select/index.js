@@ -110,7 +110,7 @@ export default class UISelect extends Component<Props> {
                             <div className="col-sm-10">
                                 <Select2 value={selected} onChange={this.onChangeSelected} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
                                     {Object.keys(choices).map((value) => (
-                                        <option key={value} value={value}>{ choices[value] }</option>
+                                        <option key={value} value={choices[value]}>{ choices[value] }</option>
                                     ))}
                                 </Select2>
                             </div>
