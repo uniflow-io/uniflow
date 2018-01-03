@@ -54,15 +54,11 @@ export default class UISelect extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onChangeSelected = (selected) => {
-        this.setState({selected: selected})
-
-        this.onUpdate()
+        this.setState({selected: selected}, this.onUpdate)
     }
 
     onUpdate = () => {

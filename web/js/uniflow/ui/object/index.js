@@ -622,9 +622,7 @@ export default class UIObject extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onUpdateItemKey = (event, index) => {
@@ -639,9 +637,7 @@ export default class UIObject extends Component<Props> {
                     ...{key: event.target.value}
                 };
             })
-        })
-
-        this.onUpdate()
+        }, this.onUpdate)
     }
 
     onUpdateItemValue = (event, index) => {
@@ -656,9 +652,7 @@ export default class UIObject extends Component<Props> {
                     ...{value: event.target.value}
                 };
             })
-        })
-
-        this.onUpdate()
+        }, this.onUpdate)
     }
 
     onRemoveItem = (event, index) => {
@@ -666,9 +660,7 @@ export default class UIObject extends Component<Props> {
 
         let keyvaluelist = this.state.keyvaluelist.slice()
         keyvaluelist.splice(index, 1);
-        this.setState({keyvaluelist: keyvaluelist})
-
-        this.onUpdate();
+        this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
     }
 
     onAddItem = (event) => {
@@ -676,9 +668,7 @@ export default class UIObject extends Component<Props> {
 
         let keyvaluelist = this.state.keyvaluelist.slice()
         keyvaluelist.push({key: '', value: ''});
-        this.setState({keyvaluelist: keyvaluelist})
-
-        this.onUpdate();
+        this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -700,7 +690,7 @@ export default class UIObject extends Component<Props> {
             if (runner.hasValue(this.state.variable)) {
                 let object       = runner.getValue(this.state.variable);
                 let keyvaluelist = this.reverseTransform(object);
-                this.setState({keyvaluelist: keyvaluelist})
+                this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
             } else {
                 let object = this.transform();
                 runner.setValue(this.state.variable, object);

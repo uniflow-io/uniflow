@@ -53,9 +53,7 @@ export default class UITextList extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onAddText = (event) => {
@@ -63,9 +61,7 @@ export default class UITextList extends Component<Props> {
 
         let newStateTextlists = this.state.textlist.slice()
         newStateTextlists.push('')
-        this.setState({textlist: newStateTextlists})
-
-        this.onUpdate();
+        this.setState({textlist: newStateTextlists}, this.onUpdate)
     }
 
     onUpdateText = (event, index) => {
@@ -77,17 +73,13 @@ export default class UITextList extends Component<Props> {
 
                 return event.target.value;
             })
-        })
-
-        this.onUpdate();
+        }, this.onUpdate)
     }
 
     onRemoveText = (event, index) => {
         let newStateTextlists = this.state.textlist.slice()
         newStateTextlists.splice(index, 1)
-        this.setState({textlist: newStateTextlists})
-
-        this.onUpdate();
+        this.setState({textlist: newStateTextlists}, this.onUpdate)
     }
 
     onUpdate = () => {

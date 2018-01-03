@@ -53,17 +53,13 @@ export default class UICheckBoxes extends Component<Props> {
     }
 
     onChangeVariable = (event) => {
-        this.setState({variable: event.target.value})
-
-        this.onUpdate()
+        this.setState({variable: event.target.value}, this.onUpdate)
     }
 
     onChangeCheckBox = (value, checkbox) => {
         let checkboxes = this.state.checkboxes
         checkboxes[checkbox] = value
-        this.setState({checkboxes: checkboxes})
-
-        this.onUpdate();
+        this.setState({checkboxes: checkboxes}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -88,8 +84,7 @@ export default class UICheckBoxes extends Component<Props> {
             for (let i = 0; i < values.length; i++) {
                 checkboxes[values[i]] = this.state.checkboxes[values[i]] || false
             }
-            this.setState({checkboxes: checkboxes})
-            this.onUpdate()
+            this.setState({checkboxes: checkboxes}, this.onUpdate)
 
             values = values.filter((value) => {
                 return checkboxes[value];
