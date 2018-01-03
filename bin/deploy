@@ -22,6 +22,10 @@ SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader
 #bin/console doctrine:schema:update --env=prod --force
 #php bin/console assetic:dump --env=prod --no-debug
 
+cd web
+yarn install
+ ./node_modules/.bin/jspm install
+
 CMD
 
 fi
