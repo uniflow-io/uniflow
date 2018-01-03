@@ -49,7 +49,13 @@ class Show extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true
+
         this.onFetchFlowData()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     componentWillReceiveProps(nextProps) {
@@ -58,6 +64,10 @@ class Show extends Component {
         if(nextProps.history.id !== oldProps.history.id) {
             this.onFetchFlowData();
         }
+    }
+
+    isMounted() {
+        return this._isMounted;
     }
 
     run = (event, index) => {
@@ -226,7 +236,9 @@ class Show extends Component {
                 return this.setFlow(history.deserialiseFlowData());
             })
             .then(() => {
-                this.setState({fetchedId: history.id})
+                if(this.isMounted()) {
+                    this.setState({fetchedId: history.id})
+                }
             })
     }, 500)
 
