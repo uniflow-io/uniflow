@@ -155,11 +155,6 @@ fos_user:
             enabled: false
         form:
             type: Darkwood\UserBundle\Form\Type\RegistrationFormType
-    from_email:
-        address:        contact@darkwood.fr
-        sender_name:    Darkwood
-    service:
-        mailer: fos_user.mailer.twig_swift
 
 # Paginator
 knp_paginator:
@@ -205,66 +200,6 @@ vich_uploader:
             uri_prefix:         /media/users
             upload_destination: '%kernel.root_dir%/../web/media/users'
             namer:              vich_uploader.namer_uniqid
-        sites:
-            uri_prefix:         /media/sites
-            upload_destination: '%kernel.root_dir%/../web/media/sites'
-            namer:              vich_uploader.namer_uniqid
-        pages:
-            uri_prefix:         /media/pages/images
-            upload_destination: '%kernel.root_dir%/../web/media/pages/images'
-            namer:              vich_uploader.namer_uniqid
-        thumbnailPages:
-            uri_prefix:         /media/pages/thumbnails
-            upload_destination: '%kernel.root_dir%/../web/media/pages/thumbnails'
-            namer:              vich_uploader.namer_uniqid
-        twitterPages:
-            uri_prefix:         /media/pages/twitters
-            upload_destination: '%kernel.root_dir%/../web/media/pages/twitters'
-            namer:              vich_uploader.namer_uniqid
-        ogPages:
-            uri_prefix:         /media/pages/ogs
-            upload_destination: '%kernel.root_dir%/../web/media/pages/ogs'
-            namer:              vich_uploader.namer_uniqid
-        news:
-            uri_prefix:         /media/news
-            upload_destination: '%kernel.root_dir%/../web/media/news'
-            namer:              vich_uploader.namer_uniqid
-        articles:
-            uri_prefix:         /media/articles
-            upload_destination: '%kernel.root_dir%/../web/media/articles'
-            namer:              vich_uploader.namer_uniqid
-        armors:
-            uri_prefix:         /media/armors
-            upload_destination: '%kernel.root_dir%/../web/media/armors'
-            namer:              vich_uploader.namer_uniqid
-        classes:
-            uri_prefix:         /media/classes
-            upload_destination: '%kernel.root_dir%/../web/media/classes'
-            namer:              vich_uploader.namer_uniqid
-        enemies:
-            uri_prefix:         /media/enemies
-            upload_destination: '%kernel.root_dir%/../web/media/enemies'
-            namer:              vich_uploader.namer_uniqid
-        gems:
-            uri_prefix:         /media/gems
-            upload_destination: '%kernel.root_dir%/../web/media/gems'
-            namer:              vich_uploader.namer_uniqid
-        gems:
-            uri_prefix:         /media/gems
-            upload_destination: '%kernel.root_dir%/../web/media/gems'
-            namer:              vich_uploader.namer_uniqid
-        potions:
-            uri_prefix:         /media/potions
-            upload_destination: '%kernel.root_dir%/../web/media/potions'
-            namer:              vich_uploader.namer_uniqid
-        swords:
-            uri_prefix:         /media/swords
-            upload_destination: '%kernel.root_dir%/../web/media/swords'
-            namer:              vich_uploader.namer_uniqid
-        bannerApps:
-            uri_prefix:         /media/apps/banners
-            upload_destination: '%kernel.root_dir%/../web/media/apps/banners'
-            namer:              vich_uploader.namer_uniqid
 
 # assetic
 assetic:
@@ -294,31 +229,9 @@ liip_imagine:
             post_processors:
                 jpegoptim: {}
                 optipng: {}
-
-        admin_vichy:
-            filters:
-                thumbnail: { size: [250, 250], mode: outbound }
-            post_processors:
-                jpegoptim: {}
-                optipng: {}
-
-        admin_list:
-            filters:
-                thumbnail: { size: [50, 50], mode: outbound }
-            post_processors:
-                jpegoptim: {}
-                optipng: {}
-
         user:
             filters:
                 thumbnail: { size: [50, 50], mode: outbound }
-            post_processors:
-                jpegoptim: {}
-                optipng: {}
-
-        user_profile:
-            filters:
-                thumbnail: { size: [256, 256], mode: outbound }
             post_processors:
                 jpegoptim: {}
                 optipng: {}
