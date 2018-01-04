@@ -15,19 +15,19 @@ parameters:
 
 services:
     dw.component.sftp:
-        class: '%dw.component.sftp.class%'
+        class: "%dw.component.sftp.class%"
         
     dw.tag:
-        class: %dw.tag.class%
+        class: "%dw.tag.class%"
         calls:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
-            - [ addRepository, [ tagRepository, %dw.entity.tag.class% ] ]
+            - [ addRepository, [ tagRepository, "%dw.entity.tag.class%" ] ]
             
     dw.history:
-        class: %dw.history.class%
+        class: "%dw.history.class%"
         calls:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
-            - [ addRepository, [ historyRepository, %dw.entity.history.class% ] ]
+            - [ addRepository, [ historyRepository, "%dw.entity.history.class%" ] ]
 
     dw.form.history:
         class: "%dw.form.history.class%"
