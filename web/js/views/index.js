@@ -1,4 +1,5 @@
 import FAQ from './FAQ/index'
+import Logs from './Logs/index'
 import Home from './Home/index'
 
-export { FAQ, Home }
+export { FAQ, Logs, Home }

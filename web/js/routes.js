@@ -1,4 +1,4 @@
-import { FAQ, Home } from './views/index'
+import { FAQ, Home, Logs } from './views/index'
 import pathToRegexp from 'path-to-regexp'
 
 const routes = {
@@ -14,6 +14,10 @@ const routes = {
     credits: {
         path: '/faq',
         component: FAQ,
+    },
+    logs: {
+        path: '/logs',
+        component: Logs,
     },
     homeDetail: {
         path: '/detail/:id',

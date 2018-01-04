@@ -85,7 +85,7 @@ class History extends Component {
                                             <input type="text" className="form-control" placeholder="Search"
                                                    value={this.state.search} onChange={this.onChange}/>
                                             {/*div className="input-group-btn">
-                                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-search"></i></button>
+                                                <button className="btn btn-default" type="submit"><i className="glyphicon glyphicon-search" /></button>
                                             </div*/}
                                         </div>
                                     </form>

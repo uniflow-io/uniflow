@@ -37,6 +37,9 @@ export default () => (
                                     <li>
                                         <Link to="/faq">FAQ</Link>
                                     </li>
+                                    <li>
+                                        <Link to="/logs">Logs</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </nav>
