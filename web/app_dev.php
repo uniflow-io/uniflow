@@ -25,7 +25,7 @@ $loader = require __DIR__.'/../app/autoload.php';
 Debug::enable();
 
 $kernel = new AppKernel('dev', true);
-$kernel->loadClassCache();
+Request::setTrustedProxies(array('127.0.0.1'), Request::HEADER_X_FORWARDED_ALL);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

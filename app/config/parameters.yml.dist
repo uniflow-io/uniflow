@@ -20,8 +20,6 @@ parameters:
     cookie_domain: .darkwood.localhost
     cookie_secure: false
 
-    trusted_proxies:   [127.0.0.1]
-
     facebook_app_id: ~
     facebook_app_secret: ~
 
