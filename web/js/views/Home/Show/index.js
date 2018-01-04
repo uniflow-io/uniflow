@@ -168,6 +168,10 @@ class Show extends Component {
                 }).then(() => {
                     return this.props.stack[index].bus.emit('execute', runner);
                 }).then(() => {
+                    return new Promise((resolve => {
+                        setTimeout(resolve, 200)
+                    }))
+                }).then(() => {
                     return new Promise((resolve) => {
                         this.setState({runIndex: null}, resolve);
                     });
@@ -393,13 +397,13 @@ class Show extends Component {
                     {uiStack.map((item, i) => (
                         <li key={i}>
                             {item.component !== 'search' && (
-                                <i className="fa fa-play bg-blue" onClick={(event) => {
+                                <i className={"fa fa-play" + (item.active ? ' bg-green' : ' bg-blue')} onClick={(event) => {
                                     this.run(event, item.index)
                                 }}/>
                             )}
 
                             <div
-                                className={"timeline-item" + (item.active ? ' bg-green' : '') + (item.component !== 'search' ? ' component' : '')}>
+                                className={"timeline-item" + (item.component !== 'search' ? ' component' : '')}>
                                 <div className="timeline-body">
                                     <UiComponent tag={item.component} bus={item.bus}
                                                  onPush={(component) => {
