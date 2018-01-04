@@ -8,11 +8,11 @@
 <body>
 <script>
     (function() {
-        var socket = io('http://localhost:3128');
-        socket.emit('read', '/Users/math/Sites/darkwood/uniflow/server/index.html', function(content) {
+        var socket = io('https://localhost:3128');
+        socket.emit('filesystem.read', '/Users/math/Sites/darkwood/uniflow/server/index.html', function(content) {
             console.log('emit', content)
         });
-        socket.on('read', function(content){
+        socket.on('filesystem.read', function(content){
             console.log('read', content)
         });
     })();
