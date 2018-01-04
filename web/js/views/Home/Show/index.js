@@ -79,7 +79,9 @@ class Show extends Component {
                 indexes.push(i);
             }
         } else {
-            indexes.push(index);
+            for (let i = 0; i <= index; i++) {
+                indexes.push(i);
+            }
         }
 
         //get polyfill
