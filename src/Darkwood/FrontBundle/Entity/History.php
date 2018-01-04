@@ -64,7 +64,7 @@ class History
     /**
      * @var Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="Darkwood\FrontBundle\Entity\Tag", inversedBy="historys", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Darkwood\FrontBundle\Entity\Tag", inversedBy="histories", cascade={"persist"})
      * @ORM\JoinTable(name="dw_history_tag")
      */
     protected $tags;
