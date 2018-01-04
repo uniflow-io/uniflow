@@ -1,5 +1,47 @@
 import React from 'react'
 
+const logs = [{
+    tag: '0.10',
+    label: 'Display uniflow',
+    date: '04/01/2018'
+},{
+    tag: '0.09',
+    label: 'Migrate from VueJS',
+    date: '04/01/2018'
+},{
+    tag: '0.08',
+    label: 'Implement multi-user connection',
+    date: '08/12/2017'
+},{
+    tag: '0.07',
+    label: 'Display active block when running a flow',
+    date: '22/11/2016'
+},{
+    tag: '0.06',
+    label: 'Uniflow flow implementation',
+    date: '18/11/2016'
+},{
+    tag: '0.05',
+    label: 'Uniflow core components',
+    date: '15/11/2016'
+},{
+    tag: '0.04',
+    label: 'Interface with VueJS 2.0',
+    date: '19/10/2016'
+},{
+    tag: '0.03',
+    label: 'Use NoFlo',
+    date: '27/11/2013'
+},{
+    tag: '0.02',
+    label: 'Graph update',
+    date: '15/11/2013'
+},{
+    tag: '0.01',
+    label: 'Bootstrap 3',
+    date: '04/09/2013'
+},]
+
 export default () => (
     <div className="content-wrapper">
         {/* Content Header (Page header) */}
@@ -9,7 +51,7 @@ export default () => (
                 <small>Control panel</small>
             </h1>
             <ol className="breadcrumb">
-                <li><a href="#"><i className="fa fa-dashboard" /> Home</a></li>
+                <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
                 <li className="active">Logs</li>
             </ol>
         </section>
@@ -20,17 +62,21 @@ export default () => (
                 <div className="col-md-12">
 
                     <h3>Logs</h3>
-                    <ul>
-                        <li>04/01/2018 - <span className="fa fa-tag">0.10</span> Display uniflow logs</li>
-                        <li>04/01/2018 - <span className="fa fa-tag">0.09</span> Migrate from VueJS to ReactJS</li>
-                        <li>08/12/2017 - <span className="fa fa-tag">0.08</span> Implement multi-user connection</li>
-                        <li>22/11/2016 - <span className="fa fa-tag">0.07</span> Display active block when running a flow</li>
-                        <li>18/11/2016 - <span className="fa fa-tag">0.06</span> Uniflow flow implementation</li>
-                        <li>15/11/2016 - <span className="fa fa-tag">0.05</span> Uniflow core components</li>
-                        <li>19/10/2016 - <span className="fa fa-tag">0.04</span> Interface with VueJS 2.0</li>
-                        <li>27/11/2013 - <span className="fa fa-tag">0.03</span> Use NoFlo</li>
-                        <li>15/11/2013 - <span className="fa fa-tag">0.02</span> Graph update</li>
-                        <li>04/09/2013 - <span className="fa fa-tag">0.01</span> Bootstrap 3</li>
+
+
+                    <ul className="timeline">
+                        {logs.map((value, index) => ([
+                            <li className="time-label"><span className="bg-green">{value.date}</span></li>,
+                            <li>
+                                <div className="timeline-item">
+                                    <h3 className="timeline-header">{value.label}</h3>
+                                    <div className="timeline-body" />
+                                    <div className="timeline-footer">
+                                        <span className="label label-primary fa fa-tag"> {value.tag}</span>
+                                    </div>
+                                </div>
+                            </li>
+                        ]))}
                     </ul>
 
                 </div>
