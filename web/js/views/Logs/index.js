@@ -63,7 +63,6 @@ export default () => (
 
                     <h3>Logs</h3>
 
-
                     <ul className="timeline">
                         {logs.map((value, index) => ([
                             <li className="time-label"><span className="bg-green">{value.date}</span></li>,
