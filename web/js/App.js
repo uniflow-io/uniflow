@@ -11,6 +11,7 @@ import routes, {pathTo} from './routes'
 import reducers from './reducers/index'
 import HistoryManager from './utils/HistoryManager/index'
 import {connect} from 'react-redux'
+import {getNewLogs,commitReadLog} from 'uniflow/reducers/log/actions'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
@@ -20,15 +21,21 @@ let store = createStore(
 )
 
 class Alerts extends Component {
+    onClose = (event, id) => {
+        event.preventDefault()
+
+        this.props.dispatch(commitReadLog(id))
+    }
+
     render() {
         const {logs} = this.props
 
         return (
             <div>
-                {logs.map((log, index) => (
+                {Object.keys(logs).map((key, index) => (
                     <div key={index} className="alert alert-danger" style={{marginBottom: '0px'}}>
-                        <button type="button" className="close" aria-hidden="true">×</button>
-                        <h4><i className="icon fa fa-ban" /> {log.message}</h4>
+                        <button type="button" className="close" aria-hidden="true" onClick={(event) => this.onClose(event, logs[key].id)}>×</button>
+                        <h4><i className="icon fa fa-ban" /> {logs[key].message}</h4>
                     </div>
                 ))}
             </div>
@@ -37,7 +44,7 @@ class Alerts extends Component {
 }
 
 const DisplayAlerts = connect(state => ({
-    logs: state.logs
+    logs: getNewLogs(state.logs)
 }))(Alerts)
 
 export default class App extends Component {

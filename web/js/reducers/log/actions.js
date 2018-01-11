@@ -3,6 +3,15 @@ import {
     COMMIT_READ_LOG,
 } from './actionsTypes'
 
+export const getNewLogs = (state) => {
+    return Object.keys(state).reduce((newLogs, key) => {
+        if(state[key].status === 'new') {
+            newLogs[key] = state[key]
+        }
+        return newLogs
+    }, {})
+}
+
 export const commitAddLog = (message, code) => {
     return (dispatch) => {
         dispatch({
@@ -13,11 +22,11 @@ export const commitAddLog = (message, code) => {
         return Promise.resolve()
     }
 }
-export const commitReadLog = (index) => {
+export const commitReadLog = (id) => {
     return (dispatch) => {
         dispatch({
             type: COMMIT_READ_LOG,
-            index
+            id
         })
         return Promise.resolve()
     }
