@@ -5,7 +5,7 @@ import {
 
 const defaultState = []
 
-const log = (state = defaultState, action) => {
+const logs = (state = defaultState, action) => {
     switch (action.type) {
         case COMMIT_ADD_LOG:
             let newStateAdd = state.slice()
@@ -31,4 +31,4 @@ const log = (state = defaultState, action) => {
     }
 }
 
-export default log
+export default logs

@@ -11,7 +11,7 @@ const routes = {
         path: '/_=_',
         component: Home,
     },
-    credits: {
+    faq: {
         path: '/faq',
         component: FAQ,
     },

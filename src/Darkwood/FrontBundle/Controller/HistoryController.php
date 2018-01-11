@@ -4,11 +4,15 @@ namespace Darkwood\FrontBundle\Controller;
 
 use Darkwood\FrontBundle\Form\HistoryType;
 use Darkwood\FrontBundle\Entity\History;
+use Darkwood\FrontBundle\Services\HistoryService;
+use Darkwood\FrontBundle\Services\TagService;
+use Darkwood\UserBundle\Entity\User;
 use FOS\UserBundle\Model\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -72,9 +76,14 @@ class HistoryController extends Controller
      */
     public function createAction(Request $request)
     {
+        /** @var User $user */
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        if(!$this->isGranted('ROLE_SUPER_ADMIN') && $user->getHistories()->count() >= 5) {
+            throw new AccessDeniedException('You are not alowed to create more history');
         }
 
         $entity = new History();

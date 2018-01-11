@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from 'uniflow/routes'
 import {connect} from 'react-redux'
 import {createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
+import {commitAddLog} from 'uniflow/reducers/log/actions'
 
 class History extends Component {
     state = {
@@ -24,6 +25,9 @@ class History extends Component {
             }))
             .then((item) => {
                 return this.props.dispatch(setCurrentHistory(item.id))
+            })
+            .catch((log) => {
+                return this.props.dispatch(commitAddLog(log.message, log.code))
             })
     }
 

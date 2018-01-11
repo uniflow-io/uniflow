@@ -40,7 +40,7 @@ const logs = [{
     tag: '0.01',
     label: 'Bootstrap 3',
     date: '04/09/2013'
-},]
+}]
 
 export default () => (
     <div className="content-wrapper">
@@ -83,5 +83,4 @@ export default () => (
         </section>
         {/* /.content */}
     </div>
-
 )

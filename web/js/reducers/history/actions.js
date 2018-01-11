@@ -1,6 +1,6 @@
 import request from 'axios'
 import serverService from 'uniflow/services/server'
-import History from 'uniflow/models/History'
+import {Log,History} from 'uniflow/models/index'
 import moment from 'moment'
 import {
     COMMIT_CLEAR_HISTORY,
@@ -8,7 +8,6 @@ import {
     COMMIT_DELETE_HISTORY,
     COMMIT_SET_CURRENT_HISTORY,
 } from './actionsTypes'
-import {COMMIT_UPDATE_FLOW} from "../flow/actionsTypes";
 
 export const getCurrentHistory = (state) => {
     return state.current ? state.items[state.current] : null;
@@ -94,7 +93,11 @@ export const createHistory = (item) => {
                 dispatch(commitUpdateHistory(item));
 
                 return item;
-            });
+            })
+            .catch(() => {
+                return Promise.reject(new Log({message: 'Create failed', code: Log.HISTORY_CREATE_FAIL}))
+            })
+        ;
     }
 }
 export const updateHistory = (item) => {
