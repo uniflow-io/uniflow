@@ -138,7 +138,11 @@ export const setHistoryData = (item) => {
                 dispatch(commitUpdateHistory(item));
 
                 return response.data;
-            });
+            })
+            .catch(() => {
+                return Promise.reject(new Log({message: 'Update data fail', code: Log.HISTORY_DATA_SET_FAIL}))
+            })
+        ;
     }
 }
 export const deleteHistory = (item) => {

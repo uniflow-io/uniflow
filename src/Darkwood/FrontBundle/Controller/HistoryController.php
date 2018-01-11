@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Serializer\Encoder\JsonDecode;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 /**
  * Class SFTPComponentController.
@@ -144,6 +147,22 @@ class HistoryController extends Controller
 
         if ('POST' === $request->getMethod()) {
             $content = $request->getContent();
+
+            $decoder = new JsonDecode();
+            try{
+                $json = $decoder->decode($content, 'json');
+
+                if(!$this->isGranted('ROLE_SUPER_ADMIN') && $json) {
+                    foreach ($json as $item) {
+                        if(!in_array($item->component, array('core-javascript', 'core-text'))) {
+                            return new JsonResponse(false, 400);
+                        }
+                    }
+                }
+            } catch (NotEncodableValueException $e) {
+                return new JsonResponse(false, 400);
+            }
+
             $entity->setData($content);
 
             $this->get('dw.history')->save($entity);

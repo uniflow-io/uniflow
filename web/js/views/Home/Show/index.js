@@ -24,6 +24,7 @@ import {
     setHistoryData,
     setCurrentHistory
 } from 'uniflow/reducers/history/actions'
+import {commitAddLog} from 'uniflow/reducers/log/actions'
 import {connect} from 'react-redux'
 
 class UiComponent extends Component {
@@ -255,7 +256,11 @@ class Show extends Component {
         let data = history.data;
         history.serialiseFlowData(stack);
         if(history.data !== data) {
-            this.props.dispatch(setHistoryData(history))
+            this.props
+                .dispatch(setHistoryData(history))
+                .catch((log) => {
+                    return this.props.dispatch(commitAddLog(log.message, log.code))
+                })
         }
     }, 500)
 
@@ -300,7 +305,11 @@ class Show extends Component {
             })
             .then(() => {
                 return this.props.dispatch(setCurrentHistory(history.id));
-            });
+            })
+            .catch((log) => {
+                return this.props.dispatch(commitAddLog(log.message, log.code))
+            })
+        ;
     }
 
     onDelete = (event) => {
