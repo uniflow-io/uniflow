@@ -49,4 +49,14 @@ class HistoryRepository extends BaseRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function clearHistoryByUser(User $user)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->delete($this->getEntityName(), 'h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
+        ;
+
+        $qb->getQuery()->execute();
+    }
 }

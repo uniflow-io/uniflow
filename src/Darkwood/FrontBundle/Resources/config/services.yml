@@ -28,6 +28,7 @@ services:
         calls:
             - [ setEntityManager, [ "@doctrine.orm.entity_manager" ] ]
             - [ addRepository, [ historyRepository, "%dw.entity.history.class%" ] ]
+            - [ addService,       [ 'cache', '@dw.cache' ] ]
 
     dw.form.history:
         class: "%dw.form.history.class%"

@@ -1,5 +1,4 @@
 parameters:
-    dw.doctrineCache.class: Cache\Bridge\DoctrineCacheBridge
 
 services:
 
@@ -8,8 +7,8 @@ services:
         autoconfigure: true
         #public: false
 
-    dw.defaultCache:
-        class: '%dw.doctrineCache.class%'
+    dw.cache:
+        class: Cache\Bridge\Doctrine\DoctrineCacheBridge
         arguments: [ '@cache.provider.defaultCache' ]
 
     twig.extension.text:
