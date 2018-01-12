@@ -102,6 +102,8 @@ class HistoryService extends BaseService
 
     public function resetDemoAccount(User $user)
     {
+        return true;
+
         $now = new \DateTime();
 
         $key  = 'reset_account_' . $user->getId();
