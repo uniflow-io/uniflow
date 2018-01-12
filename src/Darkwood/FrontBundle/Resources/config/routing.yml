@@ -13,6 +13,10 @@ history:
   resource: '@FrontBundle/Resources/config/routing/history.yml'
   prefix:   /history
 
+user:
+  resource: '@FrontBundle/Resources/config/routing/user.yml'
+  prefix:   /user
+
 home:
   path: /
   defaults: { _controller: FrontBundle:Default:home }

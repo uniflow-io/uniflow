@@ -1,30 +1,10 @@
 import React, { Component } from 'react'
 import { Select2 } from 'uniflow/components/index'
-import components from 'uniflow/uniflow/components';
+import {connect} from 'react-redux'
 
-export default class Search extends Component {
+class Search extends Component {
     state = {
         search: 'core-javascript'
-    }
-
-    constructor(props, ...rest) {
-        super(props, ...rest)
-
-        this.optionGroups = {}
-
-        for(let key in components) {
-            if(components.hasOwnProperty(key)) {
-                let [group, label] = key.split('-');
-
-                if(!this.optionGroups[group]) {
-                    this.optionGroups[group] = [];
-                }
-
-                this.optionGroups[group].push({
-                    id: key, text: label
-                });
-            }
-        }
     }
 
     onSubmit = (event) => {
@@ -40,6 +20,7 @@ export default class Search extends Component {
     }
 
     render() {
+        const { optionGroups } = this.props
         const { search } = this.state
 
         return (
@@ -49,9 +30,9 @@ export default class Search extends Component {
 
                     <div className="col-sm-9">
                         <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
-                            {Object.keys(this.optionGroups).map((group) => (
+                            {Object.keys(optionGroups).map((group) => (
                                 <optgroup key={group} label={group}>
-                                    {this.optionGroups[group].map((option) => (
+                                    {optionGroups[group].map((option) => (
                                         <option key={option.id} value={option.id}>{ option.text }</option>
                                     ))}
                                 </optgroup>
@@ -66,3 +47,28 @@ export default class Search extends Component {
         )
     }
 }
+
+const getOptionGroups = (components) => {
+    let optionGroups = {}
+
+    for(let i = 0; i < components.length; i++) {
+        let key = components[i]
+        let [group, label] = key.split('-');
+
+        if(!optionGroups[group]) {
+            optionGroups[group] = [];
+        }
+
+        optionGroups[group].push({
+            id: key, text: label
+        });
+    }
+
+    return optionGroups
+}
+
+export default connect(state => {
+    return {
+        optionGroups: getOptionGroups(state.user.components),
+    }
+})(Search)
