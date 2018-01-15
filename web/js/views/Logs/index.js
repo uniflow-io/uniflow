@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.11',
+    label: 'Demo account reset',
+    date: '15/01/2018'
+}, {
     tag: '0.10',
     label: 'Display uniflow',
     date: '04/01/2018'
