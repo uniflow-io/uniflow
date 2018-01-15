@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {pathTo} from 'uniflow/routes'
 import {connect} from 'react-redux'
-import {createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
+import {getOrderedHistory, createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
 import {commitAddLog} from 'uniflow/reducers/log/actions'
 
 class History extends Component {
@@ -32,34 +32,6 @@ class History extends Component {
     }
 
     render() {
-        const filteredHistory = (history) => {
-            let keys = Object.keys(history.items);
-
-            if (this.state.search) {
-                keys = keys.filter((key) => {
-                    let item  = history.items[key];
-                    let words = item.title;
-                    for (let i = 0; i < item.tags.length; i++) {
-                        words += ' ' + item.tags[i];
-                    }
-                    words = words.toLowerCase();
-
-                    return words.indexOf(this.state.search) !== -1;
-                });
-            }
-
-            keys.sort((keyA, keyB) => {
-                let itemA = history.items[keyA],
-                    itemB = history.items[keyB];
-
-                return itemB.updated.diff(itemA.updated);
-            });
-
-            return keys.map((key) => {
-                return history.items[key];
-            });
-        }
-
         const isActive = (history, item) => {
             return (history.current === item.id) ? 'active' : ''
         }
@@ -94,7 +66,7 @@ class History extends Component {
                                         </div>
                                     </form>
                                 </li>
-                                {filteredHistory(this.props.history).map((item, i) => (
+                                {getOrderedHistory(this.props.history, this.state.search).map((item, i) => (
                                     <li className={isActive(this.props.history, item)} key={i}>
                                         <Link
                                             to={pathTo('homeDetail', {id: item.id})}>{item.title} {item.tags.map((tag, j) => (

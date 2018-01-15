@@ -13,6 +13,34 @@ export const getCurrentHistory = (state) => {
     return state.current ? state.items[state.current] : null;
 }
 
+export const getOrderedHistory = (state, filter) => {
+    let keys = Object.keys(state.items);
+
+    if (filter !== undefined) {
+        keys = keys.filter((key) => {
+            let item  = state.items[key];
+            let words = item.title;
+            for (let i = 0; i < item.tags.length; i++) {
+                words += ' ' + item.tags[i];
+            }
+            words = words.toLowerCase();
+
+            return words.indexOf(filter) !== -1;
+        });
+    }
+
+    keys.sort((keyA, keyB) => {
+        let itemA = state.items[keyA],
+            itemB = state.items[keyB];
+
+        return itemB.updated.diff(itemA.updated);
+    });
+
+    return keys.map((key) => {
+        return state.items[key];
+    });
+}
+
 export const getTags = (state) => {
     let tags = Object.keys(state.items).reduce(function(previous, key) {
         return previous.concat(state.items[key].tags);
