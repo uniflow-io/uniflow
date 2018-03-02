@@ -24,6 +24,7 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
     });*/
 
+    require('./components/childProcess')(socket)
     require('./components/filesystem')(socket)
     require('./components/robot')(socket)
 });
