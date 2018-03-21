@@ -12,6 +12,10 @@ export default class CoreText extends Component<Props> {
         text: null
     }
 
+    static tags() {
+        return ['core']
+    }
+
     componentDidMount() {
         const { bus } = this.props
 

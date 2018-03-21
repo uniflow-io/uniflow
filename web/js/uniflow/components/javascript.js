@@ -11,6 +11,10 @@ export default class CoreJavascript extends Component<Props> {
         code: null
     }
 
+    static tags() {
+        return ['core']
+    }
+
     componentDidMount() {
         const { bus } = this.props
 

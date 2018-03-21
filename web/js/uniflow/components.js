@@ -1,21 +1,21 @@
-import CoreJavascript from './core/javascript/index.js';
-import CoreAssets from './core/assets/index.js';
-import CoreInclude from './core/include/index.js';
-import CoreText from './core/text/index.js';
-import CoreSocketIO from './core/socketio/index.js';
-import UICheckBoxes from './ui/checkboxes/index.js';
-import UIObject from './ui/object/index.js';
-import UISelect from './ui/select/index.js';
-import UITextList from './ui/textlist/index.js';
+import Javascript from './components/javascript.js';
+import Assets from './components/assets.js';
+import Include from './components/include.js';
+import Text from './components/text.js';
+import SocketIO from './components/socketio.js';
+import CheckBoxes from './components/checkboxes.js';
+import Object from './components/object.js';
+import Select from './components/select.js';
+import TextList from './components/textlist.js';
 
 export default {
-    'core-javascript': CoreJavascript,
-    'core-assets': CoreAssets,
-    'core-include': CoreInclude,
-    'core-text': CoreText,
-    'core-socketio': CoreSocketIO,
-    'ui-checkboxes': UICheckBoxes,
-    'ui-object': UIObject,
-    'ui-select': UISelect,
-    'ui-textlist': UITextList,
+    'javascript': Javascript,
+    'assets': Assets,
+    'include': Include,
+    'text': Text,
+    'socketio': SocketIO,
+    'checkboxes': CheckBoxes,
+    'object': Object,
+    'select': Select,
+    'textlist': TextList,
 }

@@ -12,6 +12,10 @@ export default class UITextList extends Component<Props> {
         textlist: []
     }
 
+    static tags() {
+        return ['ui']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

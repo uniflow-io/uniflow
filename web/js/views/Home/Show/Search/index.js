@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 
 class Search extends Component {
     state = {
-        search: 'core-javascript'
+        search: 'javascript'
     }
 
     onSubmit = (event) => {
@@ -20,7 +20,7 @@ class Search extends Component {
     }
 
     render() {
-        const { optionGroups } = this.props
+        const { components } = this.props
         const { search } = this.state
 
         return (
@@ -30,12 +30,8 @@ class Search extends Component {
 
                     <div className="col-sm-9">
                         <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
-                            {Object.keys(optionGroups).map((group) => (
-                                <optgroup key={group} label={group}>
-                                    {optionGroups[group].map((option) => (
-                                        <option key={option.id} value={option.id}>{ option.text }</option>
-                                    ))}
-                                </optgroup>
+                            {components.map((component) => (
+                                <option key={component} value={component}>{ component }</option>
                             ))}
                         </Select2>
                     </div>
@@ -48,27 +44,8 @@ class Search extends Component {
     }
 }
 
-const getOptionGroups = (components) => {
-    let optionGroups = {}
-
-    for(let i = 0; i < components.length; i++) {
-        let key = components[i]
-        let [group, label] = key.split('-');
-
-        if(!optionGroups[group]) {
-            optionGroups[group] = [];
-        }
-
-        optionGroups[group].push({
-            id: key, text: label
-        });
-    }
-
-    return optionGroups
-}
-
 export default connect(state => {
     return {
-        optionGroups: getOptionGroups(state.user.components),
+        components: state.user.components,
     }
 })(Search)

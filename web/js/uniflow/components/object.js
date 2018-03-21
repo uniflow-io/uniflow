@@ -531,6 +531,10 @@ export default class UIObject extends Component<Props> {
         keyvaluelist: []
     }
 
+    static tags() {
+        return ['ui']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

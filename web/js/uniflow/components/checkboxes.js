@@ -12,6 +12,10 @@ export default class UICheckBoxes extends Component<Props> {
         checkboxes: {}
     }
 
+    static tags() {
+        return ['ui']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

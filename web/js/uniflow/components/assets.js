@@ -12,6 +12,10 @@ export default class CoreAssets extends Component<Props> {
         assets: []
     }
 
+    static tags() {
+        return ['core']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

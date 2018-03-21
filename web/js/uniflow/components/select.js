@@ -1,16 +1,21 @@
 import React, {Component} from 'react'
+import { Select2 } from 'uniflow/components/index'
 import {Bus} from 'uniflow/models/index'
-import io from 'socket.io-client/dist/socket.io';
+import {connect} from 'react-redux'
 
 type Props = {
     bus: Bus
 }
 
-export default class CoreSocketIO extends Component<Props> {
+export default class UISelect extends Component<Props> {
     state = {
         variable: null,
-        host: null,
-        port: null
+        choices: [],
+        selected: null
+    }
+
+    static tags() {
+        return ['ui']
     }
 
     componentDidMount() {
@@ -44,25 +49,21 @@ export default class CoreSocketIO extends Component<Props> {
     }
 
     serialise = () => {
-        return [this.state.variable, this.state.host, this.state.port]
+        return [this.state.variable, this.state.choices, this.state.selected];
     }
 
     deserialise = (data) => {
-        let [variable, host, port] = data ? data : [null, null, null];
+        let [variable, choices, selected] = data ? data : [null, [], null];
 
-        this.setState({variable: variable, host: host, port: port})
+        this.setState({variable: variable, choices: choices, selected: selected})
     }
 
     onChangeVariable = (event) => {
         this.setState({variable: event.target.value}, this.onUpdate)
     }
 
-    onChangeHost = (event) => {
-        this.setState({host: event.target.value}, this.onUpdate)
-    }
-
-    onChangePort = (event) => {
-        this.setState({port: event.target.value}, this.onUpdate)
+    onChangeSelected = (selected) => {
+        this.setState({selected: selected}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -76,48 +77,25 @@ export default class CoreSocketIO extends Component<Props> {
     }
 
     onCompile = (interpreter, scope) => {
-        let obj = {};
 
-        let wrapper  = function (url) {
-            let newIO  = interpreter.createObjectProto(obj.IO_PROTO);
-            let socket = io(url);
-
-            wrapper = function (eventName, callback) {
-                socket.on(eventName, callback);
-                return this;
-            };
-            interpreter.setProperty(newIO, 'on', interpreter.createNativeFunction(wrapper, false));
-
-            wrapper = function (eventName) {
-                let args     = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
-                let callback = arguments[arguments.length - 1];
-                args.push(function (data) {
-                    callback(interpreter.nativeToPseudo(data));
-                    interpreter.run();
-                });
-                socket.emit.apply(socket, args);
-            };
-            interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(wrapper, false));
-
-            return newIO;
-        };
-        obj.IO       = interpreter.createNativeFunction(wrapper, true);
-        obj.IO_PROTO = interpreter.getProperty(obj.IO, 'prototype');
-        interpreter.setProperty(scope, 'IO', obj.IO);
     }
 
     onExecute = (runner) => {
-        runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
+        if (this.state.variable && runner.hasValue(this.state.variable)) {
+            this.setState({choices: runner.getValue(this.state.variable)}, this.onUpdate)
+
+            runner.setValue(this.state.variable, this.state.selected);
+        }
     }
 
     render() {
-        const {variable, host, port} = this.state
+        const {variable, choices, selected} = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Socket IO</h3>
+                        <h3 className="box-title">Select</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>
@@ -132,18 +110,14 @@ export default class CoreSocketIO extends Component<Props> {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="host{{ _uid }}" className="col-sm-2 control-label">Host</label>
+                            <label htmlFor="select{{ _uid }}" className="col-sm-2 control-label">Select</label>
 
                             <div className="col-sm-10">
-                                <input id="host{{ _uid }}" type="text" value={host || ''} onChange={this.onChangeHost} className="form-control"/>
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="port{{ _uid }}" className="col-sm-2 control-label">Port</label>
-
-                            <div className="col-sm-10">
-                                <input id="port{{ _uid }}" type="text" value={port || ''} onChange={this.onChangePort} className="form-control"/>
+                                <Select2 value={selected} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
+                                    {Object.keys(choices).map((value) => (
+                                        <option key={value} value={choices[value]}>{ choices[value] }</option>
+                                    ))}
+                                </Select2>
                             </div>
                         </div>
                     </div>
