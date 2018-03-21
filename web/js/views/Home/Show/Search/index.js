@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Select2 } from 'uniflow/components/index'
 import {connect} from 'react-redux'
+import components from 'uniflow/uniflow/components';
 
 class Search extends Component {
     state = {
@@ -20,7 +21,7 @@ class Search extends Component {
     }
 
     render() {
-        const { components } = this.props
+        const { componentLabels } = this.props
         const { search } = this.state
 
         return (
@@ -30,8 +31,8 @@ class Search extends Component {
 
                     <div className="col-sm-9">
                         <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
-                            {components.map((component) => (
-                                <option key={component} value={component}>{ component }</option>
+                            {Object.keys(componentLabels).map((component) => (
+                                <option key={component} value={component}>{ componentLabels[component] }</option>
                             ))}
                         </Select2>
                     </div>
@@ -44,8 +45,20 @@ class Search extends Component {
     }
 }
 
+const getComponentLabels = (userComponents) => {
+    let componentLabels = {}
+
+    for(let i = 0; i < userComponents.length; i++) {
+        let key = userComponents[i]
+
+        componentLabels[key] = components[key].tags().join(' - ') + ' : ' + key
+    }
+
+    return componentLabels
+}
+
 export default connect(state => {
     return {
-        components: state.user.components,
+        componentLabels: getComponentLabels(state.user.components),
     }
 })(Search)
