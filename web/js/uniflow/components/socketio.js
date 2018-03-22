@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class SocketIO extends Component<Props> {
+export default class ComponentSocketIO extends Component<Props> {
     state = {
         variable: null,
         host: null,

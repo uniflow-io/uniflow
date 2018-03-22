@@ -1,21 +1,21 @@
-import Assets from './components/assets.js';
-import CheckBoxes from './components/checkboxes.js';
-import Include from './components/include.js';
-import Javascript from './components/javascript.js';
-import Object from './components/object.js';
-import Select from './components/select.js';
-import SocketIO from './components/socketio.js';
-import Text from './components/text.js';
-import TextList from './components/textlist.js';
+import ComponentAssets from './components/assets.js';
+import ComponentCheckBoxes from './components/checkboxes.js';
+import ComponentInclude from './components/include.js';
+import ComponentJavascript from './components/javascript.js';
+import ComponentObject from './components/object.js';
+import ComponentSelect from './components/select.js';
+import ComponentSocketIO from './components/socketio.js';
+import ComponentText from './components/text.js';
+import ComponentTextList from './components/textlist.js';
 
 export default {
-    'assets': Assets,
-    'checkboxes': CheckBoxes,
-    'include': Include,
-    'javascript': Javascript,
-    'object': Object,
-    'select': Select,
-    'socketio': SocketIO,
-    'text': Text,
-    'textlist': TextList,
+    'assets': ComponentAssets,
+    'checkboxes': ComponentCheckBoxes,
+    'include': ComponentInclude,
+    'javascript': ComponentJavascript,
+    'object': ComponentObject,
+    'select': ComponentSelect,
+    'socketio': ComponentSocketIO,
+    'text': ComponentText,
+    'textlist': ComponentTextList,
 }

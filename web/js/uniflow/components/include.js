@@ -8,7 +8,7 @@ type Props = {
     bus: Bus
 }
 
-class Include extends Component<Props> {
+class ComponentInclude extends Component<Props> {
     state = {
         historyId: null
     }
@@ -139,4 +139,4 @@ export default connect(state => {
     return {
         history: state.history
     }
-})(Include)
+})(ComponentInclude)

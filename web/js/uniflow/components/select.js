@@ -7,7 +7,7 @@ type Props = {
     bus: Bus
 }
 
-export default class Select extends Component<Props> {
+export default class ComponentSelect extends Component<Props> {
     state = {
         variable: null,
         choices: [],

@@ -525,7 +525,7 @@ type Props = {
     bus: Bus
 }
 
-export default class Object extends Component<Props> {
+export default class ComponentObject extends Component<Props> {
     state = {
         variable: null,
         keyvaluelist: []
