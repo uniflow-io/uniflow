@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class UICheckBoxes extends Component<Props> {
+export default class CheckBoxes extends Component<Props> {
     state = {
         variable: null,
         checkboxes: {}

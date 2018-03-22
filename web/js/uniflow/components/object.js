@@ -525,7 +525,7 @@ type Props = {
     bus: Bus
 }
 
-export default class UIObject extends Component<Props> {
+export default class Object extends Component<Props> {
     state = {
         variable: null,
         keyvaluelist: []

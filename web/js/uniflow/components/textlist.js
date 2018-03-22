@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class UITextList extends Component<Props> {
+export default class TextList extends Component<Props> {
     state = {
         variable: null,
         textlist: []

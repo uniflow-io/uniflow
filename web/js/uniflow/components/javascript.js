@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class CoreJavascript extends Component<Props> {
+export default class Javascript extends Component<Props> {
     state = {
         code: null
     }

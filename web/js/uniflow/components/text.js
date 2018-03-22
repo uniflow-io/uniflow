@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class CoreText extends Component<Props> {
+export default class Text extends Component<Props> {
     state = {
         variable: null,
         text: null
