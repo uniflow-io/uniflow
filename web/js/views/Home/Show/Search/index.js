@@ -31,8 +31,8 @@ class Search extends Component {
 
                     <div className="col-sm-9">
                         <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
-                            {Object.keys(componentLabels).map((component) => (
-                                <option key={component} value={component}>{ componentLabels[component] }</option>
+                            {componentLabels.map((component) => (
+                                <option key={component.key} value={component.key}>{ component.label }</option>
                             ))}
                         </Select2>
                     </div>
@@ -46,13 +46,22 @@ class Search extends Component {
 }
 
 const getComponentLabels = (userComponents) => {
-    let componentLabels = {}
+    let componentLabels = []
 
     for(let i = 0; i < userComponents.length; i++) {
         let key = userComponents[i]
 
-        componentLabels[key] = components[key].tags().join(' - ') + ' : ' + key
+        componentLabels.push({
+            key: key,
+            label: components[key].tags().join(' - ') + ' : ' + key
+        })
     }
+
+    componentLabels.sort(function(component1, component2) {
+        let x = component1.label;
+        let y = component2.label;
+        return x < y ? -1 : x > y ? 1 : 0;
+    })
 
     return componentLabels
 }
