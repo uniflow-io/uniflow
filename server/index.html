@@ -2,19 +2,1272 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Socket IO testing</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <title>YAML testing</title>
 </head>
 <body>
+<div id="output"></div>
+<script>
+    var exports = {};
+    // YAML - Core - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
+
+    /**
+     * Version triplet.
+     */
+
+    exports.version = '0.2.3'
+
+    // --- Helpers
+
+    /**
+     * Return 'near "context"' where context
+     * is replaced by a chunk of _str_.
+     *
+     * @param  {string} str
+     * @return {string}
+     * @api public
+     */
+
+    function context(str) {
+        if (typeof str !== 'string') return ''
+        str = str
+            .slice(0, 25)
+            .replace(/\n/g, '\\n')
+            .replace(/"/g, '\\\"')
+        return 'near "' + str + '"'
+    }
+
+    // --- Lexer
+
+    /**
+     * YAML grammar tokens.
+     */
+
+    var tokens = [
+        ['comment', /^#[^\n]*/],
+        ['indent', /^\n( *)/],
+        ['space', /^ +/],
+        ['true', /^\b(enabled|true|yes|on)\b/],
+        ['false', /^\b(disabled|false|no|off)\b/],
+        ['null', /^\b(null|Null|NULL|~)\b/],
+        ['string', /^"(.*?)"/],
+        ['string', /^'(.*?)'/],
+        ['timestamp', /^((\d{4})-(\d\d?)-(\d\d?)(?:(?:[ \t]+)(\d\d?):(\d\d)(?::(\d\d))?)?)/],
+        ['float', /^(\d+\.\d+)/],
+        ['int', /^(\d+)/],
+        ['doc', /^---/],
+        [',', /^,/],
+        ['{', /^\{(?![^\n\}]*\}[^\n]*[^\s\n\}])/],
+        ['}', /^\}/],
+        ['[', /^\[(?![^\n\]]*\][^\n]*[^\s\n\]])/],
+        [']', /^\]/],
+        ['-', /^\-/],
+        [':', /^[:]/],
+        ['string', /^(?![^:\n\s]*:[^\/]{2})(([^:,\]\}\n\s]|(?!\n)\s(?!\s*?\n)|:\/\/|,(?=[^\n]*\s*[^\]\}\s\n]\s*\n)|[\]\}](?=[^\n]*\s*[^\]\}\s\n]\s*\n))*)(?=[,:\]\}\s\n]|$)/],
+        ['id', /^([\w][\w -]*)/]
+    ]
+
+    /**
+     * Tokenize the given _str_.
+     *
+     * @param  {string} str
+     * @return {array}
+     * @api private
+     */
+
+    exports.tokenize = function (str) {
+        var token, captures, ignore, input,
+            indents = 0, lastIndents = 0,
+            stack = [], indentAmount = -1
+
+        // Windows new line support (CR+LF, \r\n)
+        str = str.replace(/\r\n/g, "\n");
+
+        while (str.length) {
+            for (var i = 0, len = tokens.length; i < len; ++i)
+                if (captures = tokens[i][1].exec(str)) {
+                    token = [tokens[i][0], captures],
+                        str = str.replace(tokens[i][1], '')
+                    switch (token[0]) {
+                        case 'comment':
+                            ignore = true
+                            break
+                        case 'indent':
+                            lastIndents = indents
+                            // determine the indentation amount from the first indent
+                            if (indentAmount == -1) {
+                                indentAmount = token[1][1].length
+                            }
+
+                            indents = token[1][1].length / indentAmount
+                            if (indents === lastIndents)
+                                ignore = true
+                            else if (indents > lastIndents + 1)
+                                throw new SyntaxError('invalid indentation, got ' + indents + ' instead of ' + (lastIndents + 1))
+                            else if (indents < lastIndents) {
+                                input = token[1].input
+                                token = ['dedent']
+                                token.input = input
+                                while (--lastIndents > indents)
+                                    stack.push(token)
+                            }
+                    }
+                    break
+                }
+            if (!ignore)
+                if (token)
+                    stack.push(token),
+                        token = null
+                else
+                    throw new SyntaxError(context(str))
+            ignore = false
+        }
+        return stack
+    }
+
+    // --- Parser
+
+    /**
+     * Initialize with _tokens_.
+     */
+
+    function Parser(tokens) {
+        this.tokens = tokens
+    }
+
+    /**
+     * Look-ahead a single token.
+     *
+     * @return {array}
+     * @api public
+     */
+
+    Parser.prototype.peek = function() {
+        return this.tokens[0]
+    }
+
+    /**
+     * Advance by a single token.
+     *
+     * @return {array}
+     * @api public
+     */
+
+    Parser.prototype.advance = function() {
+        return this.tokens.shift()
+    }
+
+    /**
+     * Advance and return the token's value.
+     *
+     * @return {mixed}
+     * @api private
+     */
+
+    Parser.prototype.advanceValue = function() {
+        return this.advance()[1][1]
+    }
+
+    /**
+     * Accept _type_ and advance or do nothing.
+     *
+     * @param  {string} type
+     * @return {bool}
+     * @api private
+     */
+
+    Parser.prototype.accept = function(type) {
+        if (this.peekType(type))
+            return this.advance()
+    }
+
+    /**
+     * Expect _type_ or throw an error _msg_.
+     *
+     * @param  {string} type
+     * @param  {string} msg
+     * @api private
+     */
+
+    Parser.prototype.expect = function(type, msg) {
+        if (this.accept(type)) return
+        throw new Error(msg + ', ' + context(this.peek()[1].input))
+    }
+
+    /**
+     * Return the next token type.
+     *
+     * @return {string}
+     * @api private
+     */
+
+    Parser.prototype.peekType = function(val) {
+        return this.tokens[0] &&
+            this.tokens[0][0] === val
+    }
+
+    /**
+     * space*
+     */
+
+    Parser.prototype.ignoreSpace = function() {
+        while (this.peekType('space'))
+            this.advance()
+    }
+
+    /**
+     * (space | indent | dedent)*
+     */
+
+    Parser.prototype.ignoreWhitespace = function() {
+        while (this.peekType('space') ||
+        this.peekType('indent') ||
+        this.peekType('dedent'))
+            this.advance()
+    }
+
+    /**
+     *   block
+     * | doc
+     * | list
+     * | inlineList
+     * | hash
+     * | inlineHash
+     * | string
+     * | float
+     * | int
+     * | true
+     * | false
+     * | null
+     */
+
+    Parser.prototype.parse = function() {
+        switch (this.peek()[0]) {
+            case 'doc':
+                return this.parseDoc()
+            case '-':
+                return this.parseList()
+            case '{':
+                return this.parseInlineHash()
+            case '[':
+                return this.parseInlineList()
+            case 'id':
+                return this.parseHash()
+            case 'string':
+                return this.advanceValue()
+            case 'timestamp':
+                return this.parseTimestamp()
+            case 'float':
+                return parseFloat(this.advanceValue())
+            case 'int':
+                return parseInt(this.advanceValue())
+            case 'true':
+                this.advanceValue(); return true
+            case 'false':
+                this.advanceValue(); return false
+            case 'null':
+                this.advanceValue(); return null
+        }
+    }
+
+    /**
+     * '---'? indent expr dedent
+     */
+
+    Parser.prototype.parseDoc = function() {
+        this.accept('doc')
+        this.expect('indent', 'expected indent after document')
+        var val = this.parse()
+        this.expect('dedent', 'document not properly dedented')
+        return val
+    }
+
+    /**
+     *  ( id ':' - expr -
+     *  | id ':' - indent expr dedent
+     *  )+
+     */
+
+    Parser.prototype.parseHash = function() {
+        var id, hash = {}
+        while (this.peekType('id') && (id = this.advanceValue())) {
+            this.expect(':', 'expected semi-colon after id')
+            this.ignoreSpace()
+            if (this.accept('indent'))
+                hash[id] = this.parse(),
+                    this.expect('dedent', 'hash not properly dedented')
+            else
+                hash[id] = this.parse()
+            this.ignoreSpace()
+        }
+        return hash
+    }
+
+    /**
+     * '{' (- ','? ws id ':' - expr ws)* '}'
+     */
+
+    Parser.prototype.parseInlineHash = function() {
+        var hash = {}, id, i = 0
+        this.accept('{')
+        while (!this.accept('}')) {
+            this.ignoreSpace()
+            if (i) this.expect(',', 'expected comma')
+            this.ignoreWhitespace()
+            if (this.peekType('id') && (id = this.advanceValue())) {
+                this.expect(':', 'expected semi-colon after id')
+                this.ignoreSpace()
+                hash[id] = this.parse()
+                this.ignoreWhitespace()
+            }
+            ++i
+        }
+        return hash
+    }
+
+    /**
+     *  ( '-' - expr -
+     *  | '-' - indent expr dedent
+     *  )+
+     */
+
+    Parser.prototype.parseList = function() {
+        var list = []
+        while (this.accept('-')) {
+            this.ignoreSpace()
+            if (this.accept('indent'))
+                list.push(this.parse()),
+                    this.expect('dedent', 'list item not properly dedented')
+            else
+                list.push(this.parse())
+            this.ignoreSpace()
+        }
+        return list
+    }
+
+    /**
+     * '[' (- ','? - expr -)* ']'
+     */
+
+    Parser.prototype.parseInlineList = function() {
+        var list = [], i = 0
+        this.accept('[')
+        while (!this.accept(']')) {
+            this.ignoreSpace()
+            if (i) this.expect(',', 'expected comma')
+            this.ignoreSpace()
+            list.push(this.parse())
+            this.ignoreSpace()
+            ++i
+        }
+        return list
+    }
+
+    /**
+     * yyyy-mm-dd hh:mm:ss
+     *
+     * For full format: http://yaml.org/type/timestamp.html
+     */
+
+    Parser.prototype.parseTimestamp = function() {
+        var token = this.advance()[1]
+        var date = new Date
+        var year = token[2]
+            , month = token[3]
+            , day = token[4]
+            , hour = token[5] || 0
+            , min = token[6] || 0
+            , sec = token[7] || 0
+
+        date.setUTCFullYear(year, month-1, day)
+        date.setUTCHours(hour)
+        date.setUTCMinutes(min)
+        date.setUTCSeconds(sec)
+        date.setUTCMilliseconds(0)
+        return date
+    }
+
+    /**
+     * Evaluate a _str_ of yaml.
+     *
+     * @param  {string} str
+     * @return {mixed}
+     * @api public
+     */
+
+    exports.eval = function(str) {
+        return (new Parser(exports.tokenize(str))).parse()
+    }
+</script>
 <script>
     (function() {
-        var socket = io('https://localhost:3128');
-        socket.emit('filesystem.read', '/Users/math/Sites/darkwood/uniflow/server/index.html', function(content) {
-            console.log('emit', content)
-        });
-        socket.on('filesystem.read', function(content){
-            console.log('read', content)
-        });
+        var yaml = `back:
+
+### MENU ###
+  menu:
+    users: users accounts.
+    articles: articles.
+    pages:
+      categories:
+        index: pages
+        editorial: hub editorial.
+      identifier:
+        home: home.
+        contact: contact.
+        timeline: timeline.
+        search: search.
+        legal: legal.
+        confidentiality: confidentiality.
+        plan: plan.
+        news: news.
+        articles: articles page.
+        assets: medias page.
+        publish_pdf: publishs page.
+        publish_finance: finance page.
+        event_agenda: events page.
+        event_finance: events page.
+        stores: implantations page.
+    tags:
+      types:
+        index: tags
+        article: articles.
+        publish_pdf: publish pdf
+        publish_finance: publish financial
+        asset: media
+        event_agenda: event agenda
+        event_finance: event finance
+        store: implantation
+    publishs:
+      types:
+        pdf: publishs pdf.
+        finance: finance.
+    publishTypes: finance types.
+    events:
+      types:
+        agenda: events.
+        finance: events.
+    assets: medias.
+    stores: implantations.
+    storeTypes: implantation types.
+    menus: menu.
+    medias: media manager.
+    contacts: contacts.
+    newsletters: newsletters.
+    assetRequests: media requests.
+    cache: clear cache.
+
+### MEDIA ###
+  media:
+    path: path
+    alt: alternative text
+
+### LABELS ###
+  labels:
+    login: log in
+    form:
+      empty: select
+      create: create
+      delete: delete
+      back: back
+      edit: edit
+      preview: preview
+      confirm: are you sure ?
+      main: general.
+      search: search
+      facebook: facebook
+      twitter: twitter
+      footer: footer
+      see: See
+    table:
+      active: Active
+      inactive: Inactive
+      create: Add entry
+      results: results found
+      empty: empty
+    locales:
+      en: English
+      fr: French
+
+### ERRORS ###
+  errors:
+    password: Sorry, the passwords didn't match
+    unique: Sorry, this email is already used
+    required: Sorry, this field is mandatory
+    short: Sorry, the value you set is too short
+    long: Sorry, the value you set is too long
+    mail: Sorry, this is not a valid e-mail
+    form: The form has errors
+
+  user:
+    roles:
+      ROLE_SUPER_ADMIN: Super administrator
+      ROLE_ADMIN: Administrator
+      ROLE_USER: User
+    list:
+      subtitle: Treat with caution...
+      table:
+        name: name
+        email: e-mail
+        role: role
+        enabled: enabled
+        updated: updated at
+
+    edit:
+      title: Update user
+      notice: User has been updated
+    create:
+      title: Create user
+      notice: User has been created
+    delete:
+      notice: User has been deleted
+    form:
+      labels:
+        firstName: first name
+        lastName: last name
+        email: e-mail
+        role: role
+        passwordFirst: password
+        passwordSecond: confirm
+        enabled: user enabled
+        phone: phone number
+        address: address
+        addressMore: address (more)
+        zipCode: zip code
+        city: city
+        country: country
+
+  traits:
+    seo:
+      form:
+        labels:
+          title: title
+          slug: slug
+          description: description
+          keywords: keywords
+          ogSiteName: ogSiteName
+          ogTitle: ogTitle
+          ogDescription: ogDescription
+          twitterTitle: twitterTitle
+          twitterDescription: twitterDescription
+
+  cache:
+    labels:
+      clear: clear cache
+      clearBtn: clear cache
+      alert: Cache has been cleared
+
+  page:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    edit_identifier:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    create_identifier:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    delete_identifier:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        page: page
+        pageSubTitle: Page subtitle
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        identifier: identifier
+        headerBackgroundImage: Header Background Image
+        pageLogoHeader: Logo header
+        searchTitle: title
+        pageSubTitleColor: color
+        pageSubTitleColorColor:
+          red: Red
+          green: Green
+          blue: Blue
+        type: type
+        type.image: image
+        type.video: video
+        blocks:
+          display: Display
+          title: Title
+          text: Text
+          job: Job
+          name: Name
+          phone: Phone
+          email: Email
+          content: Content
+          brand: Brand
+          link: Link
+          year: Year
+          color: Color
+          description: Description
+          subTitle: Sub title
+          number: Number
+          image: Image
+          mp4: mp4
+          ogg: ogg
+          webm: webm
+          page: Page
+          display.right: Right
+          display.left: Left
+          display.full: Full
+          display.center: Center
+          pdf: pdf
+          publish: publish
+          titleHidden: Title hidden
+          subTitleHidden: Sub title hidden
+          author: Author
+          quote: Quote
+          label: Label
+          titleLeft: Title left
+          titleRight: Title right
+          subTitleLeft: Sub title left
+          subTitleRight: Sub title right
+          imageRight: Image right
+          imageLeft: Image left
+          type: Type of link
+          external: External
+          internal: Internal
+          previewVideo: Preview image
+          id: ID YouTube
+    subBlock:
+      title: Title
+      text: Image + Text
+      video: Video
+      bonus: Bonus button
+      double: Double image
+    blocks:
+      title: Title + text
+      text: Sub title
+      video: Video
+      image: Title* + text* + image
+      quote: Quote
+      quote.info: Quote + Project keys
+      keyFigures: Key Figures
+      brand: Brand push site
+      text.article: Text article
+      graphic: Graphic
+      assets: Assets
+      newsletter: Newsletter
+      two.text: 2 texts 2 columns
+      text.quote: Text quote
+      infoprojectkey: Keys informations of project
+      interactive: Interactive
+      brand: Brand
+      brands: Brands
+      slider: Slider
+      data.wall: Data wall
+      finance.event: Finance event
+      push.full.page: Push full page
+      finance: Finance
+      publication.pdf: Publication PDF
+      article: Article
+      articlehighlight: Article Highlight
+      articlelast: Article Last
+      diary: Diary
+      live: Live
+      live_event: Live Event
+      media: Media
+      double.slider: Double slider
+      project.highlight: Project highlight
+      year: Year
+      publishpdf: Publish Pdf
+      publishfinance: Publish Finance
+      eventagenda: Event Agenda
+      eventfinance: Event Finance
+      cta: Push CTA simple
+      product: Categories
+      homeslider: Home slider
+      marketPlace: Market Place
+      calendar: Calendar
+      visualfullwidth: Visual full width
+      needinfos: Need infos
+      projectmaplink: Project map link
+      pushplusimage: Push + Image
+
+  article:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        publicationDate: Publication date
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        isHighlight: is hightlight
+    blocks:
+      title: Title
+      text: Text
+      video: Video
+      image: Image
+      quote: Quote
+      keyFigures: Key Figures
+      brand: brand
+
+  publish:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        type: type
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        isHighlight: is highlight
+        isFlipbook: is flipbook
+        tags: tags
+        description: Description
+
+  publishType:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+
+  store:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        address: address
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    geolocate:
+      notice: implantations have been geolocated
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        address: address
+        code: code
+        phone: phone
+        phoneType: phone type
+        phoneTypePhone: phone
+        phoneTypeFax: fax
+        email: email
+        city: city
+        country: country
+        gpsX: gpsX
+        gpsY: gpsY
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        type: type
+        geolocate: geolocate
+
+  storeType:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        address: address
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        address: address
+        code: code
+        phone: phone
+        city: city
+        gpsX: gpsX
+        gpsY: gpsY
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+
+  menus:
+    list:
+      subtitle: To see how it's working
+      table:
+        head: menu.
+        head_child: sous menu %title%
+        title: title
+        position: position
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+        actions: actions
+        edit_children: edit children
+
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        slug: slug
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        position: position
+        page: page
+        publicationDate: publication date
+        tags: tags
+        isItem: Is Item
+
+  profile:
+      list:
+        subtitle: To see how it's working
+        table:
+          head: menu.
+          head_child: sous menu %title%
+          title: title
+          position: position
+          content: content
+          layout: layout
+          enabled: enabled
+          updated: updated at
+          locale: Locale
+          actions: actions
+          edit_children: edit children
+
+
+      edit:
+        title: Update content
+        notice: Content has been updated
+      create:
+        title: Create content
+        notice: Content has been created
+      delete:
+        notice: Content has been deleted
+      form:
+        labels:
+          title: title
+          media: media
+          content: content
+          layout: layout
+          typeRadio: type 2
+          date: Date
+          file: Image
+          enabled: content enabled
+          position: position
+          page: page
+          publicationDate: publication date
+          tags: tags
+          isItem: Is Item
+          type: type
+          href: href
+          type: type
+
+  asset:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        url: url
+    type:
+      form:
+        object: object
+        lastname: lastname
+        firstname: firstname
+        email: email
+        compagny: compagny
+        message: message
+
+  contact:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        email: email
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        toEmail: to email
+        lastname: lastname
+        firstname: firstname
+        object: object
+        email: email
+        message: message
+    type:
+      search:
+        type: You want contact
+        city: Filter by location
+      form:
+        toEmail: to email
+        lastname: lastname
+        firstname: firstname
+        object: object
+        email: email
+        message: message
+
+  assetRequest:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        email: email
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        toEmail: to email
+        lastname: lastname
+        firstname: firstname
+        object: object
+        email: email
+        message: message
+        compagny: compagny
+
+  newsletter:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        email: email
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        media: media
+        content: content
+        layout: layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: content enabled
+        publicationDate: publication date
+        tags: tags
+        toEmail: to email
+        lastname: lastname
+        firstname: firstname
+        object: object
+        email: email
+        message: message
+    type:
+      form:
+        email: email
+
+  tag:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        type: type
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        color: color
+        type: type
+
+  event:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title:  Title
+        subtitle: Subtitle
+        description: Description
+        media: Media
+        content: Content
+        layout: Layout
+        typeRadio: type 2
+        date: Date
+        file: Image
+        enabled: Content enabled
+        publicationDate: Publication date
+        hour: Hour
+        tags: Tags
+
+  config:
+    list:
+      subtitle: To see how it's working
+      table:
+        title: title
+        content: content
+        layout: layout
+        enabled: enabled
+        updated: updated at
+        locale: Locale
+
+    edit:
+      title: Update content
+      notice: Content has been updated
+    create:
+      title: Create content
+      notice: Content has been created
+    delete:
+      notice: Content has been deleted
+    form:
+      labels:
+        title: title
+        juicerFeedName: Juicer Feed Name
+        ogTitle: og title
+        ogDescription: og description
+        image: image
+        labelContact: label contact
+        pageContact: page contact
+        labelLegal: label legal
+        pageLegal: page legal
+        labelConfidentiality: label confidentiality
+        pageConfidentiality: page confidentiality
+        labelPlan: label plan
+        pagePlan: page plan
+        linkFb: link Facebook
+        linkTwitter: link Twitter
+        linkPinterest: link Pinterest
+        linkYoutube: link Youtube
+        linkLinkedin: link Linkedin
+        twitterTitle: twitter Title
+        twitterDescription: twitter Description
+        image: image`,
+            values = {
+                'back.menu.pages.categories.new': 'new value',
+                'back.menu.pages.identifier.new': 'new identifier',
+                'back.menu.new': 'new menu item',
+            };
+
+        console.log(yaml)
+
     })();
 </script>
 </body>
