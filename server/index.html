@@ -406,8 +406,18 @@
 
     (function (scope) {
         scope.insert = function(yaml, values) {
-            let token = scope.tokenize(yaml)
-            console.log(token)
+            Object.keys(values).forEach(function(key) {
+                let ids = key.split('.'),
+                    value = values[key]
+
+                ids.forEach(function(id) {
+
+                })
+            })
+
+            console.log(yaml)
+            // let token = scope.tokenize(yaml)
+            // console.log(token)
         }
     })(scope)
     
@@ -460,7 +470,7 @@
                 'back.menu.new': 'new menu item',
             };
 
-        scope.insert(yaml, values);
+        scope.insert('', values);
 
     })();
 </script>
