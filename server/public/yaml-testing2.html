@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YAML testing</title>
+    <script src="js/js-yaml.js"></script>
+    <script>
+        (function () {
+            var doc = jsyaml.load('greeting: hello\nname: world');
+            console.log(doc);
+        })()
+    </script>
+</head>
+<body>
+
+</body>
+</html>

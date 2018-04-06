@@ -1,4 +1,4 @@
 #!/bin/sh
 
 yarn install
-node server/index.js
+cd server && ../node_modules/.bin/http-server
