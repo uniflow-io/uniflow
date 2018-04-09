@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>YAML testing</title>
-    <script src="js/js-yaml.js"></script>
+    <script src="js/js-yaml-dist.js"></script>
     <script>
         (function () {
             var doc = jsyaml.load(`back:
@@ -45,7 +45,16 @@
     publishs:
       types:
         pdf: publishs pdf.
-        finance: finance.`);
+        finance: finance.`, {
+                'listener': function(mode, state) {
+                    var clone = Object.assign({}, state)
+                    delete clone.input;
+                    delete clone.schema;
+                    delete clone.implicitTypes;
+                    delete clone.typeMap;
+                    console.log(mode, JSON.stringify(clone))
+                }
+            });
             console.log(doc);
         })()
     </script>
