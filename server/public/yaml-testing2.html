@@ -21,6 +21,10 @@
             clone.kind = state.kind;
             clone.result = state.result;
 
+            var txt = ''
+            for(var i = 0; i< 10; i++) txt += state.input[state.position + i]
+            clone.txt = txt;
+
             lines.push(mode + ' : ' + JSON.stringify(clone))
         }
         var doc = jsyaml.load(`---
