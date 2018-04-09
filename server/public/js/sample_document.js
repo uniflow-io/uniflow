@@ -13,6 +13,7 @@ try {
       contents = fs.readFileSync(filename, 'utf8'),
       data     = yaml.load(contents);
 
+  console.log(data)
   //console.log(util.inspect(data, false, 10, true));
 } catch (err) {
   console.log(err.stack || String(err));
