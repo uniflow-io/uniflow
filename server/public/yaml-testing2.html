@@ -9,7 +9,7 @@
 <p id="content"></p>
 <script>
     (function () {
-        var lines = []
+        var lines = [], stack = []
 
         var listenerFunction = function(mode, state) {
             var clone = {}
@@ -25,8 +25,43 @@
             for(var i = 0; i< 10; i++) txt += state.input[state.position + i]
             clone.txt = txt;
 
-            lines.push(mode + ' : ' + JSON.stringify(clone))
+            if(mode === 'open') {
+                stack.push({
+                    position: state.position
+                })
+            } else {
+                var item = stack.pop()
+
+                txt = '';
+                for(var i = item.position; i< state.position; i++) {
+                    txt += state.input[i]
+                }
+
+                if(state.kind === 'scalar') {
+
+                    console.log({
+                        stack: stack.length,
+                        tag: state.tag,
+                        word: state.result,
+                        from: item.position,
+                        to: state.position,
+                        txt: txt,
+                    })
+                } else {
+                    console.log({
+                        stack: stack.length,
+                        tag: state.tag,
+                        kind: state.kind,
+                        from: item.position,
+                        to: state.position,
+                        txt: txt
+                    })
+                }
+            }
+
+            //lines.push(mode + ' : ' + JSON.stringify(clone))
         }
+
         var doc = jsyaml.load(`---
 # Collection Types #############################################################
 ################################################################################
@@ -42,6 +77,16 @@ map:
   Flow style: !!map { Clark: Evans, Ingy: döt Net, Oren: Ben-Kiki }
 
 # http://yaml.org/type/omap.html ----------------------------------------------#
+
+large sequence:
+  - seq large1:
+      - key1
+      - key2
+      - key3
+  - seq large2:
+      - skey1
+      - skey2
+      - skey3
 
 omap:
   # Explicitly typed ordered map (dictionary).
@@ -124,6 +169,9 @@ bool:
   - FALSE
 
 # http://yaml.org/type/float.html ---------------------------------------------#
+
+"string sentence":
+  my string: string
 
 float:
   canonical: 6.8523015e+5
@@ -222,7 +270,8 @@ undefined: !!js/undefined ~
 `, {
             'listener': listenerFunction
         });
-        //console.log(doc);
+
+        console.log(doc);
 
         document.getElementById('content').innerHTML = lines.join('<br />')
     })()
