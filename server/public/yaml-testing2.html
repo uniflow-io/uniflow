@@ -9,60 +9,167 @@
 <p id="content"></p>
 <script>
     (function () {
-        var lines = [], stack = []
-
-        var listenerFunction = function(mode, state) {
-            var clone = {}
-            clone.position = state.position;
-            clone.line = state.line;
-            clone.lineStart = state.lineStart;
-            clone.lineIndent = state.lineIndent;
-            clone.tag = state.tag;
-            clone.kind = state.kind;
-            clone.result = state.result;
-
-            var txt = ''
-            for(var i = 0; i< 10; i++) txt += state.input[state.position + i]
-            clone.txt = txt;
-
-            if(mode === 'open') {
-                stack.push({
-                    position: state.position
-                })
-            } else {
-                var item = stack.pop()
-
-                txt = '';
-                for(var i = item.position; i< state.position; i++) {
-                    txt += state.input[i]
-                }
-
-                if(state.kind === 'scalar') {
-
-                    console.log({
-                        stack: stack.length,
-                        tag: state.tag,
-                        word: state.result,
-                        from: item.position,
-                        to: state.position,
-                        txt: txt,
-                    })
-                } else {
-                    console.log({
-                        stack: stack.length,
-                        tag: state.tag,
-                        kind: state.kind,
-                        from: item.position,
-                        to: state.position,
-                        txt: txt
-                    })
+        function spliceSlice(str, index, count, add) {
+            // We cannot pass negative indexes dirrectly to the 2nd slicing operation.
+            if (index < 0) {
+                index = str.length + index;
+                if (index < 0) {
+                    index = 0;
                 }
             }
 
-            //lines.push(mode + ' : ' + JSON.stringify(clone))
+            return str.slice(0, index) + (add || "") + str.slice(index + count);
         }
 
-        var doc = jsyaml.load(`---
+        function repeat(string, count) {
+            var result = '', cycle;
+
+            for (cycle = 0; cycle < count; cycle += 1) {
+                result += string;
+            }
+
+            return result;
+        }
+
+        function indentString(string, spaces) {
+            var ind = repeat(' ', spaces),
+                position = 0,
+                next = -1,
+                result = '',
+                line,
+                length = string.length;
+
+            while (position < length) {
+                next = string.indexOf('\n', position);
+                if (next === -1) {
+                    line = string.slice(position);
+                    position = length;
+                } else {
+                    line = string.slice(position, next + 1);
+                    position = next + 1;
+                }
+
+                if (line.length && line !== '\n') result += ind;
+
+                result += line;
+            }
+
+            return result;
+        }
+
+        function yamlAdd(key, value, yaml) {
+            var readTxt = function(state, fromPosition, toPosition) {
+                var txt = ''
+                for (var i = fromPosition; i < toPosition; i++) txt += state.input[i]
+
+                return txt;
+            }
+
+            var nodeStack = [], storeStack = {};
+
+            var listenerFunction = function (mode, state) {
+                if (mode === 'open') {
+                    nodeStack.push({
+                        position: state.position
+                    })
+                } else {
+                    var item  = nodeStack.pop(),
+                        stack = nodeStack.length,
+                        node = {
+                            from: item.position,
+                            to: state.position,
+                        }
+
+                    if (storeStack[stack] === undefined) {
+                        storeStack[stack] = []
+                    }
+                    storeStack[stack].push(node)
+
+                    if (state.kind === 'scalar') {
+                        /*console.log({
+                            stack: stack,
+                            tag: state.tag,
+                            word: state.result,
+                            from: item.position,
+                            to: state.position,
+                            txt: readTxt(state, item.position, state.position),
+                        })*/
+
+                        node.value = state.result
+                    } else {
+                        /*console.log({
+                            stack: stack,
+                            tag: state.tag,
+                            kind: state.kind,
+                            from: item.position,
+                            to: state.position,
+                            txt: readTxt(state, item.position, state.position),
+                        })*/
+
+                        //we don't need upper stack, just mapping
+                        Object.keys(storeStack).forEach(function(s) {
+                            if(s > stack + 1) {
+                                delete storeStack[s]
+                            }
+                        })
+
+                        if (state.tag === null && state.kind === 'mapping') {
+                            node.children = {}
+
+                            for(var index = 0; index < storeStack[stack + 1].length; index +=2) {
+                                var keyNode = storeStack[stack + 1][index]
+                                var valueNode = storeStack[stack + 1][index + 1]
+
+                                node.children[keyNode.value] = {
+                                    key: keyNode,
+                                    value: valueNode,
+                                }
+                            }
+                            delete storeStack[stack + 1]
+                        }
+                    }
+                }
+            }
+
+            jsyaml.load(yaml, {
+                'listener': listenerFunction
+            })
+
+            var root = storeStack[0][0]
+
+            var keys = key.split('.'), keyIndex, keyIndex2;
+            for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+                if(root.children === undefined) {
+                    return yaml //can't add to non mapping
+                }
+
+                var keyValue = keys[keyIndex]
+                if(root.children[keyValue] === undefined) {
+                    break;
+                }
+
+                root = root.children[keyValue].value
+            }
+
+            if(keyIndex === keys.length) {
+                yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
+            } else {
+                var obj = value
+                for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
+                    var newObj = {}
+                    newObj[keys[keyIndex2]] = obj
+                    obj = Object.assign({}, newObj)
+                }
+
+                var add = jsyaml.dump(obj)
+                add = '\n' + indentString(add, keyIndex * 2)
+                yaml = spliceSlice(yaml, root.to, 0, add)
+            }
+
+            return yaml
+        }
+
+        var newYaml = yamlAdd('config.labels.toto', 'toutou', `---
 # Collection Types #############################################################
 ################################################################################
 
@@ -76,17 +183,31 @@ map:
     Oren  : Ben-Kiki
   Flow style: !!map { Clark: Evans, Ingy: döt Net, Oren: Ben-Kiki }
 
-# http://yaml.org/type/omap.html ----------------------------------------------#
+
+
+config.back.value:
+    preview: preview # toto
+
+
+config:
+  labels:
+    updated: updated at
+    #coco
+  ui:
+    saved: config saved # toto
 
 large sequence:
   - seq large1:
       - key1
       - key2
       - key3
+  # comment into sequence
   - seq large2:
       - skey1
       - skey2
       - skey3
+
+# http://yaml.org/type/omap.html ----------------------------------------------#
 
 omap:
   # Explicitly typed ordered map (dictionary).
@@ -267,13 +388,9 @@ regexp:
 undefined: !!js/undefined ~
 
 # https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function
-`, {
-            'listener': listenerFunction
-        });
+`);
 
-        console.log(doc);
-
-        document.getElementById('content').innerHTML = lines.join('<br />')
+        console.log(newYaml)
     })()
 </script>
 </body>
