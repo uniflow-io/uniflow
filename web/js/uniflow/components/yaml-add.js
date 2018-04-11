@@ -4043,9 +4043,7 @@ let scope = {};
                     node.to = node.from
                     Object.keys(storeStack).forEach(function (s) {
                         storeStack[s].forEach(function (store) {
-                            //if(store.value !== undefined) {
                             node.to = Math.max(node.to, store.to)
-                            //}
                         })
 
                         //we don't need upper stack, just mapping
@@ -4065,6 +4063,10 @@ let scope = {};
                             node.children[keyNode.value] = {
                                 key: keyNode,
                                 value: valueNode,
+                            }
+
+                            if(stack > 0) {
+                                indentationSpaceAdverage.push(keyNode.lineIndent / stack)
                             }
                         }
                         delete storeStack[stack + 1]
@@ -4088,7 +4090,7 @@ let scope = {};
         })
 
         let root = storeStack[0][0],
-            indentationSpace = Number.parseInt(indentationSpaceAdverage.reduce(function (count, spaces) {
+            indentationSpace = Math.round(indentationSpaceAdverage.reduce(function (count, spaces) {
                 return count + spaces;
             }, 0) / indentationSpaceAdverage.length)
 
