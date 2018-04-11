@@ -3994,7 +3994,7 @@ let scope = {};
 
     function endLinePosition(input, position) {
         var ch = input.charCodeAt(position);
-        while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && ch !== 0) {
+        while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && position < input.length) {
             ch = input.charCodeAt(++position);
         }
 
@@ -4047,7 +4047,7 @@ let scope = {};
                             delete storeStack[s]
                         }
                     })
-                    //node.to = endLinePosition(yaml, node.to)
+                    node.to = endLinePosition(yaml, node.to)
 
                     if (state.tag === null && state.kind === 'mapping') {
                         node.children = {}
@@ -4071,7 +4071,6 @@ let scope = {};
                             to: node.to,
                             txt: readTxt(state.input, node.from, node.to),
                         })*/
-
                     }
                 }
             }
