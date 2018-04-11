@@ -4277,7 +4277,6 @@ export default class ComponentYamlAdd extends Component<Props> {
             yaml = this.state.keyvaluelist.reduce(function (yaml, item) {
                 return scope.yamlAdd(yaml, item.key, item.value)
             }, yaml)
-            console.log(yaml)
 
             runner.setValue(this.state.variable, yaml);
         }
