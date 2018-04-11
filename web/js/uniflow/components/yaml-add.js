@@ -4006,8 +4006,8 @@ let scope = {};
         return position
     }
 
-    scope.yamlAdd = function(yaml, key, value) {
-        let nodeStack = [], storeStack = {};
+    scope.yamlAdd = function (yaml, key, value) {
+        let nodeStack = [], storeStack = {}, indentationSpaceAdverage = [2];
 
         let listenerFunction = function (mode, state) {
             if (mode === 'open') {
@@ -4015,11 +4015,12 @@ let scope = {};
                     position: state.position
                 })
             } else {
-                let item  = nodeStack.pop(),
+                let item = nodeStack.pop(),
                     stack = nodeStack.length,
                     node = {
                         from: item.position,
                         to: state.position,
+                        lineIndent: state.lineIndent,
                     }
 
                 if (storeStack[stack] === undefined) {
@@ -4040,7 +4041,7 @@ let scope = {};
                     node.value = state.result
                 } else {
                     node.to = node.from
-                    Object.keys(storeStack).forEach(function(s) {
+                    Object.keys(storeStack).forEach(function (s) {
                         storeStack[s].forEach(function (store) {
                             //if(store.value !== undefined) {
                             node.to = Math.max(node.to, store.to)
@@ -4048,7 +4049,7 @@ let scope = {};
                         })
 
                         //we don't need upper stack, just mapping
-                        if(s > stack + 1) {
+                        if (s > stack + 1) {
                             delete storeStack[s]
                         }
                     })
@@ -4057,7 +4058,7 @@ let scope = {};
                     if (state.tag === null && state.kind === 'mapping') {
                         node.children = {}
 
-                        for(let index = 0; index < storeStack[stack + 1].length; index +=2) {
+                        for (let index = 0; index < storeStack[stack + 1].length; index += 2) {
                             let keyNode = storeStack[stack + 1][index]
                             let valueNode = storeStack[stack + 1][index + 1]
 
@@ -4071,6 +4072,7 @@ let scope = {};
                         /*console.log({
                             stack: stack,
                             tag: state.tag,
+                            lineIdent: state.lineIndent,
                             kind: state.kind,
                             from: node.from,
                             to: node.to,
@@ -4085,37 +4087,48 @@ let scope = {};
             'listener': listenerFunction
         })
 
-        let root = storeStack[0][0], indentationSpace = 2;
+        let root = storeStack[0][0],
+            indentationSpace = Number.parseInt(indentationSpaceAdverage.reduce(function (count, spaces) {
+                return count + spaces;
+            }, 0) / indentationSpaceAdverage.length)
 
         let keys = key.split('.'), keyIndex;
-        for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
-            if(root.children === undefined) {
+        for (keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+            if (root.children === undefined) {
                 return yaml //can't add to non mapping
             }
 
             let keyValue = keys[keyIndex]
-            if(root.children[keyValue] === undefined) {
+            if (root.children[keyValue] === undefined) {
                 break;
             }
 
             root = root.children[keyValue].value
         }
 
-        if(keyIndex === keys.length) {
+        if (keyIndex === keys.length) {
             // replace mapping value
             yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
-        } else {
-            // add mapping value to the end
+        } else if(root.children !== undefined) {
+            // add mapping value to the end of this mapping
             let obj = value, keyIndex2
-            for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
+            for (keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2--) {
                 let newObj = {}
                 newObj[keys[keyIndex2]] = obj
                 obj = Object.assign({}, newObj)
             }
 
-            let add = scope.jsyaml.dump(obj)
+            // calculate indentation for the mapping
+            let indentation, childsKeys = Object.keys(root.children);
+            if(childsKeys.length > 0) {
+                indentation = root.children[childsKeys[0]].key.lineIndent
+            } else {
+                indentation = keyIndex * indentationSpace
+            }
+
+            let add = scope.jsyaml.dump(obj, {indent: indentationSpace})
             add = '\n' + add.slice(0, add.length - 1) //remove end line and add it to begin
-            add = indentString(add, keyIndex * indentationSpace)
+            add = indentString(add, indentation)
             yaml = spliceSlice(yaml, root.to, 0, add)
         }
 
