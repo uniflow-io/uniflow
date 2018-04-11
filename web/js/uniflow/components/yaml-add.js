@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import {Bus} from 'uniflow/models/index'
 
+/**
+ * this component insert or set key-value to existing or new mapping into the yaml given in the arguments
+ * when inserting new mapping it do not modify the existing yaml file structure
+ */
+
 let scope = {};
 
 /* js-yaml 3.11.0 https://github.com/nodeca/js-yaml */
