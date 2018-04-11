@@ -63,23 +63,6 @@
 
             return txt;
         }
-        
-        function nextLinePosition(input, position) {
-            var ch = input.charCodeAt(position);
-            while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && ch !== 0) {
-                ch = input.charCodeAt(++position);
-            }
-            if (ch === 0x0A/* LF */) {
-                position++;
-            } else if (ch === 0x0D/* CR */) {
-                position++;
-                if (input.charCodeAt(position) === 0x0A/* LF */) {
-                    position++;
-                }
-            }
-
-            return position
-        }
 
         function endLinePosition(input, position) {
             var ch = input.charCodeAt(position);
