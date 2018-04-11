@@ -81,6 +81,15 @@
             return position
         }
 
+        function endLinePosition(input, position) {
+            var ch = input.charCodeAt(position);
+            while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && ch !== 0) {
+                ch = input.charCodeAt(++position);
+            }
+
+            return position
+        }
+
         function yamlAdd(key, value, yaml) {
 
             var nodeStack = [], storeStack = {};
@@ -108,28 +117,27 @@
                             stack: stack,
                             tag: state.tag,
                             word: state.result,
-                            from: item.position,
-                            to: state.position,
-                            txt: readTxt(state.input, item.position, state.position),
+                            from: node.from,
+                            to: node.to,
+                            txt: readTxt(state.input, node.from, node.to),
                         })*/
 
                         node.value = state.result
                     } else {
-                        /*console.log({
-                            stack: stack,
-                            tag: state.tag,
-                            kind: state.kind,
-                            from: item.position,
-                            to: state.position,
-                            txt: readTxt(state.input, item.position, state.position),
-                        })*/
-
-                        //we don't need upper stack, just mapping
+                        node.to = node.from
                         Object.keys(storeStack).forEach(function(s) {
+                            storeStack[s].forEach(function (store) {
+                                //if(store.value !== undefined) {
+                                    node.to = Math.max(node.to, store.to)
+                                //}
+                            })
+
+                            //we don't need upper stack, just mapping
                             if(s > stack + 1) {
                                 delete storeStack[s]
                             }
                         })
+                        node.to = endLinePosition(yaml, node.to)
 
                         if (state.tag === null && state.kind === 'mapping') {
                             node.children = {}
@@ -142,10 +150,18 @@
                                     key: keyNode,
                                     value: valueNode,
                                 }
-
-                                //node.to = nextLinePosition(yaml, valueNode.to)
                             }
                             delete storeStack[stack + 1]
+
+                            /*console.log({
+                                stack: stack,
+                                tag: state.tag,
+                                kind: state.kind,
+                                from: node.from,
+                                to: node.to,
+                                txt: readTxt(state.input, node.from, node.to),
+                            })*/
+
                         }
                     }
                 }
@@ -157,7 +173,7 @@
 
             var root = storeStack[0][0]
 
-            var keys = key.split('.'), keyIndex, keyIndex2;
+            var keys = key.split('.'), keyIndex;
             for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
                 if(root.children === undefined) {
                     return yaml //can't add to non mapping
@@ -172,9 +188,11 @@
             }
 
             if(keyIndex === keys.length) {
+                // replace mapping value
                 yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
             } else {
-                var obj = value
+                // add mapping value to the end
+                var obj = value, keyIndex2
                 for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
                     var newObj = {}
                     newObj[keys[keyIndex2]] = obj
@@ -182,6 +200,7 @@
                 }
 
                 var add = jsyaml.dump(obj)
+                add = '\n' + add.slice(0, add.length - 1) //remove end line and add it to begin
                 add = indentString(add, keyIndex * 2)
                 yaml = spliceSlice(yaml, root.to, 0, add)
             }
@@ -189,7 +208,7 @@
             return yaml
         }
 
-        var newYaml = yamlAdd('config.labels.canonical', 'toutou', `---
+        var newYaml = yamlAdd('config.labels.toto.coco', 'toutou', `---
 # Collection Types #############################################################
 ################################################################################
 
