@@ -9,189 +9,188 @@
 <p id="content"></p>
 <script>
     (function () {
-        function spliceSlice(str, index, count, add) {
-            // We cannot pass negative indexes dirrectly to the 2nd slicing operation.
-            if (index < 0) {
-                index = str.length + index;
+            function spliceSlice(str, index, count, add) {
+                // We cannot pass negative indexes dirrectly to the 2nd slicing operation.
                 if (index < 0) {
-                    index = 0;
-                }
-            }
-
-            return str.slice(0, index) + (add || "") + str.slice(index + count);
-        }
-
-        function repeat(string, count) {
-            var result = '', cycle;
-
-            for (cycle = 0; cycle < count; cycle += 1) {
-                result += string;
-            }
-
-            return result;
-        }
-
-        function indentString(string, spaces) {
-            var ind = repeat(' ', spaces),
-                position = 0,
-                next = -1,
-                result = '',
-                line,
-                length = string.length;
-
-            while (position < length) {
-                next = string.indexOf('\n', position);
-                if (next === -1) {
-                    line = string.slice(position);
-                    position = length;
-                } else {
-                    line = string.slice(position, next + 1);
-                    position = next + 1;
-                }
-
-                if (line.length && line !== '\n') result += ind;
-
-                result += line;
-            }
-
-            return result;
-        }
-
-        function readTxt(input, fromPosition, toPosition) {
-            var txt = ''
-            for (var i = fromPosition; i < toPosition; i++) txt += input[i]
-
-            return txt;
-        }
-
-        function endLinePosition(input, position) {
-            var ch = input.charCodeAt(position);
-            while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && ch !== 0) {
-                ch = input.charCodeAt(++position);
-            }
-
-            return position
-        }
-
-        function yamlAdd(key, value, yaml) {
-
-            var nodeStack = [], storeStack = {};
-
-            var listenerFunction = function (mode, state) {
-                if (mode === 'open') {
-                    nodeStack.push({
-                        position: state.position
-                    })
-                } else {
-                    var item  = nodeStack.pop(),
-                        stack = nodeStack.length,
-                        node = {
-                            from: item.position,
-                            to: state.position,
-                        }
-
-                    if (storeStack[stack] === undefined) {
-                        storeStack[stack] = []
+                    index = str.length + index;
+                    if (index < 0) {
+                        index = 0;
                     }
-                    storeStack[stack].push(node)
+                }
 
-                    if (state.kind === 'scalar') {
-                        /*console.log({
-                            stack: stack,
-                            tag: state.tag,
-                            word: state.result,
-                            from: node.from,
-                            to: node.to,
-                            txt: readTxt(state.input, node.from, node.to),
-                        })*/
+                return str.slice(0, index) + (add || "") + str.slice(index + count);
+            }
 
-                        node.value = state.result
+            function repeat(string, count) {
+                var result = '', cycle;
+
+                for (cycle = 0; cycle < count; cycle += 1) {
+                    result += string;
+                }
+
+                return result;
+            }
+
+            function indentString(string, spaces) {
+                var ind      = repeat(' ', spaces),
+                    position = 0,
+                    next     = -1,
+                    result   = '',
+                    line,
+                    length   = string.length;
+
+                while (position < length) {
+                    next = string.indexOf('\n', position);
+                    if (next === -1) {
+                        line     = string.slice(position);
+                        position = length;
                     } else {
-                        node.to = node.from
-                        Object.keys(storeStack).forEach(function(s) {
-                            storeStack[s].forEach(function (store) {
-                                //if(store.value !== undefined) {
-                                    node.to = Math.max(node.to, store.to)
-                                //}
-                            })
+                        line     = string.slice(position, next + 1);
+                        position = next + 1;
+                    }
 
-                            //we don't need upper stack, just mapping
-                            if(s > stack + 1) {
-                                delete storeStack[s]
-                            }
+                    if (line.length && line !== '\n') result += ind;
+
+                    result += line;
+                }
+
+                return result;
+            }
+
+            function readTxt(input, fromPosition, toPosition) {
+                var txt = ''
+                for (var i = fromPosition; i < toPosition; i++) txt += input[i]
+
+                return txt;
+            }
+
+            function endLinePosition(input, position) {
+                var ch = input.charCodeAt(position);
+                while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && ch !== 0) {
+                    ch = input.charCodeAt(++position);
+                }
+
+                return position
+            }
+
+            yamlAdd = function(key, value, yaml) {
+                let nodeStack = [], storeStack = {};
+
+                let listenerFunction = function (mode, state) {
+                    if (mode === 'open') {
+                        nodeStack.push({
+                            position: state.position
                         })
-                        node.to = endLinePosition(yaml, node.to)
-
-                        if (state.tag === null && state.kind === 'mapping') {
-                            node.children = {}
-
-                            for(var index = 0; index < storeStack[stack + 1].length; index +=2) {
-                                var keyNode = storeStack[stack + 1][index]
-                                var valueNode = storeStack[stack + 1][index + 1]
-
-                                node.children[keyNode.value] = {
-                                    key: keyNode,
-                                    value: valueNode,
-                                }
+                    } else {
+                        let item  = nodeStack.pop(),
+                            stack = nodeStack.length,
+                            node = {
+                                from: item.position,
+                                to: state.position,
                             }
-                            delete storeStack[stack + 1]
 
+                        if (storeStack[stack] === undefined) {
+                            storeStack[stack] = []
+                        }
+                        storeStack[stack].push(node)
+
+                        if (state.kind === 'scalar') {
                             /*console.log({
                                 stack: stack,
                                 tag: state.tag,
-                                kind: state.kind,
+                                word: state.result,
                                 from: node.from,
                                 to: node.to,
                                 txt: readTxt(state.input, node.from, node.to),
                             })*/
 
+                            node.value = state.result
+                        } else {
+                            node.to = node.from
+                            Object.keys(storeStack).forEach(function(s) {
+                                storeStack[s].forEach(function (store) {
+                                    //if(store.value !== undefined) {
+                                    node.to = Math.max(node.to, store.to)
+                                    //}
+                                })
+
+                                //we don't need upper stack, just mapping
+                                if(s > stack + 1) {
+                                    delete storeStack[s]
+                                }
+                            })
+                            node.to = endLinePosition(yaml, node.to)
+
+                            if (state.tag === null && state.kind === 'mapping') {
+                                node.children = {}
+
+                                for(let index = 0; index < storeStack[stack + 1].length; index +=2) {
+                                    let keyNode = storeStack[stack + 1][index]
+                                    let valueNode = storeStack[stack + 1][index + 1]
+
+                                    node.children[keyNode.value] = {
+                                        key: keyNode,
+                                        value: valueNode,
+                                    }
+                                }
+                                delete storeStack[stack + 1]
+
+                                console.log({
+                                    stack: stack,
+                                    tag: state.tag,
+                                    lineIdent: state.lineIndent,
+                                    kind: state.kind,
+                                    from: node.from,
+                                    to: node.to,
+                                    txt: readTxt(state.input, node.from, node.to),
+                                })
+                            }
                         }
                     }
                 }
-            }
 
-            jsyaml.load(yaml, {
-                'listener': listenerFunction
-            })
+                jsyaml.load(yaml, {
+                    'listener': listenerFunction
+                })
 
-            var root = storeStack[0][0]
+                let root = storeStack[0][0], indentationSpace = 2;
 
-            var keys = key.split('.'), keyIndex;
-            for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
-                if(root.children === undefined) {
-                    return yaml //can't add to non mapping
+                let keys = key.split('.'), keyIndex;
+                for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+                    if(root.children === undefined) {
+                        return yaml //can't add to non mapping
+                    }
+
+                    let keyValue = keys[keyIndex]
+                    if(root.children[keyValue] === undefined) {
+                        break;
+                    }
+
+                    root = root.children[keyValue].value
                 }
 
-                var keyValue = keys[keyIndex]
-                if(root.children[keyValue] === undefined) {
-                    break;
+                if(keyIndex === keys.length) {
+                    // replace mapping value
+                    yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
+                } else {
+                    // add mapping value to the end
+                    let obj = value, keyIndex2
+                    for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
+                        let newObj = {}
+                        newObj[keys[keyIndex2]] = obj
+                        obj = Object.assign({}, newObj)
+                    }
+
+                    let add = jsyaml.dump(obj, {indent: indentationSpace})
+                    add = '\n' + add.slice(0, add.length - 1) //remove end line and add it to begin
+                    add = indentString(add, keyIndex * indentationSpace)
+                    yaml = spliceSlice(yaml, root.to, 0, add)
                 }
 
-                root = root.children[keyValue].value
+                return yaml
             }
 
-            if(keyIndex === keys.length) {
-                // replace mapping value
-                yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
-            } else {
-                // add mapping value to the end
-                var obj = value, keyIndex2
-                for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
-                    var newObj = {}
-                    newObj[keys[keyIndex2]] = obj
-                    obj = Object.assign({}, newObj)
-                }
-
-                var add = jsyaml.dump(obj)
-                add = '\n' + add.slice(0, add.length - 1) //remove end line and add it to begin
-                add = indentString(add, keyIndex * 2)
-                yaml = spliceSlice(yaml, root.to, 0, add)
-            }
-
-            return yaml
-        }
-
-        var newYaml = yamlAdd('config.labels.toto.coco', 'toutou', `---
+            var newYaml = yamlAdd('config.labels.toto.coco', 'toutou', `---
 # Collection Types #############################################################
 ################################################################################
 
@@ -412,8 +411,9 @@ undefined: !!js/undefined ~
 # https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function
 `);
 
-        console.log(newYaml)
-    })()
+            console.log(newYaml)
+        }
+    )()
 </script>
 </body>
 </html>

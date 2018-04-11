@@ -3955,7 +3955,7 @@ let scope = {};
     }
 
     function repeat(string, count) {
-        var result = '', cycle;
+        let result = '', cycle;
 
         for (cycle = 0; cycle < count; cycle += 1) {
             result += string;
@@ -3965,7 +3965,7 @@ let scope = {};
     }
 
     function indentString(string, spaces) {
-        var ind = repeat(' ', spaces),
+        let ind = repeat(' ', spaces),
             position = 0,
             next = -1,
             result = '',
@@ -3991,14 +3991,14 @@ let scope = {};
     }
 
     function readTxt(input, fromPosition, toPosition) {
-        var txt = ''
-        for (var i = fromPosition; i < toPosition; i++) txt += input[i]
+        let txt = ''
+        for (let i = fromPosition; i < toPosition; i++) txt += input[i]
 
         return txt;
     }
 
     function endLinePosition(input, position) {
-        var ch = input.charCodeAt(position);
+        let ch = input.charCodeAt(position);
         while (ch !== 0x0A/* LF */ && ch !== 0x0D/* CR */ && position < input.length) {
             ch = input.charCodeAt(++position);
         }
@@ -4007,15 +4007,15 @@ let scope = {};
     }
 
     scope.yamlAdd = function(yaml, key, value) {
-        var nodeStack = [], storeStack = {};
+        let nodeStack = [], storeStack = {};
 
-        var listenerFunction = function (mode, state) {
+        let listenerFunction = function (mode, state) {
             if (mode === 'open') {
                 nodeStack.push({
                     position: state.position
                 })
             } else {
-                var item  = nodeStack.pop(),
+                let item  = nodeStack.pop(),
                     stack = nodeStack.length,
                     node = {
                         from: item.position,
@@ -4057,9 +4057,9 @@ let scope = {};
                     if (state.tag === null && state.kind === 'mapping') {
                         node.children = {}
 
-                        for(var index = 0; index < storeStack[stack + 1].length; index +=2) {
-                            var keyNode = storeStack[stack + 1][index]
-                            var valueNode = storeStack[stack + 1][index + 1]
+                        for(let index = 0; index < storeStack[stack + 1].length; index +=2) {
+                            let keyNode = storeStack[stack + 1][index]
+                            let valueNode = storeStack[stack + 1][index + 1]
 
                             node.children[keyNode.value] = {
                                 key: keyNode,
@@ -4085,15 +4085,15 @@ let scope = {};
             'listener': listenerFunction
         })
 
-        var root = storeStack[0][0]
+        let root = storeStack[0][0], indentationSpace = 2;
 
-        var keys = key.split('.'), keyIndex;
+        let keys = key.split('.'), keyIndex;
         for(keyIndex = 0; keyIndex < keys.length; keyIndex++) {
             if(root.children === undefined) {
                 return yaml //can't add to non mapping
             }
 
-            var keyValue = keys[keyIndex]
+            let keyValue = keys[keyIndex]
             if(root.children[keyValue] === undefined) {
                 break;
             }
@@ -4106,16 +4106,16 @@ let scope = {};
             yaml = spliceSlice(yaml, root.from, root.to - root.from, ' ' + value)
         } else {
             // add mapping value to the end
-            var obj = value, keyIndex2
+            let obj = value, keyIndex2
             for(keyIndex2 = keys.length - 1; keyIndex2 >= keyIndex; keyIndex2 --) {
-                var newObj = {}
+                let newObj = {}
                 newObj[keys[keyIndex2]] = obj
                 obj = Object.assign({}, newObj)
             }
 
-            var add = scope.jsyaml.dump(obj)
+            let add = scope.jsyaml.dump(obj)
             add = '\n' + add.slice(0, add.length - 1) //remove end line and add it to begin
-            add = indentString(add, keyIndex * 2)
+            add = indentString(add, keyIndex * indentationSpace)
             yaml = spliceSlice(yaml, root.to, 0, add)
         }
 
