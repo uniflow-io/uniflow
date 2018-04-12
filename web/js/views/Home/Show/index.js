@@ -3,9 +3,8 @@ import Interpreter from 'acorn-interpreter'
 import {transform} from 'babel-standalone'
 import _ from 'lodash'
 import axios from 'axios'
-import {Ace, ComponentList, ComponentSearch, TagIt} from 'uniflow/components/index'
+import {Ace, ComponentList, TagIt} from 'uniflow/components/index'
 import {History} from 'uniflow/models/index'
-import components from 'uniflow/uniflow/components';
 import {
     commitPushFlow,
     commitPopFlow,
@@ -26,22 +25,6 @@ import {
 import {commitAddLog} from 'uniflow/reducers/log/actions'
 import {connect} from 'react-redux'
 
-class UiComponent extends Component {
-    components = Object.assign({}, components, {
-        'search': ComponentSearch
-    })
-
-    render() {
-        const {tag, bus, onPush, onPop, onUpdate} = this.props
-        const TagName                             = this.components[tag];
-
-        return <TagName bus={bus}
-                        onPush={onPush}
-                        onPop={onPop}
-                        onUpdate={onUpdate}/>
-    }
-}
-
 class Show extends Component {
     state = {
         fetchedId: null,
@@ -61,7 +44,7 @@ class Show extends Component {
     componentWillReceiveProps(nextProps) {
         const oldProps = this.props;
 
-        if(nextProps.history.id !== oldProps.history.id) {
+        if (nextProps.history.id !== oldProps.history.id) {
             this.onFetchFlowData();
         }
     }
@@ -196,8 +179,8 @@ class Show extends Component {
             .then(() => {
                 return this.setFlow(this.props.stack);
             }).then(() => {
-                this.onUpdateFlowData()
-            })
+            this.onUpdateFlowData()
+        })
     }
 
     onPopFlow = (index) => {
@@ -206,8 +189,8 @@ class Show extends Component {
             .then(() => {
                 return this.setFlow(this.props.stack);
             }).then(() => {
-                this.onUpdateFlowData()
-            })
+            this.onUpdateFlowData()
+        })
     }
 
     onUpdateFlow = (index, data) => {
@@ -219,30 +202,30 @@ class Show extends Component {
     }
 
     onFetchFlowData = _.debounce(() => {
-        let { history } = this.props;
+        let {history} = this.props;
 
         Promise.resolve()
             .then(() => {
                 return this.props.dispatch(commitSetFlow([]));
             })
             .then(() => {
-                if(history.data) {
+                if (history.data) {
                     return history.data;
                 }
 
                 return this.props.dispatch(getHistoryData(history));
             })
             .then((data) => {
-                if(!data) return;
+                if (!data) return;
 
                 history.data = data;
 
-                if(history.id !== this.props.history.id) return;
+                if (history.id !== this.props.history.id) return;
 
                 return this.setFlow(history.deserialiseFlowData());
             })
             .then(() => {
-                if(this.isMounted()) {
+                if (this.isMounted()) {
                     this.setState({fetchedId: history.id})
                 }
             })
@@ -250,11 +233,11 @@ class Show extends Component {
 
     onUpdateFlowData = _.debounce(() => {
         let {history, stack} = this.props
-        if(history.id !== this.state.fetchedId) return;
+        if (history.id !== this.state.fetchedId) return;
 
         let data = history.data;
         history.serialiseFlowData(stack);
-        if(history.data !== data) {
+        if (history.data !== data) {
             this.props
                 .dispatch(setHistoryData(history))
                 .catch((log) => {
@@ -319,33 +302,7 @@ class Show extends Component {
 
     render() {
         const {history, tags} = this.props;
-
-        const uiStack = (() => {
-            let uiStack = [{
-                component: 'search',
-                index: 0
-            }];
-
-            for (let i = 0; i < this.props.stack.length; i++) {
-                let item = this.props.stack[i];
-
-                uiStack.push({
-                    component: item.component,
-                    bus: item.bus,
-                    active: this.state.runIndex === i,
-                    index: i
-                });
-
-                uiStack.push({
-                    component: 'search',
-                    index: i + 1
-                });
-            }
-
-            return uiStack;
-        })()
-
-        const tagsOptions = {
+        const tagsOptions     = {
             availableTags: tags
         }
 
@@ -402,32 +359,11 @@ class Show extends Component {
                         <a className="btn btn-success pull-right" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
                       </span>
                     </li>
-                    {uiStack.map((item, i) => (
-                        <li key={i}>
-                            {item.component !== 'search' && (
-                                <i className={"fa fa-play" + (item.active ? ' bg-green' : ' bg-blue')} onClick={(event) => {
-                                    this.run(event, item.index)
-                                }}/>
-                            )}
-
-                            <div
-                                className={"timeline-item" + (item.component !== 'search' ? ' component' : '')}>
-                                <div className="timeline-body">
-                                    <UiComponent tag={item.component} bus={item.bus}
-                                                 onPush={(component) => {
-                                                     this.onPushFlow(item.index, component)
-                                                 }}
-                                                 onPop={() => {
-                                                     this.onPopFlow(item.index)
-                                                 }}
-                                                 onUpdate={(data) => {
-                                                     this.onUpdateFlow(item.index, data)
-                                                 }}/>
-                                </div>
-                            </div>
-                        </li>
-                    ))}
                 </ul>
+                <ComponentList stack={this.props.stack} runIndex={this.state.runIndex}
+                               onPush={this.onPushFlow}
+                               onPop={this.onPopFlow}
+                               onUpdate={this.onUpdateFlow} />
             </div>
         )
     }
