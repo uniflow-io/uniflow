@@ -1,10 +1,7 @@
 import React, {Component} from 'react'
-import Interpreter from 'acorn-interpreter'
-import {transform} from 'babel-standalone'
 import _ from 'lodash'
-import axios from 'axios'
 import {Ace, ComponentList, TagIt} from 'uniflow/components/index'
-import {History} from 'uniflow/models/index'
+import {History, Runner} from 'uniflow/models/index'
 import {
     commitPushFlow,
     commitPopFlow,
@@ -56,110 +53,14 @@ class Show extends Component {
     run = (event, index) => {
         event.preventDefault()
 
-        let indexes = [];
-        if (index === undefined) {
-            for (let i = 0; i < this.props.stack.length; i++) {
-                indexes.push(i);
-            }
-        } else {
-            for (let i = 0; i <= index; i++) {
-                indexes.push(i);
-            }
-        }
+        let stack = index === undefined ? this.props.stack : this.props.stack.slice(0, index + 1),
+            runner = new Runner()
 
-        //get polyfill
-        /*if(cachedPolyfillJS) return cachedPolyfillJS;
-
-         return axios.get('/js/libs/babel-polyfill.min.js')
-         .then(function(response) {
-         cachedPolyfillJS = response.data;
-
-         return cachedPolyfillJS;
-         })*/
-
-        let interpreter = new Interpreter('', (interpreter, scope) => {
-            let initConsole = function () {
-                let consoleObj = interpreter.createObject(interpreter.OBJECT);
-                interpreter.setProperty(scope, 'console', consoleObj);
-
-                let wrapper = function (value) {
-                    let nativeObj = interpreter.pseudoToNative(value);
-                    return interpreter.createPrimitive(console.log(nativeObj));
-                };
-                interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
-            };
-            initConsole.call(interpreter);
-
-            indexes.reduce((stack, index) => {
-                stack[index].bus.emit('compile', interpreter, scope);
-
-                return stack
-            }, this.props.stack);
-        });
-
-        let runner = {
-            hasValue: function (variable) {
-                let scope   = interpreter.getScope();
-                let nameStr = variable.toString();
-                while (scope) {
-                    if (nameStr in scope.properties) {
-                        return true;
-                    }
-                    scope = scope.parentScope;
-                }
-
-                return false;
-            },
-            getValue: function (variable) {
-                return interpreter.pseudoToNative(interpreter.getValueFromScope(variable));
-            },
-            setValue: function (variable, value) {
-                return interpreter.setValueToScope(variable, interpreter.nativeToPseudo(value));
-            },
-            eval: function (code) {
-                if (code === undefined) return;
-
-                let babelCode = transform(code, {
-                    presets: [
-                        'es2015',
-                        'es2015-loose',
-                        'es2016',
-                        'es2017',
-                        'latest',
-                        'react',
-                        'stage-0',
-                        'stage-1',
-                        'stage-2',
-                        'stage-3'
-                    ],
-                    filename: 'repl',
-                    babelrc: false,
-                });
-
-                interpreter.appendCode(babelCode.code);
-
-                return interpreter.run();
-            }
-        };
-
-        return indexes.reduce((promise, index) => {
-            return promise
-                .then(() => {
-                    return new Promise((resolve) => {
-                        this.setState({runIndex: index}, resolve);
-                    });
-                }).then(() => {
-                    return this.props.stack[index].bus.emit('execute', runner);
-                }).then(() => {
-                    return new Promise((resolve => {
-                        setTimeout(resolve, 200)
-                    }))
-                }).then(() => {
-                    return new Promise((resolve) => {
-                        this.setState({runIndex: null}, resolve);
-                    });
-                });
-        }, Promise.resolve());
+        runner.run(stack, (index) => {
+            return new Promise((resolve) => {
+                this.setState({runIndex: index}, resolve);
+            });
+        })
     }
 
     setFlow = (stack) => {
@@ -351,15 +252,14 @@ class Show extends Component {
 
                         </form>
                     </div>
-                    <div className="box-footer">
-                        <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
-                    </div>
                 </div>
 
                 <ComponentList stack={this.props.stack} runIndex={this.state.runIndex}
                                onPush={this.onPushFlow}
                                onPop={this.onPopFlow}
-                               onUpdate={this.onUpdateFlow}/>
+                               onUpdate={this.onUpdateFlow}
+                               onRun={this.run}
+                />
             </div>
         )
     }

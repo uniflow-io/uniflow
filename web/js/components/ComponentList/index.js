@@ -20,7 +20,7 @@ class UiComponent extends Component {
 
 export default class ComponentList extends Component {
     render() {
-        const {stack, runIndex, onPush, onPop, onUpdate} = this.props
+        const {stack, runIndex, onPush, onPop, onUpdate, onRun} = this.props
         const uiStack                   = (() => {
             let uiStack = [{
                 component: 'search',
@@ -48,11 +48,16 @@ export default class ComponentList extends Component {
 
         return (
             <ul className="timeline">
+                <li className="time-label">
+                      <span className="bg-green">
+                        <a className="btn btn-success pull-right" onClick={onRun}><i className="fa fa-fw fa-play"/> Play</a>
+                      </span>
+                </li>
                 {uiStack.map((item, i) => (
                     <li key={i}>
                         {item.component !== 'search' && (
                             <i className={"fa fa-play" + (item.active ? ' bg-green' : ' bg-blue')} onClick={(event) => {
-                                this.run(event, item.index)
+                                onRun(event, item.index)
                             }}/>
                         )}
 
