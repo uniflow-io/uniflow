@@ -351,19 +351,15 @@ class Show extends Component {
 
                         </form>
                     </div>
+                    <div className="box-footer">
+                        <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
+                    </div>
                 </div>
 
-                <ul className="timeline">
-                    <li className="time-label">
-                      <span className="bg-green">
-                        <a className="btn btn-success pull-right" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
-                      </span>
-                    </li>
-                </ul>
                 <ComponentList stack={this.props.stack} runIndex={this.state.runIndex}
                                onPush={this.onPushFlow}
                                onPop={this.onPopFlow}
-                               onUpdate={this.onUpdateFlow} />
+                               onUpdate={this.onUpdateFlow}/>
             </div>
         )
     }
