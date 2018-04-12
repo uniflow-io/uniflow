@@ -3,9 +3,8 @@ import Interpreter from 'acorn-interpreter'
 import {transform} from 'babel-standalone'
 import _ from 'lodash'
 import axios from 'axios'
-import {Ace, TagIt} from 'uniflow/components/index'
+import {Ace, ComponentSearch, TagIt} from 'uniflow/components/index'
 import {History} from 'uniflow/models/index'
-import Search from './Search/index'
 import components from 'uniflow/uniflow/components';
 import {
     commitPushFlow,
@@ -29,7 +28,7 @@ import {connect} from 'react-redux'
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {
-        'search': Search
+        'search': ComponentSearch
     })
 
     render() {

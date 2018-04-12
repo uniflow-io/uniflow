@@ -3,7 +3,7 @@ import { Select2 } from 'uniflow/components/index'
 import {connect} from 'react-redux'
 import components from 'uniflow/uniflow/components';
 
-class Search extends Component {
+class ComponentSearch extends Component {
     state = {
         search: 'javascript'
     }
@@ -70,4 +70,4 @@ export default connect(state => {
     return {
         componentLabels: getComponentLabels(state.user.components),
     }
-})(Search)
+})(ComponentSearch)
