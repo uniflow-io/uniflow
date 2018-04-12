@@ -1,5 +1,6 @@
 import ComponentAssets from './components/assets.js';
 import ComponentCheckBoxes from './components/checkboxes.js';
+import ComponentIf from './components/if.js';
 import ComponentInclude from './components/include.js';
 import ComponentJavascript from './components/javascript.js';
 import ComponentObject from './components/object.js';
@@ -12,6 +13,7 @@ import ComponentYamlAdd from "./components/yaml-add";
 export default {
     'assets': ComponentAssets,
     'checkboxes': ComponentCheckBoxes,
+    'if': ComponentIf,
     'include': ComponentInclude,
     'javascript': ComponentJavascript,
     'object': ComponentObject,
