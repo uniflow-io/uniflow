@@ -42,7 +42,7 @@ class UiComponent extends Component {
     }
 }
 
-class Show extends Component {
+class ComponentList extends Component {
     state = {
         fetchedId: null,
         runIndex: null,
@@ -196,8 +196,8 @@ class Show extends Component {
             .then(() => {
                 return this.setFlow(this.props.stack);
             }).then(() => {
-                this.onUpdateFlowData()
-            })
+            this.onUpdateFlowData()
+        })
     }
 
     onPopFlow = (index) => {
@@ -206,8 +206,8 @@ class Show extends Component {
             .then(() => {
                 return this.setFlow(this.props.stack);
             }).then(() => {
-                this.onUpdateFlowData()
-            })
+            this.onUpdateFlowData()
+        })
     }
 
     onUpdateFlow = (index, data) => {
