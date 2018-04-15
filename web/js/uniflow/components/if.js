@@ -76,16 +76,41 @@ export default class ComponentIf extends Component<Props> {
     serialise = () => {
         return {
             if: {
-                condition: this.state.if.conditionStack,
-                execute: this.state.if.executeStack,
+                condition: this.state.if.conditionStack.map((item) => {
+                    return {
+                        component: item.component,
+                        data: item.data
+                    }
+                }),
+                execute: this.state.if.executeStack.map((item) => {
+                    return {
+                        component: item.component,
+                        data: item.data
+                    }
+                }),
             },
             elseIfs: this.state.elseIfs.map((elseIf) => {
                 return {
-                    condition: elseIf.conditionStack,
-                    execute: elseIf.executeStack,
+                    condition: elseIf.conditionStack.map((item) => {
+                        return {
+                            component: item.component,
+                            data: item.data
+                        }
+                    }),
+                    execute: elseIf.executeStack.map((item) => {
+                        return {
+                            component: item.component,
+                            data: item.data
+                        }
+                    }),
                 }
             }),
-            else: this.state.if.executeStack
+            else: this.state.else ? this.state.else.executeStack.map((item) => {
+                return {
+                    component: item.component,
+                    data: item.data
+                }
+            }) : null
         }
     }
 
@@ -96,7 +121,7 @@ export default class ComponentIf extends Component<Props> {
             stack.forEach((item, index) => {
                 store.dispatch(commitPushFlow(index, item.component))
                     .then(() => {
-                        store.dispatch(commitUpdateFlow(index, item.data))
+                        return store.dispatch(commitUpdateFlow(index, item.data))
                     })
             })
 
@@ -137,7 +162,7 @@ export default class ComponentIf extends Component<Props> {
         }
 
         this.store.elseIfs.forEach((elseIf) => {
-            this.store.elseIfs.push({
+            state.elseIfs.push({
                 conditionStack: elseIf.conditionStack.getState(),
                 conditionRunIndex: null,
                 executeStack: elseIf.executeStack.getState(),
@@ -152,7 +177,23 @@ export default class ComponentIf extends Component<Props> {
             }
         }
 
-        this.setState(state)
+        let resetStack = (stack) => {
+            for (let i = 0; i < stack.length; i++) {
+                let item = stack[i];
+                item.bus.emit('reset', item.data);
+            }
+        }
+        this.setState(state, () => {
+            resetStack(state.if.conditionStack)
+            resetStack(state.if.executeStack)
+            state.elseIfs.forEach((elseIf) => {
+                resetStack(elseIf.conditionStack)
+                resetStack(elseIf.executeStack)
+            })
+            if(state.else) {
+                resetStack(state.else.executeStack)
+            }
+        })
     }
 
     dispatchFlow = (propertyPath, action) => {
