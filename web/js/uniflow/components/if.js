@@ -31,8 +31,8 @@ export default class ComponentIf extends Component<Props> {
 
         this.store = {
             if: {
-                conditionStack: createStore(flow),
-                executeStack: createStore(flow),
+                conditionStack: [],
+                executeStack: [],
             },
             elseIfs: [],
             else: null
@@ -74,11 +74,85 @@ export default class ComponentIf extends Component<Props> {
     }
 
     serialise = () => {
-        return this.state.code
+        return {
+            if: {
+                condition: this.state.if.conditionStack,
+                execute: this.state.if.executeStack,
+            },
+            elseIfs: this.state.elseIfs.map((elseIf) => {
+                return {
+                    condition: elseIf.conditionStack,
+                    execute: elseIf.executeStack,
+                }
+            }),
+            else: this.state.if.executeStack
+        }
     }
 
     deserialise = (data) => {
-        this.setState({code: data})
+        let createStoreStack = function(stack) {
+            let store = createStore(flow)
+
+            stack.forEach((item, index) => {
+                store.dispatch(commitPushFlow(index, item.component))
+                    .then(() => {
+                        store.dispatch(commitUpdateFlow(index, item.data))
+                    })
+            })
+
+            return store
+        }
+
+        this.store = {
+            if: {
+                conditionStack: createStoreStack(data && data.if && data.if.condition || []),
+                executeStack: createStoreStack(data && data.if && data.if.execute || []),
+            },
+            elseIfs: [],
+            else: null
+        }
+
+        data && data.elseIfs && data.elseIfs.forEach((elseIf) => {
+            this.store.elseIfs.push({
+                conditionStack: createStoreStack(elseIf.condition || []),
+                executeStack: createStoreStack(elseIf.execute || []),
+            })
+        })
+
+        if(data && data.else) {
+            this.store.else = {
+                executeStack: createStoreStack(data.else || []),
+            }
+        }
+
+        let state = {
+            if: {
+                conditionStack: this.store.if.conditionStack.getState(),
+                conditionRunIndex: null,
+                executeStack: this.store.if.executeStack.getState(),
+                executeRunIndex: null,
+            },
+            elseIfs: [],
+            else: null
+        }
+
+        this.store.elseIfs.forEach((elseIf) => {
+            this.store.elseIfs.push({
+                conditionStack: elseIf.conditionStack.getState(),
+                conditionRunIndex: null,
+                executeStack: elseIf.executeStack.getState(),
+                executeRunIndex: null,
+            })
+        })
+
+        if(this.store.else) {
+            state.else = {
+                executeStack: this.store.else.executeStack.getState(),
+                executeRunIndex: null,
+            }
+        }
+
+        this.setState(state)
     }
 
     dispatchFlow = (propertyPath, action) => {
@@ -154,7 +228,6 @@ export default class ComponentIf extends Component<Props> {
         event.preventDefault()
 
         this.store.else = {
-            conditionStack: createStore(flow),
             executeStack: createStore(flow),
         }
 
@@ -165,7 +238,7 @@ export default class ComponentIf extends Component<Props> {
     }
 
     onUpdate = () => {
-        //this.props.onUpdate(this.serialise())
+        this.props.onUpdate(this.serialise())
     }
 
     onDelete = (event) => {
