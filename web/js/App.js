@@ -5,21 +5,16 @@ import {
     Link
 } from 'react-router-dom'
 import {Provider} from 'react-redux'
-import thunk from 'redux-thunk';
-import {createStore, applyMiddleware} from 'redux'
-import routes, {pathTo} from './routes'
-import reducers from './reducers/index'
-import HistoryManager from './utils/HistoryManager/index'
-import UserManager from './utils/UserManager/index'
+import routes, {pathTo} from 'uniflow/routes'
+import reducers from 'uniflow/reducers/index'
+import { HistoryManager, UserManager } from 'uniflow/components/index'
+import createStore from 'uniflow/utils/createStore'
 import {connect} from 'react-redux'
 import {getNewLogs,commitReadLog} from 'uniflow/reducers/log/actions'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
-let store = createStore(
-    reducers,
-    applyMiddleware(thunk)
-)
+let store = createStore(reducers)
 
 class Alerts extends Component {
     onClose = (event, id) => {

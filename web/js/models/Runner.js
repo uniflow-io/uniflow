@@ -3,7 +3,7 @@ import {transform} from 'babel-standalone'
 import axios from 'axios'
 
 export default class Runner {
-    run(stack, onUpdateRunIndex) {
+    run(stack, onRunIndex) {
         //get polyfill
         /*if(cachedPolyfillJS) return cachedPolyfillJS;
 
@@ -80,7 +80,7 @@ export default class Runner {
         return stack.reduce((promise, item, index) => {
             return promise
                 .then(() => {
-                    return onUpdateRunIndex(index);
+                    return onRunIndex(index);
                 }).then(() => {
                     return item.bus.emit('execute', runner);
                 }).then(() => {
@@ -88,7 +88,7 @@ export default class Runner {
                         setTimeout(resolve, 200)
                     }))
                 }).then(() => {
-                    return onUpdateRunIndex(null);
+                    return onRunIndex(null);
                 });
         }, Promise.resolve());
     }
