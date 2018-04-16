@@ -116,74 +116,88 @@ export default class ComponentIf extends Component<Props> {
 
     deserialise = (data) => {
         let createStoreStack = function(stack) {
-            let store = createStore(flow)
+            return stack.reduce((promise, item, index) => {
+                return promise.then((store) => {
+                    return store.dispatch(commitPushFlow(index, item.component))
+                        .then(() => {
+                            return store.dispatch(commitUpdateFlow(index, item.data))
+                        }).then(() => {
+                            return store
+                        })
+                })
+            }, Promise.resolve(createStore(flow)))
+        }
 
-            stack.forEach((item, index) => {
-                store.dispatch(commitPushFlow(index, item.component))
-                    .then(() => {
-                        return store.dispatch(commitUpdateFlow(index, item.data))
+        Promise.all([
+            createStoreStack(data && data.if && data.if.condition || []),
+            createStoreStack(data && data.if && data.if.execute || []),
+            data && data.elseIfs && data.elseIfs.reduce((promise, elseIf) => {
+                return promise.then((elseIfs) => {
+                    return Promise.all([
+                        createStoreStack(elseIf.condition || []),
+                        createStoreStack(elseIf.execute || [])
+                    ]).then(([conditionStack, executeStack]) => {
+                        elseIfs.push({
+                            conditionStack: conditionStack,
+                            executeStack: executeStack,
+                        })
+                        return elseIfs
                     })
+                })
+            }, Promise.resolve([])) || [],
+            data && data.else && createStoreStack(data.else || []) || null
+        ]).then(([ifConditionStack, ifExecuteStack, elseIfsStack, elseStack]) => {
+            this.store = {
+                if: {
+                    conditionStack: ifConditionStack,
+                    executeStack: ifExecuteStack,
+                },
+                elseIfs: elseIfsStack,
+                else: elseStack ? {
+                    executeStack: elseStack
+                } : null
+            }
+
+            let state = {
+                if: {
+                    conditionStack: this.store.if.conditionStack.getState(),
+                    conditionRunIndex: null,
+                    executeStack: this.store.if.executeStack.getState(),
+                    executeRunIndex: null,
+                },
+                elseIfs: [],
+                else: null
+            }
+
+            this.store.elseIfs.forEach((elseIf) => {
+                state.elseIfs.push({
+                    conditionStack: elseIf.conditionStack.getState(),
+                    conditionRunIndex: null,
+                    executeStack: elseIf.executeStack.getState(),
+                    executeRunIndex: null,
+                })
             })
 
-            return store
-        }
+            if(this.store.else) {
+                state.else = {
+                    executeStack: this.store.else.executeStack.getState(),
+                    executeRunIndex: null,
+                }
+            }
 
-        this.store = {
-            if: {
-                conditionStack: createStoreStack(data && data.if && data.if.condition || []),
-                executeStack: createStoreStack(data && data.if && data.if.execute || []),
-            },
-            elseIfs: [],
-            else: null
-        }
-
-        data && data.elseIfs && data.elseIfs.forEach((elseIf) => {
-            this.store.elseIfs.push({
-                conditionStack: createStoreStack(elseIf.condition || []),
-                executeStack: createStoreStack(elseIf.execute || []),
+            return new Promise((resolve) => {
+                this.setState(state, resolve)
+            }).then(() => {
+                return state
             })
-        })
-
-        if(data && data.else) {
-            this.store.else = {
-                executeStack: createStoreStack(data.else || []),
+        }).then((state) => {
+            let resetStack = (stack) => {
+                for (let i = 0; i < stack.length; i++) {
+                    let item = stack[i];
+                    item.bus.emit('reset', item.data);
+                }
             }
-        }
 
-        let state = {
-            if: {
-                conditionStack: this.store.if.conditionStack.getState(),
-                conditionRunIndex: null,
-                executeStack: this.store.if.executeStack.getState(),
-                executeRunIndex: null,
-            },
-            elseIfs: [],
-            else: null
-        }
-
-        this.store.elseIfs.forEach((elseIf) => {
-            state.elseIfs.push({
-                conditionStack: elseIf.conditionStack.getState(),
-                conditionRunIndex: null,
-                executeStack: elseIf.executeStack.getState(),
-                executeRunIndex: null,
-            })
-        })
-
-        if(this.store.else) {
-            state.else = {
-                executeStack: this.store.else.executeStack.getState(),
-                executeRunIndex: null,
-            }
-        }
-
-        let resetStack = (stack) => {
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
-                item.bus.emit('reset', item.data);
-            }
-        }
-        this.setState(state, () => {
             resetStack(state.if.conditionStack)
             resetStack(state.if.executeStack)
             state.elseIfs.forEach((elseIf) => {
