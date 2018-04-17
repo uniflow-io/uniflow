@@ -307,8 +307,9 @@ export default class ComponentIf extends Component<Props> {
             .concat(this.state.elseIfs.reduce((stacks, elseIf) => {
                 stacks.push(elseIf.conditionStack)
                 stacks.push(elseIf.executeStack)
+                return stacks
             }, []))
-            .concat(this.state.else ? this.state.else.executeStack : [])
+            .concat(this.state.else ? [this.state.else.executeStack] : [])
             .forEach((stack) => {
                 stack.forEach((item) => {
                     item.bus.emit('compile', interpreter, scope);
