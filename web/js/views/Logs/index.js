@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.16',
+    label: 'Add while component',
+    date: '17/04/2018'
+}, {
     tag: '0.15',
     label: 'Add if component',
     date: '17/04/2018'
