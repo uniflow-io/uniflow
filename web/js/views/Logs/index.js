@@ -85,8 +85,8 @@ export default () => (
 
                     <ul className="timeline">
                         {logs.map((value, index) => ([
-                            <li className="time-label"><span className="bg-green">{value.date}</span></li>,
-                            <li>
+                            <li key={'date-'+index} className="time-label"><span className="bg-green">{value.date}</span></li>,
+                            <li key={'label-'+index}>
                                 <div className="timeline-item">
                                     <h3 className="timeline-header">{value.label}</h3>
                                     <div className="timeline-body" />
