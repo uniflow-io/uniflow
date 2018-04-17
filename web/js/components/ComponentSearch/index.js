@@ -28,8 +28,8 @@ class ComponentSearch extends Component {
             <div className="box box-info">
                 <form className="form-horizontal" onSubmit={this.onSubmit}>
                     <div className="box-header with-border">
-                        <h3 className="box-title pull-left" style={{'padding-top': '8px'}}>Component</h3>
-                        <div className="col-sm-10 pull-right" style={{'padding-right': '0px'}}>
+                        <h3 className="box-title pull-left" style={{'paddingTop': '8px'}}>Component</h3>
+                        <div className="col-sm-10 pull-right" style={{'paddingRight': '0px'}}>
                             <div className="input-group">
                                 <Select2 value={search} onChange={this.onChange} className="form-control pull-right" id="search{{ _uid }}" style={{width: '100%'}}>
                                     {componentLabels.map((component) => (

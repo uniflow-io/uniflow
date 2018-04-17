@@ -252,6 +252,9 @@ class Show extends Component {
 
                         </form>
                     </div>
+                    <div className="box-footer">
+                        <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
+                    </div>
                 </div>
 
                 <ComponentList stack={this.props.stack} runIndex={this.state.runIndex}

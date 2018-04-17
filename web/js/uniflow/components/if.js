@@ -418,9 +418,11 @@ export default class ComponentIf extends Component<Props> {
                     <form className="form-horizontal">
                         <div className="box-header with-border">
                             <h3 className="box-title">Endif</h3>
+                            {this.state.else === null && (
                             <button type="submit" onClick={this.onAddElse} className="btn btn-info pull-right">
                                 Add Else
                             </button>
+                            )}
                             <button type="submit" onClick={this.onAddElseIf} className="btn btn-info pull-right">
                                 Add Else If
                             </button>
