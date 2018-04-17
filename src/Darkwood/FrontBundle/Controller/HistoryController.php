@@ -158,7 +158,7 @@ class HistoryController extends Controller
 
                 if(!$this->isGranted('ROLE_SUPER_ADMIN') && $json) {
                     foreach ($json as $item) {
-                        if(!in_array($item->component, array('javascript', 'text'))) {
+                        if(!in_array($item->component, array('code', 'text'))) {
                             return new JsonResponse(false, 400);
                         }
                     }

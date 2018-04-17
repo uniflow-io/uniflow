@@ -30,7 +30,7 @@ class UserController extends Controller
 
                 if(!$this->isGranted('ROLE_SUPER_ADMIN') && $data) {
                     $data = array_filter($data, function($item) {
-                        return in_array($item, array('javascript', 'text'));
+                        return in_array($item, array('code', 'text'));
                     });
                 }
             }

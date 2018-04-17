@@ -6,7 +6,7 @@ type Props = {
     bus: Bus
 }
 
-export default class ComponentJavascript extends Component<Props> {
+export default class ComponentCode extends Component<Props> {
     state = {
         code: null
     }
@@ -82,7 +82,7 @@ export default class ComponentJavascript extends Component<Props> {
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Javascript</h3>
+                        <h3 className="box-title">Code</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>
