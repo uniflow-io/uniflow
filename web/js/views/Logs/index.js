@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.15',
+    label: 'Add if component',
+    date: '17/04/2018'
+}, {
     tag: '0.14',
     label: 'Add yaml component',
     date: '12/04/2018'
