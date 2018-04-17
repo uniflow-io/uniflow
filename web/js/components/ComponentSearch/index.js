@@ -10,7 +10,7 @@ class ComponentSearch extends Component {
 
     onSubmit = (event) => {
         event.preventDefault()
-        
+
         if (this.props.onPush) {
             this.props.onPush(this.state.search);
         }
@@ -25,22 +25,25 @@ class ComponentSearch extends Component {
         const { search } = this.state
 
         return (
-            <form className="form-horizontal" onSubmit={this.onSubmit}>
-                <div className="form-group">
-                    <label htmlFor="search{{ _uid }}" className="col-sm-2 control-label">Component</label>
-
-                    <div className="col-sm-9">
-                        <Select2 value={search} onChange={this.onChange} className="form-control" id="search{{ _uid }}" style={{width: '100%'}}>
-                            {componentLabels.map((component) => (
-                                <option key={component.key} value={component.key}>{ component.label }</option>
-                            ))}
-                        </Select2>
+            <div className="box box-info">
+                <form className="form-horizontal" onSubmit={this.onSubmit}>
+                    <div className="box-header with-border">
+                        <h3 className="box-title pull-left" style={{'padding-top': '8px'}}>Component</h3>
+                        <div className="col-sm-10 pull-right" style={{'padding-right': '0px'}}>
+                            <div className="input-group">
+                                <Select2 value={search} onChange={this.onChange} className="form-control pull-right" id="search{{ _uid }}" style={{width: '100%'}}>
+                                    {componentLabels.map((component) => (
+                                        <option key={component.key} value={component.key}>{ component.label }</option>
+                                    ))}
+                                </Select2>
+                                <span className="input-group-btn">
+                                    <button type="submit" className="btn btn-info pull-right">OK</button>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-sm-1">
-                        <button type="submit" className="btn btn-info pull-right">OK</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         )
     }
 }

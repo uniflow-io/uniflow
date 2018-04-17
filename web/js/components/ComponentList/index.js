@@ -18,33 +18,9 @@ class UiComponent extends Component {
     }
 }
 
-export default class ComponentList extends Component {
+/*class RunComponent extends Component {
     render() {
-        const {stack, runIndex, onPush, onPop, onUpdate, onRun} = this.props
-        const uiStack                   = (() => {
-            let uiStack = [{
-                component: 'search',
-                index: 0
-            }];
-
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
-
-                uiStack.push({
-                    component: item.component,
-                    bus: item.bus,
-                    active: runIndex === i,
-                    index: i
-                });
-
-                uiStack.push({
-                    component: 'search',
-                    index: i + 1
-                });
-            }
-
-            return uiStack;
-        })()
+        const {uiStack, onRun} = this.props
 
         return (
             <ul className="timeline">
@@ -80,5 +56,49 @@ export default class ComponentList extends Component {
                 ))}
             </ul>
         )
+    }
+}*/
+
+export default class ComponentList extends Component {
+    render() {
+        const {stack, runIndex, onPush, onPop, onUpdate, onRun} = this.props
+        const uiStack                   = (() => {
+            let uiStack = [{
+                component: 'search',
+                index: 0
+            }];
+
+            for (let i = 0; i < stack.length; i++) {
+                let item = stack[i];
+
+                uiStack.push({
+                    component: item.component,
+                    bus: item.bus,
+                    active: runIndex === i,
+                    index: i
+                });
+
+                uiStack.push({
+                    component: 'search',
+                    index: i + 1
+                });
+            }
+
+            return uiStack;
+        })()
+
+        return (uiStack.map((item, i) => (
+            <UiComponent key={i}
+                         tag={item.component} bus={item.bus}
+                         onPush={(component) => {
+                             onPush(item.index, component)
+                         }}
+                         onPop={() => {
+                             onPop(item.index)
+                         }}
+                         onUpdate={(data) => {
+                             onUpdate(item.index, data)
+                         }}/>
+        )))
     }
 }

@@ -307,7 +307,28 @@ export default class ComponentIf extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        //runner.eval('')
+        var stackEval = function(stack) {
+            for (let i = 0; i < stack.length; i++) {
+                let item = stack[i];
+                item.bus.emit('execute', runner);
+            }
+        }
+        if(stackEval(this.state.if.conditionStack)) {
+            stackEval(this.state.if.executeStack)
+            return
+        }
+
+        for(let i = 0; i < this.state.elseIfs.length; i++) {
+            let elseIf = this.state.elseIfs[i]
+            if(stackEval(elseIf.conditionStack)) {
+                stackEval(elseIf.executeStack)
+                return
+            }
+        }
+
+        if(this.state.else) {
+            stackEval(this.state.else.executeStack)
+        }
     }
 
     render() {
@@ -327,7 +348,7 @@ export default class ComponentIf extends Component<Props> {
                                onPush={(index, component) => {this.onPushFlow(['if', 'conditionStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['if', 'conditionStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['if', 'conditionStack'], index, data)}}
-                               onRun={() => {}} />
+                               onRun={null} />
                 <div className="box box-info">
                     <form className="form-horizontal">
                         <div className="box-header with-border">
@@ -339,7 +360,7 @@ export default class ComponentIf extends Component<Props> {
                                onPush={(index, component) => {this.onPushFlow(['if', 'executeStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['if', 'executeStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['if', 'executeStack'], index, data)}}
-                               onRun={() => {}} />
+                               onRun={null} />
                 {this.state.elseIfs.map((item, elseIfIndex) => (
                 <div key={("elseIf" + elseIfIndex)}>
                     <div className="box box-info">
@@ -358,7 +379,7 @@ export default class ComponentIf extends Component<Props> {
                                    onPush={(index, component) => {this.onPushFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['elseIfs', elseIfIndex, 'conditionStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, data)}}
-                                   onRun={() => {}} />
+                                   onRun={null} />
                     <div className="box box-info">
                         <form className="form-horizontal">
                             <div className="box-header with-border">
@@ -370,7 +391,7 @@ export default class ComponentIf extends Component<Props> {
                                    onPush={(index, component) => {this.onPushFlow(['elseIfs', elseIfIndex, 'executeStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['elseIfs', elseIfIndex, 'executeStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['elseIfs', elseIfIndex, 'executeStack'], index, data)}}
-                                   onRun={() => {}} />
+                                   onRun={null} />
 
                 </div>
                 ))}
@@ -390,7 +411,7 @@ export default class ComponentIf extends Component<Props> {
                                    onPush={(index, component) => {this.onPushFlow(['else', 'executeStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['else', 'executeStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['else', 'executeStack'], index, data)}}
-                                   onRun={() => {}} />
+                                   onRun={null} />
                 </div>
                 )}
                 <div className="box box-info">
