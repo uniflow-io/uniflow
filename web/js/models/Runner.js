@@ -72,8 +72,9 @@ export default class Runner {
                 });
 
                 interpreter.appendCode(babelCode.code);
-                interpreter.run();
-
+                return interpreter.run();
+            },
+            getReturn: function () {
                 return interpreter.value;
             }
         };

@@ -318,12 +318,15 @@ export default class ComponentIf extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        var stackEval = function(stack) {
+        let stackEval = function(stack) {
             for (let i = 0; i < stack.length; i++) {
                 let item = stack[i];
                 item.bus.emit('execute', runner);
             }
+
+            return runner.getReturn()
         }
+
         if(stackEval(this.state.if.conditionStack)) {
             stackEval(this.state.if.executeStack)
             return
