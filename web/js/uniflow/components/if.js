@@ -327,14 +327,14 @@ export default class ComponentIf extends Component<Props> {
             return runner.getReturn()
         }
 
-        if(stackEval(this.state.if.conditionStack)) {
+        if(stackEval(this.state.if.conditionStack) === true) {
             stackEval(this.state.if.executeStack)
             return
         }
 
         for(let i = 0; i < this.state.elseIfs.length; i++) {
             let elseIf = this.state.elseIfs[i]
-            if(stackEval(elseIf.conditionStack)) {
+            if(stackEval(elseIf.conditionStack) === true) {
                 stackEval(elseIf.executeStack)
                 return
             }
