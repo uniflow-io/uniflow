@@ -110,6 +110,7 @@ SystemJS.config({
         "path": "npm:jspm-nodelibs-path@0.2.3",
         "path-to-regexp": "npm:path-to-regexp@2.1.0",
         "process": "npm:jspm-nodelibs-process@0.2.1",
+        "promise-events": "npm:promise-events@0.1.4",
         "react": "npm:react@16.2.0",
         "react-dom": "npm:react-dom@16.2.0",
         "react-redux": "npm:react-redux@5.0.6",

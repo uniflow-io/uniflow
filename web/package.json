@@ -27,6 +27,7 @@
       "lz-string": "npm:lz-string@^1.4.4",
       "moment": "npm:moment@^2.20.1",
       "path-to-regexp": "npm:path-to-regexp@^2.1.0",
+      "promise-events": "npm:promise-events@^0.1.4",
       "react-dom": "npm:react-dom@^16.2.0",
       "react-redux": "npm:react-redux@^5.0.6",
       "react-router": "npm:react-router@^4.2.0",
