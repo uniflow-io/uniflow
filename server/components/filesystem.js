@@ -33,15 +33,15 @@ module.exports = function(socket) {
             let files    = fs.readdirSync(dir),
                 filelist = [];
             files.forEach(function (file) {
-                if (fs.statSync(dir + file).isDirectory()) {
+                if (fs.statSync(dir + '/' + file).isDirectory()) {
                     if (showDirectory) {
-                        filelist.push(dir + file + '/');
+                        filelist.push(dir + '/' + file);
                     }
                     if (recursive) {
-                        filelist = filelist.concat(walk(dir + file + '/'));
+                        filelist = filelist.concat(walk(dir + '/' + file));
                     }
                 } else {
-                    filelist.push(dir + file);
+                    filelist.push(dir + '/' + file);
                 }
             });
 
