@@ -173,7 +173,7 @@ export default class ComponentWhile extends Component<Props> {
         this.props.onPop()
     }
 
-    onCompile = (interpreter, scope) => {
+    onCompile = (interpreter, scope, asyncWrapper) => {
         [this.state.conditionStack, this.state.executeStack]
             .forEach((stack) => {
                 stack.forEach((item) => {

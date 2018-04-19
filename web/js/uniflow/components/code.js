@@ -67,12 +67,12 @@ export default class ComponentCode extends Component<Props> {
         this.props.onPop()
     }
 
-    onCompile = (interpreter, scope) => {
+    onCompile = (interpreter, scope, asyncWrapper) => {
 
     }
 
     onExecute = (runner) => {
-        runner.eval(this.state.code)
+        return runner.eval(this.state.code)
     }
 
     render() {

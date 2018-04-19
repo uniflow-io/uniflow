@@ -14,7 +14,8 @@ export default class Runner {
          return cachedPolyfillJS;
          })*/
 
-        let interpreter = new Interpreter('', (interpreter, scope) => {
+        let asyncRunPromise = null
+        let interpreter     = new Interpreter('', (interpreter, scope) => {
             let initConsole = function () {
                 let consoleObj = interpreter.createObject(interpreter.OBJECT);
                 interpreter.setProperty(scope, 'console', consoleObj);
@@ -28,7 +29,11 @@ export default class Runner {
             initConsole.call(interpreter);
 
             stack.forEach((item) => {
-                item.bus.emit('compile', interpreter, scope);
+                item.bus.emit('compile', interpreter, scope, (wrapper) => {
+                    return function () {
+                        asyncRunPromise = wrapper.apply(this, arguments)
+                    }
+                });
             });
         });
 
@@ -72,7 +77,23 @@ export default class Runner {
                 });
 
                 interpreter.appendCode(babelCode.code);
-                return interpreter.run();
+
+
+                let asyncLoop = () => {
+                    interpreter.run();
+
+                    if (asyncRunPromise !== null) {
+                        return asyncRunPromise
+                            .then(() => {
+                                asyncRunPromise = null
+                            })
+                            .then(asyncLoop)
+                    }
+
+                    return Promise.resolve()
+                }
+
+                return asyncLoop()
             },
             getReturn: function () {
                 return interpreter.value;
@@ -85,10 +106,6 @@ export default class Runner {
                     return onRunIndex(index);
                 }).then(() => {
                     return item.bus.emit('execute', runner);
-                }).then(() => {
-                    return new Promise((resolve => {
-                        setTimeout(resolve, 200)
-                    }))
                 }).then(() => {
                     return onRunIndex(null);
                 });

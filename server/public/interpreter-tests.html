@@ -22,25 +22,19 @@
             };
             initConsole.call(interpreter);
 
-            let wrapper = function (href, callback) {
-                let req = new XMLHttpRequest();
-                req.open('GET', href, true);
-                req.onreadystatechange = function () {
-                    if (req.readyState === 4 && req.status === 200) {
-                        callback(req.responseText);
-                    }
-                };
-                req.send(null);
+            let wrapper = function (callback) {
+                setTimeout(function () {
+                    callback('toto');
+                }, 500)
             };
             interpreter.setProperty(scope, 'getXhr', interpreter.createAsyncFunction(wrapper));
         });
 
-        interpreter.appendCode('console.log(getXhr(\'https://neil.fraser.name/software/JS-Interpreter/demos/async.txt\'))')
+        interpreter.appendCode('console.log(getXhr())')
 
         interpreter.run()
-        setTimeout(function() {
+        setTimeout(function () {
             interpreter.run()
-
         }, 1000)
     })()
 </script>

@@ -79,7 +79,7 @@ export default class ComponentSocketIO extends Component<Props> {
         this.props.onPop()
     }
 
-    onCompile = (interpreter, scope) => {
+    onCompile = (interpreter, scope, asyncWrapper) => {
         let obj = {};
 
         let wrapper  = function (url) {
@@ -95,13 +95,16 @@ export default class ComponentSocketIO extends Component<Props> {
             wrapper = function (eventName) {
                 let args     = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
                 let callback = arguments[arguments.length - 1];
-                args.push(function (data) {
-                    callback(interpreter.nativeToPseudo(data));
-                    interpreter.run();
-                });
-                socket.emit.apply(socket, args);
+
+                return new Promise((resolve) => {
+                    args.push(function (data) {
+                        callback(interpreter.nativeToPseudo(data));
+                        resolve();
+                    });
+                    socket.emit.apply(socket, args);
+                })
             };
-            interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(wrapper, false));
+            interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
 
             return newIO;
         };
@@ -111,7 +114,7 @@ export default class ComponentSocketIO extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
+        return runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
     }
 
     render() {

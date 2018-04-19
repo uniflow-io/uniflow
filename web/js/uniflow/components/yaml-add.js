@@ -4275,7 +4275,7 @@ export default class ComponentYamlAdd extends Component<Props> {
         this.props.onPop()
     }
 
-    onCompile = (interpreter, scope) => {
+    onCompile = (interpreter, scope, asyncWrapper) => {
 
     }
 

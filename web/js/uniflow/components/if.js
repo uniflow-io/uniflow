@@ -302,7 +302,7 @@ export default class ComponentIf extends Component<Props> {
         this.props.onPop()
     }
 
-    onCompile = (interpreter, scope) => {
+    onCompile = (interpreter, scope, asyncWrapper) => {
         [this.state.if.conditionStack, this.state.if.executeStack]
             .concat(this.state.elseIfs.reduce((stacks, elseIf) => {
                 stacks.push(elseIf.conditionStack)
@@ -319,12 +319,13 @@ export default class ComponentIf extends Component<Props> {
 
     onExecute = (runner) => {
         let stackEval = function(stack) {
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
-                item.bus.emit('execute', runner);
-            }
-
-            return runner.getReturn()
+            return stack.reduce((promise, item) => {
+                return promise.then(() => {
+                    return item.bus.emit('execute', runner)
+                })
+            }, Promise.resolve()).then(() => {
+                return runner.getReturn()
+            })
         }
 
         if(stackEval(this.state.if.conditionStack) === true) {
