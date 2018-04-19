@@ -9,8 +9,8 @@ export default class Bus {
         return this.events.on.apply(this.events, arguments)
     }
 
-    off() {
-        return this.events.off.apply(this.events, arguments)
+    off(eventName, listener) {
+        this.events.removeListener(eventName, listener)
     }
 
     emit() {
