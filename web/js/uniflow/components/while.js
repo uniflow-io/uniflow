@@ -184,17 +184,25 @@ export default class ComponentWhile extends Component<Props> {
 
     onExecute = (runner) => {
         let stackEval = function(stack) {
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
-                item.bus.emit('execute', runner);
-            }
-
-            return runner.getReturn()
+            return stack.reduce((promise, item) => {
+                return promise.then(() => {
+                    return item.bus.emit('execute', runner)
+                })
+            }, Promise.resolve()).then(() => {
+                return runner.getReturn()
+            })
         }
 
-        while(stackEval(this.state.conditionStack) === true) {
-            stackEval(this.state.executeStack)
+        let promiseWhile = () => {
+            return stackEval(this.state.conditionStack)
+                .then((value) => {
+                    if(value === true) {
+                        return stackEval(this.state.executeStack).then(promiseWhile)
+                    }
+                })
         }
+
+        return promiseWhile()
     }
 
     render() {
