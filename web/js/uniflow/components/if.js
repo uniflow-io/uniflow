@@ -328,22 +328,37 @@ export default class ComponentIf extends Component<Props> {
             })
         }
 
-        if(stackEval(this.state.if.conditionStack) === true) {
-            stackEval(this.state.if.executeStack)
-            return
-        }
+        return stackEval(this.state.if.conditionStack)
+            .then((value) => {
+                if(value === true) {
+                    return stackEval(this.state.if.executeStack)
+                }
 
-        for(let i = 0; i < this.state.elseIfs.length; i++) {
-            let elseIf = this.state.elseIfs[i]
-            if(stackEval(elseIf.conditionStack) === true) {
-                stackEval(elseIf.executeStack)
-                return
-            }
-        }
+                return this.state.elseIfs.reduce((promise, elseIf) => {
+                    return promise
+                        .then((isResolved) => {
+                            if(!isResolved) {
+                                return stackEval(elseIf.conditionStack)
+                                    .then((value) => {
+                                        if(value === true) {
+                                            return stackEval(this.state.if.executeStack)
+                                                .then(() => {
+                                                    return true
+                                                })
+                                        }
 
-        if(this.state.else) {
-            stackEval(this.state.else.executeStack)
-        }
+                                        return false
+                                    })
+                            }
+
+                            return isResolved
+                        })
+                }, Promise.resolve(false)).then((isResolved) => {
+                    if(!isResolved && this.state.else) {
+                        return stackEval(this.state.else.executeStack)
+                    }
+                })
+            })
     }
 
     render() {
