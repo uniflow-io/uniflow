@@ -74,18 +74,17 @@
             <!-- logo for regular state and mobile devices -->
             <span class="logo-lg">Uniflow</span>
         </a>
-        <nav class="navbar" style="margin-left: ">
+        <nav class="navbar">
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     {% if app.user %}
                         <li><a href="{{ path('fos_user_security_logout') }}"><span
-                                        class="glyphicon glyphicon-off logout" aria-hidden="true"></span></a></li>
-                        <li><a
-                                    href="{{ path('fos_user_profile_edit') }}">{{ app.user.email }}</a></li>
+                                        class="glyphicon glyphicon-off logout" aria-hidden="true" /></a></li>
+                        <li><a href="{{ path('fos_user_profile_edit') }}">{{ app.user.email }}</a></li>
                     {% else %}
                         <li><a href="{{ path('fos_user_security_login') }}"><span
                                         class="glyphicon glyphicon-log-in login"
-                                        aria-hidden="true"></span> {{ 'user.login.title' | trans }}</a></li>
+                                        aria-hidden="true" /> {{ 'user.login.title' | trans }}</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -95,19 +94,6 @@
 
 {% block body %}
     <div id="app"></div>
-
-    {#<script src="{{ asset('js/libs/polyfill.min.js') }}"></script>
-    <script data-main="js/main" src="{{ asset('js/libs/require.min.js' ) }}"></script>#}
-
-    {#<script src="{{ asset('js/libs/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/libs/bootstrap.min.js') }}"></script>#}
-    {#<script src="{{ asset('js/libs/vue.min.js') }}"></script>
-    <script src="{{ asset('js/libs/superagent.min.js') }}"></script>#}
-    {#<script src="{{ asset('js/libs/require.min.js') }}"></script>#}
-
-    {#<script src="{{ asset('js/components/text/index.js') }}"></script>
-    <script src="{{ asset('js/pages/home/index.js') }}"></script>
-    <script src="{{ asset('js/uniflow.js') }}"></script>#}
 
     <script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
     <script src="{{ asset('jspm.config.js') }}"></script>
