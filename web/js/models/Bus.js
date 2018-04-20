@@ -1,5 +1,9 @@
 import EventEmitter from 'promise-events'
 
+EventEmitter.prototype.getMaxListeners = function() {
+    return this._maxListeners;
+};
+
 export default class Bus {
     constructor() {
         this.events = new EventEmitter()
@@ -10,7 +14,7 @@ export default class Bus {
     }
 
     off(eventName, listener) {
-        this.events.removeListener(eventName, listener)
+        return this.events.removeListener.call(this.events, eventName, listener)
     }
 
     emit() {
