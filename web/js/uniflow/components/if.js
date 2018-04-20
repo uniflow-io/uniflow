@@ -341,7 +341,7 @@ export default class ComponentIf extends Component<Props> {
                                 return stackEval(elseIf.conditionStack)
                                     .then((value) => {
                                         if(value === true) {
-                                            return stackEval(this.state.if.executeStack)
+                                            return stackEval(elseIf.executeStack)
                                                 .then(() => {
                                                     return true
                                                 })
