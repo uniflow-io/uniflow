@@ -59,7 +59,7 @@
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "npm:jspm-nodelibs-process@^0.2.0",
       "react": "npm:react",
-      "redux": "npm:redux@^3.7.2",
+      "redux": "npm:redux@^4.0.0",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
       "tty": "npm:jspm-nodelibs-tty@^0.2.0",
@@ -69,7 +69,7 @@
       "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
     },
     "overrides": {
-      "github:ajaxorg/ace-builds@1.2.9": {
+      "github:ajaxorg/ace-builds@1.3.3": {
         "main": "ace",
         "format": "global",
         "directories": {
@@ -132,23 +132,6 @@
           "_stream_transform": "readable-stream/transform"
         }
       },
-      "npm:debug@2.6.9": {
-        "main": "src/browser.js",
-        "jspmNodeConversion": false,
-        "format": "cjs",
-        "map": {
-          "./src/browser.js": {
-            "node": "./src/node.js"
-          },
-          "./node.js": {
-            "browser": "./src/browser.js"
-          },
-          "fs": "@node/fs",
-          "net": "@node/net",
-          "tty": "@node/tty",
-          "util": "@node/util"
-        }
-      },
       "npm:inherits@2.0.3": {
         "ignore": [
           "test.js"
@@ -157,16 +140,19 @@
       "npm:jquery@3.2.1": {
         "format": "amd"
       },
-      "npm:lodash@4.17.4": {
+      "npm:jquery@3.3.1": {
+        "format": "amd"
+      },
+      "npm:lodash@4.17.5": {
         "map": {
           "buffer": "@empty",
           "process": "@empty"
         }
       },
-      "npm:moment@2.20.1": {
+      "npm:moment@2.22.1": {
         "jspmNodeConversion": false
       },
-      "npm:pbkdf2@3.0.14": {
+      "npm:pbkdf2@3.0.16": {
         "main": "browser.js"
       },
       "npm:safe-buffer@5.1.1": {
