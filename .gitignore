@@ -13,23 +13,6 @@ jspm_packages
 # PhpStorm
 .idea
 
-# Vagrant
-/.vagrant
-/puphpet/files/dot/ssh/id_rsa
-/puphpet/files/dot/ssh/id_rsa.pem
-/puphpet/files/dot/ssh/id_rsa.ppk
-/puphpet/files/dot/ssh/id_rsa.pub
-/puphpet/files/dot/ssh/my_id_rsa
-/puphpet/files/dot/ssh/root_id_rsa
-/puphpet/files/dot/ssh/root_id_rsa.pem
-/puphpet/files/dot/ssh/root_id_rsa.ppk
-/puphpet/files/dot/ssh/root_id_rsa.pub
-
-# grunt
-old/web/build
-old/web/tests/selenium/*.tap
-old/components/*/
-
 # Symfony
 /app/config/parameters.yml
 /build/
