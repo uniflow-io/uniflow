@@ -30,3 +30,7 @@ jspm_packages
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+
+# idea-plugin
+idea-plugin/.gradle
+idea-plugin/build
