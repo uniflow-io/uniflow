@@ -20,9 +20,9 @@
     </extensions>
 
     <actions>
-        <action id="Uniflow.Menu" class="action.ExecuteFlowAction">
-            <add-to-group group-id="EditorPopupMenu"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-        </action>
+        <group id="HistoryActionGroup" class="fr.darkwood.uniflow.actions.HistoryActionGroup" popup="true"
+               text="Uniflow history" description="List Uniflow history">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
     </actions>
 </idea-plugin>
