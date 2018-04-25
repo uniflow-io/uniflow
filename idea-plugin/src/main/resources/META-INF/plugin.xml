@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>fr.darkwood.uniflow</id>
-    <name>Uniflow Plugin</name>
-    <version>0.2</version>
+    <name>Plugin display name here</name>
+    <version>0.1</version>
     <vendor email="matyo91@gmail.com" url="https://uniflow.darkwood.fr">Mathieu Ledru</vendor>
 
     <description><![CDATA[
@@ -13,16 +13,7 @@
     ]]>
     </change-notes>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="162"/>
-
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
-
-    <depends>com.jetbrains.php</depends>
+    <!--depends>com.jetbrains.php</depends-->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
