@@ -8,6 +8,8 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 
 public class ExecuteFlowAction extends AnAction {
     public ExecuteFlowAction() {
@@ -35,9 +37,20 @@ public class ExecuteFlowAction extends AnAction {
         final int start = selectionModel.getSelectionStart();
         final int end = selectionModel.getSelectionEnd();
 
-        WriteCommandAction.runWriteCommandAction(project, () ->
-                document.replaceString(start, end, "Replacement")
-        );
+        WriteCommandAction.runWriteCommandAction(project, () -> {
+            Context cx = Context.enter();
+            try {
+                Scriptable scope = cx.initStandardObjects();
+
+                String s = "var i = 'coucou_' + 1; i";
+                Object result = cx.evaluateString(scope, s, "<cmd>", 1, null);
+                String text = Context.toString(result);
+                document.replaceString(start, end, text);
+            } finally {
+                // Exit from the context.
+                Context.exit();
+            }
+        });
         selectionModel.removeSelection();
     }
 }
