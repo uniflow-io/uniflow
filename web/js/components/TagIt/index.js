@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
-import 'tag-it';
+require("imports-loader?jQuery=jquery!../../../dist/js/jquery-ui.min.js");
+require("imports-loader?jQuery=jquery!../../../node_modules/tag-it/js/tag-it.min.js");
+//import 'tag-it';
 //import 'aehlke/tag-it/css/jquery.tagit.css!';
 //import 'jquery-ui/themes/flick/jquery-ui.css!';
 
