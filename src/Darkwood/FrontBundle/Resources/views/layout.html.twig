@@ -95,11 +95,7 @@
 {% block body %}
     <div id="app"></div>
 
-    <script src="{{ asset('js/libs/systemjs/system.js') }}"></script>
-    <script src="{{ asset('jspm.config.js') }}"></script>
-    <script>
-        SystemJS.import('uniflow')
-    </script>
+    <script src="{{ asset('dist/bundle.js') }}"></script>
 {% endblock %}
 
 </body>
