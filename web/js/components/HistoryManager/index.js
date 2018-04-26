@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
+import {fetchHistory, setCurrentHistory} from '../../reducers/history/actions'
 import {withRouter, matchPath} from 'react-router'
-import routes from 'uniflow/routes'
-import {pathTo} from 'uniflow/routes'
+import routes from '../../routes'
+import {pathTo} from '../../routes'
 
 type Props = {
     children: React.Node

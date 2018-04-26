@@ -4,13 +4,12 @@ import {
     Route,
     Link
 } from 'react-router-dom'
-import {Provider} from 'react-redux'
-import routes, {pathTo} from 'uniflow/routes'
-import reducers from 'uniflow/reducers/index'
-import { HistoryManager, UserManager } from 'uniflow/components/index'
-import createStore from 'uniflow/utils/createStore'
-import {connect} from 'react-redux'
-import {getNewLogs,commitReadLog} from 'uniflow/reducers/log/actions'
+import {Provider, connect} from 'react-redux'
+import routes, {pathTo} from './routes'
+import reducers from './reducers/index'
+import { HistoryManager, UserManager } from './components/index'
+import createStore from './utils/createStore'
+import {getNewLogs,commitReadLog} from './reducers/log/actions'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()

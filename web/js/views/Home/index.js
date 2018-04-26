@@ -1,7 +1,7 @@
 import React from 'react'
 import History from './History/index'
 import Show from './Show/index'
-import {getCurrentHistory} from 'uniflow/reducers/history/actions'
+import {getCurrentHistory} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 
 const Home = (props) => (

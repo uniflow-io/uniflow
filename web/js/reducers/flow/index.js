@@ -1,4 +1,4 @@
-import {Bus} from 'uniflow/models/index'
+import {Bus} from '../../models/index'
 import {
     COMMIT_PUSH_FLOW,
     COMMIT_POP_FLOW,

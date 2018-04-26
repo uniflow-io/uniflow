@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import { Select2 } from 'uniflow/components/index'
-import {Bus} from 'uniflow/models/index'
-import {getOrderedHistory, getHistoryData} from 'uniflow/reducers/history/actions'
+import { Select2 } from '../../components/index'
+import {Bus} from '../../models/index'
+import {getOrderedHistory, getHistoryData} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 
 type Props = {

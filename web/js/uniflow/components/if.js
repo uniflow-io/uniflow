@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
-import {ComponentList} from 'uniflow/components/index'
-import {Bus} from 'uniflow/models/index'
-import createStore from 'uniflow/utils/createStore'
-import flow from 'uniflow/reducers/flow/index'
+import {ComponentList} from '../../components/index'
+import {Bus} from '../../models/index'
+import createStore from '../../utils/createStore'
+import flow from '../../reducers/flow/index'
 import {
     commitPushFlow,
     commitPopFlow,
     commitUpdateFlow,
     commitSetFlow
-} from 'uniflow/reducers/flow/actions'
+} from '../../reducers/flow/actions'
 
 type Props = {
     bus: Bus

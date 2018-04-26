@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchComponents} from 'uniflow/reducers/user/actions'
+import {fetchComponents} from '../../reducers/user/actions'
 
 type Props = {
     children: React.Node

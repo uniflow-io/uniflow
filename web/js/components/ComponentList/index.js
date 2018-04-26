@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {ComponentSearch} from 'uniflow/components/index'
-import components from 'uniflow/uniflow/components';
+import {ComponentSearch} from '../../components/index'
+import components from '../../uniflow/components';
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {

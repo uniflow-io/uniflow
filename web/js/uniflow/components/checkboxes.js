@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {Bus} from 'uniflow/models/index'
-import { ICheckBox } from 'uniflow/components/index'
+import {Bus} from '../../models/index'
+import { ICheckBox } from '../../components/index'
 
 type Props = {
     bus: Bus

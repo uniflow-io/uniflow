@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import { Select2 } from 'uniflow/components/index'
-import {Bus} from 'uniflow/models/index'
+import { Select2 } from '../../components/index'
+import {Bus} from '../../models/index'
 import {connect} from 'react-redux'
 
 type Props = {

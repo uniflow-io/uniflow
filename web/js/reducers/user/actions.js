@@ -1,6 +1,6 @@
 import request from 'axios'
-import serverService from 'uniflow/services/server'
-import components from 'uniflow/uniflow/components'
+import serverService from '../../services/server'
+import components from '../../uniflow/components'
 import {
     COMMIT_SET_COMPONENTS,
 } from './actionsTypes'

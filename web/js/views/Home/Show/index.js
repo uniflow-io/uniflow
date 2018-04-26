@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Ace, ComponentList, TagIt} from 'uniflow/components/index'
-import {History, Runner} from 'uniflow/models/index'
+import {Ace, ComponentList, TagIt} from '../../../components/index'
+import {History, Runner} from '../../../models/index'
 import {
     commitPushFlow,
     commitPopFlow,
     commitUpdateFlow,
     commitSetFlow
-} from 'uniflow/reducers/flow/actions'
+} from '../../../reducers/flow/actions'
 import {
     getCurrentHistory,
     getTags,
@@ -18,8 +18,8 @@ import {
     getHistoryData,
     setHistoryData,
     setCurrentHistory
-} from 'uniflow/reducers/history/actions'
-import {commitAddLog} from 'uniflow/reducers/log/actions'
+} from '../../../reducers/history/actions'
+import {commitAddLog} from '../../../reducers/log/actions'
 import {connect} from 'react-redux'
 
 class Show extends Component {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Bus} from 'uniflow/models/index'
+import {Bus} from '../../models/index'
 
 /**
  * this component insert or set key-value to existing or new mapping into the yaml given in the arguments

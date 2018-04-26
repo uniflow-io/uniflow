@@ -1,4 +1,4 @@
-import {Log} from 'uniflow/models/index'
+import {Log} from '../../models/index'
 import {
     COMMIT_ADD_LOG,
     COMMIT_READ_LOG,

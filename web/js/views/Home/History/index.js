@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import {pathTo} from 'uniflow/routes'
+import {pathTo} from '../../../routes'
 import {connect} from 'react-redux'
-import {getOrderedHistory, createHistory, setCurrentHistory} from 'uniflow/reducers/history/actions'
-import {commitAddLog} from 'uniflow/reducers/log/actions'
+import {getOrderedHistory, createHistory, setCurrentHistory} from '../../../reducers/history/actions'
+import {commitAddLog} from '../../../reducers/log/actions'
 
 class History extends Component {
     state = {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Bus} from 'uniflow/models/index'
+import {Bus} from '../../models/index'
 import _ from 'lodash'
 
 let scope = {};

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Select2 } from 'uniflow/components/index'
+import { Select2 } from '../../components/index'
 import {connect} from 'react-redux'
-import components from 'uniflow/uniflow/components';
+import components from '../../uniflow/components';
 
 class ComponentSearch extends Component {
     state = {
