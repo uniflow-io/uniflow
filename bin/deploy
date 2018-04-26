@@ -22,10 +22,13 @@ php bin/console cache:clear --env=prod --no-debug
 bin/console doctrine:schema:update --env=prod --force
 php bin/console assetic:dump --env=prod --no-debug
 
-cd web
+#cd web
 #yarn install
 #./node_modules/.bin/jspm install
 
 CMD
+
+(cd web;yarn build)
+scp web/dist/bundle.js admin@darkwood.fr:/var/www/uniflow.darkwood.fr/web/dist/bundle.js
 
 fi
