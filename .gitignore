@@ -13,6 +13,10 @@ jspm_packages
 # PhpStorm
 .idea
 
+# idea-plugin
+idea-plugin/.gradle
+idea-plugin/build
+
 # Symfony
 /app/config/parameters.yml
 /build/
@@ -31,6 +35,5 @@ jspm_packages
 /vendor/
 /web/bundles/
 
-# idea-plugin
-idea-plugin/.gradle
-idea-plugin/build
+# Web
+web/dist/bundle.js
