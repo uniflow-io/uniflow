@@ -23,8 +23,8 @@ bin/console doctrine:schema:update --env=prod --force
 php bin/console assetic:dump --env=prod --no-debug
 
 cd web
-yarn install
- ./node_modules/.bin/jspm install
+#yarn install
+#./node_modules/.bin/jspm install
 
 CMD
 
