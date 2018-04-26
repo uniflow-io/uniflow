@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import ace from 'ace'
+import ace from 'brace'
+require('brace/mode/javascript')
 
 type Props = {
     value: string,
