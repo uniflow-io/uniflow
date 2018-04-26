@@ -23,10 +23,20 @@
     "webpack-cli": "^2.0.15"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-standalone": "^6.26.0",
+    "icheck": "^1.0.2",
+    "jquery": "^3.3.1",
+    "lz-string": "^1.4.4",
+    "moment": "^2.22.1",
+    "promise-events": "^0.1.4",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0",
+    "select2": "^4.0.6-rc.1",
+    "tag-it": "^2.0.0"
   }
 }
