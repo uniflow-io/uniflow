@@ -8,8 +8,10 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 public class ExecuteFlowAction extends AnAction {
     public ExecuteFlowAction() {
@@ -38,17 +40,14 @@ public class ExecuteFlowAction extends AnAction {
         final int end = selectionModel.getSelectionEnd();
 
         WriteCommandAction.runWriteCommandAction(project, () -> {
-            Context cx = Context.enter();
             try {
-                Scriptable scope = cx.initStandardObjects();
-
-                String s = "var i = 'coucou_' + 1; i";
-                Object result = cx.evaluateString(scope, s, "<cmd>", 1, null);
-                String text = Context.toString(result);
+                ScriptEngineManager engineManager = new ScriptEngineManager();
+                ScriptEngine engine = engineManager.getEngineByName("nashorn");
+                Object result = engine.eval("var i = 'dsds'; i");
+                String text = result.toString();
                 document.replaceString(start, end, text);
-            } finally {
-                // Exit from the context.
-                Context.exit();
+            } catch (ScriptException exception) {
+
             }
         });
         selectionModel.removeSelection();
