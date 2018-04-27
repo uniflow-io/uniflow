@@ -17,5 +17,6 @@ module.exports = {
                 }
             }
         }]
-    }
+    },
+    devtool: 'cheap-source-map'
 };

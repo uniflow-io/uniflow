@@ -1,11 +1,5 @@
-import {fetchHistory} from './reducers/history/actions'
-import history from './reducers/history/index'
-import createStore from './utils/createStore'
+(() => {
+    let data = '{"data":"[{\u0022component\u0022:\u0022text\u0022,\u0022data\u0022:[\u0022raw\u0022,\u0022    \u0027assets\u0027: ComponentAssets,\\\\n    \u0027checkboxes\u0027: ComponentCheckBoxes,\\\\n    \u0027code\u0027: ComponentCode,\\\\n    \u0027if\u0027: ComponentIf,\\\\n    \u0027include\u0027: ComponentInclude,\\\\n    \u0027object\u0027: ComponentObject,\\\\n    \u0027select\u0027: ComponentSelect,\\\\n    \u0027socketio\u0027: ComponentSocketIO,\\\\n    \u0027text\u0027: ComponentText,\\\\n    \u0027textlist\u0027: ComponentTextList,\\\\n    \u0027yaml-add\u0027: ComponentYamlAdd,\\\\n    \u0027while\u0027: ComponentWhile\u0022]},{\u0022component\u0022:\u0022code\u0022,\u0022data\u0022:\u0022lines = raw.split(\u0027\\\\\\\\n\u0027)\\\\nlines.sort()\\\\n\\\\nresult = lines.join(\u0027\\\\\\\\n\u0027)\u0022},{\u0022component\u0022:\u0022text\u0022,\u0022data\u0022:[\u0022result\u0022,\u0022    \u0027assets\u0027: ComponentAssets,\\\\n    \u0027checkboxes\u0027: ComponentCheckBoxes,\\\\n    \u0027code\u0027: ComponentCode,\\\\n    \u0027if\u0027: ComponentIf,\\\\n    \u0027include\u0027: ComponentInclude,\\\\n    \u0027object\u0027: ComponentObject,\\\\n    \u0027select\u0027: ComponentSelect,\\\\n    \u0027socketio\u0027: ComponentSocketIO,\\\\n    \u0027text\u0027: ComponentText,\\\\n    \u0027textlist\u0027: ComponentTextList,\\\\n    \u0027while\u0027: ComponentWhile\\\\n    \u0027yaml-add\u0027: ComponentYamlAdd,\u0022]}]"}'
 
-//const history = createBrowserHistory()
-let store = createStore(history)
-
-
-store.dispatch(fetchHistory()).then(() => {
-    console.log(store.getState())
-})
+    javaObj.onExecute(data)
+})()

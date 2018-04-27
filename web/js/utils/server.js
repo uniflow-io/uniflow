@@ -1,8 +1,8 @@
-class ServerService {
-    static getBaseUrl() {
-        if(window === undefined) {
-            return 'https://uniflow.darkwood.fr'
-        }
+export default {
+    getBaseUrl: () => {
+        /*if(window === undefined) {
+                return 'https://uniflow.darkwood.fr'
+            }*/
 
         let env = window.location.href.match(/app_dev\.php/) ? 'dev' : 'prod';
 
@@ -12,6 +12,4 @@ class ServerService {
 
         return '';
     }
-}
-
-export default new ServerService();
+};

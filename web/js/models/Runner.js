@@ -1,4 +1,4 @@
-//import Interpreter from 'acorn-interpreter'
+import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
 import {transform} from 'babel-standalone'
 import axios from 'axios'
 
@@ -14,7 +14,7 @@ export default class Runner {
          return cachedPolyfillJS;
          })*/
 
-        /*let asyncRunPromise = null
+        let asyncRunPromise = null
         let interpreter     = new Interpreter('', (interpreter, scope) => {
             let initConsole = function () {
                 let consoleObj = interpreter.createObject(interpreter.OBJECT);
@@ -109,6 +109,6 @@ export default class Runner {
                 }).then(() => {
                     return onRunIndex(null);
                 });
-        }, Promise.resolve());*/
+        }, Promise.resolve());
     }
 }

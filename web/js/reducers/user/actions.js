@@ -1,5 +1,5 @@
 import request from 'axios'
-import serverService from '../../services/server'
+import server from '../../utils/server'
 import components from '../../uniflow/components'
 import {
     COMMIT_SET_COMPONENTS,
@@ -10,7 +10,7 @@ export const fetchComponents = () => {
         let data = Object.keys(components);
 
         return request
-            .post(serverService.getBaseUrl() + '/user/components', data)
+            .post(server.getBaseUrl() + '/user/components', data)
             .then((response) => {
                 dispatch(commitSetComponents(Object.values(response.data)))
             });

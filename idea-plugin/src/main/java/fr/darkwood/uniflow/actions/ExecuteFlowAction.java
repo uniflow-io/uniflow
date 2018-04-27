@@ -11,9 +11,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
+import fr.darkwood.uniflow.components.Code;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -50,9 +52,13 @@ public class ExecuteFlowAction extends AnAction {
             try {
                 String path = "/js/bundle.js";
                 String javascript = getFileTemplateContent(path);
+                Code javaObj = new Code();
 
                 ScriptEngineManager engineManager = new ScriptEngineManager();
                 ScriptEngine engine = engineManager.getEngineByName("nashorn");
+                ScriptContext context = engine.getContext();
+                context.setAttribute("javaObj", javaObj, ScriptContext.ENGINE_SCOPE);
+
                 Object result = engine.eval(javascript);
                 String text = result.toString();
                 document.replaceString(start, end, text);

@@ -1,5 +1,5 @@
 import request from 'axios'
-import serverService from '../../services/server'
+import server from '../../utils/server'
 import {Log,History} from '../../models/index'
 import moment from 'moment'
 import {
@@ -93,7 +93,7 @@ export const commitSetCurrentHistory = (current) => {
 export const fetchHistory = () => {
     return (dispatch) => {
         return request
-            .get(serverService.getBaseUrl() + '/history/list')
+            .get(server.getBaseUrl() + '/history/list')
             .then((response) => {
                 dispatch(commitClearHistory());
 
@@ -114,7 +114,7 @@ export const createHistory = (item) => {
         };
 
         return request
-            .post(serverService.getBaseUrl() + '/history/create', data)
+            .post(server.getBaseUrl() + '/history/create', data)
             .then((response) => {
                 let item = new History(response.data);
 
@@ -137,7 +137,7 @@ export const updateHistory = (item) => {
         };
 
         return request
-            .post(serverService.getBaseUrl() + '/history/edit/'+item.id, data)
+            .post(server.getBaseUrl() + '/history/edit/'+item.id, data)
             .then((response) => {
                 let item = new History(response.data);
 
@@ -150,7 +150,7 @@ export const updateHistory = (item) => {
 export const getHistoryData = (item) => {
     return (dispatch) => {
         return request
-            .get(serverService.getBaseUrl() + '/history/getData/'+item.id)
+            .get(server.getBaseUrl() + '/history/getData/'+item.id)
             .then((response) => {
                 return response.data.data;
             });
@@ -159,7 +159,7 @@ export const getHistoryData = (item) => {
 export const setHistoryData = (item) => {
     return (dispatch) => {
         return request
-            .post(serverService.getBaseUrl() + '/history/setData/'+item.id, item.data)
+            .post(server.getBaseUrl() + '/history/setData/'+item.id, item.data)
             .then((response) => {
                 item.updated = moment();
 
@@ -176,7 +176,7 @@ export const setHistoryData = (item) => {
 export const deleteHistory = (item) => {
     return (dispatch) => {
         return request
-            .delete(serverService.getBaseUrl() + '/history/delete/'+item.id)
+            .delete(server.getBaseUrl() + '/history/delete/'+item.id)
             .then((response) => {
                 dispatch(commitDeleteHistory(item));
 
