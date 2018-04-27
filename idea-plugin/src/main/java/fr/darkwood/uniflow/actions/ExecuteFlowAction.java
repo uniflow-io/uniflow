@@ -1,17 +1,24 @@
 package fr.darkwood.uniflow.actions;
 
+import com.google.common.io.Files;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ExecuteFlowAction extends AnAction {
     public ExecuteFlowAction() {
@@ -41,15 +48,25 @@ public class ExecuteFlowAction extends AnAction {
 
         WriteCommandAction.runWriteCommandAction(project, () -> {
             try {
+                String path = "/js/bundle.js";
+                String javascript = getFileTemplateContent(path);
+
                 ScriptEngineManager engineManager = new ScriptEngineManager();
                 ScriptEngine engine = engineManager.getEngineByName("nashorn");
-                Object result = engine.eval("var i = 'dsds'; i");
+                Object result = engine.eval(javascript);
                 String text = result.toString();
                 document.replaceString(start, end, text);
-            } catch (ScriptException exception) {
-
+            } catch (ScriptException | IOException exception) {
+                exception.printStackTrace();
             }
         });
         selectionModel.removeSelection();
+    }
+
+    @Nullable
+    private String getFileTemplateContent(@NotNull String filename) throws IOException {
+        InputStream in = this.getClass().getResourceAsStream(filename);
+
+        return StreamUtil.readText(this.getClass().getResourceAsStream(filename), "UTF-8");
     }
 }

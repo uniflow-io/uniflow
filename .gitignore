@@ -35,5 +35,6 @@ idea-plugin/build
 /vendor/
 /web/bundles/
 
-# Web
+# WebPack
 web/dist/js/bundle.js
+idea-plugin/src/main/resources/js/bundle.js
