@@ -36,4 +36,4 @@ idea-plugin/build
 /web/bundles/
 
 # Web
-web/dist/bundle.js
+web/dist/js/bundle.js
