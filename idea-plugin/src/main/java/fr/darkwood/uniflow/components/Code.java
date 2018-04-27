@@ -15,6 +15,8 @@ public class Code {
 
     }
 
-    public void onExecute() {
+    public void onExecute(String result) {
+        int i = 0;
+
     }
 }
