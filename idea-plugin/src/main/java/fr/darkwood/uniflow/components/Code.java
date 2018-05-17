@@ -16,6 +16,7 @@ public class Code {
     }
 
     public void onExecute(String result) {
+        System.out.println(result);
         int i = 0;
 
     }

@@ -24,5 +24,5 @@ import Interpreter from '../dist/js/JS-Interpreter/interpreter'
     interpreter.appendCode(code)
     interpreter.run()
 
-    javaObj.onExecute(code)
+    javaObj.onExecute(interpreter.value)
 })()
