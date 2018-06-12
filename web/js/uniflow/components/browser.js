@@ -17,6 +17,7 @@ type Props = {
 export default class ComponentBrowser extends Component<Props> {
     state = {
         variable: null,
+        host: null,
         port: null,
         mode: null
     }
@@ -56,17 +57,21 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     serialise = () => {
-        return [this.state.variable, this.state.port, this.state.mode]
+        return [this.state.variable, this.state.host, this.state.port, this.state.mode]
     }
 
     deserialise = (data) => {
-        let [variable, port, mode] = data ? data : [null, null, null];
+        let [variable, host, port, mode] = data ? data : [null, null, null, null];
         
-        this.setState({variable: variable, port: port, mode: mode})
+        this.setState({variable: variable, host: host, port: port, mode: mode})
     }
 
     onChangeVariable = (event) => {
         this.setState({variable: event.target.value}, this.onUpdate)
+    }
+
+    onChangeHost = (event) => {
+        this.setState({host: event.target.value}, this.onUpdate)
     }
 
     onChangePort = (event) => {
@@ -96,7 +101,7 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     render() {
-        const { variable, port, mode } = this.state
+        const { variable, host, port, mode } = this.state
 
         return (
             <div className="box box-info">
@@ -113,6 +118,14 @@ export default class ComponentBrowser extends Component<Props> {
 
                             <div className="col-sm-10">
                                 <input id="variable{{ _uid }}" type="text" value={variable || ''} onChange={this.onChangeVariable} className="form-control"/>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="host{{ _uid }}" className="col-sm-2 control-label">Host</label>
+
+                            <div className="col-sm-10">
+                                <input id="host{{ _uid }}" type="text" value={host || ''} onChange={this.onChangeHost} className="form-control"/>
                             </div>
                         </div>
 
