@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
+import { Select2 } from '../../components/index'
 import { Bus } from '../../models/index'
 
-import Browser from 'remote-browser/web-client';
+/*import { Browser } from 'remote-browser';
 
 const browser = new Browser();
 browser.launch()
     .then(() =>  {
         console.log('toto')
-    })
+    })*/
 
 type Props = {
     bus: Bus
@@ -16,7 +16,9 @@ type Props = {
 
 export default class ComponentBrowser extends Component<Props> {
     state = {
-        browser: null
+        variable: null,
+        port: null,
+        mode: null
     }
 
     static tags() {
@@ -54,15 +56,25 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     serialise = () => {
-        return this.state.browser
+        return [this.state.variable, this.state.port, this.state.mode]
     }
 
     deserialise = (data) => {
-        this.setState({browser: data})
+        let [variable, port, mode] = data ? data : [null, null, null];
+        
+        this.setState({variable: variable, port: port, mode: mode})
     }
 
-    onChangeBrowser = (browser) => {
-        this.setState({browser: browser}, this.onUpdate)
+    onChangeVariable = (event) => {
+        this.setState({variable: event.target.value}, this.onUpdate)
+    }
+
+    onChangePort = (event) => {
+        this.setState({port: event.target.value}, this.onUpdate)
+    }
+
+    onChangeMode = (mode) => {
+        this.setState({mode: mode}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -80,11 +92,11 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        return runner.eval(this.state.browser)
+        
     }
 
     render() {
-        const { browser } = this.state
+        const { variable, port, mode } = this.state
 
         return (
             <div className="box box-info">
@@ -97,10 +109,30 @@ export default class ComponentBrowser extends Component<Props> {
                     </div>
                     <div className="box-body">
                         <div className="form-group">
-                            <label htmlFor="browser{{ _uid }}" className="col-sm-2 control-label">Browser</label>
+                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Variable</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="browser{{ _uid }}" value={browser} onChange={this.onChangeBrowser} placeholder="Browser" height="200" mode="javascript" />
+                                <input id="variable{{ _uid }}" type="text" value={variable || ''} onChange={this.onChangeVariable} className="form-control"/>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="port{{ _uid }}" className="col-sm-2 control-label">Port</label>
+
+                            <div className="col-sm-10">
+                                <input id="port{{ _uid }}" type="text" value={port || ''} onChange={this.onChangePort} className="form-control"/>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="mode{{ _uid }}" className="col-sm-2 control-label">Mode</label>
+
+                            <div className="col-sm-10">
+                                <Select2 value={mode || ''} onChange={this.onChangeMode} className="form-control" id="mode{{ _uid }}" style={{width: '100%'}}>
+                                    <option value="" />
+                                    <option value="manual">Manual</option>
+                                    <option value="background">Background</option>
+                                </Select2>
                             </div>
                         </div>
                     </div>
