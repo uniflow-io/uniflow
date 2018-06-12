@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Select2 } from '../../components/index'
 import { Bus } from '../../models/index'
+import io from 'socket.io-client';
 
 /*import { Browser } from 'remote-browser';
 
@@ -18,7 +19,8 @@ export default class ComponentBrowser extends Component<Props> {
     state = {
         variable: null,
         host: null,
-        port: null,
+        ioPort: null,
+        proxyPort: null,
         mode: null
     }
 
@@ -57,13 +59,13 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     serialise = () => {
-        return [this.state.variable, this.state.host, this.state.port, this.state.mode]
+        return [this.state.variable, this.state.host, this.state.ioPort, this.state.proxyPort, this.state.mode]
     }
 
     deserialise = (data) => {
-        let [variable, host, port, mode] = data ? data : [null, null, null, null];
+        let [variable, host, ioPort, proxyPort, mode] = data ? data : [null, null, null, null, null];
         
-        this.setState({variable: variable, host: host, port: port, mode: mode})
+        this.setState({variable: variable, host: host, ioPort: ioPort, proxyPort: proxyPort, mode: mode})
     }
 
     onChangeVariable = (event) => {
@@ -74,8 +76,12 @@ export default class ComponentBrowser extends Component<Props> {
         this.setState({host: event.target.value}, this.onUpdate)
     }
 
-    onChangePort = (event) => {
-        this.setState({port: event.target.value}, this.onUpdate)
+    onChangeIOPort = (event) => {
+        this.setState({ioPort: event.target.value}, this.onUpdate)
+    }
+
+    onChangeProxyPort = (event) => {
+        this.setState({proxyPort: event.target.value}, this.onUpdate)
     }
 
     onChangeMode = (mode) => {
@@ -101,7 +107,7 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     render() {
-        const { variable, host, port, mode } = this.state
+        const { variable, host, ioPort, proxyPort, mode } = this.state
 
         return (
             <div className="box box-info">
@@ -130,10 +136,18 @@ export default class ComponentBrowser extends Component<Props> {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="port{{ _uid }}" className="col-sm-2 control-label">Port</label>
+                            <label htmlFor="ioPort{{ _uid }}" className="col-sm-2 control-label">IO Port</label>
 
                             <div className="col-sm-10">
-                                <input id="port{{ _uid }}" type="text" value={port || ''} onChange={this.onChangePort} className="form-control"/>
+                                <input id="ioPort{{ _uid }}" type="text" value={ioPort || ''} onChange={this.onChangeIOPort} className="form-control"/>
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="proxyPort{{ _uid }}" className="col-sm-2 control-label">Proxy Port</label>
+
+                            <div className="col-sm-10">
+                                <input id="proxyPort{{ _uid }}" type="text" value={proxyPort || ''} onChange={this.onChangeProxyPort} className="form-control"/>
                             </div>
                         </div>
 

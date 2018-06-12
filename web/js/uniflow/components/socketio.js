@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Bus} from '../../models/index'
-import io from 'socket.io-client/dist/socket.io';
+import io from 'socket.io-client';
 
 type Props = {
     bus: Bus
