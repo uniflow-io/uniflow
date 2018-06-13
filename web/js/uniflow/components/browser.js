@@ -2,14 +2,7 @@ import React, { Component } from 'react'
 import { Select2 } from '../../components/index'
 import { Bus } from '../../models/index'
 import io from 'socket.io-client';
-
-/*import { Browser } from 'remote-browser';
-
-const browser = new Browser();
-browser.launch()
-    .then(() =>  {
-        console.log('toto')
-    })*/
+import { Browser } from 'remote-browser/web-client';
 
 type Props = {
     bus: Bus
@@ -101,24 +94,37 @@ export default class ComponentBrowser extends Component<Props> {
     onCompile = (interpreter, scope, asyncWrapper) => {
         let obj = {};
 
-        let constructorWrapper  = function (url) {
+        let constructorWrapper  = function (host, ioPort, proxyPort, mode) {
             let newBrowser  = interpreter.createObjectProto(obj.BROWSER_PROTO),
-                socket = io(url),
-                wrapper;
+                socket = io('https://' + host + ':' + ioPort),
+                wrapper,
+                browser = new Browser();
 
-            wrapper = function (eventName) {
-                let args     = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
-                let callback = arguments[arguments.length - 1];
+            wrapper = function (callback) {
+                let args     = ['browser.connect', proxyPort, mode];
 
                 return new Promise((resolve) => {
                     args.push(function (data) {
-                        callback(interpreter.nativeToPseudo(data));
-                        resolve();
+                        browser.connectionUrl = 'ws://' + host + ':' + proxyPort
+                        browser.sessionId = 'default'
+                        browser.negotiateConnection()
+                            .then(() => {
+                                callback(interpreter.nativeToPseudo(data));
+                                resolve();
+                            })
                     });
                     socket.emit.apply(socket, args);
                 })
             };
             interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+
+            wrapper = function (callback) {
+                browser.tabs.create({ url: 'https://intoli.com' })
+                    .then(() => {
+                        callback();
+                    })
+            };
+            interpreter.setProperty(newBrowser, 'execute', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
 
             return newBrowser;
         };
@@ -128,7 +134,13 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        return runner.eval('var ' + this.state.variable + ' = new Browser(\'https://' + this.state.host + ':' + this.state.port + '\')')
+        return runner.eval('var ' + this.state.variable + ' = new Browser(\'' + this.state.host + '\', \'' + this.state.ioPort + '\', \''+ this.state.proxyPort +'\', \''+ this.state.mode +'\')')
+            .then(() => {
+                return runner.eval(this.state.variable + '.connect()')
+            })
+            .then(() => {
+                console.log('browser connected')
+            })
     }
 
     render() {

@@ -9,6 +9,7 @@
     "express": "^4.16.2",
     "fs-extra": "^4.0.2",
     "https": "^1.0.0",
+    "remote-browser": "^0.0.12",
     "robotjs": "^0.4.7",
     "socket.io": "^2.0.4"
   },
