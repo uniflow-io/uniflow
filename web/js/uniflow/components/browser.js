@@ -99,11 +99,36 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     onCompile = (interpreter, scope, asyncWrapper) => {
+        let obj = {};
 
+        let constructorWrapper  = function (url) {
+            let newBrowser  = interpreter.createObjectProto(obj.BROWSER_PROTO),
+                socket = io(url),
+                wrapper;
+
+            wrapper = function (eventName) {
+                let args     = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+                let callback = arguments[arguments.length - 1];
+
+                return new Promise((resolve) => {
+                    args.push(function (data) {
+                        callback(interpreter.nativeToPseudo(data));
+                        resolve();
+                    });
+                    socket.emit.apply(socket, args);
+                })
+            };
+            interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+
+            return newBrowser;
+        };
+        obj.Browser       = interpreter.createNativeFunction(constructorWrapper, true);
+        obj.BROWSER_PROTO = interpreter.getProperty(obj.Browser, 'prototype');
+        interpreter.setProperty(scope, 'Browser', obj.Browser);
     }
 
     onExecute = (runner) => {
-        
+        return runner.eval('var ' + this.state.variable + ' = new Browser(\'https://' + this.state.host + ':' + this.state.port + '\')')
     }
 
     render() {

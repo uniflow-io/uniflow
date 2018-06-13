@@ -82,9 +82,10 @@ export default class ComponentSocketIO extends Component<Props> {
     onCompile = (interpreter, scope, asyncWrapper) => {
         let obj = {};
 
-        let wrapper  = function (url) {
-            let newIO  = interpreter.createObjectProto(obj.IO_PROTO);
-            let socket = io(url);
+        let constructorWrapper  = function (url) {
+            let newIO  = interpreter.createObjectProto(obj.IO_PROTO),
+                socket = io(url),
+                wrapper;
 
             wrapper = function (eventName, callback) {
                 socket.on(eventName, callback);
@@ -108,7 +109,7 @@ export default class ComponentSocketIO extends Component<Props> {
 
             return newIO;
         };
-        obj.IO       = interpreter.createNativeFunction(wrapper, true);
+        obj.IO       = interpreter.createNativeFunction(constructorWrapper, true);
         obj.IO_PROTO = interpreter.getProperty(obj.IO, 'prototype');
         interpreter.setProperty(scope, 'IO', obj.IO);
     }
