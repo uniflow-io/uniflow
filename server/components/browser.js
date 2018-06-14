@@ -16,7 +16,21 @@ module.exports = function(socket) {
                 callback(true)
             }
         } else if(mode === 'background') {
-            callback(false)
+            let proxy = proxies[proxyPort]
+            if(proxies[proxyPort] === undefined) {
+                proxy = new RemoteBrowser.ConnectionProxy()
+                proxy.listen(proxyPort)
+                    .then(function() {
+                        const launch = RemoteBrowser.launchChrome;
+                        launch(`ws://localhost:${proxyPort}/`, 'default')
+                            .then(function() {
+                                callback(true)
+                            })
+                    })
+                proxies[proxyPort] = proxy
+            } else {
+                callback(true)
+            }
         } else {
             callback(false)
         }
