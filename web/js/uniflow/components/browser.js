@@ -14,11 +14,18 @@ export default class ComponentBrowser extends Component<Props> {
         host: null,
         ioPort: null,
         proxyPort: null,
-        mode: null
+        mode: null,
+        displayBrowserConnect: false
     }
 
     static tags() {
         return ['core']
+    }
+
+    constructor(props) {
+        super(props)
+
+        this.resolveBrowserConnected = null
     }
 
     componentDidMount() {
@@ -81,6 +88,14 @@ export default class ComponentBrowser extends Component<Props> {
         this.setState({mode: mode}, this.onUpdate)
     }
 
+    onBrowserConnected = (event) => {
+        event.preventDefault()
+
+        if(this.resolveBrowserConnected) {
+            this.resolveBrowserConnected()
+        }
+    }
+
     onUpdate = () => {
         this.props.onUpdate(this.serialise())
     }
@@ -139,7 +154,19 @@ export default class ComponentBrowser extends Component<Props> {
                 return runner.eval(this.state.variable + '.connect()')
             })
             .then(() => {
-                console.log('browser connected')
+                return new Promise((resolve) => {
+                    this.setState({displayBrowserConnect: true}, resolve);
+                });
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.resolveBrowserConnected = resolve
+                })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({displayBrowserConnect: false}, resolve);
+                });
             })
     }
 
@@ -200,6 +227,13 @@ export default class ComponentBrowser extends Component<Props> {
                             </div>
                         </div>
                     </div>
+                    {this.state.displayBrowserConnect && (
+                    <div className="box-footer">
+                        <button type="submit" onClick={this.onBrowserConnected} className="btn btn-info pull-right">
+                            Browser connected
+                        </button>
+                    </div>
+                    )}
                 </form>
             </div>
         )
