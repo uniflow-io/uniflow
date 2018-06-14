@@ -134,7 +134,7 @@ export default class ComponentBrowser extends Component<Props> {
             interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
 
             wrapper = function (callback) {
-                browser.tabs.create({ url: 'https://intoli.com' })
+                return browser.tabs.create({ url: 'https://intoli.com' })
                     .then(() => {
                         callback();
                     })
