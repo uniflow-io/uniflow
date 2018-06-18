@@ -8,7 +8,7 @@ else
 
 ssh admin@darkwood.fr << CMD
 
-cd /var/www/uniflow.darkwood.fr
+cd /var/www/uniflow.io
 
 #sudo service mysql restart
 #sudo service varnish restart
@@ -29,6 +29,6 @@ php bin/console assetic:dump --env=prod --no-debug
 CMD
 
 (cd web;yarn build)
-scp web/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.darkwood.fr/web/dist/js/bundle.js
+scp web/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/web/dist/js/bundle.js
 
 fi
