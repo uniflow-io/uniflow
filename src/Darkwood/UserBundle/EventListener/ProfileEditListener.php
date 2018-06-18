@@ -35,7 +35,7 @@ class ProfileEditListener implements EventSubscriberInterface
         $user = $event->getUser();
         $request = $event->getRequest();
 
-        if(!$request->isMethod('GET') && $user->getEmail() == 'demo@darkwood.fr') {
+        if(!$request->isMethod('GET') && $user->getEmail() == 'demo@uniflow.fr') {
             $url = $this->router->generate('fos_user_profile_edit');
 
             $event->setResponse(new RedirectResponse($url));
