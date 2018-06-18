@@ -177,8 +177,8 @@ acorn-dynamic-import@^3.0.0:
     acorn "^5.0.0"
 
 acorn@^5.0.0, acorn@^5.6.2:
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.6.2.tgz#b1da1d7be2ac1b4a327fb9eab851702c5045b4e7"
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.1.tgz#f095829297706a7c9776958c0afc8930a9b9d9d8"
 
 adm-zip@0.4.7:
   version "0.4.7"
@@ -1384,8 +1384,8 @@ camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30000852"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000852.tgz#8b7510cec030cac7842e52beca2bf292af65f935"
+  version "1.0.30000856"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000856.tgz#ecc16978135a6f219b138991eb62009d25ee8daa"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -4444,8 +4444,8 @@ rc@^1.1.7:
     strip-json-comments "~2.0.1"
 
 react-dom@^16.3.2:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.1.tgz#7f8b0223b3a5fbe205116c56deb85de32685dad6"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -4487,8 +4487,8 @@ react-router@^4.3.1:
     warning "^4.0.1"
 
 react@^16.3.2:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.4.0.tgz#402c2db83335336fba1962c08b98c6272617d585"
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.4.1.tgz#de51ba5764b5dbcd1f9079037b862bd26b82fe32"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -4639,9 +4639,9 @@ regjsparser@^0.1.4:
   dependencies:
     jsesc "~0.5.0"
 
-remote-browser@^0.0.12:
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/remote-browser/-/remote-browser-0.0.12.tgz#2404058e707635bd7a9f5f71c63527f3dff029f8"
+remote-browser@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/remote-browser/-/remote-browser-0.0.13.tgz#b7bafd5c1309deab7661829285836c730d7a9181"
   dependencies:
     chromedriver "^2.37.0"
     dot-json "^1.0.4"
@@ -4739,8 +4739,8 @@ resolve-url@^0.2.1:
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
 
 resolve@^1.1.6:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.7.1.tgz#aadd656374fd298aee895bc026b8297418677fd3"
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.8.1.tgz#82f1ec19a423ac1fbd080b0bab06ba36e84a7a26"
   dependencies:
     path-parse "^1.0.5"
 
@@ -4804,8 +4804,8 @@ rxjs@^5.5.2:
     symbol-observable "1.0.1"
 
 rxjs@^6.1.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.0.tgz#e024d0e180b72756a83c2aaea8f25423751ba978"
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.2.1.tgz#246cebec189a6cbc143a3ef9f62d6f4c91813ca1"
   dependencies:
     tslib "^1.9.0"
 
