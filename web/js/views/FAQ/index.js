@@ -37,7 +37,7 @@ export default () => (
                         The computer may be the only domain that is virtual. Counter to the contruction builing for instance where you have to do real things. Here you have a computer in your hand, and you easily can create, destroy, do, cancel, redo things in one mouse click. In fact, this is just data, manipulating data and produce something at the end.
                         In your dirty work you will identify parts of your jobs that you can reproduce, then automate micro tasks in for your daily and boring todo list that you never care but end the day and go home.
                     </p*/}
-                    <p>Do nothing !</p>
+                    <p>Workflow your microtasks</p>
 
                     <h3>How ?</h3>
                     <p>Think macro, act micro</p>
