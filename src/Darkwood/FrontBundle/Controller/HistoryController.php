@@ -30,7 +30,7 @@ class HistoryController extends Controller
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if($user->getEmail() == 'demo@uniflow.fr') {
+        if($user->getEmail() == 'demo@uniflow.io') {
             $this->get('dw.history')->resetDemoAccount($user);
         }
 
