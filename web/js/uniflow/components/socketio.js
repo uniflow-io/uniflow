@@ -105,7 +105,7 @@ export default class ComponentSocketIO extends Component<Props> {
                     socket.emit.apply(socket, args);
                 })
             };
-            interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+            interpreter.setProperty(newIO, 'emit', interpreter.createAsyncFunction(asyncWrapper(wrapper)));
 
             return newIO;
         };

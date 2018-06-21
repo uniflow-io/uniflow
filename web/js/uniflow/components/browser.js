@@ -131,7 +131,7 @@ export default class ComponentBrowser extends Component<Props> {
                     socket.emit.apply(socket, args);
                 })
             };
-            interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+            interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper)));
 
             wrapper = function (asyncFunction, args, callback) {
                 asyncFunction = interpreter.pseudoToNative(asyncFunction)
@@ -141,7 +141,7 @@ export default class ComponentBrowser extends Component<Props> {
                         callback(interpreter.nativeToPseudo(result));
                     })
             };
-            interpreter.setProperty(newBrowser, 'evaluateInBackground', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+            interpreter.setProperty(newBrowser, 'evaluateInBackground', interpreter.createAsyncFunction(asyncWrapper(wrapper)));
 
             wrapper = function (tabId, asyncFunction, args, callback) {
                 tabId = interpreter.pseudoToNative(tabId)
@@ -152,7 +152,7 @@ export default class ComponentBrowser extends Component<Props> {
                         callback(interpreter.nativeToPseudo(result));
                     })
             };
-            interpreter.setProperty(newBrowser, 'evaluateInContent', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+            interpreter.setProperty(newBrowser, 'evaluateInContent', interpreter.createAsyncFunction(asyncWrapper(wrapper)));
 
             return newBrowser;
         };
