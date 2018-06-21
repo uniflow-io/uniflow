@@ -133,13 +133,26 @@ export default class ComponentBrowser extends Component<Props> {
             };
             interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
 
-            wrapper = function (callback) {
-                return browser.tabs.create({ url: 'https://intoli.com' })
-                    .then(() => {
-                        callback();
+            wrapper = function (asyncFunction, args, callback) {
+                asyncFunction = interpreter.pseudoToNative(asyncFunction)
+                args = interpreter.pseudoToNative(args)
+                return browser.evaluateInBackground(asyncFunction, args)
+                    .then((result) => {
+                        callback(interpreter.nativeToPseudo(result));
                     })
             };
-            interpreter.setProperty(newBrowser, 'execute', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+            interpreter.setProperty(newBrowser, 'evaluateInBackground', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
+
+            wrapper = function (tabId, asyncFunction, args, callback) {
+                tabId = interpreter.pseudoToNative(tabId)
+                asyncFunction = interpreter.pseudoToNative(asyncFunction)
+                args = interpreter.pseudoToNative(args)
+                return browser.evaluateInContent(tabId, asyncFunction, args)
+                    .then((result) => {
+                        callback(interpreter.nativeToPseudo(result));
+                    })
+            };
+            interpreter.setProperty(newBrowser, 'evaluateInContent', interpreter.createAsyncFunction(asyncWrapper(wrapper), false));
 
             return newBrowser;
         };
