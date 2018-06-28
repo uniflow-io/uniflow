@@ -1,9 +1,9 @@
 <?php
 
-namespace Darkwood\FrontBundle\Form;
+namespace App\Form;
 
-use Darkwood\FrontBundle\Form\Transformer\TagTransformer;
-use Darkwood\FrontBundle\Services\TagService;
+use App\Form\Transformer\TagTransformer;
+use App\Services\TagService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class HistoryType extends AbstractType
 {
@@ -27,6 +28,7 @@ class HistoryType extends AbstractType
     protected $tagService;
 
     /**
+     * TagTransformer constructor.
      * @param $tagService
      */
     public function __construct(TagService $tagService)
@@ -57,7 +59,7 @@ class HistoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Darkwood\FrontBundle\Entity\History',
+            'data_class' => 'App\Entity\History',
         ));
     }
 }

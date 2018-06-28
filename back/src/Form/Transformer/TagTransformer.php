@@ -1,9 +1,9 @@
 <?php
 
-namespace Darkwood\FrontBundle\Form\Transformer;
+namespace App\Form\Transformer;
 
-use Darkwood\FrontBundle\Entity\Tag;
-use Darkwood\FrontBundle\Services\TagService;
+use App\Entity\Tag;
+use App\Services\TagService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
