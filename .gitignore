@@ -36,7 +36,7 @@ idea-plugin/build
 /web/bundles/
 
 # WebPack
-web/dist/js/bundle.js
-web/dist/js/bundle.js.map
+back/public/dist/js/bundle.js
+back/public/dist/js/bundle.js.map
 idea-plugin/src/main/resources/js/bundle.js
 idea-plugin/src/main/resources/js/bundle.js.map

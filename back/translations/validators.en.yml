@@ -1,0 +1,18 @@
+errors:
+    password: sorry, the passwords didn't match
+    unique: sorry, this email is already used
+    required: sorry, this field is mandatory
+    short: sorry, the value you set is too short
+    long: sorry, the value you set is too long
+    mail: sorry, this is not a valid e-mail
+    slug: sorry, this is not a valid slug
+    form: the form has errors
+    size: the file you tried to upload is too large
+    file: the file you tried to upload is invalid
+
+    event:
+        facebookEventUnique: This facebook event is already used
+
+    facebookPage:
+        unique: This facebook page is already used
+
