@@ -1,0 +1,20 @@
+user:
+    login:
+        title: Connection
+        remember_me: Remember me
+        submit: Login
+        facebook: Facebook Login
+        meetup: Meetup Login
+    register:
+        title: Register
+        new: Register a new account
+        submit: Register
+        email: email
+        password: password
+        confirmed: You are now registered
+        goBack: Start use
+    profile:
+        title: Profile
+        email: email
+        password: password
+        submit: Save
