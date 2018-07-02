@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\Entity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
- * @ORM\Table(name="tag", indexes={@ORM\Index(name="index_search_tags", columns={"title"})})
+ * @ORM\Table(name="dw_tag", indexes={@ORM\Index(name="index_search_tags", columns={"title"})})
  *
  */
 class Tag

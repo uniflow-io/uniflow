@@ -40,7 +40,7 @@ php bin/console doctrine:schema:update --force
 #echo "[1;93m----------- FIXTURES LOAD  [00m"
 #echo ""
 #
-#php bin/console doctrine:fixtures:load --append
+php bin/console doctrine:fixtures:load --append
 
 # IF YOU WANT TO DUMP DB
 # preprod

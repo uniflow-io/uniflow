@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\Entity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HistoryRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="history", indexes={@ORM\Index(name="index_search", columns={"title"})})
+ * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"title"})})
  *
  */
 class History
