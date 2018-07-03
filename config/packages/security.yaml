@@ -4,13 +4,13 @@ security:
             algorithm: bcrypt
 
     role_hierarchy:
-            ROLE_SUPER_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_USER
 
     providers:
         app_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
 
     firewalls:
         dev:
@@ -19,6 +19,8 @@ security:
         main:
             pattern:    ^/
             form_login:
+                check_path: login
+                login_path: login
                 provider: app_provider
             logout:       true
             anonymous:    true
