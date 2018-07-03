@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Entity\History;
 use App\Repository\HistoryRepository;
-use Darkwood\UserBundle\Entity\User;
+use App\Entity\User;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\CacheProvider;
 use Symfony\Component\Validator\Constraints\DateTime;

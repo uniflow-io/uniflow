@@ -7,7 +7,7 @@ use App\Form\HistoryType;
 use App\Entity\History;
 use App\Services\HistoryService;
 use App\Services\TagService;
-use Darkwood\UserBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

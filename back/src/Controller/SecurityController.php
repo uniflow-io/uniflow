@@ -5,11 +5,15 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends Controller
 {
     /**
+     * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
+     * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/login", name="login")
      */
     public function login(Request $request, AuthenticationUtils $authenticationUtils)
@@ -24,5 +28,15 @@ class SecurityController extends Controller
             'last_username' => $lastUsername,
             'error'         => $error,
         ));
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @Route("/logout", name="logout")
+     */
+    public function logout()
+    {
+        throw new LogicException('This should never be reached!');
     }
 }
