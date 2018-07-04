@@ -86,7 +86,7 @@ class HistoryController extends Controller
 
             if ($form->isValid()) {
                 $this->historyService->save($entity);
-                $this->get('dw.tag')->clean();
+                $this->tagService->clean();
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',

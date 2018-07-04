@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class UserService
@@ -14,26 +15,38 @@ use App\Repository\UserRepository;
 class UserService
 {
     /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * Repository
      *
      * @var UserRepository
      */
     protected $userRepository;
 
+    public function __construct(
+        EntityManagerInterface $em
+    )
+    {
+        $this->em             = $em;
+        $this->userRepository = $this->em->getRepository(User::class);
+    }
+
     /**
-     * Save a user
-     *
      * @param User $user
+     * @return User
      */
     public function save(User $user)
     {
         // Save user
         $user->setUpdated(new \DateTime());
 
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->em->persist($user);
+        $this->em->flush();
 
-        $this->clearResultCache();
+        return $user;
     }
 
     /**
@@ -43,8 +56,8 @@ class UserService
      */
     public function remove(User $user)
     {
-        $this->getEntityManager()->remove($user);
-        $this->getEntityManager()->flush();
+        $this->em->remove($user);
+        $this->em->flush();
     }
 
     /**
