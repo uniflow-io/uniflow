@@ -20,7 +20,6 @@ git pull
 (cd back;SYMFONY_ENV=prod composer install --optimize-autoloader)
 (cd back;php bin/console cache:clear  --no-debug)
 (cd back;php bin/console doctrine:schema:update --force)
-(cd back;php bin/console assetic:dump  --no-debug)
 
 CMD
 
