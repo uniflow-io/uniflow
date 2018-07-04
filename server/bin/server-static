@@ -1,4 +1,4 @@
 #!/bin/sh
 
 yarn install
-cd server && ../node_modules/.bin/http-server
+./node_modules/.bin/http-server
