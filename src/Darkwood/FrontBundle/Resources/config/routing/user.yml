@@ -1,3 +1,0 @@
-user_components:
-  path:   /components
-  defaults: { _controller: FrontBundle:User:components }
