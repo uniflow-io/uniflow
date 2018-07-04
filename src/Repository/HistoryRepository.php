@@ -1,17 +1,23 @@
 <?php
 
 namespace App\Repository;
-use Darkwood\CoreBundle\Repository\BaseRepository;
 use App\Entity\History;
 use App\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class HistoryRepository
  *
  * @package App\Repository
  */
-class HistoryRepository extends BaseRepository
+class HistoryRepository extends ServiceEntityRepository
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, History::class);
+    }
+
     /**
      * @param User $user
      * @param null $id

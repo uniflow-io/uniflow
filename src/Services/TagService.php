@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Services;
+
 use App\Entity\Tag;
 use App\Repository\TagRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 /**
@@ -14,11 +17,23 @@ use App\Repository\TagRepository;
  */
 class TagService
 {
+    /**
+     * @var EntityManager
+     */
+    protected $em;
 
     /**
      * @var TagRepository tagRepository
      */
     protected $tagRepository;
+
+    public function __construct(
+        EntityManagerInterface $em
+    )
+    {
+        $this->em            = $em;
+        $this->tagRepository = $this->em->getRepository(Tag::class);
+    }
 
     /**
      * Update a tag
@@ -30,8 +45,8 @@ class TagService
     public function save(Tag $tag)
     {
         $tag->setUpdated(new \DateTime('now'));
-        $this->getEntityManager()->persist($tag);
-        $this->getEntityManager()->flush();
+        $this->em->persist($tag);
+        $this->em->flush();
 
         return $tag;
     }
@@ -43,8 +58,8 @@ class TagService
      */
     public function remove(Tag $tag)
     {
-        $this->getEntityManager()->remove($tag);
-        $this->getEntityManager()->flush();
+        $this->em->remove($tag);
+        $this->em->flush();
     }
 
     public function clean()
