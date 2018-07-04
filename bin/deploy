@@ -28,7 +28,7 @@ php bin/console assetic:dump --env=prod --no-debug
 
 CMD
 
-(cd web;yarn build)
-scp web/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/web/dist/js/bundle.js
+(cd front;yarn build)
+scp back/public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
 
 fi
