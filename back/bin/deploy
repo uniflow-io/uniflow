@@ -14,17 +14,13 @@ cd /var/www/uniflow.io
 #sudo service varnish restart
 #sudo service nginx restart
 #sudo service redis restart
+#redis-cli flushall
 
 git pull
-(cd back;SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader)
-#redis-cli flushall
+(cd back;SYMFONY_ENV=prod composer install --optimize-autoloader)
 (cd back;php bin/console cache:clear  --no-debug)
 (cd back;php bin/console doctrine:schema:update --force)
 (cd back;php bin/console assetic:dump  --no-debug)
-
-#cd web
-#yarn install
-#./node_modules/.bin/jspm install
 
 CMD
 
