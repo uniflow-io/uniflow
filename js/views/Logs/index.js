@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.18',
+    label: 'Symfony 4',
+    date: '04/07/2018'
+}, {
     tag: '0.17',
     label: 'Add browser component',
     date: '21/06/2018'
