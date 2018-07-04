@@ -18,9 +18,9 @@ cd /var/www/uniflow.io
 git pull
 (cd back;SYMFONY_ENV=prod composer install --no-dev --optimize-autoloader)
 #redis-cli flushall
-(cd back;php bin/console cache:clear --env=prod --no-debug)
-(cd back;php bin/console doctrine:schema:update --env=prod --force)
-(cd back;php bin/console assetic:dump --env=prod --no-debug)
+(cd back;php bin/console cache:clear  --no-debug)
+(cd back;php bin/console doctrine:schema:update --force)
+(cd back;php bin/console assetic:dump  --no-debug)
 
 #cd web
 #yarn install
