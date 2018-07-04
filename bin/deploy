@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ "$1" = "ssh" ]; then
+
+ssh admin@darkwood.fr
+
+else
+
+ssh admin@darkwood.fr << CMD
+
+cd /var/www/uniflow.io
+
+#sudo service mysql restart
+#sudo service varnish restart
+#sudo service nginx restart
+#sudo service redis restart
+#redis-cli flushall
+
+git pull
+(cd back;SYMFONY_ENV=prod composer install --optimize-autoloader)
+(cd back;php bin/console cache:clear  --no-debug)
+(cd back;php bin/console doctrine:schema:update --force)
+(cd back;php bin/console assetic:dump  --no-debug)
+
+CMD
+
+(cd front;yarn build)
+scp back/public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
+
+fi
