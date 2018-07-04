@@ -60,6 +60,13 @@ class User implements UserInterface, \Serializable
     protected $histories;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(type="json")
+     */
+    protected $roles = [];
+
+    /**
      * Creation.
      *
      * @var \DateTime
@@ -90,11 +97,6 @@ class User implements UserInterface, \Serializable
     public function __toString()
     {
         return $this->firstName . ' ' . $this->lastName;
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
     }
 
     public function getSalt()
@@ -255,6 +257,28 @@ class User implements UserInterface, \Serializable
     public function getHistories()
     {
         return $this->histories;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoles()
+    {
+        $roles = $this->roles;
+
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
     }
 
     /**
