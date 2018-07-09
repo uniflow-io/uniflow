@@ -8,6 +8,7 @@ type Props = {
 
 export default class ComponentAssets extends Component<Props> {
     state = {
+        running: false,
         variable: null,
         assets: []
     }
@@ -133,23 +134,41 @@ export default class ComponentAssets extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        if(this.state.variable) {
-            let assets = this.state.assets.reduce(function (data, asset) {
-                data.push(asset[1]);
-                return data;
-            }, []);
-            runner.setValue(this.state.variable, assets);
-        }
+        return Promise
+            .resolve()
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: true}, resolve);
+                })
+            }).then(() => {
+                if(this.state.variable) {
+                    let assets = this.state.assets.reduce(function (data, asset) {
+                        data.push(asset[1]);
+                        return data;
+                    }, []);
+                    runner.setValue(this.state.variable, assets);
+                }
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: false}, resolve);
+                })
+            })
     }
 
     render() {
-        const {variable, assets} = this.state
+        const { running, variable, assets} = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Assets</h3>
+                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Assets</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times"/></a>
                         </div>

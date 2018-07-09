@@ -16,6 +16,7 @@ type Props = {
 
 export default class ComponentWhile extends Component<Props> {
     state = {
+        running: false,
         conditionStack: [],
         conditionRunIndex: null,
         executeStack: [],
@@ -183,26 +184,44 @@ export default class ComponentWhile extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        let stackEval = function(stack) {
-            return stack.reduce((promise, item) => {
-                return promise.then(() => {
-                    return item.bus.emit('execute', runner)
+        return Promise
+            .resolve()
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: true}, resolve);
                 })
-            }, Promise.resolve()).then(() => {
-                return runner.getReturn()
+            }).then(() => {
+                let stackEval = function(stack) {
+                    return stack.reduce((promise, item) => {
+                        return promise.then(() => {
+                            return item.bus.emit('execute', runner)
+                        })
+                    }, Promise.resolve()).then(() => {
+                        return runner.getReturn()
+                    })
+                }
+
+                let promiseWhile = () => {
+                    return stackEval(this.state.conditionStack)
+                        .then((value) => {
+                            if(value === true) {
+                                return stackEval(this.state.executeStack).then(promiseWhile)
+                            }
+                        })
+                }
+
+                return promiseWhile()
             })
-        }
-
-        let promiseWhile = () => {
-            return stackEval(this.state.conditionStack)
-                .then((value) => {
-                    if(value === true) {
-                        return stackEval(this.state.executeStack).then(promiseWhile)
-                    }
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 500);
                 })
-        }
-
-        return promiseWhile()
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: false}, resolve);
+                })
+            })
     }
 
     render() {
@@ -211,7 +230,7 @@ export default class ComponentWhile extends Component<Props> {
                 <div className="box box-info">
                     <form className="form-horizontal">
                         <div className="box-header with-border">
-                            <h3 className="box-title">While</h3>
+                            <h3 className="box-title"><button type="submit" className="btn btn-default">{this.state.running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> While</h3>
                             <div className="box-tools pull-right">
                                 <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times"/></a>
                             </div>
