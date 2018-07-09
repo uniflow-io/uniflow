@@ -16,6 +16,7 @@ type Props = {
 
 export default class ComponentIf extends Component<Props> {
     state = {
+        running: false,
         if: {
             conditionStack: [],
             conditionRunIndex: null,
@@ -318,45 +319,63 @@ export default class ComponentIf extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        let stackEval = function(stack) {
-            return stack.reduce((promise, item) => {
-                return promise.then(() => {
-                    return item.bus.emit('execute', runner)
+        return Promise
+            .resolve()
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: true}, resolve);
                 })
-            }, Promise.resolve()).then(() => {
-                return runner.getReturn()
-            })
-        }
-
-        return stackEval(this.state.if.conditionStack)
-            .then((value) => {
-                if(value === true) {
-                    return stackEval(this.state.if.executeStack)
+            }).then(() => {
+                let stackEval = function(stack) {
+                    return stack.reduce((promise, item) => {
+                        return promise.then(() => {
+                            return item.bus.emit('execute', runner)
+                        })
+                    }, Promise.resolve()).then(() => {
+                        return runner.getReturn()
+                    })
                 }
 
-                return this.state.elseIfs.reduce((promise, elseIf) => {
-                    return promise
-                        .then((isResolved) => {
-                            if(!isResolved) {
-                                return stackEval(elseIf.conditionStack)
-                                    .then((value) => {
-                                        if(value === true) {
-                                            return stackEval(elseIf.executeStack)
-                                                .then(() => {
-                                                    return true
-                                                })
-                                        }
+                return stackEval(this.state.if.conditionStack)
+                    .then((value) => {
+                        if(value === true) {
+                            return stackEval(this.state.if.executeStack)
+                        }
 
-                                        return false
-                                    })
+                        return this.state.elseIfs.reduce((promise, elseIf) => {
+                            return promise
+                                .then((isResolved) => {
+                                    if(!isResolved) {
+                                        return stackEval(elseIf.conditionStack)
+                                            .then((value) => {
+                                                if(value === true) {
+                                                    return stackEval(elseIf.executeStack)
+                                                        .then(() => {
+                                                            return true
+                                                        })
+                                                }
+
+                                                return false
+                                            })
+                                    }
+
+                                    return isResolved
+                                })
+                        }, Promise.resolve(false)).then((isResolved) => {
+                            if(!isResolved && this.state.else) {
+                                return stackEval(this.state.else.executeStack)
                             }
-
-                            return isResolved
                         })
-                }, Promise.resolve(false)).then((isResolved) => {
-                    if(!isResolved && this.state.else) {
-                        return stackEval(this.state.else.executeStack)
-                    }
+                    })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: false}, resolve);
                 })
             })
     }
@@ -367,7 +386,7 @@ export default class ComponentIf extends Component<Props> {
                 <div className="box box-info">
                     <form className="form-horizontal">
                         <div className="box-header with-border">
-                            <h3 className="box-title">If</h3>
+                            <h3 className="box-title"><button type="submit" className="btn btn-default">{this.state.running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> If</h3>
                             <div className="box-tools pull-right">
                                 <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times"/></a>
                             </div>

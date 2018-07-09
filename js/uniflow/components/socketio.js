@@ -8,6 +8,7 @@ type Props = {
 
 export default class ComponentSocketIO extends Component<Props> {
     state = {
+        running: false,
         variable: null,
         host: null,
         port: null
@@ -115,17 +116,35 @@ export default class ComponentSocketIO extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        return runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
+        return Promise
+            .resolve()
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: true}, resolve);
+                })
+            }).then(() => {
+                return runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: false}, resolve);
+                })
+            })
     }
 
     render() {
-        const {variable, host, port} = this.state
+        const {running, variable, host, port} = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Socket IO</h3>
+                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Socket IO</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>

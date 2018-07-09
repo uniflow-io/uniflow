@@ -9,6 +9,7 @@ type Props = {
 
 export default class ComponentSelect extends Component<Props> {
     state = {
+        running: false,
         variable: null,
         choices: [],
         selected: null
@@ -81,21 +82,39 @@ export default class ComponentSelect extends Component<Props> {
     }
 
     onExecute = (runner) => {
-        if (this.state.variable && runner.hasValue(this.state.variable)) {
-            this.setState({choices: runner.getValue(this.state.variable)}, this.onUpdate)
+        return Promise
+            .resolve()
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: true}, resolve);
+                })
+            }).then(() => {
+                if (this.state.variable && runner.hasValue(this.state.variable)) {
+                    this.setState({choices: runner.getValue(this.state.variable)}, this.onUpdate)
 
-            runner.setValue(this.state.variable, this.state.selected);
-        }
+                    runner.setValue(this.state.variable, this.state.selected);
+                }
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, 500);
+                })
+            })
+            .then(() => {
+                return new Promise((resolve) => {
+                    this.setState({running: false}, resolve);
+                })
+            })
     }
 
     render() {
-        const {variable, choices, selected} = this.state
+        const {running, variable, choices, selected} = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title">Select</h3>
+                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Select</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>
