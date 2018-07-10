@@ -9,7 +9,6 @@ import ComponentSelect from './components/select.js';
 import ComponentSocketIO from './components/socketio.js';
 import ComponentText from './components/text.js';
 import ComponentTextList from './components/textlist.js';
-import ComponentUrl from './components/url.js';
 import ComponentWhile from "./components/while.js";
 import ComponentYamlAdd from "./components/yaml-add.js";
 
@@ -25,7 +24,6 @@ export default {
     'socketio': ComponentSocketIO,
     'text': ComponentText,
     'textlist': ComponentTextList,
-    'url': ComponentUrl,
     'while': ComponentWhile,
     'yaml-add': ComponentYamlAdd
 }
