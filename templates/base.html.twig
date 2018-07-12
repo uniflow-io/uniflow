@@ -95,7 +95,11 @@
 {% block body %}
     <div id="app"></div>
 
+    {% if app.environment == 'dev' %}
+    <script src="http://localhost:8080/bundle.js"></script>
+    {% else %}
     <script src="{{ asset('dist/js/bundle.js') }}"></script>
+    {% endif %}
 {% endblock %}
 
 </body>
