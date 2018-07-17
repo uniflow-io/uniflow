@@ -13,7 +13,9 @@ export const getPlatforms = (state) => {
             return componentPlatforms
         }
 
-        return []
+        return platforms.filter((platform) => {
+            return componentPlatforms.indexOf(platform) !== -1
+        })
     }, [])
 }
 
