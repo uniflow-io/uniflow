@@ -17,6 +17,10 @@ export default class ComponentText extends Component<Props> {
         return ['core']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     componentDidMount() {
         const { bus } = this.props
 

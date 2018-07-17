@@ -18,6 +18,10 @@ class ComponentInclude extends Component<Props> {
         return ['core']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     getFlow = (historyId) => {
         let history = this.props.history.items[historyId]
 
