@@ -1,4 +1,5 @@
 import ComponentAssets from './components/assets.js';
+import ComponentBash from './components/bash.js';
 import ComponentBrowser from './components/browser.js';
 import ComponentCheckBoxes from './components/checkboxes.js';
 import ComponentJavascript from './components/javascript.js';
@@ -14,6 +15,7 @@ import ComponentYamlAdd from "./components/yaml-add.js";
 
 export default {
     'assets': ComponentAssets,
+    'bash': ComponentBash,
     'browser': ComponentBrowser,
     'checkboxes': ComponentCheckBoxes,
     'javascript': ComponentJavascript,
