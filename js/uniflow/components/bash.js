@@ -16,6 +16,10 @@ export default class ComponentBash extends Component<Props> {
         return ['core']
     }
 
+    static platforms() {
+        return ['bash']
+    }
+
     componentDidMount() {
         const { bus } = this.props
 

@@ -4154,6 +4154,10 @@ export default class ComponentYamlAdd extends Component<Props> {
         return ['yaml']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

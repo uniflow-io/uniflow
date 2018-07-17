@@ -17,6 +17,10 @@ export default class ComponentCheckBoxes extends Component<Props> {
         return ['ui']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 

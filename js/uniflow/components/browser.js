@@ -23,6 +23,10 @@ export default class ComponentBrowser extends Component<Props> {
         return ['core']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     constructor(props) {
         super(props)
 

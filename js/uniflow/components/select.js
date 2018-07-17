@@ -19,6 +19,10 @@ export default class ComponentSelect extends Component<Props> {
         return ['ui']
     }
 
+    static platforms() {
+        return ['javascript']
+    }
+
     componentDidMount() {
         const {bus} = this.props
 
