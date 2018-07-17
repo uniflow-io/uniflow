@@ -5,7 +5,7 @@ import components from '../../uniflow/components';
 
 class ComponentSearch extends Component {
     state = {
-        search: 'code'
+        search: 'javascript'
     }
 
     onSubmit = (event) => {

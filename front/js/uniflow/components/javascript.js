@@ -6,10 +6,10 @@ type Props = {
     bus: Bus
 }
 
-export default class ComponentCode extends Component<Props> {
+export default class ComponentJavascript extends Component<Props> {
     state = {
         running: false,
-        code: null
+        javascript: null
     }
 
     static tags() {
@@ -47,15 +47,15 @@ export default class ComponentCode extends Component<Props> {
     }
 
     serialise = () => {
-        return this.state.code
+        return this.state.javascript
     }
 
     deserialise = (data) => {
-        this.setState({code: data})
+        this.setState({javascript: data})
     }
 
-    onChangeCode = (code) => {
-        this.setState({code: code}, this.onUpdate)
+    onChangeJavascript = (javascript) => {
+        this.setState({javascript: javascript}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -80,7 +80,7 @@ export default class ComponentCode extends Component<Props> {
                     this.setState({running: true}, resolve);
                 })
             }).then(() => {
-                return runner.eval(this.state.code)
+                return runner.eval(this.state.javascript)
             })
             .then(() => {
                 return new Promise((resolve) => {
@@ -95,23 +95,23 @@ export default class ComponentCode extends Component<Props> {
     }
 
     render() {
-        const { running, code } = this.state
+        const { running, javascript } = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Code</h3>
+                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Javascript</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times" /></a>
                         </div>
                     </div>
                     <div className="box-body">
                         <div className="form-group">
-                            <label htmlFor="code{{ _uid }}" className="col-sm-2 control-label">Code</label>
+                            <label htmlFor="javascript{{ _uid }}" className="col-sm-2 control-label">Javascript</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="code{{ _uid }}" value={code} onChange={this.onChangeCode} placeholder="Code" height="200" mode="javascript" />
+                                <Ace className="form-control" id="javascript{{ _uid }}" value={javascript} onChange={this.onChangeJavascript} placeholder="Javascript" height="200" mode="javascript" />
                             </div>
                         </div>
                     </div>
