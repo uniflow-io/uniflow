@@ -1,7 +1,7 @@
 import ComponentAssets from './components/assets.js';
 import ComponentBrowser from './components/browser.js';
 import ComponentCheckBoxes from './components/checkboxes.js';
-import ComponentCode from './components/code.js';
+import ComponentJavascript from './components/javascript.js';
 import ComponentIf from './components/if.js';
 import ComponentInclude from './components/include.js';
 import ComponentObject from './components/object.js';
@@ -16,7 +16,7 @@ export default {
     'assets': ComponentAssets,
     'browser': ComponentBrowser,
     'checkboxes': ComponentCheckBoxes,
-    'code': ComponentCode,
+    'javascript': ComponentJavascript,
     'if': ComponentIf,
     'include': ComponentInclude,
     'object': ComponentObject,
