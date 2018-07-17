@@ -3,6 +3,7 @@ import _ from 'lodash'
 import {Ace, ComponentList, TagIt} from '../../../components/index'
 import {History, Runner} from '../../../models/index'
 import {
+    getPlatforms,
     commitPushFlow,
     commitPopFlow,
     commitUpdateFlow,
@@ -202,7 +203,7 @@ class Show extends Component {
     }
 
     render() {
-        const {history, tags} = this.props;
+        const {history, tags, stack, platforms} = this.props;
         const tagsOptions     = {
             availableTags: tags
         }
@@ -254,10 +255,11 @@ class Show extends Component {
                     </div>
                     <div className="box-footer">
                         <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
+                        {platforms.map((platform, i) => (<span key={i} className="pull-right badge">{platform}</span>))}
                     </div>
                 </div>
 
-                <ComponentList stack={this.props.stack} runIndex={this.state.runIndex}
+                <ComponentList stack={stack} runIndex={this.state.runIndex}
                                onPush={this.onPushFlow}
                                onPop={this.onPopFlow}
                                onUpdate={this.onUpdateFlow}
@@ -270,6 +272,7 @@ class Show extends Component {
 
 export default connect(state => {
     return {
+        platforms: getPlatforms(state.flow),
         history: getCurrentHistory(state.history),
         tags: getTags(state.history),
         stack: state.flow

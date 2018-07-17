@@ -1,9 +1,21 @@
+import components from '../../uniflow/components';
 import {
     COMMIT_PUSH_FLOW,
     COMMIT_POP_FLOW,
     COMMIT_UPDATE_FLOW,
     COMMIT_SET_FLOW,
 } from './actionsTypes'
+
+export const getPlatforms = (state) => {
+    return state.reduce((platforms, item) => {
+        let componentPlatforms = components[item.component].platforms()
+        if(platforms.length === 0) {
+            return componentPlatforms
+        }
+
+        return []
+    }, [])
+}
 
 export const commitPushFlow = (index, component) => {
     return (dispatch) => {
