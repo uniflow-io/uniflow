@@ -2,5 +2,9 @@
   "name": "bash",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "util": "^0.11.0"
+  }
 }
