@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Select2 } from '../../components/index'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import components from '../../uniflow/components';
+import {
+    getPlatforms
+} from "../../reducers/flow/actions";
 
 class ComponentSearch extends Component {
     state = {
@@ -48,16 +51,24 @@ class ComponentSearch extends Component {
     }
 }
 
-const getComponentLabels = (userComponents) => {
-    let componentLabels = []
+const getComponentLabels = (userComponents, stack) => {
+    let componentLabels = [],
+        platforms = getPlatforms(stack)
 
     for(let i = 0; i < userComponents.length; i++) {
-        let key = userComponents[i]
+        let key = userComponents[i],
+            containsPlatform = platforms.filter((platform) => {
+                return components[key].platforms().indexOf(platform) !== -1
+            }).length > 0
 
-        componentLabels.push({
-            key: key,
-            label: components[key].tags().join(' - ') + ' : ' + key
-        })
+        if(platforms.length === 0 || containsPlatform) {
+            componentLabels.push({
+                key: key,
+                label: components[key].tags().join(' - ') + ' : ' + key + ' ' + components[key].platforms().map((platform) => {
+                    return '[' + platform + ']'
+                }).join(' ')
+            })
+        }
     }
 
     componentLabels.sort(function(component1, component2) {
@@ -71,6 +82,6 @@ const getComponentLabels = (userComponents) => {
 
 export default connect(state => {
     return {
-        componentLabels: getComponentLabels(state.user.components),
+        componentLabels: getComponentLabels(state.user.components, state.flow),
     }
 })(ComponentSearch)
