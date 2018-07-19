@@ -68,6 +68,9 @@ export default class App extends Component {
                                                 <li>
                                                     <Link to={pathTo('logs')}>Logs</Link>
                                                 </li>
+                                                <li>
+                                                    <Link to={pathTo('profile')}>Profile</Link>
+                                                </li>
                                             </ul>
                                         </div>
                                     </nav>
