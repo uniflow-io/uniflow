@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class UserController extends Controller
      */
     public function components(Request $request)
     {
+        /** @var User $user */
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -43,5 +45,23 @@ class UserController extends Controller
         }
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @Route("/user/profile", name="user_profile")
+     */
+    public function profile(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        return new JsonResponse([
+            'apiKey' => $user->getApiKey(),
+        ]);
     }
 }

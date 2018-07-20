@@ -55,6 +55,11 @@ class User implements UserInterface, \Serializable
     protected $facebookId;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $apiKey;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="user", cascade={"persist"})
      */
     protected $histories;
@@ -226,6 +231,22 @@ class User implements UserInterface, \Serializable
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param mixed $apiKey
+     */
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = $apiKey;
     }
 
     /**

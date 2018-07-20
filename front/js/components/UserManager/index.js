@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchComponents} from '../../reducers/user/actions'
+import {fetchComponents, fetchProfile} from '../../reducers/user/actions'
 
 type Props = {
     children: React.Node
@@ -9,6 +9,9 @@ type Props = {
 class UserManager extends Component<Props> {
     componentDidMount() {
         this.props.dispatch(fetchComponents())
+            .then(() => {
+                return this.props.dispatch(fetchProfile())
+            })
     }
 
     render() {
