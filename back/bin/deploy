@@ -23,7 +23,7 @@ git pull
 
 CMD
 
-(cd front;yarn build)
-scp back/public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
+(cd ../front;yarn build)
+scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
 
 fi
