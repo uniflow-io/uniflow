@@ -18,7 +18,7 @@ const user = (state = defaultState, action) => {
         case COMMIT_UPDATE_PROFILE:
             return {
                 ...state,
-                ...{apiKey: action.apiKey}
+                ...{apiKey: action.item.apiKey}
             }
         default:
             return state
