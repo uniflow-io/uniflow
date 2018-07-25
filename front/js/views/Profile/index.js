@@ -1,17 +1,41 @@
 import React, {Component} from 'react'
-import {getCurrentHistory, getTags} from "../../reducers/history/actions";
+import _ from 'lodash'
+import {
+    updateProfile,
+    commitUpdateProfile
+} from '../../reducers/user/actions'
 import {connect} from "react-redux";
-import {getPlatforms} from "../../reducers/flow/actions";
 
 class Profile extends Component {
-
-    generateProfileToken()
-    {
-
+    onUpdateApiKey = (event) => {
+        this.props
+            .dispatch(commitUpdateProfile({...this.props.user, ...{apiKey: event.target.value}}))
+            .then(() => {
+                this.onUpdate()
+            })
     }
 
-    render()
-    {
+    onUpdate = _.debounce(() => {
+        this.props.dispatch(updateProfile(this.props.user))
+    }, 500)
+
+    generateKey = () => {
+        let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        let apiKey = "";
+        for (let i = 0; i < 16; i++)
+            apiKey += chars.charAt(Math.floor(Math.random() * chars.length));
+
+        this.props
+            .dispatch(commitUpdateProfile({...this.props.user, ...{apiKey: apiKey}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
+    render() {
+        const {user} = this.props;
+
         return (
             <div className="content-wrapper">
                 {/* Content Header (Page header) */}
@@ -40,15 +64,16 @@ class Profile extends Component {
                                 <form role="form">
                                     <div className="box-body">
                                         <div className="form-group">
-                                            <label htmlFor="profile_token">Api token</label>
+                                            <label htmlFor="profile_key">Api key</label>
                                             <div className="input-group">
                                                 <div className="input-group-btn">
                                                     <button type="button" className="btn btn-default"
-                                                            onClick={this.generateProfileToken}>Generate
+                                                            onClick={this.generateKey}>Generate
                                                     </button>
                                                 </div>
-                                                <input type="text" className="form-control" id="profile_token"
-                                                       placeholder="You token"/>
+                                                <input type="text" className="form-control" id="profile_key"
+                                                       value={user.apiKey || ''} onChange={this.onUpdateApiKey}
+                                                       placeholder="api key"/>
                                             </div>
                                         </div>
                                     </div>
@@ -66,5 +91,6 @@ class Profile extends Component {
 
 export default connect(state => {
     return {
+        user: state.user,
     }
 })(Profile)
