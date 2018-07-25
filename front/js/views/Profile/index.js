@@ -23,7 +23,7 @@ class Profile extends Component {
         let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         let apiKey = "";
-        for (let i = 0; i < 16; i++)
+        for (let i = 0; i < 32; i++)
             apiKey += chars.charAt(Math.floor(Math.random() * chars.length));
 
         this.props
