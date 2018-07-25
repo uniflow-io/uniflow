@@ -90,7 +90,7 @@ class HistoryController extends Controller
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    'Tendance sauvegardée !'
+                    'History saved !'
                 );
 
                 return new JsonResponse($this->historyService->getJsonHistory($entity));
