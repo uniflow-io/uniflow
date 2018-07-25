@@ -11,11 +11,19 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        app_api_key_user_provider:
+            id: App\Security\ApiKeyUserProvider
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: App\Security\ApiKeyAuthenticator
+            provider: app_api_key_user_provider
         main:
             pattern:    ^/
             form_login:
