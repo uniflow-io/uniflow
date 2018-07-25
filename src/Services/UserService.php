@@ -94,6 +94,11 @@ class UserService
         return $this->userRepository->findOneBy(array('username' => $username));
     }
 
+    public function findOneByApiKey($apiKey)
+    {
+        return $this->userRepository->findOneBy(array('apiKey' => $apiKey));
+    }
+
     public function getJsonProfile(User $user)
     {
         return array(
