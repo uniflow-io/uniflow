@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.20',
+    label: 'Add bash runner',
+    date: '26/07/2018'
+}, {
     tag: '0.19',
     label: 'Add webpack tool for development',
     date: '12/07/2018'
