@@ -1,11 +1,11 @@
 {
-  "name": "uniflow",
+  "name": "uniflow-front",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "js/index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --hot --inline -d --progress --colors --config webpack.web.config.js",
-    "build": "./node_modules/.bin/webpack --mode production  -p --progress --colors --config webpack.web.config.js",
+    "dev": "./node_modules/.bin/webpack-dev-server --hot --inline -d --progress --colors --config webpack.config.js",
+    "build": "./node_modules/.bin/webpack --mode production  -p --progress --colors --config webpack.config.js",
     "plugin-start": "./node_modules/.bin/webpack --mode development --config webpack.plugin.config.js",
     "plugin-build": "./node_modules/.bin/webpack --mode production --config webpack.plugin.config.js"
   },
