@@ -25,5 +25,7 @@ CMD
 
 (cd ../front;yarn build)
 scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
+(cd ../bash;yarn build)
+scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
 
 fi

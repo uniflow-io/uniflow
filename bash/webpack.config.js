@@ -3,9 +3,9 @@ const path = require('path');
 module.exports = {
     entry: './js/index.js',
     output: {
-        filename: 'bundle.js',
+        filename: 'bash.js',
         publicPath: "/",
-        path: path.resolve(__dirname, './dist/js')
+        path: path.resolve(__dirname, '../back/public/dist/js')
     },
     devServer: {
         headers: {
@@ -15,9 +15,6 @@ module.exports = {
         publicPath: "/",
         filename: "bundle.js",
         historyApiFallback: true
-    },
-    optimization: {
-        minimize: false
     },
     module: {
         rules: [{

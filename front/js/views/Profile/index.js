@@ -6,6 +6,21 @@ import {
 } from '../../reducers/user/actions'
 import {connect} from "react-redux";
 
+function copyTextToClipboard(text) {
+    let textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+    }
+
+    document.body.removeChild(textArea);
+}
+
 class Profile extends Component {
     onUpdateApiKey = (event) => {
         this.props
@@ -13,6 +28,12 @@ class Profile extends Component {
             .then(() => {
                 this.onUpdate()
             })
+    }
+
+    onCopyApiUsage = (event) => {
+        const {clipbard} = this.props;
+
+        copyTextToClipboard(clipbard)
     }
 
     onUpdate = _.debounce(() => {
@@ -34,7 +55,7 @@ class Profile extends Component {
     }
 
     render() {
-        const {user} = this.props;
+        const {user, clipbard} = this.props;
 
         return (
             <div className="content-wrapper">
@@ -76,6 +97,15 @@ class Profile extends Component {
                                                        placeholder="api key"/>
                                             </div>
                                         </div>
+                                        <div className="form-group">
+                                            <label htmlFor="profile_key">Api usage</label>
+                                            <div className="input-group">
+                                                <span className="input-group-addon" onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" /></span>
+                                                <input type="text" className="form-control" id="profile_key"
+                                                       value={clipbard || ''}
+                                                       placeholder="api key"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -89,8 +119,17 @@ class Profile extends Component {
     }
 }
 
+const getClipboard = (user) => {
+    if(user.apiKey) {
+        return 'curl -o- https://uniflow.io/dist/js/bash.js | node --api-key=' + user.apiKey
+    }
+
+    return null
+}
+
 export default connect(state => {
     return {
         user: state.user,
+        clipbard: getClipboard(state.user)
     }
 })(Profile)
