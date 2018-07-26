@@ -1,13 +1,13 @@
-const util  = require('util');
-const exec  = util.promisify(require('child_process').exec);
 const axios = require('axios');
+const History = require('./models/History')
+const Runner = require('./models/Runner')
 
 function parseArgv(argv) {
     // Removing node/bin and called script name
     argv = argv.slice(2);
 
     // Returned object
-    let args = {};
+    let args = {}, values = [];
 
     let argName, argValue;
 
@@ -25,42 +25,56 @@ function parseArgv(argv) {
         }
 
         // Associate defined value or initialize it to "true" state
-        argValue = (arg.length === 2)
-            ? parseFloat(arg[1]).toString() === arg[1] // check if argument is valid number
-                ? +arg[1]
-                : arg[1]
-            : true;
-
-        // Finally add the argument to the args set
-        args[argName] = argValue;
+        if(arg.length === 2) {
+            args[argName] = parseFloat(arg[1]).toString() === arg[1] ? +arg[1] : arg[1]
+        } else {
+            values.push(argName)
+        }
     });
 
-    return args;
+    return {'args': args, 'values': values};
 }
 
-function api(apiKey, endpoint, params) {
+function api(apiKey, endpoint, params = []) {
     const httpHost  = 'http://uniflow.darkwood.localhost'
     const endpoints = {
         'history': '/api/history',
         'history_data': '/api/history/{id}'
     }
+    let path = Object.keys(params).reduce(function(path, key) {
+        return path.replace('{' + key + '}', params[key]);
+    }, endpoints[endpoint]);
 
-    return axios.get(httpHost + endpoints[endpoint] + '?apiKey=' + apiKey)
+    return axios.get(httpHost + path + '?apiKey=' + apiKey)
 }
 
-let args = parseArgv(process.argv)
-if(args['api-key'] === undefined) {
+let args = parseArgv(process.argv),
+    apiKey = args['args']['api-key']
+if(apiKey === undefined) {
     console.log('You must provide an api key : use --api-key=[Your Api Key]')
     process.exit(0)
 }
+if(args['values'].length === 0) {
+    console.log('You must provide an identifier')
+    process.exit(0)
+}
 
-api(args['api-key'], 'history')
-    .then((data) => {
-        console.log(data)
+let identifier = args['values'][0]
+api(apiKey, 'history')
+    .then((response) => {
+        for(let i = 0; i < response.data.length; i++) {
+            if(response.data[i].title === identifier) {
+                return api(apiKey, 'history_data', {'id': response.data[i].id})
+            }
+        }
+
+        console.log('Not such process ['+identifier+']')
+        process.exit(0)
     })
+    .then((response) => {
+        let history = new History(response.data),
+            stack = history.deserialiseFlowData(),
+            runner = new Runner()
 
-/*
-exec('ls -al')
-    .then(function(result) {
-        console.log(result.stdout)
-    })*/
+        runner.run(stack);
+    })
