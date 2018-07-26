@@ -36,7 +36,7 @@ function parseArgv(argv) {
 }
 
 function api(apiKey, endpoint, params = []) {
-    const httpHost  = 'http://uniflow.darkwood.localhost'
+    const httpHost  = 'https://uniflow.io'
     const endpoints = {
         'history': '/api/history',
         'history_data': '/api/history/{id}'
