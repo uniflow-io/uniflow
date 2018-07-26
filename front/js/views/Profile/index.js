@@ -100,9 +100,14 @@ class Profile extends Component {
                                         <div className="form-group">
                                             <label htmlFor="profile_key">Api usage</label>
                                             <div className="input-group">
-                                                <span className="input-group-addon" onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" /></span>
+                                                <div className="input-group-btn">
+                                                    <button type="button" className="btn btn-default"
+                                                            onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" />
+                                                    </button>
+                                                </div>
                                                 <input type="text" className="form-control" id="profile_key"
                                                        value={clipbard || ''}
+                                                       readOnly={true}
                                                        placeholder="api key"/>
                                             </div>
                                         </div>
@@ -121,7 +126,7 @@ class Profile extends Component {
 
 const getClipboard = (user) => {
     if(user.apiKey) {
-        return 'curl -o- https://uniflow.io/dist/js/bash.js | node --api-key=' + user.apiKey
+        return 'curl -s -o- https://uniflow.io/dist/js/bash.js | node - --api-key=' + user.apiKey
     }
 
     return null

@@ -8,6 +8,7 @@ else
 
 ssh admin@darkwood.fr << CMD
 
+# deploy back
 cd /var/www/uniflow.io
 
 #sudo service mysql restart
@@ -23,8 +24,11 @@ git pull
 
 CMD
 
+# deploy front
 (cd ../front;yarn build)
 scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
+
+# deploy bash
 (cd ../bash;yarn build)
 scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
 
