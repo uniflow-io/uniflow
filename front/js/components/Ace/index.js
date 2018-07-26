@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ace from 'brace'
 require('brace/mode/javascript')
+require('brace/mode/batchfile')
 
 type Props = {
     value: string,
