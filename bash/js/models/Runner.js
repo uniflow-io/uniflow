@@ -23,12 +23,6 @@ Runner.prototype.run = function(stack, onRunIndex = () => {}) {
                 value = stdout
                 process.stdout.write(stdout)
             })
-
-            /*return exec(code)
-                .then(function(result) {
-                    value = result.stdout
-                    process.stdout.write(result.stdout)
-                })*/
         },
         getReturn: function () {
             return value;
