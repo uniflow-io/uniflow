@@ -1,10 +1,5 @@
-const moment = require('moment')
-
 function History(data) {
     Object.assign(this, data);
-
-    this.created = moment(this.created);
-    this.updated = moment(this.updated);
 }
 
 History.prototype.serialiseFlowData = function (data) {

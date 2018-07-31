@@ -1,7 +1,5 @@
 const components = require('../uniflow/components')
-const util  = require('util');
-const exec  = util.promisify(require('child_process').exec);
-
+const execSh = require('exec-sh')
 
 function Runner() {
 
@@ -13,11 +11,24 @@ Runner.prototype.run = function(stack, onRunIndex = () => {}) {
             value = null
             if (code === undefined) return;
 
-            return exec(code)
+            return new Promise(function(resolve, reject) {
+                execSh(code, {}, function(err, stdout, stderr) {
+                    if(err) {
+                        reject(stderr)
+                    } else {
+                        resolve(stdout)
+                    }
+                })
+            }).then(function(stdout) {
+                value = stdout
+                process.stdout.write(stdout)
+            })
+
+            /*return exec(code)
                 .then(function(result) {
                     value = result.stdout
                     process.stdout.write(result.stdout)
-                })
+                })*/
         },
         getReturn: function () {
             return value;
