@@ -126,7 +126,7 @@ class Profile extends Component {
 
 const getClipboard = (user) => {
     if(user.apiKey) {
-        return 'curl -s -o- https://uniflow.io/dist/js/bash.js | node - --api-key=' + user.apiKey
+        return 'node -e "$(curl -s https://uniflow.io/dist/js/bash.js)" - --api-key=' + user.apiKey
     }
 
     return null
