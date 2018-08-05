@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.21',
+    label: 'Add prompt component',
+    date: '05/08/2018'
+}, {
     tag: '0.20',
     label: 'Add bash runner',
     date: '26/07/2018'
