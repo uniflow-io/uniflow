@@ -100,6 +100,9 @@ export default class ComponentSocketIO extends Component<Props> {
 
             wrapper = function (eventName) {
                 let args     = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+                args = args.map((data) => {
+                    return interpreter.pseudoToNative(data)
+                })
                 let callback = arguments[arguments.length - 1];
 
                 return new Promise((resolve) => {
