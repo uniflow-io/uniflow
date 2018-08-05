@@ -66,7 +66,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
-<div class="wrapper">
+{#<div class="wrapper">
     <header class="main-header">
         <a href="{{ path('home') }}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -80,7 +80,7 @@
                     {% if app.user %}
                         <li><a href="{{ path('logout') }}"><span
                                         class="glyphicon glyphicon-off logout" aria-hidden="true" /></a></li>
-                        {#<li><a href="{{ path('fos_user_profile_edit') }}">{{ app.user.email }}</a></li>#}
+                        #}{#<li><a href="{{ path('fos_user_profile_edit') }}">{{ app.user.email }}</a></li>#}{#
                     {% else %}
                         <li><a href="{{ path('login') }}"><span
                                         class="glyphicon glyphicon-log-in login"
@@ -90,7 +90,7 @@
             </div>
         </nav>
     </header>
-</div>
+</div>#}
 
 {% block body %}
     <div id="app"></div>
