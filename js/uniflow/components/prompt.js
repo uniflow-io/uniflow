@@ -7,7 +7,7 @@ type Props = {
     bus: Bus
 }
 
-export default class ComponentText extends Component<Props> {
+export default class ComponentPrompt extends Component<Props> {
     state = {
         running: false,
         variable: null,
