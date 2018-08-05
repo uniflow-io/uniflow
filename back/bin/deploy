@@ -25,10 +25,12 @@ git pull
 CMD
 
 # deploy front
+(cd ../front;yarn install)
 (cd ../front;yarn build)
 scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
 
 # deploy bash
+(cd ../bash;yarn install)
 (cd ../bash;yarn build)
 scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
 
