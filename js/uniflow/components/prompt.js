@@ -170,7 +170,6 @@ export default class ComponentText extends Component<Props> {
             'string': 'String',
             'text': 'Text',
             'file': 'File',
-            'boolean': 'Boolean'
         }
 
         return (
