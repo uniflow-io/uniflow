@@ -86,6 +86,22 @@ export default class ComponentText extends Component<Props> {
         this.setState({input: value})
     }
 
+    onChangeInputFile = (event) => {
+        event.persist()
+        event.preventDefault()
+
+        let file = event.target.files[0]
+
+        return new Promise((resolve, error) => {
+            let reader = new FileReader();
+            reader.onerror = error;
+            reader.onload = (e) => {
+                this.setState({input: e.target.result}, resolve)
+            };
+            reader.readAsText(file);
+        })
+    }
+
     onUpdate = () => {
         this.props.onUpdate(this.serialise())
     }
@@ -153,7 +169,7 @@ export default class ComponentText extends Component<Props> {
         const choices = {
             'string': 'String',
             'text': 'Text',
-            'image': 'Image',
+            'file': 'File',
             'boolean': 'Boolean'
         }
 
@@ -203,6 +219,16 @@ export default class ComponentText extends Component<Props> {
 
                                 <div className="col-sm-10">
                                     <Ace className="form-control" id="input_text{{ _uid }}" value={input || ''} onChange={this.onChangeInputText} placeholder="Text" height="200" />
+                                </div>
+                            </div>
+                        )}
+
+                        {inputDisplay && type === 'file' && (
+                            <div className="form-group">
+                                <label htmlFor="input_file{{ _uid }}" className="col-sm-2 control-label">Input</label>
+
+                                <div className="col-sm-10">
+                                    <input id="input_file{{ _uid }}" type="file" onChange={this.onChangeInputFile} className="form-control"/>
                                 </div>
                             </div>
                         )}
