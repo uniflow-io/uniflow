@@ -6,6 +6,7 @@ import ComponentJavascript from './components/javascript.js';
 import ComponentIf from './components/if.js';
 import ComponentInclude from './components/include.js';
 import ComponentObject from './components/object.js';
+import ComponentPrompt from './components/prompt.js';
 import ComponentSelect from './components/select.js';
 import ComponentSocketIO from './components/socketio.js';
 import ComponentText from './components/text.js';
@@ -22,6 +23,7 @@ export default {
     'if': ComponentIf,
     'include': ComponentInclude,
     'object': ComponentObject,
+    'prompt': ComponentPrompt,
     'select': ComponentSelect,
     'socketio': ComponentSocketIO,
     'text': ComponentText,
