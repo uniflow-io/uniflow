@@ -13,7 +13,7 @@ export default class ComponentText extends Component<Props> {
         variable: null,
         type: null,
         inputDisplay: false,
-        inputs: {},
+        input: null,
     }
 
     static tags() {
@@ -79,10 +79,11 @@ export default class ComponentText extends Component<Props> {
     }
 
     onChangeInputString = (event) => {
-        this.setState({inputs: {
-        ...this.state.inputs,
-        ...{string: event.target.value}
-        }})
+        this.setState({input: event.target.value})
+    }
+
+    onChangeInputText = (value) => {
+        this.setState({input: value})
     }
 
     onUpdate = () => {
@@ -116,12 +117,7 @@ export default class ComponentText extends Component<Props> {
                 })
             }).then(() => {
                 return new Promise((resolve) => {
-                    this.setState({inputDisplay: true}, resolve);
-                })
-                .then(() => {
-                    return new Promise((resolve) => {
-                        this.setState({inputs: {}}, resolve);
-                    })
+                    this.setState({inputDisplay: true, input: null}, resolve);
                 })
                 .then(() => {
                     return new Promise((resolve) => {
@@ -130,7 +126,7 @@ export default class ComponentText extends Component<Props> {
                 })
                 .then(() => {
                     if (this.state.variable) {
-                        runner.setValue(this.state.variable, this.state.inputs[this.state.type]);
+                        runner.setValue(this.state.variable, this.state.input);
                     }
                 })
                 .then(() => {
@@ -152,7 +148,7 @@ export default class ComponentText extends Component<Props> {
     }
 
     render() {
-        const { running, variable, type, inputDisplay, inputs } = this.state
+        const { running, variable, type, inputDisplay, input } = this.state
 
         const choices = {
             'string': 'String',
@@ -196,9 +192,19 @@ export default class ComponentText extends Component<Props> {
                             <label htmlFor="input_string{{ _uid }}" className="col-sm-2 control-label">Input</label>
 
                             <div className="col-sm-10">
-                                <input id="input_string{{ _uid }}" type="text" value={inputs.string || ''} onChange={this.onChangeInputString} className="form-control" />
+                                <input id="input_string{{ _uid }}" type="text" value={input || ''} onChange={this.onChangeInputString} className="form-control" />
                             </div>
                         </div>
+                        )}
+
+                        {inputDisplay && type === 'text' && (
+                            <div className="form-group">
+                                <label htmlFor="input_text{{ _uid }}" className="col-sm-2 control-label">Input</label>
+
+                                <div className="col-sm-10">
+                                    <Ace className="form-control" id="input_text{{ _uid }}" value={input || ''} onChange={this.onChangeInputText} placeholder="Text" height="200" />
+                                </div>
+                            </div>
                         )}
 
                     </div>
