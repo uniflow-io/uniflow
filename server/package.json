@@ -6,6 +6,7 @@
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "express": "^4.16.2",
     "fs-extra": "^4.0.2",
     "https": "^1.0.0",

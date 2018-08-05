@@ -27,6 +27,7 @@ io.on('connection', function (socket) {
     require('./components/browser')(socket)
     require('./components/childProcess')(socket)
     require('./components/filesystem')(socket)
+    require('./components/http')(socket)
     require('./components/robot')(socket)
 });
 
