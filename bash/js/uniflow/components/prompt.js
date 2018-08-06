@@ -13,10 +13,11 @@ ComponentBash.prototype.deserialise = function(data) {
 }
 
 ComponentBash.prototype.onExecute = function(runner) {
-    let bash = `if [ -z "$${this.messageVariable}" ]; then echo "$${this.messageVariable}"; fi
-    read ${this.variable}`
-
-    console.log(bash)
+    let bash = `if [ "\${${this.messageVariable}+1}" ]
+then
+  echo "$${this.messageVariable}"
+fi
+read ${this.variable}`
 
     return runner.eval(bash)
 }
