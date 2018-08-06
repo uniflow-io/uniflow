@@ -254,7 +254,9 @@ class Show extends Component {
                         </form>
                     </div>
                     <div className="box-footer">
+                        {platforms.indexOf('javascript') !== -1 && (
                         <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
+                        )}
                         {platforms.map((platform, i) => (<span key={i} className="pull-right badge">{platform}</span>))}
                     </div>
                 </div>
