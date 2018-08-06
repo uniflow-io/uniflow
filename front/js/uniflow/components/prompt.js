@@ -11,8 +11,10 @@ export default class ComponentPrompt extends Component<Props> {
     state = {
         running: false,
         variable: null,
+        messageVariable: null,
         type: null,
-        inputDisplay: false,
+        promptDisplay: false,
+        message: null,
         input: null,
     }
 
@@ -21,7 +23,7 @@ export default class ComponentPrompt extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['javascript', 'bash']
     }
 
     constructor(props) {
@@ -61,17 +63,21 @@ export default class ComponentPrompt extends Component<Props> {
     }
 
     serialise = () => {
-        return [this.state.variable, this.state.type]
+        return [this.state.variable, this.state.messageVariable, this.state.type]
     }
 
     deserialise = (data) => {
-        let [variable, type] = data ? data : [null, null];
+        let [variable, messageVariable, type] = data ? data : [null, null, null];
 
-        this.setState({variable: variable, type: type})
+        this.setState({variable: variable, messageVariable: messageVariable, type: type})
     }
 
     onChangeVariable = (event) => {
         this.setState({variable: event.target.value}, this.onUpdate)
+    }
+
+    onChangeMessageVariable = (event) => {
+        this.setState({messageVariable: event.target.value}, this.onUpdate)
     }
 
     onChangeType = (type) => {
@@ -133,7 +139,16 @@ export default class ComponentPrompt extends Component<Props> {
                 })
             }).then(() => {
                 return new Promise((resolve) => {
-                    this.setState({inputDisplay: true, input: null}, resolve);
+                    if (this.state.messageVariable && runner.hasValue(this.state.messageVariable)) {
+                        this.setState({message: runner.getValue(this.state.messageVariable)}, resolve)
+                    } else {
+                        this.setState({message: null}, resolve)
+                    }
+                })
+                .then(() => {
+                    return new Promise((resolve) => {
+                        this.setState({promptDisplay: true, input: null}, resolve);
+                    })
                 })
                 .then(() => {
                     return new Promise((resolve) => {
@@ -147,7 +162,7 @@ export default class ComponentPrompt extends Component<Props> {
                 })
                 .then(() => {
                     return new Promise((resolve) => {
-                        this.setState({inputDisplay: false}, resolve);
+                        this.setState({promptDisplay: false}, resolve);
                     });
                 })
             })
@@ -164,7 +179,7 @@ export default class ComponentPrompt extends Component<Props> {
     }
 
     render() {
-        const { running, variable, type, inputDisplay, input } = this.state
+        const { running, variable, messageVariable, type, promptDisplay, message, input } = this.state
 
         const choices = {
             'string': 'String',
@@ -191,6 +206,14 @@ export default class ComponentPrompt extends Component<Props> {
                         </div>
 
                         <div className="form-group">
+                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Message Variable</label>
+
+                            <div className="col-sm-10">
+                                <input id="variable{{ _uid }}" type="text" value={messageVariable || ''} onChange={this.onChangeMessageVariable} className="form-control" />
+                            </div>
+                        </div>
+
+                        <div className="form-group">
                             <label htmlFor="type{{ _uid }}" className="col-sm-2 control-label">Type</label>
 
                             <div className="col-sm-10">
@@ -202,7 +225,13 @@ export default class ComponentPrompt extends Component<Props> {
                             </div>
                         </div>
 
-                        {inputDisplay && type === 'string' && (
+                        {promptDisplay && message && (
+                        <div className="form-group">
+                            <div className="col-md-offset-2 col-sm-10">{message}</div>
+                        </div>
+                        )}
+
+                        {promptDisplay && type === 'string' && (
                         <div className="form-group">
                             <label htmlFor="input_string{{ _uid }}" className="col-sm-2 control-label">Input</label>
 
@@ -212,7 +241,7 @@ export default class ComponentPrompt extends Component<Props> {
                         </div>
                         )}
 
-                        {inputDisplay && type === 'text' && (
+                        {promptDisplay && type === 'text' && (
                             <div className="form-group">
                                 <label htmlFor="input_text{{ _uid }}" className="col-sm-2 control-label">Input</label>
 
@@ -222,7 +251,7 @@ export default class ComponentPrompt extends Component<Props> {
                             </div>
                         )}
 
-                        {inputDisplay && type === 'file' && (
+                        {promptDisplay && type === 'file' && (
                             <div className="form-group">
                                 <label htmlFor="input_file{{ _uid }}" className="col-sm-2 control-label">Input</label>
 
@@ -234,7 +263,7 @@ export default class ComponentPrompt extends Component<Props> {
 
                     </div>
 
-                    {inputDisplay && (
+                    {promptDisplay && (
                     <div className="box-footer">
                         <button type="submit" onClick={this.onInputSave} className="btn btn-info pull-right">
                             Save
