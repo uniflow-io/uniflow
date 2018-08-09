@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "exec-sh": "^0.2.2"
+    "merge": "^1.2.0"
   }
 }
