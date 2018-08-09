@@ -17,7 +17,7 @@ function getShell () {
     }
 }
 
-function execSh (command, arguments, options, callback) {
+function execSh (command, commandArgs, options, callback) {
     if (Array.isArray(command)) {
         command = command.join(';')
     }
@@ -42,8 +42,8 @@ function execSh (command, arguments, options, callback) {
 
     try {
         let args = ['-c', command]
-        if(arguments.length > 0) {
-            args = args.concat(['-'], arguments)
+        if(commandArgs.length > 0) {
+            args = args.concat(['-'], commandArgs)
         }
         child = cp.spawn('sh', args, options)
     } catch (e) {
@@ -77,8 +77,8 @@ function execSh (command, arguments, options, callback) {
 }
 
 
-function Runner(arguments) {
-    this.arguments = arguments
+function Runner(commandArgs) {
+    this.commandArgs = commandArgs
 }
 
 Runner.prototype.run = function(stack) {
@@ -99,7 +99,7 @@ Runner.prototype.run = function(stack) {
     }, Promise.resolve())
         .then(() => {
             return new Promise((resolve, reject) => {
-                execSh(commands.join("\n"), this.arguments, {}, function(err, stdout, stderr) {
+                execSh(commands.join("\n"), this.commandArgs, {}, function(err, stdout, stderr) {
                     if(err) {
                         reject(stderr)
                     } else {

@@ -60,7 +60,7 @@ if(args['values'].length === 0) {
 }
 
 let identifier = args['values'][0],
-    arguments = args['values'].slice(1)
+    commandArgs = args['values'].slice(1)
 api(apiKey, 'history')
     .then((response) => {
         for(let i = 0; i < response.data.length; i++) {
@@ -75,7 +75,7 @@ api(apiKey, 'history')
     .then((response) => {
         let history = new History(response.data),
             stack = history.deserialiseFlowData(),
-            runner = new Runner(arguments)
+            runner = new Runner(commandArgs)
 
         runner.run(stack);
     })
