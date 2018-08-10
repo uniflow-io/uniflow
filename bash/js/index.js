@@ -35,8 +35,12 @@ function parseArgv(argv) {
     return {'args': args, 'values': values};
 }
 
-function api(apiKey, endpoint, params = []) {
-    const httpHost  = 'https://uniflow.io'
+function api(env, apiKey, endpoint, params = []) {
+    let httpHost  = 'https://uniflow.io'
+    if(env === 'dev') {
+        httpHost  = 'http://uniflow.localhost'
+    }
+
     const endpoints = {
         'history': '/api/history',
         'history_data': '/api/history/{id}'
@@ -48,34 +52,40 @@ function api(apiKey, endpoint, params = []) {
     return axios.get(httpHost + path + '?apiKey=' + apiKey)
 }
 
-let args = parseArgv(process.argv),
-    apiKey = args['args']['api-key']
-if(apiKey === undefined) {
-    console.log('You must provide an api key : use --api-key=[Your Api Key]')
-    process.exit(0)
-}
-if(args['values'].length === 0) {
-    console.log('You must provide an identifier')
-    process.exit(0)
-}
-
-let identifier = args['values'][0],
-    commandArgs = args['values'].slice(1)
-api(apiKey, 'history')
-    .then((response) => {
-        for(let i = 0; i < response.data.length; i++) {
-            if(response.data[i].title === identifier) {
-                return api(apiKey, 'history_data', {'id': response.data[i].id})
-            }
-        }
-
-        console.log('Not such process ['+identifier+']')
+(function main() {
+    let args = parseArgv(process.argv),
+        apiKey = args['args']['api-key'],
+        env = args['args']['e'] || args['args']['env']
+    if(env === undefined) {
+        env = 'prod'
+    }
+    if(apiKey === undefined) {
+        console.log('You must provide an api key : use --api-key=[Your Api Key]')
         process.exit(0)
-    })
-    .then((response) => {
-        let history = new History(response.data),
-            stack = history.deserialiseFlowData(),
-            runner = new Runner(commandArgs)
+    }
+    if(args['values'].length === 0) {
+        console.log('You must provide an identifier')
+        process.exit(0)
+    }
 
-        runner.run(stack);
-    })
+    let identifier = args['values'][0],
+        commandArgs = args['values'].slice(1)
+    api(env, apiKey, 'history')
+        .then((response) => {
+            for(let i = 0; i < response.data.length; i++) {
+                if(response.data[i].title === identifier) {
+                    return api(env, apiKey, 'history_data', {'id': response.data[i].id})
+                }
+            }
+
+            console.log('Not such process ['+identifier+']')
+            process.exit(0)
+        })
+        .then((response) => {
+            let history = new History(response.data),
+                stack = history.deserialiseFlowData(),
+                runner = new Runner(commandArgs)
+
+            runner.run(stack);
+        })
+})()

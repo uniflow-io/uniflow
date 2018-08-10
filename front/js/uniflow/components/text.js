@@ -18,7 +18,7 @@ export default class ComponentText extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['javascript', 'bash']
     }
 
     componentDidMount() {
