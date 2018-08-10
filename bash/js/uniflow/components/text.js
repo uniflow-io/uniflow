@@ -11,7 +11,8 @@ ComponentBash.prototype.deserialise = function(data) {
 }
 
 ComponentBash.prototype.onExecute = function(runner) {
-    let text = this.text.split("\n").join('\\n')
+    let text = this.text
+    text = text.replace(/\n/g, '\\n')
     text = text.replace(/\"/g, '\\"')
     text = text.replace(/\$/g, '\\$')
 
