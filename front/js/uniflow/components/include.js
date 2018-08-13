@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import createStore from '../../utils/createStore'
 import flow from '../../reducers/flow/index'
 import components from '../../uniflow/components';
+import {commitSetFlow} from "../../reducers/flow/actions";
 
 
 class UiComponent extends Component {
@@ -53,7 +54,18 @@ class ComponentInclude extends Component<Props> {
 
                 history.data = data;
 
-                return history.deserialiseFlowData()
+                return this.setFlow(history.deserialiseFlowData());
+            })
+    }
+
+    setFlow = (stack) => {
+        this.stack
+            .dispatch(commitSetFlow(stack))
+            .then(() => {
+                for (let i = 0; i < stack.length; i++) {
+                    let item = stack[i];
+                    item.bus.emit('reset', item.data);
+                }
             })
     }
 
@@ -64,7 +76,7 @@ class ComponentInclude extends Component<Props> {
         bus.on('compile', this.onCompile);
         bus.on('execute', this.onExecute);
 
-        this.unsubscribe = store.subscribe(() =>
+        this.unsubscribe = this.stack.subscribe(() =>
             this.forceUpdate()
         );
     }
@@ -147,10 +159,10 @@ class ComponentInclude extends Component<Props> {
 
     render() {
         const { running, historyId } = this.state
-        const { stack } = this.stack.getState()
+        const stack = this.stack.getState()
 
         return ([
-            <div className="box box-info">
+            <div className="box box-info" key="info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
                         <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Include</h3>
