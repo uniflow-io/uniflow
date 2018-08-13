@@ -3,6 +3,19 @@ import { Select2 } from '../../components/index'
 import {Bus} from '../../models/index'
 import {getOrderedHistory, getHistoryData} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
+import createStore from '../../utils/createStore'
+import flow from '../../reducers/flow/index'
+import components from '../../uniflow/components';
+
+
+class UiComponent extends Component {
+    render() {
+        const {tag, bus} = this.props
+        const TagName                             = components[tag];
+
+        return <TagName bus={bus} />
+    }
+}
 
 type Props = {
     bus: Bus
@@ -12,6 +25,12 @@ class ComponentInclude extends Component<Props> {
     state = {
         running: false,
         historyId: null
+    }
+
+    constructor(props) {
+        super(props)
+
+        this.stack = createStore(flow)
     }
 
     static tags() {
@@ -27,7 +46,6 @@ class ComponentInclude extends Component<Props> {
 
         return Promise.resolve()
             .then(() => {
-
                 return this.props.dispatch(getHistoryData(history));
             })
             .then((data) => {
@@ -45,6 +63,10 @@ class ComponentInclude extends Component<Props> {
         bus.on('reset', this.deserialise);
         bus.on('compile', this.onCompile);
         bus.on('execute', this.onExecute);
+
+        this.unsubscribe = store.subscribe(() =>
+            this.forceUpdate()
+        );
     }
 
     componentWillUnmount() {
@@ -53,6 +75,8 @@ class ComponentInclude extends Component<Props> {
         bus.off('reset', this.deserialise);
         bus.off('compile', this.onCompile);
         bus.off('execute', this.onExecute);
+
+        this.unsubscribe()
     }
 
     componentWillReceiveProps(nextProps) {
@@ -104,16 +128,10 @@ class ComponentInclude extends Component<Props> {
                     this.setState({running: true}, resolve);
                 })
             }).then(() => {
-                this.getFlow(this.state.historyId)
-                    .then((flow) => {
-                        for(let i = 0; i < flow.length; i++) {
-                            let item = flow[i]
+                return this.getFlow(this.state.historyId)
+            })
+            .then((flow) => {
 
-                            if(item.component === 'javascript') {
-                                runner.eval(item.data)
-                            }
-                        }
-                    })
             })
             .then(() => {
                 return new Promise((resolve) => {
@@ -128,9 +146,10 @@ class ComponentInclude extends Component<Props> {
     }
 
     render() {
-        const {running, historyId} = this.state
+        const { running, historyId } = this.state
+        const { stack } = this.stack.getState()
 
-        return (
+        return ([
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
@@ -154,7 +173,9 @@ class ComponentInclude extends Component<Props> {
                     </div>
                 </form>
             </div>
-        )
+        ].concat(stack.map((item, i) => (
+            <UiComponent key={i} tag={item.component} bus={item.bus} />
+        ))))
     }
 }
 
