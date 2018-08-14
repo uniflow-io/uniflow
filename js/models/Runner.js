@@ -14,30 +14,33 @@ export default class Runner {
          })*/
 
         let asyncRunPromise = null
-        let interpreter     = new Interpreter('', (interpreter, scope) => {
-            let initConsole = function () {
-                let consoleObj = interpreter.createObject(interpreter.OBJECT);
-                interpreter.setProperty(scope, 'console', consoleObj);
+        let interpreter = null
+        let interpreterPromise = new Promise((resolve) => {
+            interpreter = new Interpreter('', (interpreter, scope) => {
+                let initConsole = function () {
+                    let consoleObj = interpreter.createObject(interpreter.OBJECT);
+                    interpreter.setProperty(scope, 'console', consoleObj);
 
-                let wrapper = function (value) {
-                    let nativeObj = interpreter.pseudoToNative(value);
-                    return interpreter.createPrimitive(console.log(nativeObj));
+                    let wrapper = function (value) {
+                        let nativeObj = interpreter.pseudoToNative(value);
+                        return interpreter.createPrimitive(console.log(nativeObj));
+                    };
+                    interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
                 };
-                interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
-            };
-            initConsole.call(interpreter);
+                initConsole.call(interpreter);
 
-            return stack.reduce((promise, item) => {
-                return promise
-                    .then(() => {
-                        return item.bus.emit('compile', interpreter, scope, (wrapper) => {
-                            return function () {
-                                asyncRunPromise = wrapper.apply(this, arguments)
-                            }
-                        });
-                    })
-            }, Promise.resolve());
-        });
+                return stack.reduce((promise, item) => {
+                    return promise
+                        .then(() => {
+                            return item.bus.emit('compile', interpreter, scope, (wrapper) => {
+                                return function () {
+                                    asyncRunPromise = wrapper.apply(this, arguments)
+                                }
+                            });
+                        })
+                }, Promise.resolve()).then(resolve);
+            });
+        })
 
         let runner = {
             hasValue: function (variable) {
@@ -111,6 +114,6 @@ export default class Runner {
                 }).then(() => {
                     return onRunIndex(null);
                 });
-        }, Promise.resolve());
+        }, interpreterPromise);
     }
 }
