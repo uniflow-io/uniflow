@@ -1,6 +1,6 @@
-const axios = require('axios');
 const History = require('./models/History')
 const Runner = require('./models/Runner')
+const Api = require('./models/Api')
 
 function parseArgv(argv) {
     // Removing node/bin and called script name
@@ -35,23 +35,6 @@ function parseArgv(argv) {
     return {'args': args, 'values': values};
 }
 
-function api(env, apiKey, endpoint, params = []) {
-    let httpHost  = 'https://uniflow.io'
-    if(env === 'dev') {
-        httpHost  = 'http://uniflow.localhost'
-    }
-
-    const endpoints = {
-        'history': '/api/history',
-        'history_data': '/api/history/{id}'
-    }
-    let path = Object.keys(params).reduce(function(path, key) {
-        return path.replace('{' + key + '}', params[key]);
-    }, endpoints[endpoint]);
-
-    return axios.get(httpHost + path + '?apiKey=' + apiKey)
-}
-
 (function main() {
     let args = parseArgv(process.argv),
         apiKey = args['args']['api-key'],
@@ -68,13 +51,14 @@ function api(env, apiKey, endpoint, params = []) {
         process.exit(0)
     }
 
-    let identifier = args['values'][0],
+    let api = new Api(env, apiKey),
+        identifier = args['values'][0],
         commandArgs = args['values'].slice(1)
-    api(env, apiKey, 'history')
+    api.endpoint('history')
         .then((response) => {
             for(let i = 0; i < response.data.length; i++) {
                 if(response.data[i].title === identifier) {
-                    return api(env, apiKey, 'history_data', {'id': response.data[i].id})
+                    return api.endpoint('history_data', {'id': response.data[i].id})
                 }
             }
 
@@ -84,7 +68,7 @@ function api(env, apiKey, endpoint, params = []) {
         .then((response) => {
             let history = new History(response.data),
                 stack = history.deserialiseFlowData(),
-                runner = new Runner(commandArgs)
+                runner = new Runner(commandArgs, api)
 
             runner.run(stack);
         })

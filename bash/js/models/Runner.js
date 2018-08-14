@@ -77,8 +77,9 @@ function execSh (command, commandArgs, options, callback) {
 }
 
 
-function Runner(commandArgs) {
+function Runner(commandArgs, api) {
     this.commandArgs = commandArgs
+    this.api = api
 }
 
 Runner.prototype.run = function(stack) {
@@ -94,7 +95,7 @@ Runner.prototype.run = function(stack) {
         return promise.then(() => {
             let component = new components[item.component]()
             component.deserialise(item.data)
-            return component.onExecute(runner)
+            return component.onExecute(runner, this.api, components)
         })
     }, Promise.resolve())
         .then(() => {

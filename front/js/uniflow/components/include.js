@@ -39,7 +39,7 @@ class ComponentInclude extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['javascript', 'bash']
     }
 
     getFlow = (historyId) => {
