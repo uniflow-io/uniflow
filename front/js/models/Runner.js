@@ -1,6 +1,5 @@
 import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
 import {transform} from 'babel-standalone'
-import axios from 'axios'
 
 export default class Runner {
     run(stack, onRunIndex) {
@@ -28,13 +27,16 @@ export default class Runner {
             };
             initConsole.call(interpreter);
 
-            stack.forEach((item) => {
-                item.bus.emit('compile', interpreter, scope, (wrapper) => {
-                    return function () {
-                        asyncRunPromise = wrapper.apply(this, arguments)
-                    }
-                });
-            });
+            return stack.reduce((promise, item) => {
+                return promise
+                    .then(() => {
+                        return item.bus.emit('compile', interpreter, scope, (wrapper) => {
+                            return function () {
+                                asyncRunPromise = wrapper.apply(this, arguments)
+                            }
+                        });
+                    })
+            }, Promise.resolve());
         });
 
         let runner = {

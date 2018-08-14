@@ -59,13 +59,12 @@ class ComponentInclude extends Component<Props> {
     }
 
     setFlow = (stack) => {
-        this.stack
+        return this.stack
             .dispatch(commitSetFlow(stack))
             .then(() => {
-                for (let i = 0; i < stack.length; i++) {
-                    let item = stack[i];
-                    item.bus.emit('reset', item.data);
-                }
+                return Promise.all(stack.map((item) => {
+                    return item.bus.emit('reset', item.data)
+                }))
             })
     }
 
@@ -130,6 +129,16 @@ class ComponentInclude extends Component<Props> {
     }
 
     onCompile = (interpreter, scope, asyncWrapper) => {
+        return this.getFlow(this.state.historyId)
+            .then(() => {
+                let flow = this.stack.getState()
+                return flow.reduce((promise, item) => {
+                    return promise
+                        .then(() => {
+                            return item.bus.emit('compile', interpreter, scope, asyncWrapper);
+                        })
+                }, Promise.resolve());
+            })
     }
 
     onExecute = (runner) => {
@@ -140,10 +149,13 @@ class ComponentInclude extends Component<Props> {
                     this.setState({running: true}, resolve);
                 })
             }).then(() => {
-                return this.getFlow(this.state.historyId)
-            })
-            .then((flow) => {
-
+                let flow = this.stack.getState()
+                return flow.reduce((promise, item) => {
+                    return promise
+                        .then(() => {
+                            return item.bus.emit('execute', runner)
+                        })
+                }, Promise.resolve());
             })
             .then(() => {
                 return new Promise((resolve) => {

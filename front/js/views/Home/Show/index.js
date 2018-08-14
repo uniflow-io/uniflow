@@ -65,13 +65,12 @@ class Show extends Component {
     }
 
     setFlow = (stack) => {
-        this.props
+        return this.props
             .dispatch(commitSetFlow(stack))
             .then(() => {
-                for (let i = 0; i < stack.length; i++) {
-                    let item = stack[i];
-                    item.bus.emit('reset', item.data);
-                }
+                return Promise.all(stack.map((item) => {
+                    return item.bus.emit('reset', item.data)
+                }))
             })
     }
 
