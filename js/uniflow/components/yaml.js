@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Bus} from '../../models/index'
+import Select2 from "../../components/Select2";
 
 /**
  * this component insert or set key-value to existing or new mapping into the yaml given in the arguments
@@ -4006,7 +4007,7 @@ let scope = {};
         return position
     }
 
-    scope.yamlAdd = function (yaml, key, value) {
+    scope.yamlWrite = function (yaml, key, value) {
         let nodeStack = [], storeStack = {}, indentationSpaceAdverage = [2];
 
         let listenerFunction = function (mode, state) {
@@ -4142,12 +4143,12 @@ type Props = {
     bus: Bus
 }
 
-export default class ComponentYamlAdd extends Component<Props> {
+export default class ComponentYaml extends Component<Props> {
     state = {
         running: false,
         variable: null,
         keyvaluevariable: null,
-        keyvaluelist: []
+        type: null
     }
 
     static tags() {
@@ -4188,32 +4189,14 @@ export default class ComponentYamlAdd extends Component<Props> {
         }
     }
 
-    transform = () => {
-        return this.state.keyvaluelist.reduce(function (object, item) {
-            if (item.key) {
-                object[item.key] = item.value
-            }
-            return object
-        }, {})
-    }
-
-    reverseTransform = (object) => {
-        return Object.keys(object).reduce(function (list, key) {
-            list.push({key: key, value: object[key]})
-            return list;
-        }, [])
-    }
-
     serialise = () => {
-        let object = this.transform()
-        return [this.state.variable, this.state.keyvaluevariable, object]
+        return [this.state.variable, this.state.keyvaluevariable, this.state.type]
     }
 
     deserialise = (data) => {
-        let [variable, keyvaluevariable, object] = data ? data : [null, null, {}];
-        let keyvaluelist                         = this.reverseTransform(object)
+        let [variable, keyvaluevariable, type] = data ? data : [null, null, null];
 
-        this.setState({variable: variable, keyvaluevariable: keyvaluevariable, keyvaluelist: keyvaluelist})
+        this.setState({variable: variable, keyvaluevariable: keyvaluevariable, type: type})
     }
 
     onChangeVariable = (event) => {
@@ -4224,50 +4207,8 @@ export default class ComponentYamlAdd extends Component<Props> {
         this.setState({keyvaluevariable: event.target.value}, this.onUpdate)
     }
 
-    onUpdateItemKey = (event, index) => {
-        this.setState({
-            keyvaluelist: this.state.keyvaluelist.map((item, i) => {
-                if (i !== index) {
-                    return item;
-                }
-
-                return {
-                    ...item,
-                    ...{key: event.target.value}
-                };
-            })
-        }, this.onUpdate)
-    }
-
-    onUpdateItemValue = (event, index) => {
-        this.setState({
-            keyvaluelist: this.state.keyvaluelist.map((item, i) => {
-                if (i !== index) {
-                    return item;
-                }
-
-                return {
-                    ...item,
-                    ...{value: event.target.value}
-                };
-            })
-        }, this.onUpdate)
-    }
-
-    onRemoveItem = (event, index) => {
-        event.preventDefault()
-
-        let keyvaluelist = this.state.keyvaluelist.slice()
-        keyvaluelist.splice(index, 1);
-        this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
-    }
-
-    onAddItem = (event) => {
-        event.preventDefault()
-
-        let keyvaluelist = this.state.keyvaluelist.slice()
-        keyvaluelist.push({key: '', value: ''});
-        this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
+    onChangeType = (type) => {
+        this.setState({type: type}, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -4292,22 +4233,25 @@ export default class ComponentYamlAdd extends Component<Props> {
                     this.setState({running: true}, resolve);
                 })
             }).then(() => {
-                if (this.state.keyvaluevariable) {
-                    if (runner.hasValue(this.state.keyvaluevariable)) {
-                        let object       = runner.getValue(this.state.keyvaluevariable);
-                        let keyvaluelist = this.reverseTransform(object);
-                        this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
-                    } else {
-                        let object = this.transform();
-                        runner.setValue(this.state.keyvaluevariable, object);
+                if(this.state.type === 'read'
+                && this.state.variable && runner.hasValue(this.state.variable)
+                && this.state.keyvaluevariable) {
+                    let yaml = runner.getValue(this.state.variable),
+                        keyvaluelist = scope.jsyaml.load(yaml)
+
+                    runner.setValue(this.state.keyvaluevariable, keyvaluelist);
+                } else if(this.state.type === 'write'
+                && this.state.variable
+                && this.state.keyvaluevariable && runner.hasValue(this.state.keyvaluevariable)) {
+                    let yaml = '',
+                        keyvaluelist = runner.getValue(this.state.keyvaluevariable)
+
+                    if(runner.hasValue(this.state.variable)) {
+                        yaml = runner.getValue(this.state.variable)
                     }
-                }
 
-                if (this.state.variable && runner.hasValue(this.state.variable)) {
-                    let yaml = runner.getValue(this.state.variable);
-
-                    yaml = this.state.keyvaluelist.reduce(function (yaml, item) {
-                        return scope.yamlAdd(yaml, item.key, item.value)
+                    yaml = keyvaluelist.reduce(function (yaml, item) {
+                        return scope.yamlWrite(yaml, item.key, item.value)
                     }, yaml)
 
                     runner.setValue(this.state.variable, yaml);
@@ -4326,13 +4270,13 @@ export default class ComponentYamlAdd extends Component<Props> {
     }
 
     render() {
-        const {running, variable, keyvaluevariable, keyvaluelist} = this.state
+        const {running, variable, keyvaluevariable, type} = this.state
 
         return (
             <div className="box box-info">
                 <form className="form-horizontal">
                     <div className="box-header with-border">
-                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Yaml Add</h3>
+                        <h3 className="box-title"><button type="submit" className="btn btn-default">{running ? <i className="fa fa-refresh fa-spin" /> : <i className="fa fa-refresh fa-cog" />}</button> Yaml</h3>
                         <div className="box-tools pull-right">
                             <a className="btn btn-box-tool" onClick={this.onDelete}><i className="fa fa-times"/></a>
                         </div>
@@ -4348,7 +4292,7 @@ export default class ComponentYamlAdd extends Component<Props> {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Variable Keys Values</label>
+                            <label htmlFor="variable{{ _uid }}" className="col-sm-2 control-label">Keys Values Variable</label>
 
                             <div className="col-sm-10">
                                 <input id="variable{{ _uid }}" type="text" value={keyvaluevariable || ''}
@@ -4356,30 +4300,16 @@ export default class ComponentYamlAdd extends Component<Props> {
                             </div>
                         </div>
 
-                        {keyvaluelist.map((item, index) => (
-                            <div className="form-group" key={index}>
-                                <div className="col-sm-4 col-sm-offset-2">
-                                    <input type="text" value={keyvaluelist[index].key}
-                                           onChange={(event) => this.onUpdateItemKey(event, index)}
-                                           className="form-control" placeholder="key"/>
-                                </div>
-                                <div className="col-sm-6">
-                                    <div className="input-group">
-                                        <input type="text" value={keyvaluelist[index].value}
-                                               onChange={(event) => this.onUpdateItemValue(event, index)}
-                                               className="form-control" placeholder="value"/>
-                                        <span className="input-group-addon" onClick={(event) => {
-                                            this.onRemoveItem(event, index)
-                                        }}><i className="fa fa-times"/></span>
-                                    </div>
-                                </div>
+                        <div className="form-group">
+                            <label htmlFor="type{{ _uid }}" className="col-sm-2 control-label">Type</label>
+
+                            <div className="col-sm-10">
+                                <Select2 value={type} onChange={this.onChangeType} className="form-control" id="type{{ _uid }}" style={{width: '100%'}}>
+                                    <option value="read">Read</option>
+                                    <option value="write">Write</option>
+                                </Select2>
                             </div>
-                        ))}
-                    </div>
-                    <div className="box-footer">
-                        <button type="submit" onClick={this.onAddItem} className="btn btn-info pull-right">
-                            Add Item
-                        </button>
+                        </div>
                     </div>
                 </form>
             </div>
