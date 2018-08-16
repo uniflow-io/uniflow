@@ -12,7 +12,7 @@ import ComponentSocketIO from './components/socketio.js';
 import ComponentText from './components/text.js';
 import ComponentTextList from './components/textlist.js';
 import ComponentWhile from "./components/while.js";
-import ComponentYamlAdd from "./components/yaml-add.js";
+import ComponentYaml from "./components/yaml.js";
 
 export default {
     'assets': ComponentAssets,
@@ -29,5 +29,5 @@ export default {
     'text': ComponentText,
     'textlist': ComponentTextList,
     'while': ComponentWhile,
-    'yaml-add': ComponentYamlAdd
+    'yaml': ComponentYaml
 }
