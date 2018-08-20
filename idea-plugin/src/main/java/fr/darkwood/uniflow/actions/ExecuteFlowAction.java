@@ -12,6 +12,7 @@ import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 
 import fr.darkwood.uniflow.components.Code;
+import fr.darkwood.uniflow.models.History;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ExecuteFlowAction extends AnAction {
-    public ExecuteFlowAction() {
-        super("Execute Flow");
+    private History history;
+
+    public ExecuteFlowAction(History history) {
+        super(history.getTitle());
+
+        this.history = history;
     }
 
     @Override
@@ -33,14 +38,13 @@ public class ExecuteFlowAction extends AnAction {
         final Project project = e.getProject();
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
         //Set visibility only in case of existing project and editor
-        e.getPresentation().setVisible(project != null && editor != null &&
-                editor.getSelectionModel().hasSelection());
+        e.getPresentation().setVisible(true);
     }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         //Get all the required data from data keys
-        final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
+        /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         final Project project = e.getProject();
         //Access document, caret, and selection
         final Document document = editor.getDocument();
@@ -66,7 +70,7 @@ public class ExecuteFlowAction extends AnAction {
                 exception.printStackTrace();
             }
         });
-        selectionModel.removeSelection();
+        selectionModel.removeSelection();*/
     }
 
     @Nullable
