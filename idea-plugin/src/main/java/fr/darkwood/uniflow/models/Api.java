@@ -62,4 +62,24 @@ public class Api {
 
         return list;
     }
+
+    public String getHistoryData(String id) throws IOException {
+        String httpHost = this.getHttpHost();
+        String path = "/api/history/" + id;
+
+        URL url = new URL(httpHost + path + "?apiKey=" + this.key);
+        URLConnection con = url.openConnection();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        JsonObject data = new JsonParser().parse(response.toString()).getAsJsonObject();
+        return data.get("data").getAsString();
+    }
 }

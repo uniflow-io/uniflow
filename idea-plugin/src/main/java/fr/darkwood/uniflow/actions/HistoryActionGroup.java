@@ -19,7 +19,7 @@ public class HistoryActionGroup extends ActionGroup {
     public HistoryActionGroup() {
         super();
 
-        this.api = new Api("prod", "qNFN9tqqg0tKq7GMPQy1r3nskFMntRjc");
+        this.api = new Api("dev", "wW6ILgNaFVBY56X91ordmaMtjjFv3Uob");
     }
 
 
@@ -38,7 +38,7 @@ public class HistoryActionGroup extends ActionGroup {
             for(Iterator<History> it = list.iterator(); it.hasNext();) {
                 History history = it.next();
 
-                actions.add(new ExecuteFlowAction(history));
+                actions.add(new ExecuteFlowAction(this.api, history));
             }
 
             AnAction[] arr = new AnAction[actions.size()];
