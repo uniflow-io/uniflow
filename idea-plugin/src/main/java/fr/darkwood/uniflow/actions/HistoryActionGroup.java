@@ -26,17 +26,12 @@ public class HistoryActionGroup extends ActionGroup {
     @NotNull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
-        //return actionList;
-        History history = new History();
-        history.setTitle("toto");
-        System.out.println(history.getTitle() + " : display");
-
-        return new AnAction[]{new ExecuteFlowAction(history)};
+        return this.actionList;
     }
 
     @Override
     public void update(AnActionEvent e) {
-        /*try {
+        try {
             ArrayList<AnAction> actions = new ArrayList<AnAction>();
 
             ArrayList<History> list = this.api.getHistory();
@@ -44,15 +39,14 @@ public class HistoryActionGroup extends ActionGroup {
                 History history = it.next();
 
                 actions.add(new ExecuteFlowAction(history));
-
             }
-            this.actionList = (AnAction[]) actions.toArray();
+
+            AnAction[] arr = new AnAction[actions.size()];
+            this.actionList = actions.toArray(arr);
         } catch (IOException e1) {
             e1.printStackTrace();
         }
 
         super.update(e);
-
-        System.out.println("update performed !");*/
     }
 }

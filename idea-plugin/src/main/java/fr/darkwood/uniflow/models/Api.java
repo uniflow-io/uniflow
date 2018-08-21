@@ -56,7 +56,6 @@ public class Api {
             History history = new History();
             history.setId(item.get("id").getAsString());
             history.setTitle(item.get("title").getAsString());
-            history.setDescription(item.get("description").getAsString());
 
             list.add(history);
         }

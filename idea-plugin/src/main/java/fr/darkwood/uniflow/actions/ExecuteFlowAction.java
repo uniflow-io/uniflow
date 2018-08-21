@@ -33,15 +33,6 @@ public class ExecuteFlowAction extends AnAction {
     }
 
     @Override
-    public void update(AnActionEvent e) {
-        //Get required data keys
-        final Project project = e.getProject();
-        final Editor editor = e.getData(CommonDataKeys.EDITOR);
-        //Set visibility only in case of existing project and editor
-        e.getPresentation().setVisible(true);
-    }
-
-    @Override
     public void actionPerformed(AnActionEvent e) {
         //Get all the required data from data keys
         /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);

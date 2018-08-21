@@ -15,7 +15,11 @@ jspm_packages
 
 # idea-plugin
 idea-plugin/.gradle
+idea-plugin/gradle
+idea-plugin/gradlew
+idea-plugin/gradlew.bat
 idea-plugin/build
+idea-plugin/out
 
 # Symfony
 /app/config/parameters.yml

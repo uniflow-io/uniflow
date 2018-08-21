@@ -5,9 +5,11 @@ plugins {
 group 'fr.darkwood'
 version '0.1'
 
+apply plugin: 'idea'
+apply plugin: 'org.jetbrains.intellij'
 apply plugin: 'java'
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -18,7 +20,7 @@ dependencies {
 }
 
 intellij {
-    version '2018.1.1'
+    version '2018.2.1'
 }
 patchPluginXml {
     changeNotes """
