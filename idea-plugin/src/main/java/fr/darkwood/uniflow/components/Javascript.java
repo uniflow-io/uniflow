@@ -1,5 +1,7 @@
 package fr.darkwood.uniflow.components;
 
+import fr.darkwood.uniflow.models.Execute;
+
 public class Javascript {
     private String javascript;
 
@@ -7,7 +9,7 @@ public class Javascript {
         this.javascript = javascript;
     }
 
-    public void onExecute() {
-        System.out.println(this.javascript);
+    public void onExecute(Execute execute) {
+        execute.eval(this.javascript);
     }
 }
