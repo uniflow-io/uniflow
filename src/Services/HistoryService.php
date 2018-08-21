@@ -104,7 +104,7 @@ class HistoryService
 
     public function getHistory(User $user)
     {
-        $histories = $this->historyRepository->findByUser($user);
+        $histories = $this->historyRepository->findLastByUser($user);
 
         $data = array();
 
