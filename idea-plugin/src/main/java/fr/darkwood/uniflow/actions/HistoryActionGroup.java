@@ -19,7 +19,7 @@ public class HistoryActionGroup extends ActionGroup {
     public HistoryActionGroup() {
         super();
 
-        this.api = new Api("dev", "wW6ILgNaFVBY56X91ordmaMtjjFv3Uob");
+        this.api = new Api("prod", "qNFN9tqqg0tKq7GMPQy1r3nskFMntRjc");
     }
 
 

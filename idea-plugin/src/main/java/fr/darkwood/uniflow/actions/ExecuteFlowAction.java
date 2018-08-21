@@ -29,7 +29,7 @@ public class ExecuteFlowAction extends AnAction {
             JsonArray stack = this.history.deserialiseFlowData();
 
             Runner runner = new Runner();
-            runner.run(stack);
+            runner.run(stack, e);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

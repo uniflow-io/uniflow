@@ -1,5 +1,6 @@
 package fr.darkwood.uniflow.models;
 
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.util.io.StreamUtil;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -20,7 +21,7 @@ import javax.script.ScriptException;
 import java.util.Iterator;
 
 public class Runner {
-    public void run(JsonArray stack) {
+    public void run(JsonArray stack, AnActionEvent event) {
         //Get all the required data from data keys
         /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         final Project project = e.getProject();
@@ -68,8 +69,8 @@ public class Runner {
         try {
             ScriptEngineManager engineManager = new ScriptEngineManager();
             ScriptEngine engine = engineManager.getEngineByName("nashorn");
-            //ScriptContext context = engine.getContext();
-            //context.setAttribute("javaObj", javaObj, ScriptContext.ENGINE_SCOPE);
+            ScriptContext context = engine.getContext();
+            context.setAttribute("phpstorm", new Phpstorm(event), ScriptContext.ENGINE_SCOPE);
 
             for (Iterator<String> it = execute.getCommands().iterator(); it.hasNext(); ) {
                 String code = it.next();
