@@ -17,6 +17,16 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <projectService serviceImplementation="fr.darkwood.uniflow.Settings" />
+
+        <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
+                             displayName="Uniflow"
+                             id="Symfony2.SettingsForm"
+                             parentId="tools"
+                             nonDefaultProject="true"
+        />
+
     </extensions>
 
     <actions>
