@@ -51,7 +51,7 @@
               <forms/>
             </constraints>
             <properties>
-              <text value="Autoload History"/>
+              <text value="Autoload History List"/>
             </properties>
           </component>
           <component id="d9c7" class="javax.swing.JTextField" binding="apiKeyField">
