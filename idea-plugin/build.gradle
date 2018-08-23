@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'fr.darkwood'
-version '0.1'
+version '0.3'
 
 apply plugin: 'idea'
 apply plugin: 'org.jetbrains.intellij'

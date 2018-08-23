@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>fr.darkwood.uniflow</id>
     <name>Uniflow</name>
-    <version>0.1</version>
+    <version>0.3</version>
     <vendor email="matyo91@gmail.com" url="https://uniflow.darkwood.fr">Mathieu Ledru</vendor>
 
     <description><![CDATA[
@@ -9,7 +9,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Release 0.1: Initial release.<br>
+      Release 0.3<br>
     ]]>
     </change-notes>
 
@@ -22,7 +22,7 @@
 
         <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
                              displayName="Uniflow"
-                             id="Symfony2.SettingsForm"
+                             id="Uniflow.SettingsForm"
                              parentId="tools"
                              nonDefaultProject="true"
         />

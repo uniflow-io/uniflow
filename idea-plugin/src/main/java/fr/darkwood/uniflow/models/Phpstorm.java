@@ -6,11 +6,14 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.diagnostic.Logger;
 
 import java.util.ArrayList;
 
 public class Phpstorm {
     private AnActionEvent event;
+
+    private static final Logger log = Logger.getInstance(Phpstorm.class);
 
     public Phpstorm(AnActionEvent event) {
         this.event = event;
@@ -18,21 +21,18 @@ public class Phpstorm {
 
     public void log(Object argument)
     {
-        System.out.println("Phpstorm log : " + argument);
+        Phpstorm.log.info(argument.toString());
+
+        System.out.println(argument);
     }
 
-    public int[] getEditorSelection()
+    public Project getProject()
     {
-        final Project project = this.event.getProject();
-        final Editor editor = event.getRequiredData(CommonDataKeys.EDITOR);
-        //Access document, caret, and selection
-        final Document document = editor.getDocument();
-        final SelectionModel selectionModel = editor.getSelectionModel();
-        final int start = selectionModel.getSelectionStart();
-        final int end = selectionModel.getSelectionEnd();
+        return this.event.getProject();
+    }
 
-        return new int[]{
-            start, end
-        };
+    public Editor getEditor()
+    {
+        return event.getRequiredData(CommonDataKeys.EDITOR);
     }
 }
