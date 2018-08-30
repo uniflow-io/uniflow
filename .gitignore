@@ -14,9 +14,9 @@ jspm_packages
 .idea
 
 # phpstorm
-phpstorm/.gradle
-phpstorm/build
-phpstorm/out
+platform-phpstorm/.gradle
+platform-phpstorm/build
+platform-phpstorm/out
 
 # Symfony
 /app/config/parameters.yml
@@ -41,5 +41,5 @@ back/public/dist/js/bundle.js
 back/public/dist/js/bundle.js.map
 back/public/dist/js/bash.js
 back/public/dist/js/bash.js.map
-phpstorm/src/main/resources/js/bundle.js
-phpstorm/src/main/resources/js/bundle.js.map
+platform-phpstorm/src/main/resources/js/bundle.js
+platform-phpstorm/src/main/resources/js/bundle.js.map
