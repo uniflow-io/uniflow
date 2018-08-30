@@ -41,16 +41,19 @@ class ApiController extends Controller
     }
 
     /**
-     * @Route("/api/history", name="api_history")
+     * @param Request $request
+     * @param string $platform
+     * @return JsonResponse
+     * @Route("/api/history/{platform}", name="api_history")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $platform = null)
     {
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $data = $this->historyService->getHistory($user);
+        $data = $this->historyService->getHistoryByPlatform($user);
 
         return new JsonResponse($data);
     }
@@ -59,8 +62,8 @@ class ApiController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @Route("/api/history/{id}", name="api_history_data")
-     * 
+     * @Route("/api/history-data/{id}", name="api_history_data")
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getData(Request $request, $id)
     {
