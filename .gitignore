@@ -13,13 +13,10 @@ jspm_packages
 # PhpStorm
 .idea
 
-# idea-plugin
-idea-plugin/.gradle
-idea-plugin/gradle
-idea-plugin/gradlew
-idea-plugin/gradlew.bat
-idea-plugin/build
-idea-plugin/out
+# phpstorm
+phpstorm/.gradle
+phpstorm/build
+phpstorm/out
 
 # Symfony
 /app/config/parameters.yml
@@ -44,5 +41,5 @@ back/public/dist/js/bundle.js
 back/public/dist/js/bundle.js.map
 back/public/dist/js/bash.js
 back/public/dist/js/bash.js.map
-idea-plugin/src/main/resources/js/bundle.js
-idea-plugin/src/main/resources/js/bundle.js.map
+phpstorm/src/main/resources/js/bundle.js
+phpstorm/src/main/resources/js/bundle.js.map
