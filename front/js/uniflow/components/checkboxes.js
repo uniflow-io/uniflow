@@ -18,7 +18,7 @@ export default class ComponentCheckBoxes extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

@@ -23,7 +23,7 @@ export default class ComponentPrompt extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript', 'bash']
+        return ['uniflow', 'bash']
     }
 
     constructor(props) {

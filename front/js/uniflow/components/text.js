@@ -18,7 +18,7 @@ export default class ComponentText extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript', 'bash']
+        return ['uniflow', 'bash']
     }
 
     componentDidMount() {

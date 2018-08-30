@@ -20,7 +20,7 @@ export default class ComponentSelect extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

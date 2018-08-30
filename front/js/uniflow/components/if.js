@@ -45,7 +45,7 @@ export default class ComponentIf extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

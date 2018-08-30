@@ -20,7 +20,7 @@ class History extends Component {
         this.props
             .dispatch(createHistory({
                 'title': this.state.search,
-                'platform': 'javascript',
+                'platform': 'uniflow',
                 'tags': [],
                 'description': ''
             }))
