@@ -116,6 +116,19 @@ class HistoryService
         return $data;
     }
 
+    public function getHistoryByPlatform(User $user, $platform = null)
+    {
+        $histories = $this->historyRepository->findLastByUserAndPlatform($user, $platform);
+
+        $data = array();
+
+        foreach ($histories as $history) {
+            $data[] = $this->getJsonHistory($history);
+        }
+
+        return $data;
+    }
+
     /**
      * @param User $user
      * @return bool

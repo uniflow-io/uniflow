@@ -71,6 +71,18 @@ class HistoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findLastByUserAndPlatform(User $user, $platform)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
+            ->andWhere('h.platform = :platform')->setParameter('platform', $platform)
+            ->addOrderBy('h.updated', 'DESC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function clearHistoryByUser(User $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
