@@ -109,6 +109,7 @@ export const createHistory = (item) => {
     return (dispatch) => {
         let data = {
             title: item.title,
+            platform: item.platform,
             tags: item.tags,
             description: item.description
         };
@@ -132,6 +133,7 @@ export const updateHistory = (item) => {
     return (dispatch) => {
         let data = {
             title: item.title,
+            platform: item.platform,
             tags: item.tags,
             description: item.description
         };

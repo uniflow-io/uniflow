@@ -3,7 +3,6 @@ import _ from 'lodash'
 import {Ace, ComponentList, TagIt} from '../../../components/index'
 import {History, Runner} from '../../../models/index'
 import {
-    getPlatforms,
     commitPushFlow,
     commitPopFlow,
     commitUpdateFlow,
@@ -22,6 +21,7 @@ import {
 } from '../../../reducers/history/actions'
 import {commitAddLog} from '../../../reducers/log/actions'
 import {connect} from 'react-redux'
+import Select2 from "../../../components/Select2";
 
 class Show extends Component {
     state = {
@@ -155,6 +155,14 @@ class Show extends Component {
             })
     }
 
+    onChangePlatform = (selected) => {
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{platform: selected}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
     onUpdateTags = (tags) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{tags: tags}}))
@@ -202,9 +210,14 @@ class Show extends Component {
     }
 
     render() {
-        const {history, tags, stack, platforms} = this.props;
+        const {history, tags, stack, platform} = this.props;
         const tagsOptions     = {
             availableTags: tags
+        }
+        const platforms = {
+            'javascript': 'Javascript',
+            'bash': 'Bash',
+            'phpstorm': 'PhpStorm'
         }
 
         return (
@@ -226,6 +239,18 @@ class Show extends Component {
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" id="info_title_{{ _uid }}"
                                            value={history.title} onChange={this.onUpdateTitle} placeholder="Title"/>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="info_platform_{{ _uid }}" className="col-sm-2 control-label">Platform</label>
+
+                                <div className="col-sm-10">
+                                    <Select2 value={history.platform} onChange={this.onChangePlatform} className="form-control" id="info_platform_{{ _uid }}" style={{width: '100%'}}>
+                                        {Object.keys(platforms).map((value) => (
+                                            <option key={value} value={value}>{ platforms[value] }</option>
+                                        ))}
+                                    </Select2>
                                 </div>
                             </div>
 
@@ -253,10 +278,9 @@ class Show extends Component {
                         </form>
                     </div>
                     <div className="box-footer">
-                        {platforms.indexOf('javascript') !== -1 && (
+                        {history.platform === 'javascript' && (
                         <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
                         )}
-                        {platforms.map((platform, i) => (<span key={i} className="pull-right badge">{platform}</span>))}
                     </div>
                 </div>
 
@@ -273,7 +297,6 @@ class Show extends Component {
 
 export default connect(state => {
     return {
-        platforms: getPlatforms(state.flow),
         history: getCurrentHistory(state.history),
         tags: getTags(state.history),
         stack: state.flow

@@ -46,20 +46,9 @@ class History
     protected $user;
 
     /**
-     * @var \Datetime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $created;
-
-    /**
-     * @var \Datetime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    protected $updated;
+    protected $platform;
 
     /**
      * @var Tag[]
@@ -80,6 +69,22 @@ class History
      * @ORM\Column(type="text", nullable=true)
      */
     protected $data;
+
+    /**
+     * @var \Datetime $created
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var \Datetime $updated
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
+     */
+    protected $updated;
 
     /**
      * Constructor
@@ -167,49 +172,19 @@ class History
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return History
+     * @return mixed
      */
-    public function setCreated($created)
+    public function getPlatform()
     {
-        $this->created = $created;
-
-        return $this;
+        return $this->platform;
     }
 
     /**
-     * Get created
-     *
-     * @return \DateTime
+     * @param mixed $platform
      */
-    public function getCreated()
+    public function setPlatform($platform): void
     {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return History
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
+        $this->platform = $platform;
     }
 
     /**
@@ -296,5 +271,51 @@ class History
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return History
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return History
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }

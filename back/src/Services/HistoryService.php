@@ -95,6 +95,7 @@ class HistoryService
         return array(
             'id'          => $history->getId(),
             'title'       => $history->getTitle(),
+            'platform'    => $history->getPlatform(),
             'tags'        => $tags,
             'description' => $history->getDescription(),
             'created'     => $created instanceof \DateTime ? $created->format('c') : null,
