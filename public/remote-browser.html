@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remote Browser</title>
+    <!--script src="node_modules/babel-polyfill/dist/polyfill.min.js"></script>
+    <script src="js/remote-browser.js"></script-->
+</head>
+<body>
+<div id="output"></div>
+<!-- Load Babel -->
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<!-- Your custom script here -->
+<script type="text/babel">
+    import Browser from '../node_modules/remote-browser/web-client/index.js'
+
+    remoteBrowser.then((data) => {
+        console.log(data)
+    })
+</script>
+</body>
+</html>
