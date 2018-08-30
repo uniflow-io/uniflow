@@ -4156,7 +4156,7 @@ export default class ComponentYaml extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

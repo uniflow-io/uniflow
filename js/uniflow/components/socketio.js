@@ -19,7 +19,7 @@ export default class ComponentSocketIO extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

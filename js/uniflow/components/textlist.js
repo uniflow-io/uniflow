@@ -18,7 +18,7 @@ export default class ComponentTextList extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

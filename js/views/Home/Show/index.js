@@ -215,7 +215,7 @@ class Show extends Component {
             availableTags: tags
         }
         const platforms = {
-            'javascript': 'Javascript',
+            'uniflow': 'Uniflow',
             'bash': 'Bash',
             'phpstorm': 'PhpStorm'
         }

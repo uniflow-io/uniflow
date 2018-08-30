@@ -17,7 +17,7 @@ export default class ComponentJavascript extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript', 'phpstorm']
+        return ['uniflow', 'phpstorm']
     }
 
     componentDidMount() {

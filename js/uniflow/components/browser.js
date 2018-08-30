@@ -24,7 +24,7 @@ export default class ComponentBrowser extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     constructor(props) {

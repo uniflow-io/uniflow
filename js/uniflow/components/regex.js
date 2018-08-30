@@ -1631,7 +1631,7 @@ export default class ComponentRegex extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {

@@ -537,7 +537,7 @@ export default class ComponentObject extends Component<Props> {
     }
 
     static platforms() {
-        return ['javascript']
+        return ['uniflow']
     }
 
     componentDidMount() {
