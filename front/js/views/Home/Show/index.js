@@ -278,7 +278,7 @@ class Show extends Component {
                         </form>
                     </div>
                     <div className="box-footer">
-                        {history.platform === 'javascript' && (
+                        {history.platform === 'uniflow' && (
                         <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
                         )}
                     </div>
