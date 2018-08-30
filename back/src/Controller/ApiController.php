@@ -53,7 +53,7 @@ class ApiController extends Controller
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $data = $this->historyService->getHistoryByPlatform($user);
+        $data = $this->historyService->getHistoryByPlatform($user, $platform);
 
         return new JsonResponse($data);
     }
