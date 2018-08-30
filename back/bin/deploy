@@ -30,8 +30,8 @@ CMD
 scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
 
 # deploy bash
-(cd ../bash;yarn install)
-(cd ../bash;yarn build)
+(cd ../platform-bash;yarn install)
+(cd ../platform-bash;yarn build)
 scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
 
 fi
