@@ -7,16 +7,8 @@ node_modules
 *.log
 npm-debug.log*
 
-# JSPM
-jspm_packages
-
 # PhpStorm
 .idea
-
-# phpstorm
-platform-phpstorm/.gradle
-platform-phpstorm/build
-platform-phpstorm/out
 
 # Symfony
 /app/config/parameters.yml
@@ -43,3 +35,8 @@ back/public/dist/js/bash.js
 back/public/dist/js/bash.js.map
 platform-phpstorm/src/main/resources/js/bundle.js
 platform-phpstorm/src/main/resources/js/bundle.js.map
+
+# Platform PhpStorm
+platform-phpstorm/.gradle
+platform-phpstorm/build
+platform-phpstorm/out
