@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 function Api(env, key) {
     this.env = env
@@ -22,4 +22,4 @@ Api.prototype.endpoint = function(endpoint, params = []) {
     return axios.get(httpHost + path + '?apiKey=' + this.key)
 }
 
-module.exports = Api
+export default Api
