@@ -1,4 +1,4 @@
 #!/bin/sh
 
 yarn install
-node index.js
+node src/index.js
