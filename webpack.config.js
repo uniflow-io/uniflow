@@ -9,9 +9,9 @@ const package = require('./package.json');
 
 const options = {
   entry: {
-    'background': path.resolve(__dirname, 'src', 'background.js'),
-    'content': path.resolve(__dirname, 'src', 'content.js'),
-    'popup': path.resolve(__dirname, 'src', 'popup.js'),
+    'background': path.resolve(__dirname, 'src', 'extension', 'background.js'),
+    'content': path.resolve(__dirname, 'src', 'extension', 'content.js'),
+    'popup': path.resolve(__dirname, 'src', 'extension', 'popup.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -34,13 +34,13 @@ const options = {
   },
   plugins: [
     new CleanWebpackPlugin(
-      [path.join('dist', 'extension')],
+      [path.join('dist')],
       {
         root: path.resolve(__dirname, '..'),
       },
     ),
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'src', 'manifest.json'),
+      from: path.resolve(__dirname, 'src', 'extension', 'manifest.json'),
       to: path.join('manifest.json'),
       transform: (manifest) => {
         return JSON.stringify({
@@ -52,23 +52,20 @@ const options = {
       },
     }]),
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'src', '*.html'),
+      from: path.resolve(__dirname, 'src', 'extension', '*.html'),
       to: '[name].[ext]',
       toType: 'template',
     }]),
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'src', '*.css'),
+      from: path.resolve(__dirname, 'src', 'extension', '*.css'),
       to: '[name].[ext]',
       toType: 'template',
     }]),
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'src', 'img', '*.png'),
+      from: path.resolve(__dirname, 'src', 'extension', 'img', '*.png'),
       to: path.join('img', '[name].[ext]'),
       toType: 'template',
     }]),
-    new webpack.DefinePlugin({
-      'typeof window': '"object"',
-    }),
     new webpack.ProvidePlugin({
       browser: 'webextension-polyfill',
     }),
