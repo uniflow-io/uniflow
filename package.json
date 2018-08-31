@@ -2,7 +2,7 @@
   "name": "uniflow-back",
   "version": "0.0.1",
   "description": "",
-  "main": "js/index.js",
+  "main": "src/index.js",
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --hot --inline -d --progress --colors --config webpack.config.js",
     "build": "./node_modules/.bin/webpack --mode production  -p --progress --colors --config webpack.config.js"
