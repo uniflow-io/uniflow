@@ -40,3 +40,6 @@ platform-phpstorm/src/main/resources/js/bundle.js.map
 platform-phpstorm/.gradle
 platform-phpstorm/build
 platform-phpstorm/out
+
+# Platform Chrome
+platform-chrome/dist

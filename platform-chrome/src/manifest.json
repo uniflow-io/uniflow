@@ -1,0 +1,55 @@
+{
+  "manifest_version": 2,
+  "browser_action": {
+    "default_icon": {
+      "32": "img/icon-32x32.png"
+    },
+    "default_popup": "popup.html",
+    "default_title": "Uniflow"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*",
+        "file:///*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "alarms",
+    "background",
+    "bookmarks",
+    "browsingData",
+    "contentSettings",
+    "contextMenus",
+    "cookies",
+    "debugger",
+    "downloads",
+    "downloads.open",
+    "geolocation",
+    "history",
+    "identity",
+    "idle",
+    "management",
+    "nativeMessaging",
+    "notifications",
+    "pageCapture",
+    "privacy",
+    "proxy",
+    "sessions",
+    "storage",
+    "tabs",
+    "topSites",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
