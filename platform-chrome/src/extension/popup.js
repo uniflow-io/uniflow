@@ -1,3 +1,5 @@
+import Api from '../models/Api'
+
 (function () {
     function refresh() {
         let api         = new Api('prod', 'qNFN9tqqg0tKq7GMPQy1r3nskFMntRjc')

@@ -217,7 +217,8 @@ class Show extends Component {
         const platforms = {
             'uniflow': 'Uniflow',
             'bash': 'Bash',
-            'phpstorm': 'PhpStorm'
+            'phpstorm': 'PhpStorm',
+            'chrome': 'Chrome'
         }
 
         return (
