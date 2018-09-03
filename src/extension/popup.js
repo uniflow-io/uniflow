@@ -2,7 +2,16 @@ import Api from '../models/Api'
 
 (function () {
     const refreshButton = document.getElementById('refresh');
+    const goToOptionsButton = document.getElementById('go-to-options');
     const historyElement = document.getElementById('history');
+
+    goToOptionsButton.addEventListener('click', () => {
+        if (chrome.runtime.openOptionsPage) {
+            chrome.runtime.openOptionsPage();
+        } else {
+            window.open(chrome.runtime.getURL('options.html'));
+        }
+    });
 
     const refresh = () => {
         let api = new Api('prod', 'qNFN9tqqg0tKq7GMPQy1r3nskFMntRjc')
