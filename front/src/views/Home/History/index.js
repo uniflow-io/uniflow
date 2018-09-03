@@ -54,7 +54,7 @@ class History extends Component {
                             </button>
                             <span className="visible-xs navbar-brand">Sidebar menu</span>
                         </div>
-                        <div className="navbar-collapse collapse sidebar-navbar-collapse">
+                        <div className="navbar-collapse collapse sidebar-navbar-collapse show">
                             <ul className="nav navbar-nav">
                                 <li>
                                     <form className="navbar-form" role="search" onSubmit={this.onSubmit}>
