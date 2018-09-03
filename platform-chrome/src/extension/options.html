@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head><title>My Test Extension Options</title></head>
+<head>
+    <link rel="stylesheet" href="options.css">
+    <title>Uniflow Options</title>
+</head>
 <body>
 
-Favorite color:
-<select id="color">
-    <option value="red">red</option>
-    <option value="green">green</option>
-    <option value="blue">blue</option>
-    <option value="yellow">yellow</option>
-</select>
+<div class="container">
+    <div class="row">
+        <div class="col-6-sm">ApiKey</div>
+        <div class="col-6-sm"><input type="text" id="apiKey" /></div>
+    </div>
+    <div class="row">
+        <div class="col-6-sm">Env</div>
+        <div class="col-6-sm"><input type="text" id="env" /></div>
+    </div>
+    <div class="row">
+        <div id="status"></div>
+        <button id="save">Save</button>
+    </div>
+</div>
 
-<label>
-    <input type="checkbox" id="like">
-    I like colors.
-</label>
-
-<div id="status"></div>
-<button id="save">Save</button>
-
-<script src="options.js"></script>
+<script type="text/javascript" src="options.js"></script>
 </body>
 </html>
