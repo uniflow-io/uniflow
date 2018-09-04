@@ -1,6 +1,14 @@
 import Api from '../models/Api'
 
 (function () {
+    function addEvent(parent, evt, selector, handler) {
+        parent.addEventListener(evt, function(event) {
+            if (event.target.matches(selector + ', ' + selector + ' *')) {
+                handler.apply(event.target.closest(selector), arguments);
+            }
+        }, false);
+    }
+
     chrome.storage.sync.get({
         apiKey: '',
         env: 'prod'
@@ -16,6 +24,14 @@ import Api from '../models/Api'
                 window.open(chrome.runtime.getURL('options.html'));
             }
         });
+
+        addEvent(historyElement, 'click', 'a', (e) => {
+            e.preventDefault()
+
+            let itemId = e.target.getAttribute('href')
+
+            console.log(itemId)
+        })
 
         const refresh = () => {
             let api = new Api(options.env, options.apiKey)
