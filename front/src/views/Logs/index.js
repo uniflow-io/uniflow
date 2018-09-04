@@ -1,6 +1,10 @@
 import React from 'react'
 
 const logs = [{
+    tag: '0.24',
+    label: 'Add chrome platform',
+    date: '30/08/2018'
+}, {
     tag: '0.23',
     label: 'Add platform to history',
     date: '30/08/2018'
