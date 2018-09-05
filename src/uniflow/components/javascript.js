@@ -1,17 +1,17 @@
-function ComponentJavascript() {
-    this.javascript = null
+export default class ComponentJavascript {
+    constructor() {
+        this.javascript = null
+    }
+
+    deserialise(data) {
+        this.javascript = data
+    }
+
+    onCompile(interpreter, scope, asyncWrapper) {
+
+    }
+
+    onExecute(runner) {
+        return runner.eval(this.javascript)
+    }
 }
-
-ComponentJavascript.prototype.deserialise = function(data) {
-    this.javascript = data
-}
-
-ComponentJavascript.prototype.onCompile = function(interpreter, scope, asyncWrapper) {
-
-}
-
-ComponentJavascript.prototype.onExecute = function(runner) {
-    return runner.eval(this.javascript)
-}
-
-module.exports = ComponentJavascript
