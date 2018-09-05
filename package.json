@@ -28,6 +28,7 @@
     "webpack-chrome-extension-reloader": "^0.6.6"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "babel-standalone": "^6.26.0"
   }
 }
