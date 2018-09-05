@@ -1,4 +1,4 @@
-const components = require('../uniflow/components')
+import components from '../uniflow/components'
 
 function Runner(commandArgs, api) {
     this.commandArgs = commandArgs
@@ -30,4 +30,4 @@ Runner.prototype.run = function(stack) {
         })
 }
 
-module.exports = Runner
+export default Runner

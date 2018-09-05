@@ -1,4 +1,5 @@
 import Api from '../models/Api'
+import Runner from '../models/Runner'
 
 (function () {
     function addEvent(parent, evt, selector, handler) {
@@ -15,7 +16,9 @@ import Api from '../models/Api'
     }, function(options) {
         const refreshButton = document.getElementById('refresh');
         const goToOptionsButton = document.getElementById('go-to-options');
-        const historyElement = document.getElementById('history');
+        const historyElement = document.getElementById('history')
+
+        let api = new Api(options.env, options.apiKey)
 
         goToOptionsButton.addEventListener('click', () => {
             if (chrome.runtime.openOptionsPage) {
@@ -29,12 +32,13 @@ import Api from '../models/Api'
             e.preventDefault()
 
             let itemId = e.target.getAttribute('href')
+            api.endpoint('history_data', {'id': itemId})
+                .then((response) => {
 
-            console.log(itemId)
+                })
         })
 
         const refresh = () => {
-            let api = new Api(options.env, options.apiKey)
             api.endpoint('history')
                 .then((response) => {
                     let items = []
