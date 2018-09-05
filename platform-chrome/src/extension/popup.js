@@ -1,5 +1,6 @@
 import Api from '../models/Api'
 import Runner from '../models/Runner'
+import History from '../models/History'
 
 (function () {
     function addEvent(parent, evt, selector, handler) {
@@ -34,7 +35,11 @@ import Runner from '../models/Runner'
             let itemId = e.target.getAttribute('href')
             api.endpoint('history_data', {'id': itemId})
                 .then((response) => {
+                    let history = new History(response.data),
+                        stack = history.deserialiseFlowData(),
+                        runner = new Runner(api)
 
+                    runner.run(stack);
                 })
         })
 
