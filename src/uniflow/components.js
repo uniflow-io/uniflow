@@ -1,5 +1,5 @@
-const ComponentJavascript = require('./components/javascript.js')
+import ComponentJavascript  from './components/javascript.js'
 
-module.exports = {
+export default {
     'javascript': ComponentJavascript,
 }
