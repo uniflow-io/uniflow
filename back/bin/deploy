@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ "$1" = "ssh" ]; then
-
-ssh admin@darkwood.fr
-
-else
-
 ssh admin@darkwood.fr << CMD
 
 # deploy back
@@ -24,14 +18,5 @@ git pull
 
 CMD
 
-# deploy front
-(cd ../front;yarn install)
-(cd ../front;yarn build)
-scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
-
-# deploy bash
-(cd ../platform-bash;yarn install)
-(cd ../platform-bash;yarn build)
-scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
-
-fi
+./deploy_front
+./deploy_bash

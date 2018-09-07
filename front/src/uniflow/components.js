@@ -1,6 +1,7 @@
 import ComponentAssets from './components/assets.js';
 import ComponentBash from './components/bash.js';
 import ComponentBrowser from './components/browser.js';
+import ComponentChrome from './components/chrome.js';
 import ComponentCheckBoxes from './components/checkboxes.js';
 import ComponentJavascript from './components/javascript.js';
 import ComponentIf from './components/if.js';
@@ -20,6 +21,7 @@ export default {
     'bash': ComponentBash,
     'browser': ComponentBrowser,
     'checkboxes': ComponentCheckBoxes,
+    'chrome': ComponentChrome,
     'javascript': ComponentJavascript,
     'if': ComponentIf,
     'include': ComponentInclude,
