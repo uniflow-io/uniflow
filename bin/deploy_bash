@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# deploy bash
+(cd ../platform-bash;yarn install)
+(cd ../platform-bash;yarn build)
+scp public/dist/js/bash.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
