@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 class HistoryController extends Controller
 {
     /**
-     * @var HistoryService 
+     * @var HistoryService
      */
     protected $historyService;
 
@@ -51,10 +51,6 @@ class HistoryController extends Controller
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        if($user->getEmail() == 'demo@uniflow.io') {
-            $this->historyService->resetDemoAccount($user);
         }
 
         $data = $this->historyService->getHistory($user);
@@ -150,7 +146,7 @@ class HistoryController extends Controller
      * @param $id
      * @return JsonResponse
      * @Route("/history/getData/{id}", name="history_get_data")
-     * 
+     *
      */
     public function getData(Request $request, $id)
     {
