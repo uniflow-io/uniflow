@@ -96,7 +96,9 @@ import History from '../models/History'
                     let history = new History(response.data),
                         stack = history.deserialiseFlowData(),
                         background = {
-                            evaluateInContent: sendToTab,
+                            evaluateInContent: (tabId, asyncFunction, args) => {
+                                return sendToTab(tabId, { asyncFunction, args, channel: 'evaluateInContent' })
+                            },
                             evaluateInBackground: (asyncFunction, args) => {
                                 return eval(`(${asyncFunction}).apply(null, ${JSON.stringify(args)})`)
                             },
