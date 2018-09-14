@@ -38,8 +38,10 @@ export default class Runner {
 
                         return Promise.resolve()
                             .then(() => {
-                                const tabId = this.background.evaluateInBackground('async function() { return (await browser.tabs.query({ active: true })).map(tab => tab.id) }', [])[0];
-                                this.background.evaluateInContent(tabId, 'async function(value) { return new Promise(function(resolve) { if ([\'complete\', \'loaded\'].includes(document.readyState)) { console.log(value); resolve(); } else { document.addEventListener(\'DOMContentLoaded\', () => { console.log(value); resolve(document.title) }); } }) }', [nativeObj]);
+                                this.background.evaluateInBackground('async function() { return (await browser.tabs.query({ active: true })).map(tab => tab.id) }', [])
+                                    .then((tabIds) => {
+                                        return this.background.evaluateInContent(tabIds[0], 'function(value) { console.log(value) }', [nativeObj]);
+                                    })
                             }).then((result) => {
                                 return interpreter.createPrimitive(console.log(nativeObj));
                             })
