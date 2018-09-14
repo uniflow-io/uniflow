@@ -7,7 +7,9 @@
             Promise.resolve()
             // eslint-disable-next-line no-eval
                 .then(() => eval(`(${asyncFunction}).apply(null, ${JSON.stringify(args)})`))
-                .then(result => backgroundPort.postMessage({id, message: result}))
+                .then((result) => {
+                    return backgroundPort.postMessage({id, message: result})
+                })
                 .catch((error) => {
                     backgroundPort.postMessage({
                         id,
