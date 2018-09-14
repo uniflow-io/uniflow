@@ -3,8 +3,9 @@ import {transform} from 'babel-standalone'
 import components from '../uniflow/components'
 
 export default class Runner {
-    Runner(api) {
+    constructor(api, background) {
         this.api = api
+        this.background = background
     }
 
     run(stack) {
@@ -43,7 +44,7 @@ export default class Runner {
                 return stack.reduce((promise, item) => {
                     return promise
                         .then(() => {
-                            return item.instance.onCompile(interpreter, scope, (wrapper) => {
+                            return item.instance.onCompile(interpreter, this.background, scope, (wrapper) => {
                                 return function () {
                                     asyncRunPromise = wrapper.apply(this, arguments)
                                 }
@@ -121,7 +122,7 @@ export default class Runner {
                 .then(() => {
                     let component = item.instance
                     component.deserialise(item.data)
-                    return component.onExecute(runner, this.api, components)
+                    return component.onExecute(runner, this.api, this.background, components)
                 });
         }, interpreterPromise);
     }

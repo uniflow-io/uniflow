@@ -12,6 +12,16 @@
     "page": "options.html",
     "open_in_tab": false
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*",
+        "file:///*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
   "background": {
     "scripts": ["background.js"]
   },

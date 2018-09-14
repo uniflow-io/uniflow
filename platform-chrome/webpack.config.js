@@ -10,6 +10,7 @@ const package = require('./package.json');
 const options = {
   entry: {
     'background': path.resolve(__dirname, 'src', 'extension', 'background.js'),
+    'content': path.resolve(__dirname, 'src', 'extension', 'content.js'),
     'options': path.resolve(__dirname, 'src', 'extension', 'options.js'),
     'popup': path.resolve(__dirname, 'src', 'extension', 'popup.js'),
   },

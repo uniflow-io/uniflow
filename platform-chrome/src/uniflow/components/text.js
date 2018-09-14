@@ -11,7 +11,7 @@ export default class ComponentText {
         this.text = text
     }
 
-    onCompile(interpreter, scope, asyncWrapper) {
+    onCompile(interpreter, background, scope, asyncWrapper) {
 
     }
 
