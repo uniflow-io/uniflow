@@ -89,7 +89,7 @@ export default class ComponentChrome {
 
                 return Promise.resolve()
                     .then(() => {
-                        return background.evaluateInContent(tabId, { args, asyncFunction, channel: 'evaluateInContent' })
+                        return background.evaluateInContent(tabId, asyncFunction, args)
                     }).then((result) => {
                         callback(interpreter.nativeToPseudo(result));
                     })

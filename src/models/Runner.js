@@ -29,13 +29,20 @@ export default class Runner {
         let interpreter = null
         let interpreterPromise = new Promise((resolve) => {
             interpreter = new Interpreter('', (interpreter, scope) => {
-                let initConsole = function () {
+                let initConsole = () => {
                     let consoleObj = interpreter.createObject(interpreter.OBJECT);
                     interpreter.setProperty(scope, 'console', consoleObj);
 
-                    let wrapper = function (value) {
+                    let wrapper = (value) => {
                         let nativeObj = interpreter.pseudoToNative(value);
-                        return interpreter.createPrimitive(console.log(nativeObj));
+
+                        return Promise.resolve()
+                            .then(() => {
+                                const tabId = this.background.evaluateInBackground('async function() { return (await browser.tabs.query({ active: true })).map(tab => tab.id) }', [])[0];
+                                this.background.evaluateInContent(tabId, 'async function(value) { return new Promise(function(resolve) { if ([\'complete\', \'loaded\'].includes(document.readyState)) { console.log(value); resolve(); } else { document.addEventListener(\'DOMContentLoaded\', () => { console.log(value); resolve(document.title) }); } }) }', [nativeObj]);
+                            }).then((result) => {
+                                return interpreter.createPrimitive(console.log(nativeObj));
+                            })
                     };
                     interpreter.setProperty(consoleObj, 'log', interpreter.createNativeFunction(wrapper));
                 };
