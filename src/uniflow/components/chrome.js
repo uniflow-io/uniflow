@@ -28,7 +28,7 @@ export default class ComponentChrome {
         this.variable = variable
     }
 
-    onCompile(interpreter, scope, asyncWrapper) {
+    onCompile(interpreter, background, scope, asyncWrapper) {
         let obj = {};
 
         let constructorWrapper  = function () {
@@ -74,7 +74,7 @@ export default class ComponentChrome {
 
                 return Promise.resolve()
                     .then(() => {
-                        return eval(`(${asyncFunction}).apply(null, ${JSON.stringify(args)})`)
+                        return background.evaluateInBackground(asyncFunction, args)
                     }).then((result) => {
                         callback(interpreter.nativeToPseudo(result));
                     })
@@ -86,8 +86,11 @@ export default class ComponentChrome {
                 asyncFunction = interpreter.pseudoToNative(asyncFunction)
                 asyncFunction = serializeFunction(asyncFunction)
                 args = interpreter.pseudoToNative(args)
-                return browser.evaluateInContent(tabId, asyncFunction, args)
-                    .then((result) => {
+
+                return Promise.resolve()
+                    .then(() => {
+                        return background.evaluateInContent(tabId, { args, asyncFunction, channel: 'evaluateInContent' })
+                    }).then((result) => {
                         callback(interpreter.nativeToPseudo(result));
                     })
             };

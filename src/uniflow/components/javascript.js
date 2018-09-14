@@ -7,7 +7,7 @@ export default class ComponentJavascript {
         this.javascript = data
     }
 
-    onCompile(interpreter, scope, asyncWrapper) {
+    onCompile(interpreter, background, scope, asyncWrapper) {
 
     }
 
