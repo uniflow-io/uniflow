@@ -73,7 +73,7 @@ export default class App extends Component {
                                                     <Link to={pathTo('logs')}>Logs</Link>
                                                 </li>
                                                 <li>
-                                                    <Link to={pathTo('profile')}>Profile</Link>
+                                                    <Link to={pathTo('settings')}>Settings</Link>
                                                 </li>
                                                 <li>
                                                     <a href="/logout"><span className="glyphicon glyphicon-off logout" aria-hidden="true"/></a>

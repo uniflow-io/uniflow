@@ -62,12 +62,12 @@ class Profile extends Component {
                 {/* Content Header (Page header) */}
                 <section className="content-header">
                     <h1>
-                        Profile
+                        Settings
                         <small>Control panel</small>
                     </h1>
                     <ol className="breadcrumb">
                         <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
-                        <li className="active">Profile</li>
+                        <li className="active">Settings</li>
                     </ol>
                 </section>
 
@@ -76,11 +76,11 @@ class Profile extends Component {
                     <div className="row">
                         <div className="col-md-12">
 
-                            <h3>Profile</h3>
+                            <h3>Settings</h3>
 
                             <div className="box box-primary">
                                 <div className="box-header with-border">
-                                    <h3 className="box-title">Profile</h3>
+                                    <h3 className="box-title">Settings</h3>
                                 </div>
                                 <form role="form">
                                     <div className="box-body">
