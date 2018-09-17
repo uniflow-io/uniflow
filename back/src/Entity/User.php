@@ -26,14 +26,19 @@ class User implements UserInterface, \Serializable
     protected $id;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     */
+    protected $username;
+
+    /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $email;
+    protected $email;
 
     /**
      * @ORM\Column(type="string", length=64)
      */
-    private $password;
+    protected $password;
 
     /**
      * Firstname.
@@ -109,11 +114,6 @@ class User implements UserInterface, \Serializable
         return null;
     }
 
-    public function getUsername()
-    {
-        return $this->email;
-    }
-
     public function eraseCredentials()
     {
 
@@ -127,6 +127,22 @@ class User implements UserInterface, \Serializable
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param mixed $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
 
     /**

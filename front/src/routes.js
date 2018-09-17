@@ -16,7 +16,7 @@ const routes = {
         component: Logs,
     },
     settings: {
-        path: '/profile',
+        path: '/settings',
         component: Settings,
     },
     dashboard: {
