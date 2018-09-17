@@ -36,10 +36,10 @@ export default class ComponentChrome {
                 wrapper;
 
             wrapper = function (url, config, callback) {
-                return axios.get(url, config).then((response) => {
-                    url = interpreter.pseudoToNative(url)
-                    config = interpreter.pseudoToNative(config)
+                url = interpreter.pseudoToNative(url)
+                config = interpreter.pseudoToNative(config)
 
+                return axios.get(url, config).then((response) => {
                     callback(interpreter.nativeToPseudo(response.data))
                 })
             };
