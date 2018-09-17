@@ -39,6 +39,19 @@ class FrontController extends Controller
     }
 
     /**
+     * @Route("/settings", name="settings")
+     */
+    public function settings()
+    {
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            return $this->redirect('login');
+        }
+
+        return $this->render('default/settings.html.twig');
+    }
+
+    /**
      * @Route("/me", name="dashboard")
      */
     public function dashboard()
