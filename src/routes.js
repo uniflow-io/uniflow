@@ -1,4 +1,4 @@
-import { FAQ, Home, Flow, Logs, Settings } from './views/index'
+import { FAQ, Home, Flow, Logs, Login, Settings } from './views/index'
 import pathToRegexp from 'path-to-regexp'
 
 const routes = {
@@ -6,6 +6,11 @@ const routes = {
         path: '/',
         exact: true,
         component: Home,
+    },
+    login: {
+        path: '/login',
+        exact: true,
+        component: Login,
     },
     faq: {
         path: '/faq',
