@@ -50,8 +50,8 @@ export default class App extends Component {
                 <Provider store={store}>
                     <Router>
                         <div>
-                            <HistoryManager />
-                            <UserManager />
+                            {/*<HistoryManager />
+                            <UserManager />*/}
 
                             <div className="wrapper">
 
