@@ -15,7 +15,7 @@ class HistoryManager extends Component<Props> {
 
         this.historyUnlisten = history.listen((location) => {
             const match = matchPath(location.pathname, {
-                path: routes.homeDetail.path,
+                path: routes.flow.path,
                 exact: true
             })
             if (match) {
@@ -25,14 +25,19 @@ class HistoryManager extends Component<Props> {
         })
 
         this.props.dispatch(fetchHistory()).then(() => {
-            const match = matchPath(location.pathname, {
-                path: routes.homeDetail.path,
+            const flowMatch = matchPath(location.pathname, {
+                path: routes.flow.path,
                 exact: true
             })
-            if (match) {
-                const current = parseInt(match.params.id)
+            const dashboardMatch = matchPath(location.pathname, {
+                path: routes.dashboard.path,
+                exact: true
+            })
+
+            if (flowMatch) {
+                const current = parseInt(flowMatch.params.id)
                 this.props.dispatch(setCurrentHistory(current))
-            } else {
+            } else if (dashboardMatch) {
                 let keys = Object.keys(this.props.items)
 
                 keys.sort((keyA, keyB) => {
@@ -46,7 +51,7 @@ class HistoryManager extends Component<Props> {
                     let item = this.props.items[keys[0]]
                     this.props.dispatch(setCurrentHistory(item.id))
                         .then(() => {
-                            history.push(pathTo('homeDetail', {id: item.id}))
+                            history.push(pathTo('flow', {id: item.id}))
                         })
                 }
             }

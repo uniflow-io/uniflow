@@ -64,6 +64,9 @@ export default class App extends Component {
                                                     <Link to={pathTo('home')}>Home</Link>
                                                 </li>
                                                 <li>
+                                                    <Link to={pathTo('dashboard')}>Dashboard</Link>
+                                                </li>
+                                                <li>
                                                     <Link to={pathTo('faq')}>FAQ</Link>
                                                 </li>
                                                 <li>
