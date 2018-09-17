@@ -30,6 +30,7 @@ security:
                 check_path: login
                 login_path: login
                 provider: app_provider
+                default_target_path: dashboard
             logout:       true
             anonymous:    true
             remember_me:
