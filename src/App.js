@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {
-    HashRouter,
+    BrowserRouter as Router,
+    Switch,
     Route,
     Link
 } from 'react-router-dom'
@@ -47,7 +48,7 @@ export default class App extends Component {
         return (
             //<React.StrictMode>
                 <Provider store={store}>
-                    <HashRouter>
+                    <Router>
                         <div>
                             <HistoryManager />
                             <UserManager />
@@ -82,9 +83,11 @@ export default class App extends Component {
                                 <DisplayAlerts />
 
                                 {/* Content Wrapper. Contains page content */}
+                                <Switch>
                                 {Object.values(routes).map(route => (
                                     <Route key={route.path} {...route} />
                                 ))}
+                                </Switch>
 
                                 {/* /.content-wrapper */}
                                 {/*footer className="main-footer">
@@ -301,7 +304,7 @@ export default class App extends Component {
                                 <div className="control-sidebar-bg"/>
                             </div>
                         </div>
-                    </HashRouter>
+                    </Router>
                 </Provider>
             //</React.StrictMode>
         )
