@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 class ApiController extends Controller
 {
     /**
-     * @var HistoryService 
+     * @var HistoryService
      */
     protected $historyService;
 
@@ -49,7 +49,7 @@ class ApiController extends Controller
     public function listAction(Request $request, $platform = null)
     {
         $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
+        if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
@@ -68,7 +68,7 @@ class ApiController extends Controller
     public function getData(Request $request, $id)
     {
         $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
+        if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
