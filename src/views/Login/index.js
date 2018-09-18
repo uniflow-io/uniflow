@@ -1,21 +1,29 @@
 import React, {Component} from 'react'
-import request from 'axios'
-import server from '../../utils/server'
+import connect from "react-redux/es/connect/connect";
 
 class Login extends Component {
+    state = {
+        username: null,
+        password: null,
+    }
+
+    onChangeUsername = (event) => {
+        this.setState({username: event.target.value})
+    }
+
+    onChangePassword = (event) => {
+        this.setState({password: event.target.value})
+    }
+
     onSubmit = (e) => {
         e.preventDefault()
 
-        const data = new FormData(e.target);
-
-        return request
-            .post(server.getBaseUrl() + '/login-check', data)
-            .then((response) => {
-                console.log(response)
-            });
     }
 
     render() {
+        const { auth } = this.props
+        const { username, password } = this.state
+
         return (
             <div className="content-wrapper">
                 <div className="container-fluid content content-login">
@@ -28,26 +36,21 @@ class Login extends Component {
                                 </div>
                                 <div className="box-body">
 
-                                    <form onSubmit={this.onSubmit}>
-
-                                        {/*<input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/> */}
-                                        <input type="hidden" id="remember_me" name="_remember_me" value="on"/>
+                                    <form>
 
                                         <div className="form-group col-sm-12">
-                                            <input className="form-control" id="username" name="_username"
-                                                   placeholder="Email or Username" required="required"/>
+                                            <input className="form-control" id="username{{ _uid }}" type="text" value={username || ''} onChange={this.onChangeUsername} placeholder="Email or Username" />
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <input type="password" className="form-control" id="password"
-                                                   name="_password"
-                                                   required="required" placeholder="Password"/>
+                                            <input className="form-control" id="password{{ _uid }}" type="password" value={password || ''} onChange={this.onChangePassword} placeholder="Password"/>
                                         </div>
 
                                         <div className="form-group col-sm-12">
                                             <button type="submit"
-                                                    className="btn btn-primary btn-block btn-flat">Login
-                                            </button>
+                                                    className="btn btn-primary btn-block btn-flat"
+                                                    disabled={auth.isAuthenticating}
+                                                    onClick={this.onSubmit}>Login</button>
                                         </div>
 
                                         {/*<div class="form-group col-sm-12">
@@ -79,4 +82,8 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default connect(state => {
+    return {
+        auth: state.auth
+    }
+})(Login)
