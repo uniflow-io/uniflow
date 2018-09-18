@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
-import connect from "react-redux/es/connect/connect";
+import {connect} from 'react-redux'
+import {
+    login,
+} from '../../reducers/auth/actions'
 
 class Login extends Component {
     state = {
@@ -18,6 +21,9 @@ class Login extends Component {
     onSubmit = (e) => {
         e.preventDefault()
 
+        this.props.dispatch(login(this.state.username, this.state.password)).then(() => {
+            console.log(this.props.auth)
+        })
     }
 
     render() {
