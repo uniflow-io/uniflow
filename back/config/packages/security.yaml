@@ -18,32 +18,27 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        api:
-            pattern: ^/api
+
+        login:
+            pattern:  ^/api/login
             stateless: true
-            simple_preauth:
-                authenticator: App\Security\ApiKeyAuthenticator
-            provider: app_api_key_user_provider
-        main:
-            pattern:    ^/
-            form_login:
-                check_path: login
-                login_path: login
+            anonymous: true
+            json_login:
                 provider: app_provider
-                default_target_path: dashboard
-            logout:       true
-            anonymous:    true
-            remember_me:
-                secret:   acPuzffj787lJbsr
-                lifetime: 3600
-                path:     /
-                domain:   ~
+                check_path:               /api/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            guard:
+                provider: app_provider
+                authenticators:
+                - lexik_jwt_authentication.jwt_token_authenticator
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        #- { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        #- { path: ^/, role: ROLE_USER }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
