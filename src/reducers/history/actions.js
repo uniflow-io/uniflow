@@ -90,10 +90,14 @@ export const commitSetCurrentHistory = (current) => {
     }
 }
 
-export const fetchHistory = () => {
+export const fetchHistory = (token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/history/list')
+            .get(server.getBaseUrl() + '/api/history/list', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 dispatch(commitClearHistory());
 
