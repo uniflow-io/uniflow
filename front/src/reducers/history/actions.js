@@ -93,7 +93,7 @@ export const commitSetCurrentHistory = (current) => {
 export const fetchHistory = () => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/history/list')
+            .get(server.getBaseUrl() + '/api/history/list')
             .then((response) => {
                 dispatch(commitClearHistory());
 
@@ -115,7 +115,7 @@ export const createHistory = (item) => {
         };
 
         return request
-            .post(server.getBaseUrl() + '/history/create', data)
+            .post(server.getBaseUrl() + '/api/history/create', data)
             .then((response) => {
                 let item = new History(response.data);
 
@@ -139,7 +139,7 @@ export const updateHistory = (item) => {
         };
 
         return request
-            .post(server.getBaseUrl() + '/history/edit/'+item.id, data)
+            .post(server.getBaseUrl() + '/api/history/update/'+item.id, data)
             .then((response) => {
                 let item = new History(response.data);
 
@@ -152,7 +152,7 @@ export const updateHistory = (item) => {
 export const getHistoryData = (item) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/history/getData/'+item.id)
+            .get(server.getBaseUrl() + '/api/history/getData/'+item.id)
             .then((response) => {
                 return response.data.data;
             });
@@ -161,7 +161,7 @@ export const getHistoryData = (item) => {
 export const setHistoryData = (item) => {
     return (dispatch) => {
         return request
-            .post(server.getBaseUrl() + '/history/setData/'+item.id, item.data)
+            .post(server.getBaseUrl() + '/api/history/setData/'+item.id, item.data)
             .then((response) => {
                 item.updated = moment();
 
@@ -178,7 +178,7 @@ export const setHistoryData = (item) => {
 export const deleteHistory = (item) => {
     return (dispatch) => {
         return request
-            .delete(server.getBaseUrl() + '/history/delete/'+item.id)
+            .delete(server.getBaseUrl() + '/api/history/delete/'+item.id)
             .then((response) => {
                 dispatch(commitDeleteHistory(item));
 
