@@ -2,22 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Form\ProfileType;
+use App\Form\SettingsType;
 use App\Services\UserService;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Form\HistoryType;
+use App\Entity\History;
+use App\Services\HistoryService;
+use App\Services\TagService;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Routing\Annotation\Route;
 
-class UserController extends Controller
+class ApiUserController extends Controller
 {
     /**
      * @var UserService
@@ -34,7 +36,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/user/components", name="user_components")
+     * @Route("/api/user/components", name="api_user_components")
      */
     public function components(Request $request)
     {
@@ -64,9 +66,9 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/user/profile", name="user_profile")
+     * @Route("/api/user/settings", name="api_user_settings")
      */
-    public function profile(Request $request)
+    public function settings(Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -75,7 +77,7 @@ class UserController extends Controller
         }
 
         if ('POST' === $request->getMethod()) {
-            $form = $this->createForm(ProfileType::class, $user, array(
+            $form = $this->createForm(SettingsType::class, $user, array(
                 'csrf_protection' => false,
             ));
 
@@ -92,15 +94,15 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    'User saved !'
+                    'Settings saved !'
                 );
 
-                return new JsonResponse($this->userService->getJsonProfile($user));
+                return new JsonResponse($this->userService->getJsonSettings($user));
             }
 
-            return new JsonResponse($this->userService->getJsonProfile($user), 400);
+            return new JsonResponse($this->userService->getJsonSettings($user), 400);
         }
 
-        return new JsonResponse($this->userService->getJsonProfile($user));
+        return new JsonResponse($this->userService->getJsonSettings($user));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Form\SettingsType;
+use App\Services\UserService;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\HistoryType;
 use App\Entity\History;
@@ -12,17 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
-/**
- * Class SFTPComponentController.
- */
-class HistoryController extends Controller
+class ApiHistoryController extends Controller
 {
     /**
      * @var HistoryService
@@ -44,16 +41,19 @@ class HistoryController extends Controller
     }
 
     /**
-     * @Route("/history/list", name="history_list")
+     * @param Request $request
+     * @param string $platform
+     * @return JsonResponse
+     * @Route("/api/history/list/{platform}", name="api_history_list")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $platform = null)
     {
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $data = $this->historyService->getHistory($user);
+        $data = $this->historyService->getHistoryByPlatform($user, $platform);
 
         return new JsonResponse($data);
     }
@@ -98,8 +98,7 @@ class HistoryController extends Controller
 
     /**
      * Displays a form to create a new History entity.
-     * @Route("/history/create", name="history_new")
-     *
+     * @Route("/api/history/create", name="api_history_create")
      */
     public function create(Request $request)
     {
@@ -121,11 +120,13 @@ class HistoryController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing History entity.
-     * @Route("/history/edit/{id}", name="history_edit")
-     *
+     * @param Request $request
+     * @param $id
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("/api/history/update/{id}", name="api_history_update")
      */
-    public function edit(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
@@ -145,8 +146,8 @@ class HistoryController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @Route("/history/getData/{id}", name="history_get_data")
-     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("/api/history/getData/{id}", name="api_history_get_data")
      */
     public function getData(Request $request, $id)
     {
@@ -168,7 +169,8 @@ class HistoryController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @Route("/history/setData/{id}", name="history_set_data")
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("/api/history/setData/{id}", name="api_history_set_data")
      */
     public function setData(Request $request, $id)
     {
@@ -215,7 +217,8 @@ class HistoryController extends Controller
      * @param Request $request
      * @param $id
      * @return JsonResponse
-     * @Route("/history/delete/{id}", name="history_delete")
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @Route("/api/history/delete/{id}", name="api_history_delete")
      */
     public function delete(Request $request, $id)
     {
