@@ -14,11 +14,6 @@ class FrontController extends Controller
      */
     public function home()
     {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return $this->redirect('login');
-        }
-
         return $this->render('default/home.html.twig');
     }
 
@@ -51,11 +46,6 @@ class FrontController extends Controller
      */
     public function settings()
     {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return $this->redirect('login');
-        }
-
         return $this->render('default/settings.html.twig');
     }
 
@@ -64,11 +54,6 @@ class FrontController extends Controller
      */
     public function dashboard()
     {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return $this->redirect('login');
-        }
-
         return $this->render('default/dashboard.html.twig');
     }
 
@@ -77,11 +62,6 @@ class FrontController extends Controller
      */
     public function flow()
     {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            return $this->redirect('login');
-        }
-
         return $this->render('default/flow.html.twig');
     }
 }
