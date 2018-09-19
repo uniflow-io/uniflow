@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
-use App\Form\SettingsType;
-use App\Services\UserService;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\HistoryType;
 use App\Entity\History;
@@ -19,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
-class ApiHistoryController extends Controller
+class HistoryController extends Controller
 {
     /**
      * @var HistoryService
