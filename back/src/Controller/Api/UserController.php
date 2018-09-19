@@ -1,25 +1,18 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Form\SettingsType;
 use App\Services\UserService;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\HistoryType;
-use App\Entity\History;
-use App\Services\HistoryService;
-use App\Services\TagService;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
-class ApiUserController extends Controller
+class UserController extends Controller
 {
     /**
      * @var UserService
