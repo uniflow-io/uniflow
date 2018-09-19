@@ -42,7 +42,7 @@ class HistoryController extends Controller
      * @param Request $request
      * @param string $platform
      * @return JsonResponse
-     * @Route("/api/history/list/{platform}", name="api_history_list")
+     * @Route("/api/history/list/{platform}", name="api_history_list", methods={"GET"})
      */
     public function listAction(Request $request, $platform = null)
     {
@@ -69,7 +69,7 @@ class HistoryController extends Controller
             'csrf_protection' => false,
         ));
 
-        if ('POST' === $request->getMethod()) {
+        if (in_array(array('POST', 'PUT'), $request->getMethod())) {
             $content = $request->getContent();
             if (!empty($content)) {
                 $data = json_decode($content, true);
@@ -96,7 +96,7 @@ class HistoryController extends Controller
 
     /**
      * Displays a form to create a new History entity.
-     * @Route("/api/history/create", name="api_history_create")
+     * @Route("/api/history/create", name="api_history_create", methods={"POST"})
      */
     public function create(Request $request)
     {
@@ -122,7 +122,7 @@ class HistoryController extends Controller
      * @param $id
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/update/{id}", name="api_history_update")
+     * @Route("/api/history/update/{id}", name="api_history_update", methods={"PUT"})
      */
     public function update(Request $request, $id)
     {
@@ -145,7 +145,7 @@ class HistoryController extends Controller
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/getData/{id}", name="api_history_get_data")
+     * @Route("/api/history/getData/{id}", name="api_history_get_data", methods={"GET"})
      */
     public function getData(Request $request, $id)
     {
@@ -168,7 +168,7 @@ class HistoryController extends Controller
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/setData/{id}", name="api_history_set_data")
+     * @Route("/api/history/setData/{id}", name="api_history_set_data", methods={"PUT"})
      */
     public function setData(Request $request, $id)
     {
@@ -183,7 +183,7 @@ class HistoryController extends Controller
             throw $this->createNotFoundException('Unable to find History entity.');
         }
 
-        if ('POST' === $request->getMethod()) {
+        if ('PUT' === $request->getMethod()) {
             $content = $request->getContent();
 
             $decoder = new JsonDecode();
@@ -216,7 +216,7 @@ class HistoryController extends Controller
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/delete/{id}", name="api_history_delete")
+     * @Route("/api/history/delete/{id}", name="api_history_delete", methods={"DELETE"})
      */
     public function delete(Request $request, $id)
     {
