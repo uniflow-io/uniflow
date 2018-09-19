@@ -3,6 +3,10 @@ import {connect} from 'react-redux'
 import {
     login,
 } from '../../reducers/auth/actions'
+import { withRouter } from 'react-router'
+import {pathTo} from '../../routes'
+import {commitAddLog} from "../../reducers/log/actions";
+import {Log} from '../../models/index'
 
 class Login extends Component {
     state = {
@@ -21,9 +25,14 @@ class Login extends Component {
     onSubmit = (e) => {
         e.preventDefault()
 
-        this.props.dispatch(login(this.state.username, this.state.password)).then(() => {
-            console.log(this.props.auth)
-        })
+        this.props.dispatch(login(this.state.username, this.state.password))
+            .then(() => {
+                if(this.props.auth.isAuthenticated) {
+                    this.props.history.push(pathTo('dashboard'))
+                } else {
+                    return this.props.dispatch(commitAddLog(this.props.auth.statusText, Log.USER_LOGIN_FAIL))
+                }
+            })
     }
 
     render() {
@@ -92,4 +101,4 @@ export default connect(state => {
     return {
         auth: state.auth
     }
-})(Login)
+})(withRouter(Login))
