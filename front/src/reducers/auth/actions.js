@@ -64,7 +64,7 @@ export const login = (username, password) => {
                     })
                     .then((response) => {
                         try {
-                            let decoded = jwtDecode(response.data.token);
+                            jwtDecode(response.data.token);
                             return dispatch(commitLoginUserSuccess(response.data.token));
                         } catch (e) {
                             return dispatch(commitLoginUserFailure({
