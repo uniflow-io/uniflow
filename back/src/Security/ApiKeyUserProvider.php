@@ -29,9 +29,14 @@ class ApiKeyUserProvider implements UserProviderInterface
         return $this->userService->findOneByApiKey($apiKey);
     }
 
+    /**
+     * @param string $username
+     * @return mixed|UserInterface
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function loadUserByUsername($username)
     {
-        return $this->userService->findOneByUsername($username);
+        return $this->userService->findOneByEmailOrUsername($username);
     }
 
     public function refreshUser(UserInterface $user)

@@ -7,10 +7,6 @@ security:
         ROLE_SUPER_ADMIN: ROLE_USER
 
     providers:
-        app_provider:
-            entity:
-                class: App\Entity\User
-                property: email
         app_api_key_user_provider:
             id: App\Security\ApiKeyUserProvider
 
@@ -24,7 +20,7 @@ security:
             stateless: true
             anonymous: true
             json_login:
-                provider: app_provider
+                provider: app_api_key_user_provider
                 check_path:               /api/login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
@@ -33,10 +29,10 @@ security:
             pattern:   ^/api
             stateless: true
             guard:
-                provider: app_provider
+                provider: app_api_key_user_provider
                 authenticators:
                 - lexik_jwt_authentication.jwt_token_authenticator
-                #- App\Security\ApiKeyAuthenticator
+                - App\Security\ApiKeyAuthenticator
                 entry_point: lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:

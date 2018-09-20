@@ -37,10 +37,9 @@ class UserRepository  extends ServiceEntityRepository
     }
 
     /**
-     * Find one for edit profile
-     *
-     * @param $id
-     * @return User
+     * @param null $id
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne($id = null)
     {
@@ -53,6 +52,26 @@ class UserRepository  extends ServiceEntityRepository
         } else {
             $qb->setMaxResults(1);
         }
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @param $username
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByEmailOrUsername($username)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u')
+        ;
+
+        $qb->andWhere($qb->expr()->orX('u.email = :username', 'u.username = :username'))
+            ->setParameter('username', $username);
+        $qb->setMaxResults(1);
 
         $query = $qb->getQuery();
 
