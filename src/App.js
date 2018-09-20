@@ -13,7 +13,6 @@ import createStore from './utils/createStore'
 import {getNewLogs,commitReadLog} from './reducers/log/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
 import {withRouter, matchPath} from 'react-router'
-import {setCurrentHistory} from "./reducers/history/actions";
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
