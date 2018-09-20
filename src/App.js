@@ -12,6 +12,8 @@ import { UserManager } from './components/index'
 import createStore from './utils/createStore'
 import {getNewLogs,commitReadLog} from './reducers/log/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
+import {withRouter, matchPath} from 'react-router'
+import {setCurrentHistory} from "./reducers/history/actions";
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
@@ -49,6 +51,57 @@ const DisplayAlerts = connect(state => ({
 }))(Alerts)
 
 class Header extends Component {
+    state = {
+        active: null
+    }
+
+    componentDidMount() {
+        const {location, history} = this.props
+        this.onLocationChange(location)
+
+        this.historyUnlisten = history.listen(this.onLocationChange)
+    }
+
+    componentWillUnmount() {
+        this.historyUnlisten()
+    }
+
+    onLocationChange = (location) => {
+        if (matchPath(location.pathname, {
+            path: routes.home.path,
+            exact: true
+        })) {
+            this.setState({active: 'home'})
+        } else if(matchPath(location.pathname, {
+            path: routes.dashboard.path,
+            exact: true
+        }) || matchPath(location.pathname, {
+            path: routes.flow.path
+        })) {
+            this.setState({active: 'dashboard'})
+        } else if(matchPath(location.pathname, {
+            path: routes.faq.path,
+            exact: true
+        })) {
+            this.setState({active: 'faq'})
+        } else if(matchPath(location.pathname, {
+            path: routes.logs.path,
+            exact: true
+        })) {
+            this.setState({active: 'logs'})
+        } else if(matchPath(location.pathname, {
+            path: routes.settings.path,
+            exact: true
+        })) {
+            this.setState({active: 'settings'})
+        } else if(matchPath(location.pathname, {
+            path: routes.login.path,
+            exact: true
+        })) {
+            this.setState({active: 'login'})
+        }
+    }
+
     onLogout = (e) => {
         e.preventDefault()
 
@@ -57,38 +110,39 @@ class Header extends Component {
 
     render() {
         const { auth } = this.props
+        const { active } = this.state
 
         return (
             <header className="main-header">
                 <nav className="navbar navbar-static-top">
                     <div className="navbar-custom-menu">
                         <ul className="nav navbar-nav">
-                            <li>
+                                <li className={active === 'home' ? 'active' : ''}>
                                 <Link to={pathTo('home')}>Home</Link>
                             </li>
                             {auth.isAuthenticated && (
-                            <li>
+                            <li className={active === 'dashboard' ? 'active' : ''}>
                                 <Link to={pathTo('dashboard')}>Dashboard</Link>
                             </li>
                             )}
-                            <li>
+                            <li className={active === 'faq' ? 'active' : ''}>
                                 <Link to={pathTo('faq')}>FAQ</Link>
                             </li>
-                            <li>
+                            <li className={active === 'logs' ? 'active' : ''}>
                                 <Link to={pathTo('logs')}>Logs</Link>
                             </li>
                             {auth.isAuthenticated && (
-                            <li>
+                            <li className={active === 'settings' ? 'active' : ''}>
                                 <Link to={pathTo('settings')}>Settings</Link>
                             </li>
                             )}
                             {!auth.isAuthenticated && (
-                            <li>
+                            <li className={active === 'login' ? 'active' : ''}>
                                 <Link to={pathTo('login')}>Login</Link>
                             </li>
                             )}
                             {auth.isAuthenticated && (
-                                <li>
+                                <li className={active === 'logout' ? 'active' : ''}>
                                     <a onClick={this.onLogout}><span className="glyphicon glyphicon-off logout" aria-hidden="true"/></a>
                                 </li>
                             )}
@@ -102,7 +156,7 @@ class Header extends Component {
 
 const DisplayHeader = connect(state => ({
     auth: state.auth
-}))(Header)
+}))(withRouter(Header))
 
 export default class App extends Component {
     render() {
