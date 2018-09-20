@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {ComponentList} from '../../components/index'
+import {ListComponent} from '../../components/index'
 import {Bus} from '../../models/index'
 import createStore from '../../utils/createStore'
 import flow from '../../reducers/flow/index'
@@ -241,7 +241,7 @@ export default class ComponentWhile extends Component<Props> {
                         </div>
                     </form>
                 </div>
-                <ComponentList stack={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
+                <ListComponent stack={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
                                onPush={(index, component) => {this.onPushFlow(['conditionStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['conditionStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['conditionStack'], index, data)}}
@@ -253,7 +253,7 @@ export default class ComponentWhile extends Component<Props> {
                         </div>
                     </form>
                 </div>
-                <ComponentList stack={this.state.executeStack} runIndex={this.state.executeRunIndex}
+                <ListComponent stack={this.state.executeStack} runIndex={this.state.executeRunIndex}
                                onPush={(index, component) => {this.onPushFlow(['executeStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['executeStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['executeStack'], index, data)}}

@@ -1,5 +1,6 @@
 import { FAQ, Home, Flow, Logs, Login, Settings } from './views/index'
 import pathToRegexp from 'path-to-regexp'
+import { requireAuthentication } from './components/index'
 
 const routes = {
     home: {
@@ -22,15 +23,15 @@ const routes = {
     },
     settings: {
         path: '/settings',
-        component: Settings,
+        component: requireAuthentication(Settings),
     },
     dashboard: {
         path: '/me',
-        component: Flow,
+        component: requireAuthentication(Flow),
     },
     flow: {
         path: '/me/flow/:id',
-        component: Flow,
+        component: requireAuthentication(Flow),
     },
 }
 

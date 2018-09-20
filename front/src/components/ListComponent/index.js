@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import {ComponentSearch} from '../../components/index'
+import {SearchComponent} from '../../components/index'
 import components from '../../uniflow/components';
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {
-        'search': ComponentSearch
+        'search': SearchComponent
     })
 
     render() {
@@ -59,7 +59,7 @@ class UiComponent extends Component {
     }
 }*/
 
-export default class ComponentList extends Component {
+export default class ListComponent extends Component {
     render() {
         const {stack, runIndex, onPush, onPop, onUpdate, onRun} = this.props
         const uiStack                   = (() => {
