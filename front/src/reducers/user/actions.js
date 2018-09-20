@@ -6,34 +6,46 @@ import {
     COMMIT_UPDATE_SETTINGS,
 } from './actionsTypes'
 
-export const fetchComponents = () => {
+export const fetchComponents = (token) => {
     return (dispatch) => {
         let data = Object.keys(components);
 
         return request
-            .post(server.getBaseUrl() + '/api/user/components', data)
+            .post(server.getBaseUrl() + '/api/user/components', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 dispatch(commitSetComponents(Object.values(response.data)))
             });
     }
 }
-export const fetchSettings = () => {
+export const fetchSettings = (token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/user/settings')
+            .get(server.getBaseUrl() + '/api/user/settings', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 dispatch(commitUpdateSettings(response.data));
             });
     }
 }
-export const updateSettings = (item) => {
+export const updateSettings = (item, token) => {
     return (dispatch) => {
         let data = {
             apiKey: item.apiKey
         };
 
         return request
-            .post(server.getBaseUrl() + '/api/user/settings', data)
+            .put(server.getBaseUrl() + '/api/user/settings', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 dispatch(commitUpdateSettings(data));
 

@@ -114,7 +114,7 @@ class Show extends Component {
                     return history.data;
                 }
 
-                return this.props.dispatch(getHistoryData(history));
+                return this.props.dispatch(getHistoryData(history, this.props.auth.token));
             })
             .then((data) => {
                 if (!data) return;
@@ -140,7 +140,7 @@ class Show extends Component {
         history.serialiseFlowData(stack);
         if (history.data !== data) {
             this.props
-                .dispatch(setHistoryData(history))
+                .dispatch(setHistoryData(history, this.props.auth.token))
                 .catch((log) => {
                     return this.props.dispatch(commitAddLog(log.message, log.code))
                 })
@@ -180,7 +180,7 @@ class Show extends Component {
     }
 
     onUpdate = _.debounce(() => {
-        this.props.dispatch(updateHistory(this.props.history))
+        this.props.dispatch(updateHistory(this.props.history, this.props.auth.token))
     }, 500)
 
     onDuplicate = (event) => {
@@ -189,10 +189,10 @@ class Show extends Component {
         let history = new History(this.props.history);
         history.title += ' Copy';
 
-        this.props.dispatch(createHistory(history))
+        this.props.dispatch(createHistory(history, this.props.auth.token))
             .then((item) => {
                 history.id = item.id;
-                return this.props.dispatch(setHistoryData(history));
+                return this.props.dispatch(setHistoryData(history, this.props.auth.token));
             })
             .then(() => {
                 return this.props.dispatch(setCurrentHistory(history.id));
@@ -206,7 +206,7 @@ class Show extends Component {
     onDelete = (event) => {
         event.preventDefault()
 
-        return this.props.dispatch(deleteHistory(this.props.history));
+        return this.props.dispatch(deleteHistory(this.props.history, this.props.auth.token));
     }
 
     render() {
@@ -298,6 +298,7 @@ class Show extends Component {
 
 export default connect(state => {
     return {
+        auth: state.auth,
         history: getCurrentHistory(state.history),
         tags: getTags(state.history),
         stack: state.flow

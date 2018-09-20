@@ -109,7 +109,7 @@ export const fetchHistory = (token) => {
             });
     }
 }
-export const createHistory = (item) => {
+export const createHistory = (item, token) => {
     return (dispatch) => {
         let data = {
             title: item.title,
@@ -119,7 +119,11 @@ export const createHistory = (item) => {
         };
 
         return request
-            .post(server.getBaseUrl() + '/api/history/create', data)
+            .post(server.getBaseUrl() + '/api/history/create', data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 let item = new History(response.data);
 
@@ -133,7 +137,7 @@ export const createHistory = (item) => {
         ;
     }
 }
-export const updateHistory = (item) => {
+export const updateHistory = (item, token) => {
     return (dispatch) => {
         let data = {
             title: item.title,
@@ -143,7 +147,11 @@ export const updateHistory = (item) => {
         };
 
         return request
-            .post(server.getBaseUrl() + '/api/history/update/'+item.id, data)
+            .put(server.getBaseUrl() + '/api/history/update/'+item.id, data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 let item = new History(response.data);
 
@@ -153,19 +161,27 @@ export const updateHistory = (item) => {
             });
     }
 }
-export const getHistoryData = (item) => {
+export const getHistoryData = (item, token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/history/getData/'+item.id)
+            .get(server.getBaseUrl() + '/api/history/getData/'+item.id, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 return response.data.data;
             });
     }
 }
-export const setHistoryData = (item) => {
+export const setHistoryData = (item, token) => {
     return (dispatch) => {
         return request
-            .post(server.getBaseUrl() + '/api/history/setData/'+item.id, item.data)
+            .put(server.getBaseUrl() + '/api/history/setData/'+item.id, item.data, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 item.updated = moment();
 
@@ -179,10 +195,14 @@ export const setHistoryData = (item) => {
         ;
     }
 }
-export const deleteHistory = (item) => {
+export const deleteHistory = (item, token) => {
     return (dispatch) => {
         return request
-            .delete(server.getBaseUrl() + '/api/history/delete/'+item.id)
+            .delete(server.getBaseUrl() + '/api/history/delete/'+item.id, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
             .then((response) => {
                 dispatch(commitDeleteHistory(item));
 

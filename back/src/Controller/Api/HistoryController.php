@@ -69,7 +69,7 @@ class HistoryController extends Controller
             'csrf_protection' => false,
         ));
 
-        if (in_array(array('POST', 'PUT'), $request->getMethod())) {
+        if (in_array( $request->getMethod(), array('POST', 'PUT'))) {
             $content = $request->getContent();
             if (!empty($content)) {
                 $data = json_decode($content, true);
@@ -95,7 +95,8 @@ class HistoryController extends Controller
     }
 
     /**
-     * Displays a form to create a new History entity.
+     * @param Request $request
+     * @return Response
      * @Route("/api/history/create", name="api_history_create", methods={"POST"})
      */
     public function create(Request $request)

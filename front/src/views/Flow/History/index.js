@@ -23,7 +23,7 @@ class History extends Component {
                 'platform': 'uniflow',
                 'tags': [],
                 'description': ''
-            }))
+            }, this.props.auth.token))
             .then((item) => {
                 return this.props.dispatch(setCurrentHistory(item.id))
             })
@@ -86,5 +86,6 @@ class History extends Component {
 }
 
 export default connect(state => ({
+    auth: state.auth,
     history: state.history
 }))(History)
