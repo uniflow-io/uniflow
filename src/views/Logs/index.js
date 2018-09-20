@@ -100,7 +100,6 @@ const logs = [{
 
 export default () => (
     <div className="content-wrapper">
-        {/* Content Header (Page header) */}
         <section className="content-header">
             <h1>
                 Logs
