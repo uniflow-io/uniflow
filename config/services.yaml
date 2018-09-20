@@ -29,4 +29,3 @@ services:
     Symfony\Component\Cache\Adapter\TagAwareAdapter:
         arguments:
           - '@cache.app'
-          - '@cache.app'

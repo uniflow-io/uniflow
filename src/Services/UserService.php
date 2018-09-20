@@ -94,6 +94,16 @@ class UserService
         return $this->userRepository->findOneBy(array('username' => $username));
     }
 
+    /**
+     * @param $username
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByEmailOrUsername($username)
+    {
+        return $this->userRepository->findOneByEmailOrUsername($username);
+    }
+
     public function findOneByApiKey($apiKey)
     {
         return $this->userRepository->findOneBy(array('apiKey' => $apiKey));
