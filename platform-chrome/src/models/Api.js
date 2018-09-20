@@ -12,8 +12,8 @@ Api.prototype.endpoint = function(endpoint, params = []) {
     }
 
     const endpoints = {
-        'history': '/api/history/chrome',
-        'history_data': '/api/history-data/{id}'
+        'history': '/api/history/list/chrome',
+        'history_data': '/api/history/getData/{id}'
     }
     let path = Object.keys(params).reduce(function(path, key) {
         return path.replace('{' + key + '}', params[key]);

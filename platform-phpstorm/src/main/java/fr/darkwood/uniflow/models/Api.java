@@ -34,7 +34,7 @@ public class Api {
 
     public ArrayList<History> getHistory() throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/history/phpstorm";
+        String path = "/api/history/list/phpstorm";
 
         URL url = new URL(httpHost + path + "?apiKey=" + this.key);
         URLConnection con = url.openConnection();
@@ -65,7 +65,7 @@ public class Api {
 
     public String getHistoryData(String id) throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/history-data/" + id;
+        String path = "/api/history/getData/" + id;
 
         URL url = new URL(httpHost + path + "?apiKey=" + this.key);
         URLConnection con = url.openConnection();
