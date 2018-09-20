@@ -1,6 +1,6 @@
 import {
     COMMIT_SET_COMPONENTS,
-    COMMIT_UPDATE_PROFILE,
+    COMMIT_UPDATE_SETTINGS,
 } from './actionsTypes'
 
 const defaultState = {
@@ -15,7 +15,7 @@ const user = (state = defaultState, action) => {
                 ...state,
                 ...{components: action.components}
             }
-        case COMMIT_UPDATE_PROFILE:
+        case COMMIT_UPDATE_SETTINGS:
             return {
                 ...state,
                 ...{apiKey: action.item.apiKey}

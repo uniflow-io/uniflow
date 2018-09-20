@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
 import {
-    updateProfile,
-    commitUpdateProfile
+    updateSettings,
+    commitUpdateSettings
 } from '../../reducers/user/actions'
 import {connect} from "react-redux";
 
@@ -21,10 +21,10 @@ function copyTextToClipboard(text) {
     document.body.removeChild(textArea);
 }
 
-class Profile extends Component {
+class Settings extends Component {
     onUpdateApiKey = (event) => {
         this.props
-            .dispatch(commitUpdateProfile({...this.props.user, ...{apiKey: event.target.value}}))
+            .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: event.target.value}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -37,7 +37,7 @@ class Profile extends Component {
     }
 
     onUpdate = _.debounce(() => {
-        this.props.dispatch(updateProfile(this.props.user))
+        this.props.dispatch(updateSettings(this.props.user))
     }, 500)
 
     generateKey = () => {
@@ -48,7 +48,7 @@ class Profile extends Component {
             apiKey += chars.charAt(Math.floor(Math.random() * chars.length));
 
         this.props
-            .dispatch(commitUpdateProfile({...this.props.user, ...{apiKey: apiKey}}))
+            .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: apiKey}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -85,27 +85,27 @@ class Profile extends Component {
                                 <form role="form">
                                     <div className="box-body">
                                         <div className="form-group">
-                                            <label htmlFor="profile_key">Api key</label>
+                                            <label htmlFor="settings_key">Api key</label>
                                             <div className="input-group">
                                                 <div className="input-group-btn">
                                                     <button type="button" className="btn btn-default"
                                                             onClick={this.generateKey}>Generate
                                                     </button>
                                                 </div>
-                                                <input type="text" className="form-control" id="profile_key"
+                                                <input type="text" className="form-control" id="settings_key"
                                                        value={user.apiKey || ''} onChange={this.onUpdateApiKey}
                                                        placeholder="api key"/>
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="profile_key">Api usage</label>
+                                            <label htmlFor="settings_key">Api usage</label>
                                             <div className="input-group">
                                                 <div className="input-group-btn">
                                                     <button type="button" className="btn btn-default"
                                                             onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" />
                                                     </button>
                                                 </div>
-                                                <input type="text" className="form-control" id="profile_key"
+                                                <input type="text" className="form-control" id="settings_key"
                                                        value={clipbard || ''}
                                                        readOnly={true}
                                                        placeholder="api key"/>
@@ -137,4 +137,4 @@ export default connect(state => {
         user: state.user,
         clipbard: getClipboard(state.user)
     }
-})(Profile)
+})(Settings)
