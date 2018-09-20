@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import components from '../../uniflow/components';
 import { getCurrentHistory } from "../../reducers/history/actions";
 
-class ComponentSearch extends Component {
+class SearchComponent extends Component {
     state = {
         search: 'javascript'
     }
@@ -76,4 +76,4 @@ export default connect(state => {
     return {
         componentLabels: getComponentLabels(state.user.components, getCurrentHistory(state.history)),
     }
-})(ComponentSearch)
+})(SearchComponent)

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Ace, ComponentList, TagIt} from '../../../components/index'
+import {Ace, ListComponent, TagIt} from '../../../components/index'
 import {History, Runner} from '../../../models/index'
 import {
     commitPushFlow,
@@ -285,7 +285,7 @@ class Show extends Component {
                     </div>
                 </div>
 
-                <ComponentList stack={stack} runIndex={this.state.runIndex}
+                <ListComponent stack={stack} runIndex={this.state.runIndex}
                                onPush={this.onPushFlow}
                                onPop={this.onPopFlow}
                                onUpdate={this.onUpdateFlow}

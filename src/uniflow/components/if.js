@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {ComponentList} from '../../components/index'
+import {ListComponent} from '../../components/index'
 import {Bus} from '../../models/index'
 import createStore from '../../utils/createStore'
 import flow from '../../reducers/flow/index'
@@ -397,7 +397,7 @@ export default class ComponentIf extends Component<Props> {
                         </div>
                     </form>
                 </div>
-                <ComponentList stack={this.state.if.conditionStack} runIndex={this.state.if.conditionRunIndex}
+                <ListComponent stack={this.state.if.conditionStack} runIndex={this.state.if.conditionRunIndex}
                                onPush={(index, component) => {this.onPushFlow(['if', 'conditionStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['if', 'conditionStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['if', 'conditionStack'], index, data)}}
@@ -409,7 +409,7 @@ export default class ComponentIf extends Component<Props> {
                         </div>
                     </form>
                 </div>
-                <ComponentList stack={this.state.if.executeStack} runIndex={this.state.if.executeRunIndex}
+                <ListComponent stack={this.state.if.executeStack} runIndex={this.state.if.executeRunIndex}
                                onPush={(index, component) => {this.onPushFlow(['if', 'executeStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['if', 'executeStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['if', 'executeStack'], index, data)}}
@@ -428,7 +428,7 @@ export default class ComponentIf extends Component<Props> {
                             </div>
                         </form>
                     </div>
-                    <ComponentList stack={item.conditionStack} runIndex={item.conditionRunIndex}
+                    <ListComponent stack={item.conditionStack} runIndex={item.conditionRunIndex}
                                    onPush={(index, component) => {this.onPushFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['elseIfs', elseIfIndex, 'conditionStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, data)}}
@@ -440,7 +440,7 @@ export default class ComponentIf extends Component<Props> {
                             </div>
                         </form>
                     </div>
-                    <ComponentList stack={item.executeStack} runIndex={item.executeRunIndex}
+                    <ListComponent stack={item.executeStack} runIndex={item.executeRunIndex}
                                    onPush={(index, component) => {this.onPushFlow(['elseIfs', elseIfIndex, 'executeStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['elseIfs', elseIfIndex, 'executeStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['elseIfs', elseIfIndex, 'executeStack'], index, data)}}
@@ -460,7 +460,7 @@ export default class ComponentIf extends Component<Props> {
                             </div>
                         </form>
                     </div>
-                    <ComponentList stack={this.state.else.executeStack} runIndex={this.state.else.executeRunIndex}
+                    <ListComponent stack={this.state.else.executeStack} runIndex={this.state.else.executeRunIndex}
                                    onPush={(index, component) => {this.onPushFlow(['else', 'executeStack'], index, component)}}
                                    onPop={(index) => {this.onPopFlow(['else', 'executeStack'], index)}}
                                    onUpdate={(index, data) => {this.onUpdateFlow(['else', 'executeStack'], index, data)}}
