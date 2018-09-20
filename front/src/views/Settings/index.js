@@ -37,7 +37,7 @@ class Settings extends Component {
     }
 
     onUpdate = _.debounce(() => {
-        this.props.dispatch(updateSettings(this.props.user))
+        this.props.dispatch(updateSettings(this.props.user, this.props.auth.token))
     }, 500)
 
     generateKey = () => {
@@ -134,6 +134,7 @@ const getClipboard = (user) => {
 
 export default connect(state => {
     return {
+        auth: state.auth,
         user: state.user,
         clipbard: getClipboard(state.user)
     }

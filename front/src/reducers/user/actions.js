@@ -11,7 +11,7 @@ export const fetchComponents = (token) => {
         let data = Object.keys(components);
 
         return request
-            .post(server.getBaseUrl() + '/api/user/components', data, {
+            .put(server.getBaseUrl() + '/api/user/components', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

@@ -29,7 +29,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/components", name="api_user_components")
+     * @Route("/api/user/components", name="api_user_components", methods={"PUT"})
      */
     public function components(Request $request)
     {
@@ -40,16 +40,14 @@ class UserController extends Controller
         }
 
         $data = [];
-        if ('POST' === $request->getMethod()) {
-            $content = $request->getContent();
-            if (!empty($content)) {
-                $data = json_decode($content, true);
+        $content = $request->getContent();
+        if (!empty($content)) {
+            $data = json_decode($content, true);
 
-                if(!$this->isGranted('ROLE_SUPER_ADMIN') && $data) {
-                    $data = array_filter($data, function($item) {
-                        return in_array($item, array('code', 'text'));
-                    });
-                }
+            if(!$this->isGranted('ROLE_SUPER_ADMIN') && $data) {
+                $data = array_filter($data, function($item) {
+                    return in_array($item, array('code', 'text'));
+                });
             }
         }
 
@@ -59,7 +57,7 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/settings", name="api_user_settings")
+     * @Route("/api/user/settings", name="api_user_settings", methods={"GET", "PUT"})
      */
     public function settings(Request $request)
     {
@@ -69,7 +67,7 @@ class UserController extends Controller
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if ('POST' === $request->getMethod()) {
+        if ('PUT' === $request->getMethod()) {
             $form = $this->createForm(SettingsType::class, $user, array(
                 'csrf_protection' => false,
             ));
