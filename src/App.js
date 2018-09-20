@@ -11,10 +11,15 @@ import reducers from './reducers/index'
 import { UserManager } from './components/index'
 import createStore from './utils/createStore'
 import {getNewLogs,commitReadLog} from './reducers/log/actions'
+import {commitLoginUserSuccess} from './reducers/auth/actions'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
 let store = createStore(reducers)
+let token = localStorage.getItem('token');
+if (token !== null) {
+    store.dispatch(commitLoginUserSuccess(token));
+}
 
 class Alerts extends Component {
     onClose = (event, id) => {
