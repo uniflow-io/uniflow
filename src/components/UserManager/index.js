@@ -1,17 +1,27 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {fetchComponents, fetchProfile} from '../../reducers/user/actions'
+import {fetchComponents, fetchSettings} from '../../reducers/user/actions'
 import routes, {pathTo} from "../../routes";
 import {withRouter, matchPath} from 'react-router'
 import {fetchHistory, setCurrentHistory} from "../../reducers/history/actions";
 
-type Props = {
-    children: React.Node
-}
-
 class UserManager extends Component<Props> {
+    componentWillReceiveProps(nextProps) {
+        const oldProps = this.props;
+
+        if (nextProps.auth.token !== oldProps.auth.token) {
+            if(nextProps.auth.isAuthenticated) {
+                this.onFetchUser(nextProps.auth.token);
+            }
+        }
+    }
+
     componentDidMount() {
-        const {location, history} = this.props
+        const {history, auth} = this.props
+
+        if(auth.isAuthenticated) {
+            this.onFetchUser(auth.token);
+        }
 
         this.historyUnlisten = history.listen((location) => {
             const match = matchPath(location.pathname, {
@@ -23,8 +33,16 @@ class UserManager extends Component<Props> {
                 this.props.dispatch(setCurrentHistory(current))
             }
         })
+    }
 
-        /*this.props.dispatch(fetchHistory()).then(() => {
+    componentWillUnmount() {
+        this.historyUnlisten()
+    }
+
+    onFetchUser = (token) => {
+        const {history} = this.props
+
+        this.props.dispatch(fetchHistory(token)).then(() => {
             const flowMatch = matchPath(location.pathname, {
                 path: routes.flow.path,
                 exact: true
@@ -57,14 +75,8 @@ class UserManager extends Component<Props> {
             }
         })
 
-        this.props.dispatch(fetchComponents())
-            .then(() => {
-                return this.props.dispatch(fetchProfile())
-            })*/
-    }
-
-    componentWillUnmount() {
-        this.historyUnlisten()
+        this.props.dispatch(fetchComponents(token))
+        this.props.dispatch(fetchSettings(token))
     }
 
     render() {

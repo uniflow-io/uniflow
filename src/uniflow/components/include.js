@@ -47,7 +47,7 @@ class ComponentInclude extends Component<Props> {
 
         return Promise.resolve()
             .then(() => {
-                return this.props.dispatch(getHistoryData(history));
+                return this.props.dispatch(getHistoryData(history, this.props.auth.token));
             })
             .then((data) => {
                 if(!data) return;
@@ -205,6 +205,7 @@ class ComponentInclude extends Component<Props> {
 
 export default connect(state => {
     return {
+        auth: state.auth,
         history: state.history
     }
 })(ComponentInclude)
