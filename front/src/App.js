@@ -45,7 +45,7 @@ class Alerts extends Component {
     }
 }
 
-const DisplayAlerts = connect(state => ({
+Alerts = connect(state => ({
     logs: getNewLogs(state.logs)
 }))(Alerts)
 
@@ -153,7 +153,7 @@ class Header extends Component {
     }
 }
 
-const DisplayHeader = connect(state => ({
+Header = connect(state => ({
     auth: state.auth
 }))(withRouter(Header))
 
@@ -170,8 +170,8 @@ export default class App extends Component {
 
                             <div className="wrapper">
 
-                                <DisplayAlerts />
-                                <DisplayHeader />
+                                <Alerts />
+                                <Header />
 
                                 <Switch>
                                     {Object.values(routes).map(route => (
