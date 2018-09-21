@@ -5,6 +5,7 @@ import {
     COMMIT_SET_COMPONENTS,
     COMMIT_UPDATE_SETTINGS,
 } from './actionsTypes'
+import {commitLogoutUser} from "../auth/actions";
 
 export const fetchComponents = (token) => {
     return (dispatch) => {
@@ -18,7 +19,14 @@ export const fetchComponents = (token) => {
             })
             .then((response) => {
                 dispatch(commitSetComponents(Object.values(response.data)))
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const fetchSettings = (token) => {
@@ -31,7 +39,14 @@ export const fetchSettings = (token) => {
             })
             .then((response) => {
                 dispatch(commitUpdateSettings(response.data));
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const updateSettings = (item, token) => {
@@ -50,7 +65,14 @@ export const updateSettings = (item, token) => {
                 dispatch(commitUpdateSettings(data));
 
                 return data;
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const commitSetComponents = (components) => {

@@ -8,6 +8,7 @@ import {
     COMMIT_DELETE_HISTORY,
     COMMIT_SET_CURRENT_HISTORY,
 } from './actionsTypes'
+import {commitLogoutUser} from '../auth/actions'
 
 export const getCurrentHistory = (state) => {
     return state.current ? state.items[state.current] : null;
@@ -106,7 +107,14 @@ export const fetchHistory = (token) => {
 
                     dispatch(commitUpdateHistory(item));
                 }
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const createHistory = (item, token) => {
@@ -131,8 +139,12 @@ export const createHistory = (item, token) => {
 
                 return item;
             })
-            .catch(() => {
-                return Promise.reject(new Log({message: 'Create failed', code: Log.HISTORY_CREATE_FAIL}))
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
             })
         ;
     }
@@ -158,7 +170,14 @@ export const updateHistory = (item, token) => {
                 dispatch(commitUpdateHistory(item));
 
                 return item;
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const getHistoryData = (item, token) => {
@@ -171,7 +190,14 @@ export const getHistoryData = (item, token) => {
             })
             .then((response) => {
                 return response.data.data;
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const setHistoryData = (item, token) => {
@@ -189,8 +215,12 @@ export const setHistoryData = (item, token) => {
 
                 return response.data;
             })
-            .catch(() => {
-                return Promise.reject(new Log({message: 'Update data fail', code: Log.HISTORY_DATA_SET_FAIL}))
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
             })
         ;
     }
@@ -207,7 +237,14 @@ export const deleteHistory = (item, token) => {
                 dispatch(commitDeleteHistory(item));
 
                 return response.data;
-            });
+            })
+            .catch((error) => {
+                if(error.request.status === 401) {
+                    dispatch(commitLogoutUser());
+                } else {
+                    throw error
+                }
+            })
     }
 }
 export const setCurrentHistory = (current) => {
