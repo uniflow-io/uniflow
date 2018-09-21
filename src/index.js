@@ -7,8 +7,8 @@ const IO    = require('socket.io');
 let app = express();
 
 let options    = {
-    key: fs.readFileSync(__dirname + '/file.key'),
-    cert: fs.readFileSync(__dirname + '/file.crt')
+    key: fs.readFileSync(__dirname + '/../file.key'),
+    cert: fs.readFileSync(__dirname + '/../file.crt')
 };
 let serverPort = 3128;
 let server     = https.createServer(options, app);
