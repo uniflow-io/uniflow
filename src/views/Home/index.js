@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {pathTo} from "../../routes";
+import {Link} from "react-router-dom";
 
 class Home extends Component {
 
@@ -11,7 +13,7 @@ class Home extends Component {
                         <small>Control panel</small>
                     </h1>
                     <ol className="breadcrumb">
-                        <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
+                        <li><Link to={pathTo('home')}><i className="fa fa-dashboard"/> Home</Link></li>
                     </ol>
                 </section>
             </div>

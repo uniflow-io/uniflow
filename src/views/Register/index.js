@@ -7,6 +7,7 @@ import { withRouter } from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/log/actions";
 import {Log} from '../../models/index'
+import {Link} from "react-router-dom";
 
 class Register extends Component {
     state = {
@@ -48,7 +49,7 @@ class Register extends Component {
                         <small>Control panel</small>
                     </h1>
                     <ol className="breadcrumb">
-                        <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
+                        <li><Link to={pathTo('home')}><i className="fa fa-dashboard"/> Home</Link></li>
                         <li className="active">Register</li>
                     </ol>
                 </section>
