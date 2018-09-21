@@ -66,39 +66,48 @@ class Header extends Component {
     }
 
     onLocationChange = (location) => {
+        let active = null
+
         if (matchPath(location.pathname, {
             path: routes.home.path,
             exact: true
         })) {
-            this.setState({active: 'home'})
+            active = 'home'
         } else if(matchPath(location.pathname, {
             path: routes.dashboard.path,
             exact: true
         }) || matchPath(location.pathname, {
             path: routes.flow.path
         })) {
-            this.setState({active: 'dashboard'})
+            active = 'dashboard'
         } else if(matchPath(location.pathname, {
             path: routes.faq.path,
             exact: true
         })) {
-            this.setState({active: 'faq'})
+            active = 'faq'
         } else if(matchPath(location.pathname, {
             path: routes.logs.path,
             exact: true
         })) {
-            this.setState({active: 'logs'})
+            active = 'logs'
         } else if(matchPath(location.pathname, {
             path: routes.settings.path,
             exact: true
         })) {
-            this.setState({active: 'settings'})
+            active = 'settings'
         } else if(matchPath(location.pathname, {
             path: routes.login.path,
             exact: true
         })) {
-            this.setState({active: 'login'})
+            active = 'login'
+        } else if(matchPath(location.pathname, {
+            path: routes.register.path,
+            exact: true
+        })) {
+            active = 'login'
         }
+
+        this.setState({active: active})
     }
 
     onLogout = (e) => {
