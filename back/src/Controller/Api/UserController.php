@@ -29,6 +29,18 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
+     * @Route("/api/user/register", name="api_user_register", methods={"POST"})
+     */
+    public function register(Request $request)
+    {
+        $data = [];
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
      * @Route("/api/user/components", name="api_user_components", methods={"PUT"})
      */
     public function components(Request $request)
