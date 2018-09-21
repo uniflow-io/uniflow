@@ -1,4 +1,4 @@
-import { FAQ, Home, Flow, Logs, Login, Settings } from './views/index'
+import { FAQ, Home, Flow, Logs, Login, Register, Settings } from './views/index'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components/index'
 
@@ -12,6 +12,11 @@ const routes = {
         path: '/login',
         exact: true,
         component: Login,
+    },
+    register: {
+        path: '/register',
+        exact: true,
+        component: Register,
     },
     faq: {
         path: '/faq',

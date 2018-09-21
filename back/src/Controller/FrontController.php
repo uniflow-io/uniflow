@@ -26,6 +26,14 @@ class FrontController extends Controller
     }
 
     /**
+     * @Route("/register", name="register")
+     */
+    public function register()
+    {
+        return $this->render('default/register.html.twig');
+    }
+
+    /**
      * @Route("/logout", name="logout")
      */
     public function logout()

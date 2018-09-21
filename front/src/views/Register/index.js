@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
-    login,
+    register,
 } from '../../reducers/auth/actions'
-import {withRouter} from 'react-router'
+import { withRouter } from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/log/actions";
 import {Log} from '../../models/index'
-import {Link} from "react-router-dom";
 
-class Login extends Component {
+class Register extends Component {
     state = {
         username: null,
         password: null,
@@ -26,9 +25,9 @@ class Login extends Component {
     onSubmit = (e) => {
         e.preventDefault()
 
-        this.props.dispatch(login(this.state.username, this.state.password))
+        this.props.dispatch(register(this.state.username, this.state.password))
             .then(() => {
-                if (this.props.auth.isAuthenticated) {
+                if(this.props.auth.isAuthenticated) {
                     this.props.history.push(pathTo('dashboard'))
                 } else {
                     return this.props.dispatch(commitAddLog(this.props.auth.statusText, Log.USER_LOGIN_FAIL))
@@ -37,75 +36,62 @@ class Login extends Component {
     }
 
     render() {
-        const {auth}               = this.props
-        const {username, password} = this.state
+        const { auth } = this.props
+        const { username, password } = this.state
 
         return (
             <div className="content-wrapper">
 
                 <section className="content-header">
                     <h1>
-                        Login
+                        Register
                         <small>Control panel</small>
                     </h1>
                     <ol className="breadcrumb">
                         <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
-                        <li className="active">Login</li>
+                        <li className="active">Register</li>
                     </ol>
                 </section>
 
-                <div className="container-fluid content content-login">
+                <div className="container-fluid content content-register">
 
                     <div className="row">
                         <div className="col-sm-6 col-sm-offset-3">
                             <div className="box box-default">
                                 <div className="box-header with-border">
-                                    <h3 className="box-title">Login</h3>
+                                    <h3 className="box-title">Register</h3>
                                 </div>
                                 <div className="box-body">
 
                                     <form>
 
                                         <div className="form-group col-sm-12">
-                                            <input className="form-control" id="username{{ _uid }}" type="text"
-                                                   value={username || ''} onChange={this.onChangeUsername}
-                                                   placeholder="Email or Username"/>
+                                            <input className="form-control" id="username{{ _uid }}" type="text" value={username || ''} onChange={this.onChangeUsername} placeholder="Email" />
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <input className="form-control" id="password{{ _uid }}" type="password"
-                                                   value={password || ''} onChange={this.onChangePassword}
-                                                   placeholder="Password"/>
+                                            <input className="form-control" id="password{{ _uid }}" type="password" value={password || ''} onChange={this.onChangePassword} placeholder="Password"/>
                                         </div>
 
                                         <div className="form-group col-sm-12">
                                             <button type="submit"
                                                     className="btn btn-primary btn-block btn-flat"
                                                     disabled={auth.isAuthenticating}
-                                                    onClick={this.onSubmit}>Login
-                                            </button>
+                                                    onClick={this.onSubmit}>Register</button>
                                         </div>
 
                                         {/*<div class="form-group col-sm-12">
                                             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
-                                            class="btn btn-info btn-block btn-flat">{{'user.login.facebook' | trans}}</a>
+                                            class="btn btn-info btn-block btn-flat">{{'user.register.facebook' | trans}}</a>
                                             </div>*/}
 
                                         {/*<div class="form-group col-sm-12">
-                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.login.meetup' | trans}}</a>
+                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.register.meetup' | trans}}</a>
                                             </div>*/}
 
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-6 col-sm-offset-3">
-                            <p><Link to={pathTo('register')}><span
-                                className="glyphicon glyphicon-log-in register"
-                                aria-hidden="true"/> Register</Link></p>
                         </div>
                     </div>
 
@@ -119,4 +105,4 @@ export default connect(state => {
     return {
         auth: state.auth
     }
-})(withRouter(Login))
+})(withRouter(Register))
