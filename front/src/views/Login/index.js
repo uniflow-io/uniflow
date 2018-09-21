@@ -49,7 +49,7 @@ class Login extends Component {
                         <small>Control panel</small>
                     </h1>
                     <ol className="breadcrumb">
-                        <li><a href="#"><i className="fa fa-dashboard"/> Home</a></li>
+                        <li><Link to={pathTo('home')}><i className="fa fa-dashboard"/> Home</Link></li>
                         <li className="active">Login</li>
                     </ol>
                 </section>
