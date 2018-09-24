@@ -11,12 +11,12 @@ import {Link} from "react-router-dom";
 
 class Register extends Component {
     state = {
-        username: null,
+        email: null,
         password: null,
     }
 
-    onChangeUsername = (event) => {
-        this.setState({username: event.target.value})
+    onChangeEmail = (event) => {
+        this.setState({email: event.target.value})
     }
 
     onChangePassword = (event) => {
@@ -26,7 +26,7 @@ class Register extends Component {
     onSubmit = (e) => {
         e.preventDefault()
 
-        this.props.dispatch(register(this.state.username, this.state.password))
+        this.props.dispatch(register(this.state.email, this.state.password))
             .then(() => {
                 if(this.props.auth.isAuthenticated) {
                     this.props.history.push(pathTo('dashboard'))
@@ -38,7 +38,7 @@ class Register extends Component {
 
     render() {
         const { auth } = this.props
-        const { username, password } = this.state
+        const { email, password } = this.state
 
         return (
             <div className="content-wrapper">
@@ -67,7 +67,7 @@ class Register extends Component {
                                     <form>
 
                                         <div className="form-group col-sm-12">
-                                            <input className="form-control" id="username{{ _uid }}" type="text" value={username || ''} onChange={this.onChangeUsername} placeholder="Email" />
+                                            <input className="form-control" id="email{{ _uid }}" type="text" value={email || ''} onChange={this.onChangeEmail} placeholder="Email" />
                                         </div>
 
                                         <div className="form-group col-sm-12">

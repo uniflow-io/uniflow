@@ -29,14 +29,14 @@ export const commitLoginUserSuccess = (token) => {
     }
 }
 
-export const commitLoginUserFailure = (error) => {
+export const commitLoginUserFailure = (error, message = null) => {
     localStorage.removeItem('token');
 
     return (dispatch) => {
         dispatch({
             type: COMMIT_LOGIN_USER_FAILURE,
             status: error.response.status,
-            statusText: error.response.statusText
+            statusText: message || error.response.statusText
         })
         return Promise.resolve()
     }
@@ -80,5 +80,35 @@ export const login = (username, password) => {
                     })
                     ;
         })
+    }
+}
+
+export const register = (email, password) => {
+    return (dispatch) => {
+        return dispatch(commitLoginUserRequest())
+            .then(() => {
+                return request
+                    .post(server.getBaseUrl() + '/api/register', {
+                        'email': email,
+                        'password': password,
+                    })
+                    .then((response) => {
+                        try {
+                            jwtDecode(response.data.token);
+                            return dispatch(commitLoginUserSuccess(response.data.token));
+                        } catch (e) {
+                            return dispatch(commitLoginUserFailure({
+                                response: {
+                                    status: 403,
+                                    statusText: 'Invalid token'
+                                }
+                            }));
+                        }
+                    })
+                    .catch((error) => {
+                        dispatch(commitLoginUserFailure(error, error.response.data.message));
+                    })
+                    ;
+            })
     }
 }
