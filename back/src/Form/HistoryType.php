@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\History;
 use App\Form\Transformer\TagTransformer;
 use App\Services\TagService;
 use Doctrine\ORM\EntityRepository;
@@ -60,7 +61,7 @@ class HistoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'App\Entity\History',
+            'data_class' => History::class,
         ));
     }
 }
