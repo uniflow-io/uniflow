@@ -40,7 +40,7 @@ class SecurityController extends Controller
     /**
      * @throws \Exception
      *
-     * @Route("/api/register", name="api_login_check", methods={"POST"})
+     * @Route("/api/register", name="api_register", methods={"POST"})
      */
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
