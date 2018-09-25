@@ -142,7 +142,7 @@ class Show extends Component {
             this.props
                 .dispatch(setHistoryData(history, this.props.auth.token))
                 .catch((log) => {
-                    return this.props.dispatch(commitAddLog(log.message, log.code))
+                    return this.props.dispatch(commitAddLog(log.message))
                 })
         }
     }, 500)
@@ -198,7 +198,7 @@ class Show extends Component {
                 return this.props.dispatch(setCurrentHistory(history.id));
             })
             .catch((log) => {
-                return this.props.dispatch(commitAddLog(log.message, log.code))
+                return this.props.dispatch(commitAddLog(log.message))
             })
         ;
     }

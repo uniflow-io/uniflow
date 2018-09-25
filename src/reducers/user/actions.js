@@ -6,13 +6,14 @@ import {
     COMMIT_UPDATE_SETTINGS,
 } from './actionsTypes'
 import {commitLogoutUser} from "../auth/actions";
+import {commitAddLog} from "../log/actions";
 
 export const fetchComponents = (token) => {
     return (dispatch) => {
         let data = Object.keys(components);
 
         return request
-            .put(server.getBaseUrl() + '/api/user/components', data, {
+            .put(server.getBaseUrl() + '/api/user/getComponents', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -32,7 +33,7 @@ export const fetchComponents = (token) => {
 export const fetchSettings = (token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/user/settings', {
+            .get(server.getBaseUrl() + '/api/user/getSettings', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -59,7 +60,7 @@ export const updateSettings = (item, token) => {
         };
 
         return request
-            .put(server.getBaseUrl() + '/api/user/settings', data, {
+            .put(server.getBaseUrl() + '/api/user/setSettings', data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -70,7 +71,9 @@ export const updateSettings = (item, token) => {
                 return data;
             })
             .catch((error) => {
-                if(error.request.status === 401) {
+                if(error.request.status === 400) {
+                    dispatch(commitAddLog(error.response.data.message));
+                } else if(error.request.status === 401) {
                     dispatch(commitLogoutUser());
                 } else {
                     throw error

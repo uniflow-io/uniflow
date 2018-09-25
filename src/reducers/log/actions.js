@@ -12,12 +12,11 @@ export const getNewLogs = (state) => {
     }, {})
 }
 
-export const commitAddLog = (message, code) => {
+export const commitAddLog = (message) => {
     return (dispatch) => {
         dispatch({
             type: COMMIT_ADD_LOG,
-            message,
-            code
+            message
         })
         return Promise.resolve()
     }
