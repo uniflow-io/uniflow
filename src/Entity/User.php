@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="dw_user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email", message="The email '{{ value }}' is already used.")
- * @UniqueEntity("username")
+ * @UniqueEntity("username", message="The username '{{ value }}' is already used.")
  */
 class User implements UserInterface, \Serializable
 {
