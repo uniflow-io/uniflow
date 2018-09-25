@@ -22,7 +22,15 @@ if (token !== null) {
     store.dispatch(commitLoginUserSuccess(token));
 }
 
-class Alerts extends Component {
+class Alert extends Component {
+    componentDidMount() {
+        const { alert, logs} = this.props
+
+        setTimeout(() => {
+            this.props.dispatch(commitReadLog(logs[alert].id))
+        }, 5000)
+    }
+
     onClose = (event, id) => {
         event.preventDefault()
 
@@ -30,15 +38,29 @@ class Alerts extends Component {
     }
 
     render() {
+        const { alert, logs} = this.props
+
+        return (
+            <div className="alert alert-danger" style={{marginBottom: '0px'}}>
+                <button type="button" className="close" aria-hidden="true" onClick={(event) => this.onClose(event, logs[alert].id)}>×</button>
+                <h4><i className="icon fa fa-ban" /> {logs[alert].message}</h4>
+            </div>
+        )
+    }
+}
+
+Alert = connect(state => ({
+    logs: getNewLogs(state.logs)
+}))(Alert)
+
+class Alerts extends Component {
+    render() {
         const {logs} = this.props
 
         return (
             <div>
                 {Object.keys(logs).map((key, index) => (
-                    <div key={index} className="alert alert-danger" style={{marginBottom: '0px'}}>
-                        <button type="button" className="close" aria-hidden="true" onClick={(event) => this.onClose(event, logs[key].id)}>×</button>
-                        <h4><i className="icon fa fa-ban" /> {logs[key].message}</h4>
-                    </div>
+                    <Alert key={key} alert={key} />
                 ))}
             </div>
         )
