@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 
 export default () => (
     <div className="content-wrapper">
-        {/* Content Header (Page header) */}
         <section className="content-header">
             <h1>
                 FAQ

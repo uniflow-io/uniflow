@@ -10,7 +10,6 @@ class Flow extends Component<Props> {
     render() {
         return (
             <div id="flow" className="content-wrapper">
-                {/* Content Header (Page header) */}
                 <section className="content-header">
                     <h1>
                         Dashboard

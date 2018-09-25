@@ -24,47 +24,57 @@ function copyTextToClipboard(text) {
 }
 
 class Settings extends Component {
+    state = {
+        user: {
+            apiKey: null,
+            username: null,
+            firstName: null,
+            lastName: null,
+        },
+        isSaving: false
+    }
+
+    componentDidMount() {
+        this.setState({user: Object.assign({}, this.props.user)})
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({user: Object.assign({}, nextProps.user)})
+    }
+
     onUpdateFirstname = (event) => {
-        this.props
-            .dispatch(commitUpdateSettings({...this.props.user, ...{firstname: event.target.value}}))
-            .then(() => {
-                this.onUpdate()
-            })
+        this.setState({user: {...this.state.user, ...{firstname: event.target.value}}})
     }
 
     onUpdateLastname = (event) => {
-        this.props
-            .dispatch(commitUpdateSettings({...this.props.user, ...{lastname: event.target.value}}))
-            .then(() => {
-                this.onUpdate()
-            })
+        this.setState({user: {...this.state.user, ...{lastname: event.target.value}}})
     }
 
     onUpdateUsername = (event) => {
-        this.props
-            .dispatch(commitUpdateSettings({...this.props.user, ...{username: event.target.value}}))
-            .then(() => {
-                this.onUpdate()
-            })
+        this.setState({user: {...this.state.user, ...{username: event.target.value}}})
     }
 
     onUpdateApiKey = (event) => {
-        this.props
-            .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: event.target.value}}))
-            .then(() => {
-                this.onUpdate()
-            })
+        this.setState({user: {...this.state.user, ...{apiKey: event.target.value}}})
     }
 
     onCopyApiUsage = (event) => {
-        const {clipbard} = this.props;
+        const { user } = this.state
+        const clipbard = this.getClipboard(user)
 
         copyTextToClipboard(clipbard)
     }
 
-    onUpdate = _.debounce(() => {
-        this.props.dispatch(updateSettings(this.props.user, this.props.auth.token))
-    }, 500)
+    onUpdate = (event) => {
+        event.preventDefault()
+
+        this.setState({'isSaving': true}, () => {
+            this.props.dispatch(updateSettings(this.state.user, this.props.auth.token))
+                .then(() => {
+                    this.setState({'isSaving': false})
+                })
+        })
+    }
 
     generateKey = () => {
         let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -75,17 +85,22 @@ class Settings extends Component {
 
         this.props
             .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: apiKey}}))
-            .then(() => {
-                this.onUpdate()
-            })
+    }
+
+    getClipboard = (user) => {
+        if(user.apiKey) {
+            return 'node -e "$(curl -s https://uniflow.io/dist/js/bash.js)" - --api-key=' + user.apiKey
+        }
+
+        return null
     }
 
     render() {
-        const {user, clipbard} = this.props;
+        const { user, isSaving } = this.state
+        const clipbard = this.getClipboard(user)
 
         return (
             <div className="content-wrapper">
-                {/* Content Header (Page header) */}
                 <section className="content-header">
                     <h1>
                         Settings
@@ -163,6 +178,13 @@ class Settings extends Component {
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div className="form-group col-sm-12">
+                                            <button type="submit"
+                                                    className="btn btn-primary btn-block btn-flat"
+                                                    disabled={isSaving}
+                                                    onClick={this.onUpdate}>Save</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -170,24 +192,14 @@ class Settings extends Component {
                         </div>
                     </div>
                 </section>
-                {/* /.content */}
             </div>
         )
     }
-}
-
-const getClipboard = (user) => {
-    if(user.apiKey) {
-        return 'node -e "$(curl -s https://uniflow.io/dist/js/bash.js)" - --api-key=' + user.apiKey
-    }
-
-    return null
 }
 
 export default connect(state => {
     return {
         auth: state.auth,
         user: state.user,
-        clipbard: getClipboard(state.user)
     }
 })(Settings)
