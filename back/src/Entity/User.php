@@ -53,14 +53,14 @@ class User implements UserInterface, \Serializable
      *
      * @ORM\Column(length=255, nullable=true)
      */
-    protected $firstName;
+    protected $firstname;
 
     /**
      * Lastname.
      *
      * @ORM\Column(length=255, nullable=true)
      */
-    protected $lastName;
+    protected $lastname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -114,7 +114,7 @@ class User implements UserInterface, \Serializable
 
     public function __toString()
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     public function getSalt()
@@ -186,51 +186,51 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set firstName.
+     * Set firstname.
      *
-     * @param string $firstName
+     * @param string $firstname
      *
      * @return User
      */
-    public function setFirstName($firstName)
+    public function setFirstname($firstname)
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
     /**
-     * Get firstName.
+     * Get firstname.
      *
      * @return string
      */
-    public function getFirstName()
+    public function getFirstname()
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
-     * Set lastName.
+     * Set lastname.
      *
-     * @param string $lastName
+     * @param string $lastname
      *
      * @return User
      */
-    public function setLastName($lastName)
+    public function setLastname($lastname)
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
 
         return $this;
     }
 
     /**
-     * Get lastName.
+     * Get lastname.
      *
      * @return string
      */
-    public function getLastName()
+    public function getLastname()
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
     /**

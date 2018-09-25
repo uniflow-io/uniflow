@@ -18,6 +18,9 @@ class SettingsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('firstname', TextType::class);
+        $builder->add('lastname', TextType::class);
+        $builder->add('username', TextType::class);
         $builder->add('apiKey', TextType::class);
     }
 
