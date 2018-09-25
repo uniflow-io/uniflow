@@ -112,6 +112,9 @@ class UserService
     public function getJsonSettings(User $user)
     {
         return array(
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'username' => $user->getUsername(),
             'apiKey' => $user->getApiKey(),
         );
     }
