@@ -179,11 +179,13 @@ class Settings extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="form-group col-sm-12">
-                                            <button type="submit"
-                                                    className="btn btn-primary btn-block btn-flat"
-                                                    disabled={isSaving}
-                                                    onClick={this.onUpdate}>Save</button>
+                                        <div className="form-group">
+                                            <div className="col-sm-offset-2 col-sm-10">
+                                                <button type="submit"
+                                                        className="btn btn-primary btn-block btn-flat"
+                                                        disabled={isSaving}
+                                                        onClick={this.onUpdate}>Save</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
