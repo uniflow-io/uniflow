@@ -24,6 +24,30 @@ function copyTextToClipboard(text) {
 }
 
 class Settings extends Component {
+    onUpdateFirstname = (event) => {
+        this.props
+            .dispatch(commitUpdateSettings({...this.props.user, ...{firstname: event.target.value}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
+    onUpdateLastname = (event) => {
+        this.props
+            .dispatch(commitUpdateSettings({...this.props.user, ...{lastname: event.target.value}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
+    onUpdateUsername = (event) => {
+        this.props
+            .dispatch(commitUpdateSettings({...this.props.user, ...{username: event.target.value}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
     onUpdateApiKey = (event) => {
         this.props
             .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: event.target.value}}))
@@ -78,43 +102,69 @@ class Settings extends Component {
                     <div className="row">
                         <div className="col-md-12">
 
-                            <h3>Settings</h3>
-
                             <div className="box box-primary">
                                 <div className="box-header with-border">
                                     <h3 className="box-title">Settings</h3>
                                 </div>
-                                <form role="form">
-                                    <div className="box-body">
+                                <div className="box-body">
+                                    <form className="form-horizontal">
                                         <div className="form-group">
-                                            <label htmlFor="settings_key">Api key</label>
+                                            <label htmlFor="settings_firstname" className="col-sm-2 control-label">Firstname</label>
+                                            <div className="col-sm-10">
+                                                <input type="text" className="form-control" id="settings_firstname"
+                                                       value={user.firstname || ''} onChange={this.onUpdateFirstname}
+                                                       placeholder="Firstname"/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_lastname" className="col-sm-2 control-label">Lastname</label>
+                                            <div className="col-sm-10">
+                                                <input type="text" className="form-control" id="settings_lastname"
+                                                       value={user.lastname || ''} onChange={this.onUpdateLastname}
+                                                       placeholder="Lastname"/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_username" className="col-sm-2 control-label">Username</label>
+                                            <div className="col-sm-10">
+                                                <input type="text" className="form-control" id="settings_username"
+                                                       value={user.username || ''} onChange={this.onUpdateUsername}
+                                                       placeholder="Username"/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_apiKey" className="col-sm-2 control-label">Api key</label>
+                                            <div className="col-sm-10">
                                             <div className="input-group">
                                                 <div className="input-group-btn">
                                                     <button type="button" className="btn btn-default"
                                                             onClick={this.generateKey}>Generate
                                                     </button>
                                                 </div>
-                                                <input type="text" className="form-control" id="settings_key"
+                                                <input type="text" className="form-control" id="settings_apiKey"
                                                        value={user.apiKey || ''} onChange={this.onUpdateApiKey}
                                                        placeholder="api key"/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="form-group">
-                                            <label htmlFor="settings_key">Api usage</label>
-                                            <div className="input-group">
-                                                <div className="input-group-btn">
-                                                    <button type="button" className="btn btn-default"
-                                                            onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" />
-                                                    </button>
+                                            <label htmlFor="settings_key" className="col-sm-2 control-label">Api usage</label>
+                                            <div className="col-sm-10">
+                                                <div className="input-group">
+                                                    <div className="input-group-btn">
+                                                        <button type="button" className="btn btn-default"
+                                                                onClick={this.onCopyApiUsage}><i className="fa fa-clipboard" />
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" className="form-control" id="settings_key"
+                                                           value={clipbard || ''}
+                                                           readOnly={true}
+                                                           placeholder="api key"/>
                                                 </div>
-                                                <input type="text" className="form-control" id="settings_key"
-                                                       value={clipbard || ''}
-                                                       readOnly={true}
-                                                       placeholder="api key"/>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
 
                         </div>

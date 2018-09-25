@@ -52,6 +52,9 @@ export const fetchSettings = (token) => {
 export const updateSettings = (item, token) => {
     return (dispatch) => {
         let data = {
+            firstname: item.firstname,
+            lastname: item.lastname,
+            username: item.username,
             apiKey: item.apiKey
         };
 
@@ -84,11 +87,11 @@ export const commitSetComponents = (components) => {
         return Promise.resolve()
     }
 }
-export const commitUpdateSettings = (item) => {
+export const commitUpdateSettings = (user) => {
     return (dispatch) => {
         dispatch({
             type: COMMIT_UPDATE_SETTINGS,
-            item
+            user
         })
         return Promise.resolve()
     }

@@ -6,6 +6,9 @@ import {
 const defaultState = {
     components: {},
     apiKey: null,
+    username: null,
+    firstName: null,
+    lastName: null,
 }
 
 const user = (state = defaultState, action) => {
@@ -18,7 +21,7 @@ const user = (state = defaultState, action) => {
         case COMMIT_UPDATE_SETTINGS:
             return {
                 ...state,
-                ...{apiKey: action.item.apiKey}
+                ...action.user
             }
         default:
             return state
