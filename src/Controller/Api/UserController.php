@@ -56,11 +56,11 @@ class UserController extends Controller
         if (!empty($content)) {
             $data = json_decode($content, true);
 
-            if(!$this->isGranted('ROLE_SUPER_ADMIN') && $data) {
+            /*if(!$this->isGranted('ROLE_SUPER_ADMIN') && $data) {
                 $data = array_filter($data, function($item) {
                     return in_array($item, array('code', 'text'));
                 });
-            }
+            }*/
         }
 
         return new JsonResponse($data);
