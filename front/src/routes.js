@@ -38,6 +38,14 @@ const routes = {
         path: '/me/flow/:id',
         component: requireAuthentication(Flow),
     },
+    user: {
+        path: '/:user',
+        component: requireAuthentication(Flow),
+    },
+    user_flow: {
+        path: '/:user/flow/:id',
+        component: requireAuthentication(Flow),
+    },
 }
 
 export const pathTo = (view, params = {}) => {
