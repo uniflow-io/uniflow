@@ -28,7 +28,7 @@ class History extends Component {
                 return this.props.dispatch(setCurrentHistory(item.id))
             })
             .catch((log) => {
-                return this.props.dispatch(commitAddLog(log.message, log.code))
+                return this.props.dispatch(commitAddLog(log.message))
             })
     }
 

@@ -13,7 +13,6 @@ const logs = (state = defaultState, action) => {
             let item = new Log({
                 id: id,
                 message: action.message,
-                code: action.code,
                 status: 'new'
             })
             id ++

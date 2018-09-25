@@ -31,7 +31,7 @@ class Register extends Component {
                 if(this.props.auth.isAuthenticated) {
                     this.props.history.push(pathTo('dashboard'))
                 } else {
-                    return this.props.dispatch(commitAddLog(this.props.auth.statusText, Log.USER_LOGIN_FAIL))
+                    return this.props.dispatch(commitAddLog(this.props.auth.statusText))
                 }
             })
     }
