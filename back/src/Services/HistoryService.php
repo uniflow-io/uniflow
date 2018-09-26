@@ -81,6 +81,18 @@ class HistoryService
         return $this->historyRepository->findOneByUser($user, $id);
     }
 
+    /**
+     * @param string $username
+     * @param string $slug
+     * @param null $id
+     * @return History
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByUsernameAndSlug($username, $slug)
+    {
+        return $this->historyRepository->findOneByUsernameAndSlug($username, $slug);
+    }
+
     public function getJsonHistory(History $history)
     {
         $tags = array();
