@@ -25,7 +25,8 @@ import Select2 from "../../../components/Select2";
 
 class Show extends Component {
     state = {
-        fetchedId: null,
+        fetchedSlug: null,
+        fetchedUsername: null,
         runIndex: null,
     }
 
@@ -121,20 +122,20 @@ class Show extends Component {
 
                 history.data = data;
 
-                if (history.id !== this.props.history.id) return;
+                if (history.slug !== this.props.history.slug) return;
 
                 return this.setFlow(history.deserialiseFlowData());
             })
             .then(() => {
                 if (this.isMounted()) {
-                    this.setState({fetchedId: history.id})
+                    this.setState({fetchedSlug: history.slug})
                 }
             })
     }, 500)
 
     onUpdateFlowData = _.debounce(() => {
         let {history, stack} = this.props
-        if (history.id !== this.state.fetchedId) return;
+        if (history.slug !== this.state.fetchedSlug) return;
 
         let data = history.data;
         history.serialiseFlowData(stack);
@@ -199,11 +200,11 @@ class Show extends Component {
 
         this.props.dispatch(createHistory(history, this.props.auth.token))
             .then((item) => {
-                history.id = item.id;
+                history.slug = item.slug;
                 return this.props.dispatch(setHistoryData(history, this.props.auth.token));
             })
             .then(() => {
-                return this.props.dispatch(setCurrentHistory(history.id));
+                return this.props.dispatch(setCurrentHistory(history.slug));
             })
             .catch((log) => {
                 return this.props.dispatch(commitAddLog(log.message))
