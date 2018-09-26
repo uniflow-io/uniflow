@@ -107,6 +107,7 @@ class HistoryService
         return array(
             'id'          => $history->getId(),
             'title'       => $history->getTitle(),
+            'slug'        => $history->getSlug(),
             'platform'    => $history->getPlatform(),
             'tags'        => $tags,
             'description' => $history->getDescription(),
