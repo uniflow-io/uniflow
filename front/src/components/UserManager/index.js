@@ -29,11 +29,10 @@ class UserManager extends Component<Props> {
                 exact: true
             })
             if (match) {
-                const current = parseInt(match.params.id)
-                this.props.dispatch(setCurrentHistory(current))
+                this.props.dispatch(setCurrentHistory(match.params.slug))
 
                 if(user.username) {
-                    history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                    history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
                 }
             }
         })
@@ -70,15 +69,13 @@ class UserManager extends Component<Props> {
                 }
 
                 if (flowMatch) {
-                    const current = parseInt(flowMatch.params.id)
-                    this.props.dispatch(setCurrentHistory(current))
+                    this.props.dispatch(setCurrentHistory(flowMatch.params.slug))
 
                     if(user.username) {
-                        history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                        history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
                     }
                 } else if (userFlowMatch) {
-                    const current = parseInt(userFlowMatch.params.id)
-                    this.props.dispatch(setCurrentHistory(current))
+                    this.props.dispatch(setCurrentHistory(userFlowMatch.params.slug))
                 } else if (dashboardMatch) {
                     let keys = Object.keys(this.props.items)
 
@@ -91,12 +88,12 @@ class UserManager extends Component<Props> {
 
                     if (keys.length > 0) {
                         let item = this.props.items[keys[0]]
-                        this.props.dispatch(setCurrentHistory(item.id))
+                        this.props.dispatch(setCurrentHistory(item.slug))
                             .then(() => {
                                 if(user.username) {
-                                    history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                                    history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
                                 } else {
-                                    history.push(pathTo('flow', {id: item.id}))
+                                    history.push(pathTo('flow', {slug: item.slug}))
                                 }
                             })
                     } else if(user.username) {

@@ -35,7 +35,7 @@ const routes = {
         component: requireAuthentication(Flow),
     },
     flow: {
-        path: '/me/flow/:id',
+        path: '/me/flow/:slug',
         component: requireAuthentication(Flow),
     },
     userDashboard: {
@@ -43,7 +43,7 @@ const routes = {
         component: requireAuthentication(Flow),
     },
     userFlow: {
-        path: '/:username/flow/:id',
+        path: '/:username/flow/:slug',
         component: requireAuthentication(Flow),
     },
 }
