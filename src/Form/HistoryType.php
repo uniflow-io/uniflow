@@ -46,6 +46,7 @@ class HistoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', TextType::class);
+        $builder->add('slug', TextType::class);
         $builder->add('platform', TextType::class);
         $builder->add('tags', CollectionType::class, array(
             'entry_type' => TextType::class,
