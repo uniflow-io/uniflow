@@ -155,6 +155,14 @@ class Show extends Component {
             })
     }
 
+    onUpdateSlug = (event) => {
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{slug: event.target.value}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
     onChangePlatform = (selected) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{platform: selected}}))
@@ -240,6 +248,15 @@ class Show extends Component {
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" id="info_title_{{ _uid }}"
                                            value={history.title} onChange={this.onUpdateTitle} placeholder="Title"/>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 control-label">Slug</label>
+
+                                <div className="col-sm-10">
+                                    <input type="text" className="form-control" id="info_slug_{{ _uid }}"
+                                           value={history.slug} onChange={this.onUpdateSlug} placeholder="Slug"/>
                                 </div>
                             </div>
 

@@ -153,6 +153,7 @@ export const updateHistory = (item, token) => {
     return (dispatch) => {
         let data = {
             title: item.title,
+            slug: item.slug,
             platform: item.platform,
             tags: item.tags,
             description: item.description
