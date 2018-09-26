@@ -2,13 +2,35 @@
 
 namespace App\Controller;
 
+use App\Services\HistoryService;
+use App\Services\UserService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class FrontController extends Controller
 {
+    /**
+     * @var HistoryService
+     */
+    protected $historyService;
+
+    /**
+     * @var UserService
+     */
+    protected $userService;
+
+    public function __construct(
+        HistoryService $historyService,
+        UserService $userService
+    )
+    {
+        $this->historyService = $historyService;
+        $this->userService = $userService;
+    }
+
     /**
      * @Route("/", name="home")
      */
@@ -74,10 +96,47 @@ class FrontController extends Controller
     }
 
     /**
-     * @Route("/me/flow/{id}", name="flow")
+     * @Route("/me/flow/{slug}", name="flow")
+     *
+     * @param $slug
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function flow()
+    public function flow($slug)
     {
+        return $this->render('default/flow.html.twig');
+    }
+
+    /**
+     * @Route("/{username}", name="userDashboard")
+     *
+     * @param $username
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function userDashboard($username)
+    {
+        $user = $this->userService->findOneByUsername($username);
+        if(is_null($user)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('default/dashboard.html.twig');
+    }
+
+    /**
+     * @Route("/{username}/flow/{slug}", name="userFlow")
+     *
+     * @param $username
+     * @param $slug
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function userFlow($username, $slug)
+    {
+        $history = $this->historyService->findOneByUsernameAndSlug($username, $slug);
+        if(is_null($history)) {
+            throw new NotFoundHttpException();
+        }
+
         return $this->render('default/flow.html.twig');
     }
 }

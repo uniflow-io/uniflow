@@ -43,6 +43,28 @@ class HistoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $username
+     * @param $slug
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByUsernameAndSlug($username, $slug)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->leftJoin('h.user', 'u')
+            ->andWhere('u.username = :username')->setParameter('username', $username)
+            ->andWhere('h.slug = :slug')->setParameter('slug', $slug)
+        ;
+
+        $qb->setMaxResults(1);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
      * @param User $user
      * @return History[]
      */

@@ -2,19 +2,16 @@
 
 namespace App\Entity;
 
-use App\Annotation as Templated;
-use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\ExecutionContextInterface;
-use App\Entity\Globals;
-use Doctrine\ORM\Mapping\Entity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HistoryRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"title"})})
+ * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user", "slug"})})
+ * @UniqueEntity(fields={"user", "slug"}, message="The slug '{{ value }}' is already taken.")
  *
  */
 class History
@@ -32,9 +29,11 @@ class History
     protected $title;
 
     /**
-     *
-     * @Gedmo\Slug(fields={"title"}, unique=true, updatable=false)
-     *
+     * @Assert\Regex(
+     *     pattern="/^[a-z0-9-]+$/",
+     *     match=true,
+     *     message="The slug '{{ value }}' is not a valid slug, authorised characters are [a-z], [0-9] and -"
+     * )
      * @ORM\Column(length=255, unique=true)
      */
     protected $slug;
