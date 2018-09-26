@@ -42,41 +42,43 @@ class UserManager extends Component<Props> {
     onFetchUser = (token) => {
         const {history} = this.props
 
-        this.props.dispatch(fetchHistory(token)).then(() => {
-            const flowMatch = matchPath(location.pathname, {
-                path: routes.flow.path,
-                exact: true
-            })
-            const dashboardMatch = matchPath(location.pathname, {
-                path: routes.dashboard.path,
-                exact: true
-            })
-
-            if (flowMatch) {
-                const current = parseInt(flowMatch.params.id)
-                this.props.dispatch(setCurrentHistory(current))
-            } else if (dashboardMatch) {
-                let keys = Object.keys(this.props.items)
-
-                keys.sort((keyA, keyB) => {
-                    let itemA = this.props.items[keyA],
-                        itemB = this.props.items[keyB]
-
-                    return itemB.updated.diff(itemA.updated)
+        Promise.all([
+            this.props.dispatch(fetchComponents(token)),
+            this.props.dispatch(fetchSettings(token))
+        ]).then(() => {
+            this.props.dispatch(fetchHistory(token)).then(() => {
+                const flowMatch = matchPath(location.pathname, {
+                    path: routes.flow.path,
+                    exact: true
+                })
+                const dashboardMatch = matchPath(location.pathname, {
+                    path: routes.dashboard.path,
+                    exact: true
                 })
 
-                if (keys.length > 0) {
-                    let item = this.props.items[keys[0]]
-                    this.props.dispatch(setCurrentHistory(item.id))
-                        .then(() => {
-                            history.push(pathTo('flow', {id: item.id}))
-                        })
-                }
-            }
-        })
+                if (flowMatch) {
+                    const current = parseInt(flowMatch.params.id)
+                    this.props.dispatch(setCurrentHistory(current))
+                } else if (dashboardMatch) {
+                    let keys = Object.keys(this.props.items)
 
-        this.props.dispatch(fetchComponents(token))
-        this.props.dispatch(fetchSettings(token))
+                    keys.sort((keyA, keyB) => {
+                        let itemA = this.props.items[keyA],
+                            itemB = this.props.items[keyB]
+
+                        return itemB.updated.diff(itemA.updated)
+                    })
+
+                    if (keys.length > 0) {
+                        let item = this.props.items[keys[0]]
+                        this.props.dispatch(setCurrentHistory(item.id))
+                            .then(() => {
+                                history.push(pathTo('flow', {id: item.id}))
+                            })
+                    }
+                }
+            })
+        })
     }
 
     render() {
