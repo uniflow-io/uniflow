@@ -9,10 +9,8 @@ class UserManager extends Component<Props> {
     componentWillReceiveProps(nextProps) {
         const oldProps = this.props;
 
-        if (nextProps.auth.token !== oldProps.auth.token) {
-            if(nextProps.auth.isAuthenticated) {
-                this.onFetchUser(nextProps.auth.token);
-            }
+        if (nextProps.auth.token !== oldProps.auth.token && nextProps.auth.isAuthenticated) {
+            this.onFetchUser(nextProps.auth.token);
         }
     }
 
@@ -24,6 +22,8 @@ class UserManager extends Component<Props> {
         }
 
         this.historyUnlisten = history.listen((location) => {
+            const user = this.props.user
+
             const match = matchPath(location.pathname, {
                 path: routes.flow.path,
                 exact: true
@@ -31,6 +31,10 @@ class UserManager extends Component<Props> {
             if (match) {
                 const current = parseInt(match.params.id)
                 this.props.dispatch(setCurrentHistory(current))
+
+                if(user.username) {
+                    history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                }
             }
         })
     }
@@ -47,6 +51,7 @@ class UserManager extends Component<Props> {
             this.props.dispatch(fetchSettings(token))
         ]).then(() => {
             this.props.dispatch(fetchHistory(token)).then(() => {
+                const user = this.props.user
                 const flowMatch = matchPath(location.pathname, {
                     path: routes.flow.path,
                     exact: true
@@ -56,8 +61,23 @@ class UserManager extends Component<Props> {
                     exact: true
                 })
 
+                let userFlowMatch = false
+                if(user.username) {
+                    userFlowMatch = matchPath(location.pathname, {
+                        path: routes.userFlow.path,
+                        exact: true
+                    })
+                }
+
                 if (flowMatch) {
                     const current = parseInt(flowMatch.params.id)
+                    this.props.dispatch(setCurrentHistory(current))
+
+                    if(user.username) {
+                        history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                    }
+                } else if (userFlowMatch) {
+                    const current = parseInt(userFlowMatch.params.id)
                     this.props.dispatch(setCurrentHistory(current))
                 } else if (dashboardMatch) {
                     let keys = Object.keys(this.props.items)
@@ -73,8 +93,14 @@ class UserManager extends Component<Props> {
                         let item = this.props.items[keys[0]]
                         this.props.dispatch(setCurrentHistory(item.id))
                             .then(() => {
-                                history.push(pathTo('flow', {id: item.id}))
+                                if(user.username) {
+                                    history.push(pathTo('userFlow', {username: user.username, id: item.id}))
+                                } else {
+                                    history.push(pathTo('flow', {id: item.id}))
+                                }
                             })
+                    } else if(user.username) {
+                        history.push(pathTo('userDashboard', {username: user.username}))
                     }
                 }
             })
@@ -89,6 +115,7 @@ class UserManager extends Component<Props> {
 export default connect(state => {
     return {
         auth: state.auth,
+        user: state.user,
         items: state.history.items
     }
 })(withRouter(UserManager))

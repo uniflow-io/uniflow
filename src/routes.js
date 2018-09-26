@@ -38,12 +38,12 @@ const routes = {
         path: '/me/flow/:id',
         component: requireAuthentication(Flow),
     },
-    user: {
-        path: '/:user',
+    userDashboard: {
+        path: '/:username',
         component: requireAuthentication(Flow),
     },
-    user_flow: {
-        path: '/:user/flow/:id',
+    userFlow: {
+        path: '/:username/flow/:id',
         component: requireAuthentication(Flow),
     },
 }
