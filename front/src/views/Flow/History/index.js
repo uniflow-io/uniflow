@@ -77,7 +77,6 @@ class History extends Component {
                                 ))}
                             </ul>
                         </div>
-                        {/*/.nav-collapse */}
                     </div>
                 </div>
             </div>

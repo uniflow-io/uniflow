@@ -139,4 +139,9 @@ class HistoryService
 
         return $data;
     }
+
+    public function findLastPublic($limit = null)
+    {
+        return $this->historyRepository->findLastPublic($limit);
+    }
 }

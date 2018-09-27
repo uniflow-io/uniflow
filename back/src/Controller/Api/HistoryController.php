@@ -236,4 +236,28 @@ class HistoryController extends Controller
 
         return new JsonResponse($this->historyService->getJsonHistory($entity));
     }
+
+
+
+    /**
+     * @param Request $request
+     * @param string $platform
+     * @return JsonResponse
+     * @Route("/api/history/last-public", name="api_history_last_public", methods={"GET"})
+     */
+    public function lastPublic()
+    {
+        $histories = $this->historyService->findLastPublic(15);
+
+        return new JsonResponse([
+            'flow' => array_map(function(History $history) {
+                return array(
+                    'title' => $history->getTitle(),
+                    'slug' => $history->getSlug(),
+                    'description' => $history->getDescription(),
+                    'username' => $history->getUser()->getUsername(),
+                );
+            }, $histories),
+        ]);
+    }
 }
