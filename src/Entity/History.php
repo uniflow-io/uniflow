@@ -64,6 +64,11 @@ class History
     protected $description;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $private;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=true)
@@ -74,7 +79,7 @@ class History
      * @var \Datetime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=false)
      */
     protected $created;
 
@@ -82,7 +87,7 @@ class History
      * @var \Datetime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=false)
      */
     protected $updated;
 
@@ -247,6 +252,22 @@ class History
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrivate()
+    {
+        return $this->private;
+    }
+
+    /**
+     * @param mixed $private
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
     }
 
     /**
