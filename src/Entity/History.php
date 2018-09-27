@@ -36,11 +36,7 @@ class History
      * @Assert\NotBlank(
      *     message="The slug is required"
      * )
-     * @Assert\Regex(
-     *     pattern="/^[a-z0-9-]+$/",
-     *     match=true,
-     *     message="The slug '{{ value }}' is not a valid slug, authorised characters are [a-z], [0-9] and -"
-     * )
+     * @Gedmo\Slug(fields={"slug"}, unique=true, updatable=true)
      * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     protected $slug;
