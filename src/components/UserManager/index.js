@@ -32,7 +32,7 @@ class UserManager extends Component<Props> {
                 this.props.dispatch(setCurrentHistory(match.params.slug))
 
                 if(user.username) {
-                    history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
+                    history.push(pathTo('userFlow', {username: user.username, slug: match.params.slug}))
                 }
             }
         })
@@ -72,7 +72,7 @@ class UserManager extends Component<Props> {
                     this.props.dispatch(setCurrentHistory(flowMatch.params.slug))
 
                     if(user.username) {
-                        history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
+                        history.push(pathTo('userFlow', {username: user.username, slug: flowMatch.params.slug}))
                     }
                 } else if (userFlowMatch) {
                     this.props.dispatch(setCurrentHistory(userFlowMatch.params.slug))
