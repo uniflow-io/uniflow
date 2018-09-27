@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\HistoryRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user", "slug"})})
+ * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user_id", "slug"})})
  * @UniqueEntity(fields={"user", "slug"}, message="The slug '{{ value }}' is already taken.")
  *
  */
@@ -25,27 +25,39 @@ class History
     protected $id;
 
     /**
+     * @Assert\NotBlank(
+     *     message="The title is required"
+     * )
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $title;
 
     /**
+     * @Assert\NotBlank(
+     *     message="The slug is required"
+     * )
      * @Assert\Regex(
      *     pattern="/^[a-z0-9-]+$/",
      *     match=true,
      *     message="The slug '{{ value }}' is not a valid slug, authorised characters are [a-z], [0-9] and -"
      * )
-     * @ORM\Column(length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     protected $slug;
 
     /**
+     * @Assert\NotBlank(
+     *     message="The user is required"
+     * )
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="histories", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $user;
 
     /**
+     * @Assert\NotBlank(
+     *     message="The platform can't be empty"
+     * )
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $platform;
@@ -64,7 +76,7 @@ class History
     protected $description;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=false)
      */
     protected $private;
 
@@ -76,18 +88,18 @@ class History
     protected $data;
 
     /**
-     * @var \Datetime $created
+     * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     protected $created;
 
     /**
-     * @var \Datetime $updated
+     * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     protected $updated;
 

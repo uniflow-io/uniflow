@@ -23,6 +23,9 @@ class Tag
     /**
      * @var string
      *
+     * @Assert\NotBlank(
+     *     message="The title is required"
+     * )
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;
@@ -31,7 +34,7 @@ class Tag
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     protected $created;
 
@@ -39,7 +42,7 @@ class Tag
      * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     protected $updated;
 
