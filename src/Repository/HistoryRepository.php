@@ -117,4 +117,19 @@ class HistoryRepository extends ServiceEntityRepository
 
         $qb->getQuery()->execute();
     }
+
+    public function findLastPublic($limit = null)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->andWhere('h.private = :private')->setParameter('private', false)
+            ->addOrderBy('h.updated', 'DESC')
+        ;
+
+        if($limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
