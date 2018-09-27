@@ -135,6 +135,7 @@ export const createHistory = (item, token) => {
     return (dispatch) => {
         let data = {
             title: item.title,
+            slug: item.title,
             platform: item.platform,
             tags: item.tags,
             description: item.description

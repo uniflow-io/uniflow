@@ -86,7 +86,7 @@ class UserManager extends Component<Props> {
                         this.props.dispatch(setCurrentHistory(historyObj.id))
                     }
                 } else if (dashboardMatch) {
-                    let keys = Object.keys(this.props.history.items)
+                    let keys = Object.keys(historyState.items)
 
                     keys.sort((keyA, keyB) => {
                         let itemA = historyState.items[keyA],
