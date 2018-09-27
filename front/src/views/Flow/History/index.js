@@ -25,7 +25,7 @@ class History extends Component {
                 'description': ''
             }, this.props.auth.token))
             .then((item) => {
-                return this.props.dispatch(setCurrentHistory(item.slug))
+                return this.props.dispatch(setCurrentHistory(item.id))
             })
             .catch((log) => {
                 return this.props.dispatch(commitAddLog(log.message))
