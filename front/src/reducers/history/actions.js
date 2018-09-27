@@ -42,6 +42,19 @@ export const getOrderedHistory = (state, filter) => {
     });
 }
 
+export const getHistoryBySlug = (state, slug) => {
+    let keys = Object.keys(state.items),
+        slugKeys = keys.filter((key) => {
+            return state.items[key].slug === slug
+        })
+
+    if(slugKeys.length > 0) {
+        return state.items[slugKeys[0]];
+    }
+
+    return null
+}
+
 export const getTags = (state) => {
     let tags = Object.keys(state.items).reduce(function(previous, key) {
         return previous.concat(state.items[key].tags);
@@ -117,6 +130,7 @@ export const fetchHistory = (token) => {
             })
     }
 }
+
 export const createHistory = (item, token) => {
     return (dispatch) => {
         let data = {
@@ -149,6 +163,7 @@ export const createHistory = (item, token) => {
         ;
     }
 }
+
 export const updateHistory = (item, token) => {
     return (dispatch) => {
         let data = {
@@ -181,6 +196,7 @@ export const updateHistory = (item, token) => {
             })
     }
 }
+
 export const getHistoryData = (item, token) => {
     return (dispatch) => {
         return request
@@ -201,6 +217,7 @@ export const getHistoryData = (item, token) => {
             })
     }
 }
+
 export const setHistoryData = (item, token) => {
     return (dispatch) => {
         return request
@@ -226,6 +243,7 @@ export const setHistoryData = (item, token) => {
         ;
     }
 }
+
 export const deleteHistory = (item, token) => {
     return (dispatch) => {
         return request
@@ -248,6 +266,7 @@ export const deleteHistory = (item, token) => {
             })
     }
 }
+
 export const setCurrentHistory = (current) => {
     return (dispatch) => {
         dispatch(commitSetCurrentHistory(current))
