@@ -34,16 +34,22 @@ class User implements UserInterface, \Serializable
     protected $username;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank(
+     *     message="An email is required"
+     * )
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email.",
      *     checkMX = true
      * )
+     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
      */
     protected $email;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank(
+     *     message="A password is required"
+     * )
+     * @ORM\Column(type="string", length=64, nullable=false)
      */
     protected $password;
 
@@ -84,22 +90,18 @@ class User implements UserInterface, \Serializable
     protected $roles = [];
 
     /**
-     * Creation.
-     *
-     * @var \DateTime
+     * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     protected $created;
 
     /**
-     * Edit.
-     *
-     * @var \DateTime
+     * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="updated", type="datetime", nullable=false)
      */
     protected $updated;
 
