@@ -275,3 +275,13 @@ export const setCurrentHistory = (current) => {
         return Promise.resolve(current);
     }
 }
+
+export const getLastPublicHistory = () => {
+    return (dispatch) => {
+        return request
+            .get(server.getBaseUrl() + '/api/history/last-public')
+            .then((response) => {
+                return response.data.flow;
+            })
+    }
+}
