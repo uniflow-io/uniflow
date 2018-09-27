@@ -139,7 +139,7 @@ class Header extends Component {
     }
 
     render() {
-        const { auth } = this.props
+        const { auth, user } = this.props
         const { active } = this.state
 
         return (
@@ -150,10 +150,15 @@ class Header extends Component {
                                 <li className={active === 'home' ? 'active' : ''}>
                                 <Link to={pathTo('home')}>Home</Link>
                             </li>
-                            {auth.isAuthenticated && (
+                            {auth.isAuthenticated && user.username === null && (
                             <li className={active === 'dashboard' ? 'active' : ''}>
                                 <Link to={pathTo('dashboard')}>Dashboard</Link>
                             </li>
+                            )}
+                            {auth.isAuthenticated && user.username !== null && (
+                                <li className={active === 'dashboard' ? 'active' : ''}>
+                                    <Link to={pathTo('userDashboard', {username: user.username})}>Dashboard</Link>
+                                </li>
                             )}
                             <li className={active === 'faq' ? 'active' : ''}>
                                 <Link to={pathTo('faq')}>FAQ</Link>
@@ -185,7 +190,8 @@ class Header extends Component {
 }
 
 Header = connect(state => ({
-    auth: state.auth
+    auth: state.auth,
+    user: state.user,
 }))(withRouter(Header))
 
 export default class App extends Component {
