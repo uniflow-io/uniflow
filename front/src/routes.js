@@ -1,6 +1,7 @@
 import { FAQ, Home, Flow, Logs, Login, Register, Settings } from './views/index'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components/index'
+import {matchPath} from 'react-router'
 
 const routes = {
     home: {
@@ -30,20 +31,20 @@ const routes = {
         path: '/settings',
         component: requireAuthentication(Settings),
     },
-    dashboard: {
-        path: '/me',
-        component: requireAuthentication(Flow),
-    },
     flow: {
         path: '/me/flow/:slug',
         component: requireAuthentication(Flow),
     },
-    userDashboard: {
-        path: '/:username',
-        component: Flow,
+    dashboard: {
+        path: '/me',
+        component: requireAuthentication(Flow),
     },
     userFlow: {
         path: '/:username/flow/:slug',
+        component: Flow,
+    },
+    userDashboard: {
+        path: '/:username',
         component: Flow,
     },
 }
@@ -54,6 +55,29 @@ export const pathTo = (view, params = {}) => {
     }
 
     return pathToRegexp.compile(routes[view].path)(params)
+}
+
+export const matchRoute = (pathname) => {
+    let keys = Object.keys(routes),
+        match = null,
+        route = null
+
+    for (let i = 0; i < keys.length; i++ ) {
+        route = keys[i]
+        match = matchPath(pathname, {
+            path: routes[route].path,
+            exact: routes[route].exact
+        })
+
+        if(match) {
+            return {
+                route: route,
+                match: match
+            }
+        }
+    }
+
+    return null
 }
 
 export default routes

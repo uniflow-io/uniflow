@@ -3,11 +3,13 @@ import {
     COMMIT_UPDATE_HISTORY,
     COMMIT_DELETE_HISTORY,
     COMMIT_SET_CURRENT_HISTORY,
+    COMMIT_SET_USERNAME_HISTORY,
 } from './actionsTypes'
 
 const defaultState = {
     items: {},
     current: null,
+    username: null,
 }
 
 const history = (state = defaultState, action) => {
@@ -31,6 +33,11 @@ const history = (state = defaultState, action) => {
             return {
                 ...state,
                 current: action.current
+            }
+        case COMMIT_SET_USERNAME_HISTORY:
+            return {
+                ...state,
+                username: action.username
             }
         default:
             return state
