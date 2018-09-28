@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Services\UserService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\HistoryType;
 use App\Entity\History;
@@ -29,13 +31,20 @@ class HistoryController extends Controller
      */
     protected $tagService;
 
+    /**
+     * @var UserService
+     */
+    protected $userService;
+
     public function __construct(
         HistoryService $historyService,
-        TagService $tagService
+        TagService $tagService,
+        UserService $userService
     )
     {
         $this->historyService = $historyService;
         $this->tagService = $tagService;
+        $this->userService = $userService;
     }
 
     /**
@@ -55,6 +64,11 @@ class HistoryController extends Controller
         if($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
             $histories = $this->historyService->getHistoryByPlatform($user, $platform);
         } else {
+            $user = $this->userService->findOneByUsername($username);
+            if(is_null($user)) {
+                throw new NotFoundHttpException();
+            }
+
             $histories = $this->historyService->getPublicHistoryByUsernameAndPlatform($username, $platform);
         }
 
