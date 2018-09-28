@@ -12,7 +12,7 @@ Api.prototype.endpoint = function(endpoint, params = []) {
     }
 
     const endpoints = {
-        'history': '/api/history/list/bash',
+        'history': '/api/me/history/list/bash',
         'history_data': '/api/history/getData/{id}'
     }
     let path = Object.keys(params).reduce(function(path, key) {
