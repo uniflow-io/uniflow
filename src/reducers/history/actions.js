@@ -104,10 +104,10 @@ export const commitSetCurrentHistory = (current) => {
     }
 }
 
-export const fetchHistory = (token) => {
+export const fetchHistory = (username, token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/history/list', {
+            .get(`${server.getBaseUrl()}/api/${username}/history/list`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -143,7 +143,7 @@ export const createHistory = (item, token) => {
         };
 
         return request
-            .post(server.getBaseUrl() + '/api/history/create', data, {
+            .post(`${server.getBaseUrl()}/api/history/create`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -178,7 +178,7 @@ export const updateHistory = (item, token) => {
         };
 
         return request
-            .put(server.getBaseUrl() + '/api/history/update/'+item.id, data, {
+            .put(`${server.getBaseUrl()}/api/history/update/${item.id}`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -203,7 +203,7 @@ export const updateHistory = (item, token) => {
 export const getHistoryData = (item, token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/history/getData/'+item.id, {
+            .get(`${server.getBaseUrl()}/api/history/getData/${item.id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -224,7 +224,7 @@ export const getHistoryData = (item, token) => {
 export const setHistoryData = (item, token) => {
     return (dispatch) => {
         return request
-            .put(server.getBaseUrl() + '/api/history/setData/'+item.id, item.data, {
+            .put(`${server.getBaseUrl()}/api/history/setData/${item.id}`, item.data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -250,7 +250,7 @@ export const setHistoryData = (item, token) => {
 export const deleteHistory = (item, token) => {
     return (dispatch) => {
         return request
-            .delete(server.getBaseUrl() + '/api/history/delete/'+item.id, {
+            .delete(`${server.getBaseUrl()}/api/history/delete/${item.id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -281,7 +281,7 @@ export const setCurrentHistory = (current) => {
 export const getLastPublicHistory = () => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/history/last-public')
+            .get(`${server.getBaseUrl()}/api/history/last-public`)
             .then((response) => {
                 return response.data.flow;
             })

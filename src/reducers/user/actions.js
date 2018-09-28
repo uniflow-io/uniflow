@@ -13,7 +13,7 @@ export const fetchComponents = (token) => {
         let data = Object.keys(components);
 
         return request
-            .put(server.getBaseUrl() + '/api/user/getComponents', data, {
+            .put(`${server.getBaseUrl()}/api/user/getComponents`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -33,7 +33,7 @@ export const fetchComponents = (token) => {
 export const fetchSettings = (token) => {
     return (dispatch) => {
         return request
-            .get(server.getBaseUrl() + '/api/user/getSettings', {
+            .get(`${server.getBaseUrl()}/api/user/getSettings`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -60,7 +60,7 @@ export const updateSettings = (item, token) => {
         };
 
         return request
-            .put(server.getBaseUrl() + '/api/user/setSettings', data, {
+            .put(`${server.getBaseUrl()}/api/user/setSettings`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

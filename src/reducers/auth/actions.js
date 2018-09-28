@@ -58,7 +58,7 @@ export const login = (username, password) => {
         return dispatch(commitLoginUserRequest())
             .then(() => {
                 return request
-                    .post(server.getBaseUrl() + '/api/login_check', {
+                    .post(`${server.getBaseUrl()}/api/login_check`, {
                         'username': username,
                         'password': password,
                     })
@@ -88,7 +88,7 @@ export const register = (email, password) => {
         return dispatch(commitLoginUserRequest())
             .then(() => {
                 return request
-                    .post(server.getBaseUrl() + '/api/register', {
+                    .post(`${server.getBaseUrl()}/api/register`, {
                         'email': email,
                         'password': password,
                     })
