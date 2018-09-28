@@ -112,7 +112,6 @@ class Settings extends Component {
                     </ol>
                 </section>
 
-                {/* Main content */}
                 <section className="content">
                     <div className="row">
                         <div className="col-md-12">

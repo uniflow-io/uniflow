@@ -15,7 +15,6 @@ export default () => (
             </ol>
         </section>
 
-        {/* Main content */}
         <section className="content">
             <div className="row">
                 <div className="col-md-12">
@@ -69,7 +68,6 @@ export default () => (
                 </div>
             </div>
         </section>
-        {/* /.content */}
     </div>
 
 )

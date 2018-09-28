@@ -7,6 +7,8 @@ import {
     COMMIT_UPDATE_HISTORY,
     COMMIT_DELETE_HISTORY,
     COMMIT_SET_CURRENT_HISTORY,
+    COMMIT_SET_USERNAME_HISTORY,
+    COMMIT_SET_SLUG_HISTORY,
 } from './actionsTypes'
 import {commitLogoutUser} from '../auth/actions'
 
@@ -103,15 +105,27 @@ export const commitSetCurrentHistory = (current) => {
         return Promise.resolve()
     }
 }
-
-export const fetchHistory = (username, token) => {
+export const commitSetUsernameHistory = (username) => {
     return (dispatch) => {
+        dispatch({
+            type: COMMIT_SET_USERNAME_HISTORY,
+            username
+        })
+        return Promise.resolve()
+    }
+}
+
+export const fetchHistory = (username, token = null) => {
+    return (dispatch) => {
+        let config = {}
+        if(token) {
+            config['headers'] = {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
         return request
-            .get(`${server.getBaseUrl()}/api/${username}/history/list`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+            .get(`${server.getBaseUrl()}/api/history/${username}/list`, config)
             .then((response) => {
                 dispatch(commitClearHistory());
 
@@ -200,14 +214,17 @@ export const updateHistory = (item, token) => {
     }
 }
 
-export const getHistoryData = (item, token) => {
+export const getHistoryData = (item, token = null) => {
     return (dispatch) => {
+        let config = {}
+        if(token) {
+            config['headers'] = {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+
         return request
-            .get(`${server.getBaseUrl()}/api/history/getData/${item.id}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+            .get(`${server.getBaseUrl()}/api/history/getData/${item.id}`, config)
             .then((response) => {
                 return response.data.data;
             })
@@ -275,6 +292,14 @@ export const setCurrentHistory = (current) => {
         dispatch(commitSetCurrentHistory(current))
 
         return Promise.resolve(current);
+    }
+}
+
+export const setUsernameHistory = (username) => {
+    return (dispatch) => {
+        dispatch(commitSetUsernameHistory(username))
+
+        return Promise.resolve(username);
     }
 }
 

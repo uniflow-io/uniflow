@@ -7,7 +7,11 @@ import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
 
 class Flow extends Component<Props> {
+
     render() {
+        const { history } = this.props
+        const currentHistory = getCurrentHistory(history)
+
         return (
             <div id="flow" className="content-wrapper">
                 <section className="content-header">
@@ -27,7 +31,7 @@ class Flow extends Component<Props> {
                             <History/>
                         </div>
                         <div className="col-sm-10">
-                            {this.props.currentHistory && (
+                            {history.username && currentHistory && (
                                 <Show/>
                             )}
                         </div>
@@ -40,6 +44,6 @@ class Flow extends Component<Props> {
 
 export default connect(state => {
     return {
-        currentHistory: getCurrentHistory(state.history),
+        history: state.history,
     }
 })(Flow)

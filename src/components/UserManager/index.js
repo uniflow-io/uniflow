@@ -1,11 +1,24 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchComponents, fetchSettings} from '../../reducers/user/actions'
-import routes, {pathTo} from "../../routes";
-import {withRouter, matchPath} from 'react-router'
-import {getHistoryBySlug, fetchHistory, setCurrentHistory} from "../../reducers/history/actions";
+import routes, {pathTo, matchRoute} from "../../routes";
+import {withRouter} from 'react-router'
+import {fetchHistory, getHistoryBySlug, setCurrentHistory, setUsernameHistory} from "../../reducers/history/actions";
 
 class UserManager extends Component<Props> {
+
+    componentDidMount() {
+        const { auth, history } = this.props
+
+        this.historyUnlisten = history.listen(this.onLocation)
+
+        if(auth.isAuthenticated) {
+            this.onFetchUser(auth.token);
+        } else {
+            this.onLocation(history.location)
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         const oldProps = this.props;
 
@@ -14,74 +27,55 @@ class UserManager extends Component<Props> {
         }
     }
 
-    componentDidMount() {
-        const { history } = this.props
-
-        this.historyUnlisten = history.listen((location) => {
-            const { user, historyState } = this.props
-
-            const match = matchPath(location.pathname, {
-                path: routes.flow.path,
-                exact: true
-            })
-            if (match) {
-                let historyObj = getHistoryBySlug(historyState, match.params.slug)
-                if(historyObj) {
-                    this.props.dispatch(setCurrentHistory(historyObj.id))
-                }
-
-                if(user.username) {
-                    history.push(pathTo('userFlow', {username: user.username, slug: match.params.slug}))
-                }
-            }
-        })
-    }
-
     componentWillUnmount() {
         this.historyUnlisten()
     }
 
-    onFetchUser = (token) => {
-        const {history} = this.props
+    onLocation = (location) => {
+        const { user, history, historyState } = this.props
 
+        const match = matchRoute(location.pathname)
+
+        if (match) {
+            if(match.route === 'dashboard' && user.username) {
+                this.onFetchHistory(user.username)
+            } else if(match.route === 'flow' && user.username) {
+                this.onFetchHistory(user.username, match.match.params.slug)
+                history.push(pathTo('userFlow', {username: user.username, slug: match.match.params.slug}))
+            } else if(match.route === 'userDashboard') {
+                this.onFetchHistory(match.match.params.username)
+            } else if(match.route === 'userFlow') {
+                this.onFetchHistory(match.match.params.username, match.match.params.slug)
+            }
+        }
+    }
+
+    onFetchUser = (token) => {
         Promise.all([
             this.props.dispatch(fetchComponents(token)),
             this.props.dispatch(fetchSettings(token))
         ]).then(() => {
-            this.props.dispatch(fetchHistory(token)).then(() => {
-                const { user, historyState } = this.props
-                const flowMatch = matchPath(location.pathname, {
-                    path: routes.flow.path,
-                    exact: true
-                })
-                const dashboardMatch = matchPath(location.pathname, {
-                    path: routes.dashboard.path,
-                    exact: true
-                })
+            const { history } = this.props
 
-                let userFlowMatch = false
-                if(user.username) {
-                    userFlowMatch = matchPath(location.pathname, {
-                        path: routes.userFlow.path,
-                        exact: true
-                    })
-                }
+            this.onLocation(history.location)
+        })
+    }
 
-                if (flowMatch) {
-                    let historyObj = getHistoryBySlug(historyState, flowMatch.params.slug)
-                    if(historyObj) {
-                        this.props.dispatch(setCurrentHistory(historyObj.id))
-                    }
+    onFetchHistory = (username, slug = null) => {
+        const { auth, history } = this.props
 
-                    if(user.username) {
-                        history.push(pathTo('userFlow', {username: user.username, slug: flowMatch.params.slug}))
-                    }
-                } else if (userFlowMatch) {
-                    let historyObj = getHistoryBySlug(historyState, userFlowMatch.params.slug)
-                    if(historyObj) {
-                        this.props.dispatch(setCurrentHistory(historyObj.id))
-                    }
-                } else if (dashboardMatch) {
+        this.props.dispatch(setUsernameHistory(username))
+            .then(() => {
+                const token = auth.isAuthenticated ? auth.token : null
+                return this.props.dispatch(fetchHistory(username, token))
+            })
+            .then(() => {
+                const { historyState } = this.props
+
+                let historyObj = getHistoryBySlug(historyState, slug)
+                if(historyObj) {
+                    this.props.dispatch(setCurrentHistory(historyObj.id))
+                } else {
                     let keys = Object.keys(historyState.items)
 
                     keys.sort((keyA, keyB) => {
@@ -92,24 +86,11 @@ class UserManager extends Component<Props> {
                     })
 
                     if (keys.length > 0) {
-                        let item = historyState.items[keys[0]]
-                        let historyObj = getHistoryBySlug(historyState, dashboardMatch.params.slug)
-                        if(historyObj) {
-                            this.props.dispatch(setCurrentHistory(historyObj.id))
-                                .then(() => {
-                                    if(user.username) {
-                                        history.push(pathTo('userFlow', {username: user.username, slug: item.slug}))
-                                    } else {
-                                        history.push(pathTo('flow', {slug: item.slug}))
-                                    }
-                                })
-                        }
-                    } else if(user.username) {
-                        history.push(pathTo('userDashboard', {username: user.username}))
+                        let item       = historyState.items[keys[0]]
+                        this.props.dispatch(setCurrentHistory(historyState.items[keys[0]].id))
                     }
                 }
             })
-        })
     }
 
     render() {
