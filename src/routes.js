@@ -40,11 +40,11 @@ const routes = {
     },
     userDashboard: {
         path: '/:username',
-        component: requireAuthentication(Flow),
+        component: Flow,
     },
     userFlow: {
         path: '/:username/flow/:slug',
-        component: requireAuthentication(Flow),
+        component: Flow,
     },
 }
 

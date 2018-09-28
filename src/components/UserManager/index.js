@@ -15,11 +15,7 @@ class UserManager extends Component<Props> {
     }
 
     componentDidMount() {
-        const {history, auth} = this.props
-
-        if(auth.isAuthenticated) {
-            this.onFetchUser(auth.token);
-        }
+        const { history } = this.props
 
         this.historyUnlisten = history.listen((location) => {
             const { user, historyState } = this.props
