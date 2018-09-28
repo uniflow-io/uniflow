@@ -62,12 +62,19 @@ class UserManager extends Component<Props> {
     }
 
     onFetchHistory = (username, slug = null) => {
-        const { auth, history } = this.props
+        const { auth, historyState } = this.props
 
-        this.props.dispatch(setUsernameHistory(username))
+        Promise.resolve()
             .then(() => {
-                const token = auth.isAuthenticated ? auth.token : null
-                return this.props.dispatch(fetchHistory(username, token))
+                if(historyState.username === username) {
+                    return
+                }
+
+                return this.props.dispatch(setUsernameHistory(username))
+                    .then(() => {
+                        const token = auth.isAuthenticated ? auth.token : null
+                        return this.props.dispatch(fetchHistory(username, token))
+                    })
             })
             .then(() => {
                 const { historyState } = this.props
