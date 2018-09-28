@@ -19,6 +19,28 @@ class HistoryRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param null $id
+     * @return History
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOne($id = null)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+        ;
+
+        if($id) {
+            $qb->andWhere('h.id = :id')->setParameter('id', $id);
+        } else {
+            $qb->setMaxResults(1);
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
      * @param User $user
      * @param null $id
      * @return History
@@ -98,6 +120,23 @@ class HistoryRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('h')
             ->select('h')
             ->andWhere('h.user = :user')->setParameter('user', $user)
+            ->addOrderBy('h.updated', 'DESC')
+        ;
+
+        if($platform) {
+            $qb->andWhere('h.platform = :platform')->setParameter('platform', $platform);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getPublicHistoryByUsernameAndPlatform($username, $platform = null)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->leftJoin('h.user', 'u')
+            ->andWhere('u.username = :username')->setParameter('username', $username)
+            ->andWhere('h.private = :private')->setParameter('private', false)
             ->addOrderBy('h.updated', 'DESC')
         ;
 

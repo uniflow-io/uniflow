@@ -71,6 +71,16 @@ class HistoryService
     }
 
     /**
+     * @param null $id
+     * @return History
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOne($id = null)
+    {
+        return $this->historyRepository->findOne($id);
+    }
+
+    /**
      * @param User $user
      * @param null $id
      * @return History
@@ -129,15 +139,12 @@ class HistoryService
 
     public function getHistoryByPlatform(User $user, $platform = null)
     {
-        $histories = $this->historyRepository->findLastByUserAndPlatform($user, $platform);
+        return $this->historyRepository->findLastByUserAndPlatform($user, $platform);
+    }
 
-        $data = array();
-
-        foreach ($histories as $history) {
-            $data[] = $this->getJsonHistory($history);
-        }
-
-        return $data;
+    public function getPublicHistoryByUsernameAndPlatform($username, $platform = null)
+    {
+        return $this->historyRepository->getPublicHistoryByUsernameAndPlatform($username, $platform);
     }
 
     public function findLastPublic($limit = null)
