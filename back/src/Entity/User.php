@@ -29,7 +29,13 @@ class User implements UserInterface, \Serializable
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 32,
+     *      minMessage = "The username must be at least {{ limit }} characters long",
+     *      maxMessage = "The username cannot be longer than {{ limit }} characters"
+     * )
+     * @ORM\Column(type="string", length=32, unique=true, nullable=true)
      */
     protected $username;
 

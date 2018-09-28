@@ -40,18 +40,28 @@ class HistoryController extends Controller
 
     /**
      * @param Request $request
+     * @param string $username
      * @param string $platform
      * @return JsonResponse
-     * @Route("/api/history/list/{platform}", name="api_history_list", methods={"GET"})
+     * @Route("/api/history/{username}/list/{platform}", name="api_history_list", methods={"GET"})
      */
-    public function listAction(Request $request, $platform = null)
+    public function listAction(Request $request, $username = 'me', $platform = null)
     {
         $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
+        if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $data = $this->historyService->getHistoryByPlatform($user, $platform);
+        if($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
+            $histories = $this->historyService->getHistoryByPlatform($user, $platform);
+        } else {
+            $histories = $this->historyService->getPublicHistoryByUsernameAndPlatform($username, $platform);
+        }
+
+        $data = array();
+        foreach ($histories as $history) {
+            $data[] = $this->historyService->getJsonHistory($history);
+        }
 
         return new JsonResponse($data);
     }
@@ -150,15 +160,17 @@ class HistoryController extends Controller
      */
     public function getData(Request $request, $id)
     {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        $entity = $this->historyService->findOneByUser($user, $id);
+        $entity = $this->historyService->findOne($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find History entity.');
+        }
+
+        if($entity->getPrivate()) {
+            $user = $this->getUser();
+            if (!$user instanceof UserInterface || $entity->getUser()->getId() != $user->getId()) {
+                throw $this->createAccessDeniedException('You are not allowed to view this section.');
+            }
         }
 
         return new JsonResponse(array('data' => $entity->getData()));
