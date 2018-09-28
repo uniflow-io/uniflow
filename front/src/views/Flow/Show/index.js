@@ -208,11 +208,11 @@ class Show extends Component {
 
         this.props.dispatch(createHistory(history, this.props.auth.token))
             .then((item) => {
-                history.slug = item.slug;
+                Object.assign(history, item)
                 return this.props.dispatch(setHistoryData(history, this.props.auth.token));
             })
             .then(() => {
-                return this.props.dispatch(setCurrentHistory(history.slug));
+                return this.props.dispatch(setCurrentHistory(history.id));
             })
             .catch((log) => {
                 return this.props.dispatch(commitAddLog(log.message))
