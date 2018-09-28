@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Ace, ListComponent, TagIt} from '../../../components/index'
+import {Ace, ListComponent, TagIt, ICheckBox} from '../../../components/index'
 import {History, Runner} from '../../../models/index'
 import {
     commitPushFlow,
@@ -148,7 +148,7 @@ class Show extends Component {
         }
     }, 500)
 
-    onUpdateTitle = (event) => {
+    onChangeTitle = (event) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{title: event.target.value}}))
             .then(() => {
@@ -156,7 +156,7 @@ class Show extends Component {
             })
     }
 
-    onUpdateSlug = (event) => {
+    onChangeSlug = (event) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{slug: event.target.value}}))
             .then(() => {
@@ -172,7 +172,7 @@ class Show extends Component {
             })
     }
 
-    onUpdateTags = (tags) => {
+    onChangeTags = (tags) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{tags: tags}}))
             .then(() => {
@@ -180,9 +180,17 @@ class Show extends Component {
             })
     }
 
-    onUpdateDescription = (description) => {
+    onChangeDescription = (description) => {
         this.props
             .dispatch(commitUpdateHistory({...this.props.history, ...{description: description}}))
+            .then(() => {
+                this.onUpdate()
+            })
+    }
+
+    onChangePrivate = (value) => {
+        this.props
+            .dispatch(commitUpdateHistory({...this.props.history, ...{private: value}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -248,7 +256,7 @@ class Show extends Component {
 
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" id="info_title_{{ _uid }}"
-                                           value={history.title} onChange={this.onUpdateTitle} placeholder="Title"/>
+                                           value={history.title} onChange={this.onChangeTitle} placeholder="Title"/>
                                 </div>
                             </div>
 
@@ -257,7 +265,7 @@ class Show extends Component {
 
                                 <div className="col-sm-10">
                                     <input type="text" className="form-control" id="info_slug_{{ _uid }}"
-                                           value={history.slug} onChange={this.onUpdateSlug} placeholder="Slug"/>
+                                           value={history.slug} onChange={this.onChangeSlug} placeholder="Slug"/>
                                 </div>
                             </div>
 
@@ -278,8 +286,16 @@ class Show extends Component {
 
                                 <div className="col-sm-10">
                                     <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}"
-                                           value={history.tags} onChange={this.onUpdateTags} options={tagsOptions}
+                                           value={history.tags} onChange={this.onChangeTags} options={tagsOptions}
                                            placeholder="Tags"/>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="private{{ _uid }}" className="col-sm-2 control-label">Private</label>
+
+                                <div className="col-sm-10">
+                                    <ICheckBox value={history.private} onChange={this.onChangePrivate} />
                                 </div>
                             </div>
 
@@ -289,7 +305,7 @@ class Show extends Component {
 
                                 <div className="col-sm-10">
                                     <Ace className="form-control" id="info_description_{{ _uid }}"
-                                         value={history.description} onChange={this.onUpdateDescription}
+                                         value={history.description} onChange={this.onChangeDescription}
                                          placeholder="Text" height="200"/>
                                 </div>
                             </div>

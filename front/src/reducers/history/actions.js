@@ -138,7 +138,8 @@ export const createHistory = (item, token) => {
             slug: item.title,
             platform: item.platform,
             tags: item.tags,
-            description: item.description
+            description: item.description,
+            private: true
         };
 
         return request
@@ -172,7 +173,8 @@ export const updateHistory = (item, token) => {
             slug: item.slug,
             platform: item.platform,
             tags: item.tags,
-            description: item.description
+            description: item.description,
+            private: item.private
         };
 
         return request
