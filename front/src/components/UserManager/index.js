@@ -41,7 +41,9 @@ class UserManager extends Component<Props> {
                 this.onFetchHistory('me')
             } else if(match.route === 'flow') {
                 this.onFetchHistory('me', match.match.params.slug)
-                history.push(pathTo('userFlow', {username: user.username, slug: match.match.params.slug}))
+                if(user.username) {
+                    history.push(pathTo('userFlow', {username: user.username, slug: match.match.params.slug}))
+                }
             } else if(match.route === 'userDashboard') {
                 this.onFetchHistory(match.match.params.username)
             } else if(match.route === 'userFlow') {
