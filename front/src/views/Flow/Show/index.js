@@ -134,12 +134,12 @@ class Show extends Component {
     }, 500)
 
     onUpdateFlowData = _.debounce(() => {
-        let {history, stack} = this.props
+        let {history, stack, user, username} = this.props
         if (history.slug !== this.state.fetchedSlug) return;
 
         let data = history.data;
         history.serialiseFlowData(stack);
-        if (history.data !== data) {
+        if ((username === 'me' || user.username === username) && history.data !== data) {
             this.props
                 .dispatch(setHistoryData(history, this.props.auth.token))
                 .catch((log) => {
@@ -333,8 +333,10 @@ class Show extends Component {
 export default connect(state => {
     return {
         auth: state.auth,
+        user: state.user,
         history: getCurrentHistory(state.history),
         tags: getTags(state.history),
+        username: state.history.username,
         stack: state.flow
     }
 })(Show)
