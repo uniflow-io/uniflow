@@ -37,10 +37,10 @@ class UserManager extends Component<Props> {
         const match = matchRoute(location.pathname)
 
         if (match) {
-            if(match.route === 'dashboard' && user.username) {
-                this.onFetchHistory(user.username)
-            } else if(match.route === 'flow' && user.username) {
-                this.onFetchHistory(user.username, match.match.params.slug)
+            if(match.route === 'dashboard') {
+                this.onFetchHistory('me')
+            } else if(match.route === 'flow') {
+                this.onFetchHistory('me', match.match.params.slug)
                 history.push(pathTo('userFlow', {username: user.username, slug: match.match.params.slug}))
             } else if(match.route === 'userDashboard') {
                 this.onFetchHistory(match.match.params.username)
@@ -61,7 +61,7 @@ class UserManager extends Component<Props> {
         })
     }
 
-    onFetchHistory = (username, slug = null) => {
+    onFetchHistory = (username = 'me', slug = null) => {
         const { auth, historyState } = this.props
 
         Promise.resolve()
