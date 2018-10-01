@@ -57,7 +57,7 @@ function parseArgv(argv) {
     api.endpoint('history')
         .then((response) => {
             for(let i = 0; i < response.data.length; i++) {
-                if(response.data[i].title === identifier) {
+                if(response.data[i].slug === identifier) {
                     return api.endpoint('history_data', {'id': response.data[i].id})
                 }
             }
