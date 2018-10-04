@@ -43,3 +43,7 @@ platform-phpstorm/out
 
 # Platform Chrome
 platform-chrome/dist
+
+# Platform Mac
+platform-mac/Uniflow.xcodeproj/project.xcworkspace
+platform-mac/Uniflow.xcodeproj/xcuserdata
