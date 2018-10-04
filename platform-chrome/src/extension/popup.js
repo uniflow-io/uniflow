@@ -36,7 +36,7 @@
             let items = []
             for(let i = 0; i < message.data.length; i++) {
                 let item = message.data[i]
-                const template = `<div class="row"><div class="col-6-sm">${item.title}</div><div class="col-6-sm"><a href="${item.id}">run</a></div></div>`
+                const template = `<div class="row"><div class="col-12-sm"><a href="${item.id}">${item.title}</a></div></div>`
 
                 items.push(template)
             }
