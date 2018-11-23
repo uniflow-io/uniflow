@@ -131,7 +131,7 @@ class HistoryController extends Controller
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if(!$this->isGranted('ROLE_SUPER_ADMIN') && $user->getHistories()->count() >= 5) {
+        if(!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
             throw new AccessDeniedException('You are not alowed to create more history');
         }
 
@@ -217,7 +217,7 @@ class HistoryController extends Controller
             try{
                 $json = $decoder->decode($content, 'json');
 
-                if(!$this->isGranted('ROLE_SUPER_ADMIN') && $json) {
+                if(!$this->isGranted('ROLE_USER_PRO') && $json) {
                     foreach ($json as $item) {
                         if(!in_array($item->component, array('javascript', 'text'))) {
                             return new JsonResponse(false, 400);
