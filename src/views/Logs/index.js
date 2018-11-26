@@ -3,6 +3,10 @@ import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
 
 const logs = [{
+    tag: '1.00',
+    label: 'Public release',
+    date: '13/11/2018'
+}, {
     tag: '0.25',
     label: 'Add authentification by JWT tokens',
     date: '20/09/2018'

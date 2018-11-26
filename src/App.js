@@ -201,7 +201,7 @@ class Footer extends Component {
                 <div className="pull-right hidden-xs">
                     <b>Version</b> 1.0
                 </div>
-                <a className="btn"><i className="fa fa-github" /></a>
+                <a className="btn" href="https://github.com/matyo91/uniflow" target="_blank"><i className="fa fa-github" /></a>
             </footer>
         )
     }
