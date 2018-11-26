@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ssh admin@darkwood.fr << CMD
+ssh admin@ssh.darkwood.fr << CMD
 
 # deploy back
 cd /var/www/uniflow.io
@@ -12,7 +12,7 @@ cd /var/www/uniflow.io
 #redis-cli flushall
 
 git pull
-(cd back;SYMFONY_ENV=prod composer install --optimize-autoloader)
+(cd back;composer install --optimize-autoloader)
 (cd back;php bin/console cache:clear  --no-debug)
 (cd back;php bin/console doctrine:schema:update --force)
 
