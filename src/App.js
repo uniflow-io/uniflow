@@ -194,6 +194,19 @@ Header = connect(state => ({
     user: state.user,
 }))(withRouter(Header))
 
+class Footer extends Component {
+    render(): React.ReactNode {
+        return (
+            <footer className="main-footer">
+                <div className="pull-right hidden-xs">
+                    <b>Version</b> 1.0
+                </div>
+                <a className="btn"><i className="fa fa-github" /></a>
+            </footer>
+        )
+    }
+}
+
 export default class App extends Component {
     render() {
         const auth = store.getState().auth;
@@ -216,13 +229,7 @@ export default class App extends Component {
                                     ))}
                                 </Switch>
 
-                                {/*footer className="main-footer">
-                                        <div className="pull-right hidden-xs">
-                                            <b>Version</b> 2.3.3
-                                        </div>
-                                        <strong>Copyright &copy; 2014-2015 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-                                        reserved.
-                                    </footer*/}
+                                <Footer />
                             </div>
                         </div>
                     </Router>
