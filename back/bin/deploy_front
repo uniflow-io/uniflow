@@ -3,4 +3,4 @@
 # deploy front
 (cd ../front;yarn install)
 (cd ../front;yarn build)
-scp public/dist/js/bundle.js admin@darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
+scp public/dist/js/bundle.js admin@ssh.darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bundle.js
