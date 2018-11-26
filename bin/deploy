@@ -1,6 +1,8 @@
 #!/bin/sh
 
-ssh admin@ssh.darkwood.fr << CMD
+open -a "Google Chrome" https://app.buddy.works/matyo91/uniflow/pipelines
+
+: 'ssh admin@ssh.darkwood.fr << CMD
 
 # deploy back
 cd /var/www/uniflow.io
@@ -16,7 +18,7 @@ git pull
 (cd back;php bin/console cache:clear  --no-debug)
 (cd back;php bin/console doctrine:schema:update --force)
 
-CMD
+CMD'
 
-./deploy_front
-./deploy_bash
+bin/deploy_front
+bin/deploy_bash
