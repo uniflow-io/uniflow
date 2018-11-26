@@ -19,7 +19,7 @@ import {
     setHistoryData,
     setCurrentHistory
 } from '../../../reducers/history/actions'
-import {commitAddLog} from '../../../reducers/log/actions'
+import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import Select2 from "../../../components/Select2";
 

@@ -1,7 +1,7 @@
-import { FAQ, Home, Flow, Logs, Login, Register, Settings } from './views/index'
+import { FAQ, Home, Flow, Versions, Login, Register, Settings } from './views/index'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components/index'
-import {matchPath} from 'react-router'
+import { matchPath } from 'react-router'
 
 const routes = {
     home: {
@@ -23,9 +23,9 @@ const routes = {
         path: '/faq',
         component: FAQ,
     },
-    logs: {
-        path: '/logs',
-        component: Logs,
+    versions: {
+        path: '/versions',
+        component: Versions,
     },
     settings: {
         path: '/settings',

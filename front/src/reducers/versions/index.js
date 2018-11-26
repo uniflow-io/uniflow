@@ -1,8 +1,4 @@
-import React from 'react'
-import {pathTo} from "../../routes";
-import {Link} from "react-router-dom";
-
-const logs = [{
+const defaultState = [{
     tag: '1.00',
     label: 'Public release',
     date: '13/11/2018'
@@ -108,42 +104,11 @@ const logs = [{
     date: '04/09/2013'
 }]
 
-export default () => (
-    <div className="content-wrapper">
-        <section className="content-header">
-            <h1>
-                Logs
-                <small>Control panel</small>
-            </h1>
-            <ol className="breadcrumb">
-                <li><Link to={pathTo('home')}><i className="fa fa-dashboard"/> Home</Link></li>
-                <li className="active">Logs</li>
-            </ol>
-        </section>
+const versions = (state = defaultState, action) => {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
 
-        <section className="content">
-            <div className="row">
-                <div className="col-md-12">
-
-                    <h3>Logs</h3>
-
-                    <ul className="timeline">
-                        {logs.map((value, index) => ([
-                            <li key={'date-'+index} className="time-label"><span className="bg-green">{value.date}</span></li>,
-                            <li key={'label-'+index}>
-                                <div className="timeline-item">
-                                    <h3 className="timeline-header">{value.label}</h3>
-                                    <div className="timeline-body" />
-                                    <div className="timeline-footer">
-                                        <span className="label label-primary fa fa-tag"> {value.tag}</span>
-                                    </div>
-                                </div>
-                            </li>
-                        ]))}
-                    </ul>
-
-                </div>
-            </div>
-        </section>
-    </div>
-)
+export default versions

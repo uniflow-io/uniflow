@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {connect} from 'react-redux'
 import {getOrderedHistory, createHistory, setCurrentHistory} from '../../../reducers/history/actions'
-import {commitAddLog} from '../../../reducers/log/actions'
+import {commitAddLog} from '../../../reducers/logs/actions'
 
 class History extends Component {
     state = {

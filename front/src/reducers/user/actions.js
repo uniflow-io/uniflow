@@ -6,7 +6,7 @@ import {
     COMMIT_UPDATE_SETTINGS,
 } from './actionsTypes'
 import {commitLogoutUser} from "../auth/actions";
-import {commitAddLog} from "../log/actions";
+import {commitAddLog} from "../logs/actions";
 
 export const fetchComponents = (token) => {
     return (dispatch) => {
