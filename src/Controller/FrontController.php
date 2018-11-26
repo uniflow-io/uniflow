@@ -72,11 +72,11 @@ class FrontController extends Controller
     }
 
     /**
-     * @Route("/logs", name="logs")
+     * @Route("/versions", name="versions")
      */
-    public function logs()
+    public function versions()
     {
-        return $this->render('default/logs.html.twig');
+        return $this->render('default/versions.html.twig');
     }
 
     /**
