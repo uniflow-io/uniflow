@@ -5,7 +5,7 @@ import {
 } from '../../reducers/auth/actions'
 import {withRouter} from 'react-router'
 import {pathTo} from '../../routes'
-import {commitAddLog} from "../../reducers/log/actions";
+import {commitAddLog} from "../../reducers/logs/actions";
 import {Log} from '../../models/index'
 import {Link} from "react-router-dom";
 

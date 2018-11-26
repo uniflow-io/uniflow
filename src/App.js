@@ -10,8 +10,9 @@ import routes, {pathTo} from './routes'
 import reducers from './reducers/index'
 import { UserManager } from './components/index'
 import createStore from './utils/createStore'
-import {getNewLogs,commitReadLog} from './reducers/log/actions'
+import {getNewLogs,commitReadLog} from './reducers/logs/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
+import {getLastVersion} from './reducers/versions/actions'
 import {withRouter, matchPath} from 'react-router'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
@@ -108,11 +109,6 @@ class Header extends Component {
         })) {
             active = 'faq'
         } else if(matchPath(location.pathname, {
-            path: routes.logs.path,
-            exact: true
-        })) {
-            active = 'logs'
-        } else if(matchPath(location.pathname, {
             path: routes.settings.path,
             exact: true
         })) {
@@ -163,9 +159,6 @@ class Header extends Component {
                             <li className={active === 'faq' ? 'active' : ''}>
                                 <Link to={pathTo('faq')}>FAQ</Link>
                             </li>
-                            <li className={active === 'logs' ? 'active' : ''}>
-                                <Link to={pathTo('logs')}>Logs</Link>
-                            </li>
                             {auth.isAuthenticated && (
                             <li className={active === 'settings' ? 'active' : ''}>
                                 <Link to={pathTo('settings')}>Settings</Link>
@@ -196,16 +189,22 @@ Header = connect(state => ({
 
 class Footer extends Component {
     render(): React.ReactNode {
+        const { version } = this.props
+
         return (
             <footer className="main-footer">
                 <div className="pull-right hidden-xs">
-                    <b>Version</b> 1.0
+                    <a href={pathTo('versions')}><b>Version</b> {version}</a>
                 </div>
                 <a className="btn" href="https://github.com/matyo91/uniflow" target="_blank"><i className="fa fa-github" /></a>
             </footer>
         )
     }
 }
+
+Footer = connect(state => ({
+    version: getLastVersion(state.versions),
+}))(Footer)
 
 export default class App extends Component {
     render() {
