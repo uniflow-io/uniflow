@@ -180,7 +180,7 @@ class HistoryController extends Controller
             throw $this->createNotFoundException('Unable to find History entity.');
         }
 
-        if($entity->getPrivate()) {
+        if(!$entity->getPublic()) {
             $user = $this->getUser();
             if (!$user instanceof UserInterface || $entity->getUser()->getId() != $user->getId()) {
                 throw $this->createAccessDeniedException('You are not allowed to view this section.');
