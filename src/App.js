@@ -196,7 +196,7 @@ class Footer extends Component {
                 <div className="pull-right hidden-xs">
                     <a href={pathTo('versions')}><b>Version</b> {version}</a>
                 </div>
-                <a className="btn" href="https://github.com/matyo91/uniflow" target="_blank"><i className="fa fa-github" /></a>
+                <a className="btn" href="https://github.com/uniflow-io/uniflow" target="_blank"><i className="fa fa-github" /></a>
                 <a className="btn" href="https://www.facebook.com/uniflow.io" target="_blank"><i className="fa fa-facebook" /></a>
                 <a className="btn" href="https://twitter.com/uniflow_io" target="_blank"><i className="fa fa-twitter" /></a>
                 <a className="btn" href="https://medium.com/@uniflow.io" target="_blank"><i className="fa fa-medium" /></a>
