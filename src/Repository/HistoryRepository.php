@@ -136,7 +136,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->select('h')
             ->leftJoin('h.user', 'u')
             ->andWhere('u.username = :username')->setParameter('username', $username)
-            ->andWhere('h.private = :private')->setParameter('private', false)
+            ->andWhere('h.public = :public')->setParameter('public', true)
             ->addOrderBy('h.updated', 'DESC')
         ;
 
@@ -161,7 +161,7 @@ class HistoryRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
-            ->andWhere('h.private = :private')->setParameter('private', false)
+            ->andWhere('h.public = :public')->setParameter('public', true)
             ->addOrderBy('h.updated', 'DESC')
         ;
 

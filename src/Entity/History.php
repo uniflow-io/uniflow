@@ -74,7 +74,7 @@ class History
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    protected $private;
+    protected $public;
 
     /**
      * @var string
@@ -265,17 +265,17 @@ class History
     /**
      * @return mixed
      */
-    public function getPrivate()
+    public function getPublic()
     {
-        return $this->private;
+        return $this->public;
     }
 
     /**
-     * @param mixed $private
+     * @param mixed $public
      */
-    public function setPrivate($private)
+    public function setPublic($public)
     {
-        $this->private = $private;
+        $this->public = $public;
     }
 
     /**
