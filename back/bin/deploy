@@ -1,6 +1,6 @@
 #!/bin/sh
 
-open -a "Google Chrome" https://app.buddy.works/matyo91/uniflow/pipelines
+open -a "Google Chrome" https://app.buddy.works/matyo91/uniflow-io/pipelines
 
 : 'ssh admin@ssh.darkwood.fr << CMD
 
