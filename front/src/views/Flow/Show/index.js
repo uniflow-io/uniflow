@@ -188,9 +188,9 @@ class Show extends Component {
             })
     }
 
-    onChangePrivate = (value) => {
+    onChangePublic = (value) => {
         this.props
-            .dispatch(commitUpdateHistory({...this.props.history, ...{private: value}}))
+            .dispatch(commitUpdateHistory({...this.props.history, ...{public: value}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -292,10 +292,10 @@ class Show extends Component {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="private{{ _uid }}" className="col-sm-2 control-label">Private</label>
+                                <label htmlFor="public{{ _uid }}" className="col-sm-2 control-label">Public</label>
 
                                 <div className="col-sm-10">
-                                    <ICheckBox value={history.private} onChange={this.onChangePrivate} />
+                                    <ICheckBox value={history.public} onChange={this.onChangePublic} />
                                 </div>
                             </div>
 

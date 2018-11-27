@@ -118,7 +118,7 @@ class HistoryService
             'platform'    => $history->getPlatform(),
             'tags'        => $tags,
             'description' => $history->getDescription(),
-            'private'     => $history->getPrivate(),
+            'public'      => $history->getPublic(),
             'created'     => $history->getCreated()->format('c'),
             'updated'     => $history->getUpdated()->format('c'),
         );

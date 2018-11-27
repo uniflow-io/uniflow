@@ -54,7 +54,7 @@ class HistoryType extends AbstractType
             'allow_delete' => true,
         ));
         $builder->add('description', TextareaType::class);
-        $builder->add('private', CheckboxType::class);
+        $builder->add('public', CheckboxType::class);
 
         $tagsTransformer = new TagTransformer($this->tagService);
         $builder->get('tags')->addModelTransformer($tagsTransformer);
