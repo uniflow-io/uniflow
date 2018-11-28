@@ -33,8 +33,16 @@ class History extends Component {
     }
 
     render() {
-        const isActive = (history, item) => {
-            return (history.current === item.id) ? 'active' : ''
+        const isActive = (item) => {
+            return (this.props.history.current === item.id) ? 'active' : ''
+        }
+
+        const itemPathTo = (item) => {
+            if(item.public || this.props.history.username === this.props.history.username) {
+                return pathTo('userFlow', {username: this.props.history.username, slug: item.slug})
+            }
+
+            return pathTo('flow', {slug: item.slug})
         }
 
         return (
@@ -68,9 +76,9 @@ class History extends Component {
                                     </form>
                                 </li>
                                 {getOrderedHistory(this.props.history, this.state.search).map((item, i) => (
-                                    <li className={isActive(this.props.history, item)} key={i}>
+                                    <li className={isActive(item)} key={i}>
                                         <Link
-                                            to={pathTo('flow', {slug: item.slug})}>{item.title} {item.tags.map((tag, j) => (
+                                            to={itemPathTo(item)}>{item.title} {item.tags.map((tag, j) => (
                                             <span key={j} className="badge">{tag}</span>
                                         ))}</Link>
                                     </li>
@@ -86,5 +94,6 @@ class History extends Component {
 
 export default connect(state => ({
     auth: state.auth,
+    user: state.user,
     history: state.history
 }))(History)
