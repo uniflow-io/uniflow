@@ -86,9 +86,9 @@ class Login extends Component {
                                             </button>
                                         </div>
 
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
-                                            class="btn btn-info btn-block btn-flat">{{'user.login.facebook' | trans}}</a>
+                                        {/*<div className="form-group col-sm-12">
+                                            <a href=""
+                                            className="btn btn-info btn-block btn-flat">Facebook Login</a>
                                             </div>*/}
 
                                         {/*<div class="form-group col-sm-12">
