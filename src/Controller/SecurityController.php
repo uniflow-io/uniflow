@@ -28,9 +28,9 @@ class SecurityController extends Controller
         $this->userService = $userService;
     }
     /**
-     * @throws \Exception
-     *
      * @Route("/api/login_check", name="api_login_check")
+     *
+     * @throws \Exception
      */
     public function loginCheck(Request $request)
     {
@@ -38,9 +38,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * @throws \Exception
-     *
      * @Route("/api/register", name="api_register", methods={"POST"})
+     *
+     * @throws \Exception
      */
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
