@@ -27,9 +27,10 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/api/user/register", name="api_user_register", methods={"POST"})
+     *
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/register", name="api_user_register", methods={"POST"})
      */
     public function register(Request $request)
     {
@@ -39,9 +40,10 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/api/user/getComponents", name="api_user_get_components", methods={"PUT"})
+     *
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/getComponents", name="api_user_get_components", methods={"PUT"})
      */
     public function components(Request $request)
     {
@@ -67,9 +69,10 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/api/user/getSettings", name="api_user_get_settings", methods={"GET"})
+     *
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/getSettings", name="api_user_get_settings", methods={"GET"})
      */
     public function getSettings(Request $request)
     {
@@ -83,9 +86,10 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/api/user/setSettings", name="api_user_set_settings", methods={"PUT"})
+     *
      * @param Request $request
      * @return JsonResponse
-     * @Route("/api/user/setSettings", name="api_user_set_settings", methods={"PUT"})
      */
     public function setSettings(Request $request)
     {

@@ -48,13 +48,13 @@ class HistoryController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @Route("/api/history/{username}/list/{platform}", name="api_history_list", methods={"GET"})
+     *
      * @param string $username
      * @param string $platform
      * @return JsonResponse
-     * @Route("/api/history/{username}/list/{platform}", name="api_history_list", methods={"GET"})
      */
-    public function listAction(Request $request, $username = 'me', $platform = null)
+    public function listAction($username = 'me', $platform = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -119,9 +119,11 @@ class HistoryController extends Controller
     }
 
     /**
+     * @Route("/api/history/create", name="api_history_create", methods={"POST"})
+     *
      * @param Request $request
      * @return Response
-     * @Route("/api/history/create", name="api_history_create", methods={"POST"})
+     * @throws \Exception
      */
     public function create(Request $request)
     {
@@ -143,11 +145,12 @@ class HistoryController extends Controller
     }
 
     /**
+     * @Route("/api/history/update/{id}", name="api_history_update", methods={"PUT"})
+     *
      * @param Request $request
      * @param $id
      * @return Response
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/update/{id}", name="api_history_update", methods={"PUT"})
      */
     public function update(Request $request, $id)
     {
@@ -166,13 +169,13 @@ class HistoryController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @Route("/api/history/getData/{id}", name="api_history_get_data", methods={"GET"})
+     *
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/getData/{id}", name="api_history_get_data", methods={"GET"})
      */
-    public function getData(Request $request, $id)
+    public function getData($id)
     {
         $entity = $this->historyService->findOne($id);
 
@@ -191,11 +194,12 @@ class HistoryController extends Controller
     }
 
     /**
+     * @Route("/api/history/setData/{id}", name="api_history_set_data", methods={"PUT"})
+     *
      * @param Request $request
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/setData/{id}", name="api_history_set_data", methods={"PUT"})
      */
     public function setData(Request $request, $id)
     {
@@ -239,13 +243,13 @@ class HistoryController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @Route("/api/history/delete/{id}", name="api_history_delete", methods={"DELETE"})
+     *
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @Route("/api/history/delete/{id}", name="api_history_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
@@ -266,10 +270,9 @@ class HistoryController extends Controller
 
 
     /**
-     * @param Request $request
-     * @param string $platform
-     * @return JsonResponse
      * @Route("/api/history/last-public", name="api_history_last_public", methods={"GET"})
+     *
+     * @return JsonResponse
      */
     public function lastPublic()
     {
