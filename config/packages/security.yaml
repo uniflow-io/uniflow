@@ -37,10 +37,6 @@ security:
                 - App\Security\ApiKeyAuthenticator
                 entry_point: lexik_jwt_authentication.jwt_token_authenticator
 
-        main:
-            anonymous: true
-            http_basic: true
-
     access_control:
         #- { path: ^/api/login,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
