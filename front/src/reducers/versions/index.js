@@ -1,105 +1,105 @@
 const defaultState = [{
-    tag: '1.00',
+    tag: 'v1.0.0',
     label: 'Public release',
     date: '13/11/2018'
 }, {
-    tag: '0.25',
+    tag: 'v0.0.25',
     label: 'Add authentification by JWT tokens',
     date: '20/09/2018'
 }, {
-    tag: '0.24',
+    tag: 'v0.0.24',
     label: 'Add chrome platform',
     date: '30/08/2018'
 }, {
-    tag: '0.23',
+    tag: 'v0.0.23',
     label: 'Add platform to history',
     date: '30/08/2018'
 }, {
-    tag: '0.22',
+    tag: 'v0.0.22',
     label: 'Add regex component',
     date: '17/08/2018'
 }, {
-    tag: '0.21',
+    tag: 'v0.0.21',
     label: 'Add prompt component',
     date: '05/08/2018'
 }, {
-    tag: '0.20',
+    tag: 'v0.0.20',
     label: 'Add bash runner',
     date: '26/07/2018'
 }, {
-    tag: '0.19',
+    tag: 'v0.0.19',
     label: 'Add webpack tool for development',
     date: '12/07/2018'
 }, {
-    tag: '0.18',
+    tag: 'v0.0.18',
     label: 'Symfony 4',
     date: '04/07/2018'
 }, {
-    tag: '0.17',
+    tag: 'v0.0.17',
     label: 'Add browser component',
     date: '21/06/2018'
 }, {
-    tag: '0.16',
+    tag: 'v0.0.16',
     label: 'Add while component',
     date: '17/04/2018'
 }, {
-    tag: '0.15',
+    tag: 'v0.0.15',
     label: 'Add if component',
     date: '17/04/2018'
 }, {
-    tag: '0.14',
+    tag: 'v0.0.14',
     label: 'Add yaml component',
     date: '12/04/2018'
 }, {
-    tag: '0.13',
+    tag: 'v0.0.13',
     label: 'Refactor components with tagging',
     date: '21/03/2018'
 }, {
-    tag: '0.12',
+    tag: 'v0.0.12',
     label: 'Core include',
     date: '15/01/2018'
 }, {
-    tag: '0.11',
+    tag: 'v0.0.11',
     label: 'Demo account reset',
     date: '15/01/2018'
 }, {
-    tag: '0.10',
+    tag: 'v0.0.10',
     label: 'Display uniflow',
     date: '04/01/2018'
 },{
-    tag: '0.09',
+    tag: 'v0.0.9',
     label: 'Migrate from VueJS',
     date: '04/01/2018'
 },{
-    tag: '0.08',
+    tag: 'v0.0.8',
     label: 'Implement multi-user connection',
     date: '08/12/2017'
 },{
-    tag: '0.07',
+    tag: 'v0.0.7',
     label: 'Display active block when running a flow',
     date: '22/11/2016'
 },{
-    tag: '0.06',
+    tag: 'v0.0.6',
     label: 'Uniflow flow implementation',
     date: '18/11/2016'
 },{
-    tag: '0.05',
+    tag: 'v0.0.5',
     label: 'Uniflow core components',
     date: '15/11/2016'
 },{
-    tag: '0.04',
+    tag: 'v0.0.4',
     label: 'Interface with VueJS 2.0',
     date: '19/10/2016'
 },{
-    tag: '0.03',
+    tag: 'v0.0.3',
     label: 'Use NoFlo',
     date: '27/11/2013'
 },{
-    tag: '0.02',
+    tag: 'v0.0.2',
     label: 'Graph update',
     date: '15/11/2013'
 },{
-    tag: '0.01',
+    tag: 'v0.0.1',
     label: 'Bootstrap 3',
     date: '04/09/2013'
 }]
