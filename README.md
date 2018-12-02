@@ -12,7 +12,7 @@ And is largely inspired by many projects :
 - [Google Blocky](https://developers.google.com/blockly/)
 - [nvAlt](http://brettterpstra.com/projects/nvalt/)
 
-Here, you can customise your own task and create your own specific modules into one normalised [SAAS interface](https://en.wikipedia.org/wiki/Software_as_a_service).
+Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface.
 And the runner is specificaly implemented to various way on : Browser, Bash, Your own software plugins...
 
 More informations at [https://uniflow.io](https://uniflow.io)
