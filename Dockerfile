@@ -117,6 +117,8 @@ RUN set -ex; \
     cd /var/www/back; \
     composer install
 
+COPY config/.env.local /var/www/back/.env.local
+
 VOLUME /var/www
 WORKDIR /var/www/back
 
