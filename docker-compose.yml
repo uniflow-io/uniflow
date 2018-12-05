@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    ports:
+      - 8080:80
+    links:
+      - db
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root

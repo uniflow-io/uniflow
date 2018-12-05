@@ -9,7 +9,7 @@ Usage
 The image contains a LAMP webserver and exposes port 80. To start the container type:
 
 ```console
-$ docker run -d -p 8080:80 uniflow
+$ docker-compose up -d
 ```
 
 Now you can access Uniflow at http://localhost:8080/ from your host system.

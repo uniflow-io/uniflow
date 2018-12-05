@@ -1,15 +1,19 @@
 FROM php:7.2-apache-stretch
 MAINTAINER Mathieu Ledru <matyo91@gmail.com>
 
-# update system
+## update system
+
 RUN set -ex; \
     \
     apt-get update; \
     apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
         unzip \
+        gnupg \
     ; \
     rm -rf /var/lib/apt/lists/*;
+
+## configure PHP
 
 # install the PHP extensions we need
 RUN set -ex; \
@@ -85,6 +89,26 @@ RUN { \
     \
     echo 'memory_limit=512M' > /usr/local/etc/php/conf.d/memory-limit.ini;
 
+
+## configure apache
+
+RUN a2enmod rewrite
+
+ENV APACHE_DOCUMENT_ROOT /var/www/back/public
+
+COPY config/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# configure nodejs
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs build-essential
+
+RUN npm install -g yarn
+
+## install uniflow
+
+# download uniflow
 ENV UNIFLOW_VERSION 1.0.0
 
 RUN set -ex; \
@@ -99,12 +123,6 @@ RUN set -ex; \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www
 
-# update root
-ENV APACHE_DOCUMENT_ROOT /var/www/back/public
-
-COPY config/000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
 # install composer
 RUN set -ex; \
     \
@@ -114,9 +132,21 @@ RUN set -ex; \
 
 RUN set -ex; \
     \
-    cd /var/www/back; \
-    composer install
+    (cd /var/www/back; composer install)
 
+# build front
+RUN set -ex; \
+    \
+    (cd /var/www/front; yarn install); \
+    (cd /var/www/front; yarn build)
+
+# build bash
+RUN set -ex; \
+    \
+    (cd /var/www/platform-bash; yarn install); \
+    (cd /var/www/platform-bash; yarn build)
+
+# apply config
 COPY config/.env.local /var/www/back/.env.local
 
 VOLUME /var/www
