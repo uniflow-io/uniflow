@@ -12,4 +12,12 @@ The image contains a LAMP webserver and exposes port 80. To start the container 
 $ docker-compose up -d
 ```
 
+Then create the database
+
+```console
+$ docker-compose exec app bin/console doctrine:database:create
+$ docker-compose exec app bin/console doctrine:schema:update --force
+$ docker-compose exec app bin/console --env=dev doctrine:fixtures:load --append
+```
+
 Now you can access Uniflow at http://localhost:8080/ from your host system.

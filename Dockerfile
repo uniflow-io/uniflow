@@ -118,7 +118,10 @@ RUN set -ex; \
     unzip uniflow.zip -d /tmp/; \
     mv /tmp/uniflow-${UNIFLOW_VERSION} /tmp/www; \
     rm -rf /var/www; \
-    mv /tmp/www /var; \
+    mv /tmp/www /var;
+
+# fix permissions
+RUN set -ex; \
     \
     chown -R www-data:root /var/www; \
     chmod -R g=u /var/www
