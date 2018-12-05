@@ -137,6 +137,13 @@ RUN set -ex; \
     \
     (cd /var/www/back; composer install)
 
+# generate JWT
+RUN set -ex; \
+    \
+    mkdir -p /var/www/back/config/jwt; \
+    openssl genrsa -out /var/www/back/config/jwt/private.pem -aes256 -passout pass:uniflow 4096; \
+    openssl rsa -pubout -in /var/www/back/config/jwt/private.pem -out /var/www/back/config/jwt/public.pem -passin pass:uniflow
+
 # build front
 RUN set -ex; \
     \
