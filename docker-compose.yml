@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   app:
-    build: .
+    image: uniflowio/uniflow
     container_name: uniflow_app
     hostname: uniflow_app
     ports:
