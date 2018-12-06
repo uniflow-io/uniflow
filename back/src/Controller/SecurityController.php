@@ -38,6 +38,65 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/api/login/facebook", name="api_login_facebook", methods={"POST"})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function facebookLogin(Request $request)
+    {
+        $token = $request->get("access_token");
+        // Get the token's FB app info.
+        @$tokenAppResp = file_get_contents('https://graph.facebook.com/app/?access_token=' . $token);
+        if (!$tokenAppResp) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Make sure it's the correct app.
+        $tokenApp = json_decode($tokenAppResp, true);
+        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->container->getParameter('oauth.facebook.id')) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Get the token's FB user info.
+        @$tokenUserResp = file_get_contents('https://graph.facebook.com/me/?access_token=' . $token);
+        if (!$tokenUserResp) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Try to fetch user by it's token ID, create it otherwise.
+        $tokenUser = json_decode($tokenUserResp, true);
+        if (!$tokenUser || !isset($tokenUser['id'])) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        $userProvider = $this->get("user_bundle.oauth_user_provider");
+        $user = $userProvider->loadUserByUsername($tokenUser['id']);
+
+        if ($user === null) {
+            /** @var UserManager $userManager */
+            $userManager = $this->get("fos_user.user_manager");
+            /** @var AuthUser $user */
+            $user = $userManager->createUser();
+            $user->setFacebookID($tokenUser['id']);
+            $user->setFacebookAccessToken($token);
+            //I have set all requested data with the user's username
+            //modify here with relevant data
+            $user->setUsername($tokenUser['id']);
+            $user->setFirstName($tokenUser['first_name']);
+            $user->setLastName($tokenUser['last_name']);
+            $user->setEmail($tokenUser['email']);
+            $user->setPlainPassword(substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10 / strlen($x)))), 1, 10));
+            $user->setEnabled(true);
+            $userManager->updateUser($user);
+        }
+
+        return new JsonResponse(array(
+            'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user)
+        ));
+    }
+
+    /**
      * @Route("/api/register", name="api_register", methods={"POST"})
      *
      * @throws \Exception
