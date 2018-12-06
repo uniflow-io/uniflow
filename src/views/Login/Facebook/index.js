@@ -1,9 +1,33 @@
 import React, {Component} from 'react'
 import {Link} from "react-router-dom";
 import {pathTo} from "../../../routes";
+import { withRouter } from 'react-router'
+import {loginFacebook} from "../../../reducers/auth/actions";
+import {commitAddLog} from "../../../reducers/logs/actions";
+import connect from "react-redux/es/connect/connect";
 
 class LoginFacebook extends Component {
     componentWillMount () {
+        let accessToken = this.checkAccessToken()
+
+        this.props.dispatch(loginFacebook(accessToken))
+            .then(() => {
+                if (this.props.auth.isAuthenticated) {
+                    return this.props.history.push(pathTo('dashboard'))
+                } else {
+                    this.props.dispatch(commitAddLog(this.props.auth.statusText))
+                    return this.props.history.push(pathTo('login'))
+                }
+            })
+    }
+
+    checkAccessToken () {
+        let m = this.props.location.hash.match(/access_token=([^&]*)/)
+        if(m) {
+            return m[1]
+        }
+
+        return this.props.history.push(pathTo('login'))
     }
 
     render () {
@@ -30,7 +54,7 @@ class LoginFacebook extends Component {
                                     <h3 className="box-title">Login Facebook</h3>
                                 </div>
                                 <div className="box-body">
-                                    <p>Application is currently logging you from facebook</p>
+                                    <p>Application is currently logging you from Facebook</p>
                                 </div>
                             </div>
                         </div>
@@ -43,4 +67,8 @@ class LoginFacebook extends Component {
     }
 }
 
-export default LoginFacebook
+export default connect(state => {
+    return {
+        auth: state.auth
+    }
+})(withRouter(LoginFacebook))

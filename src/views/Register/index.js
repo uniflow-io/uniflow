@@ -6,7 +6,6 @@ import {
 import { withRouter } from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/logs/actions";
-import {Log} from '../../models/index'
 import {Link} from "react-router-dom";
 
 class Register extends Component {
@@ -29,7 +28,7 @@ class Register extends Component {
         this.props.dispatch(register(this.state.email, this.state.password))
             .then(() => {
                 if(this.props.auth.isAuthenticated) {
-                    this.props.history.push(pathTo('dashboard'))
+                    return this.props.history.push(pathTo('dashboard'))
                 } else {
                     return this.props.dispatch(commitAddLog(this.props.auth.statusText))
                 }
@@ -81,10 +80,10 @@ class Register extends Component {
                                                     onClick={this.onSubmit}>Register</button>
                                         </div>
 
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
-                                            class="btn btn-info btn-block btn-flat">{{'user.register.facebook' | trans}}</a>
-                                            </div>*/}
+                                        <div className="form-group col-sm-12">
+                                            <a href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
+                                               className="btn btn-info btn-block btn-flat">Facebook Login</a>
+                                        </div>
 
                                     </form>
                                 </div>
