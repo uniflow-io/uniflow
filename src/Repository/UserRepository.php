@@ -79,6 +79,25 @@ class UserRepository  extends ServiceEntityRepository
     }
 
     /**
+     * @param $facebookId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByFacebookId($facebookId = null)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u')
+        ;
+
+        $qb->where('u.facebookId = :facebookId')
+            ->setParameter('facebookId', $facebookId);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
      * @param array $filters
      * @return \Doctrine\ORM\Query
      */

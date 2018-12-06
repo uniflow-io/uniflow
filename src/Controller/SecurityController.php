@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Services\UserService;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -18,15 +19,29 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * @var string
+     */
+    protected $appOauthFacebookId;
+
+    /**
      * @var UserService
      */
     protected $userService;
 
+    /**
+     * @var JWTTokenManagerInterface
+     */
+    protected $jwtTokenManager;
+
     public function __construct(
-        UserService $userService
+        $appOauthFacebookId,
+        UserService $userService,
+        JWTTokenManagerInterface $jwtTokenManager
     )
     {
+        $this->appOauthFacebookId = $appOauthFacebookId;
         $this->userService = $userService;
+        $this->jwtTokenManager = $jwtTokenManager;
     }
     /**
      * @Route("/api/login_check", name="api_login_check")
@@ -43,6 +58,7 @@ class SecurityController extends AbstractController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function facebookLogin(Request $request)
     {
@@ -62,7 +78,7 @@ class SecurityController extends AbstractController
 
         // Make sure it's the correct app.
         $tokenApp = json_decode($tokenAppResp, true);
-        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->container->getParameter('oauth.facebook.id')) {
+        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->appOauthFacebookId) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
 
@@ -78,29 +94,23 @@ class SecurityController extends AbstractController
             throw new AccessDeniedHttpException('Bad credentials.');
         }
 
-        $userProvider = $this->get("user_bundle.oauth_user_provider");
-        $user = $userProvider->loadUserByUsername($tokenUser['id']);
+        $user = $this->userService->findOneByFacebookId($tokenUser['id']);
 
         if ($user === null) {
-            /** @var UserManager $userManager */
-            $userManager = $this->get("fos_user.user_manager");
-            /** @var AuthUser $user */
-            $user = $userManager->createUser();
-            $user->setFacebookID($tokenUser['id']);
-            $user->setFacebookAccessToken($token);
-            //I have set all requested data with the user's username
-            //modify here with relevant data
-            $user->setUsername($tokenUser['id']);
-            $user->setFirstName($tokenUser['first_name']);
-            $user->setLastName($tokenUser['last_name']);
-            $user->setEmail($tokenUser['email']);
-            $user->setPlainPassword(substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil(10 / strlen($x)))), 1, 10));
-            $user->setEnabled(true);
-            $userManager->updateUser($user);
+            $user = new User();
+            $user->setFacebookId($tokenUser['id']);
+            $user->setEmail($tokenUser['id'].'@facebook.com');
+            $user->setPassword(md5(uniqid('uniflow', true)));
+            $this->userService->save($user);
+
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                'User registered !'
+            );
         }
 
         return new JsonResponse(array(
-            'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user)
+            'token' => $this->jwtTokenManager->create($user)
         ));
     }
 
@@ -135,7 +145,7 @@ class SecurityController extends AbstractController
             );
 
             return new JsonResponse(array(
-                'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user)
+                'token' => $this->jwtTokenManager->create($user)
             ));
         }
 
