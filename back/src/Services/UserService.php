@@ -104,6 +104,16 @@ class UserService
         return $this->userRepository->findOneByEmailOrUsername($username);
     }
 
+    /**
+     * @param $facebookId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByFacebookId($facebookId)
+    {
+        return $this->userRepository->findOneByFacebookId($facebookId);
+    }
+
     public function findOneByApiKey($apiKey)
     {
         return $this->userRepository->findOneBy(array('apiKey' => $apiKey));
