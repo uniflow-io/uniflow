@@ -120,7 +120,7 @@ export const fetchHistory = (username, token = null) => {
         let config = {}
         if(token) {
             config['headers'] = {
-                'Authorization': `Bearer ${token}`
+                'Uniflow-Authorization': `Bearer ${token}`
             }
         }
 
@@ -159,7 +159,7 @@ export const createHistory = (item, token) => {
         return request
             .post(`${server.getBaseUrl()}/api/history/create`, data, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Uniflow-Authorization': `Bearer ${token}`
                 }
             })
             .then((response) => {
@@ -194,7 +194,7 @@ export const updateHistory = (item, token) => {
         return request
             .put(`${server.getBaseUrl()}/api/history/update/${item.id}`, data, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Uniflow-Authorization': `Bearer ${token}`
                 }
             })
             .then((response) => {
@@ -219,7 +219,7 @@ export const getHistoryData = (item, token = null) => {
         let config = {}
         if(token) {
             config['headers'] = {
-                'Authorization': `Bearer ${token}`
+                'Uniflow-Authorization': `Bearer ${token}`
             }
         }
 
@@ -243,7 +243,7 @@ export const setHistoryData = (item, token) => {
         return request
             .put(`${server.getBaseUrl()}/api/history/setData/${item.id}`, item.data, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Uniflow-Authorization': `Bearer ${token}`
                 }
             })
             .then((response) => {
@@ -269,7 +269,7 @@ export const deleteHistory = (item, token) => {
         return request
             .delete(`${server.getBaseUrl()}/api/history/delete/${item.id}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Uniflow-Authorization': `Bearer ${token}`
                 }
             })
             .then((response) => {
