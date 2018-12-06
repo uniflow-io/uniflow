@@ -29,7 +29,7 @@ class Login extends Component {
         this.props.dispatch(login(this.state.username, this.state.password))
             .then(() => {
                 if (this.props.auth.isAuthenticated) {
-                    this.props.history.push(pathTo('dashboard'))
+                    return this.props.history.push(pathTo('dashboard'))
                 } else {
                     return this.props.dispatch(commitAddLog(this.props.auth.statusText))
                 }

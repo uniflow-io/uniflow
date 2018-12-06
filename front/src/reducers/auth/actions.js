@@ -83,6 +83,35 @@ export const login = (username, password) => {
     }
 }
 
+export const loginFacebook = (access_token) => {
+    return (dispatch) => {
+        return dispatch(commitLoginUserRequest())
+            .then(() => {
+                return request
+                    .post(`${server.getBaseUrl()}/api/login/facebook`, {
+                        'access_token': access_token,
+                    })
+                    .then((response) => {
+                        try {
+                            jwtDecode(response.data.token);
+                            return dispatch(commitLoginUserSuccess(response.data.token));
+                        } catch (e) {
+                            return dispatch(commitLoginUserFailure({
+                                response: {
+                                    status: 403,
+                                    statusText: 'Invalid token'
+                                }
+                            }));
+                        }
+                    })
+                    .catch((error) => {
+                        dispatch(commitLoginUserFailure(error));
+                    })
+                    ;
+            })
+    }
+}
+
 export const register = (email, password) => {
     return (dispatch) => {
         return dispatch(commitLoginUserRequest())
