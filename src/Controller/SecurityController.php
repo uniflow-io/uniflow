@@ -7,6 +7,7 @@ use App\Form\RegisterType;
 use App\Services\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -45,7 +46,14 @@ class SecurityController extends AbstractController
      */
     public function facebookLogin(Request $request)
     {
-        $token = $request->get("access_token");
+        $token = null;
+
+        $content = $request->getContent();
+        if (!empty($content)) {
+            $data = json_decode($content, true);
+            $token = isset($data['access_token']) ? $data['access_token'] : null;
+        }
+
         // Get the token's FB app info.
         @$tokenAppResp = file_get_contents('https://graph.facebook.com/app/?access_token=' . $token);
         if (!$tokenAppResp) {
