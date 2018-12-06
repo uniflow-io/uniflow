@@ -3,4 +3,4 @@
 # deploy bash
 (cd ../platform-bash;yarn install)
 (cd ../platform-bash;yarn build)
-scp public/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/uniflow.io/back/public/dist/js/bash.js
+scp public/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/dist/js/bash.js
