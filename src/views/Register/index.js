@@ -86,10 +86,6 @@ class Register extends Component {
                                             class="btn btn-info btn-block btn-flat">{{'user.register.facebook' | trans}}</a>
                                             </div>*/}
 
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.register.meetup' | trans}}</a>
-                                            </div>*/}
-
                                     </form>
                                 </div>
                             </div>

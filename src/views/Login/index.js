@@ -86,14 +86,10 @@ class Login extends Component {
                                             </button>
                                         </div>
 
-                                        {/*<div className="form-group col-sm-12">
-                                            <a href=""
+                                        <div className="form-group col-sm-12">
+                                            <a href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
                                             className="btn btn-info btn-block btn-flat">Facebook Login</a>
-                                            </div>*/}
-
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.login.meetup' | trans}}</a>
-                                            </div>*/}
+                                            </div>
 
                                     </form>
                                 </div>
