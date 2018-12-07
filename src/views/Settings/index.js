@@ -65,8 +65,15 @@ class Settings extends Component {
         copyTextToClipboard(clipbard)
     }
 
-    onUpdate = (event) => {
+    onRevokeFacebook = (event) => {
         event.preventDefault()
+        this.setState({user: {...this.state.user, ...{facebookId: null}}}, this.onUpdate)
+    }
+
+    onUpdate = (event) => {
+        if(event) {
+            event.preventDefault()
+        }
 
         this.setState({'isSaving': true}, () => {
             this.props.dispatch(updateSettings(this.state.user, this.props.auth.token))
@@ -116,12 +123,12 @@ class Settings extends Component {
                     <div className="row">
                         <div className="col-md-12">
 
-                            <div className="box box-primary">
-                                <div className="box-header with-border">
-                                    <h3 className="box-title">Settings</h3>
-                                </div>
-                                <div className="box-body">
-                                    <form className="form-horizontal">
+                            <form className="form-horizontal">
+                                <div className="box box-primary">
+                                    <div className="box-header with-border">
+                                        <h3 className="box-title">Settings</h3>
+                                    </div>
+                                    <div className="box-body">
                                         <div className="form-group">
                                             <label htmlFor="settings_firstname" className="col-sm-2 control-label">Firstname</label>
                                             <div className="col-sm-10">
@@ -146,6 +153,23 @@ class Settings extends Component {
                                                        placeholder="Username"/>
                                             </div>
                                         </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_username" className="col-sm-2 control-label">Facebook</label>
+                                            <div className="col-sm-10">
+                                                {user.facebookId && (
+                                                    <a  onClick={this.onRevokeFacebook}
+                                                        className="btn btn-info">
+                                                        <i className="fa fa-facebook" /> Revoke Facebook
+                                                    </a>
+                                                ) || (
+                                                    <a  href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
+                                                        className="btn btn-block btn-social btn-facebook">
+                                                        <i className="fa fa-facebook" /> Connect with Facebook
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+
                                         <div className="form-group">
                                             <label htmlFor="settings_apiKey" className="col-sm-2 control-label">Api key</label>
                                             <div className="col-sm-10">
@@ -186,9 +210,9 @@ class Settings extends Component {
                                                         onClick={this.onUpdate}>Save</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
 
                         </div>
                     </div>

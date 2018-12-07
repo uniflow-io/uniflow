@@ -9,6 +9,7 @@ const defaultState = {
     username: null,
     firstName: null,
     lastName: null,
+    facebookId: null,
 }
 
 const user = (state = defaultState, action) => {

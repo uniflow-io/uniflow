@@ -56,7 +56,8 @@ export const updateSettings = (item, token) => {
             firstname: item.firstname,
             lastname: item.lastname,
             username: item.username,
-            apiKey: item.apiKey
+            apiKey: item.apiKey,
+            facebookId: item.facebookId,
         };
 
         return request
