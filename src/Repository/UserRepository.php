@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 /**
  * Class UserRepository.
  */
-class UserRepository  extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {

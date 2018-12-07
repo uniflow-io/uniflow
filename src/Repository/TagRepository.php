@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repository;
+
 use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr;
@@ -11,7 +12,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  *
  * @package App\Repository
  */
-class TagRepository  extends ServiceEntityRepository
+class TagRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {

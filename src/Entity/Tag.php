@@ -62,7 +62,8 @@ class Tag
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getTitle();
     }
 
@@ -163,8 +164,7 @@ class Tag
 
     public function removeAllHistories()
     {
-        foreach($this->getHistories() as $history)
-        {
+        foreach ($this->getHistories() as $history) {
             $this->removeHistory($history);
         }
     }

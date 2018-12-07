@@ -131,7 +131,6 @@ class User implements UserInterface, \Serializable
 
     public function eraseCredentials()
     {
-
     }
 
     /**
@@ -409,7 +408,7 @@ class User implements UserInterface, \Serializable
      */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->email,
             $this->password,

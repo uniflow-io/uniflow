@@ -21,8 +21,7 @@ class UserController extends AbstractController
 
     public function __construct(
         UserService $userService
-    )
-    {
+    ) {
         $this->userService = $userService;
     }
 
