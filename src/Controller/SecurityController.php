@@ -31,14 +31,21 @@ class SecurityController extends AbstractController
      */
     protected $jwtTokenManager;
 
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    protected $userPasswordEncoder;
+
     public function __construct(
         $appOauthFacebookId,
         UserService $userService,
-        JWTTokenManagerInterface $jwtTokenManager
+        JWTTokenManagerInterface $jwtTokenManager,
+        UserPasswordEncoderInterface $userPasswordEncoder
     ) {
         $this->appOauthFacebookId = $appOauthFacebookId;
         $this->userService = $userService;
         $this->jwtTokenManager = $jwtTokenManager;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
     /**
      * @Route("/api/login_check", name="api_login_check")
@@ -91,19 +98,31 @@ class SecurityController extends AbstractController
             throw new AccessDeniedHttpException('Bad credentials.');
         }
 
-        $user = $this->userService->findOneByFacebookId($tokenUser['id']);
+        $facebookId = $tokenUser['id'];
+        $facebookEmail = $tokenUser['id'].'@facebook.com';
+
+        $user = $this->getUser();
+        if(is_null($user)) {
+            $user = $this->userService->findOneByFacebookId($facebookId);
+            if ($user === null) {
+                $user = $this->userService->findOneByEmail($facebookEmail);
+            }
+        }
 
         if ($user === null) {
             $user = new User();
-            $user->setFacebookId($tokenUser['id']);
-            $user->setEmail($tokenUser['id'].'@facebook.com');
-            $user->setPassword(md5(uniqid('uniflow', true)));
+            $user->setFacebookId($facebookId);
+            $user->setEmail($facebookEmail);
+            $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
             $this->userService->save($user);
 
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 'User registered !'
             );
+        } elseif ($user->getFacebookId() === null) {
+            $user->setFacebookId($facebookId);
+            $this->userService->save($user);
         }
 
         return new JsonResponse(array(
@@ -116,7 +135,7 @@ class SecurityController extends AbstractController
      *
      * @throws \Exception
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encoder)
+    public function register(Request $request)
     {
         $user = new User();
 
@@ -133,7 +152,7 @@ class SecurityController extends AbstractController
         }
 
         if ($form->isValid()) {
-            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
             $this->userService->save($user);
 
             $this->get('session')->getFlashBag()->add(
