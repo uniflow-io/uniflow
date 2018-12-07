@@ -35,8 +35,7 @@ class SecurityController extends AbstractController
         $appOauthFacebookId,
         UserService $userService,
         JWTTokenManagerInterface $jwtTokenManager
-    )
-    {
+    ) {
         $this->appOauthFacebookId = $appOauthFacebookId;
         $this->userService = $userService;
         $this->jwtTokenManager = $jwtTokenManager;

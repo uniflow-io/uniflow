@@ -7,7 +7,6 @@ use App\Repository\TagRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
-
 /**
  * Class TagService
  *
@@ -29,8 +28,7 @@ class TagService
 
     public function __construct(
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->em            = $em;
         $this->tagRepository = $this->em->getRepository(Tag::class);
     }

@@ -17,8 +17,7 @@ class ApiKeyUserProvider implements UserProviderInterface
 
     public function __construct(
         UserService $userService
-    )
-    {
+    ) {
         $this->userService = $userService;
     }
 
