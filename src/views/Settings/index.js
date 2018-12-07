@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import _ from 'lodash'
 import {
     updateSettings,
     commitUpdateSettings
@@ -7,6 +6,7 @@ import {
 import {connect} from "react-redux";
 import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
+import {loginFacebookUrl} from "../../reducers/auth/actions";
 
 function copyTextToClipboard(text) {
     let textArea = document.createElement("textarea");
@@ -162,14 +162,13 @@ class Settings extends Component {
                                                         <i className="fa fa-facebook" /> Revoke Facebook
                                                     </a>
                                                 ) || (
-                                                    <a  href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
+                                                    <a  href={loginFacebookUrl()}
                                                         className="btn btn-block btn-social btn-facebook">
                                                         <i className="fa fa-facebook" /> Connect with Facebook
                                                     </a>
                                                 )}
                                             </div>
                                         </div>
-
                                         <div className="form-group">
                                             <label htmlFor="settings_apiKey" className="col-sm-2 control-label">Api key</label>
                                             <div className="col-sm-10">

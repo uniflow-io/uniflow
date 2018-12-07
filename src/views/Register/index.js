@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
+    loginFacebookUrl,
     register,
 } from '../../reducers/auth/actions'
 import { withRouter } from 'react-router'
@@ -81,7 +82,7 @@ class Register extends Component {
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <a  href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
+                                            <a  href={loginFacebookUrl()}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Register with Facebook
                                             </a>

@@ -2,11 +2,11 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
     login,
+    loginFacebookUrl
 } from '../../reducers/auth/actions'
 import {withRouter} from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/logs/actions";
-import {Log} from '../../models/index'
 import {Link} from "react-router-dom";
 
 class Login extends Component {
@@ -87,7 +87,7 @@ class Login extends Component {
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <a  href="https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook&state=uniflow"
+                                            <a  href={loginFacebookUrl()}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Login with Facebook
                                             </a>
