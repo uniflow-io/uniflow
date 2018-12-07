@@ -40,8 +40,7 @@ class HistoryController extends AbstractController
         HistoryService $historyService,
         TagService $tagService,
         UserService $userService
-    )
-    {
+    ) {
         $this->historyService = $historyService;
         $this->tagService = $tagService;
         $this->userService = $userService;
@@ -61,11 +60,11 @@ class HistoryController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
+        if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
             $histories = $this->historyService->getHistoryByPlatform($user, $platform);
         } else {
             $user = $this->userService->findOneByUsername($username);
-            if(is_null($user)) {
+            if (is_null($user)) {
                 throw new NotFoundHttpException();
             }
 
@@ -93,7 +92,7 @@ class HistoryController extends AbstractController
             'csrf_protection' => false,
         ));
 
-        if (in_array( $request->getMethod(), array('POST', 'PUT'))) {
+        if (in_array($request->getMethod(), array('POST', 'PUT'))) {
             $content = $request->getContent();
             if (!empty($content)) {
                 $data = json_decode($content, true);
@@ -133,7 +132,7 @@ class HistoryController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if(!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
+        if (!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
             throw new AccessDeniedException('You are not alowed to create more history');
         }
 
@@ -183,7 +182,7 @@ class HistoryController extends AbstractController
             throw $this->createNotFoundException('Unable to find History entity.');
         }
 
-        if(!$entity->getPublic()) {
+        if (!$entity->getPublic()) {
             $user = $this->getUser();
             if (!$user instanceof UserInterface || $entity->getUser()->getId() != $user->getId()) {
                 throw $this->createAccessDeniedException('You are not allowed to view this section.');
@@ -218,12 +217,12 @@ class HistoryController extends AbstractController
             $content = $request->getContent();
 
             $decoder = new JsonDecode();
-            try{
+            try {
                 $json = $decoder->decode($content, 'json');
 
-                if(!$this->isGranted('ROLE_USER_PRO') && $json) {
+                if (!$this->isGranted('ROLE_USER_PRO') && $json) {
                     foreach ($json as $item) {
-                        if(!in_array($item->component, array('javascript', 'text'))) {
+                        if (!in_array($item->component, array('javascript', 'text'))) {
                             return new JsonResponse(false, 400);
                         }
                     }
@@ -279,7 +278,7 @@ class HistoryController extends AbstractController
         $histories = $this->historyService->findLastPublic(15);
 
         return new JsonResponse([
-            'flow' => array_map(function(History $history) {
+            'flow' => array_map(function (History $history) {
                 return array(
                     'title' => $history->getTitle(),
                     'slug' => $history->getSlug(),

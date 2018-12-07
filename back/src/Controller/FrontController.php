@@ -25,8 +25,7 @@ class FrontController extends AbstractController
     public function __construct(
         HistoryService $historyService,
         UserService $userService
-    )
-    {
+    ) {
         $this->historyService = $historyService;
         $this->userService = $userService;
     }
@@ -115,7 +114,7 @@ class FrontController extends AbstractController
     public function userDashboard($username)
     {
         $user = $this->userService->findOneByUsername($username);
-        if(is_null($user)) {
+        if (is_null($user)) {
             throw new NotFoundHttpException();
         }
 
@@ -133,7 +132,7 @@ class FrontController extends AbstractController
     public function userFlow($username, $slug)
     {
         $history = $this->historyService->findOneByUsernameAndSlug($username, $slug);
-        if(is_null($history)) {
+        if (is_null($history)) {
             throw new NotFoundHttpException();
         }
 
