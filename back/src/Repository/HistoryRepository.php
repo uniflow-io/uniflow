@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repository;
+
 use App\Entity\History;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -29,7 +30,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->select('h')
         ;
 
-        if($id) {
+        if ($id) {
             $qb->andWhere('h.id = :id')->setParameter('id', $id);
         } else {
             $qb->setMaxResults(1);
@@ -53,7 +54,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->andWhere('h.user = :user')->setParameter('user', $user)
         ;
 
-        if($id) {
+        if ($id) {
             $qb->andWhere('h.id = :id')->setParameter('id', $id);
         } else {
             $qb->setMaxResults(1);
@@ -123,7 +124,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->addOrderBy('h.updated', 'DESC')
         ;
 
-        if($platform) {
+        if ($platform) {
             $qb->andWhere('h.platform = :platform')->setParameter('platform', $platform);
         }
 
@@ -140,7 +141,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->addOrderBy('h.updated', 'DESC')
         ;
 
-        if($platform) {
+        if ($platform) {
             $qb->andWhere('h.platform = :platform')->setParameter('platform', $platform);
         }
 
@@ -165,7 +166,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->addOrderBy('h.updated', 'DESC')
         ;
 
-        if($limit) {
+        if ($limit) {
             $qb->setMaxResults($limit);
         }
 

@@ -17,7 +17,7 @@ class TagTransformer implements DataTransformerInterface
 
     /**
      * TagTransformer constructor.
-     * 
+     *
      * @param $tagService
      */
     public function __construct(TagService $tagService)
@@ -33,7 +33,7 @@ class TagTransformer implements DataTransformerInterface
     {
         $arrayTags = array();
 
-        foreach($tags as $tag){
+        foreach ($tags as $tag) {
             $arrayTags[] = $tag->getTitle();
         }
 
@@ -47,11 +47,10 @@ class TagTransformer implements DataTransformerInterface
     {
         $tags = new ArrayCollection();
 
-        foreach($arrayTags as $tagTitle){
-
+        foreach ($arrayTags as $tagTitle) {
             $tag = $this->tagService->findOneByTag($tagTitle);
 
-            if(!$tag){
+            if (!$tag) {
                 $tag = new Tag();
                 $tag->setTitle($tagTitle);
                 $this->tagService->save($tag);

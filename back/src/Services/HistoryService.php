@@ -36,8 +36,7 @@ class HistoryService
     public function __construct(
         EntityManagerInterface $em,
         TagAwareAdapter $cache
-    )
-    {
+    ) {
         $this->em                = $em;
         $this->historyRepository = $this->em->getRepository(History::class);
         $this->cache             = $cache;
