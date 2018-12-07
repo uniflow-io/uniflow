@@ -83,13 +83,21 @@ export const login = (username, password) => {
     }
 }
 
-export const loginFacebook = (access_token) => {
+export const loginFacebookUrl = () => {
+    return "https://www.facebook.com/v3.2/dialog/oauth?client_id=1830016407120207&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook"
+}
+
+export const loginFacebook = (access_token, token = null) => {
     return (dispatch) => {
         return dispatch(commitLoginUserRequest())
             .then(() => {
                 return request
                     .post(`${server.getBaseUrl()}/api/login/facebook`, {
                         'access_token': access_token,
+                    }, token === null ? {} : {
+                        headers: {
+                            'Uniflow-Authorization': `Bearer ${token}`
+                        }
                     })
                     .then((response) => {
                         try {

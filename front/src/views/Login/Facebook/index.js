@@ -8,9 +8,12 @@ import connect from "react-redux/es/connect/connect";
 
 class LoginFacebook extends Component {
     componentWillMount () {
-        let accessToken = this.checkAccessToken()
+        let accessToken = this.getAccessToken()
+        if(accessToken === null) {
+            return this.props.history.push(pathTo('login'))
+        }
 
-        this.props.dispatch(loginFacebook(accessToken))
+        this.props.dispatch(loginFacebook(accessToken, this.props.auth.token))
             .then(() => {
                 if (this.props.auth.isAuthenticated) {
                     return this.props.history.push(pathTo('dashboard'))
@@ -21,13 +24,13 @@ class LoginFacebook extends Component {
             })
     }
 
-    checkAccessToken () {
+    getAccessToken () {
         let m = this.props.location.hash.match(/access_token=([^&]*)/)
         if(m) {
             return m[1]
         }
 
-        return this.props.history.push(pathTo('login'))
+        return null
     }
 
     render () {
