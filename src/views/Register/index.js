@@ -37,7 +37,7 @@ class Register extends Component {
     }
 
     render() {
-        const { auth } = this.props
+        const { auth, env } = this.props
         const { email, password } = this.state
 
         return (
@@ -82,7 +82,7 @@ class Register extends Component {
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <a  href={loginFacebookUrl()}
+                                            <a  href={loginFacebookUrl(env.facebookAppId)}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Register with Facebook
                                             </a>
@@ -102,6 +102,7 @@ class Register extends Component {
 
 export default connect(state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        env: state.env
     }
 })(withRouter(Register))

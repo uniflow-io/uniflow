@@ -103,6 +103,7 @@ class Settings extends Component {
     }
 
     render() {
+        const { env } = this.props
         const { user, isSaving } = this.state
         const clipbard = this.getClipboard(user)
 
@@ -162,7 +163,7 @@ class Settings extends Component {
                                                         <i className="fa fa-facebook" /> Revoke Facebook
                                                     </a>
                                                 ) || (
-                                                    <a  href={loginFacebookUrl()}
+                                                    <a  href={loginFacebookUrl(env.facebookAppId)}
                                                         className="btn btn-block btn-social btn-facebook">
                                                         <i className="fa fa-facebook" /> Connect with Facebook
                                                     </a>
@@ -224,6 +225,7 @@ class Settings extends Component {
 export default connect(state => {
     return {
         auth: state.auth,
+        env: state.env,
         user: state.user,
     }
 })(Settings)

@@ -37,8 +37,8 @@ class Login extends Component {
     }
 
     render() {
-        const {auth}               = this.props
-        const {username, password} = this.state
+        const { auth, env }          = this.props
+        const { username, password } = this.state
 
         return (
             <div className="content-wrapper">
@@ -87,7 +87,7 @@ class Login extends Component {
                                         </div>
 
                                         <div className="form-group col-sm-12">
-                                            <a  href={loginFacebookUrl()}
+                                            <a  href={loginFacebookUrl(env.facebookAppId)}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Login with Facebook
                                             </a>
@@ -115,6 +115,7 @@ class Login extends Component {
 
 export default connect(state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        env: state.env
     }
 })(withRouter(Login))
