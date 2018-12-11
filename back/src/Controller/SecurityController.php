@@ -5,8 +5,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Services\UserService;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -15,14 +17,35 @@ use Symfony\Component\Security\Core\Exception\LogicException;
 class SecurityController extends AbstractController
 {
     /**
+     * @var string
+     */
+    protected $appOauthFacebookId;
+
+    /**
      * @var UserService
      */
     protected $userService;
 
+    /**
+     * @var JWTTokenManagerInterface
+     */
+    protected $jwtTokenManager;
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    protected $userPasswordEncoder;
+
     public function __construct(
-        UserService $userService
+        $appOauthFacebookId,
+        UserService $userService,
+        JWTTokenManagerInterface $jwtTokenManager,
+        UserPasswordEncoderInterface $userPasswordEncoder
     ) {
+        $this->appOauthFacebookId = $appOauthFacebookId;
         $this->userService = $userService;
+        $this->jwtTokenManager = $jwtTokenManager;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
     /**
      * @Route("/api/login_check", name="api_login_check")
@@ -35,11 +58,84 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/api/login/facebook", name="api_login_facebook", methods={"POST"})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function facebookLogin(Request $request)
+    {
+        $token = null;
+
+        $content = $request->getContent();
+        if (!empty($content)) {
+            $data = json_decode($content, true);
+            $token = isset($data['access_token']) ? $data['access_token'] : null;
+        }
+
+        // Get the token's FB app info.
+        @$tokenAppResp = file_get_contents('https://graph.facebook.com/app/?access_token=' . $token);
+        if (!$tokenAppResp) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Make sure it's the correct app.
+        $tokenApp = json_decode($tokenAppResp, true);
+        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->appOauthFacebookId) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Get the token's FB user info.
+        @$tokenUserResp = file_get_contents('https://graph.facebook.com/me/?access_token=' . $token);
+        if (!$tokenUserResp) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        // Try to fetch user by it's token ID, create it otherwise.
+        $tokenUser = json_decode($tokenUserResp, true);
+        if (!$tokenUser || !isset($tokenUser['id'])) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+
+        $facebookId = $tokenUser['id'];
+        $facebookEmail = $tokenUser['id'].'@facebook.com';
+
+        $user = $this->getUser();
+        if(is_null($user)) {
+            $user = $this->userService->findOneByFacebookId($facebookId);
+            if ($user === null) {
+                $user = $this->userService->findOneByEmail($facebookEmail);
+            }
+        }
+
+        if ($user === null) {
+            $user = new User();
+            $user->setFacebookId($facebookId);
+            $user->setEmail($facebookEmail);
+            $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
+            $this->userService->save($user);
+
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                'User registered !'
+            );
+        } elseif ($user->getFacebookId() === null) {
+            $user->setFacebookId($facebookId);
+            $this->userService->save($user);
+        }
+
+        return new JsonResponse(array(
+            'token' => $this->jwtTokenManager->create($user)
+        ));
+    }
+
+    /**
      * @Route("/api/register", name="api_register", methods={"POST"})
      *
      * @throws \Exception
      */
-    public function register(Request $request, UserPasswordEncoderInterface $encoder)
+    public function register(Request $request)
     {
         $user = new User();
 
@@ -56,7 +152,7 @@ class SecurityController extends AbstractController
         }
 
         if ($form->isValid()) {
-            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
             $this->userService->save($user);
 
             $this->get('session')->getFlashBag()->add(
@@ -65,7 +161,7 @@ class SecurityController extends AbstractController
             );
 
             return new JsonResponse(array(
-                'token' => $this->get('lexik_jwt_authentication.jwt_manager')->create($user)
+                'token' => $this->jwtTokenManager->create($user)
             ));
         }
 

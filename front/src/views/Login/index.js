@@ -2,11 +2,11 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
     login,
+    loginFacebookUrl
 } from '../../reducers/auth/actions'
 import {withRouter} from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/logs/actions";
-import {Log} from '../../models/index'
 import {Link} from "react-router-dom";
 
 class Login extends Component {
@@ -29,7 +29,7 @@ class Login extends Component {
         this.props.dispatch(login(this.state.username, this.state.password))
             .then(() => {
                 if (this.props.auth.isAuthenticated) {
-                    this.props.history.push(pathTo('dashboard'))
+                    return this.props.history.push(pathTo('dashboard'))
                 } else {
                     return this.props.dispatch(commitAddLog(this.props.auth.statusText))
                 }
@@ -37,8 +37,8 @@ class Login extends Component {
     }
 
     render() {
-        const {auth}               = this.props
-        const {username, password} = this.state
+        const { auth, env }          = this.props
+        const { username, password } = this.state
 
         return (
             <div className="content-wrapper">
@@ -86,14 +86,12 @@ class Login extends Component {
                                             </button>
                                         </div>
 
-                                        {/*<div className="form-group col-sm-12">
-                                            <a href=""
-                                            className="btn btn-info btn-block btn-flat">Facebook Login</a>
-                                            </div>*/}
-
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.login.meetup' | trans}}</a>
-                                            </div>*/}
+                                        <div className="form-group col-sm-12">
+                                            <a  href={loginFacebookUrl(env.facebookAppId)}
+                                                className="btn btn-block btn-social btn-facebook">
+                                                <i className="fa fa-facebook" /> Login with Facebook
+                                            </a>
+                                        </div>
 
                                     </form>
                                 </div>
@@ -117,6 +115,7 @@ class Login extends Component {
 
 export default connect(state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        env: state.env
     }
 })(withRouter(Login))

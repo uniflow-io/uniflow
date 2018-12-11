@@ -47,6 +47,14 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/login/facebook", name="loginFacebook")
+     */
+    public function loginFacebook()
+    {
+        return $this->render('default/login/facebook.html.twig');
+    }
+
+    /**
      * @Route("/register", name="register")
      */
     public function register()

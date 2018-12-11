@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
+    loginFacebookUrl,
     register,
 } from '../../reducers/auth/actions'
 import { withRouter } from 'react-router'
 import {pathTo} from '../../routes'
 import {commitAddLog} from "../../reducers/logs/actions";
-import {Log} from '../../models/index'
 import {Link} from "react-router-dom";
 
 class Register extends Component {
@@ -29,7 +29,7 @@ class Register extends Component {
         this.props.dispatch(register(this.state.email, this.state.password))
             .then(() => {
                 if(this.props.auth.isAuthenticated) {
-                    this.props.history.push(pathTo('dashboard'))
+                    return this.props.history.push(pathTo('dashboard'))
                 } else {
                     return this.props.dispatch(commitAddLog(this.props.auth.statusText))
                 }
@@ -37,7 +37,7 @@ class Register extends Component {
     }
 
     render() {
-        const { auth } = this.props
+        const { auth, env } = this.props
         const { email, password } = this.state
 
         return (
@@ -81,14 +81,12 @@ class Register extends Component {
                                                     onClick={this.onSubmit}>Register</button>
                                         </div>
 
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
-                                            class="btn btn-info btn-block btn-flat">{{'user.register.facebook' | trans}}</a>
-                                            </div>*/}
-
-                                        {/*<div class="form-group col-sm-12">
-                                            <a href="#" class="btn btn-info btn-block btn-flat">{{'user.register.meetup' | trans}}</a>
-                                            </div>*/}
+                                        <div className="form-group col-sm-12">
+                                            <a  href={loginFacebookUrl(env.facebookAppId)}
+                                                className="btn btn-block btn-social btn-facebook">
+                                                <i className="fa fa-facebook" /> Register with Facebook
+                                            </a>
+                                        </div>
 
                                     </form>
                                 </div>
@@ -104,6 +102,7 @@ class Register extends Component {
 
 export default connect(state => {
     return {
-        auth: state.auth
+        auth: state.auth,
+        env: state.env
     }
 })(withRouter(Register))

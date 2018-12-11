@@ -93,6 +93,11 @@ class UserService
         return $this->userRepository->findOneBy(array('username' => $username));
     }
 
+    public function findOneByEmail($email)
+    {
+        return $this->userRepository->findOneBy(array('email' => $email));
+    }
+
     /**
      * @param $username
      * @return mixed
@@ -101,6 +106,16 @@ class UserService
     public function findOneByEmailOrUsername($username)
     {
         return $this->userRepository->findOneByEmailOrUsername($username);
+    }
+
+    /**
+     * @param $facebookId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByFacebookId($facebookId)
+    {
+        return $this->userRepository->findOneByFacebookId($facebookId);
     }
 
     public function findOneByApiKey($apiKey)
@@ -114,6 +129,7 @@ class UserService
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
             'username' => $user->getUsername(),
+            'facebookId' => $user->getFacebookId(),
             'apiKey' => $user->getApiKey(),
         );
     }

@@ -214,7 +214,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
 
-        commitSetEnv(props.env)
+        store.dispatch(commitSetEnv(props.env))
     }
 
     render() {

@@ -22,6 +22,7 @@ class SettingsType extends AbstractType
         $builder->add('lastname', TextType::class);
         $builder->add('username', TextType::class);
         $builder->add('apiKey', TextType::class);
+        $builder->add('facebookId', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

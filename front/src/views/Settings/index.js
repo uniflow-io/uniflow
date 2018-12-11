@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import _ from 'lodash'
 import {
     updateSettings,
     commitUpdateSettings
@@ -7,6 +6,7 @@ import {
 import {connect} from "react-redux";
 import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
+import {loginFacebookUrl} from "../../reducers/auth/actions";
 
 function copyTextToClipboard(text) {
     let textArea = document.createElement("textarea");
@@ -65,8 +65,15 @@ class Settings extends Component {
         copyTextToClipboard(clipbard)
     }
 
-    onUpdate = (event) => {
+    onRevokeFacebook = (event) => {
         event.preventDefault()
+        this.setState({user: {...this.state.user, ...{facebookId: null}}}, this.onUpdate)
+    }
+
+    onUpdate = (event) => {
+        if(event) {
+            event.preventDefault()
+        }
 
         this.setState({'isSaving': true}, () => {
             this.props.dispatch(updateSettings(this.state.user, this.props.auth.token))
@@ -96,6 +103,7 @@ class Settings extends Component {
     }
 
     render() {
+        const { env } = this.props
         const { user, isSaving } = this.state
         const clipbard = this.getClipboard(user)
 
@@ -116,12 +124,12 @@ class Settings extends Component {
                     <div className="row">
                         <div className="col-md-12">
 
-                            <div className="box box-primary">
-                                <div className="box-header with-border">
-                                    <h3 className="box-title">Settings</h3>
-                                </div>
-                                <div className="box-body">
-                                    <form className="form-horizontal">
+                            <form className="form-horizontal">
+                                <div className="box box-primary">
+                                    <div className="box-header with-border">
+                                        <h3 className="box-title">Settings</h3>
+                                    </div>
+                                    <div className="box-body">
                                         <div className="form-group">
                                             <label htmlFor="settings_firstname" className="col-sm-2 control-label">Firstname</label>
                                             <div className="col-sm-10">
@@ -144,6 +152,22 @@ class Settings extends Component {
                                                 <input type="text" className="form-control" id="settings_username"
                                                        value={user.username || ''} onChange={this.onUpdateUsername}
                                                        placeholder="Username"/>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_username" className="col-sm-2 control-label">Facebook</label>
+                                            <div className="col-sm-10">
+                                                {user.facebookId && (
+                                                    <a  onClick={this.onRevokeFacebook}
+                                                        className="btn btn-info">
+                                                        <i className="fa fa-facebook" /> Revoke Facebook
+                                                    </a>
+                                                ) || (
+                                                    <a  href={loginFacebookUrl(env.facebookAppId)}
+                                                        className="btn btn-block btn-social btn-facebook">
+                                                        <i className="fa fa-facebook" /> Connect with Facebook
+                                                    </a>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="form-group">
@@ -186,9 +210,9 @@ class Settings extends Component {
                                                         onClick={this.onUpdate}>Save</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
 
                         </div>
                     </div>
@@ -201,6 +225,7 @@ class Settings extends Component {
 export default connect(state => {
     return {
         auth: state.auth,
+        env: state.env,
         user: state.user,
     }
 })(Settings)
