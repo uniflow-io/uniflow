@@ -1,4 +1,8 @@
 const defaultState = [{
+    tag: 'v1.0.1',
+    label: 'Add front environment',
+    date: '11/12/2018'
+}, {
     tag: 'v1.0.0',
     label: 'Public release',
     date: '13/11/2018'
