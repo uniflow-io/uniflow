@@ -1,32 +1,48 @@
-const path = require('path');
+const webpack = require('webpack')
+const dotenv = require('dotenv')
+const path = require('path')
+const fs = require('fs')
 
-module.exports = {
-    entry: './src/index.js',
-    output: {
-        filename: 'bundle.js',
-        publicPath: "/",
-        path: path.resolve(__dirname, '../back/public/dist/js')
-    },
-    devServer: {
-        headers: {
-            "Access-Control-Allow-Origin": "*"
+module.exports = (env) => {
+    let buildEnv = ['.env', '.env.local', `.env.${env.NODE_ENV}.local`].reduce((item, envPath) => {
+        return Object.assign(item, dotenv.parse(fs.readFileSync(path.resolve(__dirname, envPath))));
+    }, {})
+    buildEnv = Object.keys(buildEnv).reduce((prev, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(buildEnv[next]);
+        return prev;
+    }, {});
+
+    return {
+        entry: './src/index.js',
+        output: {
+            filename: 'bundle.js',
+            publicPath: "/",
+            path: path.resolve(__dirname, '../back/public/dist/js')
         },
-        contentBase: "../back/public",
-        publicPath: "/",
-        filename: "bundle.js",
-        historyApiFallback: true
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
+        devServer: {
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
+            contentBase: "../back/public",
+            publicPath: "/",
+            filename: "bundle.js",
+            historyApiFallback: true
+        },
+        module: {
+            rules: [{
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
+                    }
                 }
-            }
-        }]
-    },
-    devtool: 'source-map'
-};
+            }]
+        },
+        plugins: [
+            new webpack.DefinePlugin(buildEnv)
+        ],
+        devtool: 'source-map',
+    }
+}
