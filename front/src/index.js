@@ -3,4 +3,8 @@ import { render } from 'react-dom'
 
 import App from './App'
 
-render(<App />, document.getElementById('app'))
+const ENV = {
+    facebookAppId: process.env.FACEBOOK_APP_ID,
+}
+
+render(<App env={ENV} />, document.getElementById('app'))

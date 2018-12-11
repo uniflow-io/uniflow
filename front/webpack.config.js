@@ -1,13 +1,14 @@
-const webpack = require('webpack');
-const dotenv = require('dotenv');
-const path = require('path');
+const webpack = require('webpack')
+const dotenv = require('dotenv')
+const path = require('path')
+const fs = require('fs')
 
-module.exports = () => {
-    const env = dotenv.config().parsed;
-
-    // reduce it to a nice object, the same as before
-    const envKeys = Object.keys(env).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(env[next]);
+module.exports = (env) => {
+    let buildEnv = ['.env', '.env.local', `.env.${env.NODE_ENV}.local`].reduce((item, envPath) => {
+        return Object.assign(item, dotenv.parse(fs.readFileSync(path.resolve(__dirname, envPath))));
+    }, {})
+    buildEnv = Object.keys(buildEnv).reduce((prev, next) => {
+        prev[`process.env.${next}`] = JSON.stringify(buildEnv[next]);
         return prev;
     }, {});
 
@@ -40,7 +41,7 @@ module.exports = () => {
             }]
         },
         plugins: [
-            new webpack.DefinePlugin(envKeys)
+            new webpack.DefinePlugin(buildEnv)
         ],
         devtool: 'source-map',
     }
