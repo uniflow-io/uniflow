@@ -12,6 +12,7 @@ import { UserManager } from './components/index'
 import createStore from './utils/createStore'
 import {getNewLogs,commitReadLog} from './reducers/logs/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
+import {commitSetEnv} from './reducers/env/actions'
 import {getLastVersion} from './reducers/versions/actions'
 import {withRouter, matchPath} from 'react-router'
 //import createBrowserHistory from 'history/createBrowserHistory'
@@ -210,6 +211,12 @@ Footer = connect(state => ({
 }))(Footer)
 
 export default class App extends Component {
+    constructor(props) {
+        super(props);
+
+        commitSetEnv(props.env)
+    }
+
     render() {
         const auth = store.getState().auth;
 
