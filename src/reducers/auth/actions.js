@@ -84,7 +84,7 @@ export const login = (username, password) => {
 }
 
 export const loginFacebookUrl = (facebookAppId) => {
-    return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${facebookAppId}&response_type=token&redirect_uri=https://uniflow.localhost/login/facebook`
+    return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${facebookAppId}&response_type=token&redirect_uri=${location.protocol}//${location.hostname}/login/facebook`
 }
 
 export const loginFacebook = (access_token, token = null) => {
