@@ -23,8 +23,6 @@ if (token !== null) {
     store.dispatch(commitLoginUserSuccess(token));
 }
 
-console.log(process.env)
-
 class Alert extends Component {
     componentDidMount() {
         const { alert, logs} = this.props
