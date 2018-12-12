@@ -120,6 +120,43 @@ export const loginFacebook = (access_token, token = null) => {
     }
 }
 
+export const loginGithubUrl = (githubAppId) => {
+    return `https://github.com/login/oauth/authorize?client_id=${githubAppId}&redirect_uri=${location.protocol}//${location.hostname}/login/github`
+}
+
+export const loginGithub = (code, token = null) => {
+    return (dispatch) => {
+        return dispatch(commitLoginUserRequest())
+            .then(() => {
+                return request
+                    .post(`${server.getBaseUrl()}/api/login/github`, {
+                        'code': code,
+                    }, token === null ? {} : {
+                        headers: {
+                            'Uniflow-Authorization': `Bearer ${token}`
+                        }
+                    })
+                    .then((response) => {
+                        try {
+                            jwtDecode(response.data.token);
+                            return dispatch(commitLoginUserSuccess(response.data.token));
+                        } catch (e) {
+                            return dispatch(commitLoginUserFailure({
+                                response: {
+                                    status: 403,
+                                    statusText: 'Invalid token'
+                                }
+                            }));
+                        }
+                    })
+                    .catch((error) => {
+                        dispatch(commitLoginUserFailure(error));
+                    })
+                    ;
+            })
+    }
+}
+
 export const register = (email, password) => {
     return (dispatch) => {
         return dispatch(commitLoginUserRequest())

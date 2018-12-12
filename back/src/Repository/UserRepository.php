@@ -98,6 +98,25 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $githubId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByGithubId($githubId = null)
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u')
+        ;
+
+        $qb->where('u.githubId = :githubId')
+            ->setParameter('githubId', $githubId);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
+    /**
      * @param array $filters
      * @return \Doctrine\ORM\Query
      */

@@ -81,6 +81,11 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    protected $githubId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     protected $apiKey;
 
     /**
@@ -261,6 +266,30 @@ class User implements UserInterface, \Serializable
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    /**
+     * Set githubId
+     *
+     * @param string $githubId
+     *
+     * @return User
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+
+        return $this;
+    }
+
+    /**
+     * Get githubId
+     *
+     * @return string
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
     }
 
     /**

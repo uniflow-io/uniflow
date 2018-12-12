@@ -10,6 +10,7 @@ const defaultState = {
     firstName: null,
     lastName: null,
     facebookId: null,
+    githubId: null,
 }
 
 const user = (state = defaultState, action) => {

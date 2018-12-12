@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
     login,
-    loginFacebookUrl
+    loginFacebookUrl,
+    loginGithubUrl
 } from '../../reducers/auth/actions'
 import {withRouter} from 'react-router'
 import {pathTo} from '../../routes'
@@ -90,6 +91,13 @@ class Login extends Component {
                                             <a  href={loginFacebookUrl(env.facebookAppId)}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Login with Facebook
+                                            </a>
+                                        </div>
+
+                                        <div className="form-group col-sm-12">
+                                            <a  href={loginGithubUrl(env.githubAppId)}
+                                                className="btn btn-block btn-social btn-github">
+                                                <i className="fa fa-github" /> Login with Github
                                             </a>
                                         </div>
 
