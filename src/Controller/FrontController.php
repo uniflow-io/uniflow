@@ -55,6 +55,14 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/login/github", name="loginGithub")
+     */
+    public function loginGithub()
+    {
+        return $this->render('default/login/github.html.twig');
+    }
+
+    /**
      * @Route("/register", name="register")
      */
     public function register()
