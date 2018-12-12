@@ -1,4 +1,8 @@
 const defaultState = [{
+    tag: 'v1.0.3',
+    label: 'Add github connect integration',
+    date: '12/12/2018'
+}, {
     tag: 'v1.0.2',
     label: 'Add facebook connect integration',
     date: '11/12/2018'

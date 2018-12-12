@@ -34,8 +34,12 @@ class UserService
     }
 
     /**
+     * Save one user
+     *
      * @param User $user
      * @return User
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(User $user)
     {
@@ -52,6 +56,8 @@ class UserService
      * Remove one user
      *
      * @param User $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function remove(User $user)
     {
@@ -118,6 +124,16 @@ class UserService
         return $this->userRepository->findOneByFacebookId($facebookId);
     }
 
+    /**
+     * @param $githubId
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneByGithubId($githubId)
+    {
+        return $this->userRepository->findOneByGithubId($githubId);
+    }
+
     public function findOneByApiKey($apiKey)
     {
         return $this->userRepository->findOneBy(array('apiKey' => $apiKey));
@@ -130,6 +146,7 @@ class UserService
             'lastname' => $user->getLastname(),
             'username' => $user->getUsername(),
             'facebookId' => $user->getFacebookId(),
+            'githubId' => $user->getGithubId(),
             'apiKey' => $user->getApiKey(),
         );
     }

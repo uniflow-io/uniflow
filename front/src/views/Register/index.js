@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {
-    loginFacebookUrl,
     register,
+    loginFacebookUrl,
+    loginGithubUrl,
 } from '../../reducers/auth/actions'
 import { withRouter } from 'react-router'
 import {pathTo} from '../../routes'
@@ -85,6 +86,13 @@ class Register extends Component {
                                             <a  href={loginFacebookUrl(env.facebookAppId)}
                                                 className="btn btn-block btn-social btn-facebook">
                                                 <i className="fa fa-facebook" /> Register with Facebook
+                                            </a>
+                                        </div>
+
+                                        <div className="form-group col-sm-12">
+                                            <a  href={loginGithubUrl(env.githubAppId)}
+                                                className="btn btn-block btn-social btn-github">
+                                                <i className="fa fa-github" /> Register with Github
                                             </a>
                                         </div>
 

@@ -6,7 +6,10 @@ import {
 import {connect} from "react-redux";
 import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
-import {loginFacebookUrl} from "../../reducers/auth/actions";
+import {
+    loginFacebookUrl,
+    loginGithubUrl,
+} from "../../reducers/auth/actions";
 
 function copyTextToClipboard(text) {
     let textArea = document.createElement("textarea");
@@ -68,6 +71,11 @@ class Settings extends Component {
     onRevokeFacebook = (event) => {
         event.preventDefault()
         this.setState({user: {...this.state.user, ...{facebookId: null}}}, this.onUpdate)
+    }
+
+    onRevokeGithub = (event) => {
+        event.preventDefault()
+        this.setState({user: {...this.state.user, ...{githubId: null}}}, this.onUpdate)
     }
 
     onUpdate = (event) => {
@@ -166,6 +174,22 @@ class Settings extends Component {
                                                     <a  href={loginFacebookUrl(env.facebookAppId)}
                                                         className="btn btn-block btn-social btn-facebook">
                                                         <i className="fa fa-facebook" /> Connect with Facebook
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="settings_username" className="col-sm-2 control-label">Github</label>
+                                            <div className="col-sm-10">
+                                                {user.githubId && (
+                                                    <a  onClick={this.onRevokeGithub}
+                                                        className="btn btn-info">
+                                                        <i className="fa fa-github" /> Revoke Github
+                                                    </a>
+                                                ) || (
+                                                    <a  href={loginGithubUrl(env.githubAppId)}
+                                                        className="btn btn-block btn-social btn-github">
+                                                        <i className="fa fa-github" /> Connect with Github
                                                     </a>
                                                 )}
                                             </div>
