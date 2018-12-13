@@ -4,12 +4,13 @@ const path = require('path')
 const fs = require('fs')
 
 module.exports = (env) => {
-    let buildEnv = ['.env', '.env.local', `.env.${env.NODE_ENV}.local`].reduce((item, envPath) => {
+    let envMode = env && env.NODE_ENV ? env.NODE_ENV : 'development'
+    let buildEnv = ['.env', '.env.local', `.env.${envMode}.local`].reduce((item, envPath) => {
         if(fs.existsSync(path.resolve(__dirname, envPath))) {
             return Object.assign(item, dotenv.parse(fs.readFileSync(path.resolve(__dirname, envPath))));
         }
         return item
-    }, env)
+    }, env || {})
     buildEnv = Object.keys(buildEnv).reduce((prev, next) => {
         prev[`process.env.${next}`] = JSON.stringify(buildEnv[next]);
         return prev;
