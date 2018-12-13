@@ -1,4 +1,4 @@
 # Webpack
+/.cache-loader
 /.env.local
 /.env.*.local
-/.cache-loader
