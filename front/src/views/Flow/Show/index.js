@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import {Ace, ListComponent, TagIt, ICheckBox} from '../../../components/index'
 import {History, Runner} from '../../../models/index'
 import {
@@ -103,7 +103,7 @@ class Show extends Component {
             })
     }
 
-    onFetchFlowData = _.debounce(() => {
+    onFetchFlowData = debounce(() => {
         let {history} = this.props;
 
         Promise.resolve()
@@ -133,7 +133,7 @@ class Show extends Component {
             })
     }, 500)
 
-    onUpdateFlowData = _.debounce(() => {
+    onUpdateFlowData = debounce(() => {
         let {history, stack, user, username} = this.props
         if (history.slug !== this.state.fetchedSlug) return;
 
@@ -196,7 +196,7 @@ class Show extends Component {
             })
     }
 
-    onUpdate = _.debounce(() => {
+    onUpdate = debounce(() => {
         this.props.dispatch(updateHistory(this.props.history, this.props.auth.token))
     }, 500)
 

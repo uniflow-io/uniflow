@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Bus} from '../../models/index'
-import _ from 'lodash'
+import isObject from 'lodash/isObject'
+import isArray from 'lodash/isArray'
 
 let scope = {};
 
@@ -447,7 +448,7 @@ let scope = {};
             ignoreInvalidIndices = true;
         }
 
-        if (!_.isObject(objectArray) && !_.isArray(objectArray)) {
+        if (!isObject(objectArray) && !isArray(objectArray)) {
             throw new UnexpectedTypeException(objectArray, 'object or array');
         }
 
@@ -455,7 +456,7 @@ let scope = {};
             property = propertyPath.getElement(i);
             isIndex  = propertyPath.isIndex(i);
 
-            if (isIndex && (_.isObject(objectArray) && !objectArray.hasOwnProperty(property))) {
+            if (isIndex && (isObject(objectArray) && !objectArray.hasOwnProperty(property))) {
                 if (!ignoreInvalidIndices) {
                     throw new NoSuchIndexException(scope.format(
                         'Cannot read property "%s". Available properties are "%s"',
@@ -493,9 +494,9 @@ let scope = {};
         result[this.VALUE]  = null;
         result[this.IS_REF] = false;
 
-        if (_.isObject(objectArray) && objectArray.hasOwnProperty(property)) {
+        if (isObject(objectArray) && objectArray.hasOwnProperty(property)) {
             result[this.VALUE]  = objectArray[property];
-            result[this.IS_REF] = !_.isArray(objectArray[property]);
+            result[this.IS_REF] = !isArray(objectArray[property]);
         }
 
         return result;
