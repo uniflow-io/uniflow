@@ -35,7 +35,7 @@ module.exports = (env) => {
         module: {
             rules: [{
                 test: /\.js$/,
-                exclude: /node_modules/,
+                include: path.resolve(__dirname, 'src'),
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -47,6 +47,6 @@ module.exports = (env) => {
         plugins: [
             new webpack.DefinePlugin(buildEnv)
         ],
-        devtool: 'source-map',
+        devtool: envMode === 'development' ? 'source-map' : 'none',
     }
 }
