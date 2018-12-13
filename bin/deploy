@@ -20,5 +20,5 @@ git pull
 
 CMD'
 
-# bin/deploy_front
-# bin/deploy_bash
+bin/deploy_front $1
+bin/deploy_bash $1
