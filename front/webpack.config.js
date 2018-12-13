@@ -16,6 +16,18 @@ module.exports = (env) => {
         return prev;
     }, {});
 
+    let loaders = [{
+        loader: 'babel-loader',
+        options: {
+            presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
+        }
+    }]
+    if(envMode !== 'development') {
+        loaders.push({
+            loader: 'cache-loader'
+        })
+    }
+
     return {
         entry: './src/index.js',
         output: {
@@ -36,12 +48,7 @@ module.exports = (env) => {
             rules: [{
                 test: /\.js$/,
                 include: path.resolve(__dirname, 'src'),
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
-                    }
-                }
+                use: loaders
             }]
         },
         plugins: [
