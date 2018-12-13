@@ -1,6 +1,4 @@
-# React
+# Webpack
 /.env.local
 /.env.*.local
-
-# Webpack
 /.cache-loader

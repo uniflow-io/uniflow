@@ -1,17 +1,17 @@
 const webpack = require('webpack')
-const dotenv = require('dotenv')
-const path = require('path')
-const fs = require('fs')
+const dotenv  = require('dotenv')
+const path    = require('path')
+const fs      = require('fs')
 
 module.exports = (env) => {
-    let envMode = env && env.NODE_ENV ? env.NODE_ENV : 'development'
+    let envMode  = env && env.NODE_ENV ? env.NODE_ENV : 'development'
     let buildEnv = ['.env', '.env.local', `.env.${envMode}.local`].reduce((item, envPath) => {
-        if(fs.existsSync(path.resolve(__dirname, envPath))) {
+        if (fs.existsSync(path.resolve(__dirname, envPath))) {
             return Object.assign(item, dotenv.parse(fs.readFileSync(path.resolve(__dirname, envPath))));
         }
         return item
     }, env || {})
-    buildEnv = Object.keys(buildEnv).reduce((prev, next) => {
+    buildEnv     = Object.keys(buildEnv).reduce((prev, next) => {
         prev[`process.env.${next}`] = JSON.stringify(buildEnv[next]);
         return prev;
     }, {});
@@ -22,7 +22,7 @@ module.exports = (env) => {
             presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
         }
     }]
-    if(envMode !== 'development') {
+    if (envMode !== 'development') {
         loaders.push({
             loader: 'cache-loader'
         })
