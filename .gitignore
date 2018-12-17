@@ -1,37 +1,9 @@
-# MAC OS
-.DS_Store
-._.DS_Store
-
 # NPM
 node_modules
 *.log
 npm-debug.log*
 
-# PhpStorm
-.idea
-
-# Symfony
-/app/config/parameters.yml
-/build/
-/phpunit.xml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
-/vendor/
-/web/bundles/
-
-# WebPack
-back/public/dist/js/bundle.js
-back/public/dist/js/bundle.js.map
-back/public/dist/js/bash.js
-back/public/dist/js/bash.js.map
-platform-phpstorm/src/main/resources/js/bundle.js
-platform-phpstorm/src/main/resources/js/bundle.js.map
+# Webpack
+/.env.local
+/.env.*.local
+/.cache-loader
