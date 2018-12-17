@@ -35,15 +35,3 @@ back/public/dist/js/bash.js
 back/public/dist/js/bash.js.map
 platform-phpstorm/src/main/resources/js/bundle.js
 platform-phpstorm/src/main/resources/js/bundle.js.map
-
-# Platform PhpStorm
-platform-phpstorm/.gradle
-platform-phpstorm/build
-platform-phpstorm/out
-
-# Platform Chrome
-platform-chrome/dist
-
-# Platform Mac
-platform-mac/Uniflow.xcodeproj/project.xcworkspace
-platform-mac/Uniflow.xcodeproj/xcuserdata
