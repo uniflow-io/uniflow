@@ -1,11 +1,14 @@
 {
-  "name": "uniflow",
+  "name": "uniflow-front",
   "version": "0.0.1",
-  "description": "Workflow your microtasks",
-  "main": "src/index.js",
+  "description": "",
+  "main": "dist/uniflow.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack --env.NODE_ENV=production --mode production -p --progress --colors --config webpack.config.js"
+  },
   "keywords": [],
-  "author": "Mathieu Ledru",
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -42,6 +45,7 @@
     "remote-browser": "^0.0.13",
     "select2": "^4.0.6-rc.1",
     "socket.io-client": "^2.1.1",
-    "tag-it": "^2.0.0"
+    "tag-it": "^2.0.0",
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
   }
 }
