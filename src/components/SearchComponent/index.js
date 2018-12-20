@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Select2 } from '../../components/index'
 import { connect } from 'react-redux'
-import components from '../../uniflow/components';
-import { getCurrentHistory } from "../../reducers/history/actions";
+import components from '../../uniflow';
 
 class SearchComponent extends Component {
     state = {
@@ -70,6 +69,10 @@ const getComponentLabels = (userComponents, history) => {
     })
 
     return componentLabels
+}
+
+const getCurrentHistory = (state) => {
+    return state.current ? state.items[state.current] : null;
 }
 
 export default connect(state => {

@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import { Select2 } from '../../components/index'
 import {Bus} from '../../models/index'
-import {connect} from 'react-redux'
 
 type Props = {
     bus: Bus

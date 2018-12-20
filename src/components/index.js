@@ -1,10 +1,6 @@
-import Ace from './Ace/index'
-import ListComponent from './ListComponent/index'
-import SearchComponent from './SearchComponent/index'
-import ICheckBox from './ICheckBox/index'
-import Select2 from './Select2/index'
-import TagIt from './TagIt/index'
-import UserManager from './UserManager/index'
-import requireAuthentication from './AuthenticatedComponent/index'
-
-export { Ace, ListComponent, SearchComponent, ICheckBox, Select2, TagIt, UserManager, requireAuthentication }
+export { default as Ace } from './Ace/index'
+export { default as ListComponent } from './ListComponent/index'
+export { default as SearchComponent } from './SearchComponent/index'
+export { default as ICheckBox } from './ICheckBox/index'
+export { default as Select2 } from './Select2/index'
+export { default as TagIt } from './TagIt/index'

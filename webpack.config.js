@@ -1,6 +1,4 @@
-const webpack = require('webpack')
 const path    = require('path')
-const fs      = require('fs')
 
 module.exports = () => {
     let loaders = [{
@@ -16,17 +14,8 @@ module.exports = () => {
             filename: 'uniflow.js',
             publicPath: "/",
             path: path.resolve(__dirname, './dist'),
-            library: 'App',
+            library: 'default',
             libraryTarget: 'umd'
-        },
-        devServer: {
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            },
-            contentBase: "../back/public",
-            publicPath: "/",
-            filename: "bundle.js",
-            historyApiFallback: true
         },
         module: {
             rules: [{

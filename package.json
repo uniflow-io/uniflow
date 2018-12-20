@@ -1,15 +1,15 @@
 {
   "name": "uniflow",
   "version": "0.0.1",
-  "description": "",
+  "description": "Workflow your microtasks",
   "main": "dist/uniflow.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack --env.NODE_ENV=development --mode development -p --progress --colors --config webpack.config.js",
+    "dev": "./node_modules/.bin/webpack --env.NODE_ENV=development --mode development -p --progress --colors --config webpack.config.js --watch",
     "build": "./node_modules/.bin/webpack --env.NODE_ENV=production --mode production -p --progress --colors --config webpack.config.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Mathieu Ledru",
+  "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -19,14 +19,10 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "cache-loader": "^1.2.5",
-    "dotenv": "^6.2.0",
     "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
     "brace": "^0.11.1",
     "icheck": "^1.0.2",
