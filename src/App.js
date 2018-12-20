@@ -9,7 +9,7 @@ import {Provider, connect} from 'react-redux'
 import routes, {pathTo} from './routes'
 import reducers from './reducers/index'
 import { UserManager } from './components/index'
-import utils from 'uniflow'
+import { createStore } from 'uniflow/src/utils'
 import {getNewLogs,commitReadLog} from './reducers/logs/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
 import {commitSetEnv} from './reducers/env/actions'
@@ -18,8 +18,7 @@ import {withRouter, matchPath} from 'react-router'
 //import createBrowserHistory from 'history/createBrowserHistory'
 
 //const history = createBrowserHistory()
-console.log(utils)
-let store = utils.createStore(reducers)
+let store = createStore(reducers)
 let token = localStorage.getItem('token');
 if (token !== null) {
     store.dispatch(commitLoginUserSuccess(token));
