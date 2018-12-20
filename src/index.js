@@ -1,5 +1,5 @@
-export { default as components } from './components'
-export { default as models } from './models'
+export * as components from './components'
+export * as models from './models'
 export { default as reducer } from './reducers'
 export { default as uniflow } from './uniflow'
-export { default as utils } from './utils'
+export * as utils from './utils'
