@@ -47,7 +47,7 @@ module.exports = (env) => {
         module: {
             rules: [{
                 test: /\.js$/,
-                include: path.resolve(__dirname, 'src'),
+                include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules/uniflow/src'), path.resolve(__dirname, '../../uniflow/src')],
                 use: loaders
             }]
         },
