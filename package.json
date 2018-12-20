@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/uniflow.js",
   "scripts": {
+    "dev": "./node_modules/.bin/webpack --env.NODE_ENV=development --mode development -p --progress --colors --config webpack.config.js",
     "build": "./node_modules/.bin/webpack --env.NODE_ENV=production --mode production -p --progress --colors --config webpack.config.js"
   },
   "keywords": [],

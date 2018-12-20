@@ -15,7 +15,9 @@ module.exports = () => {
         output: {
             filename: 'uniflow.js',
             publicPath: "/",
-            path: path.resolve(__dirname, './dist')
+            path: path.resolve(__dirname, './dist'),
+            library: 'App',
+            libraryTarget: 'umd'
         },
         devServer: {
             headers: {
@@ -33,9 +35,6 @@ module.exports = () => {
                 use: loaders
             }]
         },
-        plugins: [
-            new webpack.DefinePlugin(buildEnv)
-        ],
-        devtool: envMode === 'development' ? 'source-map' : 'none',
+        devtool: 'source-map',
     }
 }
