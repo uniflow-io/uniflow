@@ -7,7 +7,7 @@ import {
     commitPopFlow,
     commitUpdateFlow,
     commitSetFlow
-} from '../../../reducers/flow/actions'
+} from 'uniflow/src/reducers/flow/actions'
 import {
     getCurrentHistory,
     getTags,
@@ -21,7 +21,7 @@ import {
 } from '../../../reducers/history/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
-import Select2 from "../../../components/Select2";
+import Select2 from "uniflow/src/components/Select2";
 
 class Show extends Component {
     state = {
