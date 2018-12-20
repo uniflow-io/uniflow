@@ -46,7 +46,6 @@
     "remote-browser": "^0.0.13",
     "select2": "^4.0.6-rc.1",
     "socket.io-client": "^2.1.1",
-    "tag-it": "^2.0.0",
-    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+    "tag-it": "^2.0.0"
   }
 }
