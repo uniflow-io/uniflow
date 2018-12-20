@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 
-import App from 'uniflow'
+import App from './App'
 
 const ENV = {
     facebookAppId: process.env.FACEBOOK_APP_ID,

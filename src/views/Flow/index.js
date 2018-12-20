@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import History from './History/index'
-import Show from './Show/index'
+//import Show from './Show/index'
 import {getCurrentHistory} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 import {pathTo} from "../../routes";
@@ -31,9 +31,9 @@ class Flow extends Component<Props> {
                             <History/>
                         </div>
                         <div className="col-sm-10">
-                            {history.username && currentHistory && (
+                            {/*history.username && currentHistory && (
                                 <Show/>
-                            )}
+                            )*/}
                         </div>
                     </div>
                 </section>
