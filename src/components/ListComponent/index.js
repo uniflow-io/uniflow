@@ -8,10 +8,11 @@ class UiComponent extends Component {
     })
 
     render() {
-        const {tag, bus, onPush, onPop, onUpdate} = this.props
-        const TagName                             = this.components[tag];
+        const {tag, bus, onPush, onPop, onUpdate, components} = this.props
+        const TagName                                         = this.components[tag];
 
         return <TagName bus={bus}
+                        components={components}
                         onPush={onPush}
                         onPop={onPop}
                         onUpdate={onUpdate}/>
@@ -61,7 +62,7 @@ class UiComponent extends Component {
 
 export default class ListComponent extends Component {
     render() {
-        const {stack, runIndex, onPush, onPop, onUpdate, onRun} = this.props
+        const {stack, runIndex, onPush, onPop, onUpdate, onRun, components} = this.props
         const uiStack                   = (() => {
             let uiStack = [{
                 component: 'search',
@@ -89,7 +90,9 @@ export default class ListComponent extends Component {
 
         return (uiStack.map((item, i) => (
             <UiComponent key={i}
-                         tag={item.component} bus={item.bus}
+                         tag={item.component}
+                         bus={item.bus}
+                         components={components}
                          onPush={(component) => {
                              onPush(item.index, component)
                          }}

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { Select2 } from '../../components/index'
-import { connect } from 'react-redux'
-import components from '../../uniflow';
 
-class SearchComponent extends Component {
+export default class SearchComponent extends Component {
     state = {
         search: 'javascript'
     }
@@ -21,7 +19,7 @@ class SearchComponent extends Component {
     }
 
     render() {
-        const { componentLabels } = this.props
+        const { components } = this.props
         const { search } = this.state
 
         return (
@@ -32,7 +30,7 @@ class SearchComponent extends Component {
                         <div className="col-sm-10 pull-right" style={{'paddingRight': '0px'}}>
                             <div className="input-group">
                                 <Select2 value={search} onChange={this.onChange} className="form-control pull-right" id="search{{ _uid }}" style={{width: '100%'}}>
-                                    {componentLabels.map((component) => (
+                                    {components.map((component) => (
                                         <option key={component.key} value={component.key}>{ component.label }</option>
                                     ))}
                                 </Select2>
@@ -47,36 +45,3 @@ class SearchComponent extends Component {
         )
     }
 }
-
-const getComponentLabels = (userComponents, history) => {
-    let componentLabels = []
-
-    for(let i = 0; i < userComponents.length; i++) {
-        let key = userComponents[i]
-
-        if(components[key].platforms().indexOf(history.platform) !== -1) {
-            componentLabels.push({
-                key: key,
-                label: components[key].tags().join(' - ') + ' : ' + key
-            })
-        }
-    }
-
-    componentLabels.sort(function(component1, component2) {
-        let x = component1.label;
-        let y = component2.label;
-        return x < y ? -1 : x > y ? 1 : 0;
-    })
-
-    return componentLabels
-}
-
-const getCurrentHistory = (state) => {
-    return state.current ? state.items[state.current] : null;
-}
-
-export default connect(state => {
-    return {
-        componentLabels: getComponentLabels(state.user.components, getCurrentHistory(state.history)),
-    }
-})(SearchComponent)

@@ -242,6 +242,7 @@ export default class ComponentWhile extends Component<Props> {
                     </form>
                 </div>
                 <ListComponent stack={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
+                               components={this.props.components}
                                onPush={(index, component) => {this.onPushFlow(['conditionStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['conditionStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['conditionStack'], index, data)}}
@@ -254,6 +255,7 @@ export default class ComponentWhile extends Component<Props> {
                     </form>
                 </div>
                 <ListComponent stack={this.state.executeStack} runIndex={this.state.executeRunIndex}
+                               components={this.props.components}
                                onPush={(index, component) => {this.onPushFlow(['executeStack'], index, component)}}
                                onPop={(index) => {this.onPopFlow(['executeStack'], index)}}
                                onUpdate={(index, data) => {this.onUpdateFlow(['executeStack'], index, data)}}

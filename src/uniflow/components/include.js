@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { Select2 } from '../../components/index'
 import {Bus} from '../../models/index'
-//import {getOrderedHistory, getHistoryData} from '../../reducers/history/actions'
+import {getOrderedHistory, getHistoryData} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 import createStore from '../../utils/createStore'
 import flow from '../../reducers/flow/index'
@@ -47,7 +47,7 @@ class ComponentInclude extends Component<Props> {
 
         return Promise.resolve()
             .then(() => {
-                return []; //this.props.dispatch(getHistoryData(history, this.props.auth.token));
+                return this.props.dispatch(getHistoryData(history, this.props.auth.token));
             })
             .then((data) => {
                 if(!data) return;
@@ -188,9 +188,9 @@ class ComponentInclude extends Component<Props> {
 
                             <div className="col-sm-10">
                                 <Select2 value={historyId} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
-                                    {/*{getOrderedHistory(this.props.history).map((item, i) => (
+                                    {getOrderedHistory(this.props.history).map((item, i) => (
                                         <option key={item.id} value={item.id}>{ item.title }</option>
-                                    ))}*/}
+                                    ))}
                                 </Select2>
                             </div>
                         </div>
