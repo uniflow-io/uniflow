@@ -10,6 +10,7 @@ RUN set -ex; \
     apt-get install -y --no-install-recommends \
         unzip \
         gnupg \
+        git \
     ; \
     rm -rf /var/lib/apt/lists/*;
 
@@ -109,14 +110,14 @@ RUN npm install -g yarn
 ## install uniflow
 
 # download uniflow
-ENV UNIFLOW_VERSION 1.0.0
+ENV UNIFLOW_VERSION 1.1.0
 
 RUN set -ex; \
     \
     curl -fsSL -o uniflow.zip \
-        "https://github.com/uniflow-io/uniflow/archive/v${UNIFLOW_VERSION}.zip"; \
+        "https://github.com/uniflow-io/app/archive/v${UNIFLOW_VERSION}.zip"; \
     unzip uniflow.zip -d /tmp/; \
-    mv /tmp/uniflow-${UNIFLOW_VERSION} /tmp/www; \
+    mv /tmp/app-${UNIFLOW_VERSION} /tmp/www; \
     rm -rf /var/www; \
     mv /tmp/www /var;
 
@@ -145,17 +146,17 @@ RUN set -ex; \
     openssl rsa -pubout -in /var/www/back/config/jwt/private.pem -out /var/www/back/config/jwt/public.pem -passin pass:uniflow; \
     chown -R www-data:root /var/www/back/config/jwt
 
-# build front
-RUN set -ex; \
-    \
-    (cd /var/www/front; yarn install); \
-    (cd /var/www/front; yarn build)
-
-# build bash
-RUN set -ex; \
-    \
-    (cd /var/www/platform-bash; yarn install); \
-    (cd /var/www/platform-bash; yarn build)
+## build front
+#RUN set -ex; \
+#    \
+#    (cd /var/www/front; yarn install); \
+#    (cd /var/www/front; yarn build)
+#
+## build bash
+#RUN set -ex; \
+#    \
+#    (cd /var/www/platform-bash; yarn install); \
+#    (cd /var/www/platform-bash; yarn build)
 
 # apply config
 COPY config/.env.local /var/www/back/.env.local
