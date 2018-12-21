@@ -52,11 +52,11 @@ class History
 
     /**
      * @Assert\NotBlank(
-     *     message="The platform can't be empty"
+     *     message="The client can't be empty"
      * )
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $platform;
+    protected $client;
 
     /**
      * @var Tag[]
@@ -187,17 +187,17 @@ class History
     /**
      * @return mixed
      */
-    public function getPlatform()
+    public function getClient()
     {
-        return $this->platform;
+        return $this->client;
     }
 
     /**
-     * @param mixed $platform
+     * @param mixed $client
      */
-    public function setPlatform($platform): void
+    public function setClient($client): void
     {
-        $this->platform = $platform;
+        $this->client = $client;
     }
 
     /**

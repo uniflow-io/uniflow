@@ -47,7 +47,7 @@ class HistoryType extends AbstractType
     {
         $builder->add('title', TextType::class);
         $builder->add('slug', TextType::class);
-        $builder->add('platform', TextType::class);
+        $builder->add('client', TextType::class);
         $builder->add('tags', CollectionType::class, array(
             'entry_type' => TextType::class,
             'allow_add' => true,

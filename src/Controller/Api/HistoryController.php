@@ -47,13 +47,13 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/{username}/list/{platform}", name="api_history_list", methods={"GET"})
+     * @Route("/api/history/{username}/list/{client}", name="api_history_list", methods={"GET"})
      *
      * @param string $username
-     * @param string $platform
+     * @param string $client
      * @return JsonResponse
      */
-    public function listAction($username = 'me', $platform = null)
+    public function listAction($username = 'me', $client = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -61,14 +61,14 @@ class HistoryController extends AbstractController
         }
 
         if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
-            $histories = $this->historyService->getHistoryByPlatform($user, $platform);
+            $histories = $this->historyService->getHistoryByClient($user, $client);
         } else {
             $user = $this->userService->findOneByUsername($username);
             if (is_null($user)) {
                 throw new NotFoundHttpException();
             }
 
-            $histories = $this->historyService->getPublicHistoryByUsernameAndPlatform($username, $platform);
+            $histories = $this->historyService->getPublicHistoryByUsernameAndClient($username, $client);
         }
 
         $data = array();

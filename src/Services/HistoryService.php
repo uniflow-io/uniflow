@@ -114,7 +114,7 @@ class HistoryService
             'id'          => $history->getId(),
             'title'       => $history->getTitle(),
             'slug'        => $history->getSlug(),
-            'platform'    => $history->getPlatform(),
+            'client'    => $history->getClient(),
             'tags'        => $tags,
             'description' => $history->getDescription(),
             'public'      => $history->getPublic(),
@@ -136,14 +136,14 @@ class HistoryService
         return $data;
     }
 
-    public function getHistoryByPlatform(User $user, $platform = null)
+    public function getHistoryByClient(User $user, $client = null)
     {
-        return $this->historyRepository->findLastByUserAndPlatform($user, $platform);
+        return $this->historyRepository->findLastByUserAndClient($user, $client);
     }
 
-    public function getPublicHistoryByUsernameAndPlatform($username, $platform = null)
+    public function getPublicHistoryByUsernameAndClient($username, $client = null)
     {
-        return $this->historyRepository->getPublicHistoryByUsernameAndPlatform($username, $platform);
+        return $this->historyRepository->getPublicHistoryByUsernameAndClient($username, $client);
     }
 
     public function findLastPublic($limit = null)
