@@ -1,4 +1,8 @@
 const defaultState = [{
+    tag: 'v1.1.0',
+    label: 'Decouple as library',
+    date: '21/12/2018'
+}, {
     tag: 'v1.0.3',
     label: 'Add github connect integration',
     date: '12/12/2018'
