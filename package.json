@@ -1,6 +1,6 @@
 {
-  "name": "uniflow-back",
-  "version": "0.0.1",
+  "name": "uniflow-bash-client",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -20,8 +20,6 @@
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "cache-loader": "^1.2.5",
-    "dotenv": "^6.2.0",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
