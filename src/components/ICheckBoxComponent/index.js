@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
-require("imports-loader?window.jQuery=jquery!../../node_modules/icheck/icheck.min.js");
+require("imports-loader?window.jQuery=jquery!../../../dist/js/icheck.min.js");
 //import 'icheck'
 
 type Props = {
