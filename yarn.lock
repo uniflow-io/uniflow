@@ -4717,9 +4717,9 @@ underscore@*:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
 
-"uniflow@https://github.com/uniflow-io/uniflow.git":
+"uniflow@https://github.com/uniflow-io/uniflow.git#v1.1.0":
   version "0.0.1"
-  resolved "https://github.com/uniflow-io/uniflow.git#0b29f7d0c35fc7f26392461e8090b05f36c3bb6f"
+  resolved "https://github.com/uniflow-io/uniflow.git#618254739164e5d99cfcbba9ec058002d940ddc7"
   dependencies:
     brace "^0.11.1"
     icheck "^1.0.2"
