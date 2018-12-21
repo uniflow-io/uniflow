@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import { Select2 } from 'uniflow/src/components'
-import {Bus} from '../../models/index'
+import { Select2Component } from 'uniflow/src/components'
+import { Bus } from 'uniflow/src/models'
 import {getOrderedHistory, getHistoryData} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
@@ -187,11 +187,11 @@ class ComponentInclude extends Component<Props> {
                             <label htmlFor="select{{ _uid }}" className="col-sm-2 control-label">Select</label>
 
                             <div className="col-sm-10">
-                                <Select2 value={historyId} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
+                                <Select2Component value={historyId} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
                                     {getOrderedHistory(this.props.history).map((item, i) => (
                                         <option key={item.id} value={item.id}>{ item.title }</option>
                                     ))}
-                                </Select2>
+                                </Select2Component>
                             </div>
                         </div>
                     </div>

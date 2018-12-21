@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import debounce from 'lodash/debounce'
-import {Ace, ListComponent, TagIt, ICheckBox} from 'uniflow/src/components'
-import {History, Runner} from '../../../models/index'
+import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent} from 'uniflow/src/components'
+import {History, Runner} from '../../../models'
 import {
     commitPushFlow,
     commitPopFlow,
@@ -21,7 +21,7 @@ import {
 } from '../../../reducers/history/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
-import Select2 from "uniflow/src/components/Select2";
+import {Select2Component} from "uniflow/src/components";
 import components from '../../../uniflow';
 
 class Show extends Component {
@@ -298,11 +298,11 @@ class Show extends Component {
                                 <label htmlFor="info_client_{{ _uid }}" className="col-sm-2 control-label">Client</label>
 
                                 <div className="col-sm-10">
-                                    <Select2 value={history.client} onChange={this.onChangeClient} className="form-control" id="info_client_{{ _uid }}" style={{width: '100%'}}>
+                                    <Select2Component value={history.client} onChange={this.onChangeClient} className="form-control" id="info_client_{{ _uid }}" style={{width: '100%'}}>
                                         {Object.keys(clients).map((value) => (
                                             <option key={value} value={value}>{ clients[value] }</option>
                                         ))}
-                                    </Select2>
+                                    </Select2Component>
                                 </div>
                             </div>
 
@@ -310,7 +310,7 @@ class Show extends Component {
                                 <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 control-label">Tags</label>
 
                                 <div className="col-sm-10">
-                                    <TagIt type="text" className="form-control" id="info_tags_{{ _uid }}"
+                                    <TagItComponent type="text" className="form-control" id="info_tags_{{ _uid }}"
                                            value={history.tags} onChange={this.onChangeTags} options={tagsOptions}
                                            placeholder="Tags"/>
                                 </div>
@@ -320,7 +320,7 @@ class Show extends Component {
                                 <label htmlFor="public{{ _uid }}" className="col-sm-2 control-label">Public</label>
 
                                 <div className="col-sm-10">
-                                    <ICheckBox value={history.public} onChange={this.onChangePublic} />
+                                    <ICheckBoxComponent value={history.public} onChange={this.onChangePublic} />
                                 </div>
                             </div>
 
@@ -329,7 +329,7 @@ class Show extends Component {
                                        className="col-sm-2 control-label">Description</label>
 
                                 <div className="col-sm-10">
-                                    <Ace className="form-control" id="info_description_{{ _uid }}"
+                                    <AceComponent className="form-control" id="info_description_{{ _uid }}"
                                          value={history.description} onChange={this.onChangeDescription}
                                          placeholder="Text" height="200"/>
                                 </div>

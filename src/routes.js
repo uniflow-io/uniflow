@@ -1,6 +1,6 @@
-import {FAQ, Home, Flow, Versions, Login, Register, Settings, LoginFacebook, LoginGithub} from './views/index'
+import {FAQ, Home, Flow, Versions, Login, Register, Settings, LoginFacebook, LoginGithub} from './views'
 import pathToRegexp from 'path-to-regexp'
-import { requireAuthentication } from './components/index'
+import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
 
 const routes = {

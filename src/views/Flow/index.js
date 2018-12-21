@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import History from './History/index'
-import Show from './Show/index'
+import History from './History'
+import Show from './Show'
 import {getCurrentHistory} from '../../reducers/history/actions'
 import {connect} from 'react-redux'
 import {pathTo} from "../../routes";

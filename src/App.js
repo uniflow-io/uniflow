@@ -10,7 +10,7 @@ import {Provider, connect} from 'react-redux'
 import routes, {pathTo} from './routes'
 import { auth, env, history, logs, user, versions } from './reducers'
 import { flow } from 'uniflow/src/reducers'
-import { UserManager } from './components/index'
+import { UserManagerComponent } from './components'
 import { createStore } from 'uniflow/src/utils'
 import {getNewLogs,commitReadLog} from './reducers/logs/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
@@ -235,7 +235,7 @@ export default class App extends Component {
                 <Provider store={store}>
                     <Router>
                         <div>
-                            <UserManager />
+                            <UserManagerComponent />
 
                             <div className="wrapper">
 

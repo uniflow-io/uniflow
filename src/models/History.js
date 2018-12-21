@@ -1,4 +1,4 @@
-import Bus from './Bus'
+import { Bus } from 'uniflow/src/models'
 import moment from 'moment'
 
 export default class History {

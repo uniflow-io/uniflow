@@ -5,7 +5,7 @@ import routes, {pathTo, matchRoute} from "../../routes";
 import {withRouter} from 'react-router'
 import {fetchHistory, getHistoryBySlug, setCurrentHistory, setUsernameHistory} from "../../reducers/history/actions";
 
-class UserManager extends Component<Props> {
+class UserManagerComponent extends Component<Props> {
 
     componentDidMount() {
         const { auth, history } = this.props
@@ -113,4 +113,4 @@ export default connect(state => {
         user: state.user,
         historyState: state.history
     }
-})(withRouter(UserManager))
+})(withRouter(UserManagerComponent))
