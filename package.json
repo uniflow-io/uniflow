@@ -1,5 +1,5 @@
 {
-  "name": "uniflow",
+  "name": "uniflow-server-client",
   "version": "1.0.0",
   "main": "src/index.js",
   "repository": "git+ssh://math@darkwood.fr:/home/math/git/uniflow.git",
