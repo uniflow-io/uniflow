@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import debounce from 'lodash/debounce'
-import {Ace, ListComponent, TagIt, ICheckBox} from 'uniflow/src/components/index'
+import {Ace, ListComponent, TagIt, ICheckBox} from 'uniflow/src/components'
 import {History, Runner} from '../../../models/index'
 import {
     commitPushFlow,
@@ -22,6 +22,7 @@ import {
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import Select2 from "uniflow/src/components/Select2";
+import components from 'uniflow/src/uniflow';
 
 class Show extends Component {
     state = {
@@ -226,11 +227,35 @@ class Show extends Component {
         return this.props.dispatch(deleteHistory(this.props.history, this.props.auth.token));
     }
 
+    getComponents = (userComponents, history) => {
+        let componentLabels = []
+
+        for(let i = 0; i < userComponents.length; i++) {
+            let key = userComponents[i]
+
+            if(components[key].platforms().indexOf(history.platform) !== -1) {
+                componentLabels.push({
+                    key: key,
+                    label: components[key].tags().join(' - ') + ' : ' + key
+                })
+            }
+        }
+
+        componentLabels.sort(function(component1, component2) {
+            let x = component1.label;
+            let y = component2.label;
+            return x < y ? -1 : x > y ? 1 : 0;
+        })
+
+        return componentLabels
+    }
+
     render() {
-        const {history, tags, stack, platform} = this.props;
+        const {history, tags, stack, platform, user} = this.props;
         const tagsOptions     = {
             availableTags: tags
         }
+        const components = this.getComponents(user.components, history)
         const platforms = {
             'uniflow': 'Uniflow',
             'bash': 'Bash',
@@ -320,6 +345,7 @@ class Show extends Component {
                 </div>
 
                 <ListComponent stack={stack} runIndex={this.state.runIndex}
+                               components={components}
                                onPush={this.onPushFlow}
                                onPop={this.onPopFlow}
                                onUpdate={this.onUpdateFlow}
