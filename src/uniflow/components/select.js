@@ -18,7 +18,7 @@ export default class ComponentSelect extends Component<Props> {
         return ['ui']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 

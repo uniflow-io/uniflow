@@ -16,7 +16,7 @@ export default class ComponentJavascript extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow', 'phpstorm', 'chrome']
     }
 

@@ -18,7 +18,7 @@ export default class ComponentSocketIO extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 

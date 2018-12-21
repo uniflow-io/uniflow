@@ -4155,7 +4155,7 @@ export default class ComponentYaml extends Component<Props> {
         return ['yaml']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 

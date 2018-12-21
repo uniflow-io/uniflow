@@ -17,7 +17,7 @@ export default class ComponentText extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow', 'bash', 'chrome']
     }
 

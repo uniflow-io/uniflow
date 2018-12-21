@@ -23,7 +23,7 @@ export default class ComponentBrowser extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 
@@ -69,7 +69,7 @@ export default class ComponentBrowser extends Component<Props> {
 
     deserialise = (data) => {
         let [variable, host, ioPort, proxyPort, mode] = data ? data : [null, null, null, null, null];
-        
+
         this.setState({variable: variable, host: host, ioPort: ioPort, proxyPort: proxyPort, mode: mode})
     }
 

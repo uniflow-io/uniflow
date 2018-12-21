@@ -16,7 +16,7 @@ export default class ComponentBash extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['bash']
     }
 

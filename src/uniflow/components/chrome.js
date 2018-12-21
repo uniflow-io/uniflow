@@ -15,7 +15,7 @@ export default class ComponentBrowser extends Component<Props> {
         return ['core']
     }
 
-    static platforms() {
+    static clients() {
         return ['chrome']
     }
 

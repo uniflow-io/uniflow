@@ -17,7 +17,7 @@ export default class ComponentTextList extends Component<Props> {
         return ['ui']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 

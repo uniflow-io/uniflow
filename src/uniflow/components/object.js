@@ -537,7 +537,7 @@ export default class ComponentObject extends Component<Props> {
         return ['ui']
     }
 
-    static platforms() {
+    static clients() {
         return ['uniflow']
     }
 
