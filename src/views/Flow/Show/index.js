@@ -22,7 +22,7 @@ import {
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import Select2 from "uniflow/src/components/Select2";
-import components from 'uniflow/src/uniflow';
+import components from '../../../uniflow';
 
 class Show extends Component {
     state = {
