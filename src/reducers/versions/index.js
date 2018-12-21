@@ -20,11 +20,11 @@ const defaultState = [{
     date: '20/09/2018'
 }, {
     tag: 'v0.0.24',
-    label: 'Add chrome platform',
+    label: 'Add chrome client',
     date: '30/08/2018'
 }, {
     tag: 'v0.0.23',
-    label: 'Add platform to history',
+    label: 'Add client to history',
     date: '30/08/2018'
 }, {
     tag: 'v0.0.22',

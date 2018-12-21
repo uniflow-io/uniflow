@@ -150,7 +150,7 @@ export const createHistory = (item, token) => {
         let data = {
             title: item.title,
             slug: item.title,
-            platform: item.platform,
+            client: item.client,
             tags: item.tags,
             description: item.description,
             public: false
@@ -185,7 +185,7 @@ export const updateHistory = (item, token) => {
         let data = {
             title: item.title,
             slug: item.slug,
-            platform: item.platform,
+            client: item.client,
             tags: item.tags,
             description: item.description,
             public: item.public

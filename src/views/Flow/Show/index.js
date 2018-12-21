@@ -165,9 +165,9 @@ class Show extends Component {
             })
     }
 
-    onChangePlatform = (selected) => {
+    onChangeClient = (selected) => {
         this.props
-            .dispatch(commitUpdateHistory({...this.props.history, ...{platform: selected}}))
+            .dispatch(commitUpdateHistory({...this.props.history, ...{client: selected}}))
             .then(() => {
                 this.onUpdate()
             })
@@ -233,7 +233,7 @@ class Show extends Component {
         for(let i = 0; i < userComponents.length; i++) {
             let key = userComponents[i]
 
-            if(components[key].platforms().indexOf(history.platform) !== -1) {
+            if(components[key].clients().indexOf(history.client) !== -1) {
                 componentLabels.push({
                     key: key,
                     label: components[key].tags().join(' - ') + ' : ' + key
@@ -251,12 +251,12 @@ class Show extends Component {
     }
 
     render() {
-        const {history, tags, stack, platform, user} = this.props;
+        const {history, tags, stack, client, user} = this.props;
         const tagsOptions     = {
             availableTags: tags
         }
         const components = this.getComponents(user.components, history)
-        const platforms = {
+        const clients = {
             'uniflow': 'Uniflow',
             'bash': 'Bash',
             'phpstorm': 'PhpStorm',
@@ -295,12 +295,12 @@ class Show extends Component {
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="info_platform_{{ _uid }}" className="col-sm-2 control-label">Platform</label>
+                                <label htmlFor="info_client_{{ _uid }}" className="col-sm-2 control-label">Client</label>
 
                                 <div className="col-sm-10">
-                                    <Select2 value={history.platform} onChange={this.onChangePlatform} className="form-control" id="info_platform_{{ _uid }}" style={{width: '100%'}}>
-                                        {Object.keys(platforms).map((value) => (
-                                            <option key={value} value={value}>{ platforms[value] }</option>
+                                    <Select2 value={history.client} onChange={this.onChangeClient} className="form-control" id="info_client_{{ _uid }}" style={{width: '100%'}}>
+                                        {Object.keys(clients).map((value) => (
+                                            <option key={value} value={value}>{ clients[value] }</option>
                                         ))}
                                     </Select2>
                                 </div>
@@ -338,7 +338,7 @@ class Show extends Component {
                         </form>
                     </div>
                     <div className="box-footer">
-                        {history.platform === 'uniflow' && (
+                        {history.client === 'uniflow' && (
                         <a className="btn btn-success" onClick={this.run}><i className="fa fa-fw fa-play"/> Play</a>
                         )}
                     </div>
