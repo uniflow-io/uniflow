@@ -1,16 +1,6 @@
-import { combineReducers } from 'redux'
-import auth from './auth/index'
-import env from './env/index'
-import history from './history/index'
-import logs from './logs/index'
-import user from './user/index'
-import versions from './versions/index'
-
-export default combineReducers({
-    auth,
-    env,
-    history,
-    logs,
-    user,
-    versions,
-})
+export { default as auth } from './auth/index'
+export { default as env } from './env/index'
+export { default as history } from './history/index'
+export { default as logs } from './logs/index'
+export { default as user } from './user/index'
+export { default as versions } from './versions/index'

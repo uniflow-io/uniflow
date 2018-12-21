@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import debounce from 'lodash/debounce'
-import {Ace, ListComponent, TagIt, ICheckBox} from '../../../components/index'
+import {Ace, ListComponent, TagIt, ICheckBox} from 'uniflow/src/components/index'
 import {History, Runner} from '../../../models/index'
 import {
     commitPushFlow,
