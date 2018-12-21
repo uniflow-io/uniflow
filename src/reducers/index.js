@@ -1,6 +1,1 @@
-import { combineReducers } from 'redux'
-import flow from './flow/index'
-
-export default combineReducers({
-    flow,
-})
+export { default as flow } from './flow/index'
