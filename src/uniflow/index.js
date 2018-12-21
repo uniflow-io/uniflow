@@ -5,7 +5,6 @@ import ComponentChrome from './components/chrome.js';
 import ComponentCheckBoxes from './components/checkboxes.js';
 import ComponentJavascript from './components/javascript.js';
 import ComponentIf from './components/if.js';
-//import ComponentInclude from './components/include.js';
 import ComponentObject from './components/object.js';
 import ComponentPrompt from './components/prompt.js';
 import ComponentRegex from './components/regex.js';
@@ -24,7 +23,6 @@ export default {
     'chrome': ComponentChrome,
     'javascript': ComponentJavascript,
     'if': ComponentIf,
-    //'include': ComponentInclude,
     'object': ComponentObject,
     'prompt': ComponentPrompt,
     'regex': ComponentRegex,
