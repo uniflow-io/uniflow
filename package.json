@@ -1,6 +1,6 @@
 {
-  "name": "uniflow-chrome",
-  "version": "0.0.1",
+  "name": "uniflow-chrome-client",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
