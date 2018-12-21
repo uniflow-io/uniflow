@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
-import { Bus } from '../../models/index'
+import { AceComponent } from '../../components'
+import { Bus } from '../../models'
 
 type Props = {
     bus: Bus
@@ -136,7 +136,7 @@ export default class ComponentText extends Component<Props> {
                             <label htmlFor="text{{ _uid }}" className="col-sm-2 control-label">Text</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="text{{ _uid }}" value={text} onChange={this.onChangeText} placeholder="Text" height="200" />
+                                <AceComponent className="form-control" id="text{{ _uid }}" value={text} onChange={this.onChangeText} placeholder="Text" height="200" />
                             </div>
                         </div>
                     </div>

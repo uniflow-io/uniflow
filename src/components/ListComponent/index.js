@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {SearchComponent} from '../../components/index'
+import {SearchComponent} from '../../components'
 import components from '../../uniflow';
 
 class UiComponent extends Component {

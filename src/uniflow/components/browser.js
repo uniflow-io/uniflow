@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Select2 } from '../../components/index'
-import { Bus } from '../../models/index'
+import { Select2Component } from '../../components'
+import { Bus } from '../../models'
 import io from 'socket.io-client';
 import { Browser } from 'remote-browser/web-client';
 
@@ -255,11 +255,11 @@ export default class ComponentBrowser extends Component<Props> {
                             <label htmlFor="mode{{ _uid }}" className="col-sm-2 control-label">Mode</label>
 
                             <div className="col-sm-10">
-                                <Select2 value={mode || ''} onChange={this.onChangeMode} className="form-control" id="mode{{ _uid }}" style={{width: '100%'}}>
+                                <Select2Component value={mode || ''} onChange={this.onChangeMode} className="form-control" id="mode{{ _uid }}" style={{width: '100%'}}>
                                     <option value="" />
                                     <option value="manual">Manual</option>
                                     <option value="background">Background</option>
-                                </Select2>
+                                </Select2Component>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
-import { Bus } from '../../models/index'
+import { AceComponent } from '../../components'
+import { Bus } from '../../models'
 
 const SRL = (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
         'use strict'
@@ -1765,7 +1765,7 @@ export default class ComponentRegex extends Component<Props> {
                             <label htmlFor="expression{{ _uid }}" className="col-sm-2 control-label">Expression</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="expression{{ _uid }}" value={expression} onChange={this.onChangeExpression} placeholder="Expression" height="200" />
+                                <AceComponent className="form-control" id="expression{{ _uid }}" value={expression} onChange={this.onChangeExpression} placeholder="Expression" height="200" />
                             </div>
                         </div>
 

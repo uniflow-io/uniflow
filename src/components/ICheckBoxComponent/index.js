@@ -7,7 +7,7 @@ type Props = {
     value: string
 }
 
-export default class ICheckBox extends Component<Props> {
+export default class ICheckBoxComponent extends Component<Props> {
     componentDidMount() {
         const {
             value
@@ -47,7 +47,7 @@ export default class ICheckBox extends Component<Props> {
 
     setValue = (value) => {
         this.silent = true;
-        
+
         if(value) {
             $(this.container).iCheck('check', () => {
                 this.silent = false;

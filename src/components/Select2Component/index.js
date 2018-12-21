@@ -9,7 +9,7 @@ type Props = {
     children: ({}) => React.Component
 }
 
-export default class Select2 extends Component<Props> {
+export default class Select2Component extends Component<Props> {
     componentDidMount() {
         const {
             value,

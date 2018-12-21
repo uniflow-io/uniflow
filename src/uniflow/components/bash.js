@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
-import { Bus } from '../../models/index'
+import { AceComponent } from '../../components'
+import { Bus } from '../../models'
 
 type Props = {
     bus: Bus
@@ -115,7 +115,7 @@ export default class ComponentBash extends Component<Props> {
                             <label htmlFor="bash{{ _uid }}" className="col-sm-2 control-label">Bash</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="bash{{ _uid }}" value={bash} onChange={this.onChangeBash} placeholder="Bash" height="200" mode="batchfile" />
+                                <AceComponent className="form-control" id="bash{{ _uid }}" value={bash} onChange={this.onChangeBash} placeholder="Bash" height="200" mode="batchfile" />
                             </div>
                         </div>
                     </div>

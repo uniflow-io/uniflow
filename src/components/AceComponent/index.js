@@ -10,7 +10,7 @@ type Props = {
     mode?: string
 }
 
-export default class Ace extends Component<Props> {
+export default class AceComponent extends Component<Props> {
     componentDidMount() {
         const {
             value,

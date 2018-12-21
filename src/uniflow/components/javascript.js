@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
-import { Bus } from '../../models/index'
+import { AceComponent } from '../../components'
+import { Bus } from '../../models'
 
 type Props = {
     bus: Bus
@@ -115,7 +115,7 @@ export default class ComponentJavascript extends Component<Props> {
                             <label htmlFor="javascript{{ _uid }}" className="col-sm-2 control-label">Javascript</label>
 
                             <div className="col-sm-10">
-                                <Ace className="form-control" id="javascript{{ _uid }}" value={javascript} onChange={this.onChangeJavascript} placeholder="Javascript" height="200" mode="javascript" />
+                                <AceComponent className="form-control" id="javascript{{ _uid }}" value={javascript} onChange={this.onChangeJavascript} placeholder="Javascript" height="200" mode="javascript" />
                             </div>
                         </div>
                     </div>

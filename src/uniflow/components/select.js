@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import { Select2 } from '../../components/index'
-import {Bus} from '../../models/index'
+import { Select2Component } from '../../components'
+import {Bus} from '../../models'
 
 type Props = {
     bus: Bus
@@ -135,11 +135,11 @@ export default class ComponentSelect extends Component<Props> {
                             <label htmlFor="select{{ _uid }}" className="col-sm-2 control-label">Select</label>
 
                             <div className="col-sm-10">
-                                <Select2 value={selected} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
+                                <Select2Component value={selected} onChange={this.onChangeSelected} className="form-control" id="select{{ _uid }}" style={{width: '100%'}}>
                                     {Object.keys(choices).map((value) => (
                                         <option key={value} value={choices[value]}>{ choices[value] }</option>
                                     ))}
-                                </Select2>
+                                </Select2Component>
                             </div>
                         </div>
                     </div>

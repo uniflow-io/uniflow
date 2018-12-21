@@ -11,7 +11,7 @@ type Props = {
     options?: [],
 }
 
-export default class TagIt extends Component<Props> {
+export default class TagItComponent extends Component<Props> {
     componentDidMount() {
         const {
             value,

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {Bus} from '../../models/index'
-import Select2 from "../../components/Select2";
+import {Bus} from '../../models'
+import {Select2Component} from "../../components";
 
 /**
  * this component insert or set key-value to existing or new mapping into the yaml given in the arguments
@@ -4304,10 +4304,10 @@ export default class ComponentYaml extends Component<Props> {
                             <label htmlFor="type{{ _uid }}" className="col-sm-2 control-label">Type</label>
 
                             <div className="col-sm-10">
-                                <Select2 value={type} onChange={this.onChangeType} className="form-control" id="type{{ _uid }}" style={{width: '100%'}}>
+                                <Select2Component value={type} onChange={this.onChangeType} className="form-control" id="type{{ _uid }}" style={{width: '100%'}}>
                                     <option value="read">Read</option>
                                     <option value="write">Write</option>
-                                </Select2>
+                                </Select2Component>
                             </div>
                         </div>
                     </div>

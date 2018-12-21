@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {Bus} from '../../models/index'
-import { ICheckBox } from '../../components/index'
+import {Bus} from '../../models'
+import { ICheckBoxComponent } from '../../components'
 
 type Props = {
     bus: Bus
@@ -148,7 +148,7 @@ export default class ComponentCheckBoxes extends Component<Props> {
                             <div className="col-sm-10">
                                 {Object.keys(checkboxes).map((checkbox) => (
                                     <div key={checkbox} className="checkbox">
-                                        <label><ICheckBox value={checkboxes[checkbox]} onChange={(value) => {this.onChangeCheckBox(value, checkbox)}} />{checkbox}</label>
+                                        <label><ICheckBoxComponent value={checkboxes[checkbox]} onChange={(value) => {this.onChangeCheckBox(value, checkbox)}} />{checkbox}</label>
                                     </div>
                                 ))}
                             </div>

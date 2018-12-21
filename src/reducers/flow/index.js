@@ -1,4 +1,4 @@
-import {Bus} from '../../models/index'
+import {Bus} from '../../models'
 import {
     COMMIT_PUSH_FLOW,
     COMMIT_POP_FLOW,

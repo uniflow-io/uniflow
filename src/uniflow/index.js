@@ -1,19 +1,19 @@
-import ComponentAssets from './components/assets.js';
-import ComponentBash from './components/bash.js';
-import ComponentBrowser from './components/browser.js';
-import ComponentChrome from './components/chrome.js';
-import ComponentCheckBoxes from './components/checkboxes.js';
-import ComponentJavascript from './components/javascript.js';
-import ComponentIf from './components/if.js';
-import ComponentObject from './components/object.js';
-import ComponentPrompt from './components/prompt.js';
-import ComponentRegex from './components/regex.js';
-import ComponentSelect from './components/select.js';
-import ComponentSocketIO from './components/socketio.js';
-import ComponentText from './components/text.js';
-import ComponentTextList from './components/textlist.js';
-import ComponentWhile from "./components/while.js";
-import ComponentYaml from "./components/yaml.js";
+import ComponentAssets from './components/assets';
+import ComponentBash from './components/bash';
+import ComponentBrowser from './components/browser';
+import ComponentChrome from './components/chrome';
+import ComponentCheckBoxes from './components/checkboxes';
+import ComponentJavascript from './components/javascript';
+import ComponentIf from './components/if';
+import ComponentObject from './components/object';
+import ComponentPrompt from './components/prompt';
+import ComponentRegex from './components/regex';
+import ComponentSelect from './components/select';
+import ComponentSocketIO from './components/socketio';
+import ComponentText from './components/text';
+import ComponentTextList from './components/textlist';
+import ComponentWhile from "./components/while";
+import ComponentYaml from "./components/yaml";
 
 export default {
     'assets': ComponentAssets,

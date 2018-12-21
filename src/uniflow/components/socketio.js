@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Bus} from '../../models/index'
+import {Bus} from '../../models'
 import io from 'socket.io-client';
 
 type Props = {

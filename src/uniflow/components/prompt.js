@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Ace } from '../../components/index'
-import { Bus } from '../../models/index'
-import Select2 from "../../components/Select2";
+import { AceComponent } from '../../components'
+import { Bus } from '../../models'
+import {Select2Component} from "../../components";
 
 type Props = {
     bus: Bus
@@ -217,11 +217,11 @@ export default class ComponentPrompt extends Component<Props> {
                             <label htmlFor="type{{ _uid }}" className="col-sm-2 control-label">Type</label>
 
                             <div className="col-sm-10">
-                                <Select2 value={type} onChange={this.onChangeType} className="form-control" id="type{{ _uid }}" style={{width: '100%'}}>
+                                <Select2Component value={type} onChange={this.onChangeType} className="form-control" id="type{{ _uid }}" style={{width: '100%'}}>
                                     {Object.keys(choices).map((value) => (
                                         <option key={value} value={value}>{ choices[value] }</option>
                                     ))}
-                                </Select2>
+                                </Select2Component>
                             </div>
                         </div>
 
@@ -246,7 +246,7 @@ export default class ComponentPrompt extends Component<Props> {
                                 <label htmlFor="input_text{{ _uid }}" className="col-sm-2 control-label">Input</label>
 
                                 <div className="col-sm-10">
-                                    <Ace className="form-control" id="input_text{{ _uid }}" value={input || ''} onChange={this.onChangeInputText} placeholder="Text" height="200" />
+                                    <AceComponent className="form-control" id="input_text{{ _uid }}" value={input || ''} onChange={this.onChangeInputText} placeholder="Text" height="200" />
                                 </div>
                             </div>
                         )}
