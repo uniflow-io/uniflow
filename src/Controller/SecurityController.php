@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegisterType;
 use App\Services\UserService;
+use GuzzleHttp\Client;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,13 +49,19 @@ class SecurityController extends AbstractController
      */
     protected $userPasswordEncoder;
 
+    /**
+     * @var Session
+     */
+    protected $session;
+
     public function __construct(
         $appOauthFacebookId,
         $appOauthGithubId,
         $appOauthGithubSecret,
         UserService $userService,
         JWTTokenManagerInterface $jwtTokenManager,
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordEncoderInterface $userPasswordEncoder,
+        SessionInterface $session
     ) {
         $this->appOauthFacebookId = $appOauthFacebookId;
         $this->appOauthGithubId = $appOauthGithubId;
@@ -60,6 +69,7 @@ class SecurityController extends AbstractController
         $this->userService = $userService;
         $this->jwtTokenManager = $jwtTokenManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
+        $this->session = $session;
     }
     /**
      * @Route("/api/login_check", name="api_login_check")
@@ -90,26 +100,22 @@ class SecurityController extends AbstractController
             $token = isset($data['access_token']) ? $data['access_token'] : null;
         }
 
+        $client = new Client();
+
         // Get the token's Facebook app info.
-        @$tokenAppResp = file_get_contents('https://graph.facebook.com/app/?access_token=' . $token);
-        if (!$tokenAppResp) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
+        $response = $client->get('https://graph.facebook.com/app/?access_token=' . $token);
 
         // Make sure it's the correct app.
-        $tokenApp = json_decode($tokenAppResp, true);
+        $tokenApp = json_decode((string) $response->getBody(), true);
         if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->appOauthFacebookId) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
 
         // Get the token's Facebook user info.
-        @$tokenUserResp = file_get_contents('https://graph.facebook.com/me/?access_token=' . $token);
-        if (!$tokenUserResp) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
+        $response = $client->get('https://graph.facebook.com/me/?access_token=' . $token);
 
         // Try to fetch user by it's token ID, create it otherwise.
-        $tokenUser = json_decode($tokenUserResp, true);
+        $tokenUser = json_decode((string) $response->getBody(), true);
         if (!$tokenUser || !isset($tokenUser['id'])) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
@@ -132,7 +138,7 @@ class SecurityController extends AbstractController
             $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
             $this->userService->save($user);
 
-            $this->get('session')->getFlashBag()->add(
+            $this->session->getFlashBag()->add(
                 'notice',
                 'User registered !'
             );
@@ -165,41 +171,37 @@ class SecurityController extends AbstractController
             $code = isset($data['code']) ? $data['code'] : null;
         }
 
-        // Get the token's Github app.
-        $ch = curl_init('https://github.com/login/oauth/access_token');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            'client_id' => $this->appOauthGithubId,
-            'client_secret' => $this->appOauthGithubSecret,
-            'code' => $code
-        ]));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept: application/json']);
-        $tokenResp = curl_exec($ch);
-        curl_close($ch);
+        $client = new Client();
 
-        $tokenResp = json_decode($tokenResp, true);
+        // Get the token's Github app.
+        $response = $client->post('https://github.com/login/oauth/access_token', [
+            'headers' => [
+                'Accept' => 'application/json'
+            ],
+            'form_params' => [
+                'client_id' => $this->appOauthGithubId,
+                'client_secret' => $this->appOauthGithubSecret,
+                'code' => $code
+            ]
+        ]);
+
+        $tokenResp = json_decode((string) $response->getBody(), true);
         if (!$tokenResp || !isset($tokenResp['access_token'])) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
         $token = $tokenResp['access_token'];
 
         // Get the token's Github user info.
-        $ch = curl_init('https://api.github.com/user');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Accept: application/json',
-            'User-Agent: Uniflow App',
-            'Authorization: Bearer ' . $token
+        $response = $client->get('https://api.github.com/user', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'User-Agent' => 'Uniflow App',
+                'Authorization' => 'Bearer ' . $token
+            ]
         ]);
-        $tokenUserResp = curl_exec($ch);
-        curl_close($ch);
-
-        if (!$tokenUserResp) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
 
         // Try to fetch user by it's token ID, create it otherwise.
-        $tokenUser = json_decode($tokenUserResp, true);
+        $tokenUser = json_decode((string) $response->getBody(), true);
         if (!$tokenUser || !isset($tokenUser['id'])) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
@@ -222,7 +224,7 @@ class SecurityController extends AbstractController
             $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
             $this->userService->save($user);
 
-            $this->get('session')->getFlashBag()->add(
+            $this->session->getFlashBag()->add(
                 'notice',
                 'User registered !'
             );
@@ -261,7 +263,7 @@ class SecurityController extends AbstractController
             $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
             $this->userService->save($user);
 
-            $this->get('session')->getFlashBag()->add(
+            $this->session->getFlashBag()->add(
                 'notice',
                 'User registered !'
             );
