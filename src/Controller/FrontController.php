@@ -63,6 +63,14 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/login/medium", name="loginMedium")
+     */
+    public function loginMedium()
+    {
+        return $this->render('default/login/medium.html.twig');
+    }
+
+    /**
      * @Route("/register", name="register")
      */
     public function register()
