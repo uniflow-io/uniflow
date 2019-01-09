@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Config;
 use App\Entity\User;
 use App\Form\RegisterType;
+use App\Services\ConfigService;
 use App\Services\UserService;
 use GuzzleHttp\Client;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -14,8 +16,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\LogicException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class SecurityController extends AbstractController
 {
@@ -35,9 +40,24 @@ class SecurityController extends AbstractController
     protected $appOauthGithubSecret;
 
     /**
+     * @var string
+     */
+    protected $appOauthMediumId;
+
+    /**
+     * @var string
+     */
+    protected $appOauthMediumSecret;
+
+    /**
      * @var UserService
      */
     protected $userService;
+
+    /**
+     * @var ConfigService
+     */
+    protected $configService;
 
     /**
      * @var JWTTokenManagerInterface
@@ -58,7 +78,10 @@ class SecurityController extends AbstractController
         $appOauthFacebookId,
         $appOauthGithubId,
         $appOauthGithubSecret,
+        $appOauthMediumId,
+        $appOauthMediumSecret,
         UserService $userService,
+        ConfigService $configService,
         JWTTokenManagerInterface $jwtTokenManager,
         UserPasswordEncoderInterface $userPasswordEncoder,
         SessionInterface $session
@@ -66,7 +89,10 @@ class SecurityController extends AbstractController
         $this->appOauthFacebookId = $appOauthFacebookId;
         $this->appOauthGithubId = $appOauthGithubId;
         $this->appOauthGithubSecret = $appOauthGithubSecret;
+        $this->appOauthMediumId = $appOauthMediumId;
+        $this->appOauthMediumSecret = $appOauthMediumSecret;
         $this->userService = $userService;
+        $this->configService = $configService;
         $this->jwtTokenManager = $jwtTokenManager;
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->session = $session;
@@ -236,6 +262,68 @@ class SecurityController extends AbstractController
         return new JsonResponse(array(
             'token' => $this->jwtTokenManager->create($user)
         ));
+    }
+
+    /**
+     * @Route("/api/login/medium", name="api_login_medium", methods={"POST"})
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function mediumLogin(Request $request)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        if (!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
+            throw new AccessDeniedException('You are not alowed to create more history');
+        }
+
+        $code = null;
+
+        $content = $request->getContent();
+        if (!empty($content)) {
+            $data = json_decode($content, true);
+            $code = isset($data['code']) ? $data['code'] : null;
+        }
+
+        $client = new Client();
+
+        // Get the token's Medium app.
+        $response = $client->post('https://api.medium.com/v1/tokens', [
+            'headers' => [
+                'Accept' => 'application/json'
+            ],
+            'form_params' => [
+                'client_id' => $this->appOauthMediumId,
+                'client_secret' => $this->appOauthMediumSecret,
+                'code' => $code,
+                'grant_type' => 'authorization_code',
+                'redirect_uri' => $this->generateUrl('loginMedium', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ]
+        ]);
+
+        $tokenResp = json_decode((string) $response->getBody(), true);
+        if (!$tokenResp || !isset($tokenResp['access_token'])) {
+            throw new AccessDeniedHttpException('Bad credentials.');
+        }
+        $token = $tokenResp['access_token'];
+
+        $config = $this->configService->findOne();
+        if (!$config) {
+            $config = new Config();
+        }
+        $config->setMediumToken($token);
+
+        $this->configService->save($config);
+
+        return new JsonResponse();
     }
 
     /**
