@@ -148,6 +148,7 @@ class UserService
             'facebookId' => $user->getFacebookId(),
             'githubId' => $user->getGithubId(),
             'apiKey' => $user->getApiKey(),
+            'roles' => $user->getRoles(),
         );
     }
 }

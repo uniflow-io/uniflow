@@ -111,6 +111,14 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/admin", name="admin")
+     */
+    public function admin()
+    {
+        return $this->render('default/admin.html.twig');
+    }
+
+    /**
      * @Route("/me", name="dashboard")
      */
     public function dashboard()

@@ -2,17 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Traits\TimestampTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConfigRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_config", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user_id", "slug"})})
- * @UniqueEntity(fields={"user", "slug"}, message="The slug '{{ value }}' is already taken.")
+ * @ORM\Table(name="dw_config")
  *
  */
 class Config
@@ -27,6 +23,7 @@ class Config
     protected $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $mediumToken;
@@ -42,7 +39,7 @@ class Config
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMediumToken()
     {
@@ -50,7 +47,7 @@ class Config
     }
 
     /**
-     * @param mixed $mediumToken
+     * @param string $mediumToken
      */
     public function setMediumToken($mediumToken): void
     {
