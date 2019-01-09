@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use GuzzleHttp\Client;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 /**
@@ -14,7 +15,7 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 class BlogService
 {
     /** @var string  */
-    const url = 'https://api.medium.com/v1/';
+    private $url = 'https://api.medium.com/v1/';
 
     /**
      * @var TagAwareAdapter
@@ -29,6 +30,26 @@ class BlogService
 
     public function getBlog()
     {
+        $client = new Client([
+            'base_uri' => $this->url,
+            'exceptions' => false,
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Accept-Charset' => 'utf-8',
+                'Authorization' => 'Bearer ',
+            ],
+        ]);
+
+
+        $response = $client->get('me');
+
+        $me = json_decode((string) $response->getBody(), true);
+
+
+        $response = $client->get('users/' . $me['data']['id'] . '/publications');
+
+        $data = json_decode((string) $response->getBody(), true);
 
         return [];
     }

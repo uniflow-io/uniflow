@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Tag
 {
+    use TimestampTrait;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -30,22 +32,6 @@ class Tag
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;
-
-    /**
-     * @var \DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    protected $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    protected $updated;
 
     /**
      * @var ArrayCollection
@@ -91,52 +77,6 @@ class Tag
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set created
-     *
-     * @param \DateTime $created
-     * @return Tag
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     * @return Tag
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 
     /**

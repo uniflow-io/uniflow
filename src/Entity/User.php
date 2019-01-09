@@ -19,6 +19,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class User implements UserInterface, \Serializable
 {
+    use TimestampTrait;
+
     /**
      * Id.
      *
@@ -99,22 +101,6 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="array")
      */
     protected $roles = [];
-
-    /**
-     * @var \DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    protected $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    protected $updated;
 
     /**
      * Constructor.
@@ -359,54 +345,6 @@ class User implements UserInterface, \Serializable
     public function setRoles(array $roles)
     {
         $this->roles = $roles;
-    }
-
-    /**
-     * Set created.
-     *
-     * @param \DateTime $created
-     *
-     * @return User
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created.
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return User
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
     }
 
     /**
