@@ -161,6 +161,19 @@ export const loginMediumUrl = (mediumAppId) => {
     return `https://medium.com/m/oauth/authorize?client_id=${mediumAppId}&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${location.protocol}//${location.hostname}/login/medium`
 }
 
+export const loginMedium = (code, token = null) => {
+    return (dispatch) => {
+        return request
+            .post(`${server.getBaseUrl()}/api/login/medium`, {
+                'code': code,
+            }, token === null ? {} : {
+                headers: {
+                    'Uniflow-Authorization': `Bearer ${token}`
+                }
+            })
+    }
+}
+
 export const register = (email, password) => {
     return (dispatch) => {
         return dispatch(commitLoginUserRequest())

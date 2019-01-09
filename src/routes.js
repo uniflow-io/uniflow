@@ -1,4 +1,4 @@
-import {FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub} from './views'
+import {FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub, LoginMedium} from './views'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
@@ -23,6 +23,11 @@ const routes = {
         path: '/login/github',
         exact: true,
         component: LoginGithub,
+    },
+    loginMedium: {
+        path: '/login/medium',
+        exact: true,
+        component: LoginMedium,
     },
     register: {
         path: '/register',
