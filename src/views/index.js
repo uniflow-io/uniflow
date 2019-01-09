@@ -1,3 +1,4 @@
+export { default as Admin } from './Admin'
 export { default as FAQ } from './FAQ'
 export { default as Versions } from './Versions'
 export { default as Home } from './Home'

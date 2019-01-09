@@ -14,6 +14,7 @@ import { UserManagerComponent } from './components'
 import { createStore } from 'uniflow/src/utils'
 import {getNewLogs,commitReadLog} from './reducers/logs/actions'
 import {commitLoginUserSuccess, commitLogoutUser} from './reducers/auth/actions'
+import {isGranted} from './reducers/user/actions'
 import {commitSetEnv} from './reducers/env/actions'
 import {getLastVersion} from './reducers/versions/actions'
 import {withRouter, matchPath} from 'react-router'
@@ -157,22 +158,27 @@ class Header extends Component {
                                 <li className={active === 'home' ? 'active' : ''}>
                                 <Link to={pathTo('home')}>Home</Link>
                             </li>
-                            {auth.isAuthenticated && user.username === null && (
+                            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
                             <li className={active === 'dashboard' ? 'active' : ''}>
                                 <Link to={pathTo('dashboard')}>Dashboard</Link>
                             </li>
                             )}
-                            {auth.isAuthenticated && user.username !== null && (
-                                <li className={active === 'dashboard' ? 'active' : ''}>
-                                    <Link to={pathTo('userDashboard', {username: user.username})}>Dashboard</Link>
-                                </li>
+                            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username !== null && (
+                            <li className={active === 'dashboard' ? 'active' : ''}>
+                                <Link to={pathTo('userDashboard', {username: user.username})}>Dashboard</Link>
+                            </li>
                             )}
                             <li className={active === 'faq' ? 'active' : ''}>
                                 <Link to={pathTo('faq')}>FAQ</Link>
                             </li>
-                            {auth.isAuthenticated && (
+                            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
                             <li className={active === 'settings' ? 'active' : ''}>
                                 <Link to={pathTo('settings')}>Settings</Link>
+                            </li>
+                            )}
+                            {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+                            <li className={active === 'admin' ? 'active' : ''}>
+                                <Link to={pathTo('admin')}>Admin</Link>
                             </li>
                             )}
                             {!auth.isAuthenticated && (
@@ -180,10 +186,10 @@ class Header extends Component {
                                 <Link to={pathTo('login')}>Login</Link>
                             </li>
                             )}
-                            {auth.isAuthenticated && (
-                                <li className={active === 'logout' ? 'active' : ''}>
-                                    <a onClick={this.onLogout}><span className="glyphicon glyphicon-off logout" aria-hidden="true"/></a>
-                                </li>
+                            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+                            <li className={active === 'logout' ? 'active' : ''}>
+                                <a onClick={this.onLogout}><span className="glyphicon glyphicon-off logout" aria-hidden="true"/></a>
+                            </li>
                             )}
                         </ul>
                     </div>

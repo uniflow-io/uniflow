@@ -1,5 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
+import uniq from 'lodash/uniq'
 import components from '../../uniflow'
 import {
     COMMIT_SET_COMPONENTS,
@@ -101,4 +102,39 @@ export const commitUpdateSettings = (user) => {
         return Promise.resolve()
     }
 }
+export const isGranted = (user, attributes) => {
+    if(!Array.isArray(attributes)) {
+        attributes = [attributes]
+    }
+
+    let roles = ['ROLE_USER']
+    for (let i = 0; i < user.roles.length; i++) {
+        let role = user.roles[i]
+        if(role === 'ROLE_USER_PRO') {
+            roles.push('ROLE_USER')
+            roles.push('ROLE_USER_PRO')
+        } else if(role === 'ROLE_SUPER_ADMIN') {
+            roles.push('ROLE_USER')
+            roles.push('ROLE_USER_PRO')
+            roles.push('ROLE_SUPER_ADMIN')
+        } else {
+            roles.push(role)
+        }
+    }
+    roles = uniq(roles)
+
+    for (let i = 0; i < attributes.length; i++) {
+        let attribute = attributes[i]
+        for (let j = 0; j < roles.length; j++) {
+            let role = roles[j]
+
+            if(attribute === role) {
+                return true
+            }
+        }
+    }
+
+    return false
+}
+
 

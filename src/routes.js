@@ -1,4 +1,4 @@
-import {FAQ, Home, Flow, Versions, Login, Register, Settings, LoginFacebook, LoginGithub} from './views'
+import {FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub} from './views'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
@@ -40,6 +40,10 @@ const routes = {
     settings: {
         path: '/settings',
         component: requireAuthentication(Settings),
+    },
+    admin: {
+        path: '/admin',
+        component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN'),
     },
     flow: {
         path: '/me/flow/:slug',
