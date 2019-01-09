@@ -126,6 +126,11 @@ class Header extends Component {
         })) {
             active = 'settings'
         } else if(matchPath(location.pathname, {
+            path: routes.admin.path,
+            exact: true
+        })) {
+            active = 'admin'
+        } else if(matchPath(location.pathname, {
             path: routes.login.path,
             exact: true
         })) {

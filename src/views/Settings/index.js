@@ -33,6 +33,8 @@ class Settings extends Component {
             username: null,
             firstName: null,
             lastName: null,
+            facebookId: null,
+            githubId: null,
         },
         isSaving: false
     }

@@ -4,6 +4,8 @@ import {
 
 const defaultState = {
     facebookAppId: null,
+    githubAppId: null,
+    mediumAppId: null,
 }
 
 const env = (state = defaultState, action) => {

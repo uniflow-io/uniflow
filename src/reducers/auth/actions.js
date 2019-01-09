@@ -157,6 +157,10 @@ export const loginGithub = (code, token = null) => {
     }
 }
 
+export const loginMediumUrl = (mediumAppId) => {
+    return `https://medium.com/m/oauth/authorize?client_id=${mediumAppId}&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${location.protocol}//${location.hostname}/login/medium`
+}
+
 export const register = (email, password) => {
     return (dispatch) => {
         return dispatch(commitLoginUserRequest())
