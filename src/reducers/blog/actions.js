@@ -10,3 +10,13 @@ export const getBlog = () => {
             })
     }
 }
+
+export const getArticle = (slug) => {
+    return (dispatch) => {
+        return request
+            .get(`${server.getBaseUrl()}/api/blog/${slug}`)
+            .then((response) => {
+                return response.data;
+            })
+    }
+}

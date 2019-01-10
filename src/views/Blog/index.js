@@ -3,31 +3,7 @@ import {pathTo} from "../../routes";
 import {Link} from "react-router-dom";
 import {getBlog} from "../../reducers/blog/actions";
 import {connect} from 'react-redux'
-
-class ParagraphUI extends Component {
-    render() {
-        const { data } = this.props
-
-        if(data.type === 1) {
-            return (
-                <p>{data.text}</p>
-            )
-        } else if(data.type === 3) {
-            return (
-                <h2>{data.text}</h2>
-            )
-        } else if(data.type === 4) {
-            let src = `https://miro.medium.com/fit/c/1400/420/${data['metadata']['id']}`
-            return (
-                <img src={src} alt="" className="img-thumbnail" width="100%" />
-            )
-        }
-
-        return (
-            <div />
-        )
-    }
-}
+import Paragraph from './paragraph'
 
 class Blog extends Component {
     state = {
@@ -68,7 +44,7 @@ class Blog extends Component {
                                 <div className="box box-success">
                                     <div className="box-body">
                                         {blog[item].previewContent.bodyModel.paragraphs.map((paragraph, j) => ([
-                                            <ParagraphUI key={j} data={paragraph} />
+                                            <Paragraph key={j} data={paragraph} />
                                         ]))}
                                     </div>
                                 </div>
