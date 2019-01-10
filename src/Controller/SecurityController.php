@@ -314,12 +314,14 @@ class SecurityController extends AbstractController
             throw new AccessDeniedHttpException('Bad credentials.');
         }
         $token = $tokenResp['access_token'];
+        $refreshToken = $tokenResp['refresh_token'];
 
         $config = $this->configService->findOne();
         if (!$config) {
             $config = new Config();
         }
         $config->setMediumToken($token);
+        $config->setMediumRefreshToken($refreshToken);
 
         $this->configService->save($config);
 

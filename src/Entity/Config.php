@@ -23,10 +23,14 @@ class Config
     protected $id;
 
     /**
-     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $mediumToken;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $mediumRefreshToken;
 
     /**
      * Get id
@@ -39,7 +43,7 @@ class Config
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getMediumToken()
     {
@@ -47,10 +51,26 @@ class Config
     }
 
     /**
-     * @param string $mediumToken
+     * @param mixed $mediumToken
      */
     public function setMediumToken($mediumToken): void
     {
         $this->mediumToken = $mediumToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMediumRefreshToken()
+    {
+        return $this->mediumRefreshToken;
+    }
+
+    /**
+     * @param mixed $mediumRefreshToken
+     */
+    public function setMediumRefreshToken($mediumRefreshToken): void
+    {
+        $this->mediumRefreshToken = $mediumRefreshToken;
     }
 }
