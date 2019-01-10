@@ -36,7 +36,7 @@ class Admin extends Component {
         }
 
         this.setState({'isSaving': true}, () => {
-            this.props.dispatch(updateConfig(this.state.user, this.props.auth.token))
+            this.props.dispatch(updateConfig(this.state.config, this.props.auth.token))
                 .then(() => {
                     this.setState({'isSaving': false})
                 })
