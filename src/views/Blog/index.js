@@ -4,6 +4,31 @@ import {Link} from "react-router-dom";
 import {getBlog} from "../../reducers/blog/actions";
 import {connect} from 'react-redux'
 
+class ParagraphUI extends Component {
+    render() {
+        const { data } = this.props
+
+        if(data.type === 1) {
+            return (
+                <p>{data.text}</p>
+            )
+        } else if(data.type === 3) {
+            return (
+                <h2>{data.text}</h2>
+            )
+        } else if(data.type === 4) {
+            let src = `https://miro.medium.com/fit/c/1400/420/${data['metadata']['id']}`
+            return (
+                <img src={src} alt="" className="img-thumbnail" width="100%" />
+            )
+        }
+
+        return (
+            <div />
+        )
+    }
+}
+
 class Blog extends Component {
     state = {
         blog: {}
@@ -37,15 +62,19 @@ class Blog extends Component {
 
                 <section className="content">
                     {Object.keys(blog).map((item, i) => ([
-                    <div className="row" key={i}>
-                        <div className="col-sm-12">
-                            <div className="box box-success">
-                                <div className="box-body">
-                                    {item}
+                    <Link to={pathTo('article', {slug: blog[item].slug})} key={i}>
+                        <div className="row">
+                            <div className="col-sm-12">
+                                <div className="box box-success">
+                                    <div className="box-body">
+                                        {blog[item].previewContent.bodyModel.paragraphs.map((paragraph, j) => ([
+                                            <ParagraphUI key={j} data={paragraph} />
+                                        ]))}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                     ]))}
                 </section>
             </div>

@@ -42,13 +42,13 @@ const routes = {
         path: '/versions',
         component: Versions,
     },
-    blog: {
-        path: '/blog',
-        component: Blog,
-    },
     article: {
         path: '/blog/:slug',
         component: Article,
+    },
+    blog: {
+        path: '/blog',
+        component: Blog,
     },
     settings: {
         path: '/settings',
