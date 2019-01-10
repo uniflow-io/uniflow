@@ -24,10 +24,27 @@ class BlogController extends AbstractController
      * @Route("/api/blog", name="api_blog_list", methods={"GET"})
      *
      * @return JsonResponse
+     * @throws \Psr\Cache\CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function listAction()
     {
         $data = $this->blogService->getBlog();
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/api/blog/{slug}", name="api_blog_article", methods={"GET"})
+     *
+     * @param $slug
+     * @return JsonResponse
+     * @throws \Psr\Cache\CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function article($slug)
+    {
+        $data = $this->blogService->getArticle($slug);
 
         return new JsonResponse($data);
     }

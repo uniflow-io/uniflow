@@ -14,8 +14,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
  */
 class BlogService
 {
-    /** @var string  */
-    private $url = 'https://api.medium.com/v1/';
+    /** @var string */
+    private $url = 'https://medium.com/@uniflow.io';
 
     /**
      * @var TagAwareAdapter
@@ -24,33 +24,73 @@ class BlogService
 
     public function __construct(
         TagAwareAdapter $cache
-    ) {
-        $this->cache             = $cache;
+    )
+    {
+        $this->cache         = $cache;
     }
 
-    public function getBlog()
+    /**
+     * @param bool $force
+     * @return mixed
+     * @throws \Psr\Cache\CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getBlog($force = false)
     {
-        $client = new Client([
-            'base_uri' => $this->url,
-            'exceptions' => false,
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-                'Accept-Charset' => 'utf-8',
-                'Authorization' => 'Bearer ',
-            ],
-        ]);
+        $key       = 'blog';
+        $cacheItem = $this->cache->getItem($key);
+        $cacheItem->tag('blog');
 
+        if (!$cacheItem->isHit() || $force) {
+            $client = new Client();
+            $response = $client->get($this->url . '/latest?format=json');
 
-        $response = $client->get('me');
+            $data = (string) $response->getBody();
+            $data = substr($data, 16); //remove '])}while(1);</x>'
+            $data = json_decode($data, true);
+            $data = $data['payload']['references']['Post'];
 
-        $me = json_decode((string) $response->getBody(), true);
+            $cacheItem->set($data);
+            $this->cache->save($cacheItem);
+        }
 
+        return $cacheItem->get();
+    }
 
-        $response = $client->get('users/' . $me['data']['id'] . '/publications');
+    /**
+     * @param $slug
+     * @param bool $force
+     * @return mixed
+     * @throws \Psr\Cache\CacheException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function getArticle($slug, $force = false)
+    {
+        $blog = $this->getBlog($force);
+        $article = current(array_filter($blog, function ($item) use ($slug) {
+            return $item['slug'] === $slug;
+        }));
+        if(!$article) {
+            return null;
+        }
 
-        $data = json_decode((string) $response->getBody(), true);
+        $key       = 'blog-'.$slug;
+        $cacheItem = $this->cache->getItem($key);
+        $cacheItem->tag('blog');
 
-        return [];
+        if (!$cacheItem->isHit() || $force) {
+            $client = new Client();
+            $response = $client->get($this->url . '/' . $article['uniqueSlug'] . '?format=json');
+
+            $data = (string) $response->getBody();
+            $data = substr($data, 16); //remove '])}while(1);</x>'
+            $data = json_decode($data, true);
+            $data = $data['payload']['value'];
+
+            $cacheItem->set($data);
+            $this->cache->save($cacheItem);
+        }
+
+        return $cacheItem->get();
     }
 }
