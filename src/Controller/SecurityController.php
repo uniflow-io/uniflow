@@ -305,7 +305,7 @@ class SecurityController extends AbstractController
                 'client_secret' => $this->appOauthMediumSecret,
                 'code' => $code,
                 'grant_type' => 'authorization_code',
-                'redirect_uri' => $this->generateUrl('loginMedium', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'redirect_uri' => 'https:'.$this->generateUrl('loginMedium', [], UrlGeneratorInterface::NETWORK_PATH),
             ]
         ]);
 
