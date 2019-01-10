@@ -103,6 +103,14 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/blog/{slug}", name="article")
+     */
+    public function article()
+    {
+        return $this->render('default/article.html.twig');
+    }
+
+    /**
      * @Route("/versions", name="versions")
      */
     public function versions()
