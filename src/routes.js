@@ -1,4 +1,4 @@
-import {FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub, LoginMedium} from './views'
+import {FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub, LoginMedium, Blog, Article} from './views'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
@@ -41,6 +41,14 @@ const routes = {
     versions: {
         path: '/versions',
         component: Versions,
+    },
+    blog: {
+        path: '/blog',
+        component: Blog,
+    },
+    article: {
+        path: '/blog/:slug',
+        component: Article,
     },
     settings: {
         path: '/settings',

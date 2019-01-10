@@ -131,6 +131,11 @@ class Header extends Component {
         })) {
             active = 'admin'
         } else if(matchPath(location.pathname, {
+            path: routes.blog.path,
+            exact: true
+        })) {
+            active = 'blog'
+        } else if(matchPath(location.pathname, {
             path: routes.login.path,
             exact: true
         })) {
@@ -186,6 +191,9 @@ class Header extends Component {
                                 <Link to={pathTo('admin')}>Admin</Link>
                             </li>
                             )}
+                            <li className={active === 'blog' ? 'active' : ''}>
+                                <Link to={pathTo('blog')}>Blog</Link>
+                            </li>
                             {!auth.isAuthenticated && (
                             <li className={active === 'login' ? 'active' : ''}>
                                 <Link to={pathTo('login')}>Login</Link>
