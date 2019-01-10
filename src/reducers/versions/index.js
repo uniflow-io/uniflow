@@ -1,4 +1,8 @@
 const defaultState = [{
+    tag: 'v1.1.1',
+    label: 'Add blog',
+    date: '10/01/2019'
+}, {
     tag: 'v1.1.0',
     label: 'Decouple as library',
     date: '21/12/2018'
