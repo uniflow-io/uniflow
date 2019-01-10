@@ -5,6 +5,7 @@ import {getArticle} from "../../../reducers/blog/actions";
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
 import Paragraph from './../paragraph'
+import moment from 'moment'
 
 class Article extends Component {
     state = {
@@ -42,9 +43,20 @@ class Article extends Component {
                 </section>
 
                 <section className="content">
-                    {article && article.content.bodyModel.paragraphs.map((paragraph, j) => ([
-                        <Paragraph key={j} data={paragraph} />
-                    ]))}
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="box box-success">
+                                <div className="box-header with-border">
+                                    <h3 className="box-title">{article ? moment(article.firstPublishedAt, 'x').format("MMMM Do YYYY") : ''}</h3>
+                                </div>
+                                <div className="box-body">
+                                    {article && article.content.bodyModel.paragraphs.map((paragraph, j) => ([
+                                        <Paragraph key={j} data={paragraph} />
+                                    ]))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         )

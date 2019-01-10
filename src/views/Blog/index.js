@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {getBlog} from "../../reducers/blog/actions";
 import {connect} from 'react-redux'
 import Paragraph from './paragraph'
+import moment from 'moment'
 
 class Blog extends Component {
     state = {
@@ -42,6 +43,9 @@ class Blog extends Component {
                         <div className="row">
                             <div className="col-sm-12">
                                 <div className="box box-success">
+                                    <div className="box-header with-border">
+                                        <h3 className="box-title">{moment(blog[item].firstPublishedAt, 'x').format("MMMM Do YYYY")}</h3>
+                                    </div>
                                     <div className="box-body">
                                         {blog[item].previewContent.bodyModel.paragraphs.map((paragraph, j) => ([
                                             <Paragraph key={j} data={paragraph} />
