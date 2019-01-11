@@ -41,7 +41,7 @@ class Blog extends Component {
             {Object.keys(blog).map((item, i) => ([
               <Link to={pathTo('article', { slug: blog[item].slug })} key={i}>
                 <div className='row'>
-                  <div className='col-sm-12'>
+                  <div className='col-sm-6 col-sm-offset-3'>
                     <div className='box box-success'>
                       <div className='box-header with-border'>
                         <h3 className='box-title'>{moment(blog[item].firstPublishedAt, 'x').format('MMMM Do YYYY')}</h3>

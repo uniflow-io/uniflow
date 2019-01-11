@@ -44,7 +44,7 @@ class Article extends Component {
 
           <section className='content'>
             <div className='row'>
-              <div className='col-sm-12'>
+              <div className='col-sm-6 col-sm-offset-3'>
                 <div className='box box-success'>
                   <div className='box-header with-border'>
                     <h3 className='box-title'>{article ? moment(article.firstPublishedAt, 'x').format('MMMM Do YYYY') : ''}</h3>
