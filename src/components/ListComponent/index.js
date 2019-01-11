@@ -1,25 +1,25 @@
-import React, {Component} from 'react'
-import {SearchComponent} from '../../components'
-import components from '../../uniflow';
+import React, { Component } from 'react'
+import { SearchComponent } from '../../components'
+import components from '../../uniflow'
 
 class UiComponent extends Component {
     components = Object.assign({}, components, {
-        'search': SearchComponent
+      'search': SearchComponent
     })
 
-    render() {
-        const {tag, bus, onPush, onPop, onUpdate, components} = this.props
-        const TagName                                         = this.components[tag];
+    render () {
+      const { tag, bus, onPush, onPop, onUpdate, components } = this.props
+      const TagName = this.components[tag]
 
-        return <TagName bus={bus}
-                        components={components}
-                        onPush={onPush}
-                        onPop={onPop}
-                        onUpdate={onUpdate}/>
+      return <TagName bus={bus}
+        components={components}
+        onPush={onPush}
+        onPop={onPop}
+        onUpdate={onUpdate} />
     }
 }
 
-/*class RunComponent extends Component {
+/* class RunComponent extends Component {
     render() {
         const {uiStack, onRun} = this.props
 
@@ -58,50 +58,50 @@ class UiComponent extends Component {
             </ul>
         )
     }
-}*/
+} */
 
 export default class ListComponent extends Component {
-    render() {
-        const {stack, runIndex, onPush, onPop, onUpdate, onRun, components} = this.props
-        const uiStack                   = (() => {
-            let uiStack = [{
-                component: 'search',
-                index: 0
-            }];
+  render () {
+    const { stack, runIndex, onPush, onPop, onUpdate, onRun, components } = this.props
+    const uiStack = (() => {
+      let uiStack = [{
+        component: 'search',
+        index: 0
+      }]
 
-            for (let i = 0; i < stack.length; i++) {
-                let item = stack[i];
+      for (let i = 0; i < stack.length; i++) {
+        let item = stack[i]
 
-                uiStack.push({
-                    component: item.component,
-                    bus: item.bus,
-                    active: runIndex === i,
-                    index: i
-                });
+        uiStack.push({
+          component: item.component,
+          bus: item.bus,
+          active: runIndex === i,
+          index: i
+        })
 
-                uiStack.push({
-                    component: 'search',
-                    index: i + 1
-                });
-            }
+        uiStack.push({
+          component: 'search',
+          index: i + 1
+        })
+      }
 
-            return uiStack;
-        })()
+      return uiStack
+    })()
 
-        return (uiStack.map((item, i) => (
-            <UiComponent key={i}
-                         tag={item.component}
-                         bus={item.bus}
-                         components={components}
-                         onPush={(component) => {
-                             onPush(item.index, component)
-                         }}
-                         onPop={() => {
-                             onPop(item.index)
-                         }}
-                         onUpdate={(data) => {
-                             onUpdate(item.index, data)
-                         }}/>
-        )))
-    }
+    return (uiStack.map((item, i) => (
+      <UiComponent key={i}
+        tag={item.component}
+        bus={item.bus}
+        components={components}
+        onPush={(component) => {
+          onPush(item.index, component)
+        }}
+        onPop={() => {
+          onPop(item.index)
+        }}
+        onUpdate={(data) => {
+          onUpdate(item.index, data)
+        }} />
+    )))
+  }
 }
