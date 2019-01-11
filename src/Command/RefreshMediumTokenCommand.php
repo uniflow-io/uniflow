@@ -34,8 +34,7 @@ class RefreshMediumTokenCommand extends Command
         $appOauthMediumId,
         $appOauthMediumSecret,
         ConfigService $configService
-    )
-    {
+    ) {
         $this->appOauthMediumId = $appOauthMediumId;
         $this->appOauthMediumSecret = $appOauthMediumSecret;
         $this->configService = $configService;
@@ -63,8 +62,7 @@ class RefreshMediumTokenCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $config = $this->configService->findOne();
-        if($config && $config->getMediumToken() && $config->getMediumRefreshToken()) {
-
+        if ($config && $config->getMediumToken() && $config->getMediumRefreshToken()) {
             $client = new Client();
 
             // Get the token's Medium app.
@@ -89,7 +87,6 @@ class RefreshMediumTokenCommand extends Command
             $config->setMediumRefreshToken($refreshToken);
 
             $this->configService->save($config);
-
         }
 
         $io->success('Medium token is refreshed');

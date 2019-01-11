@@ -24,8 +24,7 @@ class BlogService
 
     public function __construct(
         TagAwareAdapter $cache
-    )
-    {
+    ) {
         $this->cache         = $cache;
     }
 
@@ -70,7 +69,7 @@ class BlogService
         $article = current(array_filter($blog, function ($item) use ($slug) {
             return $item['slug'] === $slug;
         }));
-        if(!$article) {
+        if (!$article) {
             return null;
         }
 

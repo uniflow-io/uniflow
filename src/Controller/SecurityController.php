@@ -150,7 +150,7 @@ class SecurityController extends AbstractController
         $facebookEmail = $tokenUser['id'].'@facebook.com';
 
         $user = $this->getUser();
-        if(is_null($user)) {
+        if (is_null($user)) {
             $user = $this->userService->findOneByFacebookId($facebookId);
             if ($user === null) {
                 $user = $this->userService->findOneByEmail($facebookEmail);
@@ -236,7 +236,7 @@ class SecurityController extends AbstractController
         $githubEmail = $tokenUser['id'].'@github.com';
 
         $user = $this->getUser();
-        if(is_null($user)) {
+        if (is_null($user)) {
             $user = $this->userService->findOneByGithubId($githubId);
             if ($user === null) {
                 $user = $this->userService->findOneByEmail($githubEmail);
