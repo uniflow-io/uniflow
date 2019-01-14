@@ -54,6 +54,12 @@ class History
     protected $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="folders", cascade={"persist"})
+     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id", onDelete="cascade")
+     */
+    protected $folder;
+
+    /**
      * @Assert\NotBlank(
      *     message="The client can't be empty"
      * )
@@ -169,6 +175,22 @@ class History
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFolder()
+    {
+        return $this->folder;
+    }
+
+    /**
+     * @param mixed $folder
+     */
+    public function setFolder($folder): void
+    {
+        $this->folder = $folder;
     }
 
     /**
