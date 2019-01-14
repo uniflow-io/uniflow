@@ -97,6 +97,11 @@ class User implements UserInterface, \Serializable
     protected $histories;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Folder", mappedBy="user", cascade={"persist"})
+     */
+    protected $folders;
+
+    /**
      * @var array
      *
      * @ORM\Column(type="array")
@@ -109,6 +114,7 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->histories = new ArrayCollection();
+        $this->folders = new ArrayCollection();
     }
 
     public function __toString()
@@ -324,6 +330,37 @@ class User implements UserInterface, \Serializable
     public function getHistories()
     {
         return $this->histories;
+    }
+
+    /**
+     * @param Folder $folder
+     * @return $this
+     */
+    public function addFolder(Folder $folder)
+    {
+        $this->folders[] = $folder;
+
+        $folder->setUser($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Folder $folder
+     */
+    public function removeFolder(Folder $folder)
+    {
+        $this->folders->removeElement($folder);
+
+        $folder->setUser(null);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFolders()
+    {
+        return $this->folders;
     }
 
     /**
