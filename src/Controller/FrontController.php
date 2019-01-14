@@ -135,6 +135,19 @@ class FrontController extends AbstractController
     }
 
     /**
+     * @Route("/me/flow/{slug1}/{slug2}/{slug3}", name="flow")
+     *
+     * @param $slug1
+     * @param $slug2
+     * @param $slug3
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function flow($slug1, $slug2 = null, $slug3 = null)
+    {
+        return $this->render('default/flow.html.twig');
+    }
+
+    /**
      * @Route("/me", name="dashboard")
      */
     public function dashboard()
@@ -143,13 +156,22 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/me/flow/{slug}", name="flow")
+     * @Route("/{username}/flow/{slug1}/{slug2}/{slug3}", name="userFlow")
      *
-     * @param $slug
+     * @param $username
+     * @param $slug1
+     * @param $slug2
+     * @param $slug3
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function flow($slug)
+    public function userFlow($username, $slug1, $slug2 = null, $slug3 = null)
     {
+        $history = $this->historyService->findOneByUsernameAndSlug($username, $slug1);
+        if (is_null($history)) {
+            throw new NotFoundHttpException();
+        }
+
         return $this->render('default/flow.html.twig');
     }
 
@@ -167,23 +189,5 @@ class FrontController extends AbstractController
         }
 
         return $this->render('default/dashboard.html.twig');
-    }
-
-    /**
-     * @Route("/{username}/flow/{slug}", name="userFlow")
-     *
-     * @param $username
-     * @param $slug
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function userFlow($username, $slug)
-    {
-        $history = $this->historyService->findOneByUsernameAndSlug($username, $slug);
-        if (is_null($history)) {
-            throw new NotFoundHttpException();
-        }
-
-        return $this->render('default/flow.html.twig');
     }
 }
