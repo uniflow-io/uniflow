@@ -1,6 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { Log, History } from '../../models/index'
+import { Log, History, Folder } from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_HISTORY,

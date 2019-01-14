@@ -82,7 +82,7 @@ class UserManagerComponent extends Component<Props> {
 
           let historyObj = getHistoryBySlug(historyState, slug)
           if (historyObj) {
-            this.props.dispatch(setCurrentHistory(historyObj.id))
+            this.props.dispatch(setCurrentHistory({type: 'history', id: historyObj.id}))
           } else {
             let keys = Object.keys(historyState.items)
 
@@ -96,7 +96,7 @@ class UserManagerComponent extends Component<Props> {
 
             if (keys.length > 0) {
               let item = historyState.items[keys[0]]
-              this.props.dispatch(setCurrentHistory(historyState.items[keys[0]].id))
+              this.props.dispatch(setCurrentHistory({type: 'history', id: historyState.items[keys[0]].id}))
             }
           }
         })

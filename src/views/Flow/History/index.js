@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {connect} from 'react-redux'
 import {getOrderedHistory, createHistory, setCurrentHistory} from '../../../reducers/history/actions'
+import {createFolder} from '../../../reducers/folder/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
 class History extends Component {
@@ -14,8 +15,19 @@ class History extends Component {
     this.setState({search: event.target.value})
   }
 
-  onCreateFolder = () => {
-    console.log('create folder')
+  onCreateFolder = (event) => {
+    event.preventDefault()
+
+    this.props
+      .dispatch(createFolder({
+        'title': this.state.search,
+      }, this.props.auth.token))
+      .then((item) => {
+        return this.props.dispatch(setCurrentHistory({type: 'folder', id: item.id}))
+      })
+      .catch((log) => {
+        return this.props.dispatch(commitAddLog(log.message))
+      })
   }
 
   onSubmit = (event) => {
@@ -29,7 +41,7 @@ class History extends Component {
         'description': ''
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentHistory(item.id))
+        return this.props.dispatch(setCurrentHistory({type: 'history', id: item.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
