@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -51,11 +52,22 @@ class Folder
     protected $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="children", cascade={"persist"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
+     */
+    protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Folder", mappedBy="parent", cascade={"persist"})
+     */
+    protected $children;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-
+        $this->children = new ArrayCollection();
     }
 
     public function __toString()
@@ -133,5 +145,52 @@ class Folder
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     */
+    public function setParent($parent): void
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @param Folder $child
+     * @return $this
+     */
+    public function addFolder(Folder $child)
+    {
+        $this->children[] = $child;
+
+        $child->setParent($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Folder $child
+     */
+    public function removeFolder(Folder $child)
+    {
+        $this->children->removeElement($child);
+
+        $child->setParent(null);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getFolders()
+    {
+        return $this->children;
     }
 }
