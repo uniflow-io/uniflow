@@ -124,6 +124,8 @@ class FolderController extends AbstractController
      * @param $id
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function delete($id)
     {

@@ -92,14 +92,13 @@ class HistoryService
 
     /**
      * @param string $username
-     * @param string $slug
-     * @param null $id
+     * @param string $path
      * @return History
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndSlug($username, $slug)
+    public function findOneByUsernameAndPath($username, $path)
     {
-        return $this->historyRepository->findOneByUsernameAndSlug($username, $slug);
+        return $this->historyRepository->findOneByUsernameAndPath($username, $path);
     }
 
     public function getJsonHistory(History $history)

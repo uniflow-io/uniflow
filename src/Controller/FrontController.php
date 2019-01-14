@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Services\FolderService;
 use App\Services\HistoryService;
 use App\Services\UserService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -18,15 +19,22 @@ class FrontController extends AbstractController
     protected $historyService;
 
     /**
+     * @var FolderService
+     */
+    protected $folderService;
+
+    /**
      * @var UserService
      */
     protected $userService;
 
     public function __construct(
         HistoryService $historyService,
+        FolderService $folderService,
         UserService $userService
     ) {
         $this->historyService = $historyService;
+        $this->folderService = $folderService;
         $this->userService = $userService;
     }
 
@@ -167,9 +175,19 @@ class FrontController extends AbstractController
      */
     public function userFlow($username, $slug1, $slug2 = null, $slug3 = null)
     {
-        $history = $this->historyService->findOneByUsernameAndSlug($username, $slug1);
+        $path = array_reduce([$slug1, $slug2, $slug3], function($path, $slug) {
+            if($slug) {
+                $path[] = $slug;
+            }
+            return $path;
+        }, []);
+
+        $history = $this->historyService->findOneByUsernameAndPath($username, $path);
         if (is_null($history)) {
-            throw new NotFoundHttpException();
+            $folder = $this->folderService->findOneByUsernameAndPath($username, $path);
+            if(is_null($folder)) {
+                throw new NotFoundHttpException();
+            }
         }
 
         return $this->render('default/flow.html.twig');

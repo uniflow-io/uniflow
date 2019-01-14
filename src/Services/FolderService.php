@@ -88,14 +88,13 @@ class FolderService
 
     /**
      * @param string $username
-     * @param string $slug
-     * @param null $id
+     * @param string $path
      * @return Folder
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndSlug($username, $slug)
+    public function findOneByUsernameAndPath($username, $path)
     {
-        return $this->folderRepository->findOneByUsernameAndSlug($username, $slug);
+        return $this->folderRepository->findOneByUsernameAndPath($username, $path);
     }
 
     public function getJsonFolder(Folder $folder)

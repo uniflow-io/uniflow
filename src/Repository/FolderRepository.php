@@ -26,12 +26,12 @@ class FolderRepository extends ServiceEntityRepository
      */
     public function findOne($id = null)
     {
-        $qb = $this->createQueryBuilder('h')
-            ->select('h')
+        $qb = $this->createQueryBuilder('f')
+            ->select('f')
         ;
 
         if ($id) {
-            $qb->andWhere('h.id = :id')->setParameter('id', $id);
+            $qb->andWhere('f.id = :id')->setParameter('id', $id);
         } else {
             $qb->setMaxResults(1);
         }
@@ -49,13 +49,13 @@ class FolderRepository extends ServiceEntityRepository
      */
     public function findOneByUser(User $user, $id = null)
     {
-        $qb = $this->createQueryBuilder('h')
-            ->select('h')
-            ->andWhere('h.user = :user')->setParameter('user', $user)
+        $qb = $this->createQueryBuilder('f')
+            ->select('f')
+            ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
 
         if ($id) {
-            $qb->andWhere('h.id = :id')->setParameter('id', $id);
+            $qb->andWhere('f.id = :id')->setParameter('id', $id);
         } else {
             $qb->setMaxResults(1);
         }
@@ -67,18 +67,36 @@ class FolderRepository extends ServiceEntityRepository
 
     /**
      * @param $username
-     * @param $slug
+     * @param $path
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndSlug($username, $slug)
+    public function findOneByUsernameAndPath($username, $path)
     {
-        $qb = $this->createQueryBuilder('h')
-            ->select('h')
-            ->leftJoin('h.user', 'u')
+        $level = count($path);
+        $slug  = $path[$level - 1];
+
+        $qb = $this->createQueryBuilder('f')
+            ->select('f')
+            ->leftJoin('f.user', 'u')
             ->andWhere('u.username = :username')->setParameter('username', $username)
-            ->andWhere('h.slug = :slug')->setParameter('slug', $slug)
         ;
+
+        if ($level === 1) {
+            $qb->andWhere('f.slug = :slug')->setParameter('slug', $slug);
+            $qb->andWhere('f.parent IS NULL');
+        } else if ($level > 1) {
+            for ($i = $level - 2; $i >= 0; $i--) {
+                $slug = $path[$i];
+                if ($i === $level - 2) {
+                    $qb->leftJoin('f.parent', 'f' . $i);
+                } else {
+                    $qb->leftJoin('f' . ($i + 1) . '.parent', 'f' . $i);
+                }
+                $qb->andWhere('f' . $i . '.slug = :slug' . $i)->setParameter('slug' . $i, $slug);
+            }
+            $qb->andWhere('f0.parent IS NULL');
+        }
 
         $qb->setMaxResults(1);
 
@@ -93,9 +111,9 @@ class FolderRepository extends ServiceEntityRepository
      */
     public function findByUser(User $user)
     {
-        $qb = $this->createQueryBuilder('h')
-            ->select('h')
-            ->andWhere('h.user = :user')->setParameter('user', $user)
+        $qb = $this->createQueryBuilder('f')
+            ->select('f')
+            ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
 
         return $qb->getQuery()->getResult();

@@ -27,8 +27,7 @@ class HistoryRepository extends ServiceEntityRepository
     public function findOne($id = null)
     {
         $qb = $this->createQueryBuilder('h')
-            ->select('h')
-        ;
+            ->select('h');
 
         if ($id) {
             $qb->andWhere('h.id = :id')->setParameter('id', $id);
@@ -51,8 +50,7 @@ class HistoryRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
-            ->andWhere('h.user = :user')->setParameter('user', $user)
-        ;
+            ->andWhere('h.user = :user')->setParameter('user', $user);
 
         if ($id) {
             $qb->andWhere('h.id = :id')->setParameter('id', $id);
@@ -67,18 +65,35 @@ class HistoryRepository extends ServiceEntityRepository
 
     /**
      * @param $username
-     * @param $slug
+     * @param array $path
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndSlug($username, $slug)
+    public function findOneByUsernameAndPath($username, $path)
     {
+        $level = count($path);
+        $slug  = $path[$level - 1];
+
         $qb = $this->createQueryBuilder('h')
             ->select('h')
             ->leftJoin('h.user', 'u')
             ->andWhere('u.username = :username')->setParameter('username', $username)
-            ->andWhere('h.slug = :slug')->setParameter('slug', $slug)
-        ;
+            ->andWhere('h.slug = :slug')->setParameter('slug', $slug);
+
+        if ($level === 1) {
+            $qb->andWhere('h.folder IS NULL');
+        } else if ($level > 1) {
+            for ($i = $level - 2; $i >= 0; $i--) {
+                $slug = $path[$i];
+                if ($i === $level - 2) {
+                    $qb->leftJoin('h.folder', 'f' . $i);
+                } else {
+                    $qb->leftJoin('f' . ($i + 1) . '.parent', 'f' . $i);
+                }
+                $qb->andWhere('f' . $i . '.slug = :slug' . $i)->setParameter('slug' . $i, $slug);
+            }
+            $qb->andWhere('f0.parent IS NULL');
+        }
 
         $qb->setMaxResults(1);
 
@@ -95,8 +110,7 @@ class HistoryRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
-            ->andWhere('h.user = :user')->setParameter('user', $user)
-        ;
+            ->andWhere('h.user = :user')->setParameter('user', $user);
 
         return $qb->getQuery()->getResult();
     }
@@ -110,8 +124,7 @@ class HistoryRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('h')
             ->select('h')
             ->andWhere('h.user = :user')->setParameter('user', $user)
-            ->addOrderBy('h.updated', 'DESC')
-        ;
+            ->addOrderBy('h.updated', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
@@ -121,8 +134,7 @@ class HistoryRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('h')
             ->select('h')
             ->andWhere('h.user = :user')->setParameter('user', $user)
-            ->addOrderBy('h.updated', 'DESC')
-        ;
+            ->addOrderBy('h.updated', 'DESC');
 
         if ($client) {
             $qb->andWhere('h.client = :client')->setParameter('client', $client);
@@ -138,8 +150,7 @@ class HistoryRepository extends ServiceEntityRepository
             ->leftJoin('h.user', 'u')
             ->andWhere('u.username = :username')->setParameter('username', $username)
             ->andWhere('h.public = :public')->setParameter('public', true)
-            ->addOrderBy('h.updated', 'DESC')
-        ;
+            ->addOrderBy('h.updated', 'DESC');
 
         if ($client) {
             $qb->andWhere('h.client = :client')->setParameter('client', $client);
@@ -152,8 +163,7 @@ class HistoryRepository extends ServiceEntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->delete($this->getEntityName(), 'h')
-            ->andWhere('h.user = :user')->setParameter('user', $user)
-        ;
+            ->andWhere('h.user = :user')->setParameter('user', $user);
 
         $qb->getQuery()->execute();
     }
@@ -163,8 +173,7 @@ class HistoryRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('h')
             ->select('h')
             ->andWhere('h.public = :public')->setParameter('public', true)
-            ->addOrderBy('h.updated', 'DESC')
-        ;
+            ->addOrderBy('h.updated', 'DESC');
 
         if ($limit) {
             $qb->setMaxResults($limit);
