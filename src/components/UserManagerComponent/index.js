@@ -67,7 +67,12 @@ class UserManagerComponent extends Component<Props> {
 
       Promise.resolve()
         .then(() => {
-          let path = []
+          let path = [slug1, slug2, slug3].reduce((path, slug) => {
+            if(slug) {
+              path.push(slug)
+            }
+            return path
+          }, [])
           return this.props.dispatch(commitSetCurrentPathHistory(path))
         })
         .then(() => {
