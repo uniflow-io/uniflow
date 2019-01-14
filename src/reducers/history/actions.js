@@ -7,8 +7,8 @@ import {
   COMMIT_UPDATE_HISTORY,
   COMMIT_DELETE_HISTORY,
   COMMIT_SET_CURRENT_HISTORY,
-  COMMIT_SET_USERNAME_HISTORY,
-  COMMIT_SET_SLUG_HISTORY
+  COMMIT_SET_CURRENT_PATH_HISTORY,
+  COMMIT_SET_USERNAME_HISTORY
 } from './actionsTypes'
 import { commitLogoutUser } from '../auth/actions'
 
@@ -103,6 +103,15 @@ export const commitSetCurrentHistory = (current) => {
     dispatch({
       type: COMMIT_SET_CURRENT_HISTORY,
       current
+    })
+    return Promise.resolve()
+  }
+}
+export const commitSetCurrentPathHistory = (path) => {
+  return (dispatch) => {
+    dispatch({
+      type: COMMIT_SET_CURRENT_PATH_HISTORY,
+      path
     })
     return Promise.resolve()
   }

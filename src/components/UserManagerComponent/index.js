@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { fetchComponents, fetchSettings } from '../../reducers/user/actions'
 import routes, { pathTo, matchRoute } from '../../routes'
 import { withRouter } from 'react-router'
-import { fetchHistory, getHistoryBySlug, setCurrentHistory, setUsernameHistory } from '../../reducers/history/actions'
+import { fetchHistory, getHistoryBySlug, setCurrentHistory, commitSetCurrentPathHistory, setUsernameHistory } from '../../reducers/history/actions'
 
 class UserManagerComponent extends Component<Props> {
   componentDidMount () {
@@ -39,14 +39,14 @@ class UserManagerComponent extends Component<Props> {
         if (match.route === 'dashboard') {
           this.onFetchHistory('me')
         } else if (match.route === 'flow') {
-          this.onFetchHistory('me', match.match.params.slug)
+          this.onFetchHistory('me', match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
           if (user.username) {
-            history.push(pathTo('userFlow', { username: user.username, slug: match.match.params.slug }))
+            history.push(pathTo('userFlow', { username: user.username, slug1: match.match.params.slug1, slug2: match.match.params.slug2, slug3: match.match.params.slug3 }))
           }
         } else if (match.route === 'userDashboard') {
           this.onFetchHistory(match.match.params.username)
         } else if (match.route === 'userFlow') {
-          this.onFetchHistory(match.match.params.username, match.match.params.slug)
+          this.onFetchHistory(match.match.params.username, match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
         }
       }
     }
@@ -62,10 +62,14 @@ class UserManagerComponent extends Component<Props> {
       })
     }
 
-    onFetchHistory = (username = 'me', slug = null) => {
+    onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null) => {
       const { auth, historyState } = this.props
 
       Promise.resolve()
+        .then(() => {
+          let path = []
+          return this.props.dispatch(commitSetCurrentPathHistory(path))
+        })
         .then(() => {
           if (historyState.username === username) {
             return
@@ -80,7 +84,7 @@ class UserManagerComponent extends Component<Props> {
         .then(() => {
           const { historyState } = this.props
 
-          let historyObj = getHistoryBySlug(historyState, slug)
+          let historyObj = getHistoryBySlug(historyState, slug1, slug2, slug3)
           if (historyObj) {
             this.props.dispatch(setCurrentHistory({type: 'history', id: historyObj.id}))
           } else {
