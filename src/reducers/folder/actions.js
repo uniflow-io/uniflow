@@ -4,6 +4,15 @@ import { Folder } from '../../models/index'
 import { commitUpdateHistory } from '../history/actions'
 import { commitLogoutUser } from '../auth/actions'
 
+export const pathToSlugs = (path) => {
+  let slugs = {}
+  for(let i = 0; i < path.length; i++) {
+    slugs[`slug${(i + 1)}`] = path[i]
+  }
+
+  return slugs;
+}
+
 export const createFolder = (item, token) => {
   return (dispatch) => {
     let data = {

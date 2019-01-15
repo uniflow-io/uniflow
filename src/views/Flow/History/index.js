@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {connect} from 'react-redux'
 import {getOrderedHistory, createHistory, setCurrentHistory} from '../../../reducers/history/actions'
-import {createFolder} from '../../../reducers/folder/actions'
+import {createFolder, pathToSlugs} from '../../../reducers/folder/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
 class History extends Component {
@@ -50,15 +50,20 @@ class History extends Component {
 
   render() {
     const isActive = (item) => {
-      return (this.props.history.current === item.id) ? 'active' : ''
+      return (this.props.history.current && this.props.history.current.type === item.constructor.name && this.props.history.current.id === item.id) ? 'active' : ''
     }
 
     const itemPathTo = (item) => {
+      let path = this.props.history.path
+      path.pop()
+      path.push(item.slug)
+      let slugs = pathToSlugs(path)
+
       if (item.public || this.props.history.username === this.props.history.username) {
-        return pathTo('userFlow', {username: this.props.history.username, slug: item.slug})
+        return pathTo('userFlow', Object.assign({username: this.props.history.username}, slugs))
       }
 
-      return pathTo('flow', {slug: item.slug})
+      return pathTo('flow', slugs)
     }
 
     return (
@@ -98,7 +103,7 @@ class History extends Component {
                 {getOrderedHistory(this.props.history, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
-                      to={itemPathTo(item)}>{item.title} {item.tags.map((tag, j) => (
+                      to={itemPathTo(item)}>{item.title} {item.constructor.name === 'History' && item.tags.map((tag, j) => (
                       <span key={j} className='badge'>{tag}</span>
                     ))}</Link>
                   </li>

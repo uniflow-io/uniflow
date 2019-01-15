@@ -23,8 +23,10 @@ export const getOrderedHistory = (state, filter) => {
     keys = keys.filter((key) => {
       let item  = state.items[key]
       let words = item.title
-      for (let i = 0; i < item.tags.length; i++) {
-        words += ' ' + item.tags[i]
+      if(item.constructor.name === 'History') {
+        for (let i = 0; i < item.tags.length; i++) {
+          words += ' ' + item.tags[i]
+        }
       }
       words = words.toLowerCase()
 
@@ -34,7 +36,6 @@ export const getOrderedHistory = (state, filter) => {
 
   keys.sort((keyA, keyB) => {
     let itemA = state.items[keyA]
-
     let itemB = state.items[keyB]
 
     return itemB.updated.diff(itemA.updated)
