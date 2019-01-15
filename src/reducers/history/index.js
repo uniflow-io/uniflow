@@ -15,8 +15,6 @@ const defaultState = {
 }
 
 const history = (state = defaultState, action) => {
-  let key
-
   switch (action.type) {
     case COMMIT_CLEAR_HISTORY:
       return {
@@ -24,21 +22,19 @@ const history = (state = defaultState, action) => {
         items: {}
       }
     case COMMIT_UPDATE_HISTORY:
-      key = action.item.constructor.name + '_' + action.item.id
-      state.items[key] = action.item
+      state.items[`${action.item.constructor.name}_${action.item.id}`] = action.item
       return {
         ...state
       }
     case COMMIT_DELETE_HISTORY:
-      key = action.item.constructor.name + '_' + action.item.id
-      delete state.items[key]
+      delete state.items[`${action.item.constructor.name}_${action.item.id}`]
       return {
         ...state
       }
     case COMMIT_SET_CURRENT_HISTORY:
       return {
         ...state,
-        current: action.current
+        current: {...action.current}
       }
     case COMMIT_SET_CURRENT_PATH:
       return {

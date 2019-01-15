@@ -13,7 +13,7 @@ import {
 import {commitLogoutUser} from '../auth/actions'
 
 export const getCurrentHistory = (state) => {
-  return state.current ? state.items[state.current] : null
+  return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
 }
 
 export const getOrderedHistory = (state, filter) => {
