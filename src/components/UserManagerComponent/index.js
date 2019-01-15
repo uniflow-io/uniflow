@@ -73,9 +73,11 @@ class UserManagerComponent extends Component<Props> {
             }
             return path
           }, [])
-          return this.props.dispatch(commitSetCurrentPathHistory(path))
+          return this.props.dispatch(commitSetCurrentPathHistory(path)).then(() => {
+            return path
+          })
         })
-        .then(() => {
+        .then((path) => {
           if (historyState.username === username) {
             return
           }
@@ -83,7 +85,7 @@ class UserManagerComponent extends Component<Props> {
           return this.props.dispatch(setUsernameHistory(username))
             .then(() => {
               const token = auth.isAuthenticated ? auth.token : null
-              return this.props.dispatch(fetchHistory(username, token))
+              return this.props.dispatch(fetchHistory(username, path, token))
             })
         })
         .then(() => {

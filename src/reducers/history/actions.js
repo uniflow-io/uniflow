@@ -126,7 +126,7 @@ export const commitSetUsernameHistory = (username) => {
   }
 }
 
-export const fetchHistory = (username, token = null) => {
+export const fetchHistory = (username, path, token = null) => {
   return (dispatch) => {
     let config = {}
     if (token) {
@@ -136,7 +136,7 @@ export const fetchHistory = (username, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/history/${username}/list`, config)
+      .get(`${server.getBaseUrl()}/api/history/${username}/list/all/${path.join('/')}`, config)
       .then((response) => {
         dispatch(commitClearHistory())
 
