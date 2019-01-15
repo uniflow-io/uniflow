@@ -43,7 +43,7 @@ const history = (state = defaultState, action) => {
     case COMMIT_SET_CURRENT_PATH:
       return {
         ...state,
-        path: action.path
+        path: action.path.slice()
       }
     case COMMIT_SET_CURRENT_USERNAME:
       return {
