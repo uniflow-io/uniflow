@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { fetchComponents, fetchSettings } from '../../reducers/user/actions'
 import routes, { pathTo, matchRoute } from '../../routes'
 import { withRouter } from 'react-router'
-import { fetchHistory, getHistoryBySlug, setCurrentHistory, commitSetCurrentPathHistory, setUsernameHistory } from '../../reducers/history/actions'
+import { fetchHistory, getHistoryBySlug, setCurrentHistory, commitSetCurrentPath, setUsernameHistory } from '../../reducers/history/actions'
 
 class UserManagerComponent extends Component<Props> {
   componentDidMount () {
@@ -73,7 +73,7 @@ class UserManagerComponent extends Component<Props> {
             }
             return path
           }, [])
-          return this.props.dispatch(commitSetCurrentPathHistory(path)).then(() => {
+          return this.props.dispatch(commitSetCurrentPath(path)).then(() => {
             return path
           })
         })

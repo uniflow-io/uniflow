@@ -1,16 +1,16 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { Log, History, Folder } from '../../models/index'
+import {Log, History, Folder} from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_HISTORY,
   COMMIT_UPDATE_HISTORY,
   COMMIT_DELETE_HISTORY,
   COMMIT_SET_CURRENT_HISTORY,
-  COMMIT_SET_CURRENT_PATH_HISTORY,
-  COMMIT_SET_USERNAME_HISTORY
+  COMMIT_SET_CURRENT_PATH,
+  COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
-import { commitLogoutUser } from '../auth/actions'
+import {commitLogoutUser} from '../auth/actions'
 
 export const getCurrentHistory = (state) => {
   return state.current ? state.items[state.current] : null
@@ -21,7 +21,7 @@ export const getOrderedHistory = (state, filter) => {
 
   if (filter !== undefined) {
     keys = keys.filter((key) => {
-      let item = state.items[key]
+      let item  = state.items[key]
       let words = item.title
       for (let i = 0; i < item.tags.length; i++) {
         words += ' ' + item.tags[i]
@@ -72,7 +72,7 @@ export const getTags = (state) => {
   return tags
 }
 
-export const commitClearHistory = () => {
+export const commitClearHistory          = () => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_CLEAR_HISTORY
@@ -80,7 +80,7 @@ export const commitClearHistory = () => {
     return Promise.resolve()
   }
 }
-export const commitUpdateHistory = (item) => {
+export const commitUpdateHistory         = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_UPDATE_HISTORY,
@@ -89,7 +89,7 @@ export const commitUpdateHistory = (item) => {
     return Promise.resolve()
   }
 }
-export const commitDeleteHistory = (item) => {
+export const commitDeleteHistory         = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_DELETE_HISTORY,
@@ -98,7 +98,7 @@ export const commitDeleteHistory = (item) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentHistory = (current) => {
+export const commitSetCurrentHistory     = (current) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_CURRENT_HISTORY,
@@ -107,19 +107,19 @@ export const commitSetCurrentHistory = (current) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentPathHistory = (path) => {
+export const commitSetCurrentPath = (path) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_SET_CURRENT_PATH_HISTORY,
+      type: COMMIT_SET_CURRENT_PATH,
       path
     })
     return Promise.resolve()
   }
 }
-export const commitSetUsernameHistory = (username) => {
+export const commitSetCurrentUsername    = (username) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_SET_USERNAME_HISTORY,
+      type: COMMIT_SET_CURRENT_USERNAME,
       username
     })
     return Promise.resolve()
@@ -141,7 +141,14 @@ export const fetchHistory = (username, path, token = null) => {
         dispatch(commitClearHistory())
 
         for (let i = 0; i < response.data.length; i++) {
-          let item = new History(response.data[i])
+          let item            = null
+          let {type, ...data} = response.data[i]
+
+          if (type === 'history') {
+            item = new History(data)
+          } else if (type === 'folder') {
+            item = new Folder(data)
+          }
 
           dispatch(commitUpdateHistory(item))
         }
@@ -306,7 +313,7 @@ export const setCurrentHistory = (current) => {
 
 export const setUsernameHistory = (username) => {
   return (dispatch) => {
-    dispatch(commitSetUsernameHistory(username))
+    dispatch(commitSetCurrentUsername(username))
 
     return Promise.resolve(username)
   }

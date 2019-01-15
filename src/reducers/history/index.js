@@ -3,8 +3,8 @@ import {
   COMMIT_UPDATE_HISTORY,
   COMMIT_DELETE_HISTORY,
   COMMIT_SET_CURRENT_HISTORY,
-  COMMIT_SET_CURRENT_PATH_HISTORY,
-  COMMIT_SET_USERNAME_HISTORY
+  COMMIT_SET_CURRENT_PATH,
+  COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
 
 const defaultState = {
@@ -15,6 +15,8 @@ const defaultState = {
 }
 
 const history = (state = defaultState, action) => {
+  let key
+
   switch (action.type) {
     case COMMIT_CLEAR_HISTORY:
       return {
@@ -22,12 +24,14 @@ const history = (state = defaultState, action) => {
         items: {}
       }
     case COMMIT_UPDATE_HISTORY:
-      state.items[action.item.id] = action.item
+      key = action.item.constructor.name + '_' + action.item.id
+      state.items[key] = action.item
       return {
         ...state
       }
     case COMMIT_DELETE_HISTORY:
-      delete state.items[action.item.id]
+      key = action.item.constructor.name + '_' + action.item.id
+      delete state.items[key]
       return {
         ...state
       }
@@ -36,12 +40,12 @@ const history = (state = defaultState, action) => {
         ...state,
         current: action.current
       }
-    case COMMIT_SET_CURRENT_PATH_HISTORY:
+    case COMMIT_SET_CURRENT_PATH:
       return {
         ...state,
         path: action.path
       }
-    case COMMIT_SET_USERNAME_HISTORY:
+    case COMMIT_SET_CURRENT_USERNAME:
       return {
         ...state,
         username: action.username
