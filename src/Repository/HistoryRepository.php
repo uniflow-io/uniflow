@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Folder;
 use App\Entity\History;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -64,20 +65,19 @@ class HistoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $username
+     * @param User $user
      * @param array $path
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndPath($username, $path)
+    public function findOneByUserAndPath(User $user, $path)
     {
         $level = count($path);
         $slug  = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('h')
             ->select('h')
-            ->leftJoin('h.user', 'u')
-            ->andWhere('u.username = :username')->setParameter('username', $username)
+            ->andWhere('h.user = :user')->setParameter('user', $user)
             ->andWhere('h.slug = :slug')->setParameter('slug', $slug);
 
         if ($level === 1) {
@@ -129,7 +129,7 @@ class HistoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findLastByUserAndClient(User $user, $client = null)
+    public function findLastByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
@@ -140,20 +140,31 @@ class HistoryRepository extends ServiceEntityRepository
             $qb->andWhere('h.client = :client')->setParameter('client', $client);
         }
 
+        if($folder) {
+            $qb->andWhere('h.folder = :folder')->setParameter('folder', $folder);
+        } else {
+            $qb->andWhere('h.folder is NULL');
+        }
+
         return $qb->getQuery()->getResult();
     }
 
-    public function getPublicHistoryByUsernameAndClient($username, $client = null)
+    public function getPublicHistoryByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
-            ->leftJoin('h.user', 'u')
-            ->andWhere('u.username = :username')->setParameter('username', $username)
+            ->andWhere('h.user = :user')->setParameter('user', $user)
             ->andWhere('h.public = :public')->setParameter('public', true)
             ->addOrderBy('h.updated', 'DESC');
 
         if ($client) {
             $qb->andWhere('h.client = :client')->setParameter('client', $client);
+        }
+
+        if($folder) {
+            $qb->andWhere('h.folder = :folder')->setParameter('folder', $folder);
+        } else {
+            $qb->andWhere('h.folder is NULL');
         }
 
         return $qb->getQuery()->getResult();

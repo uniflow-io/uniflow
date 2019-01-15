@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Folder;
 use App\Entity\History;
 use App\Repository\HistoryRepository;
 use App\Entity\User;
@@ -36,7 +37,8 @@ class HistoryService
     public function __construct(
         EntityManagerInterface $em,
         TagAwareAdapter $cache
-    ) {
+    )
+    {
         $this->em                = $em;
         $this->historyRepository = $this->em->getRepository(History::class);
         $this->cache             = $cache;
@@ -91,14 +93,14 @@ class HistoryService
     }
 
     /**
-     * @param string $username
-     * @param string $path
+     * @param User  $user
+     * @param array $path
      * @return History
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndPath($username, $path)
+    public function findOneByUserAndPath(User $user, $path)
     {
-        return $this->historyRepository->findOneByUsernameAndPath($username, $path);
+        return $this->historyRepository->findOneByUserAndPath($user, $path);
     }
 
     public function getJsonHistory(History $history)
@@ -113,7 +115,7 @@ class HistoryService
             'id'          => $history->getId(),
             'title'       => $history->getTitle(),
             'slug'        => $history->getSlug(),
-            'client'    => $history->getClient(),
+            'client'      => $history->getClient(),
             'tags'        => $tags,
             'description' => $history->getDescription(),
             'public'      => $history->getPublic(),
@@ -135,14 +137,26 @@ class HistoryService
         return $data;
     }
 
-    public function getHistoryByClient(User $user, $client = null)
+    /**
+     * @param User $user
+     * @param null $client
+     * @param Folder|null $folder
+     * @return mixed
+     */
+    public function getHistoryByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
-        return $this->historyRepository->findLastByUserAndClient($user, $client);
+        return $this->historyRepository->findLastByUserAndClientAndFolder($user, $client, $folder);
     }
 
-    public function getPublicHistoryByUsernameAndClient($username, $client = null)
+    /**
+     * @param User $user
+     * @param null $client
+     * @param Folder|null $folder
+     * @return mixed
+     */
+    public function getPublicHistoryByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
-        return $this->historyRepository->getPublicHistoryByUsernameAndClient($username, $client);
+        return $this->historyRepository->getPublicHistoryByUserAndClientAndFolder($user, $client, $folder);
     }
 
     public function findLastPublic($limit = null)

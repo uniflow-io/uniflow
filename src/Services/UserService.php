@@ -74,11 +74,9 @@ class UserService
     }
 
     /**
-     * Find user by id for edit profile
-     *
-     * @param string $id
-     *
-     * @return User
+     * @param null $id
+     * @return User|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne($id = null)
     {
@@ -94,11 +92,19 @@ class UserService
         return $this->userRepository->queryForSearch($filters);
     }
 
+    /**
+     * @param $username
+     * @return User|null
+     */
     public function findOneByUsername($username)
     {
         return $this->userRepository->findOneBy(array('username' => $username));
     }
 
+    /**
+     * @param $email
+     * @return User|null
+     */
     public function findOneByEmail($email)
     {
         return $this->userRepository->findOneBy(array('email' => $email));
@@ -106,7 +112,7 @@ class UserService
 
     /**
      * @param $username
-     * @return mixed
+     * @return User|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByEmailOrUsername($username)
@@ -116,7 +122,7 @@ class UserService
 
     /**
      * @param $facebookId
-     * @return mixed
+     * @return User|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByFacebookId($facebookId)
@@ -126,7 +132,7 @@ class UserService
 
     /**
      * @param $githubId
-     * @return mixed
+     * @return User|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByGithubId($githubId)
@@ -134,6 +140,10 @@ class UserService
         return $this->userRepository->findOneByGithubId($githubId);
     }
 
+    /**
+     * @param $apiKey
+     * @return User|null
+     */
     public function findOneByApiKey($apiKey)
     {
         return $this->userRepository->findOneBy(array('apiKey' => $apiKey));

@@ -182,9 +182,14 @@ class FrontController extends AbstractController
             return $path;
         }, []);
 
-        $history = $this->historyService->findOneByUsernameAndPath($username, $path);
+        $user = $this->userService->findOneByUsername($username);
+        if(!$user) {
+            throw new NotFoundHttpException();
+        }
+
+        $history = $this->historyService->findOneByUserAndPath($user, $path);
         if (is_null($history)) {
-            $folder = $this->folderService->findOneByUsernameAndPath($username, $path);
+            $folder = $this->folderService->findOneByUserAndPath($user, $path);
             if(is_null($folder)) {
                 throw new NotFoundHttpException();
             }

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Services\FolderService;
 use App\Services\UserService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,44 +37,90 @@ class HistoryController extends AbstractController
      */
     protected $userService;
 
+    /**
+     * @var FolderService
+     */
+    protected $folderService;
+
     public function __construct(
         HistoryService $historyService,
         TagService $tagService,
-        UserService $userService
+        UserService $userService,
+        FolderService $folderService
     ) {
         $this->historyService = $historyService;
         $this->tagService = $tagService;
         $this->userService = $userService;
+        $this->folderService = $folderService;
     }
 
     /**
-     * @Route("/api/history/{username}/list/{client}", name="api_history_list", methods={"GET"})
+     * @Route("/api/history/{username}/list/{client}/{slug1}/{slug2}/{slug3}", name="api_history_list", methods={"GET"})
      *
      * @param string $username
-     * @param string $client
+     * @param null $client
+     * @param null $slug1
+     * @param null $slug2
+     * @param null $slug3
      * @return JsonResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function listAction($username = 'me', $client = null)
+    public function listAction($username = 'me', $client = null, $slug1 = null, $slug2 = null, $slug3 = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
+        if($client === 'all') {
+            $client = null;
+        }
+
+        $path = array_reduce([$slug1, $slug2, $slug3], function($path, $slug) {
+            if($slug) {
+                $path[] = $slug;
+            }
+            return $path;
+        }, []);
+
+        $folder = null;
+        if(count($path) > 0) {
+            $history = $this->historyService->findOneByUserAndPath($user, $path);
+            if($history) {
+                $folder = $history->getFolder();
+            } else {
+                $folder = $this->folderService->findOneByUserAndPath($user, $path);
+                if(!$folder) {
+                    throw new NotFoundHttpException();
+                }
+            }
+        }
+
+        $folders = [];
         if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
-            $histories = $this->historyService->getHistoryByClient($user, $client);
+            $histories = $this->historyService->getHistoryByUserAndClientAndFolder($user, $client, $folder);
+            $folders = $this->folderService->findByUserAndParent($user, $folder);
         } else {
             $user = $this->userService->findOneByUsername($username);
             if (is_null($user)) {
                 throw new NotFoundHttpException();
             }
 
-            $histories = $this->historyService->getPublicHistoryByUsernameAndClient($username, $client);
+            $histories = $this->historyService->getPublicHistoryByUserAndClientAndFolder($user, $client, $folder);
         }
 
         $data = array();
         foreach ($histories as $history) {
-            $data[] = $this->historyService->getJsonHistory($history);
+            $d = $this->historyService->getJsonHistory($history);
+            $d['type'] = 'history';
+
+            $data[] = $d;
+        }
+        foreach ($folders as $folder) {
+            $d = $this->folderService->getJsonFolder($folder);
+            $d['type'] = 'folder';
+
+            $data[] = $d;
         }
 
         return new JsonResponse($data);

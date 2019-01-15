@@ -21,7 +21,7 @@ class FolderRepository extends ServiceEntityRepository
 
     /**
      * @param null $id
-     * @return Folder
+     * @return Folder|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne($id = null)
@@ -44,7 +44,7 @@ class FolderRepository extends ServiceEntityRepository
     /**
      * @param User $user
      * @param null $id
-     * @return Folder
+     * @return Folder|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUser(User $user, $id = null)
@@ -66,20 +66,19 @@ class FolderRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $username
-     * @param $path
-     * @return mixed
+     * @param User $user
+     * @param array $path
+     * @return Folder|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndPath($username, $path)
+    public function findOneByUserAndPath(User $user, $path)
     {
         $level = count($path);
         $slug  = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('f')
             ->select('f')
-            ->leftJoin('f.user', 'u')
-            ->andWhere('u.username = :username')->setParameter('username', $username)
+            ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
 
         if ($level === 1) {
@@ -115,6 +114,27 @@ class FolderRepository extends ServiceEntityRepository
             ->select('f')
             ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param User $user
+     * @param Folder|null $folder
+     * @return Folder[]
+     */
+    public function findByUserAndParent(User $user, Folder $folder = null)
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->select('f')
+            ->andWhere('f.user = :user')->setParameter('user', $user)
+        ;
+
+        if($folder) {
+            $qb->andWhere('f.parent = :parent')->setParameter('parent', $folder);
+        } else {
+            $qb->andWhere('f.parent is NULL');
+        }
 
         return $qb->getQuery()->getResult();
     }

@@ -87,14 +87,23 @@ class FolderService
     }
 
     /**
-     * @param string $username
-     * @param string $path
+     * @param User $user
+     * @param array $path
      * @return Folder
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findOneByUsernameAndPath($username, $path)
+    public function findOneByUserAndPath(User $user, $path)
     {
-        return $this->folderRepository->findOneByUsernameAndPath($username, $path);
+        return $this->folderRepository->findOneByUserAndPath($user, $path);
+    }
+
+    /**
+     * @param User $user
+     * @param Folder|null $folder
+     * @return Folder[]
+     */
+    public function findByUserAndParent(User $user, Folder $folder = null) {
+        return $this->folderRepository->findByUserAndParent($user, $folder);
     }
 
     public function getJsonFolder(Folder $folder)
