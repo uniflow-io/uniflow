@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import History from './History'
 import Show from './Show'
+import FolderShow from './FolderShow'
 import { getCurrentHistory } from '../../reducers/history/actions'
 import { connect } from 'react-redux'
 import { pathTo } from '../../routes'
@@ -33,6 +34,9 @@ class Flow extends Component<Props> {
               {history.username && currentHistory && currentHistory.constructor.name === 'History' && (
                 <Show />
               )}
+              {/*history.username && currentHistory && currentHistory.constructor.name === 'Folder' && (
+                <FolderShow />
+              )*/}
             </div>
           </div>
         </section>

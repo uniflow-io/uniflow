@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
 import debounce from 'lodash/debounce'
 import { AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component } from 'uniflow/src/components'
-import { History, Runner } from '../../../models'
-import {
-  commitPushFlow,
-  commitPopFlow,
-  commitUpdateFlow,
-  commitSetFlow
-} from 'uniflow/src/reducers/flow/actions'
+import { Folder } from '../../../models'
 import {
   getCurrentHistory,
   getTags,
@@ -18,137 +12,12 @@ import {
   getHistoryData,
   setHistoryData,
   setCurrentHistory
-} from '../../../reducers/history/actions'
+} from '../../../reducers/folder/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 import components from '../../../uniflow'
 
-class Show extends Component {
-    state = {
-      fetchedSlug: null,
-      fetchedUsername: null,
-      runIndex: null
-    }
-
-    componentDidMount () {
-      this._isMounted = true
-
-      this.onFetchFlowData()
-    }
-
-    componentWillUnmount () {
-      this._isMounted = false
-    }
-
-    componentWillReceiveProps (nextProps) {
-      const oldProps = this.props
-
-      if (nextProps.history.id !== oldProps.history.id) {
-        this.onFetchFlowData()
-      }
-    }
-
-    isMounted () {
-      return this._isMounted
-    }
-
-    run = (event, index) => {
-      event.preventDefault()
-
-      let stack = index === undefined ? this.props.stack : this.props.stack.slice(0, index + 1)
-
-      let runner = new Runner()
-
-      runner.run(stack, (index) => {
-        return new Promise((resolve) => {
-          this.setState({ runIndex: index }, resolve)
-        })
-      })
-    }
-
-    setFlow = (stack) => {
-      return this.props
-        .dispatch(commitSetFlow(stack))
-        .then(() => {
-          return Promise.all(stack.map((item) => {
-            return item.bus.emit('reset', item.data)
-          }))
-        })
-    }
-
-    onPushFlow = (index, component) => {
-      this.props
-        .dispatch(commitPushFlow(index, component))
-        .then(() => {
-          return this.setFlow(this.props.stack)
-        }).then(() => {
-          this.onUpdateFlowData()
-        })
-    }
-
-    onPopFlow = (index) => {
-      this.props
-        .dispatch(commitPopFlow(index))
-        .then(() => {
-          return this.setFlow(this.props.stack)
-        }).then(() => {
-          this.onUpdateFlowData()
-        })
-    }
-
-    onUpdateFlow = (index, data) => {
-      this.props
-        .dispatch(commitUpdateFlow(index, data))
-        .then(() => {
-          this.onUpdateFlowData()
-        })
-    }
-
-    onFetchFlowData = debounce(() => {
-      let { history } = this.props
-
-      Promise.resolve()
-        .then(() => {
-          return this.props.dispatch(commitSetFlow([]))
-        })
-        .then(() => {
-          if (history.data) {
-            return history.data
-          }
-
-          return this.props.dispatch(getHistoryData(history, this.props.auth.token))
-        })
-        .then((data) => {
-          if (!data) return
-
-          history.data = data
-
-          if (history.slug !== this.props.history.slug) return
-
-          return this.setFlow(history.deserialiseFlowData())
-        })
-        .then(() => {
-          if (this.isMounted()) {
-            this.setState({ fetchedSlug: history.slug })
-          }
-        })
-    }, 500)
-
-    onUpdateFlowData = debounce(() => {
-      let { history, stack, user, username } = this.props
-      if (history.slug !== this.state.fetchedSlug) return
-
-      let data = history.data
-      history.serialiseFlowData(stack)
-      if ((username === 'me' || user.username === username) && history.data !== data) {
-        this.props
-          .dispatch(setHistoryData(history, this.props.auth.token))
-          .catch((log) => {
-            return this.props.dispatch(commitAddLog(log.message))
-          })
-      }
-    }, 500)
-
+class FolderShow extends Component {
     onChangeTitle = (event) => {
       this.props
         .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ title: event.target.value } })))
@@ -160,38 +29,6 @@ class Show extends Component {
     onChangeSlug = (event) => {
       this.props
         .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ slug: event.target.value } })))
-        .then(() => {
-          this.onUpdate()
-        })
-    }
-
-    onChangeClient = (selected) => {
-      this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ client: selected } })))
-        .then(() => {
-          this.onUpdate()
-        })
-    }
-
-    onChangeTags = (tags) => {
-      this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ tags: tags } })))
-        .then(() => {
-          this.onUpdate()
-        })
-    }
-
-    onChangeDescription = (description) => {
-      this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ description: description } })))
-        .then(() => {
-          this.onUpdate()
-        })
-    }
-
-    onChangePublic = (value) => {
-      this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ public: value } })))
         .then(() => {
           this.onUpdate()
         })
@@ -364,4 +201,4 @@ export default connect(state => {
     username: state.history.username,
     stack: state.flow
   }
-})(Show)
+})(FolderShow)
