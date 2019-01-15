@@ -1,13 +1,19 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { fetchComponents, fetchSettings } from '../../reducers/user/actions'
-import routes, { pathTo, matchRoute } from '../../routes'
-import { withRouter } from 'react-router'
-import { fetchHistory, getHistoryBySlug, setCurrentHistory, commitSetCurrentPath, setUsernameHistory } from '../../reducers/history/actions'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {fetchComponents, fetchSettings} from '../../reducers/user/actions'
+import routes, {pathTo, matchRoute} from '../../routes'
+import {withRouter} from 'react-router'
+import {
+  fetchHistory,
+  getHistoryBySlug,
+  setCurrentHistory,
+  commitSetCurrentPath,
+  setUsernameHistory
+} from '../../reducers/history/actions'
 
 class UserManagerComponent extends Component<Props> {
-  componentDidMount () {
-    const { auth, history } = this.props
+  componentDidMount() {
+    const {auth, history} = this.props
 
     this.historyUnlisten = history.listen(this.onLocation)
 
@@ -18,7 +24,7 @@ class UserManagerComponent extends Component<Props> {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
     if (nextProps.auth.token !== oldProps.auth.token && nextProps.auth.isAuthenticated) {
@@ -26,99 +32,109 @@ class UserManagerComponent extends Component<Props> {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.historyUnlisten()
   }
 
-    onLocation = (location) => {
-      const { user, history, historyState } = this.props
+  onLocation = (location) => {
+    const {user, history, historyState} = this.props
 
-      const match = matchRoute(location.pathname)
+    const match = matchRoute(location.pathname)
 
-      if (match) {
-        if (match.route === 'dashboard') {
-          this.onFetchHistory('me')
-        } else if (match.route === 'flow') {
-          this.onFetchHistory('me', match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
-          if (user.username) {
-            history.push(pathTo('userFlow', { username: user.username, slug1: match.match.params.slug1, slug2: match.match.params.slug2, slug3: match.match.params.slug3 }))
-          }
-        } else if (match.route === 'userDashboard') {
-          this.onFetchHistory(match.match.params.username)
-        } else if (match.route === 'userFlow') {
-          this.onFetchHistory(match.match.params.username, match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
+    if (match) {
+      if (match.route === 'dashboard') {
+        this.onFetchHistory('me')
+      } else if (match.route === 'flow') {
+        this.onFetchHistory('me', match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
+        if (user.username) {
+          history.push(pathTo('userFlow', {
+            username: user.username,
+            slug1: match.match.params.slug1,
+            slug2: match.match.params.slug2,
+            slug3: match.match.params.slug3
+          }))
         }
+      } else if (match.route === 'userDashboard') {
+        this.onFetchHistory(match.match.params.username)
+      } else if (match.route === 'userFlow') {
+        this.onFetchHistory(match.match.params.username, match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
       }
     }
+  }
 
-    onFetchUser = (token) => {
-      Promise.all([
-        this.props.dispatch(fetchComponents(token)),
-        this.props.dispatch(fetchSettings(token))
-      ]).then(() => {
-        const { history } = this.props
+  onFetchUser = (token) => {
+    Promise.all([
+      this.props.dispatch(fetchComponents(token)),
+      this.props.dispatch(fetchSettings(token))
+    ]).then(() => {
+      const {history} = this.props
 
-        this.onLocation(history.location)
+      this.onLocation(history.location)
+    })
+  }
+
+  onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null) => {
+    const {auth, historyState} = this.props
+
+    Promise.resolve()
+      .then(() => {
+        let path = [slug1, slug2, slug3].reduce((path, slug) => {
+          if (slug) {
+            path.push(slug)
+          }
+          return path
+        }, [])
+        return this.props.dispatch(commitSetCurrentPath(path)).then(() => {
+          return path
+        })
       })
-    }
+      .then((path) => {
+        if (historyState.username === username) {
+          return path
+        }
 
-    onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null) => {
-      const { auth, historyState } = this.props
-
-      Promise.resolve()
-        .then(() => {
-          let path = [slug1, slug2, slug3].reduce((path, slug) => {
-            if(slug) {
-              path.push(slug)
-            }
-            return path
-          }, [])
-          return this.props.dispatch(commitSetCurrentPath(path)).then(() => {
+        return this.props.dispatch(setUsernameHistory(username))
+          .then(() => {
+            const token = auth.isAuthenticated ? auth.token : null
+            return this.props.dispatch(fetchHistory(username, path, token))
+          }).then(() => {
             return path
           })
-        })
-        .then((path) => {
-          if (historyState.username === username) {
-            return path
-          }
+      })
+      .then((path) => {
+        const {historyState} = this.props
 
-          return this.props.dispatch(setUsernameHistory(username))
-            .then(() => {
-              const token = auth.isAuthenticated ? auth.token : null
-              return this.props.dispatch(fetchHistory(username, path, token))
-            }).then(() => {
-              return path
+        let slug = path.length > 0 ? path[path.length - 1] : null
+
+        let historyObj = getHistoryBySlug(historyState, slug)
+        if (historyObj) {
+          this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
+        } else {
+          let items = Object.keys(historyState.items)
+            .filter((key) => {
+              return historyState.items[key].constructor.name === 'History'
             })
-        })
-        .then((path) => {
-          const { historyState } = this.props
+            .reduce((res, key) => (res[key] = historyState.items[key], res), {})
+          let keys  = Object.keys(items)
 
-          let slug = path.length > 0 ? path[path.length - 1] : null
+          keys.sort((keyA, keyB) => {
+            let itemA = items[keyA]
+            let itemB = items[keyB]
 
-          let historyObj = getHistoryBySlug(historyState, slug)
-          if (historyObj) {
-            this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
-          } else {
-            let keys = Object.keys(historyState.items)
+            return itemB.updated.diff(itemA.updated)
+          })
 
-            keys.sort((keyA, keyB) => {
-              let itemA = historyState.items[keyA]
-              let itemB = historyState.items[keyB]
-
-              return itemB.updated.diff(itemA.updated)
-            })
-
-            if (keys.length > 0) {
-              let item = historyState.items[keys[0]]
-              this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
-            }
+          if (keys.length > 0) {
+            let item = items[keys[0]]
+            this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
           }
-        })
-    }
+        }
+      })
+  }
 
-    render () {
-      return (<div />)
-    }
+  render() {
+    return (<div/>)
+  }
 }
 
 export default connect(state => {
