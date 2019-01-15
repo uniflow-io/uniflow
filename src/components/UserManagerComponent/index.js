@@ -79,7 +79,7 @@ class UserManagerComponent extends Component<Props> {
         })
         .then((path) => {
           if (historyState.username === username) {
-            return
+            return path
           }
 
           return this.props.dispatch(setUsernameHistory(username))
