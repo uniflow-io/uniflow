@@ -30,7 +30,7 @@ class Flow extends Component<Props> {
               <History />
             </div>
             <div className='col-sm-10'>
-              {history.username && currentHistory && (
+              {history.username && currentHistory && currentHistory.constructor.name === 'History' && (
                 <Show />
               )}
             </div>
