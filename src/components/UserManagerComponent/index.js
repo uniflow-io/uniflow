@@ -86,20 +86,23 @@ class UserManagerComponent extends Component<Props> {
             .then(() => {
               const token = auth.isAuthenticated ? auth.token : null
               return this.props.dispatch(fetchHistory(username, path, token))
+            }).then(() => {
+              return path
             })
         })
-        .then(() => {
+        .then((path) => {
           const { historyState } = this.props
 
-          let historyObj = getHistoryBySlug(historyState, slug1, slug2, slug3)
+          let slug = path.length > 0 ? path[path.length - 1] : null
+
+          let historyObj = getHistoryBySlug(historyState, slug)
           if (historyObj) {
-            this.props.dispatch(setCurrentHistory({type: 'history', id: historyObj.id}))
+            this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
           } else {
             let keys = Object.keys(historyState.items)
 
             keys.sort((keyA, keyB) => {
               let itemA = historyState.items[keyA]
-
               let itemB = historyState.items[keyB]
 
               return itemB.updated.diff(itemA.updated)
@@ -107,7 +110,7 @@ class UserManagerComponent extends Component<Props> {
 
             if (keys.length > 0) {
               let item = historyState.items[keys[0]]
-              this.props.dispatch(setCurrentHistory({type: 'history', id: historyState.items[keys[0]].id}))
+              this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
             }
           }
         })

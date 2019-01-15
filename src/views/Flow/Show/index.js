@@ -214,7 +214,7 @@ class Show extends Component {
           return this.props.dispatch(setHistoryData(history, this.props.auth.token))
         })
         .then(() => {
-          return this.props.dispatch(setCurrentHistory({type: 'history', id: history.id}))
+          return this.props.dispatch(setCurrentHistory({type: history.constructor.name, id: history.id}))
         })
         .catch((log) => {
           return this.props.dispatch(commitAddLog(log.message))

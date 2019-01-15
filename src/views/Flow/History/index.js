@@ -23,7 +23,7 @@ class History extends Component {
         'title': this.state.search,
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentHistory({type: 'folder', id: item.id}))
+        return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -41,7 +41,7 @@ class History extends Component {
         'description': ''
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentHistory({type: 'history', id: item.id}))
+        return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
