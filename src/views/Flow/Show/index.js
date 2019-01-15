@@ -152,7 +152,7 @@ class Show extends Component {
 
     onChangeTitle = (event) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ title: event.target.value } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ title: event.target.value } })))
         .then(() => {
           this.onUpdate()
         })
@@ -160,7 +160,7 @@ class Show extends Component {
 
     onChangeSlug = (event) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ slug: event.target.value } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ slug: event.target.value } })))
         .then(() => {
           this.onUpdate()
         })
@@ -168,7 +168,7 @@ class Show extends Component {
 
     onChangeClient = (selected) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ client: selected } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ client: selected } })))
         .then(() => {
           this.onUpdate()
         })
@@ -176,7 +176,7 @@ class Show extends Component {
 
     onChangeTags = (tags) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ tags: tags } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ tags: tags } })))
         .then(() => {
           this.onUpdate()
         })
@@ -184,7 +184,7 @@ class Show extends Component {
 
     onChangeDescription = (description) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ description: description } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ description: description } })))
         .then(() => {
           this.onUpdate()
         })
@@ -192,7 +192,7 @@ class Show extends Component {
 
     onChangePublic = (value) => {
       this.props
-        .dispatch(commitUpdateHistory({ ...this.props.history, ...{ public: value } }))
+        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ public: value } })))
         .then(() => {
           this.onUpdate()
         })
