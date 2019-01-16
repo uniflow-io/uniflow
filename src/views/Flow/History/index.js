@@ -21,6 +21,7 @@ class History extends Component {
     this.props
       .dispatch(createFolder({
         'title': this.state.search,
+        'path': this.props.history.path
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
@@ -38,7 +39,8 @@ class History extends Component {
         'title': this.state.search,
         'client': 'uniflow',
         'tags': [],
-        'description': ''
+        'description': '',
+        'path': this.props.history.path
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))

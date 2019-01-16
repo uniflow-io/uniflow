@@ -172,6 +172,7 @@ export const createHistory = (item, token) => {
       client: item.client,
       tags: item.tags,
       description: item.description,
+      path: item.path,
       public: false
     }
 

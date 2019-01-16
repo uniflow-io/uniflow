@@ -18,6 +18,7 @@ export const createFolder = (item, token) => {
     let data = {
       title: item.title,
       slug: item.title,
+      path: item.path,
     }
 
     return request
