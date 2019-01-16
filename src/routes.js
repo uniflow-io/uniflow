@@ -59,7 +59,7 @@ const routes = {
     component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN')
   },
   flow: {
-    path: '/me/flow/:slug1/:slug2?/:slug3?',
+    path: '/me/flow/:slug1/:slug2?/:slug3?/:slug4?/:slug5?',
     component: requireAuthentication(Flow)
   },
   dashboard: {
@@ -67,7 +67,7 @@ const routes = {
     component: requireAuthentication(Flow)
   },
   userFlow: {
-    path: '/:username/flow/:slug1/:slug2?/:slug3?',
+    path: '/:username/flow/:slug1/:slug2?/:slug3?/:slug4?/:slug5?',
     component: Flow
   },
   userDashboard: {

@@ -42,22 +42,25 @@ class UserManagerComponent extends Component<Props> {
     const match = matchRoute(location.pathname)
 
     if (match) {
+      let params = match.match.params
       if (match.route === 'dashboard') {
         this.onFetchHistory('me')
       } else if (match.route === 'flow') {
-        this.onFetchHistory('me', match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
+        this.onFetchHistory('me', params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
         if (user.username) {
           history.push(pathTo('userFlow', {
             username: user.username,
-            slug1: match.match.params.slug1,
-            slug2: match.match.params.slug2,
-            slug3: match.match.params.slug3
+            slug1: params.slug1,
+            slug2: params.slug2,
+            slug3: params.slug3,
+            slug4: params.slug4,
+            slug5: params.slug5
           }))
         }
       } else if (match.route === 'userDashboard') {
-        this.onFetchHistory(match.match.params.username)
+        this.onFetchHistory(params.username)
       } else if (match.route === 'userFlow') {
-        this.onFetchHistory(match.match.params.username, match.match.params.slug1, match.match.params.slug2, match.match.params.slug3)
+        this.onFetchHistory(params.username, params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
       }
     }
   }
@@ -73,12 +76,12 @@ class UserManagerComponent extends Component<Props> {
     })
   }
 
-  onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null) => {
+  onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
     const {auth, historyState} = this.props
 
     Promise.resolve()
       .then(() => {
-        let path = [slug1, slug2, slug3].reduce((path, slug) => {
+        let path = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
           if (slug) {
             path.push(slug)
           }
