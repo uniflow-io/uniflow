@@ -51,8 +51,28 @@ class History extends Component {
   }
 
   render() {
+    const isCurrentUser = this.props.history.username === this.props.history.username
     const isActive = (item) => {
       return (this.props.history.current && this.props.history.current.type === item.constructor.name && this.props.history.current.id === item.id) ? 'active' : ''
+    }
+
+    const backTo = () => {
+      let path = this.props.history.path.slice(0, -1)
+      if(path.length === 0) {
+        if (isCurrentUser) {
+          return pathTo('userDashboard', {username: this.props.history.username})
+        }
+
+        return pathTo('dashboard')
+      }
+
+      let slugs = pathToSlugs(path)
+
+      if (isCurrentUser) {
+        return pathTo('userFlow', Object.assign({username: this.props.history.username}, slugs))
+      }
+
+      return pathTo('flow', slugs)
     }
 
     const itemPathTo = (item) => {
@@ -61,7 +81,7 @@ class History extends Component {
       path.push(item.slug)
       let slugs = pathToSlugs(path)
 
-      if (item.public || this.props.history.username === this.props.history.username) {
+      if (item.public || isCurrentUser) {
         return pathTo('userFlow', Object.assign({username: this.props.history.username}, slugs))
       }
 
@@ -102,6 +122,12 @@ class History extends Component {
                     </div>
                   </form>
                 </li>
+                {this.props.history.path.length > 0 && (
+                <li>
+                  <Link
+                    to={backTo()}><i className="fa fa-arrow-left fa-fw" /> Back</Link>
+                </li>
+                )}
                 {getOrderedHistory(this.props.history, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
