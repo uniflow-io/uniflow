@@ -50,7 +50,7 @@ export const getHistoryBySlug = (state, slug) => {
   let keys = Object.keys(state.items)
 
   let slugKeys = keys.filter((key) => {
-    return state.items[key].slug === slug
+    return state.items[key].constructor.name === 'History' && state.items[key].slug === slug
   })
 
   if (slugKeys.length > 0) {

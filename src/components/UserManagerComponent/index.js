@@ -77,24 +77,20 @@ class UserManagerComponent extends Component<Props> {
   }
 
   onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
-    const {auth, historyState} = this.props
-
     Promise.resolve()
       .then(() => {
-        let path = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
+        const {auth, historyState} = this.props
+
+        let path          = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
           if (slug) {
             path.push(slug)
           }
           return path
         }, [])
-        return this.props.dispatch(commitSetCurrentPath(path)).then(() => {
-          return path
-        })
-      })
-      .then((path) => {
-        let slug = path.length > 0 ? path[path.length - 1] : null
-        let sameDirectory = path.slice(0, -1).join('/') === historyState.path.slice(0, -1).join('/')
-        let isHistory = sameDirectory && Object.keys(historyState.items)
+
+        let slug          = path.length > 0 ? path[path.length - 1] : null
+        let sameDirectory = path.slice(0, -1).join('/') === historyState.path.join('/')
+        let isHistory     = sameDirectory && Object.keys(historyState.items)
           .filter((key) => {
             return historyState.items[key].constructor.name === 'History' && historyState.items[key].slug === slug
           })
@@ -118,8 +114,10 @@ class UserManagerComponent extends Component<Props> {
 
         let historyObj = getHistoryBySlug(historyState, slug)
         if (historyObj) {
+          this.props.dispatch(commitSetCurrentPath(path.slice(0, -1)))
           this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
         } else {
+          this.props.dispatch(commitSetCurrentPath(path))
           let items = Object.keys(historyState.items)
             .filter((key) => {
               return historyState.items[key].constructor.name === 'History'

@@ -54,7 +54,7 @@ class History extends Component {
     }
 
     const itemPathTo = (item) => {
-      let path = this.props.history.path
+      let path = this.props.history.path.slice()
       path.pop()
       path.push(item.slug)
       let slugs = pathToSlugs(path)
