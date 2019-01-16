@@ -55,17 +55,19 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/{username}/list/{client}/{slug1}/{slug2}/{slug3}", name="api_history_list", methods={"GET"})
+     * @Route("/api/history/{username}/list/{client}/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_history_list", methods={"GET"})
      *
      * @param string $username
      * @param null $client
      * @param null $slug1
      * @param null $slug2
      * @param null $slug3
+     * @param null $slug4
+     * @param null $slug5
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function listAction($username = 'me', $client = null, $slug1 = null, $slug2 = null, $slug3 = null)
+    public function listAction($username = 'me', $client = null, $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -76,7 +78,7 @@ class HistoryController extends AbstractController
             $client = null;
         }
 
-        $path = array_reduce([$slug1, $slug2, $slug3], function($path, $slug) {
+        $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
             if($slug) {
                 $path[] = $slug;
             }

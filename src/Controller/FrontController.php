@@ -143,14 +143,16 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/me/flow/{slug1}/{slug2}/{slug3}", name="flow")
+     * @Route("/me/flow/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="flow")
      *
      * @param $slug1
      * @param $slug2
      * @param $slug3
+     * @param $slug4
+     * @param $slug5
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function flow($slug1, $slug2 = null, $slug3 = null)
+    public function flow($slug1, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         return $this->render('default/flow.html.twig');
     }
@@ -164,18 +166,20 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/{username}/flow/{slug1}/{slug2}/{slug3}", name="userFlow")
+     * @Route("/{username}/flow/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="userFlow")
      *
      * @param $username
      * @param $slug1
      * @param $slug2
      * @param $slug3
+     * @param $slug4
+     * @param $slug5
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userFlow($username, $slug1, $slug2 = null, $slug3 = null)
+    public function userFlow($username, $slug1, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
-        $path = array_reduce([$slug1, $slug2, $slug3], function($path, $slug) {
+        $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
             if($slug) {
                 $path[] = $slug;
             }
