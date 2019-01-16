@@ -92,7 +92,14 @@ class UserManagerComponent extends Component<Props> {
         })
       })
       .then((path) => {
-        if (historyState.username === username) {
+        let slug = path.length > 0 ? path[path.length - 1] : null
+        let sameDirectory = path.slice(0, -1).join('/') === historyState.path.slice(0, -1).join('/')
+        let isHistory = sameDirectory && Object.keys(historyState.items)
+          .filter((key) => {
+            return historyState.items[key].constructor.name === 'History' && historyState.items[key].slug === slug
+          })
+          .length > 0
+        if (historyState.username === username && sameDirectory && isHistory) {
           return path
         }
 
