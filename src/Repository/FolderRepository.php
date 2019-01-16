@@ -74,6 +74,10 @@ class FolderRepository extends ServiceEntityRepository
     public function findOneByUserAndPath(User $user, $path)
     {
         $level = count($path);
+        if($level === 0) {
+            return null;
+        }
+
         $slug  = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('f')

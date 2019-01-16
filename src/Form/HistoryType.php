@@ -2,8 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\Folder;
 use App\Entity\History;
+use App\Form\Transformer\PathTransformer;
 use App\Form\Transformer\TagTransformer;
+use App\Services\FolderService;
 use App\Services\TagService;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -29,12 +32,18 @@ class HistoryType extends AbstractType
     protected $tagService;
 
     /**
+     * @var FolderService
+     */
+    protected $folderService;
+
+    /**
      * TagTransformer constructor.
      * @param $tagService
      */
-    public function __construct(TagService $tagService)
+    public function __construct(TagService $tagService, FolderService $folderService)
     {
         $this->tagService = $tagService;
+        $this->folderService = $folderService;
     }
 
     /**
@@ -55,9 +64,17 @@ class HistoryType extends AbstractType
         ));
         $builder->add('description', TextareaType::class);
         $builder->add('public', CheckboxType::class);
+        $builder->add('path', CollectionType::class, [
+            'property_path' => 'folder',
+            'entry_type' => TextType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
+        ]);
 
-        $tagsTransformer = new TagTransformer($this->tagService);
-        $builder->get('tags')->addModelTransformer($tagsTransformer);
+        $tagTransformer = new TagTransformer($this->tagService);
+        $builder->get('tags')->addModelTransformer($tagTransformer);
+        $pathTransformer = new PathTransformer($this->folderService, $options['data']->getUser());
+        $builder->get('path')->addModelTransformer($pathTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver)
