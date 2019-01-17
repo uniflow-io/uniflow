@@ -7,13 +7,22 @@ import {
   COMMIT_UPDATE_HISTORY,
   COMMIT_DELETE_HISTORY,
   COMMIT_SET_CURRENT_HISTORY,
-  COMMIT_SET_CURRENT_PATH,
+  COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
 import {commitLogoutUser} from '../auth/actions'
 
 export const getCurrentHistory = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
+}
+export const getCurrentPath = (state) => {
+  let path = []
+  if(state.folder) {
+    path = state.folder.path.slice()
+    path.push(state.folder.slug)
+  }
+
+  return path;
 }
 
 export const getOrderedHistory = (state, filter) => {
@@ -108,11 +117,11 @@ export const commitSetCurrentHistory     = (current) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentPath = (path) => {
+export const commitSetCurrentFolder = (folder) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_SET_CURRENT_PATH,
-      path
+      type: COMMIT_SET_CURRENT_FOLDER,
+      folder
     })
     return Promise.resolve()
   }
@@ -141,9 +150,9 @@ export const fetchHistory = (username, path, token = null) => {
       .then((response) => {
         dispatch(commitClearHistory())
 
-        for (let i = 0; i < response.data.length; i++) {
+        for (let i = 0; i < response.data['children'].length; i++) {
           let item            = null
-          let {type, ...data} = response.data[i]
+          let {type, ...data} = response.data['children'][i]
 
           if (type === 'history') {
             item = new History(data)
@@ -153,6 +162,8 @@ export const fetchHistory = (username, path, token = null) => {
 
           dispatch(commitUpdateHistory(item))
         }
+
+        dispatch(commitSetCurrentFolder(response.data['folder'] ? new Folder(response.data['folder']) : null))
       })
       .catch((error) => {
         if (error.request.status === 401) {

@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
-import {getOrderedHistory, createHistory, setCurrentHistory} from '../../../reducers/history/actions'
+import {getOrderedHistory, createHistory, setCurrentHistory, getCurrentPath} from '../../../reducers/history/actions'
 import {createFolder, pathToSlugs} from '../../../reducers/folder/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
@@ -22,7 +22,7 @@ class History extends Component {
     this.props
       .dispatch(createFolder({
         'title': this.state.search,
-        'path': this.props.historyState.path
+        'path': getCurrentPath(this.props.historyState)
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentHistory(null))
@@ -44,7 +44,7 @@ class History extends Component {
         'client': 'uniflow',
         'tags': [],
         'description': '',
-        'path': this.props.historyState.path
+        'path': getCurrentPath(this.props.historyState)
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
@@ -81,7 +81,7 @@ class History extends Component {
     }
 
     const backTo = () => {
-      let path  = this.props.historyState.path.slice(0, -1)
+      let path  = getCurrentPath(this.props.historyState).slice(0, -1)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
@@ -92,7 +92,7 @@ class History extends Component {
     }
 
     const folderTo = () => {
-      let path  = this.props.historyState.path.slice()
+      let path  = getCurrentPath(this.props.historyState)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
@@ -136,7 +136,7 @@ class History extends Component {
                     </div>
                   </form>
                 </li>
-                {this.props.historyState.path.length > 0 && ([
+                {this.props.historyState.folder && ([
                   <li key={'back'}>
                     <Link
                       to={backTo()}><i className="fa fa-arrow-left fa-fw"/> Back</Link>

@@ -3,14 +3,14 @@ import {
   COMMIT_UPDATE_HISTORY,
   COMMIT_DELETE_HISTORY,
   COMMIT_SET_CURRENT_HISTORY,
-  COMMIT_SET_CURRENT_PATH,
+  COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
 
 const defaultState = {
   items: {},
   current: null,
-  path: [],
+  folder: null,
   username: null
 }
 
@@ -36,10 +36,10 @@ const history = (state = defaultState, action) => {
         ...state,
         current: action.current === null ? null : {...action.current}
       }
-    case COMMIT_SET_CURRENT_PATH:
+    case COMMIT_SET_CURRENT_FOLDER:
       return {
         ...state,
-        path: action.path.slice()
+        folder: action.folder
       }
     case COMMIT_SET_CURRENT_USERNAME:
       return {

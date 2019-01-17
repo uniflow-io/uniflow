@@ -7,9 +7,10 @@ import {
   fetchHistory,
   getHistoryBySlug,
   setCurrentHistory,
-  commitSetCurrentPath,
+  commitSetCurrentFolder,
   setUsernameHistory,
-  getCurrentHistory
+  getCurrentHistory,
+  getCurrentPath
 } from '../../reducers/history/actions'
 import {pathToSlugs} from '../../reducers/folder/actions'
 
@@ -71,7 +72,7 @@ class UserManagerComponent extends Component<Props> {
       }
       return path
     }, [])
-    let currentPath = historyState.path.slice(),
+    let currentPath = getCurrentPath(historyState),
         item = getCurrentHistory(historyState)
     if(item) {
       currentPath.push(item.slug)
@@ -85,7 +86,7 @@ class UserManagerComponent extends Component<Props> {
         const {auth, historyState} = this.props
 
         let slug          = path.length > 0 ? path[path.length - 1] : null
-        let sameDirectory = path.slice(0, -1).join('/') === historyState.path.join('/')
+        let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(historyState).join('/')
         let isHistory     = sameDirectory && Object.keys(historyState.items)
           .filter((key) => {
             return historyState.items[key].constructor.name === 'History' && historyState.items[key].slug === slug
@@ -108,10 +109,8 @@ class UserManagerComponent extends Component<Props> {
 
         let historyObj = getHistoryBySlug(historyState, slug)
         if (historyObj) {
-          this.props.dispatch(commitSetCurrentPath(path.slice(0, -1)))
           this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
         } else {
-          this.props.dispatch(commitSetCurrentPath(path))
           let items = Object.keys(historyState.items)
             .filter((key) => {
               return historyState.items[key].constructor.name === 'History'
@@ -137,7 +136,7 @@ class UserManagerComponent extends Component<Props> {
         const {user, history, historyState} = this.props
         const isCurrentUser = historyState.username && historyState.username === user.username
 
-        let currentPath = historyState.path.slice(),
+        let currentPath = getCurrentPath(historyState),
             item = getCurrentHistory(historyState)
         if(item) {
           currentPath.push(item.slug)
