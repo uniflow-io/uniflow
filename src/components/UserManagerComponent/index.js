@@ -146,7 +146,7 @@ class UserManagerComponent extends Component<Props> {
         let slugs = pathToSlugs(currentPath)
 
         if ((item && item.public) || isCurrentUser) {
-          history.push(pathTo('userFlow', Object.assign({username: this.props.history.username}, slugs)))
+          history.push(pathTo('userFlow', Object.assign({username: historyState.username}, slugs)))
         } else {
           history.push(pathTo('flow', slugs))
         }
