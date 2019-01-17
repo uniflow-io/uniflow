@@ -63,16 +63,26 @@ class UserManagerComponent extends Component<Props> {
   }
 
   onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
+    const {historyState} = this.props
+
+    let path          = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
+      if (slug) {
+        path.push(slug)
+      }
+      return path
+    }, [])
+    let currentPath = historyState.path.slice(),
+        item = getCurrentHistory(historyState)
+    if(item) {
+      currentPath.push(item.slug)
+    }
+    if(historyState.username === username && path.join('/') === currentPath.join('/')) {
+      return Promise.resolve()
+    }
+
     return Promise.resolve()
       .then(() => {
         const {auth, historyState} = this.props
-
-        let path          = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
-          if (slug) {
-            path.push(slug)
-          }
-          return path
-        }, [])
 
         let slug          = path.length > 0 ? path[path.length - 1] : null
         let sameDirectory = path.slice(0, -1).join('/') === historyState.path.join('/')
@@ -89,11 +99,9 @@ class UserManagerComponent extends Component<Props> {
           .then(() => {
             const token = auth.isAuthenticated ? auth.token : null
             return this.props.dispatch(fetchHistory(username, path, token))
-          }).then(() => {
-            return path
           })
       })
-      .then((path) => {
+      .then(() => {
         const {historyState} = this.props
 
         let slug = path.length > 0 ? path[path.length - 1] : null
@@ -127,20 +135,18 @@ class UserManagerComponent extends Component<Props> {
         const {user, history, historyState} = this.props
         const isCurrentUser = historyState.username === user.username
 
-        let path = historyState.path.slice(),
+        let currentPath = historyState.path.slice(),
             item = getCurrentHistory(historyState)
         if(item) {
-          path.push(item.slug)
+          currentPath.push(item.slug)
         }
-        let slugs = pathToSlugs(path)
+        let slugs = pathToSlugs(currentPath)
 
-        this.historyUnlisten()
         if ((item && item.public) || isCurrentUser) {
           history.push(pathTo('userFlow', Object.assign({username: this.props.history.username}, slugs)))
         } else {
           history.push(pathTo('flow', slugs))
         }
-        this.historyUnlisten = history.listen(this.onLocation)
       })
   }
 
