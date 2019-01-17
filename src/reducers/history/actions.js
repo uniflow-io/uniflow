@@ -180,10 +180,10 @@ export const createHistory = (item, token) => {
     let data = {
       title: item.title,
       slug: item.title,
+      path: item.path,
       client: item.client,
       tags: item.tags,
       description: item.description,
-      path: item.path,
       public: false
     }
 
@@ -215,6 +215,7 @@ export const updateHistory = (item, token) => {
     let data = {
       title: item.title,
       slug: item.slug,
+      path: item.path,
       client: item.client,
       tags: item.tags,
       description: item.description,
