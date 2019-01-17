@@ -136,15 +136,15 @@ class History extends Component {
                     </div>
                   </form>
                 </li>
-                {this.props.historyState.path.length > 0 && (
-                  <li>
+                {this.props.historyState.path.length > 0 && ([
+                  <li key={'back'}>
                     <Link
                       to={backTo()}><i className="fa fa-arrow-left fa-fw"/> Back</Link>
+                  </li>,
+                  <li className={isFolderActive()} key={'folder'}>
+                    <Link to={folderTo()}>.</Link>
                   </li>
-                )}
-                <li className={isFolderActive()}>
-                  <Link to={folderTo()}>.</Link>
-                </li>
+                ])}
                 {getOrderedHistory(this.props.historyState, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
