@@ -98,6 +98,23 @@ class FolderService
     }
 
     /**
+     * @param Folder|null $folder
+     * @return array
+     */
+    public function toPath(Folder $folder = null)
+    {
+        $path = [];
+
+        while ($folder) {
+            array_unshift($path, $folder->getSlug());
+
+            $folder = $folder->getParent();
+        }
+
+        return $path;
+    }
+
+    /**
      * @param User $user
      * @param Folder|null $folder
      * @return Folder[]
@@ -112,6 +129,7 @@ class FolderService
             'id'          => $folder->getId(),
             'title'       => $folder->getTitle(),
             'slug'        => $folder->getSlug(),
+            'path'        => $this->toPath($folder->getParent()),
             'created'     => $folder->getCreated()->format('c'),
             'updated'     => $folder->getUpdated()->format('c'),
         );

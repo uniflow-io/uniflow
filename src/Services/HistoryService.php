@@ -34,14 +34,21 @@ class HistoryService
      */
     protected $cache;
 
+    /**
+     * @var FolderService
+     */
+    protected $folderService;
+
     public function __construct(
         EntityManagerInterface $em,
-        TagAwareAdapter $cache
+        TagAwareAdapter $cache,
+        FolderService $folderService
     )
     {
         $this->em                = $em;
         $this->historyRepository = $this->em->getRepository(History::class);
         $this->cache             = $cache;
+        $this->folderService     = $folderService;
     }
 
     /**
@@ -93,7 +100,7 @@ class HistoryService
     }
 
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $path
      * @return History
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -115,6 +122,7 @@ class HistoryService
             'id'          => $history->getId(),
             'title'       => $history->getTitle(),
             'slug'        => $history->getSlug(),
+            'path'        => $this->folderService->toPath($history->getFolder()),
             'client'      => $history->getClient(),
             'tags'        => $tags,
             'description' => $history->getDescription(),

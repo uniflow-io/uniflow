@@ -38,15 +38,7 @@ class PathTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        $path = [];
-
-        while ($value) {
-            array_unshift($path, $value->getSlug());
-
-            $value = $value->getParent();
-        }
-
-        return $path;
+        return $this->folderService->toPath($value);
     }
 
     /**
