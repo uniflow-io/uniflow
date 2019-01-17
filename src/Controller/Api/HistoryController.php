@@ -55,10 +55,10 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/{username}/list/{client}/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_history_list", methods={"GET"})
+     * @Route("/api/history/{username}/list/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_history_list", methods={"GET"})
      *
+     * @param Request $request
      * @param string $username
-     * @param null $client
      * @param null $slug1
      * @param null $slug2
      * @param null $slug3
@@ -67,16 +67,14 @@ class HistoryController extends AbstractController
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function listAction($username = 'me', $client = null, $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function listAction(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        if($client === 'all') {
-            $client = null;
-        }
+        $client = $request->get('client');
 
         $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
             if($slug) {
@@ -85,14 +83,14 @@ class HistoryController extends AbstractController
             return $path;
         }, []);
 
-        $folder = null;
+        $parentFolder = null;
         if(count($path) > 0) {
             $history = $this->historyService->findOneByUserAndPath($user, $path);
             if($history) {
-                $folder = $history->getFolder();
+                $parentFolder = $history->getFolder();
             } else {
-                $folder = $this->folderService->findOneByUserAndPath($user, $path);
-                if(!$folder) {
+                $parentFolder = $this->folderService->findOneByUserAndPath($user, $path);
+                if(!$parentFolder) {
                     throw new NotFoundHttpException();
                 }
             }
@@ -100,15 +98,15 @@ class HistoryController extends AbstractController
 
         $folders = [];
         if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
-            $histories = $this->historyService->getHistoryByUserAndClientAndFolder($user, $client, $folder);
-            $folders = $this->folderService->findByUserAndParent($user, $folder);
+            $histories = $this->historyService->getHistoryByUserAndClientAndFolder($user, $client, $parentFolder);
+            $folders = $this->folderService->findByUserAndParent($user, $parentFolder);
         } else {
             $user = $this->userService->findOneByUsername($username);
             if (is_null($user)) {
                 throw new NotFoundHttpException();
             }
 
-            $histories = $this->historyService->getPublicHistoryByUserAndClientAndFolder($user, $client, $folder);
+            $histories = $this->historyService->getPublicHistoryByUserAndClientAndFolder($user, $client, $parentFolder);
         }
 
         $data = array();
@@ -331,6 +329,7 @@ class HistoryController extends AbstractController
                 return array(
                     'title' => $history->getTitle(),
                     'slug' => $history->getSlug(),
+                    'path' => $this->folderService->toPath($history->getFolder()),
                     'description' => $history->getDescription(),
                     'username' => $history->getUser()->getUsername(),
                 );
