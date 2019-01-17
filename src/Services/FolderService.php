@@ -116,6 +116,15 @@ class FolderService
 
     /**
      * @param User $user
+     * @return Folder[]
+     */
+    public function findByUser(User $user)
+    {
+        return $this->folderRepository->findByUser($user);
+    }
+
+    /**
+     * @param User $user
      * @param Folder|null $folder
      * @return Folder[]
      */

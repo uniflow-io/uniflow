@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Services\UserService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\FolderType;
 use App\Entity\Folder;
@@ -33,6 +34,37 @@ class FolderController extends AbstractController
     ) {
         $this->folderService = $folderService;
         $this->userService = $userService;
+    }
+
+    /**
+     * @Route("/api/folder/{username}/tree", name="api_folder_tree", methods={"GET"})
+     *
+     * @param Request $request
+     * @param string $username
+     * @return JsonResponse
+     */
+    public function listAction(Request $request, $username = 'me')
+    {
+        $user = $this->getUser();
+        if ($username === 'me' && !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        } else {
+            $user = $this->userService->findOneByUsername($username);
+            if (is_null($user)) {
+                throw new NotFoundHttpException();
+            }
+        }
+
+        $data = [];
+        $folders = $this->folderService->findByUser($user);
+        foreach ($folders as $folder) {
+            $data[] = $this->folderService->toPath($folder);
+        }
+        usort($data, function($path1, $path2) {
+            return strcmp(implode('/', $path1), implode('/', $path2));
+        });
+
+        return new JsonResponse($data);
     }
 
     /**
