@@ -137,7 +137,7 @@ export const fetchHistory = (username, path, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/history/${username}/list/all/${path.join('/')}`, config)
+      .get(`${server.getBaseUrl()}/api/history/${username}/list/${path.join('/')}`, config)
       .then((response) => {
         dispatch(commitClearHistory())
 
