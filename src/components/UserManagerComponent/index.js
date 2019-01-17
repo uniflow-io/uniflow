@@ -110,6 +110,8 @@ class UserManagerComponent extends Component<Props> {
         let historyObj = getHistoryBySlug(historyState, slug)
         if (historyObj) {
           this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
+        } else if(historyState.folder) {
+          this.props.dispatch(setCurrentHistory(null))
         } else {
           let items = Object.keys(historyState.items)
             .filter((key) => {

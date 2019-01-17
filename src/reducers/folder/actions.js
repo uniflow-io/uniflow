@@ -1,7 +1,7 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { Folder } from '../../models/index'
-import { commitUpdateHistory } from '../history/actions'
+import {Folder} from '../../models/index'
+import {commitDeleteHistory, commitSetCurrentFolder, commitUpdateHistory} from '../history/actions'
 import { commitLogoutUser } from '../auth/actions'
 
 export const pathToSlugs = (path) => {
@@ -33,6 +33,60 @@ export const createFolder = (item, token) => {
         dispatch(commitUpdateHistory(item))
 
         return item
+      })
+      .catch((error) => {
+        if (error.request.status === 401) {
+          dispatch(commitLogoutUser())
+        } else {
+          throw error
+        }
+      })
+  }
+}
+
+export const updateCurrentFolder = (item, token) => {
+  return (dispatch) => {
+    let data = {
+      title: item.title,
+      slug: item.slug,
+      path: item.path,
+    }
+
+    return request
+      .put(`${server.getBaseUrl()}/api/folder/update/${item.id}`, data, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        let item = new Folder(response.data)
+
+        dispatch(commitSetCurrentFolder(item))
+
+        return item
+      })
+      .catch((error) => {
+        if (error.request.status === 401) {
+          dispatch(commitLogoutUser())
+        } else {
+          throw error
+        }
+      })
+  }
+}
+
+export const deleteCurrentFolder = (item, token) => {
+  return (dispatch) => {
+    return request
+      .delete(`${server.getBaseUrl()}/api/folder/delete/${item.id}`, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        dispatch(commitSetCurrentFolder(null))
+
+        return response.data
       })
       .catch((error) => {
         if (error.request.status === 401) {

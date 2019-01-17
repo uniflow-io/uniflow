@@ -34,8 +34,8 @@ class Flow extends Component<Props> {
               {history.username && currentHistory && currentHistory.constructor.name === 'History' && (
                 <Show />
               )}
-              {history.username && currentHistory === null && history.folder !== null && (
-                /*<FolderShow />*/<div />
+              {history.username && currentHistory === null && history.folder && (
+                <FolderShow />
               )}
             </div>
           </div>

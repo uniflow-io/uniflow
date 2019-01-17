@@ -1,26 +1,20 @@
 import React, { Component } from 'react'
 import debounce from 'lodash/debounce'
-import { AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component } from 'uniflow/src/components'
+import {withRouter} from 'react-router'
 import { Folder } from '../../../models'
 import {
-  getCurrentHistory,
-  getTags,
-  commitUpdateHistory,
-  createHistory,
-  updateHistory,
-  deleteHistory,
-  getHistoryData,
-  setHistoryData,
-  setCurrentHistory
+  updateCurrentFolder,
+  deleteCurrentFolder
 } from '../../../reducers/folder/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
+import {
+  commitSetCurrentFolder
+} from '../../../reducers/history/actions'
 import { connect } from 'react-redux'
-import components from '../../../uniflow'
 
 class FolderShow extends Component {
     onChangeTitle = (event) => {
       this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ title: event.target.value } })))
+        .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ title: event.target.value } })))
         .then(() => {
           this.onUpdate()
         })
@@ -28,27 +22,24 @@ class FolderShow extends Component {
 
     onChangeSlug = (event) => {
       this.props
-        .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ slug: event.target.value } })))
+        .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ slug: event.target.value } })))
         .then(() => {
           this.onUpdate()
         })
     }
 
     onUpdate = debounce(() => {
-      this.props.dispatch(updateHistory(this.props.history, this.props.auth.token))
+      this.props.dispatch(updateCurrentFolder(this.props.folder, this.props.auth.token))
     }, 500)
 
     onDelete = (event) => {
       event.preventDefault()
 
-      return this.props.dispatch(deleteHistory(this.props.history, this.props.auth.token))
+      return this.props.dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
     }
 
     render () {
-      const { history, tags, stack, client, user } = this.props
-      const tagsOptions = {
-        availableTags: tags
-      }
+      const { folder } = this.props
 
       return (
         <div>
@@ -67,7 +58,7 @@ class FolderShow extends Component {
 
                   <div className='col-sm-10'>
                     <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                      value={history.title} onChange={this.onChangeTitle} placeholder='Title' />
+                      value={folder.title} onChange={this.onChangeTitle} placeholder='Title' />
                   </div>
                 </div>
 
@@ -76,7 +67,7 @@ class FolderShow extends Component {
 
                   <div className='col-sm-10'>
                     <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                      value={history.slug} onChange={this.onChangeSlug} placeholder='Slug' />
+                      value={folder.slug} onChange={this.onChangeSlug} placeholder='Slug' />
                   </div>
                 </div>
 
@@ -91,10 +82,6 @@ class FolderShow extends Component {
 export default connect(state => {
   return {
     auth: state.auth,
-    user: state.user,
-    history: getCurrentHistory(state.history),
-    tags: getTags(state.history),
-    username: state.history.username,
-    stack: state.flow
+    folder: state.history.folder,
   }
-})(FolderShow)
+})(withRouter(FolderShow))
