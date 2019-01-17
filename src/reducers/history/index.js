@@ -34,7 +34,7 @@ const history = (state = defaultState, action) => {
     case COMMIT_SET_CURRENT_HISTORY:
       return {
         ...state,
-        current: {...action.current}
+        current: action.current === null ? null : {...action.current}
       }
     case COMMIT_SET_CURRENT_PATH:
       return {

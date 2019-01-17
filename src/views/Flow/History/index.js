@@ -25,7 +25,10 @@ class History extends Component {
         'path': this.props.historyState.path
       }, this.props.auth.token))
       .then((item) => {
-        this.props.history.push(this.itemPathTo(item))
+        return this.props.dispatch(setCurrentHistory(null))
+          .then(() => {
+            this.props.history.push(this.itemPathTo(item))
+          })
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -55,7 +58,7 @@ class History extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.historyState.username === this.props.user.username
+    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
@@ -69,13 +72,27 @@ class History extends Component {
   }
 
   render() {
-    const isCurrentUser = this.props.historyState.username === this.props.user.username
+    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+    const isFolderActive      = () => {
+      return this.props.historyState.current === null ? 'active' : ''
+    }
     const isActive      = (item) => {
       return (this.props.historyState.current && this.props.historyState.current.type === item.constructor.name && this.props.historyState.current.id === item.id) ? 'active' : ''
     }
 
     const backTo = () => {
       let path  = this.props.historyState.path.slice(0, -1)
+      let slugs = pathToSlugs(path)
+
+      if (isCurrentUser) {
+        return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+      }
+
+      return pathTo('flow', slugs)
+    }
+
+    const folderTo = () => {
+      let path  = this.props.historyState.path.slice()
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
@@ -125,6 +142,9 @@ class History extends Component {
                       to={backTo()}><i className="fa fa-arrow-left fa-fw"/> Back</Link>
                   </li>
                 )}
+                <li className={isFolderActive()}>
+                  <Link to={folderTo()}>.</Link>
+                </li>
                 {getOrderedHistory(this.props.historyState, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link

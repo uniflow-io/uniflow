@@ -129,11 +129,13 @@ class UserManagerComponent extends Component<Props> {
           if (keys.length > 0) {
             let item = items[keys[0]]
             this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
+          } else {
+            this.props.dispatch(setCurrentHistory(null))
           }
         }
       }).then(() => {
         const {user, history, historyState} = this.props
-        const isCurrentUser = historyState.username === user.username
+        const isCurrentUser = historyState.username && historyState.username === user.username
 
         let currentPath = historyState.path.slice(),
             item = getCurrentHistory(historyState)
