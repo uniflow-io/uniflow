@@ -109,20 +109,24 @@ class HistoryController extends AbstractController
             $histories = $this->historyService->getPublicHistoryByUserAndClientAndFolder($user, $client, $parentFolder);
         }
 
-        $data = array();
+        $children = [];
         foreach ($histories as $history) {
             $d = $this->historyService->getJsonHistory($history);
             $d['type'] = 'history';
 
-            $data[] = $d;
+            $children[] = $d;
         }
         foreach ($folders as $folder) {
             $d = $this->folderService->getJsonFolder($folder);
             $d['type'] = 'folder';
 
-            $data[] = $d;
+            $children[] = $d;
         }
 
+        $data = [
+            'folder' => $parentFolder ? $this->folderService->getJsonFolder($parentFolder) : null,
+            'children' => $children,
+        ];
         return new JsonResponse($data);
     }
 
