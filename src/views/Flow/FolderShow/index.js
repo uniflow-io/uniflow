@@ -32,6 +32,10 @@ class FolderShow extends Component {
     this.setState({folderTree: [pathToValue(folder.path)]})
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({folderTree: [pathToValue(nextProps.folder.path)]})
+  }
+
   onChangeTitle = (event) => {
     this.props
       .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{title: event.target.value}})))
