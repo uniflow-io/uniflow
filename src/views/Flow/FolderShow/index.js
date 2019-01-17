@@ -4,12 +4,13 @@ import {withRouter} from 'react-router'
 import { Folder } from '../../../models'
 import {
   updateCurrentFolder,
-  deleteCurrentFolder
+  deleteCurrentFolder, pathToSlugs
 } from '../../../reducers/folder/actions'
 import {
-  commitSetCurrentFolder
+  commitSetCurrentFolder, getCurrentPath
 } from '../../../reducers/history/actions'
 import { connect } from 'react-redux'
+import {pathTo} from "../../../routes";
 
 class FolderShow extends Component {
     onChangeTitle = (event) => {
@@ -30,12 +31,42 @@ class FolderShow extends Component {
 
     onUpdate = debounce(() => {
       this.props.dispatch(updateCurrentFolder(this.props.folder, this.props.auth.token))
+        .then(() => {
+          this.props.history.push(this.itemPathTo(this.props.folder))
+        })
     }, 500)
 
     onDelete = (event) => {
       event.preventDefault()
 
+      let path  = getCurrentPath(this.props.historyState).slice(0, -1)
+
       return this.props.dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
+        .then(() => {
+          const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+
+          let slugs = pathToSlugs(path)
+
+          if (isCurrentUser) {
+            this.props.history.push(pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs)))
+          } else {
+            this.props.history.push(pathTo('flow', slugs))
+          }
+        })
+    }
+
+    itemPathTo = (item) => {
+      const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+
+      let path = item.path.slice()
+      path.push(item.slug)
+      let slugs = pathToSlugs(path)
+
+      if (isCurrentUser) {
+        return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+      }
+
+      return pathTo('flow', slugs)
     }
 
     render () {
@@ -82,6 +113,8 @@ class FolderShow extends Component {
 export default connect(state => {
   return {
     auth: state.auth,
+    user: state.user,
     folder: state.history.folder,
+    historyState: state.history
   }
 })(withRouter(FolderShow))
