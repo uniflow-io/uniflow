@@ -84,7 +84,7 @@ export const deleteCurrentFolder = (item, token) => {
         }
       })
       .then((response) => {
-        dispatch(commitSetCurrentFolder(null))
+        //dispatch(commitSetCurrentFolder(null))
 
         return response.data
       })
