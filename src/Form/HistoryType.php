@@ -22,7 +22,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class HistoryType extends AbstractType
 {
@@ -37,8 +36,9 @@ class HistoryType extends AbstractType
     protected $folderService;
 
     /**
-     * TagTransformer constructor.
-     * @param $tagService
+     * HistoryType constructor.
+     * @param TagService $tagService
+     * @param FolderService $folderService
      */
     public function __construct(TagService $tagService, FolderService $folderService)
     {
