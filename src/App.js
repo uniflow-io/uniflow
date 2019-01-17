@@ -109,13 +109,6 @@ class Header extends Component {
       })) {
         active = 'home'
       } else if (matchPath(location.pathname, {
-        path: routes.dashboard.path,
-        exact: true
-      }) || matchPath(location.pathname, {
-        path: routes.flow.path
-      })) {
-        active = 'dashboard'
-      } else if (matchPath(location.pathname, {
         path: routes.faq.path,
         exact: true
       })) {
@@ -145,6 +138,12 @@ class Header extends Component {
         exact: true
       })) {
         active = 'login'
+      } else if (matchPath(location.pathname, {
+        path: routes.flow.path
+      }) || matchPath(location.pathname, {
+        path: routes.userFlow.path
+      })) {
+        active = 'dashboard'
       }
 
       this.setState({ active: active })
@@ -170,12 +169,12 @@ class Header extends Component {
                 </li>
                 {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
                   <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('dashboard')}>Dashboard</Link>
+                    <Link to={pathTo('flow')}>Dashboard</Link>
                   </li>
                 )}
                 {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username !== null && (
                   <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('userDashboard', { username: user.username })}>Dashboard</Link>
+                    <Link to={pathTo('userFlow', { username: user.username })}>Dashboard</Link>
                   </li>
                 )}
                 <li className={active === 'faq' ? 'active' : ''}>

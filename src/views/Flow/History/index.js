@@ -51,21 +51,13 @@ class History extends Component {
   }
 
   render() {
-    const isCurrentUser = this.props.history.username === this.props.history.username
+    const isCurrentUser = this.props.history.username === this.props.user.username
     const isActive = (item) => {
       return (this.props.history.current && this.props.history.current.type === item.constructor.name && this.props.history.current.id === item.id) ? 'active' : ''
     }
 
     const backTo = () => {
       let path = this.props.history.path.slice(0, -1)
-      if(path.length === 0) {
-        if (isCurrentUser) {
-          return pathTo('userDashboard', {username: this.props.history.username})
-        }
-
-        return pathTo('dashboard')
-      }
-
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {

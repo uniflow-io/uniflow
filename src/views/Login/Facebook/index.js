@@ -16,7 +16,7 @@ class LoginFacebook extends Component {
     this.props.dispatch(loginFacebook(accessToken, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return this.props.history.push(pathTo('dashboard'))
+          return this.props.history.push(pathTo('flow'))
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
           return this.props.history.push(pathTo('login'))

@@ -30,7 +30,7 @@ class Register extends Component {
       this.props.dispatch(register(this.state.email, this.state.password))
         .then(() => {
           if (this.props.auth.isAuthenticated) {
-            return this.props.history.push(pathTo('dashboard'))
+            return this.props.history.push(pathTo('flow'))
           } else {
             return this.props.dispatch(commitAddLog(this.props.auth.statusText))
           }
