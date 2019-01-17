@@ -316,10 +316,10 @@ class Show extends Component {
                 </div>
 
                 <div className='form-group'>
-                  <label htmlFor='public{{ _uid }}' className='col-sm-2 control-label'>Public</label>
+                  <label htmlFor='info_public_{{ _uid }}' className='col-sm-2 control-label'>Public</label>
 
                   <div className='col-sm-10'>
-                    <ICheckBoxComponent value={history.public} onChange={this.onChangePublic} />
+                    <ICheckBoxComponent value={history.public} onChange={this.onChangePublic} id='info_public_{{ _uid }}' />
                   </div>
                 </div>
 
