@@ -152,17 +152,9 @@ class FrontController extends AbstractController
      * @param $slug5
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function flow($slug1, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function flow($slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         return $this->render('default/flow.html.twig');
-    }
-
-    /**
-     * @Route("/me", name="dashboard")
-     */
-    public function dashboard()
-    {
-        return $this->render('default/dashboard.html.twig');
     }
 
     /**
@@ -177,7 +169,7 @@ class FrontController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userFlow($username, $slug1, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function userFlow($username, $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
             if($slug) {
@@ -200,21 +192,5 @@ class FrontController extends AbstractController
         }
 
         return $this->render('default/flow.html.twig');
-    }
-
-    /**
-     * @Route("/{username}", name="userDashboard")
-     *
-     * @param $username
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function userDashboard($username)
-    {
-        $user = $this->userService->findOneByUsername($username);
-        if (is_null($user)) {
-            throw new NotFoundHttpException();
-        }
-
-        return $this->render('default/dashboard.html.twig');
     }
 }

@@ -67,12 +67,16 @@ class HistoryRepository extends ServiceEntityRepository
     /**
      * @param User $user
      * @param array $path
-     * @return mixed
+     * @return History|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUserAndPath(User $user, $path)
     {
         $level = count($path);
+        if($level === 0) {
+            return null;
+        }
+
         $slug  = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('h')
