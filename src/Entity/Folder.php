@@ -46,7 +46,7 @@ class Folder
      * @Assert\NotBlank(
      *     message="The user is required"
      * )
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="histories", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="folders", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $user;
@@ -63,11 +63,17 @@ class Folder
     protected $children;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="folder", cascade={"persist"})
+     */
+    protected $histories;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->histories = new ArrayCollection();
     }
 
     public function __toString()
@@ -192,5 +198,36 @@ class Folder
     public function getFolders()
     {
         return $this->children;
+    }
+
+    /**
+     * @param History $history
+     * @return $this
+     */
+    public function addHistory(History $history)
+    {
+        $this->histories[] = $history;
+
+        $history->setFolder($this);
+
+        return $this;
+    }
+
+    /**
+     * @param History $history
+     */
+    public function removeHistory(History $history)
+    {
+        $this->histories->removeElement($history);
+
+        $history->setFolder(null);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getHistories()
+    {
+        return $this->histories;
     }
 }

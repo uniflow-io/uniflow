@@ -54,7 +54,7 @@ class History
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="folders", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="histories", cascade={"persist"})
      * @ORM\JoinColumn(name="folder_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $folder;
