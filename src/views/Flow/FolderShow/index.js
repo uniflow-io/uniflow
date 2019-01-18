@@ -30,10 +30,14 @@ class FolderShow extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      folderTreeEdit: false,
-      folderTree: [pathToString(nextProps.folder.path)]
-    })
+    const oldProps = this.props
+
+    if (nextProps.folder.id !== oldProps.folder.id) {
+      this.setState({
+        folderTreeEdit: false,
+        folderTree: [pathToString(nextProps.folder.path)]
+      })
+    }
   }
 
   onChangeTitle = (event) => {
