@@ -156,11 +156,6 @@ class HistoryController extends AbstractController
                 $this->historyService->save($entity);
                 $this->tagService->clean();
 
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    'History saved !'
-                );
-
                 return new JsonResponse($this->historyService->getJsonHistory($entity));
             }
         }

@@ -39,23 +39,22 @@ class FolderController extends AbstractController
     /**
      * @Route("/api/folder/{username}/tree", name="api_folder_tree", methods={"GET"})
      *
-     * @param Request $request
      * @param string $username
      * @return JsonResponse
      */
-    public function listAction(Request $request, $username = 'me')
+    public function tree($username = 'me')
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
-        } else {
+        } else if ($username !== 'me') {
             $user = $this->userService->findOneByUsername($username);
             if (is_null($user)) {
                 throw new NotFoundHttpException();
             }
         }
 
-        $data = [];
+        $data = [[]];
         $folders = $this->folderService->findByUser($user);
         foreach ($folders as $folder) {
             $data[] = $this->folderService->toPath($folder);
@@ -68,11 +67,11 @@ class FolderController extends AbstractController
     }
 
     /**
-     * Creates a form to create a Folder entity.
-     *
      * @param Request $request
-     * @param Folder $entity The entity
-     * @return Response
+     * @param Folder $entity
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function manage(Request $request, Folder $entity)
     {
@@ -91,11 +90,6 @@ class FolderController extends AbstractController
 
             if ($form->isValid()) {
                 $this->folderService->save($entity);
-
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    'Folder saved !'
-                );
 
                 return new JsonResponse($this->folderService->getJsonFolder($entity));
             }

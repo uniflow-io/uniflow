@@ -94,11 +94,6 @@ class ConfigController extends AbstractController
         if ($form->isValid()) {
             $this->configService->save($config);
 
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                'Config saved !'
-            );
-
             return new JsonResponse($this->configService->getJson($config));
         }
 

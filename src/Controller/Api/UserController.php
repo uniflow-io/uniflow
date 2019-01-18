@@ -89,6 +89,8 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function setSettings(Request $request)
     {
@@ -112,11 +114,6 @@ class UserController extends AbstractController
 
         if ($form->isValid()) {
             $this->userService->save($user);
-
-            $this->get('session')->getFlashBag()->add(
-                'notice',
-                'Settings saved !'
-            );
 
             return new JsonResponse($this->userService->getJsonSettings($user));
         }
