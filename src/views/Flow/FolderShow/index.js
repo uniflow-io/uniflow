@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import debounce from 'lodash/debounce'
 import {withRouter} from 'react-router'
+import debounce from 'lodash/debounce'
 import {Folder} from '../../../models'
 import {
   getFolderTree,

@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {withRouter} from 'react-router'
 import debounce from 'lodash/debounce'
 import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
 import {Folder, History, Runner} from '../../../models'
@@ -22,7 +23,8 @@ import {
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import components from '../../../uniflow'
-import {getFolderTree, pathToString, stringToPath} from "../../../reducers/folder/actions";
+import {getFolderTree, pathToSlugs, pathToString, stringToPath} from "../../../reducers/folder/actions";
+import {pathTo} from "../../../routes";
 
 class Show extends Component {
   state = {
@@ -34,11 +36,11 @@ class Show extends Component {
   }
 
   componentDidMount() {
-    const {history} = this.props
+    const {historyObj} = this.props
 
     this._isMounted = true
 
-    this.setState({folderTree: [pathToString(history.path)]})
+    this.setState({folderTree: [pathToString(historyObj.path)]})
 
     this.onFetchFlowData()
   }
@@ -50,10 +52,10 @@ class Show extends Component {
   componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
-    if (nextProps.history.id !== oldProps.history.id) {
+    if (nextProps.historyObj.id !== oldProps.historyObj.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(nextProps.history.path)]
+        folderTree: [pathToString(nextProps.historyObj.path)]
       })
 
       this.onFetchFlowData()
@@ -117,44 +119,44 @@ class Show extends Component {
   }
 
   onFetchFlowData = debounce(() => {
-    let {history} = this.props
+    let {historyObj} = this.props
 
     Promise.resolve()
       .then(() => {
         return this.props.dispatch(commitSetFlow([]))
       })
       .then(() => {
-        if (history.data) {
-          return history.data
+        if (historyObj.data) {
+          return historyObj.data
         }
 
-        return this.props.dispatch(getHistoryData(history, this.props.auth.token))
+        return this.props.dispatch(getHistoryData(historyObj, this.props.auth.token))
       })
       .then((data) => {
         if (!data) return
 
-        history.data = data
+        historyObj.data = data
 
-        if (history.slug !== this.props.history.slug) return
+        if (historyObj.slug !== this.props.historyObj.slug) return
 
-        return this.setFlow(history.deserialiseFlowData())
+        return this.setFlow(historyObj.deserialiseFlowData())
       })
       .then(() => {
         if (this.isMounted()) {
-          this.setState({fetchedSlug: history.slug})
+          this.setState({fetchedSlug: historyObj.slug})
         }
       })
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let {history, stack, user, username} = this.props
-    if (history.slug !== this.state.fetchedSlug) return
+    let {historyObj, stack, user, historyState} = this.props
+    if (historyObj.slug !== this.state.fetchedSlug) return
 
-    let data = history.data
-    history.serialiseFlowData(stack)
-    if ((username === 'me' || user.username === username) && history.data !== data) {
+    let data = historyObj.data
+    historyObj.serialiseFlowData(stack)
+    if ((historyState.username === 'me' || user.username === historyState.username) && historyObj.data !== data) {
       this.props
-        .dispatch(setHistoryData(history, this.props.auth.token))
+        .dispatch(setHistoryData(historyObj, this.props.auth.token))
         .catch((log) => {
           return this.props.dispatch(commitAddLog(log.message))
         })
@@ -163,7 +165,7 @@ class Show extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{title: event.target.value}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{title: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -171,7 +173,7 @@ class Show extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{slug: event.target.value}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{slug: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -179,7 +181,7 @@ class Show extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({ ...this.props.history, ...{ path: stringToPath(selected) } })))
+      .dispatch(commitUpdateHistory(new History({ ...this.props.historyObj, ...{ path: stringToPath(selected) } })))
       .then(() => {
         this.onUpdate()
       })
@@ -187,7 +189,7 @@ class Show extends Component {
 
   onChangeClient = (selected) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{client: selected}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{client: selected}})))
       .then(() => {
         this.onUpdate()
       })
@@ -195,7 +197,7 @@ class Show extends Component {
 
   onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{tags: tags}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{tags: tags}})))
       .then(() => {
         this.onUpdate()
       })
@@ -203,7 +205,7 @@ class Show extends Component {
 
   onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{description: description}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{description: description}})))
       .then(() => {
         this.onUpdate()
       })
@@ -211,29 +213,31 @@ class Show extends Component {
 
   onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.history, ...{public: value}})))
+      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{public: value}})))
       .then(() => {
         this.onUpdate()
       })
   }
 
   onUpdate = debounce(() => {
-    this.props.dispatch(updateHistory(this.props.history, this.props.auth.token))
+    this.props.dispatch(updateHistory(this.props.historyObj, this.props.auth.token)).then(() => {
+      this.props.history.push(this.itemPathTo(this.props.historyObj))
+    })
   }, 500)
 
   onDuplicate = (event) => {
     event.preventDefault()
 
-    let history = new History(this.props.history)
-    history.title += ' Copy'
+    let historyObj = new History(this.props.historyObj)
+    historyObj.title += ' Copy'
 
-    this.props.dispatch(createHistory(history, this.props.auth.token))
+    this.props.dispatch(createHistory(historyObj, this.props.auth.token))
       .then((item) => {
-        Object.assign(history, item)
-        return this.props.dispatch(setHistoryData(history, this.props.auth.token))
+        Object.assign(historyObj, item)
+        return this.props.dispatch(setHistoryData(historyObj, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(setCurrentHistory({type: history.constructor.name, id: history.id}))
+        return this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -243,15 +247,15 @@ class Show extends Component {
   onDelete = (event) => {
     event.preventDefault()
 
-    return this.props.dispatch(deleteHistory(this.props.history, this.props.auth.token))
+    return this.props.dispatch(deleteHistory(this.props.historyObj, this.props.auth.token))
   }
 
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const {username} = this.props
+    const {historyState} = this.props
 
-    this.props.dispatch(getFolderTree(username, this.props.auth.token))
+    this.props.dispatch(getFolderTree(historyState.username, this.props.auth.token))
       .then((folderTree) => {
         folderTree = folderTree.map((path) => {
           return pathToString(path)
@@ -264,13 +268,13 @@ class Show extends Component {
       })
   }
 
-  getComponents = (userComponents, history) => {
+  getComponents = (userComponents, historyObj) => {
     let componentLabels = []
 
     for (let i = 0; i < userComponents.length; i++) {
       let key = userComponents[i]
 
-      if (components[key].clients().indexOf(history.client) !== -1) {
+      if (components[key].clients().indexOf(historyObj.client) !== -1) {
         componentLabels.push({
           key: key,
           label: components[key].tags().join(' - ') + ' : ' + key
@@ -287,13 +291,27 @@ class Show extends Component {
     return componentLabels
   }
 
+  itemPathTo = (item) => {
+    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+
+    let path = item.path.slice()
+    path.push(item.slug)
+    let slugs = pathToSlugs(path)
+
+    if (isCurrentUser) {
+      return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+    }
+
+    return pathTo('flow', slugs)
+  }
+
   render() {
-    const {history, tags, stack, client, user} = this.props
+    const {historyObj, tags, stack, client, user} = this.props
     const {folderTreeEdit, folderTree} = this.state
     const tagsOptions                          = {
       availableTags: tags
     }
-    const components                           = this.getComponents(user.components, history)
+    const components                           = this.getComponents(user.components, historyObj)
     const clients                              = {
       'uniflow': 'Uniflow',
       'bash': 'Bash',
@@ -319,7 +337,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                         value={history.title} onChange={this.onChangeTitle} placeholder='Title'/>
+                         value={historyObj.title} onChange={this.onChangeTitle} placeholder='Title'/>
                 </div>
               </div>
 
@@ -328,7 +346,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                         value={history.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
+                         value={historyObj.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
                 </div>
               </div>
 
@@ -337,14 +355,14 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   {folderTreeEdit && (
-                    <Select2Component value={pathToString(history.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
+                    <Select2Component value={pathToString(historyObj.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
                       {folderTree.map((value) => (
                         <option key={value} value={value}>{ value }</option>
                       ))}
                     </Select2Component>
                   ) || (
                     <div>
-                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(history.path)}
+                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(historyObj.path)}
                     </div>
                   )}
                 </div>
@@ -354,7 +372,7 @@ class Show extends Component {
                 <label htmlFor='info_client_{{ _uid }}' className='col-sm-2 control-label'>Client</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={history.client} onChange={this.onChangeClient} className='form-control'
+                  <Select2Component value={historyObj.client} onChange={this.onChangeClient} className='form-control'
                                     id='info_client_{{ _uid }}' style={{width: '100%'}}>
                     {Object.keys(clients).map((value) => (
                       <option key={value} value={value}>{clients[value]}</option>
@@ -368,7 +386,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <TagItComponent type='text' className='form-control' id='info_tags_{{ _uid }}'
-                                  value={history.tags} onChange={this.onChangeTags} options={tagsOptions}
+                                  value={historyObj.tags} onChange={this.onChangeTags} options={tagsOptions}
                                   placeholder='Tags'/>
                 </div>
               </div>
@@ -377,7 +395,7 @@ class Show extends Component {
                 <label htmlFor='info_public_{{ _uid }}' className='col-sm-2 control-label'>Public</label>
 
                 <div className='col-sm-10'>
-                  <ICheckBoxComponent value={history.public} onChange={this.onChangePublic}
+                  <ICheckBoxComponent value={historyObj.public} onChange={this.onChangePublic}
                                       id='info_public_{{ _uid }}'/>
                 </div>
               </div>
@@ -388,7 +406,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <AceComponent className='form-control' id='info_description_{{ _uid }}'
-                                value={history.description} onChange={this.onChangeDescription}
+                                value={historyObj.description} onChange={this.onChangeDescription}
                                 placeholder='Text' height='200'/>
                 </div>
               </div>
@@ -396,7 +414,7 @@ class Show extends Component {
             </form>
           </div>
           <div className='box-footer'>
-            {history.client === 'uniflow' && (
+            {historyObj.client === 'uniflow' && (
               <a className='btn btn-success' onClick={this.run}><i className='fa fa-fw fa-play'/> Play</a>
             )}
           </div>
@@ -418,9 +436,9 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    history: getCurrentHistory(state.history),
+    historyObj: getCurrentHistory(state.history),
     tags: getTags(state.history),
-    username: state.history.username,
+    historyState: state.history,
     stack: state.flow
   }
-})(Show)
+})(withRouter(Show))
