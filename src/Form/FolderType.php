@@ -4,11 +4,14 @@ namespace App\Form;
 
 use App\Entity\Folder;
 use App\Form\Transformer\PathTransformer;
+use App\Form\Type\ArrayType;
 use App\Services\FolderService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FolderType extends AbstractType
@@ -37,11 +40,8 @@ class FolderType extends AbstractType
     {
         $builder->add('title', TextType::class);
         $builder->add('slug', TextType::class);
-        $builder->add('path', CollectionType::class, [
+        $builder->add('path', ArrayType::class, [
             'property_path' => 'parent',
-            'entry_type' => TextType::class,
-            'allow_add' => true,
-            'allow_delete' => true,
         ]);
 
         $pathTransformer = new PathTransformer($this->folderService, $options['data']->getUser());
