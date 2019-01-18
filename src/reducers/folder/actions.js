@@ -1,7 +1,7 @@
 import request from 'axios'
 import server from '../../utils/server'
 import {Folder} from '../../models/index'
-import {commitDeleteHistory, commitSetCurrentFolder, commitUpdateHistory} from '../history/actions'
+import {commitSetCurrentFolder, commitUpdateHistory} from '../history/actions'
 import { commitLogoutUser } from '../auth/actions'
 
 export const pathToSlugs = (path) => {
@@ -11,6 +11,41 @@ export const pathToSlugs = (path) => {
   }
 
   return slugs;
+}
+
+export const pathToString = (path) => {
+  return `/${path.join('/')}`
+}
+
+export const stringToPath = (value) => {
+  if(value === '/') {
+    return []
+  }
+  return value.slice(1).split('/')
+}
+
+export const getFolderTree = (username, token = null) => {
+  return (dispatch) => {
+    let config = {}
+    if (token) {
+      config['headers'] = {
+        'Uniflow-Authorization': `Bearer ${token}`
+      }
+    }
+
+    return request
+      .get(`${server.getBaseUrl()}/api/folder/${username}/tree`, config)
+      .then((response) => {
+        return response.data
+      })
+      .catch((error) => {
+        if (error.request.status === 401) {
+          dispatch(commitLogoutUser())
+        } else {
+          throw error
+        }
+      })
+  }
 }
 
 export const createFolder = (item, token) => {

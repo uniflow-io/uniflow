@@ -3,8 +3,12 @@ import debounce from 'lodash/debounce'
 import {withRouter} from 'react-router'
 import {Folder} from '../../../models'
 import {
+  getFolderTree,
   updateCurrentFolder,
-  deleteCurrentFolder, pathToSlugs
+  deleteCurrentFolder,
+  pathToSlugs,
+  pathToString,
+  stringToPath
 } from '../../../reducers/folder/actions'
 import {
   commitSetCurrentFolder, getCurrentPath
@@ -13,27 +17,23 @@ import {connect} from 'react-redux'
 import {pathTo} from "../../../routes";
 import {Select2Component} from "uniflow/src/components";
 
-const pathToValue = (path) => {
-  return `/${path.join('/')}`
-}
-
-const valueToPath = (value) => {
-  return value.slice(1).split('/')
-}
-
 class FolderShow extends Component {
   state = {
+    folderTreeEdit: false,
     folderTree: []
   }
 
   componentDidMount() {
     const {folder} = this.props
 
-    this.setState({folderTree: [pathToValue(folder.path)]})
+    this.setState({folderTree: [pathToString(folder.path)]})
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({folderTree: [pathToValue(nextProps.folder.path)]})
+    this.setState({
+      folderTreeEdit: false,
+      folderTree: [pathToString(nextProps.folder.path)]
+    })
   }
 
   onChangeTitle = (event) => {
@@ -54,7 +54,7 @@ class FolderShow extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ path: valueToPath(selected) } })))
+      .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ path: stringToPath(selected) } })))
       .then(() => {
         this.onUpdate()
       })
@@ -86,6 +86,29 @@ class FolderShow extends Component {
       })
   }
 
+  onFolderEdit = (event) => {
+    event.preventDefault()
+
+    const {historyState, folder} = this.props
+
+    this.props.dispatch(getFolderTree(historyState.username, this.props.auth.token))
+      .then((folderTree) => {
+        let folderPath = folder.path.slice()
+        folderPath.push(folder.slug)
+        folderPath = pathToString(folderPath)
+
+        folderTree = folderTree.map((path) => { return pathToString(path)})
+        folderTree = folderTree.filter((value) => {
+          return value.startsWith(folderPath) === false
+        })
+
+        this.setState({
+          folderTreeEdit: true,
+          folderTree: folderTree
+        })
+      })
+  }
+
   itemPathTo = (item) => {
     const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
 
@@ -101,7 +124,7 @@ class FolderShow extends Component {
   }
 
   render() {
-    const {folderTree} = this.state
+    const {folderTreeEdit, folderTree} = this.state
     const {folder} = this.props
 
     return (
@@ -138,11 +161,17 @@ class FolderShow extends Component {
                 <label htmlFor='info_path_{{ _uid }}' className='col-sm-2 control-label'>Path</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={pathToValue(folder.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
-                    {folderTree.map((value) => (
-                      <option key={value} value={value}>{ value }</option>
-                    ))}
-                  </Select2Component>
+                  {folderTreeEdit && (
+                    <Select2Component value={pathToString(folder.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
+                      {folderTree.map((value) => (
+                        <option key={value} value={value}>{ value }</option>
+                      ))}
+                    </Select2Component>
+                  ) || (
+                    <div>
+                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(folder.path)}
+                    </div>
+                  )}
                 </div>
               </div>
 
