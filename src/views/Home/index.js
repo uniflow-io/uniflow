@@ -20,6 +20,13 @@ class Home extends Component {
       })
   }
 
+  itemPathTo = (item) => {
+    let path = item.path.slice()
+    path.push(item.slug)
+
+    return feedPathTo(path, item.username)
+  }
+
   render () {
     const { flow } = this.state
 
@@ -46,7 +53,7 @@ class Home extends Component {
                   <dl className='dl-horizontal'>
                     {flow.map((item, i) => ([
                       <dt key={i * 2}><Link
-                        to={feedPathTo(item.path, item.username)}>{item.title}</Link></dt>,
+                        to={this.itemPathTo(item)}>{item.title}</Link></dt>,
                       <dd key={i * 2 + 1}>{item.description}</dd>
                     ]))}
                   </dl>
