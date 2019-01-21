@@ -3,10 +3,10 @@ import server from '../../utils/server'
 import {Log, Program, Folder} from '../../models/index'
 import moment from 'moment'
 import {
-  COMMIT_CLEAR_PROGRAM,
-  COMMIT_UPDATE_PROGRAM,
-  COMMIT_DELETE_PROGRAM,
-  COMMIT_SET_CURRENT_PROGRAM,
+  COMMIT_CLEAR_FEED,
+  COMMIT_UPDATE_FEED,
+  COMMIT_DELETE_FEED,
+  COMMIT_SET_CURRENT_FEED,
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
@@ -25,7 +25,7 @@ export const getCurrentPath = (state) => {
   return path;
 }
 
-export const getOrderedProgram = (state, filter) => {
+export const getOrderedFeed = (state, filter) => {
   let keys = Object.keys(state.items)
 
   if (filter !== undefined) {
@@ -82,36 +82,36 @@ export const getTags = (state) => {
   return tags
 }
 
-export const commitClearProgram          = () => {
+export const commitClearFeed          = () => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_CLEAR_PROGRAM
+      type: COMMIT_CLEAR_FEED
     })
     return Promise.resolve()
   }
 }
-export const commitUpdateProgram         = (item) => {
+export const commitUpdateFeed         = (item) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_UPDATE_PROGRAM,
+      type: COMMIT_UPDATE_FEED,
       item
     })
     return Promise.resolve()
   }
 }
-export const commitDeleteProgram         = (item) => {
+export const commitDeleteFeed         = (item) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_DELETE_PROGRAM,
+      type: COMMIT_DELETE_FEED,
       item
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentProgram     = (current) => {
+export const commitSetCurrentFeed     = (current) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_SET_CURRENT_PROGRAM,
+      type: COMMIT_SET_CURRENT_FEED,
       current
     })
     return Promise.resolve()
@@ -136,7 +136,7 @@ export const commitSetCurrentUsername    = (username) => {
   }
 }
 
-export const fetchProgram = (username, path, token = null) => {
+export const fetchFeed = (username, path, token = null) => {
   return (dispatch) => {
     let config = {}
     if (token) {
@@ -148,7 +148,7 @@ export const fetchProgram = (username, path, token = null) => {
     return request
       .get(`${server.getBaseUrl()}/api/program/${username}/list/${path.join('/')}`, config)
       .then((response) => {
-        dispatch(commitClearProgram())
+        dispatch(commitClearFeed())
 
         for (let i = 0; i < response.data['children'].length; i++) {
           let item            = null
@@ -160,7 +160,7 @@ export const fetchProgram = (username, path, token = null) => {
             item = new Folder(data)
           }
 
-          dispatch(commitUpdateProgram(item))
+          dispatch(commitUpdateFeed(item))
         }
 
         dispatch(commitSetCurrentFolder(response.data['folder'] ? new Folder(response.data['folder']) : null))
@@ -196,7 +196,7 @@ export const createProgram = (item, token) => {
       .then((response) => {
         let item = new Program(response.data)
 
-        dispatch(commitUpdateProgram(item))
+        dispatch(commitUpdateFeed(item))
 
         return item
       })
@@ -231,7 +231,7 @@ export const updateProgram = (item, token) => {
       .then((response) => {
         let item = new Program(response.data)
 
-        dispatch(commitUpdateProgram(item))
+        dispatch(commitUpdateFeed(item))
 
         return item
       })
@@ -280,7 +280,7 @@ export const setProgramData = (item, token) => {
       .then((response) => {
         item.updated = moment()
 
-        dispatch(commitUpdateProgram(item))
+        dispatch(commitUpdateFeed(item))
 
         return response.data
       })
@@ -303,7 +303,7 @@ export const deleteProgram = (item, token) => {
         }
       })
       .then((response) => {
-        dispatch(commitDeleteProgram(item))
+        dispatch(commitDeleteFeed(item))
 
         return response.data
       })
@@ -319,7 +319,7 @@ export const deleteProgram = (item, token) => {
 
 export const setCurrentProgram = (current) => {
   return (dispatch) => {
-    dispatch(commitSetCurrentProgram(current))
+    dispatch(commitSetCurrentFeed(current))
 
     return Promise.resolve(current)
   }

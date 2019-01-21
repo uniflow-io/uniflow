@@ -12,7 +12,7 @@ import {
 } from '../../../reducers/folder/actions'
 import {
   commitSetCurrentFolder, getCurrentPath
-} from '../../../reducers/program/actions'
+} from '../../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import {pathTo} from "../../../routes";
 import {Select2Component} from "uniflow/src/components";
@@ -74,16 +74,16 @@ class FolderShow extends Component {
   onDelete = (event) => {
     event.preventDefault()
 
-    let path = getCurrentPath(this.props.program).slice(0, -1)
+    let path = getCurrentPath(this.props.feed).slice(0, -1)
 
     return this.props.dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
+        const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
         let slugs = pathToSlugs(path)
 
         if (isCurrentUser) {
-          this.props.history.push(pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs)))
+          this.props.history.push(pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs)))
         } else {
           this.props.history.push(pathTo('flow', slugs))
         }
@@ -93,9 +93,9 @@ class FolderShow extends Component {
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const {program, folder} = this.props
+    const {feed, folder} = this.props
 
-    this.props.dispatch(getFolderTree(program.username, this.props.auth.token))
+    this.props.dispatch(getFolderTree(feed.username, this.props.auth.token))
       .then((folderTree) => {
         let folderPath = folder.path.slice()
         folderPath.push(folder.slug)
@@ -114,14 +114,14 @@ class FolderShow extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
+    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
     let slugs = pathToSlugs(path)
 
     if (isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
+      return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
     }
 
     return pathTo('flow', slugs)
@@ -191,7 +191,7 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    folder: state.program.folder,
-    program: state.program
+    folder: state.feed.folder,
+    feed: state.feed
   }
 })(withRouter(FolderShow))

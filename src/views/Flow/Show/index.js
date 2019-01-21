@@ -12,14 +12,14 @@ import {
 import {
   getCurrentProgram,
   getTags,
-  commitUpdateProgram,
+  commitUpdateFeed,
   createProgram,
   updateProgram,
   deleteProgram,
   getProgramData,
   setProgramData,
   setCurrentProgram, commitSetCurrentFolder
-} from '../../../reducers/program/actions'
+} from '../../../reducers/feed/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import components from '../../../uniflow'
@@ -149,12 +149,12 @@ class Show extends Component {
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let {program, stack, user, programState} = this.props
+    let {program, stack, user, feed} = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
     let data = program.data
     program.serialiseFlowData(stack)
-    if ((programState.username === 'me' || user.username === programState.username) && program.data !== data) {
+    if ((feed.username === 'me' || user.username === feed.username) && program.data !== data) {
       this.props
         .dispatch(setProgramData(program, this.props.auth.token))
         .catch((log) => {
@@ -165,7 +165,7 @@ class Show extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{title: event.target.value}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{title: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -173,7 +173,7 @@ class Show extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{slug: event.target.value}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{slug: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -181,7 +181,7 @@ class Show extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({ ...this.props.program, ...{ path: stringToPath(selected) } })))
+      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ path: stringToPath(selected) } })))
       .then(() => {
         this.onUpdate()
       })
@@ -189,7 +189,7 @@ class Show extends Component {
 
   onChangeClient = (selected) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{client: selected}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{client: selected}})))
       .then(() => {
         this.onUpdate()
       })
@@ -197,7 +197,7 @@ class Show extends Component {
 
   onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{tags: tags}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{tags: tags}})))
       .then(() => {
         this.onUpdate()
       })
@@ -205,7 +205,7 @@ class Show extends Component {
 
   onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{description: description}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{description: description}})))
       .then(() => {
         this.onUpdate()
       })
@@ -213,7 +213,7 @@ class Show extends Component {
 
   onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{public: value}})))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{public: value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -253,9 +253,9 @@ class Show extends Component {
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const {programState} = this.props
+    const {feed} = this.props
 
-    this.props.dispatch(getFolderTree(programState.username, this.props.auth.token))
+    this.props.dispatch(getFolderTree(feed.username, this.props.auth.token))
       .then((folderTree) => {
         folderTree = folderTree.map((path) => {
           return pathToString(path)
@@ -292,14 +292,14 @@ class Show extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.programState.username && this.props.programState.username === this.props.user.username
+    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
     let slugs = pathToSlugs(path)
 
     if (isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.programState.username}, slugs))
+      return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
     }
 
     return pathTo('flow', slugs)
@@ -436,9 +436,9 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    program: getCurrentProgram(state.program),
-    tags: getTags(state.program),
-    programState: state.program,
+    program: getCurrentProgram(state.feed),
+    tags: getTags(state.feed),
+    feed: state.feed,
     stack: state.flow
   }
 })(withRouter(Show))

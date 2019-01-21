@@ -8,7 +8,7 @@ import {
 import { combineReducers } from 'redux'
 import { Provider, connect } from 'react-redux'
 import routes, { pathTo } from './routes'
-import { auth, env, program, logs, user, versions } from './reducers'
+import { auth, env, feed, logs, user, versions } from './reducers'
 import { flow } from 'uniflow/src/reducers'
 import { UserManagerComponent } from './components'
 import { createStore } from 'uniflow/src/utils'
@@ -25,7 +25,7 @@ let store = createStore(combineReducers({
   auth,
   env,
   flow,
-  program,
+  feed,
   logs,
   user,
   versions

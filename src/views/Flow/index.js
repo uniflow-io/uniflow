@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 import Program from './Program'
 import Show from './Show'
 import FolderShow from './FolderShow'
-import { getCurrentProgram } from '../../reducers/program/actions'
+import { getCurrentProgram } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
 
 class Flow extends Component<Props> {
   render () {
-    const { program } = this.props
-    const currentProgram = getCurrentProgram(program)
+    const { feed } = this.props
+    const currentProgram = getCurrentProgram(feed)
 
     return (
       <div id='flow' className='content-wrapper'>
@@ -31,10 +31,10 @@ class Flow extends Component<Props> {
               <Program />
             </div>
             <div className='col-sm-10'>
-              {program.username && currentProgram && currentProgram.constructor.name === 'Program' && (
+              {feed.username && currentProgram && currentProgram.constructor.name === 'Program' && (
                 <Show />
               )}
-              {program.username && currentProgram === null && program.folder && (
+              {feed.username && currentProgram === null && feed.folder && (
                 <FolderShow />
               )}
             </div>
@@ -47,6 +47,6 @@ class Flow extends Component<Props> {
 
 export default connect(state => {
   return {
-    program: state.program
+    feed: state.feed
   }
 })(Flow)

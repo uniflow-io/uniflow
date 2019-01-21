@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Select2Component } from 'uniflow/src/components'
 import { Bus } from 'uniflow/src/models'
-import { getOrderedProgram, getProgramData } from '../../reducers/program/actions'
+import { getOrderedFeed, getProgramData } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
@@ -42,7 +42,7 @@ class ComponentInclude extends Component<Props> {
     }
 
     getFlow = (programId) => {
-      let program = this.props.program.items[programId]
+      let program = this.props.feed.items[programId]
 
       return Promise.resolve()
         .then(() => {
@@ -187,7 +187,7 @@ class ComponentInclude extends Component<Props> {
 
                 <div className='col-sm-10'>
                   <Select2Component value={programId} onChange={this.onChangeSelected} className='form-control' id='select{{ _uid }}' style={{ width: '100%' }}>
-                    {getOrderedProgram(this.props.program).map((item, i) => (
+                    {getOrderedFeed(this.props.feed).map((item, i) => (
                       <option key={item.id} value={item.id}>{ item.title }</option>
                     ))}
                   </Select2Component>
@@ -205,6 +205,6 @@ class ComponentInclude extends Component<Props> {
 export default connect(state => {
   return {
     auth: state.auth,
-    program: state.program
+    feed: state.feed
   }
 })(ComponentInclude)

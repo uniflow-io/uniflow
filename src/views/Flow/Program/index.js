@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
-import {getOrderedProgram, createProgram, setCurrentProgram, getCurrentPath} from '../../../reducers/program/actions'
+import {getOrderedFeed, createProgram, setCurrentProgram, getCurrentPath} from '../../../reducers/feed/actions'
 import {createFolder, pathToSlugs} from '../../../reducers/folder/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
@@ -22,7 +22,7 @@ class Program extends Component {
     this.props
       .dispatch(createFolder({
         'title': this.state.search,
-        'path': getCurrentPath(this.props.program)
+        'path': getCurrentPath(this.props.feed)
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentProgram(null))
@@ -44,7 +44,7 @@ class Program extends Component {
         'client': 'uniflow',
         'tags': [],
         'description': '',
-        'path': getCurrentPath(this.props.program)
+        'path': getCurrentPath(this.props.feed)
       }, this.props.auth.token))
       .then((item) => {
         return this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
@@ -58,45 +58,45 @@ class Program extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
+    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
     let slugs = pathToSlugs(path)
 
     if (item.public || isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
+      return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
     }
 
     return pathTo('flow', slugs)
   }
 
   render() {
-    const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
+    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
     const isFolderActive      = () => {
-      return this.props.program.current === null ? 'active' : ''
+      return this.props.feed.current === null ? 'active' : ''
     }
     const isActive      = (item) => {
-      return (this.props.program.current && this.props.program.current.type === item.constructor.name && this.props.program.current.id === item.id) ? 'active' : ''
+      return (this.props.feed.current && this.props.feed.current.type === item.constructor.name && this.props.feed.current.id === item.id) ? 'active' : ''
     }
 
     const backTo = () => {
-      let path  = getCurrentPath(this.props.program).slice(0, -1)
+      let path  = getCurrentPath(this.props.feed).slice(0, -1)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
-        return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
+        return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
       }
 
       return pathTo('flow', slugs)
     }
 
     const folderTo = () => {
-      let path  = getCurrentPath(this.props.program)
+      let path  = getCurrentPath(this.props.feed)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
-        return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
+        return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
       }
 
       return pathTo('flow', slugs)
@@ -136,7 +136,7 @@ class Program extends Component {
                     </div>
                   </form>
                 </li>
-                {this.props.program.folder && ([
+                {this.props.feed.folder && ([
                   <li key={'back'}>
                     <Link
                       to={backTo()}><i className="fa fa-arrow-left fa-fw"/> Back</Link>
@@ -145,7 +145,7 @@ class Program extends Component {
                     <Link to={folderTo()}>.</Link>
                   </li>
                 ])}
-                {getOrderedProgram(this.props.program, this.state.search).map((item, i) => (
+                {getOrderedFeed(this.props.feed, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
                       to={this.itemPathTo(item)}>{item.constructor.name === 'Folder' && (
@@ -167,5 +167,5 @@ class Program extends Component {
 export default connect(state => ({
   auth: state.auth,
   user: state.user,
-  program: state.program
+  feed: state.feed
 }))(withRouter(Program))

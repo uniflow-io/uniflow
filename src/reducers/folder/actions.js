@@ -1,7 +1,7 @@
 import request from 'axios'
 import server from '../../utils/server'
 import {Folder} from '../../models/index'
-import {commitSetCurrentFolder, commitUpdateProgram} from '../program/actions'
+import {commitSetCurrentFolder, commitUpdateFeed} from '../program/actions'
 import { commitLogoutUser } from '../auth/actions'
 
 export const pathToSlugs = (path) => {
@@ -65,7 +65,7 @@ export const createFolder = (item, token) => {
       .then((response) => {
         let item = new Folder(response.data)
 
-        dispatch(commitUpdateProgram(item))
+        dispatch(commitUpdateFeed(item))
 
         return item
       })
