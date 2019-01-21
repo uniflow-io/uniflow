@@ -147,7 +147,7 @@ export const fetchFeed = (username, path, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/program/${username}/list${path ? '/'+path.join('/') : ''}`, config)
+      .get(`${server.getBaseUrl()}/api/program/${username}/list${path.length > 0 ? '/'+path.join('/') : ''}`, config)
       .then((response) => {
         dispatch(commitClearFeed())
 
