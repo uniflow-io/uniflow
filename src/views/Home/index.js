@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
-import { getLastPublicProgram } from '../../reducers/program/actions'
+import { getLastPublicProgram } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Home extends Component {
