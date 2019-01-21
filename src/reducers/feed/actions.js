@@ -326,7 +326,7 @@ export const setCurrentProgram = (current) => {
   }
 }
 
-export const setUsernameProgram = (username) => {
+export const setCurrentUsername = (username) => {
   return (dispatch) => {
     dispatch(commitSetCurrentUsername(username))
 

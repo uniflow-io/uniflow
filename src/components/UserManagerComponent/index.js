@@ -7,7 +7,7 @@ import {
   fetchFeed,
   getProgramBySlug,
   setCurrentProgram,
-  setUsernameProgram,
+  setCurrentUsername,
   getCurrentProgram,
   getCurrentPath,
   feedPathTo
@@ -96,7 +96,7 @@ class UserManagerComponent extends Component<Props> {
           return path
         }
 
-        return this.props.dispatch(setUsernameProgram(username))
+        return this.props.dispatch(setCurrentUsername(username))
           .then(() => {
             const token = auth.isAuthenticated ? auth.token : null
             return this.props.dispatch(fetchFeed(username, path, token))
