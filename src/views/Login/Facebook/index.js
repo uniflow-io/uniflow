@@ -16,7 +16,7 @@ class LoginFacebook extends Component {
     this.props.dispatch(loginFacebook(accessToken, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return this.props.history.push(pathTo('flow'))
+          return this.props.history.push(pathTo('feed'))
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
           return this.props.history.push(pathTo('login'))
@@ -39,7 +39,7 @@ class LoginFacebook extends Component {
 
         <section className='content-header'>
           <h1>
-                        Login Facebook
+            Login Facebook
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>

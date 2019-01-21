@@ -16,7 +16,7 @@ class LoginGithub extends Component {
     this.props.dispatch(loginGithub(code, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return this.props.history.push(pathTo('flow'))
+          return this.props.history.push(pathTo('feed'))
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
           return this.props.history.push(pathTo('login'))
@@ -39,7 +39,7 @@ class LoginGithub extends Component {
 
         <section className='content-header'>
           <h1>
-                        Login Github
+            Login Github
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>

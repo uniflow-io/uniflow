@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router'
 import debounce from 'lodash/debounce'
-import {Folder} from '../../../models'
+import { Folder } from '../../../models'
 import {
   getFolderTree,
   updateCurrentFolder,
@@ -12,9 +12,9 @@ import {
   commitSetCurrentFolder,
   getCurrentPath
 } from '../../../reducers/feed/actions'
-import {connect} from 'react-redux'
-import {pathTo} from "../../../routes";
-import {Select2Component} from "uniflow/src/components";
+import { connect } from 'react-redux'
+import { pathTo } from '../../../routes'
+import { Select2Component } from 'uniflow/src/components'
 
 class FolderShow extends Component {
   state = {
@@ -22,13 +22,13 @@ class FolderShow extends Component {
     folderTree: []
   }
 
-  componentDidMount() {
-    const {folder} = this.props
+  componentDidMount () {
+    const { folder } = this.props
 
-    this.setState({folderTree: [pathToString(folder.path)]})
+    this.setState({ folderTree: [pathToString(folder.path)] })
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const oldProps = this.props
 
     if (nextProps.folder.id !== oldProps.folder.id) {
@@ -41,7 +41,7 @@ class FolderShow extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{title: event.target.value}})))
+      .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ title: event.target.value } })))
       .then(() => {
         this.onUpdate()
       })
@@ -49,7 +49,7 @@ class FolderShow extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{slug: event.target.value}})))
+      .dispatch(commitSetCurrentFolder(new Folder({ ...this.props.folder, ...{ slug: event.target.value } })))
       .then(() => {
         this.onUpdate()
       })
@@ -82,9 +82,9 @@ class FolderShow extends Component {
         let slugs = pathToSlugs(path)
 
         if (isCurrentUser) {
-          this.props.history.push(pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs)))
+          this.props.history.push(pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs)))
         } else {
-          this.props.history.push(pathTo('flow', slugs))
+          this.props.history.push(pathTo('feed', slugs))
         }
       })
   }
@@ -92,7 +92,7 @@ class FolderShow extends Component {
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const {feed, folder} = this.props
+    const { feed, folder } = this.props
 
     this.props.dispatch(getFolderTree(feed.username, this.props.auth.token))
       .then((folderTree) => {
@@ -100,7 +100,9 @@ class FolderShow extends Component {
         folderPath.push(folder.slug)
         folderPath = pathToString(folderPath)
 
-        folderTree = folderTree.map((path) => { return pathToString(path)})
+        folderTree = folderTree.map((path) => {
+          return pathToString(path)
+        })
         folderTree = folderTree.filter((value) => {
           return value.startsWith(folderPath) === false
         })
@@ -120,15 +122,15 @@ class FolderShow extends Component {
     let slugs = pathToSlugs(path)
 
     if (isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.feed.username}, slugs))
+      return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
     }
 
-    return pathTo('flow', slugs)
+    return pathTo('feed', slugs)
   }
 
-  render() {
-    const {folderTreeEdit, folderTree} = this.state
-    const {folder} = this.props
+  render () {
+    const { folderTreeEdit, folderTree } = this.state
+    const { folder } = this.props
 
     return (
       <div>
@@ -136,7 +138,7 @@ class FolderShow extends Component {
           <div className='box-header with-border'>
             <h3 className='box-title'>Infos</h3>
             <div className='box-tools pull-right'>
-              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></a>
+              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
             </div>
           </div>
           <div className='box-body'>
@@ -147,7 +149,7 @@ class FolderShow extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                         value={folder.title} onChange={this.onChangeTitle} placeholder='Title'/>
+                    value={folder.title} onChange={this.onChangeTitle} placeholder='Title' />
                 </div>
               </div>
 
@@ -156,7 +158,7 @@ class FolderShow extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                         value={folder.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
+                    value={folder.slug} onChange={this.onChangeSlug} placeholder='Slug' />
                 </div>
               </div>
 
@@ -165,14 +167,17 @@ class FolderShow extends Component {
 
                 <div className='col-sm-10'>
                   {folderTreeEdit && (
-                    <Select2Component value={pathToString(folder.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
+                    <Select2Component value={pathToString(folder.path)} onChange={this.onChangePath}
+                      className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
                       {folderTree.map((value) => (
-                        <option key={value} value={value}>{ value }</option>
+                        <option key={value} value={value}>{value}</option>
                       ))}
                     </Select2Component>
                   ) || (
                     <div>
-                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(folder.path)}
+                      <button type='button' className='btn btn-primary' onClick={this.onFolderEdit}><i
+                        className='fa fa-edit fa-fw' /></button>
+                      {pathToString(folder.path)}
                     </div>
                   )}
                 </div>

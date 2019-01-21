@@ -11,7 +11,7 @@ class Versions extends Component {
       <div className='content-wrapper'>
         <section className='content-header'>
           <h1>
-                        Versions
+            Versions
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>

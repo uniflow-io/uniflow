@@ -39,7 +39,7 @@ class LoginMedium extends Component {
 
         <section className='content-header'>
           <h1>
-                        Login Medium
+            Login Medium
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>

@@ -44,22 +44,24 @@ class Alert extends Component {
     }, 5000)
   }
 
-    onClose = (event, id) => {
-      event.preventDefault()
+  onClose = (event, id) => {
+    event.preventDefault()
 
-      this.props.dispatch(commitReadLog(id))
-    }
+    this.props.dispatch(commitReadLog(id))
+  }
 
-    render () {
-      const { alert, logs } = this.props
+  render () {
+    const { alert, logs } = this.props
 
-      return (
-        <div className='alert alert-danger' style={{ marginBottom: '0px' }}>
-          <button type='button' className='close' aria-hidden='true' onClick={(event) => this.onClose(event, logs[alert].id)}>×</button>
-          <h4><i className='icon fa fa-ban' /> {logs[alert].message}</h4>
-        </div>
-      )
-    }
+    return (
+      <div className='alert alert-danger' style={{ marginBottom: '0px' }}>
+        <button type='button' className='close' aria-hidden='true'
+          onClick={(event) => this.onClose(event, logs[alert].id)}>×
+        </button>
+        <h4><i className='icon fa fa-ban' /> {logs[alert].message}</h4>
+      </div>
+    )
+  }
 }
 
 Alert = connect(state => ({
@@ -85,130 +87,130 @@ Alerts = connect(state => ({
 }))(Alerts)
 
 class Header extends Component {
-    state = {
-      active: null
+  state = {
+    active: null
+  }
+
+  componentDidMount () {
+    const { location, history } = this.props
+    this.onLocationChange(location)
+
+    this.historyUnlisten = history.listen(this.onLocationChange)
+  }
+
+  componentWillUnmount () {
+    this.historyUnlisten()
+  }
+
+  onLocationChange = (location) => {
+    let active = null
+
+    if (matchPath(location.pathname, {
+      path: routes.home.path,
+      exact: true
+    })) {
+      active = 'home'
+    } else if (matchPath(location.pathname, {
+      path: routes.faq.path,
+      exact: true
+    })) {
+      active = 'faq'
+    } else if (matchPath(location.pathname, {
+      path: routes.settings.path,
+      exact: true
+    })) {
+      active = 'settings'
+    } else if (matchPath(location.pathname, {
+      path: routes.admin.path,
+      exact: true
+    })) {
+      active = 'admin'
+    } else if (matchPath(location.pathname, {
+      path: routes.blog.path,
+      exact: true
+    })) {
+      active = 'blog'
+    } else if (matchPath(location.pathname, {
+      path: routes.login.path,
+      exact: true
+    })) {
+      active = 'login'
+    } else if (matchPath(location.pathname, {
+      path: routes.register.path,
+      exact: true
+    })) {
+      active = 'login'
+    } else if (matchPath(location.pathname, {
+      path: routes.feed.path
+    }) || matchPath(location.pathname, {
+      path: routes.userFeed.path
+    })) {
+      active = 'dashboard'
     }
 
-    componentDidMount () {
-      const { location, history } = this.props
-      this.onLocationChange(location)
+    this.setState({ active: active })
+  }
 
-      this.historyUnlisten = history.listen(this.onLocationChange)
-    }
+  onLogout = (e) => {
+    e.preventDefault()
 
-    componentWillUnmount () {
-      this.historyUnlisten()
-    }
+    this.props.dispatch(commitLogoutUser())
+  }
 
-    onLocationChange = (location) => {
-      let active = null
+  render () {
+    const { auth, user } = this.props
+    const { active } = this.state
 
-      if (matchPath(location.pathname, {
-        path: routes.home.path,
-        exact: true
-      })) {
-        active = 'home'
-      } else if (matchPath(location.pathname, {
-        path: routes.faq.path,
-        exact: true
-      })) {
-        active = 'faq'
-      } else if (matchPath(location.pathname, {
-        path: routes.settings.path,
-        exact: true
-      })) {
-        active = 'settings'
-      } else if (matchPath(location.pathname, {
-        path: routes.admin.path,
-        exact: true
-      })) {
-        active = 'admin'
-      } else if (matchPath(location.pathname, {
-        path: routes.blog.path,
-        exact: true
-      })) {
-        active = 'blog'
-      } else if (matchPath(location.pathname, {
-        path: routes.login.path,
-        exact: true
-      })) {
-        active = 'login'
-      } else if (matchPath(location.pathname, {
-        path: routes.register.path,
-        exact: true
-      })) {
-        active = 'login'
-      } else if (matchPath(location.pathname, {
-        path: routes.flow.path
-      }) || matchPath(location.pathname, {
-        path: routes.userFlow.path
-      })) {
-        active = 'dashboard'
-      }
-
-      this.setState({ active: active })
-    }
-
-    onLogout = (e) => {
-      e.preventDefault()
-
-      this.props.dispatch(commitLogoutUser())
-    }
-
-    render () {
-      const { auth, user } = this.props
-      const { active } = this.state
-
-      return (
-        <header className='main-header'>
-          <nav className='navbar navbar-static-top'>
-            <div className='navbar-custom-menu'>
-              <ul className='nav navbar-nav'>
-                <li className={active === 'home' ? 'active' : ''}>
-                  <Link to={pathTo('home')}>Home</Link>
+    return (
+      <header className='main-header'>
+        <nav className='navbar navbar-static-top'>
+          <div className='navbar-custom-menu'>
+            <ul className='nav navbar-nav'>
+              <li className={active === 'home' ? 'active' : ''}>
+                <Link to={pathTo('home')}>Home</Link>
+              </li>
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
+                <li className={active === 'dashboard' ? 'active' : ''}>
+                  <Link to={pathTo('feed')}>Dashboard</Link>
                 </li>
-                {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
-                  <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('flow')}>Dashboard</Link>
-                  </li>
-                )}
-                {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username !== null && (
-                  <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('userFlow', { username: user.username })}>Dashboard</Link>
-                  </li>
-                )}
-                <li className={active === 'faq' ? 'active' : ''}>
-                  <Link to={pathTo('faq')}>FAQ</Link>
+              )}
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username !== null && (
+                <li className={active === 'dashboard' ? 'active' : ''}>
+                  <Link to={pathTo('userFeed', { username: user.username })}>Dashboard</Link>
                 </li>
-                {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
-                  <li className={active === 'settings' ? 'active' : ''}>
-                    <Link to={pathTo('settings')}>Settings</Link>
-                  </li>
-                )}
-                {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
-                  <li className={active === 'admin' ? 'active' : ''}>
-                    <Link to={pathTo('admin')}>Admin</Link>
-                  </li>
-                )}
-                <li className={active === 'blog' ? 'active' : ''}>
-                  <Link to={pathTo('blog')}>Blog</Link>
+              )}
+              <li className={active === 'faq' ? 'active' : ''}>
+                <Link to={pathTo('faq')}>FAQ</Link>
+              </li>
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+                <li className={active === 'settings' ? 'active' : ''}>
+                  <Link to={pathTo('settings')}>Settings</Link>
                 </li>
-                {!auth.isAuthenticated && (
-                  <li className={active === 'login' ? 'active' : ''}>
-                    <Link to={pathTo('login')}>Login</Link>
-                  </li>
-                )}
-                {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
-                  <li className={active === 'logout' ? 'active' : ''}>
-                    <a onClick={this.onLogout}><span className='glyphicon glyphicon-off logout' aria-hidden='true' /></a>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </nav>
-        </header>
-      )
-    }
+              )}
+              {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+                <li className={active === 'admin' ? 'active' : ''}>
+                  <Link to={pathTo('admin')}>Admin</Link>
+                </li>
+              )}
+              <li className={active === 'blog' ? 'active' : ''}>
+                <Link to={pathTo('blog')}>Blog</Link>
+              </li>
+              {!auth.isAuthenticated && (
+                <li className={active === 'login' ? 'active' : ''}>
+                  <Link to={pathTo('login')}>Login</Link>
+                </li>
+              )}
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+                <li className={active === 'logout' ? 'active' : ''}>
+                  <a onClick={this.onLogout}><span className='glyphicon glyphicon-off logout' aria-hidden='true' /></a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </nav>
+      </header>
+    )
+  }
 }
 
 Header = connect(state => ({
@@ -225,8 +227,10 @@ class Footer extends Component {
         <div className='pull-right hidden-xs'>
           <a href={pathTo('versions')}><b>Version</b> {version}</a>
         </div>
-        <a className='btn' href='https://github.com/uniflow-io/uniflow' target='_blank'><i className='fa fa-github' /></a>
-        <a className='btn' href='https://www.facebook.com/uniflow.io' target='_blank'><i className='fa fa-facebook' /></a>
+        <a className='btn' href='https://github.com/uniflow-io/uniflow' target='_blank'><i
+          className='fa fa-github' /></a>
+        <a className='btn' href='https://www.facebook.com/uniflow.io' target='_blank'><i
+          className='fa fa-facebook' /></a>
         <a className='btn' href='https://twitter.com/uniflow_io' target='_blank'><i className='fa fa-twitter' /></a>
         <a className='btn' href='https://medium.com/@uniflow.io' target='_blank'><i className='fa fa-medium' /></a>
       </footer>
@@ -249,7 +253,7 @@ export default class App extends Component {
     const auth = store.getState().auth
 
     return (
-    // <React.StrictMode>
+      // <React.StrictMode>
       <Provider store={store}>
         <Router>
           <div>
@@ -271,7 +275,7 @@ export default class App extends Component {
           </div>
         </Router>
       </Provider>
-    // </React.StrictMode>
+      // </React.StrictMode>
     )
   }
 }

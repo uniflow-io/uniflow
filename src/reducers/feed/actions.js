@@ -1,6 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
-import {Log, Program, Folder} from '../../models/index'
+import { Log, Program, Folder } from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_FEED,
@@ -10,19 +10,19 @@ import {
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
-import {commitLogoutUser} from '../auth/actions'
+import { commitLogoutUser } from '../auth/actions'
 
 export const getCurrentProgram = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
 }
 export const getCurrentPath = (state) => {
   let path = []
-  if(state.folder) {
+  if (state.folder) {
     path = state.folder.path.slice()
     path.push(state.folder.slug)
   }
 
-  return path;
+  return path
 }
 
 export const getOrderedFeed = (state, filter) => {
@@ -30,9 +30,9 @@ export const getOrderedFeed = (state, filter) => {
 
   if (filter !== undefined) {
     keys = keys.filter((key) => {
-      let item  = state.items[key]
+      let item = state.items[key]
       let words = item.title
-      if(item.constructor.name === 'Program') {
+      if (item.constructor.name === 'Program') {
         for (let i = 0; i < item.tags.length; i++) {
           words += ' ' + item.tags[i]
         }
@@ -82,7 +82,7 @@ export const getTags = (state) => {
   return tags
 }
 
-export const commitClearFeed          = () => {
+export const commitClearFeed = () => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_CLEAR_FEED
@@ -90,7 +90,7 @@ export const commitClearFeed          = () => {
     return Promise.resolve()
   }
 }
-export const commitUpdateFeed         = (item) => {
+export const commitUpdateFeed = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_UPDATE_FEED,
@@ -99,7 +99,7 @@ export const commitUpdateFeed         = (item) => {
     return Promise.resolve()
   }
 }
-export const commitDeleteFeed         = (item) => {
+export const commitDeleteFeed = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_DELETE_FEED,
@@ -108,7 +108,7 @@ export const commitDeleteFeed         = (item) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFeed     = (current) => {
+export const commitSetCurrentFeed = (current) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_CURRENT_FEED,
@@ -126,7 +126,7 @@ export const commitSetCurrentFolder = (folder) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentUsername    = (username) => {
+export const commitSetCurrentUsername = (username) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_CURRENT_USERNAME,
@@ -151,8 +151,8 @@ export const fetchFeed = (username, path, token = null) => {
         dispatch(commitClearFeed())
 
         for (let i = 0; i < response.data['children'].length; i++) {
-          let item            = null
-          let {type, ...data} = response.data['children'][i]
+          let item = null
+          let { type, ...data } = response.data['children'][i]
 
           if (type === 'program') {
             item = new Program(data)
@@ -345,11 +345,11 @@ export const getLastPublicProgram = () => {
 
 export const pathToSlugs = (path) => {
   let slugs = {}
-  for(let i = 0; i < path.length; i++) {
+  for (let i = 0; i < path.length; i++) {
     slugs[`slug${(i + 1)}`] = path[i]
   }
 
-  return slugs;
+  return slugs
 }
 
 export const pathToString = (path) => {
@@ -357,7 +357,7 @@ export const pathToString = (path) => {
 }
 
 export const stringToPath = (value) => {
-  if(value === '/') {
+  if (value === '/') {
     return []
   }
   return value.slice(1).split('/')
@@ -392,7 +392,7 @@ export const createFolder = (item, token) => {
     let data = {
       title: item.title,
       slug: item.title,
-      path: item.path,
+      path: item.path
     }
 
     return request
@@ -423,7 +423,7 @@ export const updateCurrentFolder = (item, token) => {
     let data = {
       title: item.title,
       slug: item.slug,
-      path: item.path,
+      path: item.path
     }
 
     return request
@@ -458,7 +458,7 @@ export const deleteCurrentFolder = (item, token) => {
         }
       })
       .then((response) => {
-        //dispatch(commitSetCurrentFolder(null))
+        // dispatch(commitSetCurrentFolder(null))
 
         return response.data
       })

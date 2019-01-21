@@ -1,4 +1,18 @@
-import { FAQ, Home, Flow, Versions, Login, Register, Settings, Admin, LoginFacebook, LoginGithub, LoginMedium, Blog, Article } from './views'
+import {
+  FAQ,
+  Home,
+  Feed,
+  Versions,
+  Login,
+  Register,
+  Settings,
+  Admin,
+  LoginFacebook,
+  LoginGithub,
+  LoginMedium,
+  Blog,
+  Article
+} from './views'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
@@ -58,13 +72,13 @@ const routes = {
     path: '/admin',
     component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN')
   },
-  flow: {
+  feed: {
     path: '/me/flow/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
-    component: requireAuthentication(Flow)
+    component: requireAuthentication(Feed)
   },
-  userFlow: {
+  userFeed: {
     path: '/:username/flow/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
-    component: Flow
+    component: Feed
   }
 }
 
