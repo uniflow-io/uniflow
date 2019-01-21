@@ -74,6 +74,16 @@ class ProgramController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
+        $fetchUser = null;
+        if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
+            $fetchUser = $user;
+        } else {
+            $fetchUser = $this->userService->findOneByUsername($username);
+            if (is_null($fetchUser)) {
+                throw new NotFoundHttpException();
+            }
+        }
+
         $client = $request->get('client');
 
         $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
@@ -85,11 +95,11 @@ class ProgramController extends AbstractController
 
         $parentFolder = null;
         if(count($path) > 0) {
-            $program = $this->programService->findOneByUserAndPath($user, $path);
+            $program = $this->programService->findOneByUserAndPath($fetchUser, $path);
             if($program) {
                 $parentFolder = $program->getFolder();
             } else {
-                $parentFolder = $this->folderService->findOneByUserAndPath($user, $path);
+                $parentFolder = $this->folderService->findOneByUserAndPath($fetchUser, $path);
                 if(!$parentFolder) {
                     throw new NotFoundHttpException();
                 }
@@ -98,15 +108,10 @@ class ProgramController extends AbstractController
 
         $folders = [];
         if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
-            $programs = $this->programService->getProgramByUserAndClientAndFolder($user, $client, $parentFolder);
-            $folders = $this->folderService->findByUserAndParent($user, $parentFolder);
+            $programs = $this->programService->getProgramByUserAndClientAndFolder($fetchUser, $client, $parentFolder);
+            $folders = $this->folderService->findByUserAndParent($fetchUser, $parentFolder);
         } else {
-            $user = $this->userService->findOneByUsername($username);
-            if (is_null($user)) {
-                throw new NotFoundHttpException();
-            }
-
-            $programs = $this->programService->getPublicProgramByUserAndClientAndFolder($user, $client, $parentFolder);
+            $programs = $this->programService->getPublicProgramByUserAndClientAndFolder($fetchUser, $client, $parentFolder);
         }
 
         $children = [];
