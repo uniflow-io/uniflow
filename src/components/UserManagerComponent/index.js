@@ -7,11 +7,9 @@ import {
   fetchFeed,
   getProgramBySlug,
   setCurrentProgram,
-  commitSetCurrentFolder,
   setUsernameProgram,
   getCurrentProgram,
   getCurrentPath,
-  pathToSlugs,
   feedPathTo
 } from '../../reducers/feed/actions'
 

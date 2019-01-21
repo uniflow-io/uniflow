@@ -6,7 +6,6 @@ import {
   getFolderTree,
   updateCurrentFolder,
   deleteCurrentFolder,
-  pathToSlugs,
   pathToString,
   stringToPath,
   commitSetCurrentFolder,

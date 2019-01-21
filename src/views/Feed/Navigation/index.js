@@ -9,7 +9,6 @@ import {
   setCurrentProgram,
   getCurrentPath,
   createFolder,
-  pathToSlugs,
   feedPathTo
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'

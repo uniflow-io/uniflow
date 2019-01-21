@@ -20,7 +20,6 @@ import {
   setProgramData,
   setCurrentProgram,
   getFolderTree,
-  pathToSlugs,
   pathToString,
   stringToPath,
   feedPathTo
@@ -28,7 +27,6 @@ import {
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 import components from '../../../uniflow'
-import { pathTo } from '../../../routes'
 
 class ProgramShow extends Component {
   state = {
