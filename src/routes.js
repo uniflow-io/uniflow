@@ -87,7 +87,7 @@ export const pathTo = (view, params = {}) => {
     throw new Error(`There is no such view as ${view}`)
   }
 
-  return pathToRegexp.compile(routes[view].path)(params).replace(/\/$/, "")
+  return pathToRegexp.compile(routes[view].path)(params)
 }
 
 export const matchRoute = (pathname) => {
