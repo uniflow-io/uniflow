@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
-import { getLastPublicProgram } from '../../reducers/feed/actions'
+import { getLastPublicProgram, feedPathTo } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Home extends Component {
@@ -46,7 +46,7 @@ class Home extends Component {
                   <dl className='dl-horizontal'>
                     {flow.map((item, i) => ([
                       <dt key={i * 2}><Link
-                        to={pathTo('userFeed', { username: item.username, slug: item.slug })}>{item.title}</Link></dt>,
+                        to={feedPathTo(item.path, item.username)}>{item.title}</Link></dt>,
                       <dd key={i * 2 + 1}>{item.description}</dd>
                     ]))}
                   </dl>

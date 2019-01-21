@@ -11,7 +11,8 @@ import {
   setUsernameProgram,
   getCurrentProgram,
   getCurrentPath,
-  pathToSlugs
+  pathToSlugs,
+  feedPathTo
 } from '../../reducers/feed/actions'
 
 class UserManagerComponent extends Component<Props> {
@@ -145,13 +146,7 @@ class UserManagerComponent extends Component<Props> {
         if (item) {
           currentPath.push(item.slug)
         }
-        let slugs = pathToSlugs(currentPath)
-
-        if ((item && item.public) || isCurrentUser) {
-          history.push(pathTo('userFeed', Object.assign({ username: feed.username }, slugs)))
-        } else {
-          history.push(pathTo('feed', slugs))
-        }
+        history.push(feedPathTo(currentPath, (item && item.public) || isCurrentUser ? feed.username : null))
       })
   }
 

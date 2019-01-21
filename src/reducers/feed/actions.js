@@ -11,6 +11,7 @@ import {
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
 import { commitLogoutUser } from '../auth/actions'
+import {pathTo} from "../../routes";
 
 export const getCurrentProgram = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
@@ -350,6 +351,16 @@ export const pathToSlugs = (path) => {
   }
 
   return slugs
+}
+
+export const feedPathTo = (path, username = null) => {
+  let slugs = pathToSlugs(path)
+
+  if (username) {
+    return pathTo('userFeed', Object.assign({ username: username }, slugs))
+  }
+
+  return pathTo('feed', slugs)
 }
 
 export const pathToString = (path) => {

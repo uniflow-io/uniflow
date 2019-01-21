@@ -22,7 +22,8 @@ import {
   getFolderTree,
   pathToSlugs,
   pathToString,
-  stringToPath
+  stringToPath,
+  feedPathTo
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
@@ -299,13 +300,7 @@ class ProgramShow extends Component {
 
     let path = item.path.slice()
     path.push(item.slug)
-    let slugs = pathToSlugs(path)
-
-    if (isCurrentUser) {
-      return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
-    }
-
-    return pathTo('feed', slugs)
+    return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
   render () {

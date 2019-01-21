@@ -10,7 +10,8 @@ import {
   pathToString,
   stringToPath,
   commitSetCurrentFolder,
-  getCurrentPath
+  getCurrentPath,
+  feedPathTo
 } from '../../../reducers/feed/actions'
 import { connect } from 'react-redux'
 import { pathTo } from '../../../routes'
@@ -79,13 +80,7 @@ class FolderShow extends Component {
       .then(() => {
         const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
-        let slugs = pathToSlugs(path)
-
-        if (isCurrentUser) {
-          this.props.history.push(pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs)))
-        } else {
-          this.props.history.push(pathTo('feed', slugs))
-        }
+        this.props.history.push(feedPathTo(path, isCurrentUser ? this.props.feed.username : null))
       })
   }
 
@@ -119,13 +114,8 @@ class FolderShow extends Component {
 
     let path = item.path.slice()
     path.push(item.slug)
-    let slugs = pathToSlugs(path)
 
-    if (isCurrentUser) {
-      return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
-    }
-
-    return pathTo('feed', slugs)
+    return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
   render () {

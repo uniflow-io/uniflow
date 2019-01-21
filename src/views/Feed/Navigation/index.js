@@ -9,7 +9,8 @@ import {
   setCurrentProgram,
   getCurrentPath,
   createFolder,
-  pathToSlugs
+  pathToSlugs,
+  feedPathTo
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 
@@ -68,13 +69,8 @@ class Navigation extends Component {
 
     let path = item.path.slice()
     path.push(item.slug)
-    let slugs = pathToSlugs(path)
 
-    if (item.public || isCurrentUser) {
-      return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
-    }
-
-    return pathTo('feed', slugs)
+    return feedPathTo(path, item.public || isCurrentUser ? this.props.feed.username : null)
   }
 
   render () {
@@ -88,24 +84,14 @@ class Navigation extends Component {
 
     const backTo = () => {
       let path = getCurrentPath(this.props.feed).slice(0, -1)
-      let slugs = pathToSlugs(path)
 
-      if (isCurrentUser) {
-        return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
-      }
-
-      return pathTo('feed', slugs)
+      return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
     }
 
     const folderTo = () => {
       let path = getCurrentPath(this.props.feed)
-      let slugs = pathToSlugs(path)
 
-      if (isCurrentUser) {
-        return pathTo('userFeed', Object.assign({ username: this.props.feed.username }, slugs))
-      }
-
-      return pathTo('feed', slugs)
+      return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
     }
 
     return (
