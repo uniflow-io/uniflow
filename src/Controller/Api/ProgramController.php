@@ -266,13 +266,13 @@ class ProgramController extends AbstractController
             try {
                 $json = $decoder->decode($content, 'json');
 
-                if (!$this->isGranted('ROLE_USER_PRO') && $json) {
+                /*if (!$this->isGranted('ROLE_USER_PRO') && $json) {
                     foreach ($json as $item) {
                         if (!in_array($item->component, array('javascript', 'text'))) {
                             return new JsonResponse(false, 400);
                         }
                     }
-                }
+                }*/
             } catch (NotEncodableValueException $e) {
                 return new JsonResponse(false, 400);
             }
