@@ -6,9 +6,9 @@ use App\Services\FolderService;
 use App\Services\UserService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Form\HistoryType;
-use App\Entity\History;
-use App\Services\HistoryService;
+use App\Form\ProgramType;
+use App\Entity\Program;
+use App\Services\ProgramService;
 use App\Services\TagService;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,12 +20,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
-class HistoryController extends AbstractController
+class ProgramController extends AbstractController
 {
     /**
-     * @var HistoryService
+     * @var ProgramService
      */
-    protected $historyService;
+    protected $programService;
 
     /**
      * @var TagService
@@ -43,19 +43,19 @@ class HistoryController extends AbstractController
     protected $folderService;
 
     public function __construct(
-        HistoryService $historyService,
+        ProgramService $programService,
         TagService $tagService,
         UserService $userService,
         FolderService $folderService
     ) {
-        $this->historyService = $historyService;
+        $this->programService = $programService;
         $this->tagService = $tagService;
         $this->userService = $userService;
         $this->folderService = $folderService;
     }
 
     /**
-     * @Route("/api/history/{username}/list/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_history_list", methods={"GET"})
+     * @Route("/api/program/{username}/list/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_program_list", methods={"GET"})
      *
      * @param Request $request
      * @param string $username
@@ -85,9 +85,9 @@ class HistoryController extends AbstractController
 
         $parentFolder = null;
         if(count($path) > 0) {
-            $history = $this->historyService->findOneByUserAndPath($user, $path);
-            if($history) {
-                $parentFolder = $history->getFolder();
+            $program = $this->programService->findOneByUserAndPath($user, $path);
+            if($program) {
+                $parentFolder = $program->getFolder();
             } else {
                 $parentFolder = $this->folderService->findOneByUserAndPath($user, $path);
                 if(!$parentFolder) {
@@ -98,7 +98,7 @@ class HistoryController extends AbstractController
 
         $folders = [];
         if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
-            $histories = $this->historyService->getHistoryByUserAndClientAndFolder($user, $client, $parentFolder);
+            $programs = $this->programService->getProgramByUserAndClientAndFolder($user, $client, $parentFolder);
             $folders = $this->folderService->findByUserAndParent($user, $parentFolder);
         } else {
             $user = $this->userService->findOneByUsername($username);
@@ -106,13 +106,13 @@ class HistoryController extends AbstractController
                 throw new NotFoundHttpException();
             }
 
-            $histories = $this->historyService->getPublicHistoryByUserAndClientAndFolder($user, $client, $parentFolder);
+            $programs = $this->programService->getPublicProgramByUserAndClientAndFolder($user, $client, $parentFolder);
         }
 
         $children = [];
-        foreach ($histories as $history) {
-            $d = $this->historyService->getJsonHistory($history);
-            $d['type'] = 'history';
+        foreach ($programs as $program) {
+            $d = $this->programService->getJsonProgram($program);
+            $d['type'] = 'program';
 
             $children[] = $d;
         }
@@ -131,15 +131,15 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * Creates a form to create a History entity.
+     * Creates a form to create a Program entity.
      *
      * @param Request $request
-     * @param History $entity The entity
+     * @param Program $entity The entity
      * @return Response
      */
-    private function manage(Request $request, History $entity)
+    private function manage(Request $request, Program $entity)
     {
-        $form = $this->createForm(HistoryType::class, $entity, array(
+        $form = $this->createForm(ProgramType::class, $entity, array(
             'csrf_protection' => false,
         ));
 
@@ -153,18 +153,18 @@ class HistoryController extends AbstractController
             }
 
             if ($form->isValid()) {
-                $this->historyService->save($entity);
+                $this->programService->save($entity);
                 $this->tagService->clean();
 
-                return new JsonResponse($this->historyService->getJsonHistory($entity));
+                return new JsonResponse($this->programService->getJsonProgram($entity));
             }
         }
 
-        return new JsonResponse($this->historyService->getJsonHistory($entity), 400);
+        return new JsonResponse($this->programService->getJsonProgram($entity), 400);
     }
 
     /**
-     * @Route("/api/history/create", name="api_history_create", methods={"POST"})
+     * @Route("/api/program/create", name="api_program_create", methods={"POST"})
      *
      * @param Request $request
      * @return Response
@@ -179,10 +179,10 @@ class HistoryController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
-            throw new AccessDeniedException('You are not alowed to create more history');
+            throw new AccessDeniedException('You are not alowed to create more program');
         }
 
-        $entity = new History();
+        $entity = new Program();
         $entity->setCreated(new \DateTime());
         $entity->setUser($user);
 
@@ -190,7 +190,7 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/update/{id}", name="api_history_update", methods={"PUT"})
+     * @Route("/api/program/update/{id}", name="api_program_update", methods={"PUT"})
      *
      * @param Request $request
      * @param $id
@@ -204,17 +204,17 @@ class HistoryController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->historyService->findOneByUser($user, $id);
+        $entity = $this->programService->findOneByUser($user, $id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find History entity.');
+            throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
         return $this->manage($request, $entity);
     }
 
     /**
-     * @Route("/api/history/getData/{id}", name="api_history_get_data", methods={"GET"})
+     * @Route("/api/program/getData/{id}", name="api_program_get_data", methods={"GET"})
      *
      * @param $id
      * @return JsonResponse
@@ -222,10 +222,10 @@ class HistoryController extends AbstractController
      */
     public function getData($id)
     {
-        $entity = $this->historyService->findOne($id);
+        $entity = $this->programService->findOne($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find History entity.');
+            throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
         if (!$entity->getPublic()) {
@@ -239,7 +239,7 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/setData/{id}", name="api_history_set_data", methods={"PUT"})
+     * @Route("/api/program/setData/{id}", name="api_program_set_data", methods={"PUT"})
      *
      * @param Request $request
      * @param $id
@@ -253,10 +253,10 @@ class HistoryController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->historyService->findOneByUser($user, $id);
+        $entity = $this->programService->findOneByUser($user, $id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find History entity.');
+            throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
         if ('PUT' === $request->getMethod()) {
@@ -279,7 +279,7 @@ class HistoryController extends AbstractController
 
             $entity->setData($content);
 
-            $this->historyService->save($entity);
+            $this->programService->save($entity);
 
             return new JsonResponse(true);
         }
@@ -288,7 +288,7 @@ class HistoryController extends AbstractController
     }
 
     /**
-     * @Route("/api/history/delete/{id}", name="api_history_delete", methods={"DELETE"})
+     * @Route("/api/program/delete/{id}", name="api_program_delete", methods={"DELETE"})
      *
      * @param $id
      * @return JsonResponse
@@ -301,38 +301,38 @@ class HistoryController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->historyService->findOneByUser($user, $id);
+        $entity = $this->programService->findOneByUser($user, $id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find History entity.');
+            throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
-        $this->historyService->remove($entity);
+        $this->programService->remove($entity);
 
-        return new JsonResponse($this->historyService->getJsonHistory($entity));
+        return new JsonResponse($this->programService->getJsonProgram($entity));
     }
 
 
 
     /**
-     * @Route("/api/history/last-public", name="api_history_last_public", methods={"GET"})
+     * @Route("/api/program/last-public", name="api_program_last_public", methods={"GET"})
      *
      * @return JsonResponse
      */
     public function lastPublic()
     {
-        $histories = $this->historyService->findLastPublic(15);
+        $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
-            'flow' => array_map(function (History $history) {
+            'flow' => array_map(function (Program $program) {
                 return array(
-                    'title' => $history->getTitle(),
-                    'slug' => $history->getSlug(),
-                    'path' => $this->folderService->toPath($history->getFolder()),
-                    'description' => $history->getDescription(),
-                    'username' => $history->getUser()->getUsername(),
+                    'title' => $program->getTitle(),
+                    'slug' => $program->getSlug(),
+                    'path' => $this->folderService->toPath($program->getFolder()),
+                    'description' => $program->getDescription(),
+                    'username' => $program->getUser()->getUsername(),
                 );
-            }, $histories),
+            }, $programs),
         ]);
     }
 }

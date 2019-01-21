@@ -10,13 +10,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\HistoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProgramRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_history", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user_id", "slug"})})
+ * @ORM\Table(name="program", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})}, uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user_id", "slug"})})
  * @UniqueEntity(fields={"user", "slug"}, message="The slug '{{ value }}' is already taken.")
  *
  */
-class History
+class Program
 {
     use TimestampTrait;
 
@@ -48,13 +48,13 @@ class History
      * @Assert\NotBlank(
      *     message="The user is required"
      * )
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="histories", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="programs", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="histories", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="programs", cascade={"persist"})
      * @ORM\JoinColumn(name="folder_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $folder;
@@ -70,8 +70,8 @@ class History
     /**
      * @var Tag[]
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="histories", cascade={"persist"})
-     * @ORM\JoinTable(name="dw_history_tag")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="programs", cascade={"persist"})
+     * @ORM\JoinTable(name="program_tag")
      */
     protected $tags;
 
@@ -158,7 +158,7 @@ class History
      *
      * @param User $user
      *
-     * @return History
+     * @return Program
      */
     public function setUser(User $user = null)
     {
@@ -213,13 +213,13 @@ class History
      * Add tags
      *
      * @param \App\Entity\Tag $tag
-     * @return History
+     * @return Program
      */
     public function addTag(\App\Entity\Tag $tag)
     {
         $this->tags[] = $tag;
 
-        $tag->addHistory($this);
+        $tag->addProgram($this);
 
         return $this;
     }
@@ -233,7 +233,7 @@ class History
     {
         $this->tags->removeElement($tag);
 
-        $tag->removeHistory($this);
+        $tag->removeProgram($this);
     }
 
     public function removeAllTags()
@@ -292,7 +292,7 @@ class History
      *
      * @param string $data
      *
-     * @return History
+     * @return Program
      */
     public function setData($data)
     {

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Services\FolderService;
-use App\Services\HistoryService;
+use App\Services\ProgramService;
 use App\Services\UserService;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -14,9 +14,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class FrontController extends AbstractController
 {
     /**
-     * @var HistoryService
+     * @var ProgramService
      */
-    protected $historyService;
+    protected $programService;
 
     /**
      * @var FolderService
@@ -29,11 +29,11 @@ class FrontController extends AbstractController
     protected $userService;
 
     public function __construct(
-        HistoryService $historyService,
+        ProgramService $programService,
         FolderService $folderService,
         UserService $userService
     ) {
-        $this->historyService = $historyService;
+        $this->programService = $programService;
         $this->folderService = $folderService;
         $this->userService = $userService;
     }
@@ -183,8 +183,8 @@ class FrontController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        $history = $this->historyService->findOneByUserAndPath($user, $path);
-        if (is_null($history)) {
+        $program = $this->programService->findOneByUserAndPath($user, $path);
+        if (is_null($program)) {
             $folder = $this->folderService->findOneByUserAndPath($user, $path);
             if(is_null($folder)) {
                 throw new NotFoundHttpException();

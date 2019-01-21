@@ -39,7 +39,7 @@ class TagRepository extends ServiceEntityRepository
             ->select('e')
         ;
 
-        $qb->leftJoin('e.histories', 'h')
+        $qb->leftJoin('e.programs', 'h')
             ->andWhere('h.id IS NULL');
 
         $query = $qb->getQuery();

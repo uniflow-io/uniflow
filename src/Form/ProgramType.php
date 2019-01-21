@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Folder;
-use App\Entity\History;
+use App\Entity\Program;
 use App\Form\DataMapper\PathMapper;
 use App\Form\Transformer\PathTransformer;
 use App\Form\Transformer\TagTransformer;
@@ -27,7 +27,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class HistoryType extends AbstractType
+class ProgramType extends AbstractType
 {
     /**
      * @var TagService
@@ -40,7 +40,7 @@ class HistoryType extends AbstractType
     protected $folderService;
 
     /**
-     * HistoryType constructor.
+     * ProgramType constructor.
      * @param TagService $tagService
      * @param FolderService $folderService
      */
@@ -81,7 +81,7 @@ class HistoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => History::class,
+            'data_class' => Program::class,
         ));
     }
 }

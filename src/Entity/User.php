@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Class User.
  *
- * @ORM\Table(name="dw_user")
+ * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email", message="The email '{{ value }}' is already used.")
  * @UniqueEntity("username", message="The username '{{ value }}' is already taken.")
@@ -92,9 +92,9 @@ class User implements UserInterface, \Serializable
     protected $apiKey;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Program", mappedBy="user", cascade={"persist"})
      */
-    protected $histories;
+    protected $programs;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Folder", mappedBy="user", cascade={"persist"})
@@ -113,7 +113,7 @@ class User implements UserInterface, \Serializable
      */
     public function __construct()
     {
-        $this->histories = new ArrayCollection();
+        $this->programs = new ArrayCollection();
         $this->folders = new ArrayCollection();
     }
 
@@ -302,26 +302,26 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param History $history
+     * @param Program $program
      * @return $this
      */
-    public function addHistory(History $history)
+    public function addProgram(Program $program)
     {
-        $this->histories[] = $history;
+        $this->programs[] = $program;
 
-        $history->setUser($this);
+        $program->setUser($this);
 
         return $this;
     }
 
     /**
-     * @param History $history
+     * @param Program $program
      */
-    public function removeHistory(History $history)
+    public function removeProgram(Program $program)
     {
-        $this->histories->removeElement($history);
+        $this->programs->removeElement($program);
 
-        $history->setUser(null);
+        $program->setUser(null);
     }
 
     /**
@@ -329,7 +329,7 @@ class User implements UserInterface, \Serializable
      */
     public function getHistories()
     {
-        return $this->histories;
+        return $this->programs;
     }
 
     /**

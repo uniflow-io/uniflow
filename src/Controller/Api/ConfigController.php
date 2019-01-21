@@ -42,7 +42,7 @@ class ConfigController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('You are not alowed to create more history');
+            throw new AccessDeniedException('You are not alowed to create more program');
         }
 
         $config = $this->configService->findOne();
@@ -71,7 +71,7 @@ class ConfigController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('You are not alowed to create more history');
+            throw new AccessDeniedException('You are not alowed to create more program');
         }
 
         $config = $this->configService->findOne();

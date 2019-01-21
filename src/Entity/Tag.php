@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
- * @ORM\Table(name="dw_tag", indexes={@ORM\Index(name="index_search_tags", columns={"title"})})
+ * @ORM\Table(name="tag", indexes={@ORM\Index(name="index_search_tags", columns={"title"})})
  *
  */
 class Tag
@@ -37,16 +37,16 @@ class Tag
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\History", mappedBy="tags", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Program", mappedBy="tags", cascade={"persist"})
      */
-    protected $histories;
+    protected $programs;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -81,32 +81,32 @@ class Tag
     }
 
     /**
-     * Add histories
+     * Add programs
      *
-     * @param \App\Entity\History $history
+     * @param \App\Entity\Program $program
      * @return Tag
      */
-    public function addHistory(\App\Entity\History $history)
+    public function addProgram(\App\Entity\Program $program)
     {
-        $this->histories[] = $history;
+        $this->programs[] = $program;
 
         return $this;
     }
 
     /**
-     * Remove histories
+     * Remove programs
      *
-     * @param \App\Entity\History $history
+     * @param \App\Entity\Program $program
      */
-    public function removeHistory(\App\Entity\History $history)
+    public function removeProgram(\App\Entity\Program $program)
     {
-        $this->histories->removeElement($history);
+        $this->programs->removeElement($program);
     }
 
     public function removeAllHistories()
     {
-        foreach ($this->getHistories() as $history) {
-            $this->removeHistory($history);
+        foreach ($this->getHistories() as $program) {
+            $this->removeProgram($program);
         }
     }
 
@@ -115,6 +115,6 @@ class Tag
      */
     public function getHistories()
     {
-        return $this->histories;
+        return $this->programs;
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\FolderRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_folder", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})})
+ * @ORM\Table(name="folder", indexes={@ORM\Index(name="index_search", columns={"slug", "title"})})
  *
  */
 class Folder
@@ -63,9 +63,9 @@ class Folder
     protected $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="folder", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Program", mappedBy="folder", cascade={"persist"})
      */
-    protected $histories;
+    protected $programs;
 
     /**
      * Constructor
@@ -73,7 +73,7 @@ class Folder
     public function __construct()
     {
         $this->children = new ArrayCollection();
-        $this->histories = new ArrayCollection();
+        $this->programs = new ArrayCollection();
     }
 
     public function __toString()
@@ -201,26 +201,26 @@ class Folder
     }
 
     /**
-     * @param History $history
+     * @param Program $program
      * @return $this
      */
-    public function addHistory(History $history)
+    public function addProgram(Program $program)
     {
-        $this->histories[] = $history;
+        $this->programs[] = $program;
 
-        $history->setFolder($this);
+        $program->setFolder($this);
 
         return $this;
     }
 
     /**
-     * @param History $history
+     * @param Program $program
      */
-    public function removeHistory(History $history)
+    public function removeProgram(Program $program)
     {
-        $this->histories->removeElement($history);
+        $this->programs->removeElement($program);
 
-        $history->setFolder(null);
+        $program->setFolder(null);
     }
 
     /**
@@ -228,6 +228,6 @@ class Folder
      */
     public function getHistories()
     {
-        return $this->histories;
+        return $this->programs;
     }
 }

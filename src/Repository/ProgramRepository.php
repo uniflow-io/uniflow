@@ -3,26 +3,26 @@
 namespace App\Repository;
 
 use App\Entity\Folder;
-use App\Entity\History;
+use App\Entity\Program;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class HistoryRepository
+ * Class ProgramRepository
  *
  * @package App\Repository
  */
-class HistoryRepository extends ServiceEntityRepository
+class ProgramRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, History::class);
+        parent::__construct($registry, Program::class);
     }
 
     /**
      * @param null $id
-     * @return History
+     * @return Program
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne($id = null)
@@ -44,7 +44,7 @@ class HistoryRepository extends ServiceEntityRepository
     /**
      * @param User $user
      * @param null $id
-     * @return History
+     * @return Program
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUser(User $user, $id = null)
@@ -67,7 +67,7 @@ class HistoryRepository extends ServiceEntityRepository
     /**
      * @param User $user
      * @param array $path
-     * @return History|null
+     * @return Program|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOneByUserAndPath(User $user, $path)
@@ -108,7 +108,7 @@ class HistoryRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return History[]
+     * @return Program[]
      */
     public function findByUser(User $user)
     {
@@ -121,7 +121,7 @@ class HistoryRepository extends ServiceEntityRepository
 
     /**
      * @param User $user
-     * @return History[]
+     * @return Program[]
      */
     public function findLastByUser(User $user)
     {
@@ -153,7 +153,7 @@ class HistoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getPublicHistoryByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
+    public function getPublicProgramByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
         $qb = $this->createQueryBuilder('h')
             ->select('h')
@@ -174,7 +174,7 @@ class HistoryRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function clearHistoryByUser(User $user)
+    public function clearProgramByUser(User $user)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->delete($this->getEntityName(), 'h')

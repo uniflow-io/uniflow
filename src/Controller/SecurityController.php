@@ -282,7 +282,7 @@ class SecurityController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_USER_PRO') && $user->getHistories()->count() >= 5) {
-            throw new AccessDeniedException('You are not alowed to create more history');
+            throw new AccessDeniedException('You are not alowed to create more program');
         }
 
         $code = null;

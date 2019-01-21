@@ -22,7 +22,7 @@ class FolderType extends AbstractType
     protected $folderService;
 
     /**
-     * HistoryType constructor.
+     * ProgramType constructor.
      * @param FolderService $folderService
      */
     public function __construct(FolderService $folderService)

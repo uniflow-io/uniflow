@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConfigRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="dw_config")
+ * @ORM\Table(name="config")
  *
  */
 class Config
