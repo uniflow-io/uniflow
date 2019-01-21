@@ -154,7 +154,7 @@ class FrontController extends AbstractController
      */
     public function feed($slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
-        return $this->render('default/flow.html.twig');
+        return $this->render('default/feed.html.twig');
     }
 
     /**
@@ -191,6 +191,6 @@ class FrontController extends AbstractController
             }
         }
 
-        return $this->render('default/flow.html.twig');
+        return $this->render('default/feed.html.twig');
     }
 }
