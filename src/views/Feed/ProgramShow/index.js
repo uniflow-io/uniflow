@@ -19,7 +19,6 @@ import {
   getProgramData,
   setProgramData,
   setCurrentProgram,
-  commitSetCurrentFolder,
   getFolderTree,
   pathToSlugs,
   pathToString,

@@ -73,11 +73,11 @@ const routes = {
     component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN')
   },
   feed: {
-    path: '/me/flow/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
+    path: '/me/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
     component: requireAuthentication(Feed)
   },
   userFeed: {
-    path: '/:username/flow/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
+    path: '/:username/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
     component: Feed
   }
 }
