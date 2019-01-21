@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import debounce from 'lodash/debounce'
 import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
-import {Folder, Program, Runner} from '../../../models'
+import { Program, Runner} from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -18,12 +18,16 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setCurrentProgram, commitSetCurrentFolder
+  setCurrentProgram,
+  commitSetCurrentFolder,
+  getFolderTree,
+  pathToSlugs,
+  pathToString,
+  stringToPath
 } from '../../../reducers/feed/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import components from '../../../uniflow'
-import {getFolderTree, pathToSlugs, pathToString, stringToPath} from "../../../reducers/folder/actions";
 import {pathTo} from "../../../routes";
 
 class Show extends Component {

@@ -8,10 +8,9 @@ import {
   deleteCurrentFolder,
   pathToSlugs,
   pathToString,
-  stringToPath
-} from '../../../reducers/folder/actions'
-import {
-  commitSetCurrentFolder, getCurrentPath
+  stringToPath,
+  commitSetCurrentFolder,
+  getCurrentPath
 } from '../../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import {pathTo} from "../../../routes";

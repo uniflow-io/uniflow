@@ -3,8 +3,14 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
-import {getOrderedFeed, createProgram, setCurrentProgram, getCurrentPath} from '../../../reducers/feed/actions'
-import {createFolder, pathToSlugs} from '../../../reducers/folder/actions'
+import {
+  getOrderedFeed,
+  createProgram,
+  setCurrentProgram,
+  getCurrentPath,
+  createFolder,
+  pathToSlugs
+} from '../../../reducers/feed/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
 class Program extends Component {

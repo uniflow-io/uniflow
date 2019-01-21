@@ -10,9 +10,9 @@ import {
   commitSetCurrentFolder,
   setUsernameProgram,
   getCurrentProgram,
-  getCurrentPath
+  getCurrentPath,
+  pathToSlugs
 } from '../../reducers/feed/actions'
-import {pathToSlugs} from '../../reducers/folder/actions'
 
 class UserManagerComponent extends Component<Props> {
   componentDidMount() {
