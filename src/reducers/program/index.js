@@ -1,8 +1,8 @@
 import {
-  COMMIT_CLEAR_HISTORY,
-  COMMIT_UPDATE_HISTORY,
-  COMMIT_DELETE_HISTORY,
-  COMMIT_SET_CURRENT_HISTORY,
+  COMMIT_CLEAR_PROGRAM,
+  COMMIT_UPDATE_PROGRAM,
+  COMMIT_DELETE_PROGRAM,
+  COMMIT_SET_CURRENT_PROGRAM,
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
@@ -14,24 +14,24 @@ const defaultState = {
   username: null
 }
 
-const history = (state = defaultState, action) => {
+const program = (state = defaultState, action) => {
   switch (action.type) {
-    case COMMIT_CLEAR_HISTORY:
+    case COMMIT_CLEAR_PROGRAM:
       return {
         ...state,
         items: {}
       }
-    case COMMIT_UPDATE_HISTORY:
+    case COMMIT_UPDATE_PROGRAM:
       state.items[`${action.item.constructor.name}_${action.item.id}`] = action.item
       return {
         ...state
       }
-    case COMMIT_DELETE_HISTORY:
+    case COMMIT_DELETE_PROGRAM:
       delete state.items[`${action.item.constructor.name}_${action.item.id}`]
       return {
         ...state
       }
-    case COMMIT_SET_CURRENT_HISTORY:
+    case COMMIT_SET_CURRENT_PROGRAM:
       return {
         ...state,
         current: action.current === null ? null : {...action.current}
@@ -51,4 +51,4 @@ const history = (state = defaultState, action) => {
   }
 }
 
-export default history
+export default program

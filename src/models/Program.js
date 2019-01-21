@@ -1,7 +1,7 @@
 import { Bus } from 'uniflow/src/models'
 import moment from 'moment'
 
-export default class History {
+export default class Program {
   constructor (data) {
     Object.assign(this, data)
 

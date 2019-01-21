@@ -1,6 +1,6 @@
 import Folder from './Folder'
-import History from './History'
+import Program from './Program'
 import Log from './Log'
 import Runner from './Runner'
 
-export { Folder, History, Log, Runner }
+export { Folder, Program, Log, Runner }

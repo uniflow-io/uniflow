@@ -1,18 +1,18 @@
 import request from 'axios'
 import server from '../../utils/server'
-import {Log, History, Folder} from '../../models/index'
+import {Log, Program, Folder} from '../../models/index'
 import moment from 'moment'
 import {
-  COMMIT_CLEAR_HISTORY,
-  COMMIT_UPDATE_HISTORY,
-  COMMIT_DELETE_HISTORY,
-  COMMIT_SET_CURRENT_HISTORY,
+  COMMIT_CLEAR_PROGRAM,
+  COMMIT_UPDATE_PROGRAM,
+  COMMIT_DELETE_PROGRAM,
+  COMMIT_SET_CURRENT_PROGRAM,
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
 import {commitLogoutUser} from '../auth/actions'
 
-export const getCurrentHistory = (state) => {
+export const getCurrentProgram = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
 }
 export const getCurrentPath = (state) => {
@@ -25,14 +25,14 @@ export const getCurrentPath = (state) => {
   return path;
 }
 
-export const getOrderedHistory = (state, filter) => {
+export const getOrderedProgram = (state, filter) => {
   let keys = Object.keys(state.items)
 
   if (filter !== undefined) {
     keys = keys.filter((key) => {
       let item  = state.items[key]
       let words = item.title
-      if(item.constructor.name === 'History') {
+      if(item.constructor.name === 'Program') {
         for (let i = 0; i < item.tags.length; i++) {
           words += ' ' + item.tags[i]
         }
@@ -55,11 +55,11 @@ export const getOrderedHistory = (state, filter) => {
   })
 }
 
-export const getHistoryBySlug = (state, slug) => {
+export const getProgramBySlug = (state, slug) => {
   let keys = Object.keys(state.items)
 
   let slugKeys = keys.filter((key) => {
-    return state.items[key].constructor.name === 'History' && state.items[key].slug === slug
+    return state.items[key].constructor.name === 'Program' && state.items[key].slug === slug
   })
 
   if (slugKeys.length > 0) {
@@ -82,36 +82,36 @@ export const getTags = (state) => {
   return tags
 }
 
-export const commitClearHistory          = () => {
+export const commitClearProgram          = () => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_CLEAR_HISTORY
+      type: COMMIT_CLEAR_PROGRAM
     })
     return Promise.resolve()
   }
 }
-export const commitUpdateHistory         = (item) => {
+export const commitUpdateProgram         = (item) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_UPDATE_HISTORY,
+      type: COMMIT_UPDATE_PROGRAM,
       item
     })
     return Promise.resolve()
   }
 }
-export const commitDeleteHistory         = (item) => {
+export const commitDeleteProgram         = (item) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_DELETE_HISTORY,
+      type: COMMIT_DELETE_PROGRAM,
       item
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentHistory     = (current) => {
+export const commitSetCurrentProgram     = (current) => {
   return (dispatch) => {
     dispatch({
-      type: COMMIT_SET_CURRENT_HISTORY,
+      type: COMMIT_SET_CURRENT_PROGRAM,
       current
     })
     return Promise.resolve()
@@ -136,7 +136,7 @@ export const commitSetCurrentUsername    = (username) => {
   }
 }
 
-export const fetchHistory = (username, path, token = null) => {
+export const fetchProgram = (username, path, token = null) => {
   return (dispatch) => {
     let config = {}
     if (token) {
@@ -146,21 +146,21 @@ export const fetchHistory = (username, path, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/history/${username}/list/${path.join('/')}`, config)
+      .get(`${server.getBaseUrl()}/api/program/${username}/list/${path.join('/')}`, config)
       .then((response) => {
-        dispatch(commitClearHistory())
+        dispatch(commitClearProgram())
 
         for (let i = 0; i < response.data['children'].length; i++) {
           let item            = null
           let {type, ...data} = response.data['children'][i]
 
-          if (type === 'history') {
-            item = new History(data)
+          if (type === 'program') {
+            item = new Program(data)
           } else if (type === 'folder') {
             item = new Folder(data)
           }
 
-          dispatch(commitUpdateHistory(item))
+          dispatch(commitUpdateProgram(item))
         }
 
         dispatch(commitSetCurrentFolder(response.data['folder'] ? new Folder(response.data['folder']) : null))
@@ -175,7 +175,7 @@ export const fetchHistory = (username, path, token = null) => {
   }
 }
 
-export const createHistory = (item, token) => {
+export const createProgram = (item, token) => {
   return (dispatch) => {
     let data = {
       title: item.title,
@@ -188,15 +188,15 @@ export const createHistory = (item, token) => {
     }
 
     return request
-      .post(`${server.getBaseUrl()}/api/history/create`, data, {
+      .post(`${server.getBaseUrl()}/api/program/create`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`
         }
       })
       .then((response) => {
-        let item = new History(response.data)
+        let item = new Program(response.data)
 
-        dispatch(commitUpdateHistory(item))
+        dispatch(commitUpdateProgram(item))
 
         return item
       })
@@ -210,7 +210,7 @@ export const createHistory = (item, token) => {
   }
 }
 
-export const updateHistory = (item, token) => {
+export const updateProgram = (item, token) => {
   return (dispatch) => {
     let data = {
       title: item.title,
@@ -223,15 +223,15 @@ export const updateHistory = (item, token) => {
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/history/update/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/program/update/${item.id}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`
         }
       })
       .then((response) => {
-        let item = new History(response.data)
+        let item = new Program(response.data)
 
-        dispatch(commitUpdateHistory(item))
+        dispatch(commitUpdateProgram(item))
 
         return item
       })
@@ -245,7 +245,7 @@ export const updateHistory = (item, token) => {
   }
 }
 
-export const getHistoryData = (item, token = null) => {
+export const getProgramData = (item, token = null) => {
   return (dispatch) => {
     let config = {}
     if (token) {
@@ -255,7 +255,7 @@ export const getHistoryData = (item, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/history/getData/${item.id}`, config)
+      .get(`${server.getBaseUrl()}/api/program/getData/${item.id}`, config)
       .then((response) => {
         return response.data.data
       })
@@ -269,10 +269,10 @@ export const getHistoryData = (item, token = null) => {
   }
 }
 
-export const setHistoryData = (item, token) => {
+export const setProgramData = (item, token) => {
   return (dispatch) => {
     return request
-      .put(`${server.getBaseUrl()}/api/history/setData/${item.id}`, item.data, {
+      .put(`${server.getBaseUrl()}/api/program/setData/${item.id}`, item.data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`
         }
@@ -280,7 +280,7 @@ export const setHistoryData = (item, token) => {
       .then((response) => {
         item.updated = moment()
 
-        dispatch(commitUpdateHistory(item))
+        dispatch(commitUpdateProgram(item))
 
         return response.data
       })
@@ -294,16 +294,16 @@ export const setHistoryData = (item, token) => {
   }
 }
 
-export const deleteHistory = (item, token) => {
+export const deleteProgram = (item, token) => {
   return (dispatch) => {
     return request
-      .delete(`${server.getBaseUrl()}/api/history/delete/${item.id}`, {
+      .delete(`${server.getBaseUrl()}/api/program/delete/${item.id}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`
         }
       })
       .then((response) => {
-        dispatch(commitDeleteHistory(item))
+        dispatch(commitDeleteProgram(item))
 
         return response.data
       })
@@ -317,15 +317,15 @@ export const deleteHistory = (item, token) => {
   }
 }
 
-export const setCurrentHistory = (current) => {
+export const setCurrentProgram = (current) => {
   return (dispatch) => {
-    dispatch(commitSetCurrentHistory(current))
+    dispatch(commitSetCurrentProgram(current))
 
     return Promise.resolve(current)
   }
 }
 
-export const setUsernameHistory = (username) => {
+export const setUsernameProgram = (username) => {
   return (dispatch) => {
     dispatch(commitSetCurrentUsername(username))
 
@@ -333,10 +333,10 @@ export const setUsernameHistory = (username) => {
   }
 }
 
-export const getLastPublicHistory = () => {
+export const getLastPublicProgram = () => {
   return (dispatch) => {
     return request
-      .get(`${server.getBaseUrl()}/api/history/last-public`)
+      .get(`${server.getBaseUrl()}/api/program/last-public`)
       .then((response) => {
         return response.data.flow
       })

@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import History from './History'
+import Program from './Program'
 import Show from './Show'
 import FolderShow from './FolderShow'
-import { getCurrentHistory } from '../../reducers/history/actions'
+import { getCurrentProgram } from '../../reducers/program/actions'
 import { connect } from 'react-redux'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
 
 class Flow extends Component<Props> {
   render () {
-    const { history } = this.props
-    const currentHistory = getCurrentHistory(history)
+    const { program } = this.props
+    const currentProgram = getCurrentProgram(program)
 
     return (
       <div id='flow' className='content-wrapper'>
@@ -28,13 +28,13 @@ class Flow extends Component<Props> {
         <section className='content'>
           <div className='row'>
             <div className='col-sm-2'>
-              <History />
+              <Program />
             </div>
             <div className='col-sm-10'>
-              {history.username && currentHistory && currentHistory.constructor.name === 'History' && (
+              {program.username && currentProgram && currentProgram.constructor.name === 'Program' && (
                 <Show />
               )}
-              {history.username && currentHistory === null && history.folder && (
+              {program.username && currentProgram === null && program.folder && (
                 <FolderShow />
               )}
             </div>
@@ -47,6 +47,6 @@ class Flow extends Component<Props> {
 
 export default connect(state => {
   return {
-    history: state.history
+    program: state.program
   }
 })(Flow)

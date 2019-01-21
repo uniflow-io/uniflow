@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
-import { getLastPublicHistory } from '../../reducers/history/actions'
+import { getLastPublicProgram } from '../../reducers/program/actions'
 import { connect } from 'react-redux'
 
 class Home extends Component {
@@ -14,7 +14,7 @@ class Home extends Component {
     }
 
     onFetchFlowData = () => {
-      this.props.dispatch(getLastPublicHistory())
+      this.props.dispatch(getLastPublicProgram())
         .then((flow) => {
           this.setState({ flow: flow })
         })

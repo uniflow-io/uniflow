@@ -32,7 +32,7 @@ const defaultState = [{
   date: '30/08/2018'
 }, {
   tag: 'v0.0.23',
-  label: 'Add client to history',
+  label: 'Add client to program',
   date: '30/08/2018'
 }, {
   tag: 'v0.0.22',

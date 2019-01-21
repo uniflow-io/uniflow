@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Select2Component } from 'uniflow/src/components'
 import { Bus } from 'uniflow/src/models'
-import { getOrderedHistory, getHistoryData } from '../../reducers/history/actions'
+import { getOrderedProgram, getProgramData } from '../../reducers/program/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
@@ -24,7 +24,7 @@ type Props = {
 class ComponentInclude extends Component<Props> {
     state = {
       running: false,
-      historyId: null
+      programId: null
     }
 
     constructor (props) {
@@ -41,19 +41,19 @@ class ComponentInclude extends Component<Props> {
       return ['uniflow', 'bash']
     }
 
-    getFlow = (historyId) => {
-      let history = this.props.history.items[historyId]
+    getFlow = (programId) => {
+      let program = this.props.program.items[programId]
 
       return Promise.resolve()
         .then(() => {
-          return this.props.dispatch(getHistoryData(history, this.props.auth.token))
+          return this.props.dispatch(getProgramData(program, this.props.auth.token))
         })
         .then((data) => {
           if (!data) return
 
-          history.data = data
+          program.data = data
 
-          return this.setFlow(history.deserialiseFlowData())
+          return this.setFlow(program.deserialiseFlowData())
         })
     }
 
@@ -104,17 +104,17 @@ class ComponentInclude extends Component<Props> {
     }
 
     serialise = () => {
-      return [this.state.historyId]
+      return [this.state.programId]
     }
 
     deserialise = (data) => {
-      let [historyId] = data || [null]
+      let [programId] = data || [null]
 
-      this.setState({ historyId: historyId })
+      this.setState({ programId: programId })
     }
 
-    onChangeSelected = (historyId) => {
-      this.setState({ historyId: historyId }, this.onUpdate)
+    onChangeSelected = (programId) => {
+      this.setState({ programId: programId }, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -128,7 +128,7 @@ class ComponentInclude extends Component<Props> {
     }
 
     onCompile = (interpreter, scope, asyncWrapper) => {
-      return this.getFlow(this.state.historyId)
+      return this.getFlow(this.state.programId)
         .then(() => {
           let flow = this.stack.getState()
           return flow.reduce((promise, item) => {
@@ -169,7 +169,7 @@ class ComponentInclude extends Component<Props> {
     }
 
     render () {
-      const { running, historyId } = this.state
+      const { running, programId } = this.state
       const stack = this.stack.getState()
 
       return ([
@@ -186,8 +186,8 @@ class ComponentInclude extends Component<Props> {
                 <label htmlFor='select{{ _uid }}' className='col-sm-2 control-label'>Select</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={historyId} onChange={this.onChangeSelected} className='form-control' id='select{{ _uid }}' style={{ width: '100%' }}>
-                    {getOrderedHistory(this.props.history).map((item, i) => (
+                  <Select2Component value={programId} onChange={this.onChangeSelected} className='form-control' id='select{{ _uid }}' style={{ width: '100%' }}>
+                    {getOrderedProgram(this.props.program).map((item, i) => (
                       <option key={item.id} value={item.id}>{ item.title }</option>
                     ))}
                   </Select2Component>
@@ -205,6 +205,6 @@ class ComponentInclude extends Component<Props> {
 export default connect(state => {
   return {
     auth: state.auth,
-    history: state.history
+    program: state.program
   }
 })(ComponentInclude)

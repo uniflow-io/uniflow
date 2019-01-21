@@ -3,11 +3,11 @@ import {Link} from 'react-router-dom'
 import {pathTo} from '../../../routes'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
-import {getOrderedHistory, createHistory, setCurrentHistory, getCurrentPath} from '../../../reducers/history/actions'
+import {getOrderedProgram, createProgram, setCurrentProgram, getCurrentPath} from '../../../reducers/program/actions'
 import {createFolder, pathToSlugs} from '../../../reducers/folder/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 
-class History extends Component {
+class Program extends Component {
   state = {
     search: ''
   }
@@ -22,10 +22,10 @@ class History extends Component {
     this.props
       .dispatch(createFolder({
         'title': this.state.search,
-        'path': getCurrentPath(this.props.historyState)
+        'path': getCurrentPath(this.props.program)
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentHistory(null))
+        return this.props.dispatch(setCurrentProgram(null))
           .then(() => {
             this.props.history.push(this.itemPathTo(item))
           })
@@ -39,15 +39,15 @@ class History extends Component {
     event.preventDefault()
 
     this.props
-      .dispatch(createHistory({
+      .dispatch(createProgram({
         'title': this.state.search,
         'client': 'uniflow',
         'tags': [],
         'description': '',
-        'path': getCurrentPath(this.props.historyState)
+        'path': getCurrentPath(this.props.program)
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
+        return this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
           .then(() => {
             this.props.history.push(this.itemPathTo(item))
           })
@@ -58,45 +58,45 @@ class History extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+    const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
     let slugs = pathToSlugs(path)
 
     if (item.public || isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+      return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
     }
 
     return pathTo('flow', slugs)
   }
 
   render() {
-    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+    const isCurrentUser = this.props.program.username && this.props.program.username === this.props.user.username
     const isFolderActive      = () => {
-      return this.props.historyState.current === null ? 'active' : ''
+      return this.props.program.current === null ? 'active' : ''
     }
     const isActive      = (item) => {
-      return (this.props.historyState.current && this.props.historyState.current.type === item.constructor.name && this.props.historyState.current.id === item.id) ? 'active' : ''
+      return (this.props.program.current && this.props.program.current.type === item.constructor.name && this.props.program.current.id === item.id) ? 'active' : ''
     }
 
     const backTo = () => {
-      let path  = getCurrentPath(this.props.historyState).slice(0, -1)
+      let path  = getCurrentPath(this.props.program).slice(0, -1)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
-        return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+        return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
       }
 
       return pathTo('flow', slugs)
     }
 
     const folderTo = () => {
-      let path  = getCurrentPath(this.props.historyState)
+      let path  = getCurrentPath(this.props.program)
       let slugs = pathToSlugs(path)
 
       if (isCurrentUser) {
-        return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+        return pathTo('userFlow', Object.assign({username: this.props.program.username}, slugs))
       }
 
       return pathTo('flow', slugs)
@@ -105,7 +105,7 @@ class History extends Component {
     return (
       <div className='box box-danger'>
         <div className='box-header with-border'>
-          <h3 className='box-title'>History</h3>
+          <h3 className='box-title'>Program</h3>
         </div>
         <div className='box-body'>
           <div className='navbar navbar-default navbar-vertical' role='navigation'>
@@ -136,7 +136,7 @@ class History extends Component {
                     </div>
                   </form>
                 </li>
-                {this.props.historyState.folder && ([
+                {this.props.program.folder && ([
                   <li key={'back'}>
                     <Link
                       to={backTo()}><i className="fa fa-arrow-left fa-fw"/> Back</Link>
@@ -145,12 +145,12 @@ class History extends Component {
                     <Link to={folderTo()}>.</Link>
                   </li>
                 ])}
-                {getOrderedHistory(this.props.historyState, this.state.search).map((item, i) => (
+                {getOrderedProgram(this.props.program, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
                       to={this.itemPathTo(item)}>{item.constructor.name === 'Folder' && (
                       <i className="fa fa-folder fa-fw"/>
-                    )}{item.title} {item.constructor.name === 'History' && item.tags.map((tag, j) => (
+                    )}{item.title} {item.constructor.name === 'Program' && item.tags.map((tag, j) => (
                       <span key={j} className='badge'>{tag}</span>
                     ))}</Link>
                   </li>
@@ -167,5 +167,5 @@ class History extends Component {
 export default connect(state => ({
   auth: state.auth,
   user: state.user,
-  historyState: state.history
-}))(withRouter(History))
+  program: state.program
+}))(withRouter(Program))

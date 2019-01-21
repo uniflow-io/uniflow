@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router'
 import debounce from 'lodash/debounce'
 import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
-import {Folder, History, Runner} from '../../../models'
+import {Folder, Program, Runner} from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -10,16 +10,16 @@ import {
   commitSetFlow
 } from 'uniflow/src/reducers/flow/actions'
 import {
-  getCurrentHistory,
+  getCurrentProgram,
   getTags,
-  commitUpdateHistory,
-  createHistory,
-  updateHistory,
-  deleteHistory,
-  getHistoryData,
-  setHistoryData,
-  setCurrentHistory, commitSetCurrentFolder
-} from '../../../reducers/history/actions'
+  commitUpdateProgram,
+  createProgram,
+  updateProgram,
+  deleteProgram,
+  getProgramData,
+  setProgramData,
+  setCurrentProgram, commitSetCurrentFolder
+} from '../../../reducers/program/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
 import components from '../../../uniflow'
@@ -36,11 +36,11 @@ class Show extends Component {
   }
 
   componentDidMount() {
-    const {historyObj} = this.props
+    const {program} = this.props
 
     this._isMounted = true
 
-    this.setState({folderTree: [pathToString(historyObj.path)]})
+    this.setState({folderTree: [pathToString(program.path)]})
 
     this.onFetchFlowData()
   }
@@ -52,10 +52,10 @@ class Show extends Component {
   componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
-    if (nextProps.historyObj.id !== oldProps.historyObj.id) {
+    if (nextProps.program.id !== oldProps.program.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(nextProps.historyObj.path)]
+        folderTree: [pathToString(nextProps.program.path)]
       })
 
       this.onFetchFlowData()
@@ -119,44 +119,44 @@ class Show extends Component {
   }
 
   onFetchFlowData = debounce(() => {
-    let {historyObj} = this.props
+    let {program} = this.props
 
     Promise.resolve()
       .then(() => {
         return this.props.dispatch(commitSetFlow([]))
       })
       .then(() => {
-        if (historyObj.data) {
-          return historyObj.data
+        if (program.data) {
+          return program.data
         }
 
-        return this.props.dispatch(getHistoryData(historyObj, this.props.auth.token))
+        return this.props.dispatch(getProgramData(program, this.props.auth.token))
       })
       .then((data) => {
         if (!data) return
 
-        historyObj.data = data
+        program.data = data
 
-        if (historyObj.slug !== this.props.historyObj.slug) return
+        if (program.slug !== this.props.program.slug) return
 
-        return this.setFlow(historyObj.deserialiseFlowData())
+        return this.setFlow(program.deserialiseFlowData())
       })
       .then(() => {
         if (this.isMounted()) {
-          this.setState({fetchedSlug: historyObj.slug})
+          this.setState({fetchedSlug: program.slug})
         }
       })
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let {historyObj, stack, user, historyState} = this.props
-    if (historyObj.slug !== this.state.fetchedSlug) return
+    let {program, stack, user, programState} = this.props
+    if (program.slug !== this.state.fetchedSlug) return
 
-    let data = historyObj.data
-    historyObj.serialiseFlowData(stack)
-    if ((historyState.username === 'me' || user.username === historyState.username) && historyObj.data !== data) {
+    let data = program.data
+    program.serialiseFlowData(stack)
+    if ((programState.username === 'me' || user.username === programState.username) && program.data !== data) {
       this.props
-        .dispatch(setHistoryData(historyObj, this.props.auth.token))
+        .dispatch(setProgramData(program, this.props.auth.token))
         .catch((log) => {
           return this.props.dispatch(commitAddLog(log.message))
         })
@@ -165,7 +165,7 @@ class Show extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{title: event.target.value}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{title: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -173,7 +173,7 @@ class Show extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{slug: event.target.value}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{slug: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -181,7 +181,7 @@ class Show extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({ ...this.props.historyObj, ...{ path: stringToPath(selected) } })))
+      .dispatch(commitUpdateProgram(new Program({ ...this.props.program, ...{ path: stringToPath(selected) } })))
       .then(() => {
         this.onUpdate()
       })
@@ -189,7 +189,7 @@ class Show extends Component {
 
   onChangeClient = (selected) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{client: selected}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{client: selected}})))
       .then(() => {
         this.onUpdate()
       })
@@ -197,7 +197,7 @@ class Show extends Component {
 
   onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{tags: tags}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{tags: tags}})))
       .then(() => {
         this.onUpdate()
       })
@@ -205,7 +205,7 @@ class Show extends Component {
 
   onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{description: description}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{description: description}})))
       .then(() => {
         this.onUpdate()
       })
@@ -213,31 +213,31 @@ class Show extends Component {
 
   onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateHistory(new History({...this.props.historyObj, ...{public: value}})))
+      .dispatch(commitUpdateProgram(new Program({...this.props.program, ...{public: value}})))
       .then(() => {
         this.onUpdate()
       })
   }
 
   onUpdate = debounce(() => {
-    this.props.dispatch(updateHistory(this.props.historyObj, this.props.auth.token)).then(() => {
-      this.props.history.push(this.itemPathTo(this.props.historyObj))
+    this.props.dispatch(updateProgram(this.props.program, this.props.auth.token)).then(() => {
+      this.props.history.push(this.itemPathTo(this.props.program))
     })
   }, 500)
 
   onDuplicate = (event) => {
     event.preventDefault()
 
-    let historyObj = new History(this.props.historyObj)
-    historyObj.title += ' Copy'
+    let program = new Program(this.props.program)
+    program.title += ' Copy'
 
-    this.props.dispatch(createHistory(historyObj, this.props.auth.token))
+    this.props.dispatch(createProgram(program, this.props.auth.token))
       .then((item) => {
-        Object.assign(historyObj, item)
-        return this.props.dispatch(setHistoryData(historyObj, this.props.auth.token))
+        Object.assign(program, item)
+        return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
+        return this.props.dispatch(setCurrentProgram({type: program.constructor.name, id: program.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -247,15 +247,15 @@ class Show extends Component {
   onDelete = (event) => {
     event.preventDefault()
 
-    return this.props.dispatch(deleteHistory(this.props.historyObj, this.props.auth.token))
+    return this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token))
   }
 
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const {historyState} = this.props
+    const {programState} = this.props
 
-    this.props.dispatch(getFolderTree(historyState.username, this.props.auth.token))
+    this.props.dispatch(getFolderTree(programState.username, this.props.auth.token))
       .then((folderTree) => {
         folderTree = folderTree.map((path) => {
           return pathToString(path)
@@ -268,13 +268,13 @@ class Show extends Component {
       })
   }
 
-  getComponents = (userComponents, historyObj) => {
+  getComponents = (userComponents, program) => {
     let componentLabels = []
 
     for (let i = 0; i < userComponents.length; i++) {
       let key = userComponents[i]
 
-      if (components[key].clients().indexOf(historyObj.client) !== -1) {
+      if (components[key].clients().indexOf(program.client) !== -1) {
         componentLabels.push({
           key: key,
           label: components[key].tags().join(' - ') + ' : ' + key
@@ -292,26 +292,26 @@ class Show extends Component {
   }
 
   itemPathTo = (item) => {
-    const isCurrentUser = this.props.historyState.username && this.props.historyState.username === this.props.user.username
+    const isCurrentUser = this.props.programState.username && this.props.programState.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
     let slugs = pathToSlugs(path)
 
     if (isCurrentUser) {
-      return pathTo('userFlow', Object.assign({username: this.props.historyState.username}, slugs))
+      return pathTo('userFlow', Object.assign({username: this.props.programState.username}, slugs))
     }
 
     return pathTo('flow', slugs)
   }
 
   render() {
-    const {historyObj, tags, stack, client, user} = this.props
+    const {program, tags, stack, client, user} = this.props
     const {folderTreeEdit, folderTree} = this.state
     const tagsOptions                          = {
       availableTags: tags
     }
-    const components                           = this.getComponents(user.components, historyObj)
+    const components                           = this.getComponents(user.components, program)
     const clients                              = {
       'uniflow': 'Uniflow',
       'bash': 'Bash',
@@ -337,7 +337,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                         value={historyObj.title} onChange={this.onChangeTitle} placeholder='Title'/>
+                         value={program.title} onChange={this.onChangeTitle} placeholder='Title'/>
                 </div>
               </div>
 
@@ -346,7 +346,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                         value={historyObj.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
+                         value={program.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
                 </div>
               </div>
 
@@ -355,14 +355,14 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   {folderTreeEdit && (
-                    <Select2Component value={pathToString(historyObj.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
+                    <Select2Component value={pathToString(program.path)} onChange={this.onChangePath} className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
                       {folderTree.map((value) => (
                         <option key={value} value={value}>{ value }</option>
                       ))}
                     </Select2Component>
                   ) || (
                     <div>
-                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(historyObj.path)}
+                      <button type="button" className="btn btn-primary" onClick={this.onFolderEdit}><i className="fa fa-edit fa-fw" /></button> {pathToString(program.path)}
                     </div>
                   )}
                 </div>
@@ -372,7 +372,7 @@ class Show extends Component {
                 <label htmlFor='info_client_{{ _uid }}' className='col-sm-2 control-label'>Client</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={historyObj.client} onChange={this.onChangeClient} className='form-control'
+                  <Select2Component value={program.client} onChange={this.onChangeClient} className='form-control'
                                     id='info_client_{{ _uid }}' style={{width: '100%'}}>
                     {Object.keys(clients).map((value) => (
                       <option key={value} value={value}>{clients[value]}</option>
@@ -386,7 +386,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <TagItComponent type='text' className='form-control' id='info_tags_{{ _uid }}'
-                                  value={historyObj.tags} onChange={this.onChangeTags} options={tagsOptions}
+                                  value={program.tags} onChange={this.onChangeTags} options={tagsOptions}
                                   placeholder='Tags'/>
                 </div>
               </div>
@@ -395,7 +395,7 @@ class Show extends Component {
                 <label htmlFor='info_public_{{ _uid }}' className='col-sm-2 control-label'>Public</label>
 
                 <div className='col-sm-10'>
-                  <ICheckBoxComponent value={historyObj.public} onChange={this.onChangePublic}
+                  <ICheckBoxComponent value={program.public} onChange={this.onChangePublic}
                                       id='info_public_{{ _uid }}'/>
                 </div>
               </div>
@@ -406,7 +406,7 @@ class Show extends Component {
 
                 <div className='col-sm-10'>
                   <AceComponent className='form-control' id='info_description_{{ _uid }}'
-                                value={historyObj.description} onChange={this.onChangeDescription}
+                                value={program.description} onChange={this.onChangeDescription}
                                 placeholder='Text' height='200'/>
                 </div>
               </div>
@@ -414,7 +414,7 @@ class Show extends Component {
             </form>
           </div>
           <div className='box-footer'>
-            {historyObj.client === 'uniflow' && (
+            {program.client === 'uniflow' && (
               <a className='btn btn-success' onClick={this.run}><i className='fa fa-fw fa-play'/> Play</a>
             )}
           </div>
@@ -436,9 +436,9 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    historyObj: getCurrentHistory(state.history),
-    tags: getTags(state.history),
-    historyState: state.history,
+    program: getCurrentProgram(state.program),
+    tags: getTags(state.program),
+    programState: state.program,
     stack: state.flow
   }
 })(withRouter(Show))

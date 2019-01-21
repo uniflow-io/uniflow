@@ -8,7 +8,7 @@ import {
 import { combineReducers } from 'redux'
 import { Provider, connect } from 'react-redux'
 import routes, { pathTo } from './routes'
-import { auth, env, history, logs, user, versions } from './reducers'
+import { auth, env, program, logs, user, versions } from './reducers'
 import { flow } from 'uniflow/src/reducers'
 import { UserManagerComponent } from './components'
 import { createStore } from 'uniflow/src/utils'
@@ -18,14 +18,14 @@ import { isGranted } from './reducers/user/actions'
 import { commitSetEnv } from './reducers/env/actions'
 import { getLastVersion } from './reducers/versions/actions'
 import { withRouter, matchPath } from 'react-router'
-// import createBrowserHistory from 'history/createBrowserHistory'
+// import createBrowserHistory from 'history/createBrowserProgram'
 
 // const history = createBrowserHistory()
 let store = createStore(combineReducers({
   auth,
   env,
   flow,
-  history,
+  program,
   logs,
   user,
   versions

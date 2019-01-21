@@ -4,14 +4,14 @@ import {fetchComponents, fetchSettings} from '../../reducers/user/actions'
 import routes, {pathTo, matchRoute} from '../../routes'
 import {withRouter} from 'react-router'
 import {
-  fetchHistory,
-  getHistoryBySlug,
-  setCurrentHistory,
+  fetchProgram,
+  getProgramBySlug,
+  setCurrentProgram,
   commitSetCurrentFolder,
-  setUsernameHistory,
-  getCurrentHistory,
+  setUsernameProgram,
+  getCurrentProgram,
   getCurrentPath
-} from '../../reducers/history/actions'
+} from '../../reducers/program/actions'
 import {pathToSlugs} from '../../reducers/folder/actions'
 
 class UserManagerComponent extends Component<Props> {
@@ -45,9 +45,9 @@ class UserManagerComponent extends Component<Props> {
     if (match) {
       let params = match.match.params
       if (match.route === 'flow') {
-        this.onFetchHistory('me', params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
+        this.onFetchProgram('me', params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
       } else if (match.route === 'userFlow') {
-        this.onFetchHistory(params.username, params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
+        this.onFetchProgram(params.username, params.slug1, params.slug2, params.slug3, params.slug4, params.slug5)
       }
     }
   }
@@ -63,8 +63,8 @@ class UserManagerComponent extends Component<Props> {
     })
   }
 
-  onFetchHistory = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
-    const {historyState} = this.props
+  onFetchProgram = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
+    const {program} = this.props
 
     let path          = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
       if (slug) {
@@ -72,52 +72,52 @@ class UserManagerComponent extends Component<Props> {
       }
       return path
     }, [])
-    let currentPath = getCurrentPath(historyState),
-        item = getCurrentHistory(historyState)
+    let currentPath = getCurrentPath(program),
+        item = getCurrentProgram(program)
     if(item) {
       currentPath.push(item.slug)
     }
-    if(historyState.username === username && path.join('/') === currentPath.join('/')) {
+    if(program.username === username && path.join('/') === currentPath.join('/')) {
       return Promise.resolve()
     }
 
     return Promise.resolve()
       .then(() => {
-        const {auth, historyState} = this.props
+        const {auth, program} = this.props
 
         let slug          = path.length > 0 ? path[path.length - 1] : null
-        let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(historyState).join('/')
-        let isHistory     = sameDirectory && Object.keys(historyState.items)
+        let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(program).join('/')
+        let isProgram     = sameDirectory && Object.keys(program.items)
           .filter((key) => {
-            return historyState.items[key].constructor.name === 'History' && historyState.items[key].slug === slug
+            return program.items[key].constructor.name === 'Program' && program.items[key].slug === slug
           })
           .length > 0
-        if (historyState.username === username && sameDirectory && isHistory) {
+        if (program.username === username && sameDirectory && isProgram) {
           return path
         }
 
-        return this.props.dispatch(setUsernameHistory(username))
+        return this.props.dispatch(setUsernameProgram(username))
           .then(() => {
             const token = auth.isAuthenticated ? auth.token : null
-            return this.props.dispatch(fetchHistory(username, path, token))
+            return this.props.dispatch(fetchProgram(username, path, token))
           })
       })
       .then(() => {
-        const {historyState} = this.props
+        const {program} = this.props
 
         let slug = path.length > 0 ? path[path.length - 1] : null
 
-        let historyObj = getHistoryBySlug(historyState, slug)
-        if (historyObj) {
-          this.props.dispatch(setCurrentHistory({type: historyObj.constructor.name, id: historyObj.id}))
-        } else if(historyState.folder) {
-          this.props.dispatch(setCurrentHistory(null))
+        let programObj = getProgramBySlug(program, slug)
+        if (programObj) {
+          this.props.dispatch(setCurrentProgram({type: programObj.constructor.name, id: programObj.id}))
+        } else if(program.folder) {
+          this.props.dispatch(setCurrentProgram(null))
         } else {
-          let items = Object.keys(historyState.items)
+          let items = Object.keys(program.items)
             .filter((key) => {
-              return historyState.items[key].constructor.name === 'History'
+              return program.items[key].constructor.name === 'Program'
             })
-            .reduce((res, key) => (res[key] = historyState.items[key], res), {})
+            .reduce((res, key) => (res[key] = program.items[key], res), {})
           let keys  = Object.keys(items)
 
           keys.sort((keyA, keyB) => {
@@ -129,24 +129,24 @@ class UserManagerComponent extends Component<Props> {
 
           if (keys.length > 0) {
             let item = items[keys[0]]
-            this.props.dispatch(setCurrentHistory({type: item.constructor.name, id: item.id}))
+            this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
           } else {
-            this.props.dispatch(setCurrentHistory(null))
+            this.props.dispatch(setCurrentProgram(null))
           }
         }
       }).then(() => {
-        const {user, history, historyState} = this.props
-        const isCurrentUser = historyState.username && historyState.username === user.username
+        const {user, history, program} = this.props
+        const isCurrentUser = program.username && program.username === user.username
 
-        let currentPath = getCurrentPath(historyState),
-            item = getCurrentHistory(historyState)
+        let currentPath = getCurrentPath(program),
+            item = getCurrentProgram(program)
         if(item) {
           currentPath.push(item.slug)
         }
         let slugs = pathToSlugs(currentPath)
 
         if ((item && item.public) || isCurrentUser) {
-          history.push(pathTo('userFlow', Object.assign({username: historyState.username}, slugs)))
+          history.push(pathTo('userFlow', Object.assign({username: program.username}, slugs)))
         } else {
           history.push(pathTo('flow', slugs))
         }
@@ -162,6 +162,6 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    historyState: state.history
+    program: state.program
   }
 })(withRouter(UserManagerComponent))
