@@ -1,4 +1,8 @@
 const defaultState = [{
+  tag: 'v1.1.2',
+  label: 'Add folder',
+  date: '21/01/2019'
+}, {
   tag: 'v1.1.1',
   label: 'Add blog',
   date: '10/01/2019'
