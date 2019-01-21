@@ -143,7 +143,7 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/me/flow/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="flow")
+     * @Route("/me/feed/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="feed")
      *
      * @param $slug1
      * @param $slug2
@@ -152,13 +152,13 @@ class FrontController extends AbstractController
      * @param $slug5
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function flow($slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function feed($slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         return $this->render('default/flow.html.twig');
     }
 
     /**
-     * @Route("/{username}/flow/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="userFlow")
+     * @Route("/{username}/feed/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="userFeed")
      *
      * @param $username
      * @param $slug1
@@ -169,7 +169,7 @@ class FrontController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function userFlow($username, $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function userFeed($username, $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function($path, $slug) {
             if($slug) {
