@@ -8,18 +8,18 @@ function Api(env, key) {
 Api.prototype.endpoint = function(endpoint, params = []) {
     let httpHost  = 'https://uniflow.io'
     if(this.env === 'dev') {
-        httpHost  = 'http://uniflow.localhost'
+        httpHost  = 'http://uniflow-io.localhost'
     }
 
     const endpoints = {
-        'history': '/api/history/me/list?client=bash',
-        'history_data': '/api/history/getData/{id}'
+        'history': `/api/program/me/list?client=bash&apiKey=${this.key}`,
+        'history_data': `/api/program/getData/{id}?apiKey=${this.key}`
     }
     let path = Object.keys(params).reduce(function(path, key) {
         return path.replace('{' + key + '}', params[key]);
     }, endpoints[endpoint]);
 
-    return axios.get(httpHost + path + '?apiKey=' + this.key)
+    return axios.get(httpHost + path)
 }
 
 module.exports = Api
