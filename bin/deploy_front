@@ -11,6 +11,8 @@ fi
 
 if [[ "$1" == "production" ]]; then
 # deploy prod
-(cd ../front;yarn build)
+#(cd ../front;yarn build)
+(cd ../front; ./node_modules/.bin/webpack --env.NODE_ENV=development --mode development -p --progress --colors --config webpack.config.js)
 scp public/dist/js/bundle.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/dist/js/bundle.js
+scp public/dist/js/bundle.js.map admin@ssh.darkwood.fr:/var/www/uniflow.io/public/dist/js/bundle.js.map
 fi
