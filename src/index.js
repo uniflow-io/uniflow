@@ -1,4 +1,4 @@
-const History = require('./models/History')
+const Program = require('./models/Program')
 const Runner = require('./models/Runner')
 const Api = require('./models/Api')
 
@@ -54,11 +54,11 @@ function parseArgv(argv) {
     let api = new Api(env, apiKey),
         identifier = args['values'][0],
         commandArgs = args['values'].slice(1)
-    api.endpoint('history')
+    api.endpoint('program')
         .then((response) => {
             for(let i = 0; i < response.data.length; i++) {
                 if(response.data[i].slug === identifier) {
-                    return api.endpoint('history_data', {'id': response.data[i].id})
+                    return api.endpoint('program_data', {'id': response.data[i].id})
                 }
             }
 
@@ -66,8 +66,8 @@ function parseArgv(argv) {
             process.exit(0)
         })
         .then((response) => {
-            let history = new History(response.data),
-                stack = history.deserialiseFlowData(),
+            let program = new Program(response.data),
+                stack = program.deserialiseFlowData(),
                 runner = new Runner(commandArgs, api)
 
             runner.run(stack);

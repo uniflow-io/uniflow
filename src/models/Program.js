@@ -1,8 +1,8 @@
-function History(data) {
+function Program(data) {
     Object.assign(this, data);
 }
 
-History.prototype.serialiseFlowData = function (data) {
+Program.prototype.serialiseFlowData = function (data) {
     let objData = [];
 
     for (let i = 0; i < data.length; i++) {
@@ -15,7 +15,7 @@ History.prototype.serialiseFlowData = function (data) {
     this.data = JSON.stringify(objData);
 }
 
-History.prototype.deserialiseFlowData = function () {
+Program.prototype.deserialiseFlowData = function () {
     let objData = JSON.parse(this.data);
 
     let data = [];
@@ -30,4 +30,4 @@ History.prototype.deserialiseFlowData = function () {
     return data;
 }
 
-module.exports = History
+module.exports = Program

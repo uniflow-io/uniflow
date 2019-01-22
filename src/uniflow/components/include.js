@@ -1,20 +1,20 @@
-const History = require('../../models/History')
+const Program = require('../../models/Program')
 
 function ComponentBash() {
-    this.historyId = null
+    this.programId = null
 }
 
 ComponentBash.prototype.deserialise = function(data) {
-    let [historyId] = data ? data : [null];
+    let [programId] = data ? data : [null];
 
-    this.historyId = historyId
+    this.programId = programId
 }
 
 ComponentBash.prototype.onExecute = function(runner, api, components) {
-    return api.endpoint('history_data', {'id': this.historyId})
+    return api.endpoint('program_data', {'id': this.programId})
         .then((response) => {
-            let history = new History(response.data),
-                stack = history.deserialiseFlowData()
+            let program = new Program(response.data),
+                stack = program.deserialiseFlowData()
 
             return stack.reduce((promise, item) => {
                 return promise.then(() => {
