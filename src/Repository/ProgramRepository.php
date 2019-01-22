@@ -133,6 +133,20 @@ class ProgramRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findLastByUserAndClient(User $user, $client = null)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
+            ->addOrderBy('h.updated', 'DESC');
+
+        if ($client) {
+            $qb->andWhere('h.client = :client')->setParameter('client', $client);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findLastByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
         $qb = $this->createQueryBuilder('h')
@@ -148,6 +162,21 @@ class ProgramRepository extends ServiceEntityRepository
             $qb->andWhere('h.folder = :folder')->setParameter('folder', $folder);
         } else {
             $qb->andWhere('h.folder is NULL');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getPublicProgramByUserAndClient(User $user, $client = null)
+    {
+        $qb = $this->createQueryBuilder('h')
+            ->select('h')
+            ->andWhere('h.user = :user')->setParameter('user', $user)
+            ->andWhere('h.public = :public')->setParameter('public', true)
+            ->addOrderBy('h.updated', 'DESC');
+
+        if ($client) {
+            $qb->andWhere('h.client = :client')->setParameter('client', $client);
         }
 
         return $qb->getQuery()->getResult();

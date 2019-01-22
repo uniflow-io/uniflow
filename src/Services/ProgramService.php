@@ -151,9 +151,29 @@ class ProgramService
      * @param Folder|null $folder
      * @return mixed
      */
+    public function getProgramByUserAndClient(User $user, $client = null)
+    {
+        return $this->programRepository->findLastByUserAndClient($user, $client);
+    }
+
+    /**
+     * @param User $user
+     * @param null $client
+     * @return mixed
+     */
     public function getProgramByUserAndClientAndFolder(User $user, $client = null, Folder $folder = null)
     {
         return $this->programRepository->findLastByUserAndClientAndFolder($user, $client, $folder);
+    }
+
+    /**
+     * @param User $user
+     * @param null $client
+     * @return mixed
+     */
+    public function getPublicProgramByUserAndClient(User $user, $client = null)
+    {
+        return $this->programRepository->getPublicProgramByUserAndClient($user, $client);
     }
 
     /**

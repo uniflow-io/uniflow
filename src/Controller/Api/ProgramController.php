@@ -55,7 +55,49 @@ class ProgramController extends AbstractController
     }
 
     /**
-     * @Route("/api/program/{username}/list/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_program_list", methods={"GET"})
+     * @Route("/api/program/{username}/list", name="api_program_list", methods={"GET"})
+     *
+     * @param Request $request
+     * @param string $username
+     * @return JsonResponse
+     */
+    public function listAction(Request $request, $username = 'me')
+    {
+        $user = $this->getUser();
+        if ($username === 'me' && !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        $fetchUser = null;
+        if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
+            $fetchUser = $user;
+        } else {
+            $fetchUser = $this->userService->findOneByUsername($username);
+            if (is_null($fetchUser)) {
+                throw new NotFoundHttpException();
+            }
+        }
+
+        $client = $request->get('client');
+
+        if ($user instanceof UserInterface && ($username === 'me' || $username === $user->getUsername())) {
+            $programs = $this->programService->getProgramByUserAndClient($fetchUser, $client);
+        } else {
+            $programs = $this->programService->getPublicProgramByUserAndClient($fetchUser, $client);
+        }
+
+        $data = [];
+        foreach ($programs as $program) {
+            $d = $this->programService->getJsonProgram($program);
+
+            $data[] = $d;
+        }
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/api/program/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_program_tree", methods={"GET"})
      *
      * @param Request $request
      * @param string $username
@@ -67,7 +109,7 @@ class ProgramController extends AbstractController
      * @return JsonResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function listAction(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    public function treeAction(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
