@@ -18,9 +18,9 @@ let store = createStore(combineReducers({
 }))
 
 const ENV = {
-  facebookAppId: 'coucou', //process.env.FACEBOOK_APP_ID,
-  githubAppId: '', //process.env.GITHUB_APP_ID,
-  mediumAppId: '', //process.env.MEDIUM_APP_ID
+  facebookAppId: process.env.FACEBOOK_APP_ID,
+  githubAppId: process.env.GITHUB_APP_ID,
+  mediumAppId: process.env.MEDIUM_APP_ID
 }
 store.dispatch(commitSetEnv(ENV))
 
