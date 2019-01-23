@@ -101,13 +101,13 @@ class Header extends Component {
 
   componentDidMount () {
     const { location, history } = this.props
-    this.onLocationChange(location)
+    //this.onLocationChange(location)
 
-    this.historyUnlisten = history.listen(this.onLocationChange)
+    //this.historyUnlisten = history.listen(this.onLocationChange)
   }
 
   componentWillUnmount () {
-    this.historyUnlisten()
+    //this.historyUnlisten()
   }
 
   onLocationChange = (location) => {
@@ -174,7 +174,7 @@ class Header extends Component {
           <nav className='navbar navbar-static-top'>
             <div className='navbar-custom-menu'>
               <ul className='nav navbar-nav'>
-                <li className={active === 'home' ? 'active' : ''}>
+                {/*<li className={active === 'home' ? 'active' : ''}>
                   <Link to={pathTo('home')}>Home</Link>
                 </li>
                 {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
@@ -212,7 +212,7 @@ class Header extends Component {
                     <li className={active === 'logout' ? 'active' : ''}>
                       <a onClick={this.onLogout}><span className='glyphicon glyphicon-off logout' aria-hidden='true' /></a>
                     </li>
-                )}
+                )}*/}
               </ul>
             </div>
           </nav>
@@ -224,7 +224,7 @@ class Header extends Component {
 Header = connect(state => ({
   auth: state.auth,
   user: state.user
-}))(withRouter(Header))
+}))(Header)
 
 class Footer extends Component {
   render () {
