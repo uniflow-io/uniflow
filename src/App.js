@@ -219,7 +219,7 @@ Header = connect(state => ({
 }))(withRouter(Header))
 
 class Footer extends Component {
-  render (): React.ReactNode {
+  render () {
     const { version } = this.props
 
     return (
