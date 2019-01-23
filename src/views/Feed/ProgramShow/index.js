@@ -64,7 +64,7 @@ class ProgramShow extends Component {
     }
   }
 
-  isMounted () {
+  isMounted = () => {
     return this._isMounted
   }
 
