@@ -288,11 +288,7 @@ export default class Layout extends Component {
                 <Alerts/>
                 <Header/>
 
-                {/*<Switch>
-                    {Object.values(routes).map(route => (
-                        <Route key={route.path} {...route} />
-                    ))}
-                </Switch>*/}
+                {this.props.children}
 
                 <Footer/>
             </div>
