@@ -4,11 +4,7 @@ import { Bus } from '../../models'
 import io from 'socket.io-client'
 import { Browser } from 'remote-browser/web-client'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentBrowser extends Component<Props> {
+export default class ComponentBrowser extends Component {
     state = {
       running: false,
       variable: null,

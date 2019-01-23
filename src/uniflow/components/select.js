@@ -2,11 +2,7 @@ import React, { Component } from 'react'
 import { Select2Component } from '../../components'
 import { Bus } from '../../models'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentSelect extends Component<Props> {
+export default class ComponentSelect extends Component {
     state = {
       running: false,
       variable: null,

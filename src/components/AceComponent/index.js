@@ -3,14 +3,7 @@ import ace from 'brace'
 require('brace/mode/javascript')
 require('brace/mode/batchfile')
 
-type Props = {
-    value: string,
-    width?: number,
-    height?: number,
-    mode?: string
-}
-
-export default class AceComponent extends Component<Props> {
+export default class AceComponent extends Component {
   componentDidMount () {
     const {
       value,

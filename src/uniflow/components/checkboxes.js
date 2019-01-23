@@ -2,11 +2,7 @@ import React, { Component } from 'react'
 import { Bus } from '../../models'
 import { ICheckBoxComponent } from '../../components'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentCheckBoxes extends Component<Props> {
+export default class ComponentCheckBoxes extends Component {
     state = {
       running: false,
       variable: null,

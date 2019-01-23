@@ -2,11 +2,7 @@ import React, { Component } from 'react'
 import { Bus } from '../../models'
 import io from 'socket.io-client'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentSocketIO extends Component<Props> {
+export default class ComponentSocketIO extends Component {
     state = {
       running: false,
       variable: null,

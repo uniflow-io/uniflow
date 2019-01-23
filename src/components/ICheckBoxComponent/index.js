@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
-require('imports-loader?window.jQuery=jquery!../../../dist/js/icheck.min.js')
+//require('imports-loader?window.jQuery=jquery!../../../dist/js/icheck.min.js')
+
 // import 'icheck'
 
-type Props = {
-    value: string
-}
-
-export default class ICheckBoxComponent extends Component<Props> {
+export default class ICheckBoxComponent extends Component {
   componentDidMount () {
     const {
       value

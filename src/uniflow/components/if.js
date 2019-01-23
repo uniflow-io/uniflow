@@ -10,11 +10,7 @@ import {
   commitSetFlow
 } from '../../reducers/flow/actions'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentIf extends Component<Props> {
+export default class ComponentIf extends Component {
     state = {
       running: false,
       if: {

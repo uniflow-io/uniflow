@@ -1611,11 +1611,7 @@ function copyTextToClipboard (text) {
   document.body.removeChild(textArea)
 }
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentRegex extends Component<Props> {
+export default class ComponentRegex extends Component {
     state = {
       running: false,
       variable: null,

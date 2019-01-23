@@ -2,11 +2,7 @@ import React, { Component } from 'react'
 import { Bus } from '../../models'
 import LZString from 'lz-string'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentTextList extends Component<Props> {
+export default class ComponentTextList extends Component {
     state = {
       running: false,
       variable: null,

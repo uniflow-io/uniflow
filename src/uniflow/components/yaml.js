@@ -4171,11 +4171,7 @@ let indentationSpace = Math.round(indentationSpaceAdverage.reduce(function (coun
     }
 })(scope)
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentYaml extends Component<Props> {
+export default class ComponentYaml extends Component {
     state = {
         running: false,
         variable: null,

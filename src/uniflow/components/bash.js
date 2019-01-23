@@ -2,11 +2,7 @@ import React, { Component } from 'react'
 import { AceComponent } from '../../components'
 import { Bus } from '../../models'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentBash extends Component<Props> {
+export default class ComponentBash extends Component {
     state = {
       running: false,
       bash: null

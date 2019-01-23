@@ -189,14 +189,14 @@ let scope = {};
      *
      * @return {PropertyPath|null} The parent path or null
      */
-  PropertyPath.prototype.getParent = function getParent () {
+  /*PropertyPath.prototype.getParent = function getParent () {
     let parent
 
     if (this._len <= 1) {
       return null
     }
 
-    /** @type {PropertyPath} */
+    /!** @type {PropertyPath} *!/
     parent = op.clone(this)
     --parent._len
     parent._pathAsString = parent._pathAsString.substr(0, Math.max(parent._pathAsString.indexOf('.'), parent._pathAsString.indexOf('[')))
@@ -205,7 +205,7 @@ let scope = {};
     parent._isIndex.pop()
 
     return parent
-  }
+  }*/
 
   /**
      * Returns the elements of the property path as array.
@@ -343,7 +343,7 @@ let scope = {};
      * @throws InvalidArgumentException If the property path is invalid
      * @throws UnexpectedTypeException  If a value within the path is neither object nor array
      */
-  PropertyAccessor.prototype.getValue = function getValue (objectArray, propertyPath) {
+  /*PropertyAccessor.prototype.getValue = function getValue (objectArray, propertyPath) {
     let propertyValues
 
     if (typeof propertyPath === 'string') {
@@ -366,7 +366,7 @@ let scope = {};
     )
 
     return propertyValues[propertyValues.length - 1][this.VALUE]
-  }
+  }*/
 
   /**
      * Sets the value at the end of the property path of the object graph.
@@ -520,11 +520,7 @@ let scope = {};
   scope.PropertyAccessor = PropertyAccessor
 })(scope)
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentObject extends Component<Props> {
+export default class ComponentObject extends Component {
     state = {
       running: false,
       variable: null,

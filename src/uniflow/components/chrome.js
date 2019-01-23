@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import { Bus } from '../../models'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentBrowser extends Component<Props> {
+export default class ComponentBrowser extends Component {
     state = {
       running: false,
       variable: null

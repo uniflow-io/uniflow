@@ -1,17 +1,13 @@
 import React, { Component } from 'react'
 import $ from 'jquery'
-require('imports-loader?jQuery=jquery!../../../dist/js/jquery-ui.min.js')
-require('imports-loader?jQuery=jquery!../../../dist/js/tag-it.min.js')
+//require('imports-loader?jQuery=jquery!../../../dist/js/jquery-ui.min.js')
+//require('imports-loader?jQuery=jquery!../../../dist/js/tag-it.min.js')
+
 // import 'tag-it';
 // import 'aehlke/tag-it/css/jquery.tagit.css!';
 // import 'jquery-ui/themes/flick/jquery-ui.css!';
 
-type Props = {
-    value: string,
-    options?: [],
-}
-
-export default class TagItComponent extends Component<Props> {
+export default class TagItComponent extends Component {
   componentDidMount () {
     const {
       value,

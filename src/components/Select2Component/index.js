@@ -2,14 +2,7 @@ import React, { Component } from 'react'
 import $ from 'jquery'
 import 'select2'
 
-type Props = {
-    value: string,
-    options?: [],
-    style?: {},
-    children: ({}) => React.Component
-}
-
-export default class Select2Component extends Component<Props> {
+export default class Select2Component extends Component {
   componentDidMount () {
     const {
       value,

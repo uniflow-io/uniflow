@@ -3,11 +3,7 @@ import { AceComponent } from '../../components'
 import { Bus } from '../../models'
 import { Select2Component } from '../../components'
 
-type Props = {
-    bus: Bus
-}
-
-export default class ComponentPrompt extends Component<Props> {
+export default class ComponentPrompt extends Component {
     state = {
       running: false,
       variable: null,
