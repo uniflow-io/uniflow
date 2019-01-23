@@ -37,13 +37,13 @@ import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 //import routes, { pathTo } from './../routes'
 //import { UserManagerComponent } from './../components'
-//import { getNewLogs, commitReadLog } from './../reducers/logs/actions'
+import { getNewLogs, commitReadLog } from './../reducers/logs/actions'
 //import { commitLogoutUser } from './../reducers/auth/actions'
 //import { isGranted } from './../reducers/user/actions'
 import { getLastVersion } from './../reducers/versions/actions'
 //import { withRouter, matchPath } from 'react-router'
 
-/*class Alert extends Component {
+class Alert extends Component {
   componentDidMount () {
     const { alert, logs } = this.props
 
@@ -94,7 +94,7 @@ Alerts = connect(state => ({
   logs: getNewLogs(state.logs)
 }))(Alerts)
 
-class Header extends Component {
+/*class Header extends Component {
   state = {
     active: null
   }
@@ -285,8 +285,8 @@ export default class Layout extends Component {
 
             <div className='wrapper'>
 
-                {/*<Alerts/>
-                <Header/>*/}
+                <Alerts/>
+                {/*<Header/>*/}
 
                 {/*<Switch>
                     {Object.values(routes).map(route => (
