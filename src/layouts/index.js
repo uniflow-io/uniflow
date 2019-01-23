@@ -1,41 +1,17 @@
 import React, { Component } from 'react'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from 'react-router-dom'
-import { combineReducers } from 'redux'
-import { Provider, connect } from 'react-redux'
-import routes, { pathTo } from './routes'
-import { auth, env, feed, logs, user, versions } from './reducers'
-import { flow } from 'uniflow/src/reducers'
-import { UserManagerComponent } from './components'
-import { createStore } from 'uniflow/src/utils'
-import { getNewLogs, commitReadLog } from './reducers/logs/actions'
-import { commitLoginUserSuccess, commitLogoutUser } from './reducers/auth/actions'
-import { isGranted } from './reducers/user/actions'
-import { commitSetEnv } from './reducers/env/actions'
-import { getLastVersion } from './reducers/versions/actions'
-import { withRouter, matchPath } from 'react-router'
-// import createBrowserHistory from 'history/createBrowserProgram'
+//import {
+//  Link
+//} from 'react-router-dom'
+import { connect } from 'react-redux'
+//import routes, { pathTo } from './../routes'
+//import { UserManagerComponent } from './../components'
+//import { getNewLogs, commitReadLog } from './../reducers/logs/actions'
+//import { commitLogoutUser } from './../reducers/auth/actions'
+//import { isGranted } from './../reducers/user/actions'
+import { getLastVersion } from './../reducers/versions/actions'
+//import { withRouter, matchPath } from 'react-router'
 
-// const history = createBrowserHistory()
-let store = createStore(combineReducers({
-  auth,
-  env,
-  flow,
-  feed,
-  logs,
-  user,
-  versions
-}))
-let token = window.localStorage.getItem('token')
-if (token !== null) {
-  store.dispatch(commitLoginUserSuccess(token))
-}
-
-class Alert extends Component {
+/*class Alert extends Component {
   componentDidMount () {
     const { alert, logs } = this.props
 
@@ -216,7 +192,7 @@ class Header extends Component {
 Header = connect(state => ({
   auth: state.auth,
   user: state.user
-}))(withRouter(Header))
+}))(withRouter(Header))*/
 
 class Footer extends Component {
   render () {
@@ -225,7 +201,7 @@ class Footer extends Component {
     return (
         <footer className='main-footer'>
           <div className='pull-right hidden-xs'>
-            <a href={pathTo('versions')}><b>Version</b> {version}</a>
+            {/*<a href={pathTo('versions')}><b>Version</b> {version}</a>*/}
           </div>
           <a className='btn' href='https://github.com/uniflow-io/uniflow' target='_blank'><i
               className='fa fa-github' /></a>
@@ -242,40 +218,26 @@ Footer = connect(state => ({
   version: getLastVersion(state.versions)
 }))(Footer)
 
-export default class App extends Component {
-  constructor (props) {
-    super(props)
-
-    store.dispatch(commitSetEnv(props.env))
-  }
-
+export default class Layout extends Component {
   render () {
-    const auth = store.getState().auth
-
     return (
-        // <React.StrictMode>
-        <Provider store={store}>
-          <Router>
-            <div>
-              <UserManagerComponent />
+        <div>
+            {/*<UserManagerComponent/>*/}
 
-              <div className='wrapper'>
+            <div className='wrapper'>
 
-                <Alerts />
-                <Header />
+                {/*<Alerts/>
+                <Header/>*/}
 
-                <Switch>
-                  {Object.values(routes).map(route => (
-                      <Route key={route.path} {...route} />
-                  ))}
-                </Switch>
+                {/*<Switch>
+                    {Object.values(routes).map(route => (
+                        <Route key={route.path} {...route} />
+                    ))}
+                </Switch>*/}
 
-                <Footer />
-              </div>
+                <Footer/>
             </div>
-          </Router>
-        </Provider>
-        // </React.StrictMode>
+        </div>
     )
   }
 }
