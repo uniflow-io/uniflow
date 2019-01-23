@@ -13,7 +13,7 @@ import {
   feedPathTo
 } from '../../reducers/feed/actions'
 
-class UserManagerComponent extends Component<Props> {
+class UserManagerComponent extends Component {
   componentDidMount () {
     const { auth, history } = this.props
 

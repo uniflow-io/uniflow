@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { pathTo } from '../../routes'
 import { Link } from 'react-router-dom'
 
-class Feed extends Component<Props> {
+class Feed extends Component {
   render () {
     const { feed } = this.props
     const currentProgram = getCurrentProgram(feed)

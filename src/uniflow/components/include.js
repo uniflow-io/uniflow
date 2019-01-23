@@ -17,11 +17,7 @@ class UiComponent extends Component {
   }
 }
 
-type Props = {
-  bus: Bus
-}
-
-class ComponentInclude extends Component<Props> {
+class ComponentInclude extends Component {
   state = {
     running: false,
     programId: null

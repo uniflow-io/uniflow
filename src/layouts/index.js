@@ -31,17 +31,17 @@ import '../../content/css/uniflow.css'
 
 import React, { Component } from 'react'
 import Helmet from 'react-helmet'
-//import {
-//  Link
-//} from 'react-router-dom'
+import {
+  Link
+} from 'react-router-dom'
 import { connect } from 'react-redux'
-//import routes, { pathTo } from './../routes'
-//import { UserManagerComponent } from './../components'
+import routes, { pathTo } from './../routes'
+import { UserManagerComponent } from './../components'
 import { getNewLogs, commitReadLog } from './../reducers/logs/actions'
-//import { commitLogoutUser } from './../reducers/auth/actions'
-//import { isGranted } from './../reducers/user/actions'
+import { commitLogoutUser } from './../reducers/auth/actions'
+import { isGranted } from './../reducers/user/actions'
 import { getLastVersion } from './../reducers/versions/actions'
-//import { withRouter, matchPath } from 'react-router'
+import { withRouter, matchPath } from 'react-router'
 
 class Alert extends Component {
   componentDidMount () {
@@ -94,7 +94,7 @@ Alerts = connect(state => ({
   logs: getNewLogs(state.logs)
 }))(Alerts)
 
-/*class Header extends Component {
+class Header extends Component {
   state = {
     active: null
   }
@@ -224,7 +224,7 @@ Alerts = connect(state => ({
 Header = connect(state => ({
   auth: state.auth,
   user: state.user
-}))(withRouter(Header))*/
+}))(withRouter(Header))
 
 class Footer extends Component {
   render () {
@@ -286,7 +286,7 @@ export default class Layout extends Component {
             <div className='wrapper'>
 
                 <Alerts/>
-                {/*<Header/>*/}
+                <Header/>
 
                 {/*<Switch>
                     {Object.values(routes).map(route => (
