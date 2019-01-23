@@ -1,4 +1,36 @@
+import favicon from '../../content/favicon.ico'
+
+// <!-- Bootstrap CSS -->
+import '../../content/js/plugins/bootstrap/css/bootstrap.min.css'
+
+// <!-- Font Awesome -->
+import '../../content/css/font-awesome.min.css'
+// <!-- Ionicons -->
+import '../../content/css/ionicons.min.css'
+// <!-- iCheck -->
+import '../../content/js/plugins/iCheck/all.css'
+// <!-- Date Picker -->
+import '../../content/js/plugins/datepicker/datepicker3.css'
+// <!-- Select2 -->
+import '../../content/js/plugins/select2/select2.min.css'
+// <!-- Tag It -->
+import '../../content/js/plugins/tagit/css/jquery.tagit.css'
+import '../../content/js/plugins/tagit/css/tagit.ui-zendesk.css'
+// <!-- Daterange picker -->
+import '../../content/js/plugins/daterangepicker/daterangepicker-bs3.css'
+// <!-- bootstrap wysihtml5 - text editor -->
+import '../../content/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
+
+// <!-- Theme style -->
+import '../../content/css/AdminLTE.css'
+
+// <!-- AdminLTE Skins. Choose a skin from the css/skins
+//      folder instead of downloading all of them to reduce the load. -->
+import '../../content/css/skins/_all-skins.min.css'
+import '../../content/css/uniflow.css'
+
 import React, { Component } from 'react'
+import Helmet from 'react-helmet'
 //import {
 //  Link
 //} from 'react-router-dom'
@@ -222,6 +254,33 @@ export default class Layout extends Component {
   render () {
     return (
         <div>
+            <Helmet>
+                <html lang="en" />
+                <body className="hold-transition skin-blue sidebar-mini" />
+
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                <meta http-equiv="x-ua-compatible" content="ie=edge" />
+                <title>Uniflow</title>
+
+                <link rel="icon" href={favicon} />
+
+                <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900,900i|Lustria|Playfair+Display:400,400i,700,700i,900,900i"
+                      rel="stylesheet" />
+
+                {/*<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2319330-13" />
+                <script>
+                    window.dataLayer = window.dataLayer || [];
+
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+
+                    gtag('js', new Date());
+
+                    gtag('config', 'UA-2319330-13');
+                </script>*/}
+            </Helmet>
             {/*<UserManagerComponent/>*/}
 
             <div className='wrapper'>
