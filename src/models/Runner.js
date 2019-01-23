@@ -1,4 +1,4 @@
-import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
+//import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
 import { transform } from 'babel-standalone'
 
 export default class Runner {
@@ -13,7 +13,7 @@ export default class Runner {
          return cachedPolyfillJS;
          }) */
 
-    let asyncRunPromise = null
+    /*let asyncRunPromise = null
     let interpreter = null
     let interpreterPromise = new Promise((resolve) => {
       interpreter = new Interpreter('', (interpreter, scope) => {
@@ -113,6 +113,6 @@ export default class Runner {
         }).then(() => {
           return onRunIndex(null)
         })
-    }, interpreterPromise)
+    }, interpreterPromise)*/
   }
 }
