@@ -39,7 +39,7 @@ import {getNewLogs, commitReadLog} from './../reducers/logs/actions'
 import {commitLogoutUser} from './../reducers/auth/actions'
 import {isGranted} from './../reducers/user/actions'
 import {getLastVersion} from './../reducers/versions/actions'
-import {withRouter, matchPath} from 'react-router'
+import {matchPath} from '../utils'
 
 class Alert extends Component {
   componentDidMount() {
@@ -93,22 +93,7 @@ Alerts = connect(state => ({
 }))(Alerts)
 
 class Header extends Component {
-  state = {
-    active: null
-  }
-
-  componentDidMount() {
-    const {location, history} = this.props
-    //this.onLocationChange(location)
-
-    //this.historyUnlisten = history.listen(this.onLocationChange)
-  }
-
-  componentWillUnmount() {
-    //this.historyUnlisten()
-  }
-
-  onLocationChange = (location) => {
+  onLocation = (location) => {
     let active = null
 
     if (matchPath(location.pathname, {
@@ -154,7 +139,7 @@ class Header extends Component {
       active = 'dashboard'
     }
 
-    this.setState({active: active})
+    return active
   }
 
   onLogout = (e) => {
@@ -165,7 +150,7 @@ class Header extends Component {
 
   render() {
     const {auth, user} = this.props
-    const {active}     = this.state
+    const active       = this.onLocation(this.props.location)
 
     return (
       <header className='main-header'>
@@ -285,7 +270,7 @@ export default class Layout extends Component {
         <div className='wrapper'>
 
           <Alerts/>
-          <Header/>
+          <Header location={this.props.location}/>
 
           {this.props.children}
 

@@ -32,7 +32,7 @@ class Home extends Component {
     const {flow} = this.state
 
     return (
-      <Layout>
+      <Layout location={this.props.location}>
         <div id='home' className='content-wrapper'>
           <section className='content-header'>
             <h1>

@@ -42,7 +42,7 @@ class Login extends Component {
     const {username, password} = this.state
 
     return (
-      <Layout>
+      <Layout location={this.props.location}>
         <div className='content-wrapper'>
 
           <section className='content-header'>

@@ -9,7 +9,7 @@ class Versions extends Component {
     const {versions} = this.props
 
     return (
-      <Layout>
+      <Layout location={this.props.location}>
         <div className='content-wrapper'>
           <section className='content-header'>
             <h1>

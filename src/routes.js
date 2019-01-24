@@ -16,7 +16,7 @@ import Register from './pages/register'
 
 import pathToRegexp from 'path-to-regexp'
 import {requireAuthentication} from './components'
-import {matchPath} from 'react-router'
+import {matchPath} from './utils'
 
 const routes = {
   home: {

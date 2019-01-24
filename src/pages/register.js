@@ -42,7 +42,7 @@ class Register extends Component {
     const {email, password} = this.state
 
     return (
-      <Layout>
+      <Layout location={this.props.location}>
         <div className='content-wrapper'>
 
           <section className='content-header'>
