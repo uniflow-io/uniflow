@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import {getArticle} from '../../../reducers/blog/actions'
 import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
-import Paragraph from './../paragraph'
+import {BlogParagraph} from './../../../components'
 import moment from 'moment'
 
 class Article extends Component {
@@ -52,7 +52,7 @@ class Article extends Component {
                 </div>
                 <div className='box-body'>
                   {article && article.content.bodyModel.paragraphs.map((paragraph, j) => ([
-                    <Paragraph key={j} data={paragraph}/>
+                    <BlogParagraph key={j} data={paragraph}/>
                   ]))}
                 </div>
               </div>

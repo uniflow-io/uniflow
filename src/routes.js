@@ -6,10 +6,10 @@ import {
   LoginFacebook,
   LoginGithub,
   LoginMedium,
-  Blog,
   Article
 } from './views'
 import FAQ from './pages/faq'
+import Blog from './pages/blog'
 import Versions from './pages/versions'
 import Login from './pages/login'
 import Register from './pages/register'
