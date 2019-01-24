@@ -1,8 +1,6 @@
 export { default as Admin } from './Admin'
 export { default as Article } from './Blog/Article'
 export { default as Blog } from './Blog'
-export { default as FAQ } from './FAQ'
-export { default as Versions } from './Versions'
 export { default as Home } from './Home'
 export { default as Login } from './Login'
 export { default as LoginFacebook } from './Login/Facebook'

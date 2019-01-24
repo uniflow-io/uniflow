@@ -1,8 +1,6 @@
 import {
-  FAQ,
   Home,
   Feed,
-  Versions,
   Login,
   Register,
   Settings,
@@ -13,6 +11,8 @@ import {
   Blog,
   Article
 } from './views'
+import FAQ from './pages/faq'
+import Versions from './pages/versions'
 import pathToRegexp from 'path-to-regexp'
 import { requireAuthentication } from './components'
 import { matchPath } from 'react-router'
