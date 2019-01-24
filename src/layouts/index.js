@@ -31,9 +31,7 @@ import '../../content/css/uniflow.css'
 
 import React, { Component } from 'react'
 import Helmet from 'react-helmet'
-import {
-  Link
-} from 'react-router-dom'
+import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import routes, { pathTo } from './../routes'
 import { UserManagerComponent } from './../components'
@@ -174,7 +172,7 @@ class Header extends Component {
           <nav className='navbar navbar-static-top'>
             <div className='navbar-custom-menu'>
               <ul className='nav navbar-nav'>
-                {/*<li className={active === 'home' ? 'active' : ''}>
+                <li className={active === 'home' ? 'active' : ''}>
                   <Link to={pathTo('home')}>Home</Link>
                 </li>
                 {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && user.username === null && (
@@ -212,7 +210,7 @@ class Header extends Component {
                     <li className={active === 'logout' ? 'active' : ''}>
                       <a onClick={this.onLogout}><span className='glyphicon glyphicon-off logout' aria-hidden='true' /></a>
                     </li>
-                )}*/}
+                )}
               </ul>
             </div>
           </nav>
@@ -233,7 +231,7 @@ class Footer extends Component {
     return (
         <footer className='main-footer'>
           <div className='pull-right hidden-xs'>
-            {/*<a href={pathTo('versions')}><b>Version</b> {version}</a>*/}
+              <Link to={pathTo('versions')}><b>Version</b> {version}</Link>
           </div>
           <a className='btn' href='https://github.com/uniflow-io/uniflow' target='_blank'><i
               className='fa fa-github' /></a>
