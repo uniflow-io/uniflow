@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Select2Component } from '../../components'
 import { Bus } from '../../models'
 import io from 'socket.io-client'
-import { Browser } from 'remote-browser/web-client'
+//import { Browser } from 'remote-browser/web-client'
+
+let Browser = {}
 
 export default class ComponentBrowser extends Component {
     state = {

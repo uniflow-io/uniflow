@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import ace from 'brace'
+/*import ace from 'brace'
 require('brace/mode/javascript')
-require('brace/mode/batchfile')
+require('brace/mode/batchfile')*/
+
+let ace = {}
 
 export default class AceComponent extends Component {
   componentDidMount () {

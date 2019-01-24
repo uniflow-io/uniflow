@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
-import 'select2'
+//import $ from 'jquery'
+//import 'select2'
+
+let $ = {}
 
 export default class Select2Component extends Component {
   componentDidMount () {
