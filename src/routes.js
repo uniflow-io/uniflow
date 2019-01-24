@@ -1,5 +1,4 @@
 import {
-  Home,
   Feed,
   Settings,
   Admin,
@@ -8,6 +7,7 @@ import {
   LoginMedium,
   Article
 } from './views'
+import Home from './pages/index'
 import FAQ from './pages/faq'
 import Blog from './pages/blog'
 import Versions from './pages/versions'

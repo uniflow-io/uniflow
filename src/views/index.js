@@ -1,6 +1,5 @@
 export {default as Admin} from './Admin'
 export {default as Article} from './Blog/Article'
-export {default as Home} from './Home'
 export {default as LoginFacebook} from './Login/Facebook'
 export {default as LoginGithub} from './Login/Github'
 export {default as LoginMedium} from './Login/Medium'
