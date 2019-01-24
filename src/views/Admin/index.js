@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {
   fetchConfig,
   updateConfig
 } from '../../reducers/config/actions'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { Link } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {Link} from 'react-router-dom'
 import {
   loginMediumUrl
 } from '../../reducers/auth/actions'
@@ -18,16 +18,16 @@ class Admin extends Component {
     isSaving: false
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.dispatch(fetchConfig(this.props.auth.token))
       .then((response) => {
-        this.setState({ config: Object.assign({}, this.state.config, response.data) })
+        this.setState({config: Object.assign({}, this.state.config, response.data)})
       })
   }
 
   onRevokeMedium = (event) => {
     event.preventDefault()
-    this.setState({ config: { ...this.state.config, ...{ mediumToken: null } } }, this.onUpdate)
+    this.setState({config: {...this.state.config, ...{mediumToken: null}}}, this.onUpdate)
   }
 
   onUpdate = (event) => {
@@ -35,17 +35,17 @@ class Admin extends Component {
       event.preventDefault()
     }
 
-    this.setState({ 'isSaving': true }, () => {
+    this.setState({'isSaving': true}, () => {
       this.props.dispatch(updateConfig(this.state.config, this.props.auth.token))
         .then(() => {
-          this.setState({ 'isSaving': false })
+          this.setState({'isSaving': false})
         })
     })
   }
 
-  render () {
-    const { env } = this.props
-    const { config, isSaving } = this.state
+  render() {
+    const {env}              = this.props
+    const {config, isSaving} = this.state
 
     return (
       <div className='content-wrapper'>
@@ -55,7 +55,7 @@ class Admin extends Component {
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard' /> Home</Link></li>
+            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
             <li className='active'>Admin</li>
           </ol>
         </section>
@@ -75,13 +75,13 @@ class Admin extends Component {
                       <div className='col-sm-10'>
                         {config.mediumToken && (
                           <a onClick={this.onRevokeMedium}
-                            className='btn btn-info'>
-                            <i className='fa fa-medium' /> Revoke Medium
+                             className='btn btn-info'>
+                            <i className='fa fa-medium'/> Revoke Medium
                           </a>
                         ) || (
                           <a href={loginMediumUrl(env.mediumAppId)}
-                            className='btn btn-block btn-social btn-medium'>
-                            <i className='fa fa-medium' /> Connect with Medium
+                             className='btn btn-block btn-social btn-medium'>
+                            <i className='fa fa-medium'/> Connect with Medium
                           </a>
                         )}
                       </div>

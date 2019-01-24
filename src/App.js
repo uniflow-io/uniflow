@@ -29,4 +29,4 @@ if (token !== null) {
   store.dispatch(commitLoginUserSuccess(token))
 }*/
 
-export default ({ element }) => <Provider store={store}>{element}</Provider>
+export default ({element}) => <Provider store={store}>{element}</Provider>

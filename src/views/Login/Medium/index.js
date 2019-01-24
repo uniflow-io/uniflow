@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { pathTo } from '../../../routes'
-import { withRouter } from 'react-router'
-import { loginMedium } from '../../../reducers/auth/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import {pathTo} from '../../../routes'
+import {withRouter} from 'react-router'
+import {loginMedium} from '../../../reducers/auth/actions'
+import {commitAddLog} from '../../../reducers/logs/actions'
 import connect from 'react-redux/es/connect/connect'
 
 class LoginMedium extends Component {
-  componentWillMount () {
+  componentWillMount() {
     let code = this.getCode()
     if (code === null) {
       return this.props.history.push(pathTo('login'))
@@ -24,7 +24,7 @@ class LoginMedium extends Component {
       })
   }
 
-  getCode () {
+  getCode() {
     let m = this.props.location.search.match(/code=([^&]*)/)
     if (m) {
       return m[1]
@@ -33,7 +33,7 @@ class LoginMedium extends Component {
     return null
   }
 
-  render () {
+  render() {
     return (
       <div className='content-wrapper'>
 
@@ -43,7 +43,7 @@ class LoginMedium extends Component {
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard' /> Home</Link></li>
+            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
             <li className='active'>Login</li>
           </ol>
         </section>

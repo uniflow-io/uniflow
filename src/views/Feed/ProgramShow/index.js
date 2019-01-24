@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+import React, {Component} from 'react'
+import {withRouter} from 'react-router'
 import debounce from 'lodash/debounce'
-import { AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component } from 'uniflow/src/components'
-import { Program, Runner } from '../../../models'
+import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
+import {Program, Runner} from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -24,8 +24,8 @@ import {
   stringToPath,
   feedPathTo
 } from '../../../reducers/feed/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
-import { connect } from 'react-redux'
+import {commitAddLog} from '../../../reducers/logs/actions'
+import {connect} from 'react-redux'
 import components from '../../../uniflow'
 
 class ProgramShow extends Component {
@@ -37,21 +37,21 @@ class ProgramShow extends Component {
     folderTree: []
   }
 
-  componentDidMount () {
-    const { program } = this.props
+  componentDidMount() {
+    const {program} = this.props
 
     this._isMounted = true
 
-    this.setState({ folderTree: [pathToString(program.path)] })
+    this.setState({folderTree: [pathToString(program.path)]})
 
     this.onFetchFlowData()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this._isMounted = false
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
     if (nextProps.program.id !== oldProps.program.id) {
@@ -77,7 +77,7 @@ class ProgramShow extends Component {
 
     runner.run(stack, (index) => {
       return new Promise((resolve) => {
-        this.setState({ runIndex: index }, resolve)
+        this.setState({runIndex: index}, resolve)
       })
     })
   }
@@ -98,8 +98,8 @@ class ProgramShow extends Component {
       .then(() => {
         return this.setFlow(this.props.stack)
       }).then(() => {
-        this.onUpdateFlowData()
-      })
+      this.onUpdateFlowData()
+    })
   }
 
   onPopFlow = (index) => {
@@ -108,8 +108,8 @@ class ProgramShow extends Component {
       .then(() => {
         return this.setFlow(this.props.stack)
       }).then(() => {
-        this.onUpdateFlowData()
-      })
+      this.onUpdateFlowData()
+    })
   }
 
   onUpdateFlow = (index, data) => {
@@ -121,7 +121,7 @@ class ProgramShow extends Component {
   }
 
   onFetchFlowData = debounce(() => {
-    let { program } = this.props
+    let {program} = this.props
 
     Promise.resolve()
       .then(() => {
@@ -145,13 +145,13 @@ class ProgramShow extends Component {
       })
       .then(() => {
         if (this.isMounted()) {
-          this.setState({ fetchedSlug: program.slug })
+          this.setState({fetchedSlug: program.slug})
         }
       })
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let { program, stack, user, feed } = this.props
+    let {program, stack, user, feed} = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
     let data = program.data
@@ -167,7 +167,7 @@ class ProgramShow extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ title: event.target.value } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{title: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -175,7 +175,7 @@ class ProgramShow extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ slug: event.target.value } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{slug: event.target.value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -183,7 +183,7 @@ class ProgramShow extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ path: stringToPath(selected) } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{path: stringToPath(selected)}})))
       .then(() => {
         this.onUpdate()
       })
@@ -191,7 +191,7 @@ class ProgramShow extends Component {
 
   onChangeClient = (selected) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ client: selected } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{client: selected}})))
       .then(() => {
         this.onUpdate()
       })
@@ -199,7 +199,7 @@ class ProgramShow extends Component {
 
   onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ tags: tags } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{tags: tags}})))
       .then(() => {
         this.onUpdate()
       })
@@ -207,7 +207,7 @@ class ProgramShow extends Component {
 
   onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ description: description } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{description: description}})))
       .then(() => {
         this.onUpdate()
       })
@@ -215,7 +215,7 @@ class ProgramShow extends Component {
 
   onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({ ...this.props.program, ...{ public: value } })))
+      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{public: value}})))
       .then(() => {
         this.onUpdate()
       })
@@ -239,7 +239,7 @@ class ProgramShow extends Component {
         return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(setCurrentProgram({ type: program.constructor.name, id: program.id }))
+        return this.props.dispatch(setCurrentProgram({type: program.constructor.name, id: program.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -255,7 +255,7 @@ class ProgramShow extends Component {
   onFolderEdit = (event) => {
     event.preventDefault()
 
-    const { feed } = this.props
+    const {feed} = this.props
 
     this.props.dispatch(getFolderTree(feed.username, this.props.auth.token))
       .then((folderTree) => {
@@ -301,14 +301,14 @@ class ProgramShow extends Component {
     return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
-  render () {
-    const { program, tags, stack, client, user } = this.props
-    const { folderTreeEdit, folderTree } = this.state
-    const tagsOptions = {
+  render() {
+    const {program, tags, stack, client, user} = this.props
+    const {folderTreeEdit, folderTree}         = this.state
+    const tagsOptions                          = {
       availableTags: tags
     }
-    const components = this.getComponents(user.components, program)
-    const clients = {
+    const components                           = this.getComponents(user.components, program)
+    const clients                              = {
       'uniflow': 'Uniflow',
       'bash': 'Bash',
       'phpstorm': 'PhpStorm',
@@ -321,8 +321,8 @@ class ProgramShow extends Component {
           <div className='box-header with-border'>
             <h3 className='box-title'>Infos</h3>
             <div className='box-tools pull-right'>
-              <a className='btn btn-box-tool' onClick={this.onDuplicate}><i className='fa fa-clone' /></a>
-              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+              <a className='btn btn-box-tool' onClick={this.onDuplicate}><i className='fa fa-clone'/></a>
+              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></a>
             </div>
           </div>
           <div className='box-body'>
@@ -333,7 +333,7 @@ class ProgramShow extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                    value={program.title} onChange={this.onChangeTitle} placeholder='Title' />
+                         value={program.title} onChange={this.onChangeTitle} placeholder='Title'/>
                 </div>
               </div>
 
@@ -342,7 +342,7 @@ class ProgramShow extends Component {
 
                 <div className='col-sm-10'>
                   <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                    value={program.slug} onChange={this.onChangeSlug} placeholder='Slug' />
+                         value={program.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
                 </div>
               </div>
 
@@ -352,7 +352,7 @@ class ProgramShow extends Component {
                 <div className='col-sm-10'>
                   {folderTreeEdit && (
                     <Select2Component value={pathToString(program.path)} onChange={this.onChangePath}
-                      className='form-control' id='info_path_{{ _uid }}' style={{ width: '100%' }}>
+                                      className='form-control' id='info_path_{{ _uid }}' style={{width: '100%'}}>
                       {folderTree.map((value) => (
                         <option key={value} value={value}>{value}</option>
                       ))}
@@ -360,7 +360,7 @@ class ProgramShow extends Component {
                   ) || (
                     <div>
                       <button type='button' className='btn btn-primary' onClick={this.onFolderEdit}><i
-                        className='fa fa-edit fa-fw' /></button>
+                        className='fa fa-edit fa-fw'/></button>
                       {pathToString(program.path)}
                     </div>
                   )}
@@ -372,7 +372,7 @@ class ProgramShow extends Component {
 
                 <div className='col-sm-10'>
                   <Select2Component value={program.client} onChange={this.onChangeClient} className='form-control'
-                    id='info_client_{{ _uid }}' style={{ width: '100%' }}>
+                                    id='info_client_{{ _uid }}' style={{width: '100%'}}>
                     {Object.keys(clients).map((value) => (
                       <option key={value} value={value}>{clients[value]}</option>
                     ))}
@@ -385,8 +385,8 @@ class ProgramShow extends Component {
 
                 <div className='col-sm-10'>
                   <TagItComponent type='text' className='form-control' id='info_tags_{{ _uid }}'
-                    value={program.tags} onChange={this.onChangeTags} options={tagsOptions}
-                    placeholder='Tags' />
+                                  value={program.tags} onChange={this.onChangeTags} options={tagsOptions}
+                                  placeholder='Tags'/>
                 </div>
               </div>
 
@@ -395,18 +395,18 @@ class ProgramShow extends Component {
 
                 <div className='col-sm-10'>
                   <ICheckBoxComponent value={program.public} onChange={this.onChangePublic}
-                    id='info_public_{{ _uid }}' />
+                                      id='info_public_{{ _uid }}'/>
                 </div>
               </div>
 
               <div className='form-group'>
                 <label htmlFor='info_description_{{ _uid }}'
-                  className='col-sm-2 control-label'>Description</label>
+                       className='col-sm-2 control-label'>Description</label>
 
                 <div className='col-sm-10'>
                   <AceComponent className='form-control' id='info_description_{{ _uid }}'
-                    value={program.description} onChange={this.onChangeDescription}
-                    placeholder='Text' height='200' />
+                                value={program.description} onChange={this.onChangeDescription}
+                                placeholder='Text' height='200'/>
                 </div>
               </div>
 
@@ -414,17 +414,17 @@ class ProgramShow extends Component {
           </div>
           <div className='box-footer'>
             {program.client === 'uniflow' && (
-              <a className='btn btn-success' onClick={this.run}><i className='fa fa-fw fa-play' /> Play</a>
+              <a className='btn btn-success' onClick={this.run}><i className='fa fa-fw fa-play'/> Play</a>
             )}
           </div>
         </div>
 
         <ListComponent stack={stack} runIndex={this.state.runIndex}
-          components={components}
-          onPush={this.onPushFlow}
-          onPop={this.onPopFlow}
-          onUpdate={this.onUpdateFlow}
-          onRun={this.run}
+                       components={components}
+                       onPush={this.onPushFlow}
+                       onPop={this.onPopFlow}
+                       onUpdate={this.onUpdateFlow}
+                       onRun={this.run}
         />
       </div>
     )

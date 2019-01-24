@@ -1,26 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { withRouter } from 'react-router'
-import { isGranted } from '../../reducers/user/actions'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {withRouter} from 'react-router'
+import {isGranted} from '../../reducers/user/actions'
 
-export default function requireAuthentication (Component, role = 'ROLE_USER') {
+export default function requireAuthentication(Component, role = 'ROLE_USER') {
   class AuthenticatedComponent extends React.Component {
-    componentWillMount () {
+    componentWillMount() {
       this.checkAuth(this.props.isAuthenticated, this.props.user)
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       this.checkAuth(nextProps.isAuthenticated, nextProps.user)
     }
 
-    checkAuth (isAuthenticated, user) {
+    checkAuth(isAuthenticated, user) {
       if (!isAuthenticated || (user.username && !isGranted(user, role))) {
         this.props.history.push(pathTo('login'))
       }
     }
 
-    render () {
+    render() {
       return (
         <div>
           {this.props.isAuthenticated === true

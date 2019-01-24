@@ -19,7 +19,7 @@ const user = (state = defaultState, action) => {
     case COMMIT_SET_COMPONENTS:
       return {
         ...state,
-        ...{ components: action.components }
+        ...{components: action.components}
       }
     case COMMIT_UPDATE_SETTINGS:
       return {

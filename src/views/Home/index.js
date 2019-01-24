@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'react-router-dom'
-import { getLastPublicProgram, feedPathTo } from '../../reducers/feed/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {pathTo} from '../../routes'
+import {Link} from 'react-router-dom'
+import {getLastPublicProgram, feedPathTo} from '../../reducers/feed/actions'
+import {connect} from 'react-redux'
 
 class Home extends Component {
   state = {
     flow: []
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.onFetchFlowData()
   }
 
   onFetchFlowData = () => {
     this.props.dispatch(getLastPublicProgram())
       .then((flow) => {
-        this.setState({ flow: flow })
+        this.setState({flow: flow})
       })
   }
 
@@ -27,8 +27,8 @@ class Home extends Component {
     return feedPathTo(path, item.username)
   }
 
-  render () {
-    const { flow } = this.state
+  render() {
+    const {flow} = this.state
 
     return (
       <div id='home' className='content-wrapper'>
@@ -38,7 +38,7 @@ class Home extends Component {
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard' /> Home</Link></li>
+            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
           </ol>
         </section>
 

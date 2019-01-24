@@ -1,15 +1,15 @@
-import { Bus } from 'uniflow/src/models'
+import {Bus} from 'uniflow/src/models'
 import moment from 'moment'
 
 export default class Program {
-  constructor (data) {
+  constructor(data) {
     Object.assign(this, data)
 
     this.created = moment(this.created)
     this.updated = moment(this.updated)
   }
 
-  serialiseFlowData (data) {
+  serialiseFlowData(data) {
     let objData = []
 
     for (let i = 0; i < data.length; i++) {
@@ -22,7 +22,7 @@ export default class Program {
     this.data = JSON.stringify(objData)
   }
 
-  deserialiseFlowData () {
+  deserialiseFlowData() {
     let objData = JSON.parse(this.data)
 
     let data = []

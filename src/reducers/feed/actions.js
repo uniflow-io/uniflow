@@ -1,6 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { Log, Program, Folder } from '../../models/index'
+import {Log, Program, Folder} from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_FEED,
@@ -10,13 +10,13 @@ import {
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME
 } from './actionsTypes'
-import { commitLogoutUser } from '../auth/actions'
+import {commitLogoutUser} from '../auth/actions'
 import {pathTo} from "../../routes";
 
 export const getCurrentProgram = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
 }
-export const getCurrentPath = (state) => {
+export const getCurrentPath    = (state) => {
   let path = []
   if (state.folder) {
     path = state.folder.path.slice()
@@ -31,7 +31,7 @@ export const getOrderedFeed = (state, filter) => {
 
   if (filter !== undefined) {
     keys = keys.filter((key) => {
-      let item = state.items[key]
+      let item  = state.items[key]
       let words = item.title
       if (item.constructor.name === 'Program') {
         for (let i = 0; i < item.tags.length; i++) {
@@ -83,7 +83,7 @@ export const getTags = (state) => {
   return tags
 }
 
-export const commitClearFeed = () => {
+export const commitClearFeed          = () => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_CLEAR_FEED
@@ -91,7 +91,7 @@ export const commitClearFeed = () => {
     return Promise.resolve()
   }
 }
-export const commitUpdateFeed = (item) => {
+export const commitUpdateFeed         = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_UPDATE_FEED,
@@ -100,7 +100,7 @@ export const commitUpdateFeed = (item) => {
     return Promise.resolve()
   }
 }
-export const commitDeleteFeed = (item) => {
+export const commitDeleteFeed         = (item) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_DELETE_FEED,
@@ -109,7 +109,7 @@ export const commitDeleteFeed = (item) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFeed = (current) => {
+export const commitSetCurrentFeed     = (current) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_CURRENT_FEED,
@@ -118,7 +118,7 @@ export const commitSetCurrentFeed = (current) => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFolder = (folder) => {
+export const commitSetCurrentFolder   = (folder) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_CURRENT_FOLDER,
@@ -147,13 +147,13 @@ export const fetchFeed = (username, path, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/program/${username}/tree${path.length > 0 ? '/'+path.join('/') : ''}`, config)
+      .get(`${server.getBaseUrl()}/api/program/${username}/tree${path.length > 0 ? '/' + path.join('/') : ''}`, config)
       .then((response) => {
         dispatch(commitClearFeed())
 
         for (let i = 0; i < response.data['children'].length; i++) {
-          let item = null
-          let { type, ...data } = response.data['children'][i]
+          let item            = null
+          let {type, ...data} = response.data['children'][i]
 
           if (type === 'program') {
             item = new Program(data)
@@ -357,7 +357,7 @@ export const feedPathTo = (path, username = null) => {
   let slugs = pathToSlugs(path)
 
   if (username) {
-    return pathTo('userFeed', Object.assign({ username: username }, slugs))
+    return pathTo('userFeed', Object.assign({username: username}, slugs))
   }
 
   return pathTo('feed', slugs)

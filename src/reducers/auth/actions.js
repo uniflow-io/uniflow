@@ -18,7 +18,7 @@ export const commitLoginUserRequest = () => {
 }
 
 export const commitLoginUserSuccess = (token) => {
-    window.localStorage.setItem('token', token)
+  window.localStorage.setItem('token', token)
 
   return (dispatch) => {
     dispatch({
@@ -30,7 +30,7 @@ export const commitLoginUserSuccess = (token) => {
 }
 
 export const commitLoginUserFailure = (error, message = null) => {
-    window.localStorage.removeItem('token')
+  window.localStorage.removeItem('token')
 
   return (dispatch) => {
     dispatch({
@@ -43,7 +43,7 @@ export const commitLoginUserFailure = (error, message = null) => {
 }
 
 export const commitLogoutUser = () => {
-    window.localStorage.removeItem('token')
+  window.localStorage.removeItem('token')
 
   return (dispatch) => {
     dispatch({

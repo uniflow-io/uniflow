@@ -6,10 +6,10 @@ import {
   COMMIT_SET_COMPONENTS,
   COMMIT_UPDATE_SETTINGS
 } from './actionsTypes'
-import { commitLogoutUser } from '../auth/actions'
-import { commitAddLog } from '../logs/actions'
+import {commitLogoutUser} from '../auth/actions'
+import {commitAddLog} from '../logs/actions'
 
-export const fetchComponents = (token) => {
+export const fetchComponents      = (token) => {
   return (dispatch) => {
     let data = Object.keys(components)
 
@@ -31,7 +31,7 @@ export const fetchComponents = (token) => {
       })
   }
 }
-export const fetchSettings = (token) => {
+export const fetchSettings        = (token) => {
   return (dispatch) => {
     return request
       .get(`${server.getBaseUrl()}/api/user/getSettings`, {
@@ -51,7 +51,7 @@ export const fetchSettings = (token) => {
       })
   }
 }
-export const updateSettings = (item, token) => {
+export const updateSettings       = (item, token) => {
   return (dispatch) => {
     let data = {
       firstname: item.firstname,
@@ -84,7 +84,7 @@ export const updateSettings = (item, token) => {
       })
   }
 }
-export const commitSetComponents = (components) => {
+export const commitSetComponents  = (components) => {
   return (dispatch) => {
     dispatch({
       type: COMMIT_SET_COMPONENTS,
@@ -102,7 +102,7 @@ export const commitUpdateSettings = (user) => {
     return Promise.resolve()
   }
 }
-export const isGranted = (user, attributes) => {
+export const isGranted            = (user, attributes) => {
   if (!Array.isArray(attributes)) {
     attributes = [attributes]
   }

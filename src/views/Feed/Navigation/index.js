@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { pathTo } from '../../../routes'
-import { withRouter } from 'react-router'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import {pathTo} from '../../../routes'
+import {withRouter} from 'react-router'
+import {connect} from 'react-redux'
 import {
   getOrderedFeed,
   createProgram,
@@ -11,7 +11,7 @@ import {
   createFolder,
   feedPathTo
 } from '../../../reducers/feed/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
+import {commitAddLog} from '../../../reducers/logs/actions'
 
 class Navigation extends Component {
   state = {
@@ -19,7 +19,7 @@ class Navigation extends Component {
   }
 
   onChange = (event) => {
-    this.setState({ search: event.target.value })
+    this.setState({search: event.target.value})
   }
 
   onCreateFolder = (event) => {
@@ -53,7 +53,7 @@ class Navigation extends Component {
         'path': getCurrentPath(this.props.feed)
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentProgram({ type: item.constructor.name, id: item.id }))
+        return this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
           .then(() => {
             this.props.history.push(this.itemPathTo(item))
           })
@@ -72,12 +72,12 @@ class Navigation extends Component {
     return feedPathTo(path, item.public || isCurrentUser ? this.props.feed.username : null)
   }
 
-  render () {
-    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
+  render() {
+    const isCurrentUser  = this.props.feed.username && this.props.feed.username === this.props.user.username
     const isFolderActive = () => {
       return this.props.feed.current === null ? 'active' : ''
     }
-    const isActive = (item) => {
+    const isActive       = (item) => {
       return (this.props.feed.current && this.props.feed.current.type === item.constructor.name && this.props.feed.current.id === item.id) ? 'active' : ''
     }
 
@@ -102,11 +102,11 @@ class Navigation extends Component {
           <div className='navbar navbar-default navbar-vertical' role='navigation'>
             <div className='navbar-header'>
               <button type='button' className='navbar-toggle' data-toggle='collapse'
-                data-target='.sidebar-navbar-collapse'>
+                      data-target='.sidebar-navbar-collapse'>
                 <span className='sr-only'>Toggle navigation</span>
-                <span className='icon-bar' />
-                <span className='icon-bar' />
-                <span className='icon-bar' />
+                <span className='icon-bar'/>
+                <span className='icon-bar'/>
+                <span className='icon-bar'/>
               </button>
               <span className='visible-xs navbar-brand'>Sidebar menu</span>
             </div>
@@ -114,13 +114,13 @@ class Navigation extends Component {
               <ul className='nav navbar-nav'>
                 <li>
                   <form className='navbar-form' role='search' onSubmit={this.onSubmit}>
-                    <div className='input-group' style={{ width: '100%' }}>
+                    <div className='input-group' style={{width: '100%'}}>
                       <input type='text' className='form-control' placeholder='Search'
-                        value={this.state.search} onChange={this.onChange} />
+                             value={this.state.search} onChange={this.onChange}/>
                       {this.state.search && (
                         <span className='input-group-btn'>
                           <button className='btn btn-default' type='button' onClick={this.onCreateFolder}><i
-                            className='fa fa-folder' />
+                            className='fa fa-folder'/>
                           </button>
                         </span>
                       )}
@@ -130,7 +130,7 @@ class Navigation extends Component {
                 {this.props.feed.folder && ([
                   <li key={'back'}>
                     <Link
-                      to={backTo()}><i className='fa fa-arrow-left fa-fw' /> Back</Link>
+                      to={backTo()}><i className='fa fa-arrow-left fa-fw'/> Back</Link>
                   </li>,
                   <li className={isFolderActive()} key={'folder'}>
                     <Link to={folderTo()}>.</Link>
@@ -140,10 +140,10 @@ class Navigation extends Component {
                   <li className={isActive(item)} key={i}>
                     <Link
                       to={this.itemPathTo(item)}>{item.constructor.name === 'Folder' && (
-                        <i className='fa fa-folder fa-fw' />
-                      )}{item.title} {item.constructor.name === 'Program' && item.tags.map((tag, j) => (
-                        <span key={j} className='badge'>{tag}</span>
-                      ))}</Link>
+                      <i className='fa fa-folder fa-fw'/>
+                    )}{item.title} {item.constructor.name === 'Program' && item.tags.map((tag, j) => (
+                      <span key={j} className='badge'>{tag}</span>
+                    ))}</Link>
                   </li>
                 ))}
               </ul>

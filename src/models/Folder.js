@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 export default class Folder {
-  constructor (data) {
+  constructor(data) {
     Object.assign(this, data)
 
     this.created = moment(this.created)

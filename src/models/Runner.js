@@ -1,8 +1,8 @@
 //import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
-import { transform } from 'babel-standalone'
+import {transform} from 'babel-standalone'
 
 export default class Runner {
-  run (stack, onRunIndex) {
+  run(stack, onRunIndex) {
     // get polyfill
     /* if(cachedPolyfillJS) return cachedPolyfillJS;
 

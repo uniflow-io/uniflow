@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {
   updateSettings,
   commitUpdateSettings
 } from '../../reducers/user/actions'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { Link } from 'react-router-dom'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {Link} from 'react-router-dom'
 import {
   loginFacebookUrl,
   loginGithubUrl
 } from '../../reducers/auth/actions'
 
-function copyTextToClipboard (text) {
-  let textArea = document.createElement('textarea')
+function copyTextToClipboard(text) {
+  let textArea   = document.createElement('textarea')
   textArea.value = text
   document.body.appendChild(textArea)
   textArea.focus()
@@ -39,32 +39,32 @@ class Settings extends Component {
     isSaving: false
   }
 
-  componentDidMount () {
-    this.setState({ user: Object.assign({}, this.props.user) })
+  componentDidMount() {
+    this.setState({user: Object.assign({}, this.props.user)})
   }
 
-  componentWillReceiveProps (nextProps) {
-    this.setState({ user: Object.assign({}, nextProps.user) })
+  componentWillReceiveProps(nextProps) {
+    this.setState({user: Object.assign({}, nextProps.user)})
   }
 
   onUpdateFirstname = (event) => {
-    this.setState({ user: { ...this.state.user, ...{ firstname: event.target.value } } })
+    this.setState({user: {...this.state.user, ...{firstname: event.target.value}}})
   }
 
   onUpdateLastname = (event) => {
-    this.setState({ user: { ...this.state.user, ...{ lastname: event.target.value } } })
+    this.setState({user: {...this.state.user, ...{lastname: event.target.value}}})
   }
 
   onUpdateUsername = (event) => {
-    this.setState({ user: { ...this.state.user, ...{ username: event.target.value } } })
+    this.setState({user: {...this.state.user, ...{username: event.target.value}}})
   }
 
   onUpdateApiKey = (event) => {
-    this.setState({ user: { ...this.state.user, ...{ apiKey: event.target.value } } })
+    this.setState({user: {...this.state.user, ...{apiKey: event.target.value}}})
   }
 
   onCopyApiUsage = (event) => {
-    const { user } = this.state
+    const {user}   = this.state
     const clipbard = this.getClipboard(user)
 
     copyTextToClipboard(clipbard)
@@ -72,12 +72,12 @@ class Settings extends Component {
 
   onRevokeFacebook = (event) => {
     event.preventDefault()
-    this.setState({ user: { ...this.state.user, ...{ facebookId: null } } }, this.onUpdate)
+    this.setState({user: {...this.state.user, ...{facebookId: null}}}, this.onUpdate)
   }
 
   onRevokeGithub = (event) => {
     event.preventDefault()
-    this.setState({ user: { ...this.state.user, ...{ githubId: null } } }, this.onUpdate)
+    this.setState({user: {...this.state.user, ...{githubId: null}}}, this.onUpdate)
   }
 
   onUpdate = (event) => {
@@ -85,10 +85,10 @@ class Settings extends Component {
       event.preventDefault()
     }
 
-    this.setState({ 'isSaving': true }, () => {
+    this.setState({'isSaving': true}, () => {
       this.props.dispatch(updateSettings(this.state.user, this.props.auth.token))
         .then(() => {
-          this.setState({ 'isSaving': false })
+          this.setState({'isSaving': false})
         })
     })
   }
@@ -102,7 +102,7 @@ class Settings extends Component {
     }
 
     this.props
-      .dispatch(commitUpdateSettings({ ...this.props.user, ...{ apiKey: apiKey } }))
+      .dispatch(commitUpdateSettings({...this.props.user, ...{apiKey: apiKey}}))
   }
 
   getClipboard = (user) => {
@@ -113,10 +113,10 @@ class Settings extends Component {
     return null
   }
 
-  render () {
-    const { env } = this.props
-    const { user, isSaving } = this.state
-    const clipbard = this.getClipboard(user)
+  render() {
+    const {env}            = this.props
+    const {user, isSaving} = this.state
+    const clipbard         = this.getClipboard(user)
 
     return (
       <div className='content-wrapper'>
@@ -126,7 +126,7 @@ class Settings extends Component {
             <small>Control panel</small>
           </h1>
           <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard' /> Home</Link></li>
+            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
             <li className='active'>Settings</li>
           </ol>
         </section>
@@ -145,24 +145,24 @@ class Settings extends Component {
                       <label htmlFor='settings_firstname' className='col-sm-2 control-label'>Firstname</label>
                       <div className='col-sm-10'>
                         <input type='text' className='form-control' id='settings_firstname'
-                          value={user.firstname || ''} onChange={this.onUpdateFirstname}
-                          placeholder='Firstname' />
+                               value={user.firstname || ''} onChange={this.onUpdateFirstname}
+                               placeholder='Firstname'/>
                       </div>
                     </div>
                     <div className='form-group'>
                       <label htmlFor='settings_lastname' className='col-sm-2 control-label'>Lastname</label>
                       <div className='col-sm-10'>
                         <input type='text' className='form-control' id='settings_lastname'
-                          value={user.lastname || ''} onChange={this.onUpdateLastname}
-                          placeholder='Lastname' />
+                               value={user.lastname || ''} onChange={this.onUpdateLastname}
+                               placeholder='Lastname'/>
                       </div>
                     </div>
                     <div className='form-group'>
                       <label htmlFor='settings_username' className='col-sm-2 control-label'>Username</label>
                       <div className='col-sm-10'>
                         <input type='text' className='form-control' id='settings_username'
-                          value={user.username || ''} onChange={this.onUpdateUsername}
-                          placeholder='Username' />
+                               value={user.username || ''} onChange={this.onUpdateUsername}
+                               placeholder='Username'/>
                       </div>
                     </div>
                     <div className='form-group'>
@@ -170,13 +170,13 @@ class Settings extends Component {
                       <div className='col-sm-10'>
                         {user.facebookId && (
                           <a onClick={this.onRevokeFacebook}
-                            className='btn btn-info'>
-                            <i className='fa fa-facebook' /> Revoke Facebook
+                             className='btn btn-info'>
+                            <i className='fa fa-facebook'/> Revoke Facebook
                           </a>
                         ) || (
                           <a href={loginFacebookUrl(env.facebookAppId)}
-                            className='btn btn-block btn-social btn-facebook'>
-                            <i className='fa fa-facebook' /> Connect with Facebook
+                             className='btn btn-block btn-social btn-facebook'>
+                            <i className='fa fa-facebook'/> Connect with Facebook
                           </a>
                         )}
                       </div>
@@ -186,13 +186,13 @@ class Settings extends Component {
                       <div className='col-sm-10'>
                         {user.githubId && (
                           <a onClick={this.onRevokeGithub}
-                            className='btn btn-info'>
-                            <i className='fa fa-github' /> Revoke Github
+                             className='btn btn-info'>
+                            <i className='fa fa-github'/> Revoke Github
                           </a>
                         ) || (
                           <a href={loginGithubUrl(env.githubAppId)}
-                            className='btn btn-block btn-social btn-github'>
-                            <i className='fa fa-github' /> Connect with Github
+                             className='btn btn-block btn-social btn-github'>
+                            <i className='fa fa-github'/> Connect with Github
                           </a>
                         )}
                       </div>
@@ -203,12 +203,12 @@ class Settings extends Component {
                         <div className='input-group'>
                           <div className='input-group-btn'>
                             <button type='button' className='btn btn-default'
-                              onClick={this.generateKey}>Generate
+                                    onClick={this.generateKey}>Generate
                             </button>
                           </div>
                           <input type='text' className='form-control' id='settings_apiKey'
-                            value={user.apiKey || ''} onChange={this.onUpdateApiKey}
-                            placeholder='api key' />
+                                 value={user.apiKey || ''} onChange={this.onUpdateApiKey}
+                                 placeholder='api key'/>
                         </div>
                       </div>
                     </div>
@@ -218,13 +218,13 @@ class Settings extends Component {
                         <div className='input-group'>
                           <div className='input-group-btn'>
                             <button type='button' className='btn btn-default'
-                              onClick={this.onCopyApiUsage}><i className='fa fa-clipboard' />
+                                    onClick={this.onCopyApiUsage}><i className='fa fa-clipboard'/>
                             </button>
                           </div>
                           <input type='text' className='form-control' id='settings_key'
-                            value={clipbard || ''}
-                            readOnly
-                            placeholder='api key' />
+                                 value={clipbard || ''}
+                                 readOnly
+                                 placeholder='api key'/>
                         </div>
                       </div>
                     </div>
@@ -232,9 +232,9 @@ class Settings extends Component {
                     <div className='form-group'>
                       <div className='col-sm-offset-2 col-sm-10'>
                         <button type='submit'
-                          className='btn btn-primary btn-block btn-flat'
-                          disabled={isSaving}
-                          onClick={this.onUpdate}>Save
+                                className='btn btn-primary btn-block btn-flat'
+                                disabled={isSaving}
+                                onClick={this.onUpdate}>Save
                         </button>
                       </div>
                     </div>

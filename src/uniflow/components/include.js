@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { Select2Component } from 'uniflow/src/components'
-import { Bus } from 'uniflow/src/models'
-import { getOrderedFeed, getProgramData } from '../../reducers/feed/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {Select2Component} from 'uniflow/src/components'
+import {Bus} from 'uniflow/src/models'
+import {getOrderedFeed, getProgramData} from '../../reducers/feed/actions'
+import {connect} from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
 import components from '../../uniflow'
-import { commitSetFlow } from 'uniflow/src/reducers/flow/actions'
+import {commitSetFlow} from 'uniflow/src/reducers/flow/actions'
 
 class UiComponent extends Component {
-  render () {
-    const { tag, bus } = this.props
-    const TagName = components[tag]
+  render() {
+    const {tag, bus} = this.props
+    const TagName    = components[tag]
 
-    return <TagName bus={bus} />
+    return <TagName bus={bus}/>
   }
 }
 
@@ -23,17 +23,17 @@ class ComponentInclude extends Component {
     programId: null
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.stack = createStore(flow)
   }
 
-  static tags () {
+  static tags() {
     return ['core']
   }
 
-  static clients () {
+  static clients() {
     return ['uniflow', 'bash']
   }
 
@@ -63,8 +63,8 @@ class ComponentInclude extends Component {
       })
   }
 
-  componentDidMount () {
-    const { bus } = this.props
+  componentDidMount() {
+    const {bus} = this.props
 
     bus.on('reset', this.deserialise)
     bus.on('compile', this.onCompile)
@@ -75,8 +75,8 @@ class ComponentInclude extends Component {
     )
   }
 
-  componentWillUnmount () {
-    const { bus } = this.props
+  componentWillUnmount() {
+    const {bus} = this.props
 
     bus.off('reset', this.deserialise)
     bus.off('compile', this.onCompile)
@@ -85,7 +85,7 @@ class ComponentInclude extends Component {
     this.unsubscribe()
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
     if (nextProps.bus !== oldProps.bus) {
@@ -106,11 +106,11 @@ class ComponentInclude extends Component {
   deserialise = (data) => {
     let [programId] = data || [null]
 
-    this.setState({ programId: programId })
+    this.setState({programId: programId})
   }
 
   onChangeSelected = (programId) => {
-    this.setState({ programId: programId }, this.onUpdate)
+    this.setState({programId: programId}, this.onUpdate)
   }
 
   onUpdate = () => {
@@ -141,7 +141,7 @@ class ComponentInclude extends Component {
       .resolve()
       .then(() => {
         return new Promise((resolve) => {
-          this.setState({ running: true }, resolve)
+          this.setState({running: true}, resolve)
         })
       }).then(() => {
         let flow = this.stack.getState()
@@ -159,26 +159,26 @@ class ComponentInclude extends Component {
       })
       .then(() => {
         return new Promise((resolve) => {
-          this.setState({ running: false }, resolve)
+          this.setState({running: false}, resolve)
         })
       })
   }
 
-  render () {
-    const { running, programId } = this.state
-    const stack = this.stack.getState()
+  render() {
+    const {running, programId} = this.state
+    const stack                = this.stack.getState()
 
     return ([
       <div className='box box-info' key='info'>
         <form className='form-horizontal'>
           <div className='box-header with-border'>
             <h3 className='box-title'>
-              <button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' />
-                : <i className='fa fa-refresh fa-cog' />}</button>
+              <button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin'/>
+                : <i className='fa fa-refresh fa-cog'/>}</button>
               Include
             </h3>
             <div className='box-tools pull-right'>
-              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></a>
             </div>
           </div>
           <div className='box-body'>
@@ -187,7 +187,7 @@ class ComponentInclude extends Component {
 
               <div className='col-sm-10'>
                 <Select2Component value={programId} onChange={this.onChangeSelected} className='form-control'
-                  id='select{{ _uid }}' style={{ width: '100%' }}>
+                                  id='select{{ _uid }}' style={{width: '100%'}}>
                   {getOrderedFeed(this.props.feed).map((item, i) => (
                     <option key={item.id} value={item.id}>{item.title}</option>
                   ))}
@@ -198,7 +198,7 @@ class ComponentInclude extends Component {
         </form>
       </div>
     ].concat(stack.map((item, i) => (
-      <UiComponent key={i} tag={item.component} bus={item.bus} />
+      <UiComponent key={i} tag={item.component} bus={item.bus}/>
     ))))
   }
 }

@@ -34,7 +34,7 @@ const feed = (state = defaultState, action) => {
     case COMMIT_SET_CURRENT_FEED:
       return {
         ...state,
-        current: action.current === null ? null : { ...action.current }
+        current: action.current === null ? null : {...action.current}
       }
     case COMMIT_SET_CURRENT_FOLDER:
       return {

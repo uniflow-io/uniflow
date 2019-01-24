@@ -1,8 +1,6 @@
 import {
   Home,
   Feed,
-  Login,
-  Register,
   Settings,
   Admin,
   LoginFacebook,
@@ -13,9 +11,12 @@ import {
 } from './views'
 import FAQ from './pages/faq'
 import Versions from './pages/versions'
+import Login from './pages/login'
+import Register from './pages/register'
+
 import pathToRegexp from 'path-to-regexp'
-import { requireAuthentication } from './components'
-import { matchPath } from 'react-router'
+import {requireAuthentication} from './components'
+import {matchPath} from 'react-router'
 
 const routes = {
   home: {
