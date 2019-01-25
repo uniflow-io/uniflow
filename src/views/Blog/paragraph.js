@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-class BlogParagraph extends Component {
+class Paragraph extends Component {
   render() {
     const {data} = this.props
 
@@ -25,4 +25,4 @@ class BlogParagraph extends Component {
   }
 }
 
-export default BlogParagraph
+export default Paragraph

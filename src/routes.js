@@ -1,18 +1,18 @@
 import {
-  Feed,
-  Settings,
   Admin,
+  Article,
+  Blog,
+  FAQ,
+  Feed,
+  Home,
+  Login,
   LoginFacebook,
   LoginGithub,
   LoginMedium,
-  Article
+  Register,
+  Settings,
+  Versions,
 } from './views'
-import Home from './pages/index'
-import FAQ from './pages/faq'
-import Blog from './pages/blog'
-import Versions from './pages/versions'
-import Login from './pages/login'
-import Register from './pages/register'
 
 import pathToRegexp from 'path-to-regexp'
 import {requireAuthentication} from './components'
