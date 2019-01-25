@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {withRouter} from 'react-router'
+import {navigate} from 'gatsby'
 import debounce from 'lodash/debounce'
 import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
 import {Program, Runner} from '../../../models'
@@ -223,7 +223,7 @@ class ProgramShow extends Component {
 
   onUpdate = debounce(() => {
     this.props.dispatch(updateProgram(this.props.program, this.props.auth.token)).then(() => {
-      this.props.history.push(this.itemPathTo(this.props.program))
+      navigate(this.itemPathTo(this.props.program))
     })
   }, 500)
 
@@ -440,4 +440,4 @@ export default connect(state => {
     feed: state.feed,
     stack: state.flow
   }
-})(withRouter(ProgramShow))
+})(ProgramShow)

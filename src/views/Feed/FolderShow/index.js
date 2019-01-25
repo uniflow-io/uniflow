@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {withRouter} from 'react-router'
+import {navigate} from 'gatsby'
 import debounce from 'lodash/debounce'
 import {Folder} from '../../../models'
 import {
@@ -66,7 +66,7 @@ class FolderShow extends Component {
   onUpdate = debounce(() => {
     this.props.dispatch(updateCurrentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        this.props.history.push(this.itemPathTo(this.props.folder))
+        navigate(this.itemPathTo(this.props.folder))
       })
   }, 500)
 
@@ -79,7 +79,7 @@ class FolderShow extends Component {
       .then(() => {
         const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
 
-        this.props.history.push(feedPathTo(path, isCurrentUser ? this.props.feed.username : null))
+        navigate(feedPathTo(path, isCurrentUser ? this.props.feed.username : null))
       })
   }
 
@@ -187,4 +187,4 @@ export default connect(state => {
     folder: state.feed.folder,
     feed: state.feed
   }
-})(withRouter(FolderShow))
+})(FolderShow)

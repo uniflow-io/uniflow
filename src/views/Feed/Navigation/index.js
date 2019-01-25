@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'gatsby'
-import {pathTo} from '../../../routes'
-import {withRouter} from 'react-router'
+import {navigate} from 'gatsby'
 import {connect} from 'react-redux'
 import {
   getOrderedFeed,
@@ -33,7 +32,7 @@ class Navigation extends Component {
       .then((item) => {
         return this.props.dispatch(setCurrentProgram(null))
           .then(() => {
-            this.props.history.push(this.itemPathTo(item))
+            navigate(this.itemPathTo(item))
           })
       })
       .catch((log) => {
@@ -55,7 +54,7 @@ class Navigation extends Component {
       .then((item) => {
         return this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
           .then(() => {
-            this.props.history.push(this.itemPathTo(item))
+            navigate(this.itemPathTo(item))
           })
       })
       .catch((log) => {
@@ -159,4 +158,4 @@ export default connect(state => ({
   auth: state.auth,
   user: state.user,
   feed: state.feed
-}))(withRouter(Navigation))
+}))(Navigation)
