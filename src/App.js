@@ -24,9 +24,11 @@ const ENV = {
 }
 store.dispatch(commitSetEnv(ENV))
 
-/*let token = window.localStorage.getItem('token')
-if (token !== null) {
-  store.dispatch(commitLoginUserSuccess(token))
-}*/
+if (typeof window !== `undefined`) {
+  let token = window.localStorage.getItem('token')
+  if (token !== null) {
+    store.dispatch(commitLoginUserSuccess(token))
+  }
+}
 
 export default ({element}) => <Provider store={store}>{element}</Provider>
