@@ -9,16 +9,22 @@ class LoginMedium extends Component {
   componentWillMount() {
     let code = this.getCode()
     if (code === null) {
-      return navigate(pathTo('login'))
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('login'))
+      }
     }
 
     this.props.dispatch(loginMedium(code, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return navigate(pathTo('admin'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('admin'))
+          }
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          return navigate(pathTo('login'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('login'))
+          }
         }
       })
   }

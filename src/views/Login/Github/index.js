@@ -9,16 +9,22 @@ class LoginGithub extends Component {
   componentWillMount() {
     let code = this.getCode()
     if (code === null) {
-      return navigate(pathTo('login'))
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('login'))
+      }
     }
 
     this.props.dispatch(loginGithub(code, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return navigate(pathTo('feed'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('feed'))
+          }
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          return navigate(pathTo('login'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('login'))
+          }
         }
       })
   }

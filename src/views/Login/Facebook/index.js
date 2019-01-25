@@ -9,16 +9,22 @@ class LoginFacebook extends Component {
   componentWillMount() {
     let accessToken = this.getAccessToken()
     if (accessToken === null) {
-      return navigate(pathTo('login'))
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('login'))
+      }
     }
 
     this.props.dispatch(loginFacebook(accessToken, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return navigate(pathTo('feed'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('feed'))
+          }
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          return navigate(pathTo('login'))
+          if (typeof window !== `undefined`) {
+            return navigate(pathTo('login'))
+          }
         }
       })
   }
