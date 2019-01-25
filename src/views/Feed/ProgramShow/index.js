@@ -40,7 +40,7 @@ class ProgramShow extends Component {
   componentDidMount() {
     const {program} = this.props
 
-    this._isMounted = true
+    this._componentIsMounted = true
 
     this.setState({folderTree: [pathToString(program.path)]})
 
@@ -48,7 +48,7 @@ class ProgramShow extends Component {
   }
 
   componentWillUnmount() {
-    this._isMounted = false
+    this._componentIsMounted = false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,8 +64,8 @@ class ProgramShow extends Component {
     }
   }
 
-  isMounted = () => {
-    return this._isMounted
+  componentIsMounted = () => {
+    return this._componentIsMounted
   }
 
   run = (event, index) => {
@@ -144,7 +144,7 @@ class ProgramShow extends Component {
         return this.setFlow(program.deserialiseFlowData())
       })
       .then(() => {
-        if (this.isMounted()) {
+        if (this.componentIsMounted()) {
           this.setState({fetchedSlug: program.slug})
         }
       })

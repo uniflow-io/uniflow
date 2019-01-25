@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchComponents, fetchSettings} from '../../reducers/user/actions'
-import routes, {pathTo, matchRoute} from '../../routes'
-import {withRouter} from 'react-router'
+import {matchRoute} from '../../routes'
 import {
   fetchFeed,
   getProgramBySlug,
@@ -12,17 +11,18 @@ import {
   getCurrentPath,
   feedPathTo
 } from '../../reducers/feed/actions'
+import {navigate} from 'gatsby'
 
 class UserManagerComponent extends Component {
   componentDidMount() {
-    const {auth, history} = this.props
+    const {auth, location} = this.props
 
-    this.historyUnlisten = history.listen(this.onLocation)
+    //this.historyUnlisten = history.listen(this.onLocation)
 
     if (auth.isAuthenticated) {
       this.onFetchUser(auth.token)
     } else {
-      this.onLocation(history.location)
+      this.onLocation(location)
     }
   }
 
@@ -35,7 +35,7 @@ class UserManagerComponent extends Component {
   }
 
   componentWillUnmount() {
-    this.historyUnlisten()
+    //this.historyUnlisten()
   }
 
   onLocation = (location) => {
@@ -56,9 +56,9 @@ class UserManagerComponent extends Component {
       this.props.dispatch(fetchComponents(token)),
       this.props.dispatch(fetchSettings(token))
     ]).then(() => {
-      const {history} = this.props
+      const {location} = this.props
 
-      this.onLocation(history.location)
+      this.onLocation(location)
     })
   }
 
@@ -135,7 +135,7 @@ class UserManagerComponent extends Component {
           }
         }
       }).then(() => {
-        const {user, history, feed} = this.props
+        const {user, feed} = this.props
         const isCurrentUser         = feed.username && feed.username === user.username
 
         let currentPath = getCurrentPath(feed)
@@ -144,7 +144,7 @@ class UserManagerComponent extends Component {
         if (item) {
           currentPath.push(item.slug)
         }
-        history.push(feedPathTo(currentPath, (item && item.public) || isCurrentUser ? feed.username : null))
+        navigate(feedPathTo(currentPath, (item && item.public) || isCurrentUser ? feed.username : null))
       })
   }
 
@@ -159,4 +159,4 @@ export default connect(state => {
     user: state.user,
     feed: state.feed
   }
-})(withRouter(UserManagerComponent))
+})(UserManagerComponent)

@@ -265,7 +265,7 @@ export default class Layout extends Component {
                     gtag('config', 'UA-2319330-13');
                 </script>*/}
         </Helmet>
-        {/*<UserManagerComponent/>*/}
+        <UserManagerComponent location={this.props.location}/>
 
         <div className='wrapper'>
 

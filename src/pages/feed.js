@@ -1,5 +1,5 @@
 import React from 'react'
-import {Article, Feed} from '../views'
+import {Feed} from '../views'
 import Layout from "../layouts";
 import {requireAuthentication} from '../components'
 import routes from '../routes'
