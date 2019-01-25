@@ -13,7 +13,6 @@ import {
   feedPathTo
 } from '../../../reducers/feed/actions'
 import {connect} from 'react-redux'
-import {pathTo} from '../../../routes'
 import {Select2Component} from 'uniflow/src/components'
 
 class FolderShow extends Component {
