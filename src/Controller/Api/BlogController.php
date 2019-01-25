@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\BlogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,6 +32,9 @@ class BlogController extends AbstractController
     public function article($slug)
     {
         $data = $this->blogService->getArticle($slug);
+        if(!$data) {
+            throw new NotFoundHttpException();
+        }
 
         return new JsonResponse($data);
     }
