@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {pathTo} from '../../../routes'
-import {Link} from 'react-router-dom'
+import {Link} from 'gatsby'
 import {getArticle} from '../../../reducers/blog/actions'
-import {withRouter} from 'react-router'
 import {connect} from 'react-redux'
 import Paragraph from './../paragraph'
 import moment from 'moment'
@@ -17,9 +16,9 @@ class Article extends Component {
   }
 
   onFetchFlowData = () => {
-    const {match} = this.props
+    const {slug} = this.props
 
-    this.props.dispatch(getArticle(match.params.slug))
+    this.props.dispatch(getArticle(slug))
       .then((article) => {
         this.setState({article: article})
       })
@@ -66,4 +65,4 @@ class Article extends Component {
 
 export default connect(() => {
   return {}
-})(withRouter(Article))
+})(Article)
