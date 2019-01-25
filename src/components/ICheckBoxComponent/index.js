@@ -12,7 +12,7 @@ export default class ICheckBoxComponent extends Component {
 
     this.silent = false
 
-    $(this.container)
+    /*$(this.container)
       .iCheck({
         handle: 'checkbox',
         checkboxClass: 'icheckbox_square-blue'
@@ -26,12 +26,12 @@ export default class ICheckBoxComponent extends Component {
         if (this.props.onChange && !this.silent) {
           this.props.onChange(false)
         }
-      })
+      })*/
     this.setValue(value)
   }
 
   componentWillUnmount () {
-    $(this.container).iCheck('destroy')
+    //$(this.container).iCheck('destroy')
   }
 
   componentWillReceiveProps (nextProps) {
@@ -45,7 +45,7 @@ export default class ICheckBoxComponent extends Component {
     setValue = (value) => {
       this.silent = true
 
-      if (value) {
+      /*if (value) {
         $(this.container).iCheck('check', () => {
           this.silent = false
         })
@@ -53,7 +53,7 @@ export default class ICheckBoxComponent extends Component {
         $(this.container).iCheck('uncheck', () => {
           this.silent = false
         })
-      }
+      }*/
     }
 
     render () {

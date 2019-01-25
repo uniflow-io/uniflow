@@ -13,7 +13,7 @@ export default class Select2Component extends Component {
 
     this.silent = false
 
-    $(this.container)
+    /*$(this.container)
       .val(value)
       .select2({ data: options })
       .on('change', (event) => {
@@ -21,11 +21,11 @@ export default class Select2Component extends Component {
           const value = $(event.currentTarget).val()
           this.props.onChange(value, event)
         }
-      })
+      })*/
   }
 
   componentWillUnmount () {
-    $(this.container).off().select2('destroy')
+    //$(this.container).off().select2('destroy')
   }
 
   componentWillReceiveProps (nextProps) {
@@ -34,14 +34,14 @@ export default class Select2Component extends Component {
     if (nextProps.value !== oldProps.value) {
       this.silent = true
 
-      $(this.container).val(nextProps.value)
-      $(this.container).trigger('change.select2')
+      //$(this.container).val(nextProps.value)
+      //$(this.container).trigger('change.select2')
 
       this.silent = false
     }
 
     if (nextProps.options !== oldProps.options) {
-      $(this.container).select2({ data: nextProps.options })
+      //$(this.container).select2({ data: nextProps.options })
     }
   }
 

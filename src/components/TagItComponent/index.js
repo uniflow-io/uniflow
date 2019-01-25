@@ -16,7 +16,7 @@ export default class TagItComponent extends Component {
 
     this.silent = false
 
-    $(this.container)
+    /*$(this.container)
       .val(value)
       .tagit(options)
       .on('change', (event) => {
@@ -24,11 +24,11 @@ export default class TagItComponent extends Component {
           const value = $(this.container).tagit('assignedTags')
           this.props.onChange(value, event)
         }
-      })
+      })*/
   }
 
   componentWillUnmount () {
-    $(this.container).off().tagit('destroy')
+    //$(this.container).off().tagit('destroy')
   }
 
   componentWillReceiveProps (nextProps) {
@@ -37,17 +37,17 @@ export default class TagItComponent extends Component {
     if (nextProps.value !== oldProps.value) {
       this.silent = true
 
-      let tags = $(this.container).tagit('assignedTags'); let i
+      let tags = []; /*$(this.container).tagit('assignedTags');*/ let i
 
       for (i = 0; i < nextProps.value.length; i++) {
         if (tags.indexOf(nextProps.value[i]) === -1) {
-          $(this.container).tagit('createTag', nextProps.value[i])
+          //$(this.container).tagit('createTag', nextProps.value[i])
         }
       }
 
       for (i = 0; i < tags.length; i++) {
         if (nextProps.value.indexOf(tags[i]) === -1) {
-          $(this.container).tagit('removeTagByLabel', tags[i])
+          //$(this.container).tagit('removeTagByLabel', tags[i])
         }
       }
 
@@ -55,7 +55,7 @@ export default class TagItComponent extends Component {
     }
 
     if (nextProps.options !== oldProps.options) {
-      $(this.container).tagit(nextProps.options)
+      //$(this.container).tagit(nextProps.options)
     }
   }
 
