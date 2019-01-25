@@ -6,7 +6,7 @@ exports.onCreatePage = function onCreatePage({
         page.matchPath = `/blog/*`
         createPage(page)
     } else if(page.path.startsWith(`/feed`)) {
-        page.matchPath = `/me/feed/*`
+        page.matchPath = `/*`
         createPage(page)
     }
 }
