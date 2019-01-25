@@ -5,7 +5,7 @@ import {
 } from '../../reducers/user/actions'
 import {connect} from 'react-redux'
 import {pathTo} from '../../routes'
-import {Link} from 'react-router-dom'
+import {Link} from 'gatsby'
 import {
   loginFacebookUrl,
   loginGithubUrl

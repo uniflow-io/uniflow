@@ -5,7 +5,7 @@ import FolderShow from './FolderShow'
 import {getCurrentProgram} from '../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import {pathTo} from '../../routes'
-import {Link} from 'react-router-dom'
+import {Link} from 'gatsby'
 
 class Feed extends Component {
   render() {
