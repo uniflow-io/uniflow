@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
-import {Link} from 'gatsby'
+import {Link, navigate} from 'gatsby'
 import {pathTo} from '../../../routes'
-import {withRouter} from 'react-router'
 import {loginMedium} from '../../../reducers/auth/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import connect from 'react-redux/es/connect/connect'
@@ -10,16 +9,16 @@ class LoginMedium extends Component {
   componentWillMount() {
     let code = this.getCode()
     if (code === null) {
-      return this.props.history.push(pathTo('login'))
+      return navigate(pathTo('login'))
     }
 
     this.props.dispatch(loginMedium(code, this.props.auth.token))
       .then(() => {
         if (this.props.auth.isAuthenticated) {
-          return this.props.history.push(pathTo('admin'))
+          return navigate(pathTo('admin'))
         } else {
           this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          return this.props.history.push(pathTo('login'))
+          return navigate(pathTo('login'))
         }
       })
   }
@@ -73,4 +72,4 @@ export default connect(state => {
   return {
     auth: state.auth
   }
-})(withRouter(LoginMedium))
+})(LoginMedium)
