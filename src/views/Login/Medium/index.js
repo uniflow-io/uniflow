@@ -3,7 +3,7 @@ import {Link, navigate} from 'gatsby'
 import {pathTo} from '../../../routes'
 import {loginMedium} from '../../../reducers/auth/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
-import connect from 'react-redux/es/connect/connect'
+import {connect} from 'react-redux'
 
 class LoginMedium extends Component {
   componentWillMount() {

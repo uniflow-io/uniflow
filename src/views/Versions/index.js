@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {pathTo} from '../../routes'
 import {Link} from 'gatsby'
-import connect from 'react-redux/es/connect/connect'
+import {connect} from 'react-redux'
 
 class Versions extends Component {
   render() {
