@@ -18,8 +18,6 @@ class UserManagerComponent extends Component {
   componentDidMount() {
     const {auth, location} = this.props
 
-    //this.historyUnlisten = history.listen(this.onLocation)
-
     if (auth.isAuthenticated) {
       this.onFetchUser(auth.token)
     } else {
@@ -33,10 +31,6 @@ class UserManagerComponent extends Component {
     if (nextProps.auth.token !== oldProps.auth.token && nextProps.auth.isAuthenticated) {
       this.onFetchUser(nextProps.auth.token)
     }
-  }
-
-  componentWillUnmount() {
-    //this.historyUnlisten()
   }
 
   onLocation = (location) => {
