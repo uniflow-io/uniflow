@@ -1,10 +1,7 @@
-import {Log} from '../../models'
-import {
-  COMMIT_ADD_LOG,
-  COMMIT_READ_LOG
-} from './actionsTypes'
+import { Log } from '../../models'
+import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from './actionsTypes'
 
-let id             = 1
+let id = 1
 const defaultState = {}
 
 const logs = (state = defaultState, action) => {
@@ -13,16 +10,16 @@ const logs = (state = defaultState, action) => {
       let item = new Log({
         id: id,
         message: action.message,
-        status: 'new'
+        status: 'new',
       })
       id++
 
       state[item.id] = item
       return {
-        ...state
+        ...state,
       }
     case COMMIT_READ_LOG:
-      return Object.keys(state).map((key) => {
+      return Object.keys(state).map(key => {
         let item = state[key]
         if (item.id !== action.id) {
           return item
@@ -30,7 +27,7 @@ const logs = (state = defaultState, action) => {
 
         return {
           ...item,
-          ...{status: 'read'}
+          ...{ status: 'read' },
         }
       })
     default:

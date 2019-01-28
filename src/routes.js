@@ -15,72 +15,72 @@ import {
 } from './views'
 
 import pathToRegexp from 'path-to-regexp'
-import {requireAuthentication} from './components'
-import {matchPath} from './utils'
+import { requireAuthentication } from './components'
+import { matchPath } from './utils'
 
 const routes = {
   home: {
     path: '/',
     exact: true,
-    component: Home
+    component: Home,
   },
   login: {
     path: '/login',
     exact: true,
-    component: Login
+    component: Login,
   },
   loginFacebook: {
     path: '/login/facebook',
     exact: true,
-    component: LoginFacebook
+    component: LoginFacebook,
   },
   loginGithub: {
     path: '/login/github',
     exact: true,
-    component: LoginGithub
+    component: LoginGithub,
   },
   loginMedium: {
     path: '/login/medium',
     exact: true,
-    component: LoginMedium
+    component: LoginMedium,
   },
   register: {
     path: '/register',
     exact: true,
-    component: Register
+    component: Register,
   },
   faq: {
     path: '/faq',
-    component: FAQ
+    component: FAQ,
   },
   versions: {
     path: '/versions',
-    component: Versions
+    component: Versions,
   },
   article: {
     path: '/blog/:slug',
-    component: Article
+    component: Article,
   },
   blog: {
     path: '/blog',
-    component: Blog
+    component: Blog,
   },
   settings: {
     path: '/settings',
-    component: requireAuthentication(Settings)
+    component: requireAuthentication(Settings),
   },
   admin: {
     path: '/admin',
-    component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN')
+    component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN'),
   },
   feed: {
     path: '/me/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
-    component: requireAuthentication(Feed)
+    component: requireAuthentication(Feed),
   },
   userFeed: {
     path: '/:username/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
-    component: Feed
-  }
+    component: Feed,
+  },
 }
 
 export const pathTo = (view, params = {}) => {
@@ -91,7 +91,7 @@ export const pathTo = (view, params = {}) => {
   return pathToRegexp.compile(routes[view].path)(params)
 }
 
-export const matchRoute = (pathname) => {
+export const matchRoute = pathname => {
   let keys = Object.keys(routes)
 
   let match = null
@@ -102,13 +102,13 @@ export const matchRoute = (pathname) => {
     route = keys[i]
     match = matchPath(pathname, {
       path: routes[route].path,
-      exact: routes[route].exact
+      exact: routes[route].exact,
     })
 
     if (match) {
       return {
         route: route,
-        match: match
+        match: match,
       }
     }
   }

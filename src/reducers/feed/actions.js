@@ -1,6 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
-import {Log, Program, Folder} from '../../models/index'
+import { Log, Program, Folder } from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_FEED,
@@ -8,26 +8,26 @@ import {
   COMMIT_DELETE_FEED,
   COMMIT_SET_CURRENT_FEED,
   COMMIT_SET_CURRENT_FOLDER,
-  COMMIT_SET_CURRENT_USERNAME
+  COMMIT_SET_CURRENT_USERNAME,
 } from './actionsTypes'
-import {commitLogoutUser} from '../auth/actions'
-import {pathTo} from "../../routes";
-import {Bus} from "uniflow/src/models";
+import { commitLogoutUser } from '../auth/actions'
+import { pathTo } from '../../routes'
+import { Bus } from 'uniflow/src/models'
 
-export const serialiseFlowData = (data) => {
+export const serialiseFlowData = data => {
   let objData = []
 
   for (let i = 0; i < data.length; i++) {
     objData.push({
       component: data[i].component,
-      data: data[i].data
+      data: data[i].data,
     })
   }
 
   return JSON.stringify(objData)
 }
 
-export const deserialiseFlowData = (raw) => {
+export const deserialiseFlowData = raw => {
   let objData = JSON.parse(raw)
 
   let data = []
@@ -36,17 +36,19 @@ export const deserialiseFlowData = (raw) => {
     data.push({
       component: objData[i].component,
       data: objData[i].data,
-      bus: new Bus()
+      bus: new Bus(),
     })
   }
 
   return data
 }
 
-export const getCurrentProgram = (state) => {
-  return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
+export const getCurrentProgram = state => {
+  return state.current
+    ? state.items[`${state.current.type}_${state.current.id}`]
+    : null
 }
-export const getCurrentPath    = (state) => {
+export const getCurrentPath = state => {
   let path = []
   if (state.folder) {
     path = state.folder.path.slice()
@@ -60,8 +62,8 @@ export const getOrderedFeed = (state, filter) => {
   let keys = Object.keys(state.items)
 
   if (filter !== undefined) {
-    keys = keys.filter((key) => {
-      let item  = state.items[key]
+    keys = keys.filter(key => {
+      let item = state.items[key]
       let words = item.title
       if (item.type === 'program') {
         for (let i = 0; i < item.tags.length; i++) {
@@ -81,7 +83,7 @@ export const getOrderedFeed = (state, filter) => {
     return moment(itemB.updated).diff(moment(itemA.updated))
   })
 
-  return keys.map((key) => {
+  return keys.map(key => {
     return state.items[key]
   })
 }
@@ -89,7 +91,7 @@ export const getOrderedFeed = (state, filter) => {
 export const getProgramBySlug = (state, slug) => {
   let keys = Object.keys(state.items)
 
-  let slugKeys = keys.filter((key) => {
+  let slugKeys = keys.filter(key => {
     return state.items[key].type === 'program' && state.items[key].slug === slug
   })
 
@@ -100,85 +102,90 @@ export const getProgramBySlug = (state, slug) => {
   return null
 }
 
-export const getTags = (state) => {
-  let tags = Object.keys(state.items).reduce(function (previous, key) {
+export const getTags = state => {
+  let tags = Object.keys(state.items).reduce(function(previous, key) {
     return previous.concat(state.items[key].tags)
   }, [])
 
   // filter unique
-  tags = tags.filter(function (value, index, self) {
+  tags = tags.filter(function(value, index, self) {
     return self.indexOf(value) === index
   })
 
   return tags
 }
 
-export const commitClearFeed          = () => {
-  return (dispatch) => {
+export const commitClearFeed = () => {
+  return dispatch => {
     dispatch({
-      type: COMMIT_CLEAR_FEED
+      type: COMMIT_CLEAR_FEED,
     })
     return Promise.resolve()
   }
 }
-export const commitUpdateFeed         = (item) => {
-  return (dispatch) => {
+export const commitUpdateFeed = item => {
+  return dispatch => {
     dispatch({
       type: COMMIT_UPDATE_FEED,
-      item
+      item,
     })
     return Promise.resolve()
   }
 }
-export const commitDeleteFeed         = (item) => {
-  return (dispatch) => {
+export const commitDeleteFeed = item => {
+  return dispatch => {
     dispatch({
       type: COMMIT_DELETE_FEED,
-      item
+      item,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFeed     = (current) => {
-  return (dispatch) => {
+export const commitSetCurrentFeed = current => {
+  return dispatch => {
     dispatch({
       type: COMMIT_SET_CURRENT_FEED,
-      current
+      current,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFolder   = (folder) => {
-  return (dispatch) => {
+export const commitSetCurrentFolder = folder => {
+  return dispatch => {
     dispatch({
       type: COMMIT_SET_CURRENT_FOLDER,
-      folder
+      folder,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentUsername = (username) => {
-  return (dispatch) => {
+export const commitSetCurrentUsername = username => {
+  return dispatch => {
     dispatch({
       type: COMMIT_SET_CURRENT_USERNAME,
-      username
+      username,
     })
     return Promise.resolve()
   }
 }
 
 export const fetchFeed = (username, path, token = null) => {
-  return (dispatch) => {
+  return dispatch => {
     let config = {}
     if (token) {
       config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${token}`
+        'Uniflow-Authorization': `Bearer ${token}`,
       }
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/program/${username}/tree${path.length > 0 ? '/' + path.join('/') : ''}`, config)
-      .then((response) => {
+      .get(
+        `${server.getBaseUrl()}/api/program/${username}/tree${
+          path.length > 0 ? '/' + path.join('/') : ''
+        }`,
+        config
+      )
+      .then(response => {
         dispatch(commitClearFeed())
 
         for (let i = 0; i < response.data['children'].length; i++) {
@@ -187,9 +194,13 @@ export const fetchFeed = (username, path, token = null) => {
           dispatch(commitUpdateFeed(item))
         }
 
-        dispatch(commitSetCurrentFolder(response.data['folder'] ? response.data['folder'] : null))
+        dispatch(
+          commitSetCurrentFolder(
+            response.data['folder'] ? response.data['folder'] : null
+          )
+        )
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -200,7 +211,7 @@ export const fetchFeed = (username, path, token = null) => {
 }
 
 export const createProgram = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     let data = {
       title: item.title,
       slug: item.title,
@@ -208,23 +219,23 @@ export const createProgram = (item, token) => {
       client: item.client,
       tags: item.tags,
       description: item.description,
-      public: false
+      public: false,
     }
 
     return request
       .post(`${server.getBaseUrl()}/api/program/create`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
         return item
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -235,7 +246,7 @@ export const createProgram = (item, token) => {
 }
 
 export const updateProgram = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     let data = {
       title: item.title,
       slug: item.slug,
@@ -243,23 +254,23 @@ export const updateProgram = (item, token) => {
       client: item.client,
       tags: item.tags,
       description: item.description,
-      public: item.public
+      public: item.public,
     }
 
     return request
       .put(`${server.getBaseUrl()}/api/program/update/${item.id}`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
         return item
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -270,20 +281,20 @@ export const updateProgram = (item, token) => {
 }
 
 export const getProgramData = (item, token = null) => {
-  return (dispatch) => {
+  return dispatch => {
     let config = {}
     if (token) {
       config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${token}`
+        'Uniflow-Authorization': `Bearer ${token}`,
       }
     }
 
     return request
       .get(`${server.getBaseUrl()}/api/program/getData/${item.id}`, config)
-      .then((response) => {
+      .then(response => {
         return response.data.data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -294,21 +305,21 @@ export const getProgramData = (item, token = null) => {
 }
 
 export const setProgramData = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     return request
       .put(`${server.getBaseUrl()}/api/program/setData/${item.id}`, item.data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         item.updated = moment()
 
         dispatch(commitUpdateFeed(item))
 
         return response.data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -319,19 +330,19 @@ export const setProgramData = (item, token) => {
 }
 
 export const deleteProgram = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     return request
       .delete(`${server.getBaseUrl()}/api/program/delete/${item.id}`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         dispatch(commitDeleteFeed(item))
 
         return response.data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -341,16 +352,16 @@ export const deleteProgram = (item, token) => {
   }
 }
 
-export const setCurrentFeed = (current) => {
-  return (dispatch) => {
+export const setCurrentFeed = current => {
+  return dispatch => {
     dispatch(commitSetCurrentFeed(current))
 
     return Promise.resolve(current)
   }
 }
 
-export const setCurrentUsername = (username) => {
-  return (dispatch) => {
+export const setCurrentUsername = username => {
+  return dispatch => {
     dispatch(commitSetCurrentUsername(username))
 
     return Promise.resolve(username)
@@ -358,19 +369,19 @@ export const setCurrentUsername = (username) => {
 }
 
 export const getLastPublicProgram = () => {
-  return (dispatch) => {
+  return dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/program/last-public`)
-      .then((response) => {
+      .then(response => {
         return response.data.flow
       })
   }
 }
 
-export const pathToSlugs = (path) => {
+export const pathToSlugs = path => {
   let slugs = {}
   for (let i = 0; i < path.length; i++) {
-    slugs[`slug${(i + 1)}`] = path[i]
+    slugs[`slug${i + 1}`] = path[i]
   }
 
   return slugs
@@ -380,17 +391,17 @@ export const feedPathTo = (path, username = null) => {
   let slugs = pathToSlugs(path)
 
   if (username) {
-    return pathTo('userFeed', Object.assign({username: username}, slugs))
+    return pathTo('userFeed', Object.assign({ username: username }, slugs))
   }
 
   return pathTo('feed', slugs)
 }
 
-export const pathToString = (path) => {
+export const pathToString = path => {
   return `/${path.join('/')}`
 }
 
-export const stringToPath = (value) => {
+export const stringToPath = value => {
   if (value === '/') {
     return []
   }
@@ -398,20 +409,20 @@ export const stringToPath = (value) => {
 }
 
 export const getFolderTree = (username, token = null) => {
-  return (dispatch) => {
+  return dispatch => {
     let config = {}
     if (token) {
       config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${token}`
+        'Uniflow-Authorization': `Bearer ${token}`,
       }
     }
 
     return request
       .get(`${server.getBaseUrl()}/api/folder/${username}/tree`, config)
-      .then((response) => {
+      .then(response => {
         return response.data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -422,27 +433,27 @@ export const getFolderTree = (username, token = null) => {
 }
 
 export const createFolder = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     let data = {
       title: item.title,
       slug: item.title,
-      path: item.path
+      path: item.path,
     }
 
     return request
       .post(`${server.getBaseUrl()}/api/folder/create`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
         return item
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -453,27 +464,27 @@ export const createFolder = (item, token) => {
 }
 
 export const updateCurrentFolder = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     let data = {
       title: item.title,
       slug: item.slug,
-      path: item.path
+      path: item.path,
     }
 
     return request
       .put(`${server.getBaseUrl()}/api/folder/update/${item.id}`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         let item = response.data
 
         dispatch(commitSetCurrentFolder(item))
 
         return item
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -484,19 +495,19 @@ export const updateCurrentFolder = (item, token) => {
 }
 
 export const deleteCurrentFolder = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     return request
       .delete(`${server.getBaseUrl()}/api/folder/delete/${item.id}`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         // dispatch(commitSetCurrentFolder(null))
 
         return response.data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {

@@ -1,4 +1,4 @@
 import React from 'react'
-import {LoginGithub} from '../../views'
+import { LoginGithub } from '../../views'
 
-export default ({location}) => <LoginGithub location={location}/>
+export default ({ location }) => <LoginGithub location={location} />

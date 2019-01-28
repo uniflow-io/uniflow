@@ -1,87 +1,94 @@
-import React, {Component} from 'react'
-import {
-  fetchConfig,
-  updateConfig
-} from '../../reducers/config/actions'
-import {connect} from 'react-redux'
-import {pathTo} from '../../routes'
-import {Link} from 'gatsby'
-import {
-  loginMediumUrl
-} from '../../reducers/auth/actions'
+import React, { Component } from 'react'
+import { fetchConfig, updateConfig } from '../../reducers/config/actions'
+import { connect } from 'react-redux'
+import { pathTo } from '../../routes'
+import { Link } from 'gatsby'
+import { loginMediumUrl } from '../../reducers/auth/actions'
 
 class Admin extends Component {
   state = {
     config: {
-      mediumToken: null
+      mediumToken: null,
     },
-    isSaving: false
+    isSaving: false,
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchConfig(this.props.auth.token))
-      .then((response) => {
-        this.setState({config: Object.assign({}, this.state.config, response.data)})
+    this.props.dispatch(fetchConfig(this.props.auth.token)).then(response => {
+      this.setState({
+        config: Object.assign({}, this.state.config, response.data),
       })
+    })
   }
 
-  onRevokeMedium = (event) => {
+  onRevokeMedium = event => {
     event.preventDefault()
-    this.setState({config: {...this.state.config, ...{mediumToken: null}}}, this.onUpdate)
+    this.setState(
+      { config: { ...this.state.config, ...{ mediumToken: null } } },
+      this.onUpdate
+    )
   }
 
-  onUpdate = (event) => {
+  onUpdate = event => {
     if (event) {
       event.preventDefault()
     }
 
-    this.setState({'isSaving': true}, () => {
-      this.props.dispatch(updateConfig(this.state.config, this.props.auth.token))
+    this.setState({ isSaving: true }, () => {
+      this.props
+        .dispatch(updateConfig(this.state.config, this.props.auth.token))
         .then(() => {
-          this.setState({'isSaving': false})
+          this.setState({ isSaving: false })
         })
     })
   }
 
   render() {
-    const {env}              = this.props
-    const {config, isSaving} = this.state
+    const { env } = this.props
+    const { config, isSaving } = this.state
 
     return (
-      <div className='content-wrapper'>
-        <section className='content-header'>
+      <div className="content-wrapper">
+        <section className="content-header">
           <h1>
             Admin
             <small>Control panel</small>
           </h1>
-          <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
-            <li className='active'>Admin</li>
+          <ol className="breadcrumb">
+            <li>
+              <Link to={pathTo('home')}>
+                <i className="fa fa-dashboard" /> Home
+              </Link>
+            </li>
+            <li className="active">Admin</li>
           </ol>
         </section>
 
-        <section className='content'>
-          <div className='row'>
-            <div className='col-md-12'>
-
-              <form className='form-horizontal'>
-                <div className='box box-primary'>
-                  <div className='box-header with-border'>
-                    <h3 className='box-title'>Admin</h3>
+        <section className="content">
+          <div className="row">
+            <div className="col-md-12">
+              <form className="form-horizontal">
+                <div className="box box-primary">
+                  <div className="box-header with-border">
+                    <h3 className="box-title">Admin</h3>
                   </div>
-                  <div className='box-body'>
-                    <div className='form-group'>
-                      <label className='col-sm-2 control-label'>Medium</label>
-                      <div className='col-sm-10'>
-                        {config.mediumToken && (
-                          <a onClick={this.onRevokeMedium}
-                             className='btn btn-info'>
-                            <i className='fa fa-medium'/> Revoke Medium
+                  <div className="box-body">
+                    <div className="form-group">
+                      <label className="col-sm-2 control-label">Medium</label>
+                      <div className="col-sm-10">
+                        {(config.mediumToken && (
+                          <a
+                            onClick={this.onRevokeMedium}
+                            className="btn btn-info"
+                          >
+                            <i className="fa fa-medium" /> Revoke Medium
                           </a>
-                        ) || (
-                          <a href={loginMediumUrl(env.mediumAppId)}
-                             className='btn btn-block btn-social btn-medium'>
-                            <i className='fa fa-medium'/> Connect with Medium
+                        )) || (
+                          <a
+                            href={loginMediumUrl(env.mediumAppId)}
+                            className="btn btn-block btn-social btn-medium"
+                          >
+                            <i className="fa fa-medium" /> Connect with Medium
                           </a>
                         )}
                       </div>
@@ -89,7 +96,6 @@ class Admin extends Component {
                   </div>
                 </div>
               </form>
-
             </div>
           </div>
         </section>
@@ -102,6 +108,6 @@ export default connect(state => {
   return {
     auth: state.auth,
     env: state.env,
-    user: state.user
+    user: state.user,
   }
 })(Admin)

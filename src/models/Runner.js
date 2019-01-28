@@ -1,5 +1,5 @@
 //import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
-import {transform} from 'babel-standalone'
+import { transform } from 'babel-standalone'
 
 export default class Runner {
   run(stack, onRunIndex) {
@@ -12,7 +12,6 @@ export default class Runner {
 
          return cachedPolyfillJS;
          }) */
-
     /*let asyncRunPromise = null
     let interpreter = null
     let interpreterPromise = new Promise((resolve) => {

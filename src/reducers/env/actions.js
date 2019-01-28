@@ -1,12 +1,10 @@
-import {
-  COMMIT_SET_ENV
-} from './actionsTypes'
+import { COMMIT_SET_ENV } from './actionsTypes'
 
-export const commitSetEnv = (env) => {
-  return (dispatch) => {
+export const commitSetEnv = env => {
+  return dispatch => {
     dispatch({
       type: COMMIT_SET_ENV,
-      env
+      env,
     })
     return Promise.resolve()
   }

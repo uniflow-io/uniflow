@@ -2,27 +2,24 @@ import request from 'axios'
 import server from '../../utils/server'
 import uniq from 'lodash/uniq'
 import components from '../../uniflow'
-import {
-  COMMIT_SET_COMPONENTS,
-  COMMIT_UPDATE_SETTINGS
-} from './actionsTypes'
-import {commitLogoutUser} from '../auth/actions'
-import {commitAddLog} from '../logs/actions'
+import { COMMIT_SET_COMPONENTS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
+import { commitLogoutUser } from '../auth/actions'
+import { commitAddLog } from '../logs/actions'
 
-export const fetchComponents      = (token) => {
-  return (dispatch) => {
+export const fetchComponents = token => {
+  return dispatch => {
     let data = Object.keys(components)
 
     return request
       .put(`${server.getBaseUrl()}/api/user/getComponents`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         dispatch(commitSetComponents(Object.values(response.data)))
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -31,18 +28,18 @@ export const fetchComponents      = (token) => {
       })
   }
 }
-export const fetchSettings        = (token) => {
-  return (dispatch) => {
+export const fetchSettings = token => {
+  return dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/user/getSettings`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         dispatch(commitUpdateSettings(response.data))
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -51,29 +48,29 @@ export const fetchSettings        = (token) => {
       })
   }
 }
-export const updateSettings       = (item, token) => {
-  return (dispatch) => {
+export const updateSettings = (item, token) => {
+  return dispatch => {
     let data = {
       firstname: item.firstname,
       lastname: item.lastname,
       username: item.username,
       apiKey: item.apiKey,
       facebookId: item.facebookId,
-      githubId: item.githubId
+      githubId: item.githubId,
     }
 
     return request
       .put(`${server.getBaseUrl()}/api/user/setSettings`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         dispatch(commitUpdateSettings(data))
 
         return data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 400) {
           dispatch(commitAddLog(error.response.data.message))
         } else if (error.request.status === 401) {
@@ -84,25 +81,25 @@ export const updateSettings       = (item, token) => {
       })
   }
 }
-export const commitSetComponents  = (components) => {
-  return (dispatch) => {
+export const commitSetComponents = components => {
+  return dispatch => {
     dispatch({
       type: COMMIT_SET_COMPONENTS,
-      components
+      components,
     })
     return Promise.resolve()
   }
 }
-export const commitUpdateSettings = (user) => {
-  return (dispatch) => {
+export const commitUpdateSettings = user => {
+  return dispatch => {
     dispatch({
       type: COMMIT_UPDATE_SETTINGS,
-      user
+      user,
     })
     return Promise.resolve()
   }
 }
-export const isGranted            = (user, attributes) => {
+export const isGranted = (user, attributes) => {
   if (!Array.isArray(attributes)) {
     attributes = [attributes]
   }

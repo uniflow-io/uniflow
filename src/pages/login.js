@@ -1,4 +1,4 @@
 import React from 'react'
-import {Login} from '../views'
+import { Login } from '../views'
 
-export default () => <Login/>
+export default () => <Login />

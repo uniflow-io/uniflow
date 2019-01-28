@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
-import {Link, navigate} from 'gatsby'
-import {pathTo} from '../../../routes'
-import {loginGithub} from '../../../reducers/auth/actions'
-import {commitAddLog} from '../../../reducers/logs/actions'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { Link, navigate } from 'gatsby'
+import { pathTo } from '../../../routes'
+import { loginGithub } from '../../../reducers/auth/actions'
+import { commitAddLog } from '../../../reducers/logs/actions'
+import { connect } from 'react-redux'
 
 class LoginGithub extends Component {
   componentWillMount() {
@@ -14,19 +14,18 @@ class LoginGithub extends Component {
       }
     }
 
-    this.props.dispatch(loginGithub(code, this.props.auth.token))
-      .then(() => {
-        if (this.props.auth.isAuthenticated) {
-          if (typeof window !== `undefined`) {
-            return navigate(pathTo('feed'))
-          }
-        } else {
-          this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          if (typeof window !== `undefined`) {
-            return navigate(pathTo('login'))
-          }
+    this.props.dispatch(loginGithub(code, this.props.auth.token)).then(() => {
+      if (this.props.auth.isAuthenticated) {
+        if (typeof window !== `undefined`) {
+          return navigate(pathTo('feed'))
         }
-      })
+      } else {
+        this.props.dispatch(commitAddLog(this.props.auth.statusText))
+        if (typeof window !== `undefined`) {
+          return navigate(pathTo('login'))
+        }
+      }
+    })
   }
 
   getCode() {
@@ -40,34 +39,35 @@ class LoginGithub extends Component {
 
   render() {
     return (
-      <div className='content-wrapper'>
-
-        <section className='content-header'>
+      <div className="content-wrapper">
+        <section className="content-header">
           <h1>
             Login Github
             <small>Control panel</small>
           </h1>
-          <ol className='breadcrumb'>
-            <li><Link to={pathTo('home')}><i className='fa fa-dashboard'/> Home</Link></li>
-            <li className='active'>Login</li>
+          <ol className="breadcrumb">
+            <li>
+              <Link to={pathTo('home')}>
+                <i className="fa fa-dashboard" /> Home
+              </Link>
+            </li>
+            <li className="active">Login</li>
           </ol>
         </section>
 
-        <div className='container-fluid content content-login'>
-
-          <div className='row'>
-            <div className='col-sm-6 col-sm-offset-3'>
-              <div className='box box-default'>
-                <div className='box-header with-border'>
-                  <h3 className='box-title'>Login Github</h3>
+        <div className="container-fluid content content-login">
+          <div className="row">
+            <div className="col-sm-6 col-sm-offset-3">
+              <div className="box box-default">
+                <div className="box-header with-border">
+                  <h3 className="box-title">Login Github</h3>
                 </div>
-                <div className='box-body'>
+                <div className="box-body">
                   <p>Application is currently logging you from Github</p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     )
@@ -76,6 +76,6 @@ class LoginGithub extends Component {
 
 export default connect(state => {
   return {
-    auth: state.auth
+    auth: state.auth,
   }
 })(LoginGithub)

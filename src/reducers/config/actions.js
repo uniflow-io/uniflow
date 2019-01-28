@@ -1,17 +1,17 @@
 import request from 'axios'
 import server from '../../utils/server'
-import {commitLogoutUser} from '../auth/actions'
-import {commitAddLog} from '../logs/actions'
+import { commitLogoutUser } from '../auth/actions'
+import { commitAddLog } from '../logs/actions'
 
-export const fetchConfig  = (token) => {
-  return (dispatch) => {
+export const fetchConfig = token => {
+  return dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/config/getConfig`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -21,21 +21,21 @@ export const fetchConfig  = (token) => {
   }
 }
 export const updateConfig = (item, token) => {
-  return (dispatch) => {
+  return dispatch => {
     let data = {
-      mediumToken: item.mediumToken
+      mediumToken: item.mediumToken,
     }
 
     return request
       .put(`${server.getBaseUrl()}/api/config/setConfig`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`
-        }
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
       })
-      .then((response) => {
+      .then(response => {
         return data
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.request.status === 400) {
           dispatch(commitAddLog(error.response.data.message))
         } else if (error.request.status === 401) {

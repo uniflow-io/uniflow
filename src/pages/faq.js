@@ -1,4 +1,4 @@
 import React from 'react'
-import {FAQ} from '../views'
+import { FAQ } from '../views'
 
-export default () => <FAQ/>
+export default () => <FAQ />

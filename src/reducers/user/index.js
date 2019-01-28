@@ -1,7 +1,4 @@
-import {
-  COMMIT_SET_COMPONENTS,
-  COMMIT_UPDATE_SETTINGS
-} from './actionsTypes'
+import { COMMIT_SET_COMPONENTS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
 
 const defaultState = {
   components: {},
@@ -11,7 +8,7 @@ const defaultState = {
   lastName: null,
   facebookId: null,
   githubId: null,
-  roles: []
+  roles: [],
 }
 
 const user = (state = defaultState, action) => {
@@ -19,12 +16,12 @@ const user = (state = defaultState, action) => {
     case COMMIT_SET_COMPONENTS:
       return {
         ...state,
-        ...{components: action.components}
+        ...{ components: action.components },
       }
     case COMMIT_UPDATE_SETTINGS:
       return {
         ...state,
-        ...action.user
+        ...action.user,
       }
     default:
       return state

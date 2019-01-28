@@ -1,11 +1,9 @@
-import {
-  COMMIT_SET_ENV
-} from './actionsTypes'
+import { COMMIT_SET_ENV } from './actionsTypes'
 
 const defaultState = {
   facebookAppId: null,
   githubAppId: null,
-  mediumAppId: null
+  mediumAppId: null,
 }
 
 const env = (state = defaultState, action) => {
@@ -13,7 +11,7 @@ const env = (state = defaultState, action) => {
     case COMMIT_SET_ENV:
       return {
         ...state,
-        ...action.env
+        ...action.env,
       }
     default:
       return state

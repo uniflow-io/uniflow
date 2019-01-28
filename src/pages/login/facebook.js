@@ -1,4 +1,4 @@
 import React from 'react'
-import {LoginFacebook} from '../../views'
+import { LoginFacebook } from '../../views'
 
-export default ({location}) => <LoginFacebook location={location}/>
+export default ({ location }) => <LoginFacebook location={location} />

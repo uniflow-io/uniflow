@@ -1,4 +1,4 @@
 import React from 'react'
-import {Versions} from '../views'
+import { Versions } from '../views'
 
-export default () => <Versions/>
+export default () => <Versions />

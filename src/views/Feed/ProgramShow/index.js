@@ -1,13 +1,19 @@
-import React, {Component} from 'react'
-import {navigate} from 'gatsby'
+import React, { Component } from 'react'
+import { navigate } from 'gatsby'
 import debounce from 'lodash/debounce'
-import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
-import {Runner} from '../../../models'
+import {
+  AceComponent,
+  ListComponent,
+  TagItComponent,
+  ICheckBoxComponent,
+  Select2Component,
+} from 'uniflow/src/components'
+import { Runner } from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
-  commitSetFlow
+  commitSetFlow,
 } from 'uniflow/src/reducers/flow/actions'
 import {
   getCurrentProgram,
@@ -24,10 +30,10 @@ import {
   stringToPath,
   feedPathTo,
   deserialiseFlowData,
-  serialiseFlowData
+  serialiseFlowData,
 } from '../../../reducers/feed/actions'
-import {commitAddLog} from '../../../reducers/logs/actions'
-import {connect} from 'react-redux'
+import { commitAddLog } from '../../../reducers/logs/actions'
+import { connect } from 'react-redux'
 import components from '../../../uniflow'
 
 class ProgramShow extends Component {
@@ -36,15 +42,15 @@ class ProgramShow extends Component {
     fetchedUsername: null,
     runIndex: null,
     folderTreeEdit: false,
-    folderTree: []
+    folderTree: [],
   }
 
   componentDidMount() {
-    const {program} = this.props
+    const { program } = this.props
 
     this._componentIsMounted = true
 
-    this.setState({folderTree: [pathToString(program.path)]})
+    this.setState({ folderTree: [pathToString(program.path)] })
 
     this.onFetchFlowData()
   }
@@ -59,7 +65,7 @@ class ProgramShow extends Component {
     if (nextProps.program.id !== oldProps.program.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(nextProps.program.path)]
+        folderTree: [pathToString(nextProps.program.path)],
       })
 
       this.onFetchFlowData()
@@ -73,25 +79,28 @@ class ProgramShow extends Component {
   run = (event, index) => {
     event.preventDefault()
 
-    let stack = index === undefined ? this.props.stack : this.props.stack.slice(0, index + 1)
+    let stack =
+      index === undefined
+        ? this.props.stack
+        : this.props.stack.slice(0, index + 1)
 
     let runner = new Runner()
 
-    runner.run(stack, (index) => {
-      return new Promise((resolve) => {
-        this.setState({runIndex: index}, resolve)
+    runner.run(stack, index => {
+      return new Promise(resolve => {
+        this.setState({ runIndex: index }, resolve)
       })
     })
   }
 
-  setFlow = (stack) => {
-    return this.props
-      .dispatch(commitSetFlow(stack))
-      .then(() => {
-        return Promise.all(stack.map((item) => {
+  setFlow = stack => {
+    return this.props.dispatch(commitSetFlow(stack)).then(() => {
+      return Promise.all(
+        stack.map(item => {
           return item.bus.emit('reset', item.data)
-        }))
-      })
+        })
+      )
+    })
   }
 
   onPushFlow = (index, component) => {
@@ -99,31 +108,31 @@ class ProgramShow extends Component {
       .dispatch(commitPushFlow(index, component))
       .then(() => {
         return this.setFlow(this.props.stack)
-      }).then(() => {
-      this.onUpdateFlowData()
-    })
-  }
-
-  onPopFlow = (index) => {
-    this.props
-      .dispatch(commitPopFlow(index))
-      .then(() => {
-        return this.setFlow(this.props.stack)
-      }).then(() => {
-      this.onUpdateFlowData()
-    })
-  }
-
-  onUpdateFlow = (index, data) => {
-    this.props
-      .dispatch(commitUpdateFlow(index, data))
+      })
       .then(() => {
         this.onUpdateFlowData()
       })
   }
 
+  onPopFlow = index => {
+    this.props
+      .dispatch(commitPopFlow(index))
+      .then(() => {
+        return this.setFlow(this.props.stack)
+      })
+      .then(() => {
+        this.onUpdateFlowData()
+      })
+  }
+
+  onUpdateFlow = (index, data) => {
+    this.props.dispatch(commitUpdateFlow(index, data)).then(() => {
+      this.onUpdateFlowData()
+    })
+  }
+
   onFetchFlowData = debounce(() => {
-    let {program} = this.props
+    let { program } = this.props
 
     Promise.resolve()
       .then(() => {
@@ -134,9 +143,11 @@ class ProgramShow extends Component {
           return program.data
         }
 
-        return this.props.dispatch(getProgramData(program, this.props.auth.token))
+        return this.props.dispatch(
+          getProgramData(program, this.props.auth.token)
+        )
       })
-      .then((data) => {
+      .then(data => {
         if (!data) return
 
         program.data = data
@@ -147,126 +158,163 @@ class ProgramShow extends Component {
       })
       .then(() => {
         if (this.componentIsMounted()) {
-          this.setState({fetchedSlug: program.slug})
+          this.setState({ fetchedSlug: program.slug })
         }
       })
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let {program, stack, user, feed} = this.props
+    let { program, stack, user, feed } = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
     let data = serialiseFlowData(stack)
-    if ((feed.username === 'me' || user.username === feed.username) && program.data !== data) {
+    if (
+      (feed.username === 'me' || user.username === feed.username) &&
+      program.data !== data
+    ) {
       this.props
         .dispatch(setProgramData(program, this.props.auth.token))
-        .catch((log) => {
+        .catch(log => {
           return this.props.dispatch(commitAddLog(log.message))
         })
     }
   }, 500)
 
-  onChangeTitle = (event) => {
+  onChangeTitle = event => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{title: event.target.value}}))
+      .dispatch(
+        commitUpdateFeed({
+          ...this.props.program,
+          ...{ title: event.target.value },
+        })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangeSlug = (event) => {
+  onChangeSlug = event => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{slug: event.target.value}}))
+      .dispatch(
+        commitUpdateFeed({
+          ...this.props.program,
+          ...{ slug: event.target.value },
+        })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangePath = (selected) => {
+  onChangePath = selected => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{path: stringToPath(selected)}}))
+      .dispatch(
+        commitUpdateFeed({
+          ...this.props.program,
+          ...{ path: stringToPath(selected) },
+        })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangeClient = (selected) => {
+  onChangeClient = selected => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{client: selected}}))
+      .dispatch(
+        commitUpdateFeed({ ...this.props.program, ...{ client: selected } })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangeTags = (tags) => {
+  onChangeTags = tags => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{tags: tags}}))
+      .dispatch(commitUpdateFeed({ ...this.props.program, ...{ tags: tags } }))
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangeDescription = (description) => {
+  onChangeDescription = description => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{description: description}}))
+      .dispatch(
+        commitUpdateFeed({
+          ...this.props.program,
+          ...{ description: description },
+        })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
-  onChangePublic = (value) => {
+  onChangePublic = value => {
     this.props
-      .dispatch(commitUpdateFeed({...this.props.program, ...{public: value}}))
+      .dispatch(
+        commitUpdateFeed({ ...this.props.program, ...{ public: value } })
+      )
       .then(() => {
         this.onUpdate()
       })
   }
 
   onUpdate = debounce(() => {
-    this.props.dispatch(updateProgram(this.props.program, this.props.auth.token)).then(() => {
-      navigate(this.itemPathTo(this.props.program))
-    })
+    this.props
+      .dispatch(updateProgram(this.props.program, this.props.auth.token))
+      .then(() => {
+        navigate(this.itemPathTo(this.props.program))
+      })
   }, 500)
 
-  onDuplicate = (event) => {
+  onDuplicate = event => {
     event.preventDefault()
 
     let program = this.props.program
     program.title += ' Copy'
 
-    this.props.dispatch(createProgram(program, this.props.auth.token))
-      .then((item) => {
+    this.props
+      .dispatch(createProgram(program, this.props.auth.token))
+      .then(item => {
         Object.assign(program, item)
-        return this.props.dispatch(setProgramData(program, this.props.auth.token))
+        return this.props.dispatch(
+          setProgramData(program, this.props.auth.token)
+        )
       })
       .then(() => {
-        return this.props.dispatch(setCurrentFeed({type: program.type, id: program.id}))
+        return this.props.dispatch(
+          setCurrentFeed({ type: program.type, id: program.id })
+        )
       })
-      .catch((log) => {
+      .catch(log => {
         return this.props.dispatch(commitAddLog(log.message))
       })
   }
 
-  onDelete = (event) => {
+  onDelete = event => {
     event.preventDefault()
 
-    return this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token))
+    return this.props.dispatch(
+      deleteProgram(this.props.program, this.props.auth.token)
+    )
   }
 
-  onFolderEdit = (event) => {
+  onFolderEdit = event => {
     event.preventDefault()
 
-    const {feed} = this.props
+    const { feed } = this.props
 
-    this.props.dispatch(getFolderTree(feed.username, this.props.auth.token))
-      .then((folderTree) => {
-        folderTree = folderTree.map((path) => {
+    this.props
+      .dispatch(getFolderTree(feed.username, this.props.auth.token))
+      .then(folderTree => {
+        folderTree = folderTree.map(path => {
           return pathToString(path)
         })
 
         this.setState({
           folderTreeEdit: true,
-          folderTree: folderTree
+          folderTree: folderTree,
         })
       })
   }
@@ -280,12 +328,12 @@ class ProgramShow extends Component {
       if (components[key].clients().indexOf(program.client) !== -1) {
         componentLabels.push({
           key: key,
-          label: components[key].tags().join(' - ') + ' : ' + key
+          label: components[key].tags().join(' - ') + ' : ' + key,
         })
       }
     }
 
-    componentLabels.sort(function (component1, component2) {
+    componentLabels.sort(function(component1, component2) {
       let x = component1.label
       let y = component2.label
       return x < y ? -1 : x > y ? 1 : 0
@@ -294,8 +342,10 @@ class ProgramShow extends Component {
     return componentLabels
   }
 
-  itemPathTo = (item) => {
-    const isCurrentUser = this.props.feed.username && this.props.feed.username === this.props.user.username
+  itemPathTo = item => {
+    const isCurrentUser =
+      this.props.feed.username &&
+      this.props.feed.username === this.props.user.username
 
     let path = item.path.slice()
     path.push(item.slug)
@@ -303,129 +353,214 @@ class ProgramShow extends Component {
   }
 
   render() {
-    const {program, tags, stack, client, user} = this.props
-    const {folderTreeEdit, folderTree}         = this.state
-    const tagsOptions                          = {
-      availableTags: tags
+    const { program, tags, stack, client, user } = this.props
+    const { folderTreeEdit, folderTree } = this.state
+    const tagsOptions = {
+      availableTags: tags,
     }
-    const components                           = this.getComponents(user.components, program)
-    const clients                              = {
-      'uniflow': 'Uniflow',
-      'bash': 'Bash',
-      'phpstorm': 'PhpStorm',
-      'chrome': 'Chrome'
+    const components = this.getComponents(user.components, program)
+    const clients = {
+      uniflow: 'Uniflow',
+      bash: 'Bash',
+      phpstorm: 'PhpStorm',
+      chrome: 'Chrome',
     }
 
     return (
       <div>
-        <div className='box box-primary'>
-          <div className='box-header with-border'>
-            <h3 className='box-title'>Infos</h3>
-            <div className='box-tools pull-right'>
-              <a className='btn btn-box-tool' onClick={this.onDuplicate}><i className='fa fa-clone'/></a>
-              <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></a>
+        <div className="box box-primary">
+          <div className="box-header with-border">
+            <h3 className="box-title">Infos</h3>
+            <div className="box-tools pull-right">
+              <a className="btn btn-box-tool" onClick={this.onDuplicate}>
+                <i className="fa fa-clone" />
+              </a>
+              <a className="btn btn-box-tool" onClick={this.onDelete}>
+                <i className="fa fa-times" />
+              </a>
             </div>
           </div>
-          <div className='box-body'>
-            <form className='form-horizontal'>
+          <div className="box-body">
+            <form className="form-horizontal">
+              <div className="form-group">
+                <label
+                  htmlFor="info_title_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Title
+                </label>
 
-              <div className='form-group'>
-                <label htmlFor='info_title_{{ _uid }}' className='col-sm-2 control-label'>Title</label>
-
-                <div className='col-sm-10'>
-                  <input type='text' className='form-control' id='info_title_{{ _uid }}'
-                         value={program.title} onChange={this.onChangeTitle} placeholder='Title'/>
+                <div className="col-sm-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="info_title_{{ _uid }}"
+                    value={program.title}
+                    onChange={this.onChangeTitle}
+                    placeholder="Title"
+                  />
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_slug_{{ _uid }}' className='col-sm-2 control-label'>Slug</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_slug_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Slug
+                </label>
 
-                <div className='col-sm-10'>
-                  <input type='text' className='form-control' id='info_slug_{{ _uid }}'
-                         value={program.slug} onChange={this.onChangeSlug} placeholder='Slug'/>
+                <div className="col-sm-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="info_slug_{{ _uid }}"
+                    value={program.slug}
+                    onChange={this.onChangeSlug}
+                    placeholder="Slug"
+                  />
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_path_{{ _uid }}' className='col-sm-2 control-label'>Path</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_path_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Path
+                </label>
 
-                <div className='col-sm-10'>
-                  {folderTreeEdit && (
-                    <Select2Component value={pathToString(program.path)} onChange={this.onChangePath}
-                                      className='form-control' id='info_path_{{ _uid }}' style={{width: '100%'}}>
-                      {folderTree.map((value) => (
-                        <option key={value} value={value}>{value}</option>
+                <div className="col-sm-10">
+                  {(folderTreeEdit && (
+                    <Select2Component
+                      value={pathToString(program.path)}
+                      onChange={this.onChangePath}
+                      className="form-control"
+                      id="info_path_{{ _uid }}"
+                      style={{ width: '100%' }}
+                    >
+                      {folderTree.map(value => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
                       ))}
                     </Select2Component>
-                  ) || (
+                  )) || (
                     <div>
-                      <button type='button' className='btn btn-primary' onClick={this.onFolderEdit}><i
-                        className='fa fa-edit fa-fw'/></button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={this.onFolderEdit}
+                      >
+                        <i className="fa fa-edit fa-fw" />
+                      </button>
                       {pathToString(program.path)}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_client_{{ _uid }}' className='col-sm-2 control-label'>Client</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_client_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Client
+                </label>
 
-                <div className='col-sm-10'>
-                  <Select2Component value={program.client} onChange={this.onChangeClient} className='form-control'
-                                    id='info_client_{{ _uid }}' style={{width: '100%'}}>
-                    {Object.keys(clients).map((value) => (
-                      <option key={value} value={value}>{clients[value]}</option>
+                <div className="col-sm-10">
+                  <Select2Component
+                    value={program.client}
+                    onChange={this.onChangeClient}
+                    className="form-control"
+                    id="info_client_{{ _uid }}"
+                    style={{ width: '100%' }}
+                  >
+                    {Object.keys(clients).map(value => (
+                      <option key={value} value={value}>
+                        {clients[value]}
+                      </option>
                     ))}
                   </Select2Component>
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_tags_{{ _uid }}' className='col-sm-2 control-label'>Tags</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_tags_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Tags
+                </label>
 
-                <div className='col-sm-10'>
-                  <TagItComponent type='text' className='form-control' id='info_tags_{{ _uid }}'
-                                  value={program.tags} onChange={this.onChangeTags} options={tagsOptions}
-                                  placeholder='Tags'/>
+                <div className="col-sm-10">
+                  <TagItComponent
+                    type="text"
+                    className="form-control"
+                    id="info_tags_{{ _uid }}"
+                    value={program.tags}
+                    onChange={this.onChangeTags}
+                    options={tagsOptions}
+                    placeholder="Tags"
+                  />
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_public_{{ _uid }}' className='col-sm-2 control-label'>Public</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_public_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Public
+                </label>
 
-                <div className='col-sm-10'>
-                  <ICheckBoxComponent value={program.public} onChange={this.onChangePublic}
-                                      id='info_public_{{ _uid }}'/>
+                <div className="col-sm-10">
+                  <ICheckBoxComponent
+                    value={program.public}
+                    onChange={this.onChangePublic}
+                    id="info_public_{{ _uid }}"
+                  />
                 </div>
               </div>
 
-              <div className='form-group'>
-                <label htmlFor='info_description_{{ _uid }}'
-                       className='col-sm-2 control-label'>Description</label>
+              <div className="form-group">
+                <label
+                  htmlFor="info_description_{{ _uid }}"
+                  className="col-sm-2 control-label"
+                >
+                  Description
+                </label>
 
-                <div className='col-sm-10'>
-                  <AceComponent className='form-control' id='info_description_{{ _uid }}'
-                                value={program.description} onChange={this.onChangeDescription}
-                                placeholder='Text' height='200'/>
+                <div className="col-sm-10">
+                  <AceComponent
+                    className="form-control"
+                    id="info_description_{{ _uid }}"
+                    value={program.description}
+                    onChange={this.onChangeDescription}
+                    placeholder="Text"
+                    height="200"
+                  />
                 </div>
               </div>
-
             </form>
           </div>
-          <div className='box-footer'>
+          <div className="box-footer">
             {program.client === 'uniflow' && (
-              <a className='btn btn-success' onClick={this.run}><i className='fa fa-fw fa-play'/> Play</a>
+              <a className="btn btn-success" onClick={this.run}>
+                <i className="fa fa-fw fa-play" /> Play
+              </a>
             )}
           </div>
         </div>
 
-        <ListComponent stack={stack} runIndex={this.state.runIndex}
-                       components={components}
-                       onPush={this.onPushFlow}
-                       onPop={this.onPopFlow}
-                       onUpdate={this.onUpdateFlow}
-                       onRun={this.run}
+        <ListComponent
+          stack={stack}
+          runIndex={this.state.runIndex}
+          components={components}
+          onPush={this.onPushFlow}
+          onPop={this.onPopFlow}
+          onUpdate={this.onUpdateFlow}
+          onRun={this.run}
         />
       </div>
     )
@@ -439,6 +574,6 @@ export default connect(state => {
     program: getCurrentProgram(state.feed),
     tags: getTags(state.feed),
     feed: state.feed,
-    stack: state.flow
+    stack: state.flow,
   }
 })(ProgramShow)

@@ -1,9 +1,6 @@
-import {
-  COMMIT_ADD_LOG,
-  COMMIT_READ_LOG
-} from './actionsTypes'
+import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from './actionsTypes'
 
-export const getNewLogs = (state) => {
+export const getNewLogs = state => {
   return Object.keys(state).reduce((newLogs, key) => {
     if (state[key].status === 'new') {
       newLogs[key] = state[key]
@@ -12,20 +9,20 @@ export const getNewLogs = (state) => {
   }, {})
 }
 
-export const commitAddLog  = (message) => {
-  return (dispatch) => {
+export const commitAddLog = message => {
+  return dispatch => {
     dispatch({
       type: COMMIT_ADD_LOG,
-      message
+      message,
     })
     return Promise.resolve()
   }
 }
-export const commitReadLog = (id) => {
-  return (dispatch) => {
+export const commitReadLog = id => {
+  return dispatch => {
     dispatch({
       type: COMMIT_READ_LOG,
-      id
+      id,
     })
     return Promise.resolve()
   }

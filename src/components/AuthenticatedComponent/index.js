@@ -1,8 +1,8 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {pathTo} from '../../routes'
-import {isGranted} from '../../reducers/user/actions'
-import {navigate} from 'gatsby'
+import { connect } from 'react-redux'
+import { pathTo } from '../../routes'
+import { isGranted } from '../../reducers/user/actions'
+import { navigate } from 'gatsby'
 
 export default function requireAuthentication(Component, role = 'ROLE_USER') {
   class AuthenticatedComponent extends React.Component {
@@ -25,18 +25,19 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
     render() {
       return (
         <div>
-          {this.props.isAuthenticated === true
-            ? <Component {...this.props} />
-            : ''
-          }
+          {this.props.isAuthenticated === true ? (
+            <Component {...this.props} />
+          ) : (
+            ''
+          )}
         </div>
       )
     }
   }
 
-  return connect((state) => ({
+  return connect(state => ({
     token: state.auth.token,
     user: state.user,
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
   }))(AuthenticatedComponent)
 }
