@@ -5,13 +5,14 @@ import {matchRoute} from '../../routes'
 import {
   fetchFeed,
   getProgramBySlug,
-  setCurrentProgram,
+  setCurrentFeed,
   setCurrentUsername,
   getCurrentProgram,
   getCurrentPath,
   feedPathTo
 } from '../../reducers/feed/actions'
 import {navigate} from 'gatsby'
+import moment from "moment";
 
 class UserManagerComponent extends Component {
   componentDidMount() {
@@ -89,7 +90,7 @@ class UserManagerComponent extends Component {
         let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(feed).join('/')
         let isProgram     = sameDirectory && Object.keys(feed.items)
           .filter((key) => {
-            return feed.items[key].constructor.name === 'Program' && feed.items[key].slug === slug
+            return feed.items[key].type === 'program' && feed.items[key].slug === slug
           })
           .length > 0
         if (feed.username === username && sameDirectory && isProgram) {
@@ -109,13 +110,13 @@ class UserManagerComponent extends Component {
 
         let program = getProgramBySlug(feed, slug)
         if (program) {
-          this.props.dispatch(setCurrentProgram({type: program.constructor.name, id: program.id}))
+          this.props.dispatch(setCurrentFeed({type: program.type, id: program.id}))
         } else if (feed.folder) {
-          this.props.dispatch(setCurrentProgram(null))
+          this.props.dispatch(setCurrentFeed(null))
         } else {
           let items = Object.keys(feed.items)
             .filter((key) => {
-              return feed.items[key].constructor.name === 'Program'
+              return feed.items[key].type === 'program'
             })
             .reduce((res, key) => (res[key] = feed.items[key], res), {})
           let keys  = Object.keys(items)
@@ -124,14 +125,14 @@ class UserManagerComponent extends Component {
             let itemA = items[keyA]
             let itemB = items[keyB]
 
-            return itemB.updated.diff(itemA.updated)
+            return moment(itemB.updated).diff(moment(itemA.updated))
           })
 
           if (keys.length > 0) {
             let item = items[keys[0]]
-            this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
+            this.props.dispatch(setCurrentFeed({type: item.type, id: item.id}))
           } else {
-            this.props.dispatch(setCurrentProgram(null))
+            this.props.dispatch(setCurrentFeed(null))
           }
         }
       }).then(() => {

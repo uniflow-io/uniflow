@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Select2Component} from 'uniflow/src/components'
 import {Bus} from 'uniflow/src/models'
-import {getOrderedFeed, getProgramData} from '../../reducers/feed/actions'
+import {getOrderedFeed, getProgramData, deserialiseFlowData} from '../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
@@ -49,7 +49,7 @@ class ComponentInclude extends Component {
 
         program.data = data
 
-        return this.setFlow(program.deserialiseFlowData())
+        return this.setFlow(deserialiseFlowData(data))
       })
   }
 

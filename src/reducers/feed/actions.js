@@ -12,6 +12,36 @@ import {
 } from './actionsTypes'
 import {commitLogoutUser} from '../auth/actions'
 import {pathTo} from "../../routes";
+import {Bus} from "uniflow/src/models";
+
+export const serialiseFlowData = (data) => {
+  let objData = []
+
+  for (let i = 0; i < data.length; i++) {
+    objData.push({
+      component: data[i].component,
+      data: data[i].data
+    })
+  }
+
+  return JSON.stringify(objData)
+}
+
+export const deserialiseFlowData = (raw) => {
+  let objData = JSON.parse(raw)
+
+  let data = []
+
+  for (let i = 0; i < objData.length; i++) {
+    data.push({
+      component: objData[i].component,
+      data: objData[i].data,
+      bus: new Bus()
+    })
+  }
+
+  return data
+}
 
 export const getCurrentProgram = (state) => {
   return state.current ? state.items[`${state.current.type}_${state.current.id}`] : null
@@ -33,7 +63,7 @@ export const getOrderedFeed = (state, filter) => {
     keys = keys.filter((key) => {
       let item  = state.items[key]
       let words = item.title
-      if (item.constructor.name === 'Program') {
+      if (item.type === 'program') {
         for (let i = 0; i < item.tags.length; i++) {
           words += ' ' + item.tags[i]
         }
@@ -48,7 +78,7 @@ export const getOrderedFeed = (state, filter) => {
     let itemA = state.items[keyA]
     let itemB = state.items[keyB]
 
-    return itemB.updated.diff(itemA.updated)
+    return moment(itemB.updated).diff(moment(itemA.updated))
   })
 
   return keys.map((key) => {
@@ -60,7 +90,7 @@ export const getProgramBySlug = (state, slug) => {
   let keys = Object.keys(state.items)
 
   let slugKeys = keys.filter((key) => {
-    return state.items[key].constructor.name === 'Program' && state.items[key].slug === slug
+    return state.items[key].type === 'program' && state.items[key].slug === slug
   })
 
   if (slugKeys.length > 0) {
@@ -152,19 +182,12 @@ export const fetchFeed = (username, path, token = null) => {
         dispatch(commitClearFeed())
 
         for (let i = 0; i < response.data['children'].length; i++) {
-          let item            = null
-          let {type, ...data} = response.data['children'][i]
-
-          if (type === 'program') {
-            item = new Program(data)
-          } else if (type === 'folder') {
-            item = new Folder(data)
-          }
+          let item = response.data['children'][i]
 
           dispatch(commitUpdateFeed(item))
         }
 
-        dispatch(commitSetCurrentFolder(response.data['folder'] ? new Folder(response.data['folder']) : null))
+        dispatch(commitSetCurrentFolder(response.data['folder'] ? response.data['folder'] : null))
       })
       .catch((error) => {
         if (error.request.status === 401) {
@@ -195,7 +218,7 @@ export const createProgram = (item, token) => {
         }
       })
       .then((response) => {
-        let item = new Program(response.data)
+        let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
@@ -230,7 +253,7 @@ export const updateProgram = (item, token) => {
         }
       })
       .then((response) => {
-        let item = new Program(response.data)
+        let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
@@ -318,7 +341,7 @@ export const deleteProgram = (item, token) => {
   }
 }
 
-export const setCurrentProgram = (current) => {
+export const setCurrentFeed = (current) => {
   return (dispatch) => {
     dispatch(commitSetCurrentFeed(current))
 
@@ -413,7 +436,7 @@ export const createFolder = (item, token) => {
         }
       })
       .then((response) => {
-        let item = new Folder(response.data)
+        let item = response.data
 
         dispatch(commitUpdateFeed(item))
 
@@ -444,7 +467,7 @@ export const updateCurrentFolder = (item, token) => {
         }
       })
       .then((response) => {
-        let item = new Folder(response.data)
+        let item = response.data
 
         dispatch(commitSetCurrentFolder(item))
 

@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {
   getOrderedFeed,
   createProgram,
-  setCurrentProgram,
+  setCurrentFeed,
   getCurrentPath,
   createFolder,
   feedPathTo
@@ -30,7 +30,7 @@ class Navigation extends Component {
         'path': getCurrentPath(this.props.feed)
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentProgram(null))
+        return this.props.dispatch(setCurrentFeed(null))
           .then(() => {
             navigate(this.itemPathTo(item))
           })
@@ -52,7 +52,7 @@ class Navigation extends Component {
         'path': getCurrentPath(this.props.feed)
       }, this.props.auth.token))
       .then((item) => {
-        return this.props.dispatch(setCurrentProgram({type: item.constructor.name, id: item.id}))
+        return this.props.dispatch(setCurrentFeed({type: item.type, id: item.id}))
           .then(() => {
             navigate(this.itemPathTo(item))
           })
@@ -77,7 +77,7 @@ class Navigation extends Component {
       return this.props.feed.current === null ? 'active' : ''
     }
     const isActive       = (item) => {
-      return (this.props.feed.current && this.props.feed.current.type === item.constructor.name && this.props.feed.current.id === item.id) ? 'active' : ''
+      return (this.props.feed.current && this.props.feed.current.type === item.type && this.props.feed.current.id === item.id) ? 'active' : ''
     }
 
     const backTo = () => {
@@ -138,9 +138,9 @@ class Navigation extends Component {
                 {getOrderedFeed(this.props.feed, this.state.search).map((item, i) => (
                   <li className={isActive(item)} key={i}>
                     <Link
-                      to={this.itemPathTo(item)}>{item.constructor.name === 'Folder' && (
+                      to={this.itemPathTo(item)}>{item.type === 'folder' && (
                       <i className='fa fa-folder fa-fw'/>
-                    )}{item.title} {item.constructor.name === 'Program' && item.tags.map((tag, j) => (
+                    )}{item.title} {item.type === 'program' && item.tags.map((tag, j) => (
                       <span key={j} className='badge'>{tag}</span>
                     ))}</Link>
                   </li>

@@ -31,7 +31,7 @@ class Feed extends Component {
               <Navigation/>
             </div>
             <div className='col-sm-10'>
-              {feed.username && currentProgram && currentProgram.constructor.name === 'Program' && (
+              {feed.username && currentProgram && currentProgram.type === 'program' && (
                 <ProgramShow/>
               )}
               {feed.username && currentProgram === null && feed.folder && (

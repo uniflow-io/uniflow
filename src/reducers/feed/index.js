@@ -22,12 +22,12 @@ const feed = (state = defaultState, action) => {
         items: {}
       }
     case COMMIT_UPDATE_FEED:
-      state.items[`${action.item.constructor.name}_${action.item.id}`] = action.item
+      state.items[`${action.item.type}_${action.item.id}`] = action.item
       return {
         ...state
       }
     case COMMIT_DELETE_FEED:
-      delete state.items[`${action.item.constructor.name}_${action.item.id}`]
+      delete state.items[`${action.item.type}_${action.item.id}`]
       return {
         ...state
       }

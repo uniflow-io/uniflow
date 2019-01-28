@@ -40,7 +40,7 @@ class FolderShow extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{title: event.target.value}})))
+      .dispatch(commitSetCurrentFolder({...this.props.folder, ...{title: event.target.value}}))
       .then(() => {
         this.onUpdate()
       })
@@ -48,7 +48,7 @@ class FolderShow extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{slug: event.target.value}})))
+      .dispatch(commitSetCurrentFolder({...this.props.folder, ...{slug: event.target.value}}))
       .then(() => {
         this.onUpdate()
       })
@@ -56,7 +56,7 @@ class FolderShow extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitSetCurrentFolder(new Folder({...this.props.folder, ...{path: stringToPath(selected)}})))
+      .dispatch(commitSetCurrentFolder({...this.props.folder, ...{path: stringToPath(selected)}}))
       .then(() => {
         this.onUpdate()
       })

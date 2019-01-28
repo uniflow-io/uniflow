@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {navigate} from 'gatsby'
 import debounce from 'lodash/debounce'
 import {AceComponent, ListComponent, TagItComponent, ICheckBoxComponent, Select2Component} from 'uniflow/src/components'
-import {Program, Runner} from '../../../models'
+import {Runner} from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -18,11 +18,13 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setCurrentProgram,
+  setCurrentFeed,
   getFolderTree,
   pathToString,
   stringToPath,
-  feedPathTo
+  feedPathTo,
+  deserialiseFlowData,
+  serialiseFlowData
 } from '../../../reducers/feed/actions'
 import {commitAddLog} from '../../../reducers/logs/actions'
 import {connect} from 'react-redux'
@@ -141,7 +143,7 @@ class ProgramShow extends Component {
 
         if (program.slug !== this.props.program.slug) return
 
-        return this.setFlow(program.deserialiseFlowData())
+        return this.setFlow(deserialiseFlowData(data))
       })
       .then(() => {
         if (this.componentIsMounted()) {
@@ -154,8 +156,7 @@ class ProgramShow extends Component {
     let {program, stack, user, feed} = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
-    let data = program.data
-    program.serialiseFlowData(stack)
+    let data = serialiseFlowData(stack)
     if ((feed.username === 'me' || user.username === feed.username) && program.data !== data) {
       this.props
         .dispatch(setProgramData(program, this.props.auth.token))
@@ -167,7 +168,7 @@ class ProgramShow extends Component {
 
   onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{title: event.target.value}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{title: event.target.value}}))
       .then(() => {
         this.onUpdate()
       })
@@ -175,7 +176,7 @@ class ProgramShow extends Component {
 
   onChangeSlug = (event) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{slug: event.target.value}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{slug: event.target.value}}))
       .then(() => {
         this.onUpdate()
       })
@@ -183,7 +184,7 @@ class ProgramShow extends Component {
 
   onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{path: stringToPath(selected)}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{path: stringToPath(selected)}}))
       .then(() => {
         this.onUpdate()
       })
@@ -191,7 +192,7 @@ class ProgramShow extends Component {
 
   onChangeClient = (selected) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{client: selected}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{client: selected}}))
       .then(() => {
         this.onUpdate()
       })
@@ -199,7 +200,7 @@ class ProgramShow extends Component {
 
   onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{tags: tags}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{tags: tags}}))
       .then(() => {
         this.onUpdate()
       })
@@ -207,7 +208,7 @@ class ProgramShow extends Component {
 
   onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{description: description}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{description: description}}))
       .then(() => {
         this.onUpdate()
       })
@@ -215,7 +216,7 @@ class ProgramShow extends Component {
 
   onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateFeed(new Program({...this.props.program, ...{public: value}})))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{public: value}}))
       .then(() => {
         this.onUpdate()
       })
@@ -230,7 +231,7 @@ class ProgramShow extends Component {
   onDuplicate = (event) => {
     event.preventDefault()
 
-    let program = new Program(this.props.program)
+    let program = this.props.program
     program.title += ' Copy'
 
     this.props.dispatch(createProgram(program, this.props.auth.token))
@@ -239,7 +240,7 @@ class ProgramShow extends Component {
         return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(setCurrentProgram({type: program.constructor.name, id: program.id}))
+        return this.props.dispatch(setCurrentFeed({type: program.type, id: program.id}))
       })
       .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
