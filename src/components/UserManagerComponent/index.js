@@ -66,7 +66,6 @@ class UserManagerComponent extends Component {
   onFetchProgram = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
     const {fetching} = this.state
     const {feed} = this.props
-    console.log(fetching)
 
     if(fetching) {
       return
