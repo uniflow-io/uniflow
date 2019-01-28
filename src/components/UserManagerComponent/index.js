@@ -15,14 +15,18 @@ import {navigate} from 'gatsby'
 import moment from "moment";
 
 class UserManagerComponent extends Component {
+  state = {
+    fetching: false
+  }
+
   componentDidMount() {
     const {auth, location} = this.props
 
     if (auth.isAuthenticated) {
       this.onFetchUser(auth.token)
-    } else {
-      this.onLocation(location)
     }
+
+    this.onLocation(location)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,9 +34,9 @@ class UserManagerComponent extends Component {
 
     if (nextProps.auth.token !== oldProps.auth.token && nextProps.auth.isAuthenticated) {
       this.onFetchUser(nextProps.auth.token)
-    }/* else {
-      this.onLocation(nextProps.location)
-    }*/
+    }
+
+    this.onLocation(nextProps.location)
   }
 
   onLocation = (location) => {
@@ -60,88 +64,103 @@ class UserManagerComponent extends Component {
   }
 
   onFetchProgram = (username = 'me', slug1 = null, slug2 = null, slug3 = null, slug4 = null, slug5 = null) => {
+    const {fetching} = this.state
     const {feed} = this.props
+    console.log(fetching)
 
-    let path        = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
-      if (slug) {
-        path.push(slug)
-      }
-      return path
-    }, [])
-    let currentPath = getCurrentPath(feed)
-
-    let item = getCurrentProgram(feed)
-    if (item) {
-      currentPath.push(item.slug)
-    }
-    if (feed.username === username && path.join('/') === currentPath.join('/')) {
-      return Promise.resolve()
+    if(fetching) {
+      return
     }
 
-    return Promise.resolve()
-      .then(() => {
-        const {auth, feed} = this.props
-
-        let slug          = path.length > 0 ? path[path.length - 1] : null
-        let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(feed).join('/')
-        let isProgram     = sameDirectory && Object.keys(feed.items)
-          .filter((key) => {
-            return feed.items[key].type === 'program' && feed.items[key].slug === slug
-          })
-          .length > 0
-        if (feed.username === username && sameDirectory && isProgram) {
-          return path
-        }
-
-        return this.props.dispatch(setCurrentUsername(username))
-          .then(() => {
-            const token = auth.isAuthenticated ? auth.token : null
-            return this.props.dispatch(fetchFeed(username, path, token))
-          })
+    Promise.resolve()
+      .then((resolve) => {
+        this.setState({fetching: true}, resolve)
       })
       .then(() => {
-        const {feed} = this.props
-
-        let slug = path.length > 0 ? path[path.length - 1] : null
-
-        let program = getProgramBySlug(feed, slug)
-        if (program) {
-          this.props.dispatch(setCurrentFeed({type: program.type, id: program.id}))
-        } else if (feed.folder) {
-          this.props.dispatch(setCurrentFeed(null))
-        } else {
-          let items = Object.keys(feed.items)
-            .filter((key) => {
-              return feed.items[key].type === 'program'
-            })
-            .reduce((res, key) => (res[key] = feed.items[key], res), {})
-          let keys  = Object.keys(items)
-
-          keys.sort((keyA, keyB) => {
-            let itemA = items[keyA]
-            let itemB = items[keyB]
-
-            return moment(itemB.updated).diff(moment(itemA.updated))
-          })
-
-          if (keys.length > 0) {
-            let item = items[keys[0]]
-            this.props.dispatch(setCurrentFeed({type: item.type, id: item.id}))
-          } else {
-            this.props.dispatch(setCurrentFeed(null))
+        let path        = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
+          if (slug) {
+            path.push(slug)
           }
-        }
-      }).then(() => {
-        const {user, feed} = this.props
-        const isCurrentUser         = feed.username && feed.username === user.username
-
+          return path
+        }, [])
         let currentPath = getCurrentPath(feed)
 
         let item = getCurrentProgram(feed)
         if (item) {
           currentPath.push(item.slug)
         }
-        navigate(feedPathTo(currentPath, (item && item.public) || isCurrentUser ? feed.username : null))
+        if (feed.username === username && path.join('/') === currentPath.join('/')) {
+          return Promise.resolve()
+        }
+
+        return Promise.resolve()
+          .then(() => {
+            const {auth, feed} = this.props
+
+            let slug          = path.length > 0 ? path[path.length - 1] : null
+            let sameDirectory = path.slice(0, -1).join('/') === getCurrentPath(feed).join('/')
+            let isProgram     = sameDirectory && Object.keys(feed.items)
+              .filter((key) => {
+                return feed.items[key].type === 'program' && feed.items[key].slug === slug
+              })
+              .length > 0
+            if (feed.username === username && sameDirectory && isProgram) {
+              return path
+            }
+
+            return this.props.dispatch(setCurrentUsername(username))
+              .then(() => {
+                const token = auth.isAuthenticated ? auth.token : null
+                return this.props.dispatch(fetchFeed(username, path, token))
+              })
+          })
+          .then(() => {
+            const {feed} = this.props
+
+            let slug = path.length > 0 ? path[path.length - 1] : null
+
+            let program = getProgramBySlug(feed, slug)
+            if (program) {
+              this.props.dispatch(setCurrentFeed({type: program.type, id: program.id}))
+            } else if (feed.folder) {
+              this.props.dispatch(setCurrentFeed(null))
+            } else {
+              let items = Object.keys(feed.items)
+                .filter((key) => {
+                  return feed.items[key].type === 'program'
+                })
+                .reduce((res, key) => (res[key] = feed.items[key], res), {})
+              let keys  = Object.keys(items)
+
+              keys.sort((keyA, keyB) => {
+                let itemA = items[keyA]
+                let itemB = items[keyB]
+
+                return moment(itemB.updated).diff(moment(itemA.updated))
+              })
+
+              if (keys.length > 0) {
+                let item = items[keys[0]]
+                this.props.dispatch(setCurrentFeed({type: item.type, id: item.id}))
+              } else {
+                this.props.dispatch(setCurrentFeed(null))
+              }
+            }
+          }).then(() => {
+            const {user, feed} = this.props
+            const isCurrentUser         = feed.username && feed.username === user.username
+
+            let currentPath = getCurrentPath(feed)
+
+            let item = getCurrentProgram(feed)
+            if (item) {
+              currentPath.push(item.slug)
+            }
+            navigate(feedPathTo(currentPath, (item && item.public) || isCurrentUser ? feed.username : null))
+          })
+      })
+      .then((resolve) => {
+        this.setState({fetching: false}, resolve)
       })
   }
 
