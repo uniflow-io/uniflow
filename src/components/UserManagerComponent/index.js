@@ -30,6 +30,8 @@ class UserManagerComponent extends Component {
 
     if (nextProps.auth.token !== oldProps.auth.token && nextProps.auth.isAuthenticated) {
       this.onFetchUser(nextProps.auth.token)
+    } else {
+      this.onLocation(nextProps.location)
     }
   }
 
