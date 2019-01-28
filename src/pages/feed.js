@@ -1,6 +1,5 @@
 import React from 'react'
 import {Feed} from '../views'
-import Layout from "../layouts";
 import {requireAuthentication} from '../components'
 import routes from '../routes'
 import {matchPath} from '../utils'
@@ -15,11 +14,11 @@ export default ({location}) => {
 
   if(match) {
     return (
-      <Layout location={location}><AuthFeed/></Layout>
+      <AuthFeed/>
     )
   }
 
   return (
-    <Layout location={location}><Feed/></Layout>
+    <Feed/>
   )
 }

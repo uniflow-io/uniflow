@@ -1,6 +1,5 @@
 import React from 'react'
 import {Article, NotFound} from '../views'
-import Layout from "../layouts";
 import routes from '../routes'
 import {matchPath} from '../utils'
 
@@ -12,11 +11,11 @@ export default ({location}) => {
 
   if(match) {
     return (
-      <Layout location={location}><Article slug={match.params.slug}/></Layout>
+      <Article slug={match.params.slug}/>
     )
   }
 
   return (
-    <Layout location={location}><NotFound/></Layout>
+    <NotFound/>
   )
 }
