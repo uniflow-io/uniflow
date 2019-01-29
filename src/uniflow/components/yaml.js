@@ -4334,10 +4334,16 @@ let keyvaluelist = runner.getValue(this.state.keyvaluevariable)
                   <label htmlFor='type{{ _uid }}' className='col-sm-2 control-label'>Type</label>
 
                   <div className='col-sm-10'>
-                    <Select2Component value={type} onChange={this.onChangeType} className='form-control' id='type{{ _uid }}' style={{ width: '100%' }}>
-                      <option value='read'>Read</option>
-                      <option value='write'>Write</option>
-                    </Select2Component>
+                    <Select2Component
+                      value={type}
+                      onChange={this.onChangeType}
+                      className='form-control'
+                      id='type{{ _uid }}'
+                      options={[
+                        {value: 'read', label: 'Read'},
+                        {value: 'write', label: 'Write'},
+                      ]}
+                    />
                   </div>
                 </div>
               </div>

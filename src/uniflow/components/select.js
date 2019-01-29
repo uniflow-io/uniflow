@@ -131,11 +131,14 @@ export default class ComponentSelect extends Component {
                 <label htmlFor='select{{ _uid }}' className='col-sm-2 control-label'>Select</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={selected} onChange={this.onChangeSelected} className='form-control' id='select{{ _uid }}' style={{ width: '100%' }}>
-                    {Object.keys(choices).map((value) => (
-                      <option key={value} value={choices[value]}>{ choices[value] }</option>
-                    ))}
-                  </Select2Component>
+                  <Select2Component
+                    value={selected}
+                    onChange={this.onChangeSelected}
+                    className='form-control' id='select{{ _uid }}'
+                    options={Object.keys(choices).map((value) => {
+                      return {value: value, label: choices[value]}
+                    })}
+                  />
                 </div>
               </div>
             </div>

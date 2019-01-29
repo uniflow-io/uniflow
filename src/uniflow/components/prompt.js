@@ -213,11 +213,15 @@ export default class ComponentPrompt extends Component {
                 <label htmlFor='type{{ _uid }}' className='col-sm-2 control-label'>Type</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={type} onChange={this.onChangeType} className='form-control' id='type{{ _uid }}' style={{ width: '100%' }}>
-                    {Object.keys(choices).map((value) => (
-                      <option key={value} value={value}>{ choices[value] }</option>
-                    ))}
-                  </Select2Component>
+                  <Select2Component
+                    value={type}
+                    onChange={this.onChangeType}
+                    className='form-control'
+                    id='type{{ _uid }}'
+                    options={Object.keys(choices).map((value) => {
+                      return {value: value, label: choices[value]}
+                    })}
+                  />
                 </div>
               </div>
 

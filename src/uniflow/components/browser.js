@@ -256,11 +256,17 @@ export default class ComponentBrowser extends Component {
                 <label htmlFor='mode{{ _uid }}' className='col-sm-2 control-label'>Mode</label>
 
                 <div className='col-sm-10'>
-                  <Select2Component value={mode || ''} onChange={this.onChangeMode} className='form-control' id='mode{{ _uid }}' style={{ width: '100%' }}>
-                    <option value='' />
-                    <option value='manual'>Manual</option>
-                    <option value='background'>Background</option>
-                  </Select2Component>
+                  <Select2Component
+                    value={mode || ''}
+                    onChange={this.onChangeMode}
+                    className='form-control'
+                    id='mode{{ _uid }}'
+                    options={[
+                      {value: '', label: ''},
+                      {value: 'manual', label: 'Manual'},
+                      {value: 'background', label: 'Background'},
+                    ]}
+                  />
                 </div>
               </div>
             </div>
