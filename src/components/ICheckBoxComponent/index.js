@@ -1,64 +1,34 @@
-import React, { Component } from 'react'
-import $ from 'jquery'
-//require('imports-loader?window.jQuery=jquery!../../../dist/js/icheck.min.js')
+import React, {Component} from 'react'
 
-// import 'icheck'
+let id = 0
+const gen = () => {
+  id ++;
+
+  return `checkbox_${id}`
+}
 
 export default class ICheckBoxComponent extends Component {
-  componentDidMount () {
+  onChange = (event) => {
     const {
-      value
-    } = this.props
+            value
+          } = this.props
 
-    this.silent = false
-
-    /*$(this.container)
-      .iCheck({
-        handle: 'checkbox',
-        checkboxClass: 'icheckbox_square-blue'
-      })
-      .on('ifChecked', () => {
-        if (this.props.onChange && !this.silent) {
-          this.props.onChange(true)
-        }
-      })
-      .on('ifUnchecked', () => {
-        if (this.props.onChange && !this.silent) {
-          this.props.onChange(false)
-        }
-      })*/
-    this.setValue(value)
-  }
-
-  componentWillUnmount () {
-    //$(this.container).iCheck('destroy')
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const oldProps = this.props
-
-    if (nextProps.value !== oldProps.value) {
-      this.setValue(nextProps.value)
+    if (this.props.onChange) {
+      this.props.onChange(!value)
     }
   }
 
-    setValue = (value) => {
-      this.silent = true
+  render() {
+    const {
+            value
+          } = this.props
+    const uid = gen()
 
-      /*if (value) {
-        $(this.container).iCheck('check', () => {
-          this.silent = false
-        })
-      } else {
-        $(this.container).iCheck('uncheck', () => {
-          this.silent = false
-        })
-      }*/
-    }
-
-    render () {
-      return (
-        <input ref={container => (this.container = container)} type='checkbox' />
-      )
-    }
+    return (
+      <div className="icheck-primary">
+        <input type="checkbox" defaultChecked={value} onChange={this.onChange} id={uid}/>
+        <label htmlFor={uid} />
+      </div>
+    )
+  }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import $ from 'jquery'
+//import $ from 'jquery'
 //require('imports-loader?jQuery=jquery!../../../dist/js/jquery-ui.min.js')
 //require('imports-loader?jQuery=jquery!../../../dist/js/tag-it.min.js')
 
