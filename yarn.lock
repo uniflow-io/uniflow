@@ -5864,11 +5864,6 @@ table@^4.0.3:
     slice-ansi "1.0.0"
     string-width "^2.1.1"
 
-tag-it@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/tag-it/-/tag-it-2.0.0.tgz#7b618759df840fb90294a54257a947fa2b148542"
-  integrity sha1-e2GHWd+ED7kClKVCV6lH+isUhUI=
-
 tapable@^1.0.0, tapable@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.1.tgz#4d297923c5a72a42360de2ab52dadfaaec00018e"
