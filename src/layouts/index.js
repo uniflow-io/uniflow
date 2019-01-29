@@ -223,7 +223,7 @@ class Header extends Component {
               )}
               {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
                 <li className={active === 'logout' ? 'active' : ''}>
-                  <a onClick={this.onLogout}>
+                  <a href="/logout" onClick={this.onLogout}>
                     <span
                       className="glyphicon glyphicon-off logout"
                       aria-hidden="true"
@@ -259,6 +259,7 @@ class Footer extends Component {
           className="btn"
           href="https://github.com/uniflow-io/uniflow"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa fa-github" />
         </a>
@@ -266,6 +267,7 @@ class Footer extends Component {
           className="btn"
           href="https://www.facebook.com/uniflow.io"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa fa-facebook" />
         </a>
@@ -273,6 +275,7 @@ class Footer extends Component {
           className="btn"
           href="https://twitter.com/uniflow_io"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa fa-twitter" />
         </a>
@@ -280,6 +283,7 @@ class Footer extends Component {
           className="btn"
           href="https://medium.com/@uniflow.io"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="fa fa-medium" />
         </a>

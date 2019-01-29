@@ -162,7 +162,10 @@ class UserManagerComponent extends Component {
                 .filter(key => {
                   return feed.items[key].type === 'program'
                 })
-                .reduce((res, key) => ((res[key] = feed.items[key]), res), {})
+                .reduce((res, key) => {
+                  res[key] = feed.items[key]
+                  return res
+                }, {})
               let keys = Object.keys(items)
 
               keys.sort((keyA, keyB) => {
