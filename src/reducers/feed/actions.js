@@ -230,6 +230,7 @@ export const createProgram = (item, token) => {
       })
       .then(response => {
         let item = response.data
+        item.type = 'program'
 
         dispatch(commitUpdateFeed(item))
 
@@ -265,6 +266,7 @@ export const updateProgram = (item, token) => {
       })
       .then(response => {
         let item = response.data
+        item.type = 'program'
 
         dispatch(commitUpdateFeed(item))
 
@@ -448,6 +450,7 @@ export const createFolder = (item, token) => {
       })
       .then(response => {
         let item = response.data
+        item.type = 'program'
 
         dispatch(commitUpdateFeed(item))
 
