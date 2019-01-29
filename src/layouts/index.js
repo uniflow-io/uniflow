@@ -8,7 +8,9 @@ import '../../content/css/font-awesome.min.css'
 // <!-- Ionicons -->
 import '../../content/css/ionicons.min.css'
 // <!-- iCheck -->
-import '../../content/js/plugins/iCheck/all.css'
+//import '../../content/js/plugins/iCheck/all.css'
+// <!-- iCheck-bootstrap -->
+import '../../content/js/plugins/icheck-bootstrap/icheck-bootstrap.css'
 // <!-- Date Picker -->
 import '../../content/js/plugins/datepicker/datepicker3.css'
 // <!-- Select2 -->

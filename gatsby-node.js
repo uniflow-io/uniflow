@@ -1,3 +1,18 @@
+exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
+    if (stage === "develop-html" || stage === "build-html") {
+        actions.setWebpackConfig({
+            module: {
+                rules: [
+                    {
+                        test: /brace/,
+                        use: loaders.null(),
+                    },
+                ],
+            },
+        })
+    }
+}
+
 exports.onCreatePage = function onCreatePage({
                                                  page,
                                                  actions: { createPage },
