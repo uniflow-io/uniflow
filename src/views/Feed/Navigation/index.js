@@ -115,9 +115,6 @@ class Navigation extends Component {
 
     return (
       <div className="box box-danger">
-        <div className="box-header with-border">
-          <h3 className="box-title">Program</h3>
-        </div>
         <div className="box-body">
           <div
             className="navbar navbar-default navbar-vertical"

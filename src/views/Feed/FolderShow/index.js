@@ -212,14 +212,10 @@ class FolderShow extends Component {
                       onChange={this.onChangePath}
                       className="form-control"
                       id="info_path_{{ _uid }}"
-                      style={{ width: '100%' }}
-                    >
-                      {folderTree.map(value => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </Select2Component>
+                      options={folderTree.map(value => {
+                        return { value: value, label: value }
+                      })}
+                    />
                   )) || (
                     <div>
                       <button

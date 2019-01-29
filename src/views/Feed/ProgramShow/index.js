@@ -437,14 +437,10 @@ class ProgramShow extends Component {
                       onChange={this.onChangePath}
                       className="form-control"
                       id="info_path_{{ _uid }}"
-                      style={{ width: '100%' }}
-                    >
-                      {folderTree.map(value => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      ))}
-                    </Select2Component>
+                      options={folderTree.map(value => {
+                        return { value: value, label: value }
+                      })}
+                    />
                   )) || (
                     <div>
                       <button
@@ -474,14 +470,10 @@ class ProgramShow extends Component {
                     onChange={this.onChangeClient}
                     className="form-control"
                     id="info_client_{{ _uid }}"
-                    style={{ width: '100%' }}
-                  >
-                    {Object.keys(clients).map(value => (
-                      <option key={value} value={value}>
-                        {clients[value]}
-                      </option>
-                    ))}
-                  </Select2Component>
+                    options={Object.keys(clients).map(value => {
+                      return { value: value, label: clients[value] }
+                    })}
+                  />
                 </div>
               </div>
 

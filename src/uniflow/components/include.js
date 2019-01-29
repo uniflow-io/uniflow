@@ -204,14 +204,10 @@ class ComponentInclude extends Component {
                   onChange={this.onChangeSelected}
                   className="form-control"
                   id="select{{ _uid }}"
-                  style={{ width: '100%' }}
-                >
-                  {getOrderedFeed(this.props.feed).map((item, i) => (
-                    <option key={item.id} value={item.id}>
-                      {item.title}
-                    </option>
-                  ))}
-                </Select2Component>
+                  options={getOrderedFeed(this.props.feed).map((item, i) => {
+                    return { value: item.id, label: item.title }
+                  })}
+                />
               </div>
             </div>
           </div>

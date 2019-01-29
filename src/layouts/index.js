@@ -14,14 +14,14 @@ import '../../content/js/plugins/icheck-bootstrap/icheck-bootstrap.css'
 // <!-- Date Picker -->
 import '../../content/js/plugins/datepicker/datepicker3.css'
 // <!-- Select2 -->
-import '../../content/js/plugins/select2/select2.min.css'
+//import '../../content/js/plugins/select2/select2.min.css'
 // <!-- Tag It -->
-import '../../content/js/plugins/tagit/css/jquery.tagit.css'
-import '../../content/js/plugins/tagit/css/tagit.ui-zendesk.css'
+//import '../../content/js/plugins/tagit/css/jquery.tagit.css'
+//import '../../content/js/plugins/tagit/css/tagit.ui-zendesk.css'
 // <!-- Daterange picker -->
-import '../../content/js/plugins/daterangepicker/daterangepicker-bs3.css'
+//import '../../content/js/plugins/daterangepicker/daterangepicker-bs3.css'
 // <!-- bootstrap wysihtml5 - text editor -->
-import '../../content/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
+//import '../../content/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
 
 // <!-- Theme style -->
 import '../../content/css/AdminLTE.css'
