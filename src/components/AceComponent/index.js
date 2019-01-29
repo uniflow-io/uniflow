@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-/*import ace from 'brace'
-require('brace/mode/javascript')
-require('brace/mode/batchfile')*/
-
-let ace = {}
+import ace from 'brace'
+import 'brace/mode/javascript'
+import 'brace/mode/batchfile'
 
 export default class AceComponent extends Component {
   componentDidMount () {
@@ -14,7 +12,7 @@ export default class AceComponent extends Component {
 
     this.silent = false
 
-    /*ace.config.set('basePath', '/jspm_packages/github/ajaxorg/ace-builds@1.3.3')
+    ace.config.set('basePath', '/jspm_packages/github/ajaxorg/ace-builds@1.3.3')
     this.editor = ace.edit(this.container)
     this.editor.$blockScrolling = Infinity
     if (value) {
@@ -33,25 +31,25 @@ export default class AceComponent extends Component {
 
     if (mode) {
       session.setMode('ace/mode/' + mode)
-    }*/
+    }
   }
 
   componentWillUnmount () {
-    //this.editor.destroy()
-    //this.editor = null
+    this.editor.destroy()
+    this.editor = null
   }
 
   componentWillReceiveProps (nextProps) {
     const oldProps = this.props
 
-    /*if (this.editor && this.editor.getValue() !== nextProps.value) {
+    if (this.editor && this.editor.getValue() !== nextProps.value) {
       // editor.setValue is a synchronous function call, change event is emitted before setValue return.
       this.silent = true
       const pos = this.editor.session.selection.toJSON()
       this.editor.setValue(nextProps.value || '', 1)
       this.editor.session.selection.fromJSON(pos)
       this.silent = false
-    }*/
+    }
   }
 
   render () {
