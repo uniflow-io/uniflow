@@ -492,7 +492,9 @@ class ProgramShow extends Component {
                     id="info_tags_{{ _uid }}"
                     value={program.tags}
                     onChange={this.onChangeTags}
-                    options={tagsOptions}
+                    options={tags.map((tag) => {
+                      return {value: tag, label: tag}
+                    })}
                     placeholder="Tags"
                   />
                 </div>
