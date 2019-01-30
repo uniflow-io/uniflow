@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { ListComponent } from '../../components'
-import { Bus } from '../../models'
 import createStore from '../../utils/createStore'
 import flow from '../../reducers/flow'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
-  commitSetFlow
 } from '../../reducers/flow/actions'
 
 export default class ComponentIf extends Component {

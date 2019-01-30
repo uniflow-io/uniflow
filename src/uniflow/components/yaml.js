@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
 import { Select2Component } from '../../components'
 
 /**

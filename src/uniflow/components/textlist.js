@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
-import LZString from 'lz-string'
 
 export default class ComponentTextList extends Component {
     state = {

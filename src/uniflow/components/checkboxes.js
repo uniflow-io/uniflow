@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
 import { ICheckBoxComponent } from '../../components'
 
 export default class ComponentCheckBoxes extends Component {

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
 
 export default class ComponentBrowser extends Component {
     state = {

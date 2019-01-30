@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Select2Component } from '../../components'
-import { Bus } from '../../models'
 
 export default class ComponentSelect extends Component {
     state = {

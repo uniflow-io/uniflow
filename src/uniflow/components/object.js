@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
 

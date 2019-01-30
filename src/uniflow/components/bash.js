@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { AceComponent } from '../../components'
-import { Bus } from '../../models'
 
 export default class ComponentBash extends Component {
     state = {

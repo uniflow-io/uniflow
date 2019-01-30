@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { AceComponent } from '../../components'
-import { Bus } from '../../models'
 import { Select2Component } from '../../components'
 
 export default class ComponentPrompt extends Component {

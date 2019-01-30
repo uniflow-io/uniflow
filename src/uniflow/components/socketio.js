@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Bus } from '../../models'
 import io from 'socket.io-client'
 
 export default class ComponentSocketIO extends Component {
