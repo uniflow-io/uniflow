@@ -2,8 +2,3 @@
 node_modules
 *.log
 npm-debug.log*
-
-# Webpack
-/.env.local
-/.env.*.local
-/.cache-loader
