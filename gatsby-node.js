@@ -1,17 +1,18 @@
+const path = require('path')
+
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
     const isSSR = stage.includes(`html`)
-    if (isSSR) {
-        actions.setWebpackConfig({
-            module: {
-                rules: [
-                    {
-                        test: /brace|remote-browser/,
-                        use: loaders.null(),
-                    }
-                ],
-            },
-        })
-    }
+
+    actions.setWebpackConfig({
+        module: {
+            rules: isSSR ? [
+                {
+                    test: /brace|remote-browser/,
+                    use: loaders.null(),
+                }
+            ] : [],
+        }
+    })
 }
 
 exports.onCreatePage = function onCreatePage({
