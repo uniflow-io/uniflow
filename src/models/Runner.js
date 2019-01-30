@@ -1,18 +1,20 @@
-//import Interpreter from '../../dist/js/JS-Interpreter/interpreter'
+//import Interpreter from '../../content/js/JS-Interpreter/interpreter'
 import { transform } from 'babel-standalone'
+
+let Interpreter = () => {}
 
 export default class Runner {
   run(stack, onRunIndex) {
     // get polyfill
     /* if(cachedPolyfillJS) return cachedPolyfillJS;
 
-         return axios.get('/js/libs/babel-polyfill.min.js')
-         .then(function(response) {
-         cachedPolyfillJS = response.data;
+       return axios.get('/js/libs/babel-polyfill.min.js')
+       .then(function(response) {
+       cachedPolyfillJS = response.data;
 
-         return cachedPolyfillJS;
-         }) */
-    /*let asyncRunPromise = null
+       return cachedPolyfillJS;
+       }) */
+    let asyncRunPromise = null
     let interpreter = null
     let interpreterPromise = new Promise((resolve) => {
       interpreter = new Interpreter('', (interpreter, scope) => {
@@ -112,6 +114,6 @@ export default class Runner {
         }).then(() => {
           return onRunIndex(null)
         })
-    }, interpreterPromise)*/
+    }, interpreterPromise)
   }
 }

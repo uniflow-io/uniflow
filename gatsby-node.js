@@ -1,12 +1,13 @@
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-    if (stage === "develop-html" || stage === "build-html") {
+    const isSSR = stage.includes(`html`)
+    if (isSSR) {
         actions.setWebpackConfig({
             module: {
                 rules: [
                     {
-                        test: /brace/,
+                        test: /brace|remote-browser/,
                         use: loaders.null(),
-                    },
+                    }
                 ],
             },
         })
