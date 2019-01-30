@@ -93,13 +93,13 @@ export default class ListComponent extends Component {
         tag={item.component}
         bus={item.bus}
         components={components}
-        onPush={(component) => {
+        onPush={component => {
           onPush(item.index, component)
         }}
         onPop={() => {
           onPop(item.index)
         }}
-        onUpdate={(data) => {
+        onUpdate={data => {
           onUpdate(item.index, data)
         }} />
     )))

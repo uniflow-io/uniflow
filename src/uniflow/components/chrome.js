@@ -48,13 +48,13 @@ export default class ComponentBrowser extends Component {
       return [this.state.variable]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable] = data || [null]
 
       this.setState({ variable: variable })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
@@ -62,7 +62,7 @@ export default class ComponentBrowser extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -72,23 +72,23 @@ export default class ComponentBrowser extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
 
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

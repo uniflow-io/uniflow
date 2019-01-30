@@ -51,21 +51,21 @@ export default class ComponentSocketIO extends Component {
       return [this.state.variable, this.state.host, this.state.port]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, host, port] = data || [null, null, null]
 
       this.setState({ variable: variable, host: host, port: port })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeHost = (event) => {
+    onChangeHost = event => {
       this.setState({ host: event.target.value }, this.onUpdate)
     }
 
-    onChangePort = (event) => {
+    onChangePort = event => {
       this.setState({ port: event.target.value }, this.onUpdate)
     }
 
@@ -73,7 +73,7 @@ export default class ComponentSocketIO extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -97,12 +97,12 @@ export default class ComponentSocketIO extends Component {
 
         wrapper = function (eventName) {
           let args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
-          args = args.map((data) => {
+          args = args.map(data => {
             return interpreter.pseudoToNative(data)
           })
           let callback = arguments[arguments.length - 1]
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             args.push(function (data) {
               callback(interpreter.nativeToPseudo(data))
               resolve()
@@ -119,23 +119,23 @@ export default class ComponentSocketIO extends Component {
       interpreter.setProperty(scope, 'IO', obj.IO)
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
           return runner.eval('var ' + this.state.variable + ' = new IO(\'https://' + this.state.host + ':' + this.state.port + '\')')
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

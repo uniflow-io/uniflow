@@ -50,17 +50,17 @@ export default class ComponentText extends Component {
       return [this.state.variable, this.state.text]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, text] = data || [null, null]
 
       this.setState({ variable: variable, text: text })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeText = (text) => {
+    onChangeText = text => {
       this.setState({ text: text }, this.onUpdate)
     }
 
@@ -68,7 +68,7 @@ export default class ComponentText extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -78,11 +78,11 @@ export default class ComponentText extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -95,12 +95,12 @@ export default class ComponentText extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

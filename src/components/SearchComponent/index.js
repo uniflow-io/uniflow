@@ -6,7 +6,7 @@ export default class SearchComponent extends Component {
       search: 'javascript'
     }
 
-    onSubmit = (event) => {
+    onSubmit = event => {
       event.preventDefault()
 
       if (this.props.onPush) {
@@ -14,7 +14,7 @@ export default class SearchComponent extends Component {
       }
     }
 
-    onChange = (value) => {
+    onChange = value => {
       this.setState({ search: value })
     }
 
@@ -34,8 +34,8 @@ export default class SearchComponent extends Component {
                     onChange={this.onChange}
                     className='form-control pull-right'
                     id='search{{ _uid }}'
-                    options={components.map((component) => {
-                      return {value: component.key, label: component.label}
+                    options={components.map(component => {
+                      return { value: component.key, label: component.label }
                     })}
                   />
                   <span className='input-group-btn'>

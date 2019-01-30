@@ -5,7 +5,7 @@ import flow from '../../reducers/flow'
 import {
   commitPushFlow,
   commitPopFlow,
-  commitUpdateFlow,
+  commitUpdateFlow
 } from '../../reducers/flow/actions'
 
 export default class ComponentIf extends Component {
@@ -75,28 +75,28 @@ export default class ComponentIf extends Component {
     serialise = () => {
       return {
         if: {
-          condition: this.state.if.conditionStack.map((item) => {
+          condition: this.state.if.conditionStack.map(item => {
             return {
               component: item.component,
               data: item.data
             }
           }),
-          execute: this.state.if.executeStack.map((item) => {
+          execute: this.state.if.executeStack.map(item => {
             return {
               component: item.component,
               data: item.data
             }
           })
         },
-        elseIfs: this.state.elseIfs.map((elseIf) => {
+        elseIfs: this.state.elseIfs.map(elseIf => {
           return {
-            condition: elseIf.conditionStack.map((item) => {
+            condition: elseIf.conditionStack.map(item => {
               return {
                 component: item.component,
                 data: item.data
               }
             }),
-            execute: elseIf.executeStack.map((item) => {
+            execute: elseIf.executeStack.map(item => {
               return {
                 component: item.component,
                 data: item.data
@@ -104,7 +104,7 @@ export default class ComponentIf extends Component {
             })
           }
         }),
-        else: this.state.else ? this.state.else.executeStack.map((item) => {
+        else: this.state.else ? this.state.else.executeStack.map(item => {
           return {
             component: item.component,
             data: item.data
@@ -113,10 +113,10 @@ export default class ComponentIf extends Component {
       }
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let createStoreStack = function (stack) {
         return stack.reduce((promise, item, index) => {
-          return promise.then((store) => {
+          return promise.then(store => {
             return store.dispatch(commitPushFlow(index, item.component))
               .then(() => {
                 return store.dispatch(commitUpdateFlow(index, item.data))
@@ -131,7 +131,7 @@ export default class ComponentIf extends Component {
         createStoreStack(data && data.if && data.if.condition || []),
         createStoreStack(data && data.if && data.if.execute || []),
         data && data.elseIfs && data.elseIfs.reduce((promise, elseIf) => {
-          return promise.then((elseIfs) => {
+          return promise.then(elseIfs => {
             return Promise.all([
               createStoreStack(elseIf.condition || []),
               createStoreStack(elseIf.execute || [])
@@ -168,7 +168,7 @@ export default class ComponentIf extends Component {
           else: null
         }
 
-        this.store.elseIfs.forEach((elseIf) => {
+        this.store.elseIfs.forEach(elseIf => {
           state.elseIfs.push({
             conditionStack: elseIf.conditionStack.getState(),
             conditionRunIndex: null,
@@ -184,13 +184,13 @@ export default class ComponentIf extends Component {
           }
         }
 
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           this.setState(state, resolve)
         }).then(() => {
           return state
         })
-      }).then((state) => {
-        let resetStack = (stack) => {
+      }).then(state => {
+        let resetStack = stack => {
           for (let i = 0; i < stack.length; i++) {
             let item = stack[i]
             item.bus.emit('reset', item.data)
@@ -199,7 +199,7 @@ export default class ComponentIf extends Component {
 
         resetStack(state.if.conditionStack)
         resetStack(state.if.executeStack)
-        state.elseIfs.forEach((elseIf) => {
+        state.elseIfs.forEach(elseIf => {
           resetStack(elseIf.conditionStack)
           resetStack(elseIf.executeStack)
         })
@@ -211,16 +211,16 @@ export default class ComponentIf extends Component {
 
     dispatchFlow = (propertyPath, action) => {
       let store = this.store
-      propertyPath.forEach((key) => {
+      propertyPath.forEach(key => {
         store = store[key]
       })
 
       return store.dispatch(action)
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             let state = Object.assign({}, this.state)
             let el = state
-            propertyPath.slice(0, propertyPath.length - 1).forEach((key) => {
+            propertyPath.slice(0, propertyPath.length - 1).forEach(key => {
               el = el[key]
             })
             el[propertyPath[propertyPath.length - 1]] = store.getState()
@@ -252,7 +252,7 @@ export default class ComponentIf extends Component {
       this.setState({ elseIfs: elseIfs }, this.onUpdate)
     }
 
-    onAddElseIf = (event) => {
+    onAddElseIf = event => {
       event.preventDefault()
 
       this.store.elseIfs.push({
@@ -270,7 +270,7 @@ export default class ComponentIf extends Component {
       this.setState({ elseIfs: elseIfs }, this.onUpdate)
     }
 
-    onRemoveElse = (event) => {
+    onRemoveElse = event => {
       event.preventDefault()
 
       this.store.else = null
@@ -278,7 +278,7 @@ export default class ComponentIf extends Component {
       this.setState({ else: null }, this.onUpdate)
     }
 
-    onAddElse = (event) => {
+    onAddElse = event => {
       event.preventDefault()
 
       this.store.else = {
@@ -295,7 +295,7 @@ export default class ComponentIf extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -309,18 +309,18 @@ export default class ComponentIf extends Component {
           return stacks
         }, []))
         .concat(this.state.else ? [this.state.else.executeStack] : [])
-        .forEach((stack) => {
-          stack.forEach((item) => {
+        .forEach(stack => {
+          stack.forEach(item => {
             item.bus.emit('compile', interpreter, scope)
           })
         })
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -335,17 +335,17 @@ export default class ComponentIf extends Component {
           }
 
           return stackEval(this.state.if.conditionStack)
-            .then((value) => {
+            .then(value => {
               if (value === true) {
                 return stackEval(this.state.if.executeStack)
               }
 
               return this.state.elseIfs.reduce((promise, elseIf) => {
                 return promise
-                  .then((isResolved) => {
+                  .then(isResolved => {
                     if (!isResolved) {
                       return stackEval(elseIf.conditionStack)
-                        .then((value) => {
+                        .then(value => {
                           if (value === true) {
                             return stackEval(elseIf.executeStack)
                               .then(() => {
@@ -359,7 +359,7 @@ export default class ComponentIf extends Component {
 
                     return isResolved
                   })
-              }, Promise.resolve(false)).then((isResolved) => {
+              }, Promise.resolve(false)).then(isResolved => {
                 if (!isResolved && this.state.else) {
                   return stackEval(this.state.else.executeStack)
                 }
@@ -367,12 +367,12 @@ export default class ComponentIf extends Component {
             })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -394,7 +394,7 @@ export default class ComponentIf extends Component {
           <ListComponent stack={this.state.if.conditionStack} runIndex={this.state.if.conditionRunIndex}
             components={this.props.components}
             onPush={(index, component) => { this.onPushFlow(['if', 'conditionStack'], index, component) }}
-            onPop={(index) => { this.onPopFlow(['if', 'conditionStack'], index) }}
+            onPop={index => { this.onPopFlow(['if', 'conditionStack'], index) }}
             onUpdate={(index, data) => { this.onUpdateFlow(['if', 'conditionStack'], index, data) }}
             onRun={null} />
           <div className='box box-info'>
@@ -407,7 +407,7 @@ export default class ComponentIf extends Component {
           <ListComponent stack={this.state.if.executeStack} runIndex={this.state.if.executeRunIndex}
             components={this.props.components}
             onPush={(index, component) => { this.onPushFlow(['if', 'executeStack'], index, component) }}
-            onPop={(index) => { this.onPopFlow(['if', 'executeStack'], index) }}
+            onPop={index => { this.onPopFlow(['if', 'executeStack'], index) }}
             onUpdate={(index, data) => { this.onUpdateFlow(['if', 'executeStack'], index, data) }}
             onRun={null} />
           {this.state.elseIfs.map((item, elseIfIndex) => (
@@ -427,7 +427,7 @@ export default class ComponentIf extends Component {
               <ListComponent stack={item.conditionStack} runIndex={item.conditionRunIndex}
                 components={this.props.components}
                 onPush={(index, component) => { this.onPushFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, component) }}
-                onPop={(index) => { this.onPopFlow(['elseIfs', elseIfIndex, 'conditionStack'], index) }}
+                onPop={index => { this.onPopFlow(['elseIfs', elseIfIndex, 'conditionStack'], index) }}
                 onUpdate={(index, data) => { this.onUpdateFlow(['elseIfs', elseIfIndex, 'conditionStack'], index, data) }}
                 onRun={null} />
               <div className='box box-info'>
@@ -440,7 +440,7 @@ export default class ComponentIf extends Component {
               <ListComponent stack={item.executeStack} runIndex={item.executeRunIndex}
                 components={this.props.components}
                 onPush={(index, component) => { this.onPushFlow(['elseIfs', elseIfIndex, 'executeStack'], index, component) }}
-                onPop={(index) => { this.onPopFlow(['elseIfs', elseIfIndex, 'executeStack'], index) }}
+                onPop={index => { this.onPopFlow(['elseIfs', elseIfIndex, 'executeStack'], index) }}
                 onUpdate={(index, data) => { this.onUpdateFlow(['elseIfs', elseIfIndex, 'executeStack'], index, data) }}
                 onRun={null} />
 
@@ -461,7 +461,7 @@ export default class ComponentIf extends Component {
               <ListComponent stack={this.state.else.executeStack} runIndex={this.state.else.executeRunIndex}
                 components={this.props.components}
                 onPush={(index, component) => { this.onPushFlow(['else', 'executeStack'], index, component) }}
-                onPop={(index) => { this.onPopFlow(['else', 'executeStack'], index) }}
+                onPop={index => { this.onPopFlow(['else', 'executeStack'], index) }}
                 onUpdate={(index, data) => { this.onUpdateFlow(['else', 'executeStack'], index, data) }}
                 onRun={null} />
             </div>

@@ -50,17 +50,17 @@ export default class ComponentAssets extends Component {
       return LZString.compressToEncodedURIComponent(JSON.stringify([this.state.variable, this.state.assets]))
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, assets] = data ? JSON.parse(LZString.decompressFromEncodedURIComponent(data)) : [null, []]
 
       this.setState({ variable: variable, assets: assets })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onFiles = (event) => {
+    onFiles = event => {
       event.persist()
       event.preventDefault()
 
@@ -74,7 +74,7 @@ export default class ComponentAssets extends Component {
           return new Promise((resolve, error) => {
             let reader = new FileReader()
             reader.onerror = error
-            reader.onload = (e) => {
+            reader.onload = e => {
               let newStateAssets = this.state.assets.slice()
               newStateAssets.push([file.name, e.target.result])
               this.setState({ assets: newStateAssets }, resolve)
@@ -124,7 +124,7 @@ export default class ComponentAssets extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -134,11 +134,11 @@ export default class ComponentAssets extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -151,12 +151,12 @@ export default class ComponentAssets extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -187,9 +187,9 @@ export default class ComponentAssets extends Component {
                 <div key={index} className='form-group'>
                   <div className='col-sm-10 col-sm-offset-2'>
                     <div className='input-group'>
-                      <span className='input-group-addon' onClick={(event) => { this.onDownloadFile(event, index) }}><i className='fa fa-download' /></span>
-                      <input type='text' value={asset[0]} onChange={(event) => { this.onUpdateFile(event, index) }} className='form-control' />
-                      <span className='input-group-addon' onClick={(event) => { this.onRemoveFile(event, index) }}><i className='fa fa-times' /></span>
+                      <span className='input-group-addon' onClick={event => { this.onDownloadFile(event, index) }}><i className='fa fa-download' /></span>
+                      <input type='text' value={asset[0]} onChange={event => { this.onUpdateFile(event, index) }} className='form-control' />
+                      <span className='input-group-addon' onClick={event => { this.onRemoveFile(event, index) }}><i className='fa fa-times' /></span>
                     </div>
                   </div>
                 </div>

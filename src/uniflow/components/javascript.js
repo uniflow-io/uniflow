@@ -49,11 +49,11 @@ export default class ComponentJavascript extends Component {
       return this.state.javascript
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       this.setState({ javascript: data })
     }
 
-    onChangeJavascript = (javascript) => {
+    onChangeJavascript = javascript => {
       this.setState({ javascript: javascript }, this.onUpdate)
     }
 
@@ -61,7 +61,7 @@ export default class ComponentJavascript extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -71,23 +71,23 @@ export default class ComponentJavascript extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
           return runner.eval(this.state.javascript)
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

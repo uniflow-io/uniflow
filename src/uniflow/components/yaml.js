@@ -10,37 +10,37 @@ let scope = {};
 
 /* js-yaml 3.11.0 https://github.com/nodeca/js-yaml */
 (function (scope, f) { scope.jsyaml = f() })(scope, function () {
-  var define, module, exports; return (function () {
+  let define, module, exports; return (function () {
     function e (t, n, r) {
       function s (o, u) {
         if (!n[o]) {
           if (!t[o]) {
-            var a = typeof require === 'function' && require
+            let a = typeof require === 'function' && require
             if (!u && a) return a(o, !0)
             if (i) return i(o, !0)
-            var f = new Error("Cannot find module '" + o + "'")
+            let f = new Error("Cannot find module '" + o + "'")
             throw f.code = 'MODULE_NOT_FOUND', f
           }
-          var l = n[o] = {
+          let l = n[o] = {
             exports: {}
           }
           t[o][0].call(l.exports, function (e) {
-            var n = t[o][1][e]
+            let n = t[o][1][e]
             return s(n || e)
           }, l, l.exports, e, t, n, r)
         }
         return n[o].exports
       }
       var i = typeof require === 'function' && require
-      for (var o = 0; o < r.length; o++) s(r[o])
+      for (let o = 0; o < r.length; o++) s(r[o])
       return s
     }
     return e
   })()({ 1: [function (require, module, exports) {
     'use strict'
 
-    var loader = require('./js-yaml/loader')
-    var dumper = require('./js-yaml/dumper')
+    let loader = require('./js-yaml/loader')
+    let dumper = require('./js-yaml/dumper')
 
     function deprecated (name) {
       return function () {
@@ -93,7 +93,7 @@ let scope = {};
     }
 
     function extend (target, source) {
-      var index, length, key, sourceKeys
+      let index, length, key, sourceKeys
 
       if (source) {
         sourceKeys = Object.keys(source)
@@ -108,7 +108,7 @@ let scope = {};
     }
 
     function repeat (string, count) {
-      var result = ''; var cycle
+      let result = ''; let cycle
 
       for (cycle = 0; cycle < count; cycle += 1) {
         result += string
@@ -133,38 +133,38 @@ let scope = {};
 
     /* eslint-disable no-use-before-define */
 
-    var common = require('./common')
-    var YAMLException = require('./exception')
-    var DEFAULT_FULL_SCHEMA = require('./schema/default_full')
-    var DEFAULT_SAFE_SCHEMA = require('./schema/default_safe')
+    let common = require('./common')
+    let YAMLException = require('./exception')
+    let DEFAULT_FULL_SCHEMA = require('./schema/default_full')
+    let DEFAULT_SAFE_SCHEMA = require('./schema/default_safe')
 
-    var _toString = Object.prototype.toString
-    var _hasOwnProperty = Object.prototype.hasOwnProperty
+    let _toString = Object.prototype.toString
+    let _hasOwnProperty = Object.prototype.hasOwnProperty
 
-    var CHAR_TAB = 0x09 /* Tab */
-    var CHAR_LINE_FEED = 0x0A /* LF */
-    var CHAR_SPACE = 0x20 /* Space */
-    var CHAR_EXCLAMATION = 0x21 /* ! */
-    var CHAR_DOUBLE_QUOTE = 0x22 /* " */
-    var CHAR_SHARP = 0x23 /* # */
-    var CHAR_PERCENT = 0x25 /* % */
-    var CHAR_AMPERSAND = 0x26 /* & */
-    var CHAR_SINGLE_QUOTE = 0x27 /* ' */
-    var CHAR_ASTERISK = 0x2A /* * */
-    var CHAR_COMMA = 0x2C /* , */
-    var CHAR_MINUS = 0x2D /* - */
-    var CHAR_COLON = 0x3A /* : */
-    var CHAR_GREATER_THAN = 0x3E /* > */
-    var CHAR_QUESTION = 0x3F /* ? */
-    var CHAR_COMMERCIAL_AT = 0x40 /* @ */
-    var CHAR_LEFT_SQUARE_BRACKET = 0x5B /* [ */
-    var CHAR_RIGHT_SQUARE_BRACKET = 0x5D /* ] */
-    var CHAR_GRAVE_ACCENT = 0x60 /* ` */
-    var CHAR_LEFT_CURLY_BRACKET = 0x7B /* { */
-    var CHAR_VERTICAL_LINE = 0x7C /* | */
-    var CHAR_RIGHT_CURLY_BRACKET = 0x7D /* } */
+    let CHAR_TAB = 0x09 /* Tab */
+    let CHAR_LINE_FEED = 0x0A /* LF */
+    let CHAR_SPACE = 0x20 /* Space */
+    let CHAR_EXCLAMATION = 0x21 /* ! */
+    let CHAR_DOUBLE_QUOTE = 0x22 /* " */
+    let CHAR_SHARP = 0x23 /* # */
+    let CHAR_PERCENT = 0x25 /* % */
+    let CHAR_AMPERSAND = 0x26 /* & */
+    let CHAR_SINGLE_QUOTE = 0x27 /* ' */
+    let CHAR_ASTERISK = 0x2A /* * */
+    let CHAR_COMMA = 0x2C /* , */
+    let CHAR_MINUS = 0x2D /* - */
+    let CHAR_COLON = 0x3A /* : */
+    let CHAR_GREATER_THAN = 0x3E /* > */
+    let CHAR_QUESTION = 0x3F /* ? */
+    let CHAR_COMMERCIAL_AT = 0x40 /* @ */
+    let CHAR_LEFT_SQUARE_BRACKET = 0x5B /* [ */
+    let CHAR_RIGHT_SQUARE_BRACKET = 0x5D /* ] */
+    let CHAR_GRAVE_ACCENT = 0x60 /* ` */
+    let CHAR_LEFT_CURLY_BRACKET = 0x7B /* { */
+    let CHAR_VERTICAL_LINE = 0x7C /* | */
+    let CHAR_RIGHT_CURLY_BRACKET = 0x7D /* } */
 
-    var ESCAPE_SEQUENCES = {}
+    let ESCAPE_SEQUENCES = {}
 
     ESCAPE_SEQUENCES[0x00] = '\\0'
     ESCAPE_SEQUENCES[0x07] = '\\a'
@@ -182,13 +182,13 @@ let scope = {};
     ESCAPE_SEQUENCES[0x2028] = '\\L'
     ESCAPE_SEQUENCES[0x2029] = '\\P'
 
-    var DEPRECATED_BOOLEANS_SYNTAX = [
+    let DEPRECATED_BOOLEANS_SYNTAX = [
       'y', 'Y', 'yes', 'Yes', 'YES', 'on', 'On', 'ON',
       'n', 'N', 'no', 'No', 'NO', 'off', 'Off', 'OFF'
     ]
 
     function compileStyleMap (schema, map) {
-      var result, keys, index, length, tag, style, type
+      let result, keys, index, length, tag, style, type
 
       if (map === null) return {}
 
@@ -215,7 +215,7 @@ let scope = {};
     }
 
     function encodeHex (character) {
-      var string, handle, length
+      let string, handle, length
 
       string = character.toString(16).toUpperCase()
 
@@ -259,17 +259,17 @@ let scope = {};
 
     // Indents every line in a string. Empty lines (\n only) are not indented.
     function indentString (string, spaces) {
-      var ind = common.repeat(' ', spaces)
+      let ind = common.repeat(' ', spaces)
 
-      var position = 0
+      let position = 0
 
-      var next = -1
+      let next = -1
 
-      var result = ''
+      let result = ''
 
-      var line
+      let line
 
-      var length = string.length
+      let length = string.length
 
       while (position < length) {
         next = string.indexOf('\n', position)
@@ -294,7 +294,7 @@ let scope = {};
     }
 
     function testImplicitResolving (state, str) {
-      var index, length, type
+      let index, length, type
 
       for (index = 0, length = state.implicitTypes.length; index < length; index += 1) {
         type = state.implicitTypes[index]
@@ -370,15 +370,15 @@ let scope = {};
                 c !== CHAR_GRAVE_ACCENT
     }
 
-    var STYLE_PLAIN = 1
+    let STYLE_PLAIN = 1
 
-    var STYLE_SINGLE = 2
+    let STYLE_SINGLE = 2
 
-    var STYLE_LITERAL = 3
+    let STYLE_LITERAL = 3
 
-    var STYLE_FOLDED = 4
+    let STYLE_FOLDED = 4
 
-    var STYLE_DOUBLE = 5
+    let STYLE_DOUBLE = 5
 
     // Determines which scalar styles are possible and returns the preferred style.
     // lineWidth = -1 => no limit.
@@ -388,13 +388,13 @@ let scope = {};
     //    STYLE_LITERAL => no lines are suitable for folding (or lineWidth is -1).
     //    STYLE_FOLDED => a line > lineWidth and can be folded (and lineWidth != -1).
     function chooseScalarStyle (string, singleLineOnly, indentPerLevel, lineWidth, testAmbiguousType) {
-      var i
-      var char
-      var hasLineBreak = false
-      var hasFoldableLine = false // only checked if shouldTrackWidth
-      var shouldTrackWidth = lineWidth !== -1
-      var previousLineBreak = -1 // count the first line correctly
-      var plain = isPlainSafeFirst(string.charCodeAt(0)) &&
+      let i
+      let char
+      let hasLineBreak = false
+      let hasFoldableLine = false // only checked if shouldTrackWidth
+      let shouldTrackWidth = lineWidth !== -1
+      let previousLineBreak = -1 // count the first line correctly
+      let plain = isPlainSafeFirst(string.charCodeAt(0)) &&
                 !isWhitespace(string.charCodeAt(string.length - 1))
 
       if (singleLineOnly) {
@@ -465,7 +465,7 @@ let scope = {};
           return "'" + string + "'"
         }
 
-        var indent = state.indent * Math.max(1, level) // no 0-indent scalars
+        let indent = state.indent * Math.max(1, level) // no 0-indent scalars
         // As indentation gets deeper, let the width decrease monotonically
         // to the lower bound min(state.lineWidth, 40).
         // Note that this implies
@@ -473,11 +473,11 @@ let scope = {};
         //  state.lineWidth > 40 + state.indent: width decreases until the lower bound.
         // This behaves better than a constant minimum width which disallows narrower options,
         // or an indent threshold which causes the width to suddenly increase.
-        var lineWidth = state.lineWidth === -1
+        let lineWidth = state.lineWidth === -1
           ? -1 : Math.max(Math.min(state.lineWidth, 40), state.lineWidth - indent)
 
         // Without knowing if keys are implicit/explicit, assume implicit for safety.
-        var singleLineOnly = iskey ||
+        let singleLineOnly = iskey ||
                     // No block styles in flow mode.
                     (state.flowLevel > -1 && level >= state.flowLevel)
         function testAmbiguity (string) {
@@ -485,32 +485,32 @@ let scope = {};
         }
 
         switch (chooseScalarStyle(string, singleLineOnly, state.indent, lineWidth, testAmbiguity)) {
-          case STYLE_PLAIN:
-            return string
-          case STYLE_SINGLE:
-            return "'" + string.replace(/'/g, "''") + "'"
-          case STYLE_LITERAL:
-            return '|' + blockHeader(string, state.indent) +
+        case STYLE_PLAIN:
+          return string
+        case STYLE_SINGLE:
+          return "'" + string.replace(/'/g, "''") + "'"
+        case STYLE_LITERAL:
+          return '|' + blockHeader(string, state.indent) +
                             dropEndingNewline(indentString(string, indent))
-          case STYLE_FOLDED:
-            return '>' + blockHeader(string, state.indent) +
+        case STYLE_FOLDED:
+          return '>' + blockHeader(string, state.indent) +
                             dropEndingNewline(indentString(foldString(string, lineWidth), indent))
-          case STYLE_DOUBLE:
-            return '"' + escapeString(string, lineWidth) + '"'
-          default:
-            throw new YAMLException('impossible error: invalid scalar style')
+        case STYLE_DOUBLE:
+          return '"' + escapeString(string, lineWidth) + '"'
+        default:
+          throw new YAMLException('impossible error: invalid scalar style')
         }
       }())
     }
 
     // Pre-conditions: string is valid for a block scalar, 1 <= indentPerLevel <= 9.
     function blockHeader (string, indentPerLevel) {
-      var indentIndicator = (string[0] === ' ') ? String(indentPerLevel) : ''
+      let indentIndicator = (string[0] === ' ') ? String(indentPerLevel) : ''
 
       // note the special case: the string '\n' counts as a "trailing" empty line.
-      var clip = string[string.length - 1] === '\n'
-      var keep = clip && (string[string.length - 2] === '\n' || string === '\n')
-      var chomp = keep ? '+' : (clip ? '' : '-')
+      let clip = string[string.length - 1] === '\n'
+      let keep = clip && (string[string.length - 2] === '\n' || string === '\n')
+      let chomp = keep ? '+' : (clip ? '' : '-')
 
       return indentIndicator + chomp + '\n'
     }
@@ -527,23 +527,23 @@ let scope = {};
     // unless they're before or after a more-indented line, or at the very
     // beginning or end, in which case $k$ maps to $k$.
     // Therefore, parse each chunk as newline(s) followed by a content line.
-      var lineRe = /(\n+)([^\n]*)/g
+      let lineRe = /(\n+)([^\n]*)/g
 
       // first line (possibly an empty line)
-      var result = (function () {
-        var nextLF = string.indexOf('\n')
+      let result = (function () {
+        let nextLF = string.indexOf('\n')
         nextLF = nextLF !== -1 ? nextLF : string.length
         lineRe.lastIndex = nextLF
         return foldLine(string.slice(0, nextLF), width)
       }())
       // If we haven't reached the first content line yet, don't add an extra \n.
-      var prevMoreIndented = string[0] === '\n' || string[0] === ' '
-      var moreIndented
+      let prevMoreIndented = string[0] === '\n' || string[0] === ' '
+      let moreIndented
 
       // rest of the lines
-      var match
+      let match
       while ((match = lineRe.exec(string))) {
-        var prefix = match[1]; var line = match[2]
+        let prefix = match[1]; let line = match[2]
         moreIndented = (line[0] === ' ')
         result += prefix +
                     (!prevMoreIndented && !moreIndented && line !== ''
@@ -563,11 +563,11 @@ let scope = {};
       if (line === '' || line[0] === ' ') return line
 
       // Since a more-indented line adds a \n, breaks can't be followed by a space.
-      var breakRe = / [^ ]/g // note: the match index will always be <= length-2.
-      var match
+      let breakRe = / [^ ]/g // note: the match index will always be <= length-2.
+      let match
       // start is an inclusive index. end, curr, and next are exclusive.
-      var start = 0; var end; var curr = 0; var next = 0
-      var result = ''
+      let start = 0; let end; let curr = 0; let next = 0
+      let result = ''
 
       // Invariants: 0 <= start <= length-1.
       //   0 <= curr <= next <= max(0, length-2). curr - start <= width.
@@ -600,11 +600,11 @@ let scope = {};
 
     // Escapes a double-quoted string.
     function escapeString (string) {
-      var result = ''
-      var char, nextChar
-      var escapeSeq
+      let result = ''
+      let char, nextChar
+      let escapeSeq
 
-      for (var i = 0; i < string.length; i++) {
+      for (let i = 0; i < string.length; i++) {
         char = string.charCodeAt(i)
         // Check for surrogate pairs (reference Unicode 3.0 section "3.7 Surrogates").
         if (char >= 0xD800 && char <= 0xDBFF/* high surrogate */) {
@@ -626,13 +626,13 @@ let scope = {};
     }
 
     function writeFlowSequence (state, level, object) {
-      var _result = ''
+      let _result = ''
 
-      var _tag = state.tag
+      let _tag = state.tag
 
-      var index
+      let index
 
-      var length
+      let length
 
       for (index = 0, length = object.length; index < length; index += 1) {
       // Write only valid elements.
@@ -647,13 +647,13 @@ let scope = {};
     }
 
     function writeBlockSequence (state, level, object, compact) {
-      var _result = ''
+      let _result = ''
 
-      var _tag = state.tag
+      let _tag = state.tag
 
-      var index
+      let index
 
-      var length
+      let length
 
       for (index = 0, length = object.length; index < length; index += 1) {
       // Write only valid elements.
@@ -677,21 +677,21 @@ let scope = {};
     }
 
     function writeFlowMapping (state, level, object) {
-      var _result = ''
+      let _result = ''
 
-      var _tag = state.tag
+      let _tag = state.tag
 
-      var objectKeyList = Object.keys(object)
+      let objectKeyList = Object.keys(object)
 
-      var index
+      let index
 
-      var length
+      let length
 
-      var objectKey
+      let objectKey
 
-      var objectValue
+      let objectValue
 
-      var pairBuffer
+      let pairBuffer
 
       for (index = 0, length = objectKeyList.length; index < length; index += 1) {
         pairBuffer = state.condenseFlow ? '"' : ''
@@ -724,23 +724,23 @@ let scope = {};
     }
 
     function writeBlockMapping (state, level, object, compact) {
-      var _result = ''
+      let _result = ''
 
-      var _tag = state.tag
+      let _tag = state.tag
 
-      var objectKeyList = Object.keys(object)
+      let objectKeyList = Object.keys(object)
 
-      var index
+      let index
 
-      var length
+      let length
 
-      var objectKey
+      let objectKey
 
-      var objectValue
+      let objectValue
 
-      var explicitPair
+      let explicitPair
 
-      var pairBuffer
+      let pairBuffer
 
       // Allow sorting keys so that the output file is deterministic
       if (state.sortKeys === true) {
@@ -806,7 +806,7 @@ let scope = {};
     }
 
     function detectType (state, object, explicit) {
-      var _result, typeList, index, length, type, style
+      let _result, typeList, index, length, type, style
 
       typeList = explicit ? state.explicitTypes : state.implicitTypes
 
@@ -850,17 +850,17 @@ let scope = {};
         detectType(state, object, true)
       }
 
-      var type = _toString.call(state.dump)
+      let type = _toString.call(state.dump)
 
       if (block) {
         block = (state.flowLevel < 0 || state.flowLevel > level)
       }
 
-      var objectOrArray = type === '[object Object]' || type === '[object Array]'
+      let objectOrArray = type === '[object Object]' || type === '[object Array]'
 
-      var duplicateIndex
+      let duplicateIndex
 
-      var duplicate
+      let duplicate
 
       if (objectOrArray) {
         duplicateIndex = state.duplicates.indexOf(object)
@@ -919,13 +919,13 @@ let scope = {};
     }
 
     function getDuplicateReferences (object, state) {
-      var objects = []
+      let objects = []
 
-      var duplicatesIndexes = []
+      let duplicatesIndexes = []
 
-      var index
+      let index
 
-      var length
+      let length
 
       inspectNode(object, objects, duplicatesIndexes)
 
@@ -936,7 +936,7 @@ let scope = {};
     }
 
     function inspectNode (object, objects, duplicatesIndexes) {
-      var objectKeyList,
+      let objectKeyList,
         index,
         length
 
@@ -967,7 +967,7 @@ let scope = {};
     function dump (input, options) {
       options = options || {}
 
-      var state = new State(options)
+      let state = new State(options)
 
       if (!state.noRefs) getDuplicateReferences(input, state)
 
@@ -1012,7 +1012,7 @@ let scope = {};
     YAMLException.prototype.constructor = YAMLException
 
     YAMLException.prototype.toString = function toString (compact) {
-      var result = this.name + ': '
+      let result = this.name + ': '
 
       result += this.reason || '(unknown reason)'
 
@@ -1030,28 +1030,28 @@ let scope = {};
 
     /* eslint-disable max-len,no-use-before-define */
 
-    var common = require('./common')
-    var YAMLException = require('./exception')
-    var Mark = require('./mark')
-    var DEFAULT_SAFE_SCHEMA = require('./schema/default_safe')
-    var DEFAULT_FULL_SCHEMA = require('./schema/default_full')
+    let common = require('./common')
+    let YAMLException = require('./exception')
+    let Mark = require('./mark')
+    let DEFAULT_SAFE_SCHEMA = require('./schema/default_safe')
+    let DEFAULT_FULL_SCHEMA = require('./schema/default_full')
 
-    var _hasOwnProperty = Object.prototype.hasOwnProperty
+    let _hasOwnProperty = Object.prototype.hasOwnProperty
 
-    var CONTEXT_FLOW_IN = 1
-    var CONTEXT_FLOW_OUT = 2
-    var CONTEXT_BLOCK_IN = 3
-    var CONTEXT_BLOCK_OUT = 4
+    let CONTEXT_FLOW_IN = 1
+    let CONTEXT_FLOW_OUT = 2
+    let CONTEXT_BLOCK_IN = 3
+    let CONTEXT_BLOCK_OUT = 4
 
-    var CHOMPING_CLIP = 1
-    var CHOMPING_STRIP = 2
-    var CHOMPING_KEEP = 3
+    let CHOMPING_CLIP = 1
+    let CHOMPING_STRIP = 2
+    let CHOMPING_KEEP = 3
 
-    var PATTERN_NON_PRINTABLE = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
-    var PATTERN_NON_ASCII_LINE_BREAKS = /[\x85\u2028\u2029]/
-    var PATTERN_FLOW_INDICATORS = /[,\[\]\{\}]/
-    var PATTERN_TAG_HANDLE = /^(?:!|!!|![a-z\-]+!)$/i
-    var PATTERN_TAG_URI = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i
+    let PATTERN_NON_PRINTABLE = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
+    let PATTERN_NON_ASCII_LINE_BREAKS = /[\x85\u2028\u2029]/
+    let PATTERN_FLOW_INDICATORS = /[,\[\]\{\}]/
+    let PATTERN_TAG_HANDLE = /^(?:!|!!|![a-z\-]+!)$/i
+    let PATTERN_TAG_URI = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i
 
     function is_EOL (c) {
       return (c === 0x0A/* LF */) || (c === 0x0D/* CR */)
@@ -1077,7 +1077,7 @@ let scope = {};
     }
 
     function fromHexCode (c) {
-      var lc
+      let lc
 
       if ((c/* 0 */ >= 0x30) && (c <= 0x39/* 9 */)) {
         return c - 0x30
@@ -1142,9 +1142,9 @@ let scope = {};
             )
         }
 
-        var simpleEscapeCheck = new Array(256) // integer, for fast access
-        var simpleEscapeMap = new Array(256)
-        for (var i = 0; i < 256; i++) {
+        let simpleEscapeCheck = new Array(256) // integer, for fast access
+        let simpleEscapeMap = new Array(256)
+        for (let i = 0; i < 256; i++) {
             simpleEscapeCheck[i] = simpleEscapeSequence(i) ? 1 : 0
             simpleEscapeMap[i] = simpleEscapeSequence(i)
         }
@@ -1197,10 +1197,10 @@ let scope = {};
             }
         }
 
-        var directiveHandlers = {
+        let directiveHandlers = {
 
             YAML: function handleYamlDirective (state, name, args) {
-                var match, major, minor
+                let match, major, minor
 
                 if (state.version !== null) {
                     throwError(state, 'duplication of %YAML directive')
@@ -1232,7 +1232,7 @@ let scope = {};
             },
 
             TAG: function handleTagDirective (state, name, args) {
-                var handle, prefix
+                let handle, prefix
 
                 if (args.length !== 2) {
                     throwError(state, 'TAG directive accepts exactly two arguments')
@@ -1258,7 +1258,7 @@ let scope = {};
         }
 
         function captureSegment (state, start, end, checkJson) {
-            var _position, _length, _character, _result
+            let _position, _length, _character, _result
 
             if (start < end) {
                 _result = state.input.slice(start, end)
@@ -1280,7 +1280,7 @@ let scope = {};
         }
 
         function mergeMappings (state, destination, source, overridableKeys) {
-            var sourceKeys, key, index, quantity
+            let sourceKeys, key, index, quantity
 
             if (!common.isObject(source)) {
                 throwError(state, 'cannot merge mappings; the provided source object is unacceptable')
@@ -1299,7 +1299,7 @@ let scope = {};
         }
 
         function storeMappingPair (state, _result, overridableKeys, keyTag, keyNode, valueNode, startLine, startPos) {
-            var index, quantity
+            let index, quantity
 
             keyNode = String(keyNode)
 
@@ -1331,7 +1331,7 @@ let scope = {};
         }
 
         function readLineBreak (state) {
-            var ch
+            let ch
 
             ch = state.input.charCodeAt(state.position)
 
@@ -1351,9 +1351,9 @@ let scope = {};
         }
 
         function skipSeparationSpace (state, allowComments, checkIndent) {
-            var lineBreaks = 0
+            let lineBreaks = 0
 
-var ch = state.input.charCodeAt(state.position)
+let ch = state.input.charCodeAt(state.position)
 
             while (ch !== 0) {
                 while (is_WHITE_SPACE(ch)) {
@@ -1390,9 +1390,9 @@ var ch = state.input.charCodeAt(state.position)
         }
 
         function testDocumentSeparator (state) {
-            var _position = state.position
+            let _position = state.position
 
-var ch
+let ch
 
             ch = state.input.charCodeAt(_position)
 
@@ -1422,27 +1422,27 @@ var ch
         }
 
         function readPlainScalar (state, nodeIndent, withinFlowCollection) {
-            var preceding
+            let preceding
 
-var following
+let following
 
-var captureStart
+let captureStart
 
-var captureEnd
+let captureEnd
 
-var hasPendingContent
+let hasPendingContent
 
-var _line
+let _line
 
-var _lineStart
+let _lineStart
 
-var _lineIndent
+let _lineIndent
 
-var _kind = state.kind
+let _kind = state.kind
 
-var _result = state.result
+let _result = state.result
 
-var ch
+let ch
 
             ch = state.input.charCodeAt(state.position)
 
@@ -1538,7 +1538,7 @@ var ch
         }
 
         function readSingleQuotedScalar (state, nodeIndent) {
-            var ch,
+            let ch,
                 captureStart, captureEnd
 
             ch = state.input.charCodeAt(state.position)
@@ -1580,7 +1580,7 @@ var ch
         }
 
         function readDoubleQuotedScalar (state, nodeIndent) {
-            var captureStart,
+            let captureStart,
                 captureEnd,
                 hexLength,
                 hexResult,
@@ -1652,35 +1652,35 @@ var ch
         }
 
         function readFlowCollection (state, nodeIndent) {
-            var readNext = true
+            let readNext = true
 
-var _line
+let _line
 
-var _tag = state.tag
+let _tag = state.tag
 
-var _result
+let _result
 
-var _anchor = state.anchor
+let _anchor = state.anchor
 
-var following
+let following
 
-var terminator
+let terminator
 
-var isPair
+let isPair
 
-var isExplicitPair
+let isExplicitPair
 
-var isMapping
+let isMapping
 
-var overridableKeys = {}
+let overridableKeys = {}
 
-var keyNode
+let keyNode
 
-var keyTag
+let keyTag
 
-var valueNode
+let valueNode
 
-var ch
+let ch
 
             ch = state.input.charCodeAt(state.position)
 
@@ -1771,25 +1771,25 @@ var ch
         }
 
         function readBlockScalar (state, nodeIndent) {
-            var captureStart
+            let captureStart
 
-var folding
+let folding
 
-var chomping = CHOMPING_CLIP
+let chomping = CHOMPING_CLIP
 
-var didReadContent = false
+let didReadContent = false
 
-var detectedIndent = false
+let detectedIndent = false
 
-var textIndent = nodeIndent
+let textIndent = nodeIndent
 
-var emptyLines = 0
+let emptyLines = 0
 
-var atMoreIndented = false
+let atMoreIndented = false
 
-var tmp
+let tmp
 
-var ch
+let ch
 
             ch = state.input.charCodeAt(state.position)
 
@@ -1919,19 +1919,19 @@ var ch
         }
 
         function readBlockSequence (state, nodeIndent) {
-            var _line
+            let _line
 
-var _tag = state.tag
+let _tag = state.tag
 
-var _anchor = state.anchor
+let _anchor = state.anchor
 
-var _result = []
+let _result = []
 
-var following
+let following
 
-var detected = false
+let detected = false
 
-var ch
+let ch
 
             if (state.anchor !== null) {
                 state.anchorMap[state.anchor] = _result
@@ -1986,33 +1986,33 @@ var ch
         }
 
         function readBlockMapping (state, nodeIndent, flowIndent) {
-            var following
+            let following
 
-var allowCompact
+let allowCompact
 
-var _line
+let _line
 
-var _pos
+let _pos
 
-var _tag = state.tag
+let _tag = state.tag
 
-var _anchor = state.anchor
+let _anchor = state.anchor
 
-var _result = {}
+let _result = {}
 
-var overridableKeys = {}
+let overridableKeys = {}
 
-var keyTag = null
+let keyTag = null
 
-var keyNode = null
+let keyNode = null
 
-var valueNode = null
+let valueNode = null
 
-var atExplicitKey = false
+let atExplicitKey = false
 
-var detected = false
+let detected = false
 
-var ch
+let ch
 
             if (state.anchor !== null) {
                 state.anchorMap[state.anchor] = _result
@@ -2145,17 +2145,17 @@ var ch
         }
 
         function readTagProperty (state) {
-            var _position
+            let _position
 
-var isVerbatim = false
+let isVerbatim = false
 
-var isNamed = false
+let isNamed = false
 
-var tagHandle
+let tagHandle
 
-var tagName
+let tagName
 
-var ch
+let ch
 
             ch = state.input.charCodeAt(state.position)
 
@@ -2237,7 +2237,7 @@ var ch
         }
 
         function readAnchorProperty (state) {
-            var _position,
+            let _position,
                 ch
 
             ch = state.input.charCodeAt(state.position)
@@ -2264,7 +2264,7 @@ var ch
         }
 
         function readAlias (state) {
-            var _position, alias,
+            let _position, alias,
                 ch
 
             ch = state.input.charCodeAt(state.position)
@@ -2294,28 +2294,28 @@ var ch
         }
 
         function composeNode (state, parentIndent, nodeContext, allowToSeek, allowCompact) {
-            var allowBlockStyles
+            let allowBlockStyles
 
-var allowBlockScalars
+let allowBlockScalars
 
-var allowBlockCollections
+let allowBlockCollections
 
-var indentStatus = 1
+let indentStatus = 1
  // 1: this>parent, 0: this=parent, -1: this<parent
 
-var atNewLine = false
+let atNewLine = false
 
-var hasContent = false
+let hasContent = false
 
-var typeIndex
+let typeIndex
 
-var typeQuantity
+let typeQuantity
 
-var type
+let type
 
-var flowIndent
+let flowIndent
 
-var blockIndent
+let blockIndent
 
             if (state.listener !== null) {
                 state.listener('open', state)
@@ -2457,17 +2457,17 @@ var blockIndent
         }
 
         function readDocument (state) {
-            var documentStart = state.position
+            let documentStart = state.position
 
-var _position
+let _position
 
-var directiveName
+let directiveName
 
-var directiveArgs
+let directiveArgs
 
-var hasDirectives = false
+let hasDirectives = false
 
-var ch
+let ch
 
             state.version = null
             state.checkLineBreaks = state.legacy
@@ -2583,7 +2583,7 @@ var ch
                 }
             }
 
-            var state = new State(input, options)
+            let state = new State(input, options)
 
             // Use 0 as string terminator. That significantly simplifies bounds check.
             state.input += '\0'
@@ -2601,7 +2601,7 @@ var ch
         }
 
         function loadAll (input, iterator, options) {
-            var documents = loadDocuments(input, options); var index; var length
+            let documents = loadDocuments(input, options); let index; let length
 
             if (typeof iterator !== 'function') {
                 return documents
@@ -2613,7 +2613,7 @@ var ch
         }
 
         function load (input, options) {
-            var documents = loadDocuments(input, options)
+            let documents = loadDocuments(input, options)
 
             if (documents.length === 0) {
                 /* eslint-disable no-undefined */
@@ -2644,7 +2644,7 @@ var ch
 6: [function (require, module, exports) {
         'use strict'
 
-        var common = require('./common')
+        let common = require('./common')
 
         function Mark (name, buffer, position, line, column) {
             this.name = name
@@ -2655,7 +2655,7 @@ var ch
         }
 
         Mark.prototype.getSnippet = function getSnippet (indent, maxLength) {
-            var head, start, tail, end, snippet
+            let head, start, tail, end, snippet
 
             if (!this.buffer) return null
 
@@ -2693,7 +2693,7 @@ var ch
         }
 
         Mark.prototype.toString = function toString (compact) {
-            var snippet; var where = ''
+            let snippet; let where = ''
 
             if (this.name) {
                 where += 'in "' + this.name + '" '
@@ -2719,12 +2719,12 @@ var ch
 
         /* eslint-disable max-len */
 
-        var common = require('./common')
-        var YAMLException = require('./exception')
-        var Type = require('./type')
+        let common = require('./common')
+        let YAMLException = require('./exception')
+        let Type = require('./type')
 
         function compileList (schema, name, result) {
-            var exclude = []
+            let exclude = []
 
             schema.include.forEach(function (includedSchema) {
                 result = compileList(includedSchema, name, result)
@@ -2746,12 +2746,12 @@ var ch
         }
 
         function compileMap (/* lists... */) {
-            var result = {
+            let result = {
                 scalar: {},
                 sequence: {},
                 mapping: {},
                 fallback: {}
-            }; var index; var length
+            }; let index; let length
 
             function collectType (type) {
                 result[type.kind][type.tag] = result['fallback'][type.tag] = type
@@ -2782,7 +2782,7 @@ var ch
         Schema.DEFAULT = null
 
         Schema.create = function createSchema () {
-            var schemas, types
+            let schemas, types
 
             switch (arguments.length) {
                 case 1:
@@ -2827,7 +2827,7 @@ var ch
 
         'use strict'
 
-        var Schema = require('../schema')
+        let Schema = require('../schema')
 
         module.exports = new Schema({
             include: [
@@ -2846,7 +2846,7 @@ var ch
 
         'use strict'
 
-        var Schema = require('../schema')
+        let Schema = require('../schema')
 
         module.exports = Schema.DEFAULT = new Schema({
             include: [
@@ -2868,7 +2868,7 @@ var ch
 
         'use strict'
 
-        var Schema = require('../schema')
+        let Schema = require('../schema')
 
         module.exports = new Schema({
             include: [
@@ -2892,7 +2892,7 @@ var ch
 
         'use strict'
 
-        var Schema = require('../schema')
+        let Schema = require('../schema')
 
         module.exports = new Schema({
             explicit: [
@@ -2912,7 +2912,7 @@ var ch
 
         'use strict'
 
-        var Schema = require('../schema')
+        let Schema = require('../schema')
 
         module.exports = new Schema({
             include: [
@@ -2929,9 +2929,9 @@ var ch
 13: [function (require, module, exports) {
         'use strict'
 
-        var YAMLException = require('./exception')
+        let YAMLException = require('./exception')
 
-        var TYPE_CONSTRUCTOR_OPTIONS = [
+        let TYPE_CONSTRUCTOR_OPTIONS = [
             'kind',
             'resolve',
             'construct',
@@ -2942,14 +2942,14 @@ var ch
             'styleAliases'
         ]
 
-        var YAML_NODE_KINDS = [
+        let YAML_NODE_KINDS = [
             'scalar',
             'sequence',
             'mapping'
         ]
 
         function compileStyleAliases (map) {
-            var result = {}
+            let result = {}
 
             if (map !== null) {
                 Object.keys(map).forEach(function (style) {
@@ -2994,23 +2994,23 @@ var ch
 
         /* eslint-disable no-bitwise */
 
-        var NodeBuffer
+        let NodeBuffer
 
         try {
             // A trick for browserified version, to not include `Buffer` shim
-            var _require = require
+            let _require = require
             NodeBuffer = _require('buffer').Buffer
         } catch (__) {}
 
-        var Type = require('../type')
+        let Type = require('../type')
 
 // [ 64, 65, 66 ] -> [ padding, CR, LF ]
-        var BASE64_MAP = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r'
+        let BASE64_MAP = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r'
 
         function resolveYamlBinary (data) {
             if (data === null) return false
 
-            var code; var idx; var bitlen = 0; var max = data.length; var map = BASE64_MAP
+            let code; let idx; let bitlen = 0; let max = data.length; let map = BASE64_MAP
 
             // Convert one by one.
             for (idx = 0; idx < max; idx++) {
@@ -3030,18 +3030,18 @@ var ch
         }
 
         function constructYamlBinary (data) {
-            var idx; var tailbits
+            let idx; let tailbits
 
-var input = data.replace(/[\r\n=]/g, '')
+let input = data.replace(/[\r\n=]/g, '')
  // remove CR/LF & padding to simplify scan
 
-var max = input.length
+let max = input.length
 
-var map = BASE64_MAP
+let map = BASE64_MAP
 
-var bits = 0
+let bits = 0
 
-var result = []
+let result = []
 
             // Collect by 6*4 bits (3 bytes)
 
@@ -3080,11 +3080,11 @@ var result = []
         }
 
         function representYamlBinary (object /*, style */) {
-            var result = ''; var bits = 0; var idx; var tail
+            let result = ''; let bits = 0; let idx; let tail
 
-var max = object.length
+let max = object.length
 
-var map = BASE64_MAP
+let map = BASE64_MAP
 
             // Convert every three bytes to 4 ASCII characters.
 
@@ -3138,12 +3138,12 @@ var map = BASE64_MAP
 15: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         function resolveYamlBoolean (data) {
             if (data === null) return false
 
-            var max = data.length
+            let max = data.length
 
             return (max === 4 && (data === 'true' || data === 'True' || data === 'TRUE')) ||
                 (max === 5 && (data === 'false' || data === 'False' || data === 'FALSE'))
@@ -3175,10 +3175,10 @@ var map = BASE64_MAP
 16: [function (require, module, exports) {
         'use strict'
 
-        var common = require('../common')
-        var Type = require('../type')
+        let common = require('../common')
+        let Type = require('../type')
 
-        var YAML_FLOAT_PATTERN = new RegExp(
+        let YAML_FLOAT_PATTERN = new RegExp(
             // 2.5e4, 2.5 and integers
             '^(?:[-+]?(?:0|[1-9][0-9_]*)(?:\\.[0-9_]*)?(?:[eE][-+]?[0-9]+)?' +
             // .2e4, .2
@@ -3205,7 +3205,7 @@ var map = BASE64_MAP
         }
 
         function constructYamlFloat (data) {
-            var value, sign, base, digits
+            let value, sign, base, digits
 
             value = data.replace(/_/g, '').toLowerCase()
             sign = value[0] === '-' ? -1 : 1
@@ -3237,10 +3237,10 @@ var map = BASE64_MAP
             return sign * parseFloat(value, 10)
         }
 
-        var SCIENTIFIC_WITHOUT_DOT = /^[-+]?[0-9]+e/
+        let SCIENTIFIC_WITHOUT_DOT = /^[-+]?[0-9]+e/
 
         function representYamlFloat (object, style) {
-            var res
+            let res
 
             if (isNaN(object)) {
                 switch (style) {
@@ -3289,8 +3289,8 @@ var map = BASE64_MAP
 17: [function (require, module, exports) {
         'use strict'
 
-        var common = require('../common')
-        var Type = require('../type')
+        let common = require('../common')
+        let Type = require('../type')
 
         function isHexCode (c) {
             return ((c/* 0 */ >= 0x30) && (c <= 0x39/* 9 */)) ||
@@ -3309,13 +3309,13 @@ var map = BASE64_MAP
         function resolveYamlInteger (data) {
             if (data === null) return false
 
-            var max = data.length
+            let max = data.length
 
-var index = 0
+let index = 0
 
-var hasDigits = false
+let hasDigits = false
 
-var ch
+let ch
 
             if (!max) return false
 
@@ -3395,7 +3395,7 @@ var ch
         }
 
         function constructYamlInteger (data) {
-            var value = data; var sign = 1; var ch; var base; var digits = []
+            let value = data; let sign = 1; let ch; let base; let digits = []
 
             if (value.indexOf('_') !== -1) {
                 value = value.replace(/_/g, '')
@@ -3465,7 +3465,7 @@ var ch
 18: [function (require, module, exports) {
         'use strict'
 
-        var esprima
+        let esprima
 
 // Browserified version does not have esprima
 //
@@ -3476,22 +3476,22 @@ var ch
 //
         try {
             // workaround to exclude package from browserify list.
-            var _require = require
+            let _require = require
             esprima = _require('esprima')
         } catch (_) {
             /* global window */
             if (typeof window !== 'undefined') esprima = window.esprima
         }
 
-        var Type = require('../../type')
+        let Type = require('../../type')
 
         function resolveJavascriptFunction (data) {
             if (data === null) return false
 
             try {
-                var source = '(' + data + ')'
+                let source = '(' + data + ')'
 
-var ast = esprima.parse(source, { range: true })
+let ast = esprima.parse(source, { range: true })
 
                 if (ast.type !== 'Program' ||
                     ast.body.length !== 1 ||
@@ -3510,13 +3510,13 @@ var ast = esprima.parse(source, { range: true })
         function constructJavascriptFunction (data) {
             /* jslint evil:true */
 
-            var source = '(' + data + ')'
+            let source = '(' + data + ')'
 
-var ast = esprima.parse(source, { range: true })
+let ast = esprima.parse(source, { range: true })
 
-var params = []
+let params = []
 
-var body
+let body
 
             if (ast.type !== 'Program' ||
                 ast.body.length !== 1 ||
@@ -3557,17 +3557,17 @@ var body
 19: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../../type')
+        let Type = require('../../type')
 
         function resolveJavascriptRegExp (data) {
             if (data === null) return false
             if (data.length === 0) return false
 
-            var regexp = data
+            let regexp = data
 
-var tail = /\/([gim]*)$/.exec(data)
+let tail = /\/([gim]*)$/.exec(data)
 
-var modifiers = ''
+let modifiers = ''
 
             // if regexp starts with '/' it can have modifiers and must be properly closed
             // `/foo/gim` - modifiers tail can be maximum 3 chars
@@ -3583,11 +3583,11 @@ var modifiers = ''
         }
 
         function constructJavascriptRegExp (data) {
-            var regexp = data
+            let regexp = data
 
-var tail = /\/([gim]*)$/.exec(data)
+let tail = /\/([gim]*)$/.exec(data)
 
-var modifiers = ''
+let modifiers = ''
 
             // `/foo/gim` - tail can be maximum 4 chars
             if (regexp[0] === '/') {
@@ -3599,7 +3599,7 @@ var modifiers = ''
         }
 
         function representJavascriptRegExp (object /*, style */) {
-            var result = '/' + object.source + '/'
+            let result = '/' + object.source + '/'
 
             if (object.global) result += 'g'
             if (object.multiline) result += 'm'
@@ -3623,7 +3623,7 @@ var modifiers = ''
 20: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../../type')
+        let Type = require('../../type')
 
         function resolveJavascriptUndefined () {
             return true
@@ -3653,7 +3653,7 @@ var modifiers = ''
 21: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         module.exports = new Type('tag:yaml.org,2002:map', {
             kind: 'mapping',
@@ -3663,7 +3663,7 @@ var modifiers = ''
 22: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         function resolveYamlMerge (data) {
             return data === '<<' || data === null
@@ -3677,12 +3677,12 @@ var modifiers = ''
 23: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         function resolveYamlNull (data) {
             if (data === null) return true
 
-            var max = data.length
+            let max = data.length
 
             return (max === 1 && data === '~') ||
                 (max === 4 && (data === 'null' || data === 'Null' || data === 'NULL'))
@@ -3713,17 +3713,17 @@ var modifiers = ''
 24: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
-        var _hasOwnProperty = Object.prototype.hasOwnProperty
-        var _toString = Object.prototype.toString
+        let _hasOwnProperty = Object.prototype.hasOwnProperty
+        let _toString = Object.prototype.toString
 
         function resolveYamlOmap (data) {
             if (data === null) return true
 
-            var objectKeys = []; var index; var length; var pair; var pairKey; var pairHasKey
+            let objectKeys = []; let index; let length; let pair; let pairKey; let pairHasKey
 
-var object = data
+let object = data
 
             for (index = 0, length = object.length; index < length; index += 1) {
                 pair = object[index]
@@ -3760,16 +3760,16 @@ var object = data
 25: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
-        var _toString = Object.prototype.toString
+        let _toString = Object.prototype.toString
 
         function resolveYamlPairs (data) {
             if (data === null) return true
 
-            var index; var length; var pair; var keys; var result
+            let index; let length; let pair; let keys; let result
 
-var object = data
+let object = data
 
             result = new Array(object.length)
 
@@ -3791,9 +3791,9 @@ var object = data
         function constructYamlPairs (data) {
             if (data === null) return []
 
-            var index; var length; var pair; var keys; var result
+            let index; let length; let pair; let keys; let result
 
-var object = data
+let object = data
 
             result = new Array(object.length)
 
@@ -3817,7 +3817,7 @@ var object = data
 26: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         module.exports = new Type('tag:yaml.org,2002:seq', {
             kind: 'sequence',
@@ -3827,14 +3827,14 @@ var object = data
 27: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
-        var _hasOwnProperty = Object.prototype.hasOwnProperty
+        let _hasOwnProperty = Object.prototype.hasOwnProperty
 
         function resolveYamlSet (data) {
             if (data === null) return true
 
-            var key; var object = data
+            let key; let object = data
 
             for (key in object) {
                 if (_hasOwnProperty.call(object, key)) {
@@ -3858,7 +3858,7 @@ var object = data
 28: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
         module.exports = new Type('tag:yaml.org,2002:str', {
             kind: 'scalar',
@@ -3868,14 +3868,14 @@ var object = data
 29: [function (require, module, exports) {
         'use strict'
 
-        var Type = require('../type')
+        let Type = require('../type')
 
-        var YAML_DATE_REGEXP = new RegExp(
+        let YAML_DATE_REGEXP = new RegExp(
             '^([0-9][0-9][0-9][0-9])' + // [1] year
             '-([0-9][0-9])' + // [2] month
             '-([0-9][0-9])$') // [3] day
 
-        var YAML_TIMESTAMP_REGEXP = new RegExp(
+        let YAML_TIMESTAMP_REGEXP = new RegExp(
             '^([0-9][0-9][0-9][0-9])' + // [1] year
             '-([0-9][0-9]?)' + // [2] month
             '-([0-9][0-9]?)' + // [3] day
@@ -3895,9 +3895,9 @@ var object = data
         }
 
         function constructYamlTimestamp (data) {
-            var match; var year; var month; var day; var hour; var minute; var second; var fraction = 0
+            let match; let year; let month; let day; let hour; let minute; let second; let fraction = 0
 
-var delta = null; var tz_hour; var tz_minute; var date
+let delta = null; let tz_hour; let tz_minute; let date
 
             match = YAML_DATE_REGEXP.exec(data)
             if (match === null) match = YAML_TIMESTAMP_REGEXP.exec(data)
@@ -3959,7 +3959,7 @@ var delta = null; var tz_hour; var tz_minute; var date
 '/': [function (require, module, exports) {
         'use strict'
 
-        var yaml = require('./lib/js-yaml.js')
+        let yaml = require('./lib/js-yaml.js')
 
         module.exports = yaml
     }, { './lib/js-yaml.js': 1 }] }, {}, [])('/')
@@ -4220,21 +4220,21 @@ export default class ComponentYaml extends Component {
         return [this.state.variable, this.state.keyvaluevariable, this.state.type]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
         let [variable, keyvaluevariable, type] = data || [null, null, null]
 
         this.setState({ variable: variable, keyvaluevariable: keyvaluevariable, type: type })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
         this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeKeyvaluevariable = (event) => {
+    onChangeKeyvaluevariable = event => {
         this.setState({ keyvaluevariable: event.target.value }, this.onUpdate)
     }
 
-    onChangeType = (type) => {
+    onChangeType = type => {
         this.setState({ type: type }, this.onUpdate)
     }
 
@@ -4242,7 +4242,7 @@ export default class ComponentYaml extends Component {
         this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
         event.preventDefault()
 
         this.props.onPop()
@@ -4252,11 +4252,11 @@ export default class ComponentYaml extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
         return Promise
             .resolve()
             .then(() => {
-                return new Promise((resolve) => {
+                return new Promise(resolve => {
                     this.setState({ running: true }, resolve)
                 })
             }).then(() => {
@@ -4287,12 +4287,12 @@ let keyvaluelist = runner.getValue(this.state.keyvaluevariable)
                 }
             })
             .then(() => {
-                return new Promise((resolve) => {
+                return new Promise(resolve => {
                     setTimeout(resolve, 500)
                 })
             })
             .then(() => {
-                return new Promise((resolve) => {
+                return new Promise(resolve => {
                     this.setState({ running: false }, resolve)
                 })
             })
@@ -4339,8 +4339,8 @@ let keyvaluelist = runner.getValue(this.state.keyvaluevariable)
                       className='form-control'
                       id='type{{ _uid }}'
                       options={[
-                        {value: 'read', label: 'Read'},
-                        {value: 'write', label: 'Write'},
+                        { value: 'read', label: 'Read' },
+                        { value: 'write', label: 'Write' },
                       ]}
                     />
                   </div>

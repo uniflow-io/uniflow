@@ -49,17 +49,17 @@ export default class ComponentTextList extends Component {
       return [this.state.variable, this.state.textlist]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, textlist] = data || [null, []]
 
       this.setState({ variable: variable, textlist: textlist })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onAddText = (event) => {
+    onAddText = event => {
       event.preventDefault()
 
       let newStateTextlists = this.state.textlist.slice()
@@ -89,7 +89,7 @@ export default class ComponentTextList extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -99,11 +99,11 @@ export default class ComponentTextList extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -116,12 +116,12 @@ export default class ComponentTextList extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -152,11 +152,11 @@ export default class ComponentTextList extends Component {
                 <div key={index} className='form-group'>
                   <div className='col-sm-10 col-sm-offset-2'>
                     <div className='input-group'>
-                      <input type='text' value={textlist[index]} onChange={(event) => {
+                      <input type='text' value={textlist[index]} onChange={event => {
                         this.onUpdateText(event, index)
                       }}
-                        className='form-control' />
-                      <span className='input-group-addon' onClick={(event) => {
+                      className='form-control' />
+                      <span className='input-group-addon' onClick={event => {
                         this.onRemoveText(event, index)
                       }}><i className='fa fa-times' /></span>
                     </div>

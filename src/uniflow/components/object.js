@@ -188,7 +188,7 @@ let scope = {};
      *
      * @return {PropertyPath|null} The parent path or null
      */
-  /*PropertyPath.prototype.getParent = function getParent () {
+  /* PropertyPath.prototype.getParent = function getParent () {
     let parent
 
     if (this._len <= 1) {
@@ -204,7 +204,7 @@ let scope = {};
     parent._isIndex.pop()
 
     return parent
-  }*/
+  } */
 
   /**
      * Returns the elements of the property path as array.
@@ -342,7 +342,7 @@ let scope = {};
      * @throws InvalidArgumentException If the property path is invalid
      * @throws UnexpectedTypeException  If a value within the path is neither object nor array
      */
-  /*PropertyAccessor.prototype.getValue = function getValue (objectArray, propertyPath) {
+  /* PropertyAccessor.prototype.getValue = function getValue (objectArray, propertyPath) {
     let propertyValues
 
     if (typeof propertyPath === 'string') {
@@ -365,7 +365,7 @@ let scope = {};
     )
 
     return propertyValues[propertyValues.length - 1][this.VALUE]
-  }*/
+  } */
 
   /**
      * Sets the value at the end of the property path of the object graph.
@@ -583,7 +583,7 @@ export default class ComponentObject extends Component {
       }, {})
     }
 
-    reverseTransform = (object) => {
+    reverseTransform = object => {
       let flatten = function (data, accessors = []) {
         return Object
           .entries(data)
@@ -617,14 +617,14 @@ export default class ComponentObject extends Component {
       return [this.state.variable, object]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, object] = data || [null, {}]
       let keyvaluelist = this.reverseTransform(object)
 
       this.setState({ variable: variable, keyvaluelist: keyvaluelist })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
@@ -666,7 +666,7 @@ export default class ComponentObject extends Component {
       this.setState({ keyvaluelist: keyvaluelist }, this.onUpdate)
     }
 
-    onAddItem = (event) => {
+    onAddItem = event => {
       event.preventDefault()
 
       let keyvaluelist = this.state.keyvaluelist.slice()
@@ -678,7 +678,7 @@ export default class ComponentObject extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -688,11 +688,11 @@ export default class ComponentObject extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -708,12 +708,12 @@ export default class ComponentObject extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -745,15 +745,15 @@ export default class ComponentObject extends Component {
                 <div className='form-group' key={index}>
                   <div className='col-sm-4 col-sm-offset-2'>
                     <input type='text' value={keyvaluelist[index].key}
-                      onChange={(event) => this.onUpdateItemKey(event, index)}
+                      onChange={event => this.onUpdateItemKey(event, index)}
                       className='form-control' placeholder='key' />
                   </div>
                   <div className='col-sm-6'>
                     <div className='input-group'>
                       <input type='text' value={keyvaluelist[index].value}
-                        onChange={(event) => this.onUpdateItemValue(event, index)}
+                        onChange={event => this.onUpdateItemValue(event, index)}
                         className='form-control' placeholder='value' />
-                      <span className='input-group-addon' onClick={(event) => {
+                      <span className='input-group-addon' onClick={event => {
                         this.onRemoveItem(event, index)
                       }}><i className='fa fa-times' /></span>
                     </div>

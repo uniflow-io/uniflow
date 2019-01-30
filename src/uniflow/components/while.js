@@ -67,13 +67,13 @@ export default class ComponentWhile extends Component {
 
     serialise = () => {
       return {
-        condition: this.state.conditionStack.map((item) => {
+        condition: this.state.conditionStack.map(item => {
           return {
             component: item.component,
             data: item.data
           }
         }),
-        execute: this.state.executeStack.map((item) => {
+        execute: this.state.executeStack.map(item => {
           return {
             component: item.component,
             data: item.data
@@ -82,10 +82,10 @@ export default class ComponentWhile extends Component {
       }
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let createStoreStack = function (stack) {
         return stack.reduce((promise, item, index) => {
-          return promise.then((store) => {
+          return promise.then(store => {
             return store.dispatch(commitPushFlow(index, item.component))
               .then(() => {
                 return store.dispatch(commitUpdateFlow(index, item.data))
@@ -112,13 +112,13 @@ export default class ComponentWhile extends Component {
           executeRunIndex: null
         }
 
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           this.setState(state, resolve)
         }).then(() => {
           return state
         })
-      }).then((state) => {
-        let resetStack = (stack) => {
+      }).then(state => {
+        let resetStack = stack => {
           for (let i = 0; i < stack.length; i++) {
             let item = stack[i]
             item.bus.emit('reset', item.data)
@@ -132,16 +132,16 @@ export default class ComponentWhile extends Component {
 
     dispatchFlow = (propertyPath, action) => {
       let store = this.store
-      propertyPath.forEach((key) => {
+      propertyPath.forEach(key => {
         store = store[key]
       })
 
       return store.dispatch(action)
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             let state = Object.assign({}, this.state)
             let el = state
-            propertyPath.slice(0, propertyPath.length - 1).forEach((key) => {
+            propertyPath.slice(0, propertyPath.length - 1).forEach(key => {
               el = el[key]
             })
             el[propertyPath[propertyPath.length - 1]] = store.getState()
@@ -167,7 +167,7 @@ export default class ComponentWhile extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -175,18 +175,18 @@ export default class ComponentWhile extends Component {
 
     onCompile = (interpreter, scope, asyncWrapper) => {
       [this.state.conditionStack, this.state.executeStack]
-        .forEach((stack) => {
-          stack.forEach((item) => {
+        .forEach(stack => {
+          stack.forEach(item => {
             item.bus.emit('compile', interpreter, scope)
           })
         })
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -202,7 +202,7 @@ export default class ComponentWhile extends Component {
 
           let promiseWhile = () => {
             return stackEval(this.state.conditionStack)
-              .then((value) => {
+              .then(value => {
                 if (value === true) {
                   return stackEval(this.state.executeStack).then(promiseWhile)
                 }
@@ -212,12 +212,12 @@ export default class ComponentWhile extends Component {
           return promiseWhile()
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -239,7 +239,7 @@ export default class ComponentWhile extends Component {
           <ListComponent stack={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
             components={this.props.components}
             onPush={(index, component) => { this.onPushFlow(['conditionStack'], index, component) }}
-            onPop={(index) => { this.onPopFlow(['conditionStack'], index) }}
+            onPop={index => { this.onPopFlow(['conditionStack'], index) }}
             onUpdate={(index, data) => { this.onUpdateFlow(['conditionStack'], index, data) }}
             onRun={null} />
           <div className='box box-info'>
@@ -252,7 +252,7 @@ export default class ComponentWhile extends Component {
           <ListComponent stack={this.state.executeStack} runIndex={this.state.executeRunIndex}
             components={this.props.components}
             onPush={(index, component) => { this.onPushFlow(['executeStack'], index, component) }}
-            onPop={(index) => { this.onPopFlow(['executeStack'], index) }}
+            onPop={index => { this.onPopFlow(['executeStack'], index) }}
             onUpdate={(index, data) => { this.onUpdateFlow(['executeStack'], index, data) }}
             onRun={null} />
           <div className='box box-info'>

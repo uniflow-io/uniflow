@@ -62,33 +62,33 @@ export default class ComponentBrowser extends Component {
       return [this.state.variable, this.state.host, this.state.ioPort, this.state.proxyPort, this.state.mode]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, host, ioPort, proxyPort, mode] = data || [null, null, null, null, null]
 
       this.setState({ variable: variable, host: host, ioPort: ioPort, proxyPort: proxyPort, mode: mode })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeHost = (event) => {
+    onChangeHost = event => {
       this.setState({ host: event.target.value }, this.onUpdate)
     }
 
-    onChangeIOPort = (event) => {
+    onChangeIOPort = event => {
       this.setState({ ioPort: event.target.value }, this.onUpdate)
     }
 
-    onChangeProxyPort = (event) => {
+    onChangeProxyPort = event => {
       this.setState({ proxyPort: event.target.value }, this.onUpdate)
     }
 
-    onChangeMode = (mode) => {
+    onChangeMode = mode => {
       this.setState({ mode: mode }, this.onUpdate)
     }
 
-    onBrowserConnected = (event) => {
+    onBrowserConnected = event => {
       event.preventDefault()
 
       if (this.resolveBrowserConnected) {
@@ -100,7 +100,7 @@ export default class ComponentBrowser extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -121,7 +121,7 @@ export default class ComponentBrowser extends Component {
         wrapper = function (callback) {
           let args = ['browser.connect', proxyPort, mode]
 
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             args.push(function (data) {
               browser.connectionUrl = 'ws://' + host + ':' + proxyPort
               browser.sessionId = 'default'
@@ -140,7 +140,7 @@ export default class ComponentBrowser extends Component {
           asyncFunction = interpreter.pseudoToNative(asyncFunction)
           args = interpreter.pseudoToNative(args)
           return browser.evaluateInBackground(asyncFunction, args)
-            .then((result) => {
+            .then(result => {
               callback(interpreter.nativeToPseudo(result))
             })
         }
@@ -151,7 +151,7 @@ export default class ComponentBrowser extends Component {
           asyncFunction = interpreter.pseudoToNative(asyncFunction)
           args = interpreter.pseudoToNative(args)
           return browser.evaluateInContent(tabId, asyncFunction, args)
-            .then((result) => {
+            .then(result => {
               callback(interpreter.nativeToPseudo(result))
             })
         }
@@ -164,11 +164,11 @@ export default class ComponentBrowser extends Component {
       interpreter.setProperty(scope, 'Browser', obj.Browser)
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -177,28 +177,28 @@ export default class ComponentBrowser extends Component {
               return runner.eval(this.state.variable + '.connect()')
             })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.setState({ displayBrowserConnect: true }, resolve)
               })
             })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.resolveBrowserConnected = resolve
               })
             })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.setState({ displayBrowserConnect: false }, resolve)
               })
             })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -259,9 +259,9 @@ export default class ComponentBrowser extends Component {
                     className='form-control'
                     id='mode{{ _uid }}'
                     options={[
-                      {value: '', label: ''},
-                      {value: 'manual', label: 'Manual'},
-                      {value: 'background', label: 'Background'},
+                      { value: '', label: '' },
+                      { value: 'manual', label: 'Manual' },
+                      { value: 'background', label: 'Background' },
                     ]}
                   />
                 </div>

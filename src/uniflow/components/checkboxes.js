@@ -50,13 +50,13 @@ export default class ComponentCheckBoxes extends Component {
       return [this.state.variable, this.state.checkboxes]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, checkboxes] = data || [null, {}]
 
       this.setState({ variable: variable, checkboxes: checkboxes })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
@@ -70,7 +70,7 @@ export default class ComponentCheckBoxes extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -80,11 +80,11 @@ export default class ComponentCheckBoxes extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -97,7 +97,7 @@ export default class ComponentCheckBoxes extends Component {
             }
             this.setState({ checkboxes: checkboxes }, this.onUpdate)
 
-            values = values.filter((value) => {
+            values = values.filter(value => {
               return checkboxes[value]
             })
 
@@ -105,12 +105,12 @@ export default class ComponentCheckBoxes extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -141,9 +141,9 @@ export default class ComponentCheckBoxes extends Component {
                 <label htmlFor='checkboxes{{ _uid }}' className='col-sm-2 control-label'>Checkboxes</label>
 
                 <div className='col-sm-10'>
-                  {Object.keys(checkboxes).map((checkbox) => (
+                  {Object.keys(checkboxes).map(checkbox => (
                     <div key={checkbox} className='checkbox'>
-                      <label><ICheckBoxComponent value={checkboxes[checkbox]} onChange={(value) => { this.onChangeCheckBox(value, checkbox) }} />{checkbox}</label>
+                      <label><ICheckBoxComponent value={checkboxes[checkbox]} onChange={value => { this.onChangeCheckBox(value, checkbox) }} />{checkbox}</label>
                     </div>
                   ))}
                 </div>

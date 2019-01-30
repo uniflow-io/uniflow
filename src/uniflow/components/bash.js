@@ -49,11 +49,11 @@ export default class ComponentBash extends Component {
       return this.state.bash
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       this.setState({ bash: data })
     }
 
-    onChangeBash = (bash) => {
+    onChangeBash = bash => {
       this.setState({ bash: bash }, this.onUpdate)
     }
 
@@ -61,7 +61,7 @@ export default class ComponentBash extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -71,23 +71,23 @@ export default class ComponentBash extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
           return runner.eval(this.state.bash)
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

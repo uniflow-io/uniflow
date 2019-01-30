@@ -51,17 +51,17 @@ export default class ComponentSelect extends Component {
       return [this.state.variable, this.state.choices, this.state.selected]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, choices, selected] = data || [null, [], null]
 
       this.setState({ variable: variable, choices: choices, selected: selected })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeSelected = (selected) => {
+    onChangeSelected = selected => {
       this.setState({ selected: selected }, this.onUpdate)
     }
 
@@ -69,7 +69,7 @@ export default class ComponentSelect extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -79,11 +79,11 @@ export default class ComponentSelect extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -94,12 +94,12 @@ export default class ComponentSelect extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -134,8 +134,8 @@ export default class ComponentSelect extends Component {
                     value={selected}
                     onChange={this.onChangeSelected}
                     className='form-control' id='select{{ _uid }}'
-                    options={Object.keys(choices).map((value) => {
-                      return {value: value, label: choices[value]}
+                    options={Object.keys(choices).map(value => {
+                      return { value: value, label: choices[value] }
                     })}
                   />
                 </div>

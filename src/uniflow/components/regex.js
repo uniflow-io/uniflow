@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { AceComponent } from '../../components'
 
-const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i]) { if (!e[i]) { var c = typeof require === 'function' && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = 'MODULE_NOT_FOUND', a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = typeof require === 'function' && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({ 1: [function (require, module, exports) {
+const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i]) { if (!e[i]) { let c = typeof require === 'function' && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); let a = new Error("Cannot find module '" + i + "'"); throw a.code = 'MODULE_NOT_FOUND', a } let p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { let n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = typeof require === 'function' && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({ 1: [function (require, module, exports) {
   'use strict'
 
   const SyntaxException = require('./Exceptions/Syntax')
@@ -164,10 +164,10 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     oneOf (chars) {
       this._validateAndAddMethodType(METHOD_TYPE_CHARACTER, METHOD_TYPES_ALLOWED_FOR_CHARACTERS)
 
-      let result = chars.split('').map((character) => this.escape(character)).join('')
+      let result = chars.split('').map(character => this.escape(character)).join('')
       result = result.replace('-', '\\-').replace(']', '\\]')
 
-      return this.add(`[${result}]`)
+      return this.add(`[${ result }]`)
     }
 
     /**
@@ -179,10 +179,10 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     noneOf (chars) {
       this._validateAndAddMethodType(METHOD_TYPE_CHARACTER, METHOD_TYPES_ALLOWED_FOR_CHARACTERS)
 
-      let result = chars.split('').map((character) => this.escape(character)).join('')
+      let result = chars.split('').map(character => this.escape(character)).join('')
       result = result.replace('-', '\\-').replace(']', '\\]')
 
-      return this.add(`[^${result}]`)
+      return this.add(`[^${ result }]`)
     }
 
     /**
@@ -193,9 +193,9 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              */
     literally (chars) {
       this._validateAndAddMethodType(METHOD_TYPE_CHARACTER, METHOD_TYPES_ALLOWED_FOR_CHARACTERS)
-      const result = chars.split('').map((character) => this.escape(character)).join('')
+      const result = chars.split('').map(character => this.escape(character)).join('')
 
-      return this.add(`(?:${result})`)
+      return this.add(`(?:${ result })`)
     }
 
     /**
@@ -208,7 +208,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     digit (min = 0, max = 9) {
       this._validateAndAddMethodType(METHOD_TYPE_CHARACTER, METHOD_TYPES_ALLOWED_FOR_CHARACTERS)
 
-      return this.add(`[${min}-${max}]`)
+      return this.add(`[${ min }-${ max }]`)
     }
 
     /**
@@ -230,7 +230,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              * @return {Builder}
              */
     uppercaseLetter (min = 'A', max = 'Z') {
-      return this.add(`[${min}-${max}]`)
+      return this.add(`[${ min }-${ max }]`)
     }
 
     /**
@@ -242,7 +242,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     letter (min = 'a', max = 'z') {
       this._validateAndAddMethodType(METHOD_TYPE_CHARACTER, METHOD_TYPES_ALLOWED_FOR_CHARACTERS)
 
-      return this.add(`[${min}-${max}]`)
+      return this.add(`[${ min }-${ max }]`)
     }
 
     /**********************************************************/
@@ -356,7 +356,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     between (min, max) {
       this._validateAndAddMethodType(METHOD_TYPE_QUANTIFIER, METHOD_TYPE_CHARACTER | METHOD_TYPE_GROUP)
 
-      return this.add(`{${min},${max}}`)
+      return this.add(`{${ min },${ max }}`)
     }
 
     /**
@@ -368,7 +368,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     atLeast (min) {
       this._validateAndAddMethodType(METHOD_TYPE_QUANTIFIER, METHOD_TYPE_CHARACTER | METHOD_TYPE_GROUP)
 
-      return this.add(`{${min},}`)
+      return this.add(`{${ min },}`)
     }
 
     /**
@@ -398,7 +398,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     exactly (count) {
       this._validateAndAddMethodType(METHOD_TYPE_QUANTIFIER, METHOD_TYPE_CHARACTER | METHOD_TYPE_GROUP)
 
-      return this.add(`{${count}}`)
+      return this.add(`{${ count }}`)
     }
 
     /**
@@ -586,7 +586,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       }[this._lastMethodType]
 
       throw new ImplementationException(
-        `Method ${methodName} is not allowed ${message || 'here'}`
+        `Method ${ methodName } is not allowed ${ message || 'here' }`
       )
     }
 
@@ -954,7 +954,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       if (!(method instanceof Method)) {
         // At this point, there should only be methods left, since all parameters are already taken care of.
         // If that's not the case, something didn't work out.
-        throw new SyntaxException(`Unexpected statement: ${method}`)
+        throw new SyntaxException(`Unexpected statement: ${ method }`)
       }
 
       const parameters = []
@@ -979,7 +979,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
           method.callMethodOn(builder)
           builder.and(buildQuery(parameters[lastIndex], new NonCapture()))
         } else {
-          throw new SyntaxException(`Invalid parameter given for ${method.origin}`)
+          throw new SyntaxException(`Invalid parameter given for ${ method.origin }`)
         }
       }
     }
@@ -1070,8 +1070,8 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
 
     // Go through each mapper and check if the name matches. Then, take the highest match to avoid matching
     // 'any', if 'any character' was given, and so on.
-    Object.keys(mapper).forEach((key) => {
-      const regex = new RegExp(`^(${key.replace(' ', ') (')})`, 'i')
+    Object.keys(mapper).forEach(key => {
+      const regex = new RegExp(`^(${ key.replace(' ', ') (') })`, 'i')
       const matches = part.match(regex)
 
       const count = matches ? matches.length : 0
@@ -1088,7 +1088,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       return new item['class'](maxMatch, item.method, buildQuery)
     }
 
-    throw new SyntaxException(`Invalid method: ${part}`)
+    throw new SyntaxException(`Invalid method: ${ part }`)
   }
 
   module.exports = methodMatch
@@ -1147,34 +1147,34 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       }
 
       switch (char) {
-        case '\\':
-          // Set the backslash flag. This will skip one character.
-          backslash = true
-          break
-        case '"':
-        case '\'':
-          // Set the string flag. This will tell the parser to skip over this string.
-          inString = char
-          // Also, to create a "Literally" object later on, save the string start position.
-          stringPositions.push({ start: i })
-          break
-        case '(':
-          // Opening parenthesis, increase the count and set the pointer if it's the first one.
-          openCount++
-          if (openPos === false) {
-            openPos = i
-          }
-          break
-        case ')':
-          // Closing parenthesis, remove count
-          openCount--
-          if (openCount === 0) {
-            // If this is the matching one, set the closing pointer and break the loop, since we don't
-            // want to match any following pairs. Those will be taken care of in a later recursion step.
-            closePos = i
-            break loop
-          }
-          break
+      case '\\':
+        // Set the backslash flag. This will skip one character.
+        backslash = true
+        break
+      case '"':
+      case '\'':
+        // Set the string flag. This will tell the parser to skip over this string.
+        inString = char
+        // Also, to create a "Literally" object later on, save the string start position.
+        stringPositions.push({ start: i })
+        break
+      case '(':
+        // Opening parenthesis, increase the count and set the pointer if it's the first one.
+        openCount++
+        if (openPos === false) {
+          openPos = i
+        }
+        break
+      case ')':
+        // Closing parenthesis, remove count
+        openCount--
+        if (openCount === 0) {
+          // If this is the matching one, set the closing pointer and break the loop, since we don't
+          // want to match any following pairs. Those will be taken care of in a later recursion step.
+          closePos = i
+          break loop
+        }
+        break
       }
     }
 
@@ -1199,7 +1199,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       ], parseParentheses(query.substr(closePos + 1)))
     }
 
-    return result.filter((item) => typeof item !== 'string' || item.length)
+    return result.filter(item => typeof item !== 'string' || item.length)
   }
 
   /**
@@ -1216,7 +1216,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     const result = [firstRaw.trim()]
     let pointer = 0
 
-    stringPositions.forEach((stringPosition) => {
+    stringPositions.forEach(stringPosition => {
       if (!stringPosition.end) {
         throw new SyntaxException('Invalid string ending found.')
       }
@@ -1330,11 +1330,11 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
         } else if (Array.isArray(item)) {
           query[i] = this.resolveQuery(item)
         } else if (!(item instanceof Literally)) {
-          throw new InterpreterException(`Unexpected statement: ${JSON.stringify(item)}`)
+          throw new InterpreterException(`Unexpected statement: ${ JSON.stringify(item) }`)
         }
       }
 
-      return query.filter((item) => item !== '')
+      return query.filter(item => item !== '')
     }
 
     /**
@@ -1362,7 +1362,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              * @inheritdoc
              */
     setParameters (parameters) {
-      parameters = parameters.filter((parameter) => {
+      parameters = parameters.filter(parameter => {
         if (typeof parameter !== 'string') {
           return true
         }
@@ -1390,7 +1390,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              * @inheritdoc
              */
     setParameters (parameters) {
-      parameters = parameters.filter((parameter) => {
+      parameters = parameters.filter(parameter => {
         if (typeof parameter !== 'string') {
           return true
         }
@@ -1460,7 +1460,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
         if (e instanceof ImplementationException) {
           throw new SyntaxException(e.message)
         } else {
-          throw new SyntaxException(`'${methodName}' does not allow the use of sub-queries.`)
+          throw new SyntaxException(`'${ methodName }' does not allow the use of sub-queries.`)
         }
       }
     }
@@ -1478,7 +1478,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
           return parameter.toString()
         } else if (Array.isArray(parameter)) {
           // Assuming the user wanted to start a sub-query. This means, we'll create a callback for them.
-          return (builder) => {
+          return builder => {
             this.executedCallbacks.push(index)
             this.buildQuery(parameter, builder)
           }
@@ -1531,7 +1531,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              * @inheritdoc
              */
     setParameters (parameters) {
-      parameters = parameters.filter((parameter) => {
+      parameters = parameters.filter(parameter => {
         if (typeof parameter !== 'string') {
           return true
         }
@@ -1564,7 +1564,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
              * @inheritdoc
              */
     setParameters (parameters) {
-      parameters = parameters.filter((parameter) => {
+      parameters = parameters.filter(parameter => {
         return typeof parameter !== 'string' || parameter.toLowerCase() !== 'to'
       })
 
@@ -1659,17 +1659,17 @@ export default class ComponentRegex extends Component {
       return [this.state.variable, this.state.expression]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, expression] = data || [null, null]
 
       this.setState({ variable: variable, expression: expression })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeExpression = (expression) => {
+    onChangeExpression = expression => {
       this.setState({ expression: expression }, this.onUpdate)
     }
 
@@ -1677,13 +1677,13 @@ export default class ComponentRegex extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
     }
 
-    onCopyGenerated = (event) => {
+    onCopyGenerated = event => {
       const { clipbard } = this.props
 
       copyTextToClipboard(clipbard)
@@ -1693,11 +1693,11 @@ export default class ComponentRegex extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
@@ -1710,12 +1710,12 @@ export default class ComponentRegex extends Component {
           }
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })

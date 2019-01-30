@@ -61,33 +61,33 @@ export default class ComponentPrompt extends Component {
       return [this.state.variable, this.state.messageVariable, this.state.type]
     }
 
-    deserialise = (data) => {
+    deserialise = data => {
       let [variable, messageVariable, type] = data || [null, null, null]
 
       this.setState({ variable: variable, messageVariable: messageVariable, type: type })
     }
 
-    onChangeVariable = (event) => {
+    onChangeVariable = event => {
       this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
-    onChangeMessageVariable = (event) => {
+    onChangeMessageVariable = event => {
       this.setState({ messageVariable: event.target.value }, this.onUpdate)
     }
 
-    onChangeType = (type) => {
+    onChangeType = type => {
       this.setState({ type: type }, this.onUpdate)
     }
 
-    onChangeInputString = (event) => {
+    onChangeInputString = event => {
       this.setState({ input: event.target.value })
     }
 
-    onChangeInputText = (value) => {
+    onChangeInputText = value => {
       this.setState({ input: value })
     }
 
-    onChangeInputFile = (event) => {
+    onChangeInputFile = event => {
       event.persist()
       event.preventDefault()
 
@@ -96,7 +96,7 @@ export default class ComponentPrompt extends Component {
       return new Promise((resolve, error) => {
         let reader = new FileReader()
         reader.onerror = error
-        reader.onload = (e) => {
+        reader.onload = e => {
           this.setState({ input: e.target.result }, resolve)
         }
         reader.readAsText(file)
@@ -107,7 +107,7 @@ export default class ComponentPrompt extends Component {
       this.props.onUpdate(this.serialise())
     }
 
-    onInputSave = (event) => {
+    onInputSave = event => {
       event.preventDefault()
 
       if (this.inputResolve) {
@@ -115,7 +115,7 @@ export default class ComponentPrompt extends Component {
       }
     }
 
-    onDelete = (event) => {
+    onDelete = event => {
       event.preventDefault()
 
       this.props.onPop()
@@ -125,15 +125,15 @@ export default class ComponentPrompt extends Component {
 
     }
 
-    onExecute = (runner) => {
+    onExecute = runner => {
       return Promise
         .resolve()
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: true }, resolve)
           })
         }).then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             if (this.state.messageVariable && runner.hasValue(this.state.messageVariable)) {
               this.setState({ message: runner.getValue(this.state.messageVariable) }, resolve)
             } else {
@@ -141,12 +141,12 @@ export default class ComponentPrompt extends Component {
             }
           })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.setState({ promptDisplay: true, input: null }, resolve)
               })
             })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.inputResolve = resolve
               })
             })
@@ -156,18 +156,18 @@ export default class ComponentPrompt extends Component {
               }
             })
             .then(() => {
-              return new Promise((resolve) => {
+              return new Promise(resolve => {
                 this.setState({ promptDisplay: false }, resolve)
               })
             })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             setTimeout(resolve, 500)
           })
         })
         .then(() => {
-          return new Promise((resolve) => {
+          return new Promise(resolve => {
             this.setState({ running: false }, resolve)
           })
         })
@@ -217,8 +217,8 @@ export default class ComponentPrompt extends Component {
                     onChange={this.onChangeType}
                     className='form-control'
                     id='type{{ _uid }}'
-                    options={Object.keys(choices).map((value) => {
-                      return {value: value, label: choices[value]}
+                    options={Object.keys(choices).map(value => {
+                      return { value: value, label: choices[value] }
                     })}
                   />
                 </div>

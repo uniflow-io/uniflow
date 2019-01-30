@@ -1,21 +1,20 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 
 export default class TagItComponent extends Component {
-
-  onChange = (value) => {
+  onChange = value => {
     if (this.props.onChange) {
-      this.props.onChange(value.map((option) => {
+      this.props.onChange(value.map(option => {
         return option.value
       }))
     }
   }
 
-  render() {
+  render () {
     const {
-            value,
-            options
-          } = this.props
+      value,
+      options
+    } = this.props
     const customStyles = {
       menu: (provided, state) => ({
         ...provided,
@@ -25,8 +24,8 @@ export default class TagItComponent extends Component {
 
     let opts = []
     if (value) {
-      opts = value.map((data) => {
-        return {value: data, label: data}
+      opts = value.map(data => {
+        return { value: data, label: data }
       })
     }
 

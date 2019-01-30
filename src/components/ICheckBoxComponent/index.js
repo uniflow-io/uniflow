@@ -1,27 +1,27 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 let id = 0
 const gen = () => {
-  id ++;
+  id++
 
-  return `checkbox_${id}`
+  return `checkbox_${ id }`
 }
 
 export default class ICheckBoxComponent extends Component {
-  onChange = (event) => {
+  onChange = event => {
     const {
-            value
-          } = this.props
+      value
+    } = this.props
 
     if (this.props.onChange) {
       this.props.onChange(!value)
     }
   }
 
-  render() {
+  render () {
     const {
-            value
-          } = this.props
+      value
+    } = this.props
     const uid = gen()
 
     return (

@@ -18,7 +18,7 @@ export default class AceComponent extends Component {
     if (value) {
       this.editor.setValue(value, 1)
     }
-    this.editor.on('change', (event) => {
+    this.editor.on('change', event => {
       if (this.props.onChange && !this.silent) {
         const value = this.editor.getValue()
         this.props.onChange(value, event)

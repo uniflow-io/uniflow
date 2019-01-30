@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import Select from 'react-select';
+import Select from 'react-select'
 
 export default class Select2Component extends Component {
-
-  onChange = (option) => {
+  onChange = option => {
     if (this.props.onChange) {
       this.props.onChange(option.value)
     }
@@ -18,8 +17,9 @@ export default class Select2Component extends Component {
       }),
     }
 
-    let opts = options ? options : [],
-        selected = opts.filter((option) => {
+    let opts = options || []
+
+    let selected = opts.filter(option => {
       return option.value === value
     })
 
