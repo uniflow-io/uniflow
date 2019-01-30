@@ -45,7 +45,7 @@ class Admin extends Component {
 
   render () {
     const { env } = this.props
-    const { config, isSaving } = this.state
+    const { config } = this.state
 
     return (
       <div className="content-wrapper">
@@ -77,12 +77,12 @@ class Admin extends Component {
                       <label className="col-sm-2 control-label">Medium</label>
                       <div className="col-sm-10">
                         {(config.mediumToken && (
-                          <a
+                          <button
                             onClick={this.onRevokeMedium}
                             className="btn btn-info"
                           >
                             <i className="fa fa-medium" /> Revoke Medium
-                          </a>
+                          </button>
                         )) || (
                           <a
                             href={loginMediumUrl(env.mediumAppId)}

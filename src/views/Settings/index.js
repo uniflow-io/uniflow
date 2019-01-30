@@ -222,12 +222,12 @@ class Settings extends Component {
                       </label>
                       <div className="col-sm-10">
                         {(user.facebookId && (
-                          <a
+                          <button
                             onClick={this.onRevokeFacebook}
                             className="btn btn-info"
                           >
                             <i className="fa fa-facebook" /> Revoke Facebook
-                          </a>
+                          </button>
                         )) || (
                           <a
                             href={loginFacebookUrl(env.facebookAppId)}
@@ -248,12 +248,12 @@ class Settings extends Component {
                       </label>
                       <div className="col-sm-10">
                         {(user.githubId && (
-                          <a
+                          <button
                             onClick={this.onRevokeGithub}
                             className="btn btn-info"
                           >
                             <i className="fa fa-github" /> Revoke Github
-                          </a>
+                          </button>
                         )) || (
                           <a
                             href={loginGithubUrl(env.githubAppId)}

@@ -1,6 +1,5 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { Log, Program, Folder } from '../../models/index'
 import moment from 'moment'
 import {
   COMMIT_CLEAR_FEED,

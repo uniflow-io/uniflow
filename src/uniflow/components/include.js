@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Select2Component } from 'uniflow/src/components'
-import { Bus } from 'uniflow/src/models'
 import {
   getOrderedFeed,
   getProgramData,
@@ -184,9 +183,9 @@ class ComponentInclude extends Component {
               Include
             </h3>
             <div className="box-tools pull-right">
-              <a className="btn btn-box-tool" onClick={this.onDelete}>
+              <button className="btn btn-box-tool" onClick={this.onDelete}>
                 <i className="fa fa-times" />
-              </a>
+              </button>
             </div>
           </div>
           <div className="box-body">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { navigate } from 'gatsby'
 import debounce from 'lodash/debounce'
-import { Folder } from '../../../models'
 import {
   getFolderTree,
   updateCurrentFolder,
@@ -150,9 +149,9 @@ class FolderShow extends Component {
           <div className="box-header with-border">
             <h3 className="box-title">Infos</h3>
             <div className="box-tools pull-right">
-              <a className="btn btn-box-tool" onClick={this.onDelete}>
+              <button className="btn btn-box-tool" onClick={this.onDelete}>
                 <i className="fa fa-times" />
-              </a>
+              </button>
             </div>
           </div>
           <div className="box-body">

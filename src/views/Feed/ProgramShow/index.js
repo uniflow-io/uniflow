@@ -355,11 +355,8 @@ class ProgramShow extends Component {
   }
 
   render () {
-    const { program, tags, stack, client, user } = this.props
+    const { program, tags, stack, user } = this.props
     const { folderTreeEdit, folderTree } = this.state
-    const tagsOptions = {
-      availableTags: tags,
-    }
     const components = this.getComponents(user.components, program)
     const clients = {
       uniflow: 'Uniflow',
@@ -374,12 +371,12 @@ class ProgramShow extends Component {
           <div className="box-header with-border">
             <h3 className="box-title">Infos</h3>
             <div className="box-tools pull-right">
-              <a className="btn btn-box-tool" onClick={this.onDuplicate}>
+              <button className="btn btn-box-tool" onClick={this.onDuplicate}>
                 <i className="fa fa-clone" />
-              </a>
-              <a className="btn btn-box-tool" onClick={this.onDelete}>
+              </button>
+              <button className="btn btn-box-tool" onClick={this.onDelete}>
                 <i className="fa fa-times" />
-              </a>
+              </button>
             </div>
           </div>
           <div className="box-body">
@@ -542,9 +539,9 @@ class ProgramShow extends Component {
           </div>
           <div className="box-footer">
             {program.client === 'uniflow' && (
-              <a className="btn btn-success" onClick={this.run}>
+              <button className="btn btn-success" onClick={this.run}>
                 <i className="fa fa-fw fa-play" /> Play
-              </a>
+              </button>
             )}
           </div>
         </div>
