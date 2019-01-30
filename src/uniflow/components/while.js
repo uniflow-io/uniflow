@@ -5,8 +5,7 @@ import flow from '../../reducers/flow'
 import {
   commitPushFlow,
   commitPopFlow,
-  commitUpdateFlow,
-  commitSetFlow
+  commitUpdateFlow
 } from '../../reducers/flow/actions'
 
 export default class ComponentWhile extends Component {
@@ -97,8 +96,8 @@ export default class ComponentWhile extends Component {
       }
 
       Promise.all([
-        createStoreStack(data && data.condition || []),
-        createStoreStack(data && data.execute || [])
+        createStoreStack(data ? data.condition : []),
+        createStoreStack(data ? data.execute : [])
       ]).then(([conditionStack, executeStack]) => {
         this.store = {
           conditionStack: conditionStack,
@@ -231,7 +230,7 @@ export default class ComponentWhile extends Component {
               <div className='box-header with-border'>
                 <h3 className='box-title'><button type='submit' className='btn btn-default'>{this.state.running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> While</h3>
                 <div className='box-tools pull-right'>
-                  <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                  <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
                 </div>
               </div>
             </form>

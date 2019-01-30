@@ -171,7 +171,7 @@ export default class ComponentAssets extends Component {
             <div className='box-header with-border'>
               <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Assets</h3>
               <div className='box-tools pull-right'>
-                <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
               </div>
             </div>
             <div className='box-body'>

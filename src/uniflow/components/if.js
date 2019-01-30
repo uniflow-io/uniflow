@@ -128,9 +128,9 @@ export default class ComponentIf extends Component {
       }
 
       Promise.all([
-        createStoreStack(data && data.if && data.if.condition || []),
-        createStoreStack(data && data.if && data.if.execute || []),
-        data && data.elseIfs && data.elseIfs.reduce((promise, elseIf) => {
+        createStoreStack(data && data.if && data.if.condition ? data.if.condition : []),
+        createStoreStack(data && data.if && data.if.execute ? data.if.execute : []),
+        data && data.elseIfs ? data.elseIfs.reduce((promise, elseIf) => {
           return promise.then(elseIfs => {
             return Promise.all([
               createStoreStack(elseIf.condition || []),
@@ -143,8 +143,8 @@ export default class ComponentIf extends Component {
               return elseIfs
             })
           })
-        }, Promise.resolve([])) || [],
-        data && data.else && createStoreStack(data.else || []) || null
+        }, Promise.resolve([])) : [],
+        data && data.else ? createStoreStack(data.else || []) : null
       ]).then(([ifConditionStack, ifExecuteStack, elseIfsStack, elseStack]) => {
         this.store = {
           if: {
@@ -386,7 +386,7 @@ export default class ComponentIf extends Component {
               <div className='box-header with-border'>
                 <h3 className='box-title'><button type='submit' className='btn btn-default'>{this.state.running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> If</h3>
                 <div className='box-tools pull-right'>
-                  <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                  <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
                 </div>
               </div>
             </form>
@@ -417,9 +417,9 @@ export default class ComponentIf extends Component {
                   <div className='box-header with-border'>
                     <h3 className='box-title'>Else If</h3>
                     <div className='box-tools pull-right'>
-                      <a className='btn btn-box-tool' onClick={(event, index) => {
+                      <button className='btn btn-box-tool' onClick={(event, index) => {
                         this.onRemoveElseIf(event, index)
-                      }}><i className='fa fa-times' /></a>
+                      }}><i className='fa fa-times' /></button>
                     </div>
                   </div>
                 </form>
@@ -453,7 +453,7 @@ export default class ComponentIf extends Component {
                   <div className='box-header with-border'>
                     <h3 className='box-title'>Else</h3>
                     <div className='box-tools pull-right'>
-                      <a className='btn btn-box-tool' onClick={this.onRemoveElse}><i className='fa fa-times' /></a>
+                      <button className='btn btn-box-tool' onClick={this.onRemoveElse}><i className='fa fa-times' /></button>
                     </div>
                   </div>
                 </form>

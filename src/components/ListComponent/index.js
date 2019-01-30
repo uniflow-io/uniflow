@@ -62,7 +62,7 @@ class UiComponent extends Component {
 
 export default class ListComponent extends Component {
   render () {
-    const { stack, runIndex, onPush, onPop, onUpdate, onRun, components } = this.props
+    const { stack, runIndex, onPush, onPop, onUpdate, components } = this.props
     const uiStack = (() => {
       let uiStack = [{
         component: 'search',

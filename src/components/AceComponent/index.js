@@ -40,7 +40,7 @@ export default class AceComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const oldProps = this.props
+    //const oldProps = this.props
 
     if (this.editor && this.editor.getValue() !== nextProps.value) {
       // editor.setValue is a synchronous function call, change event is emitted before setValue return.

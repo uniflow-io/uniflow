@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { AceComponent } from '../../components'
 
-const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i]) { if (!e[i]) { let c = typeof require === 'function' && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); let a = new Error("Cannot find module '" + i + "'"); throw a.code = 'MODULE_NOT_FOUND', a } let p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { let n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = typeof require === 'function' && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({ 1: [function (require, module, exports) {
-  'use strict'
+const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i]) { if (!e[i]) { let c = typeof require === 'function' && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); let a = new Error("Cannot find module '" + i + "'"); a.code = 'MODULE_NOT_FOUND'; throw a } let p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { let n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = typeof require === 'function' && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({ 1: [function (require, module, exports) {
+
 
   const SyntaxException = require('./Exceptions/Syntax')
   const BuilderException = require('./Exceptions/Builder')
@@ -795,11 +795,12 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
     getMatches (target) {
       const result = []
       const regex = this.get()
-      let temp = null
+      let temp = regex.exec(target)
 
-      while (temp = regex.exec(target)) {
+      while (temp) {
         temp = this._mapCaptureIndexToName(temp)
         result.push(temp)
+        temp = regex.exec(target)
       }
       regex.lastIndex = 0
 
@@ -810,7 +811,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Builder
 }, { './Exceptions/Builder': 3, './Exceptions/Implementation': 4, './Exceptions/Syntax': 6 }],
 2: [function (require, module, exports) {
-  'use strict'
+
 
   const Builder = require('../Builder')
 
@@ -826,7 +827,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = NonCapture
 }, { '../Builder': 1 }],
 3: [function (require, module, exports) {
-  'use strict'
+
 
   class BuilderException extends Error {
   }
@@ -834,7 +835,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = BuilderException
 }, {}],
 4: [function (require, module, exports) {
-  'use strict'
+
 
   class ImplementationException extends Error {
   }
@@ -842,7 +843,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = ImplementationException
 }, {}],
 5: [function (require, module, exports) {
-  'use strict'
+
 
   class Interpreter extends Error {
   }
@@ -850,7 +851,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Interpreter
 }, {}],
 6: [function (require, module, exports) {
-  'use strict'
+
 
   class SyntaxException extends Error {
   }
@@ -858,7 +859,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = SyntaxException
 }, {}],
 7: [function (require, module, exports) {
-  'use strict'
+
 
   const Builder = require('../../Builder')
   const _cache = {}
@@ -901,7 +902,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Cache
 }, { '../../Builder': 1 }],
 8: [function (require, module, exports) {
-  'use strict'
+
 
   /**
          * Wrapper for literal strings that should not be split, tainted or interpreted in any way.
@@ -927,7 +928,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Literally
 }, {}],
 9: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('../Methods/Method')
   const Builder = require('../../Builder')
@@ -990,7 +991,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = buildQuery
 }, { '../../Builder': 1, '../../Builder/NonCapture': 2, '../../Exceptions/Syntax': 6, '../Methods/Method': 15 }],
 10: [function (require, module, exports) {
-  'use strict'
+
 
   const buildQuery = require('./buildQuery')
   const DefaultMethod = require('../Methods/Method')
@@ -1094,7 +1095,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = methodMatch
 }, { '../../Exceptions/Syntax': 6, '../Methods/AndMethod': 13, '../Methods/AsMethod': 14, '../Methods/Method': 15, '../Methods/SimpleMethod': 16, '../Methods/TimesMethod': 17, '../Methods/ToMethod': 18, './buildQuery': 9 }],
 11: [function (require, module, exports) {
-  'use strict'
+
 
   const SyntaxException = require('../../Exceptions/Syntax')
   const Literally = require('./Literally')
@@ -1147,6 +1148,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
       }
 
       switch (char) {
+        default: break
       case '\\':
         // Set the backslash flag. This will skip one character.
         backslash = true
@@ -1248,7 +1250,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = parseParentheses
 }, { '../../Exceptions/Syntax': 6, './Literally': 8 }],
 12: [function (require, module, exports) {
-  'use strict'
+
 
   const Cache = require('./Helpers/Cache')
   const Literally = require('./Helpers/Literally')
@@ -1350,7 +1352,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Interpreter
 }, { '../Exceptions/Interpreter': 5, './Helpers/Cache': 7, './Helpers/Literally': 8, './Helpers/buildQuery': 9, './Helpers/methodMatch': 10, './Helpers/parseParentheses': 11 }],
 13: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('./Method')
 
@@ -1378,7 +1380,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = AndMethod
 }, { './Method': 15 }],
 14: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('./Method')
 
@@ -1406,7 +1408,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = AsMethod
 }, { './Method': 15 }],
 15: [function (require, module, exports) {
-  'use strict'
+
 
   const SyntaxException = require('../../Exceptions/Syntax')
   const ImplementationException = require('../../Exceptions/Implementation')
@@ -1494,7 +1496,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = Method
 }, { '../../Exceptions/Implementation': 4, '../../Exceptions/Syntax': 6, '../Helpers/Literally': 8 }],
 16: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('./Method')
   const SyntaxException = require('../../Exceptions/Syntax')
@@ -1518,7 +1520,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = SimpleMethod
 }, { '../../Exceptions/Syntax': 6, './Method': 15 }],
 17: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('./Method')
   const SyntaxException = require('../../Exceptions/Syntax')
@@ -1552,7 +1554,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = TimeMethod
 }, { '../../Exceptions/Syntax': 6, './Method': 15 }],
 18: [function (require, module, exports) {
-  'use strict'
+
 
   const Method = require('./Method')
 
@@ -1575,7 +1577,7 @@ const SRL = (function () { function r (e, n, t) { function o (i, f) { if (!n[i])
   module.exports = ToMethod
 }, { './Method': 15 }],
 19: [function (require, module, exports) {
-  'use strict'
+
 
   const Builder = require('./Builder')
   const Interpreter = require('./Language/Interpreter')
@@ -1739,7 +1741,7 @@ export default class ComponentRegex extends Component {
             <div className='box-header with-border'>
               <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Regex</h3>
               <div className='box-tools pull-right'>
-                <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
               </div>
             </div>
 

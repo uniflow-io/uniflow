@@ -21,7 +21,7 @@ let scope = {};
  */
 
 (function (scope) {
-  'use strict'
+
 
   let InvalidPropertyPathException
   let OutOfBoundsException
@@ -115,7 +115,7 @@ let scope = {};
     }
 
     this._pathAsString = propertyPath
-    pattern = /^(([^\.\[]+)|\[([^\]]+)\])(.*)/gmi
+    pattern = /^(([^.[]+)|\[([^\]]+)])(.*)/gmi
     remaining = propertyPath
     position = 0
     pos = false
@@ -143,7 +143,7 @@ let scope = {};
 
       position += String(matches[1]).length
       remaining = matches[4]
-      pattern = /^(\.([^\.|\[]+)|\[([^\]]+)\])(.*)/gmi
+      pattern = /^(\.([^.|[]+)|\[([^\]]+)\])(.*)/gmi
     }
 
     if (remaining !== '') {
@@ -270,7 +270,7 @@ let scope = {};
 })(scope);
 
 (function (scope) {
-  'use strict'
+
 
   let InvalidArgumentException, UnexpectedTypeException, NoSuchIndexException, PropertyAccessor
 
@@ -728,7 +728,7 @@ export default class ComponentObject extends Component {
             <div className='box-header with-border'>
               <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Object</h3>
               <div className='box-tools pull-right'>
-                <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
               </div>
             </div>
             <div className='box-body'>

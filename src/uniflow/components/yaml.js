@@ -10,7 +10,7 @@ let scope = {};
 
 /* js-yaml 3.11.0 https://github.com/nodeca/js-yaml */
 (function (scope, f) { scope.jsyaml = f() })(scope, function () {
-  let define, module, exports; return (function () {
+  return (function () {
     function e (t, n, r) {
       function s (o, u) {
         if (!n[o]) {
@@ -19,7 +19,8 @@ let scope = {};
             if (!u && a) return a(o, !0)
             if (i) return i(o, !0)
             let f = new Error("Cannot find module '" + o + "'")
-            throw f.code = 'MODULE_NOT_FOUND', f
+            f.code = 'MODULE_NOT_FOUND'
+            throw f
           }
           let l = n[o] = {
             exports: {}
@@ -37,7 +38,7 @@ let scope = {};
     }
     return e
   })()({ 1: [function (require, module, exports) {
-    'use strict'
+
 
     let loader = require('./js-yaml/loader')
     let dumper = require('./js-yaml/dumper')
@@ -75,7 +76,7 @@ let scope = {};
     module.exports.addConstructor = deprecated('addConstructor')
   }, { './js-yaml/dumper': 3, './js-yaml/exception': 4, './js-yaml/loader': 5, './js-yaml/schema': 7, './js-yaml/schema/core': 8, './js-yaml/schema/default_full': 9, './js-yaml/schema/default_safe': 10, './js-yaml/schema/failsafe': 11, './js-yaml/schema/json': 12, './js-yaml/type': 13 }],
   2: [function (require, module, exports) {
-    'use strict'
+
 
     function isNothing (subject) {
       return (typeof subject === 'undefined') || (subject === null)
@@ -129,7 +130,7 @@ let scope = {};
     module.exports.extend = extend
   }, {}],
   3: [function (require, module, exports) {
-    'use strict'
+
 
     /* eslint-disable no-use-before-define */
 
@@ -986,7 +987,7 @@ let scope = {};
   4: [function (require, module, exports) {
     // YAML error class. http://stackoverflow.com/questions/8458984
     //
-    'use strict'
+
 
     function YAMLException (reason, mark) {
     // Super constructor
@@ -1026,7 +1027,7 @@ let scope = {};
     module.exports = YAMLException
   }, {}],
   5: [function (require, module, exports) {
-    'use strict'
+
 
     /* eslint-disable max-len,no-use-before-define */
 
@@ -1047,11 +1048,11 @@ let scope = {};
     let CHOMPING_STRIP = 2
     let CHOMPING_KEEP = 3
 
-    let PATTERN_NON_PRINTABLE = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
-    let PATTERN_NON_ASCII_LINE_BREAKS = /[\x85\u2028\u2029]/
-    let PATTERN_FLOW_INDICATORS = /[,\[\]\{\}]/
-    let PATTERN_TAG_HANDLE = /^(?:!|!!|![a-z\-]+!)$/i
-    let PATTERN_TAG_URI = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i
+    let PATTERN_NON_PRINTABLE = /[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F-\\x84\\x86-\\x9F\\uFFFE\\uFFFF]|[\\uD800-\\uDBFF](?![\\uDC00-\\uDFFF])|(?:[^\\uD800-\\uDBFF]|^)[\\uDC00-\\uDFFF]/
+    let PATTERN_NON_ASCII_LINE_BREAKS = /[\\x85\\u2028\\u2029]/
+    let PATTERN_FLOW_INDICATORS = /[,[]{}]/
+    let PATTERN_TAG_HANDLE = /^(?:!|!!|![a-z-]+!)$/i
+    let PATTERN_TAG_URI = /^(?:!|[^,[]{}])(?:%[0-9a-f]{2}|[0-9a-z-#;/?:@&=+$,_.!~*'()[]])*$/i
 
     function is_EOL (c) {
       return (c === 0x0A/* LF */) || (c === 0x0D/* CR */)
@@ -1466,7 +1467,7 @@ let ch
                 following = state.input.charCodeAt(state.position + 1)
 
                 if (is_WS_OR_EOL(following) ||
-                    withinFlowCollection && is_FLOW_INDICATOR(following)) {
+                  (withinFlowCollection && is_FLOW_INDICATOR(following))) {
                     return false
                 }
             }
@@ -1481,7 +1482,7 @@ let ch
                     following = state.input.charCodeAt(state.position + 1)
 
                     if (is_WS_OR_EOL(following) ||
-                        withinFlowCollection && is_FLOW_INDICATOR(following)) {
+                      (withinFlowCollection && is_FLOW_INDICATOR(following))) {
                         break
                     }
                 } else if (ch === 0x23/* # */) {
@@ -1491,7 +1492,7 @@ let ch
                         break
                     }
                 } else if ((state.position === state.lineStart && testDocumentSeparator(state)) ||
-                    withinFlowCollection && is_FLOW_INDICATOR(ch)) {
+                  (withinFlowCollection && is_FLOW_INDICATOR(ch))) {
                     break
                 } else if (is_EOL(ch)) {
                     _line = state.line
@@ -2377,9 +2378,9 @@ let blockIndent
                 blockIndent = state.position - state.lineStart
 
                 if (indentStatus === 1) {
-                    if (allowBlockCollections &&
+                    if ((allowBlockCollections &&
                         (readBlockSequence(state, blockIndent) ||
-                            readBlockMapping(state, blockIndent, flowIndent)) ||
+                            readBlockMapping(state, blockIndent, flowIndent))) ||
                         readFlowCollection(state, flowIndent)) {
                         hasContent = true
                     } else {
@@ -2642,7 +2643,7 @@ let ch
         module.exports.safeLoad = safeLoad
     }, { './common': 2, './exception': 4, './mark': 6, './schema/default_full': 9, './schema/default_safe': 10 }],
 6: [function (require, module, exports) {
-        'use strict'
+
 
         let common = require('./common')
 
@@ -2715,7 +2716,7 @@ let ch
         module.exports = Mark
     }, { './common': 2 }],
 7: [function (require, module, exports) {
-        'use strict'
+
 
         /* eslint-disable max-len */
 
@@ -2825,7 +2826,7 @@ let ch
 // NOTE: JS-YAML does not support schema-specific tag resolution restrictions.
 // So, Core schema has no distinctions from JSON schema is JS-YAML.
 
-        'use strict'
+
 
         let Schema = require('../schema')
 
@@ -2844,7 +2845,7 @@ let ch
 //
 // Also this schema is used as default base schema at `Schema.create` function.
 
-        'use strict'
+
 
         let Schema = require('../schema')
 
@@ -2866,7 +2867,7 @@ let ch
 // This schema is based on standard YAML's Core schema and includes most of
 // extra types described at YAML tag repository. (http://yaml.org/type/)
 
-        'use strict'
+
 
         let Schema = require('../schema')
 
@@ -2890,7 +2891,7 @@ let ch
 // Standard YAML's Failsafe schema.
 // http://www.yaml.org/spec/1.2/spec.html#id2802346
 
-        'use strict'
+
 
         let Schema = require('../schema')
 
@@ -2910,7 +2911,7 @@ let ch
 // So, this schema is not such strict as defined in the YAML specification.
 // It allows numbers in binary notaion, use `Null` and `NULL` as `null`, etc.
 
-        'use strict'
+
 
         let Schema = require('../schema')
 
@@ -2927,7 +2928,7 @@ let ch
         })
     }, { '../schema': 7, '../type/bool': 15, '../type/float': 16, '../type/int': 17, '../type/null': 23, './failsafe': 11 }],
 13: [function (require, module, exports) {
-        'use strict'
+
 
         let YAMLException = require('./exception')
 
@@ -2990,7 +2991,7 @@ let ch
         module.exports = Type
     }, { './exception': 4 }],
 14: [function (require, module, exports) {
-        'use strict'
+
 
         /* eslint-disable no-bitwise */
 
@@ -3136,7 +3137,7 @@ let map = BASE64_MAP
         })
     }, { '../type': 13 }],
 15: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3173,7 +3174,7 @@ let map = BASE64_MAP
         })
     }, { '../type': 13 }],
 16: [function (require, module, exports) {
-        'use strict'
+
 
         let common = require('../common')
         let Type = require('../type')
@@ -3244,18 +3245,21 @@ let map = BASE64_MAP
 
             if (isNaN(object)) {
                 switch (style) {
+                  default: return ''
                     case 'lowercase': return '.nan'
                     case 'uppercase': return '.NAN'
                     case 'camelcase': return '.NaN'
                 }
             } else if (Number.POSITIVE_INFINITY === object) {
                 switch (style) {
+                  default: return ''
                     case 'lowercase': return '.inf'
                     case 'uppercase': return '.INF'
                     case 'camelcase': return '.Inf'
                 }
             } else if (Number.NEGATIVE_INFINITY === object) {
                 switch (style) {
+                  default: return ''
                     case 'lowercase': return '-.inf'
                     case 'uppercase': return '-.INF'
                     case 'camelcase': return '-.Inf'
@@ -3287,7 +3291,7 @@ let map = BASE64_MAP
         })
     }, { '../common': 2, '../type': 13 }],
 17: [function (require, module, exports) {
-        'use strict'
+
 
         let common = require('../common')
         let Type = require('../type')
@@ -3463,7 +3467,7 @@ let ch
         })
     }, { '../common': 2, '../type': 13 }],
 18: [function (require, module, exports) {
-        'use strict'
+
 
         let esprima
 
@@ -3555,7 +3559,7 @@ let body
         })
     }, { '../../type': 13 }],
 19: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../../type')
 
@@ -3621,7 +3625,7 @@ let modifiers = ''
         })
     }, { '../../type': 13 }],
 20: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../../type')
 
@@ -3651,7 +3655,7 @@ let modifiers = ''
         })
     }, { '../../type': 13 }],
 21: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3661,7 +3665,7 @@ let modifiers = ''
         })
     }, { '../type': 13 }],
 22: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3675,7 +3679,7 @@ let modifiers = ''
         })
     }, { '../type': 13 }],
 23: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3711,7 +3715,7 @@ let modifiers = ''
         })
     }, { '../type': 13 }],
 24: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3758,7 +3762,7 @@ let object = data
         })
     }, { '../type': 13 }],
 25: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3815,7 +3819,7 @@ let object = data
         })
     }, { '../type': 13 }],
 26: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3825,7 +3829,7 @@ let object = data
         })
     }, { '../type': 13 }],
 27: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3856,7 +3860,7 @@ let object = data
         })
     }, { '../type': 13 }],
 28: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3866,7 +3870,7 @@ let object = data
         })
     }, { '../type': 13 }],
 29: [function (require, module, exports) {
-        'use strict'
+
 
         let Type = require('../type')
 
@@ -3957,7 +3961,7 @@ let delta = null; let tz_hour; let tz_minute; let date
         })
     }, { '../type': 13 }],
 '/': [function (require, module, exports) {
-        'use strict'
+
 
         let yaml = require('./lib/js-yaml.js')
 
@@ -4019,12 +4023,12 @@ let length = string.length
         return result
     }
 
-    function readTxt (input, fromPosition, toPosition) {
+    /*function readTxt (input, fromPosition, toPosition) {
         let txt = ''
         for (let i = fromPosition; i < toPosition; i++) txt += input[i]
 
         return txt
-    }
+    }*/
 
     function endLinePosition (input, position) {
         let ch = input.charCodeAt(position)
@@ -4307,7 +4311,7 @@ let keyvaluelist = runner.getValue(this.state.keyvaluevariable)
               <div className='box-header with-border'>
                 <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Yaml</h3>
                 <div className='box-tools pull-right'>
-                  <a className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></a>
+                  <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
                 </div>
               </div>
               <div className='box-body'>
