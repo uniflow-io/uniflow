@@ -6,32 +6,32 @@ const defaultState = {}
 
 const logs = (state = defaultState, action) => {
   switch (action.type) {
-    case COMMIT_ADD_LOG:
-      let item = new Log({
-        id: id,
-        message: action.message,
-        status: 'new',
-      })
-      id++
+  case COMMIT_ADD_LOG:
+    let item = new Log({
+      id: id,
+      message: action.message,
+      status: 'new',
+    })
+    id++
 
-      state[item.id] = item
-      return {
-        ...state,
+    state[item.id] = item
+    return {
+      ...state,
+    }
+  case COMMIT_READ_LOG:
+    return Object.keys(state).map(key => {
+      let item = state[key]
+      if (item.id !== action.id) {
+        return item
       }
-    case COMMIT_READ_LOG:
-      return Object.keys(state).map(key => {
-        let item = state[key]
-        if (item.id !== action.id) {
-          return item
-        }
 
-        return {
-          ...item,
-          ...{ status: 'read' },
-        }
-      })
-    default:
-      return state
+      return {
+        ...item,
+        ...{ status: 'read' },
+      }
+    })
+  default:
+    return state
   }
 }
 

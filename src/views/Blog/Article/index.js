@@ -11,7 +11,7 @@ class Article extends Component {
     article: null,
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.onFetchFlowData()
   }
 
@@ -23,7 +23,7 @@ class Article extends Component {
     })
   }
 
-  render() {
+  render () {
     const { article } = this.state
 
     return (
@@ -54,8 +54,8 @@ class Article extends Component {
                   <h3 className="box-title">
                     {article
                       ? moment(article.firstPublishedAt, 'x').format(
-                          'MMMM Do YYYY'
-                        )
+                        'MMMM Do YYYY'
+                      )
                       : ''}
                   </h3>
                 </div>

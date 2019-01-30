@@ -6,9 +6,9 @@ import { commitAddLog } from '../logs/actions'
 export const fetchConfig = token => {
   return dispatch => {
     return request
-      .get(`${server.getBaseUrl()}/api/config/getConfig`, {
+      .get(`${ server.getBaseUrl() }/api/config/getConfig`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
+          'Uniflow-Authorization': `Bearer ${ token }`,
         },
       })
       .catch(error => {
@@ -27,9 +27,9 @@ export const updateConfig = (item, token) => {
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/config/setConfig`, data, {
+      .put(`${ server.getBaseUrl() }/api/config/setConfig`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
+          'Uniflow-Authorization': `Bearer ${ token }`,
         },
       })
       .then(response => {

@@ -8,20 +8,20 @@ import '../../content/css/font-awesome.min.css'
 // <!-- Ionicons -->
 import '../../content/css/ionicons.min.css'
 // <!-- iCheck -->
-//import '../../content/js/plugins/iCheck/all.css'
+// import '../../content/js/plugins/iCheck/all.css'
 // <!-- iCheck-bootstrap -->
 import '../../content/js/plugins/icheck-bootstrap/icheck-bootstrap.css'
 // <!-- Date Picker -->
 import '../../content/js/plugins/datepicker/datepicker3.css'
 // <!-- Select2 -->
-//import '../../content/js/plugins/select2/select2.min.css'
+// import '../../content/js/plugins/select2/select2.min.css'
 // <!-- Tag It -->
-//import '../../content/js/plugins/tagit/css/jquery.tagit.css'
-//import '../../content/js/plugins/tagit/css/tagit.ui-zendesk.css'
+// import '../../content/js/plugins/tagit/css/jquery.tagit.css'
+// import '../../content/js/plugins/tagit/css/tagit.ui-zendesk.css'
 // <!-- Daterange picker -->
-//import '../../content/js/plugins/daterangepicker/daterangepicker-bs3.css'
+// import '../../content/js/plugins/daterangepicker/daterangepicker-bs3.css'
 // <!-- bootstrap wysihtml5 - text editor -->
-//import '../../content/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
+// import '../../content/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
 
 // <!-- Theme style -->
 import '../../content/css/AdminLTE.css'
@@ -44,7 +44,7 @@ import { getLastVersion } from './../reducers/versions/actions'
 import { matchPath } from '../utils'
 
 class Alert extends Component {
-  componentDidMount() {
+  componentDidMount () {
     const { alert, logs } = this.props
 
     setTimeout(() => {
@@ -58,7 +58,7 @@ class Alert extends Component {
     this.props.dispatch(commitReadLog(id))
   }
 
-  render() {
+  render () {
     const { alert, logs } = this.props
 
     return (
@@ -84,7 +84,7 @@ Alert = connect(state => ({
 }))(Alert)
 
 class Alerts extends Component {
-  render() {
+  render () {
     const { logs } = this.props
 
     return (
@@ -174,7 +174,7 @@ class Header extends Component {
     this.props.dispatch(commitLogoutUser())
   }
 
-  render() {
+  render () {
     const { auth, user } = this.props
     const active = this.onLocation(this.props.location)
 
@@ -189,19 +189,19 @@ class Header extends Component {
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
                 user.username === null && (
-                  <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('feed')}>Dashboard</Link>
-                  </li>
-                )}
+                <li className={active === 'dashboard' ? 'active' : ''}>
+                  <Link to={pathTo('feed')}>Dashboard</Link>
+                </li>
+              )}
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
                 user.username !== null && (
-                  <li className={active === 'dashboard' ? 'active' : ''}>
-                    <Link to={pathTo('userFeed', { username: user.username })}>
+                <li className={active === 'dashboard' ? 'active' : ''}>
+                  <Link to={pathTo('userFeed', { username: user.username })}>
                       Dashboard
-                    </Link>
-                  </li>
-                )}
+                  </Link>
+                </li>
+              )}
               <li className={active === 'faq' ? 'active' : ''}>
                 <Link to={pathTo('faq')}>FAQ</Link>
               </li>
@@ -247,7 +247,7 @@ Header = connect(state => ({
 }))(Header)
 
 class Footer extends Component {
-  render() {
+  render () {
     const { version } = this.props
 
     return (
@@ -299,7 +299,7 @@ Footer = connect(state => ({
 }))(Footer)
 
 export default class Layout extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Helmet>
@@ -321,7 +321,7 @@ export default class Layout extends Component {
             rel="stylesheet"
           />
 
-          {/*<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2319330-13" />
+          {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2319330-13" />
                 <script>
                     window.dataLayer = window.dataLayer || [];
 
@@ -332,7 +332,7 @@ export default class Layout extends Component {
                     gtag('js', new Date());
 
                     gtag('config', 'UA-2319330-13');
-                </script>*/}
+                </script> */}
         </Helmet>
         <UserManagerComponent location={this.props.location} />
 

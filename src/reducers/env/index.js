@@ -8,13 +8,13 @@ const defaultState = {
 
 const env = (state = defaultState, action) => {
   switch (action.type) {
-    case COMMIT_SET_ENV:
-      return {
-        ...state,
-        ...action.env,
-      }
-    default:
-      return state
+  case COMMIT_SET_ENV:
+    return {
+      ...state,
+      ...action.env,
+    }
+  default:
+    return state
   }
 }
 

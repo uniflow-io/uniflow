@@ -6,7 +6,7 @@ import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 
 class LoginGithub extends Component {
-  componentWillMount() {
+  componentWillMount () {
     let code = this.getCode()
     if (code === null) {
       if (typeof window !== `undefined`) {
@@ -28,7 +28,7 @@ class LoginGithub extends Component {
     })
   }
 
-  getCode() {
+  getCode () {
     let m = this.props.location.search.match(/code=([^&]*)/)
     if (m) {
       return m[1]
@@ -37,7 +37,7 @@ class LoginGithub extends Component {
     return null
   }
 
-  render() {
+  render () {
     return (
       <div className="content-wrapper">
         <section className="content-header">

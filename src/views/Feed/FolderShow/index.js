@@ -10,7 +10,7 @@ import {
   stringToPath,
   commitSetCurrentFolder,
   getCurrentPath,
-  feedPathTo,
+  feedPathTo
 } from '../../../reducers/feed/actions'
 import { connect } from 'react-redux'
 import { Select2Component } from 'uniflow/src/components'
@@ -21,13 +21,13 @@ class FolderShow extends Component {
     folderTree: [],
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { folder } = this.props
 
     this.setState({ folderTree: [pathToString(folder.path)] })
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const oldProps = this.props
 
     if (nextProps.folder.id !== oldProps.folder.id) {
@@ -140,7 +140,7 @@ class FolderShow extends Component {
     return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
-  render() {
+  render () {
     const { folderTreeEdit, folderTree } = this.state
     const { folder } = this.props
 

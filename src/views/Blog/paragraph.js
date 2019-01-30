@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 class Paragraph extends Component {
-  render() {
+  render () {
     const { data } = this.props
 
     if (data.type === 1) {

@@ -1,10 +1,10 @@
-//import Interpreter from '../../content/js/JS-Interpreter/interpreter'
+// import Interpreter from '../../content/js/JS-Interpreter/interpreter'
 import { transform } from 'babel-standalone'
 
 let Interpreter = () => {}
 
 export default class Runner {
-  run(stack, onRunIndex) {
+  run (stack, onRunIndex) {
     // get polyfill
     /* if(cachedPolyfillJS) return cachedPolyfillJS;
 
@@ -16,7 +16,7 @@ export default class Runner {
        }) */
     let asyncRunPromise = null
     let interpreter = null
-    let interpreterPromise = new Promise((resolve) => {
+    let interpreterPromise = new Promise(resolve => {
       interpreter = new Interpreter('', (interpreter, scope) => {
         let initConsole = function () {
           let consoleObj = interpreter.createObject(interpreter.OBJECT)
@@ -33,7 +33,7 @@ export default class Runner {
         return stack.reduce((promise, item) => {
           return promise
             .then(() => {
-              return item.bus.emit('compile', interpreter, scope, (wrapper) => {
+              return item.bus.emit('compile', interpreter, scope, wrapper => {
                 return function () {
                   asyncRunPromise = wrapper.apply(this, arguments)
                 }

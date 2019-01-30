@@ -8,7 +8,7 @@ import { pathTo } from '../../routes'
 import { Link } from 'gatsby'
 
 class Feed extends Component {
-  render() {
+  render () {
     const { feed } = this.props
     const currentProgram = getCurrentProgram(feed)
 

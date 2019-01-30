@@ -9,7 +9,7 @@ class Home extends Component {
     flow: [],
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.onFetchFlowData()
   }
 
@@ -26,7 +26,7 @@ class Home extends Component {
     return feedPathTo(path, item.username)
   }
 
-  render() {
+  render () {
     const { flow } = this.state
 
     return (

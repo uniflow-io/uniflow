@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 
 class Versions extends Component {
-  render() {
+  render () {
     const { versions } = this.props
 
     return (

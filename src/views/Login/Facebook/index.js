@@ -6,7 +6,7 @@ import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 
 class LoginFacebook extends Component {
-  componentWillMount() {
+  componentWillMount () {
     let accessToken = this.getAccessToken()
     if (accessToken === null) {
       if (typeof window !== `undefined`) {
@@ -30,7 +30,7 @@ class LoginFacebook extends Component {
       })
   }
 
-  getAccessToken() {
+  getAccessToken () {
     let m = this.props.location.hash.match(/access_token=([^&]*)/)
     if (m) {
       return m[1]
@@ -39,7 +39,7 @@ class LoginFacebook extends Component {
     return null
   }
 
-  render() {
+  render () {
     return (
       <div className="content-wrapper">
         <section className="content-header">

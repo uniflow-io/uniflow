@@ -11,7 +11,7 @@ class Blog extends Component {
     blog: {},
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.onFetchFlowData()
   }
 
@@ -21,7 +21,7 @@ class Blog extends Component {
     })
   }
 
-  render() {
+  render () {
     const { blog } = this.state
 
     return (

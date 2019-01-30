@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import {
   updateSettings,
-  commitUpdateSettings,
+  commitUpdateSettings
 } from '../../reducers/user/actions'
 import { connect } from 'react-redux'
 import { pathTo } from '../../routes'
 import { Link } from 'gatsby'
 import { loginFacebookUrl, loginGithubUrl } from '../../reducers/auth/actions'
 
-function copyTextToClipboard(text) {
+function copyTextToClipboard (text) {
   let textArea = document.createElement('textarea')
   textArea.value = text
   document.body.appendChild(textArea)
@@ -35,11 +35,11 @@ class Settings extends Component {
     isSaving: false,
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.setState({ user: Object.assign({}, this.props.user) })
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.setState({ user: Object.assign({}, nextProps.user) })
   }
 
@@ -128,7 +128,7 @@ class Settings extends Component {
     return null
   }
 
-  render() {
+  render () {
     const { env } = this.props
     const { user, isSaving } = this.state
     const clipbard = this.getClipboard(user)

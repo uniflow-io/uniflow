@@ -9,7 +9,7 @@ import {
   setCurrentUsername,
   getCurrentProgram,
   getCurrentPath,
-  feedPathTo,
+  feedPathTo
 } from '../../reducers/feed/actions'
 import { navigate } from 'gatsby'
 import moment from 'moment'
@@ -19,7 +19,7 @@ class UserManagerComponent extends Component {
     fetching: false,
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { auth, location } = this.props
 
     if (auth.isAuthenticated) {
@@ -29,7 +29,7 @@ class UserManagerComponent extends Component {
     this.onLocation(location)
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const oldProps = this.props
 
     if (
@@ -209,7 +209,7 @@ class UserManagerComponent extends Component {
       })
   }
 
-  render() {
+  render () {
     return <div />
   }
 }
