@@ -172,6 +172,8 @@ class ProgramShow extends Component {
       (feed.username === 'me' || user.username === feed.username) &&
       program.data !== data
     ) {
+      program.data = data
+
       this.props
         .dispatch(setProgramData(program, this.props.auth.token))
         .catch(log => {
