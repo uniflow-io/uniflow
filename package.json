@@ -35,6 +35,7 @@
   "scripts": {
     "build": "ACTIVE_ENV=production gatsby build",
     "build-staging": "ACTIVE_ENV=staging gatsby build",
+    "build-development": "ACTIVE_ENV=development gatsby build",
     "dev": "ACTIVE_ENV=development gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",

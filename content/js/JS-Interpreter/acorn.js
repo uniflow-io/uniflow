@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Acorn is a tiny, fast JavaScript parser written in JavaScript.
 //
 // Acorn was written by Marijn Haverbeke and released under an MIT

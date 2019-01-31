@@ -1,5 +1,7 @@
 import acorn from './acorn'
 
+/* eslint-disable */
+
 /**
  * @license
  * JavaScript Interpreter

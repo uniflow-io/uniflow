@@ -1,7 +1,5 @@
-// import Interpreter from '../../content/js/JS-Interpreter/interpreter'
+import Interpreter from '../../content/js/JS-Interpreter/interpreter'
 import { transform } from 'babel-standalone'
-
-let Interpreter = () => {}
 
 export default class Runner {
   run (stack, onRunIndex) {
