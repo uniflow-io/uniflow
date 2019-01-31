@@ -5,10 +5,10 @@
 
 if [[ "$1" == "staging" ]]; then
 (cd ../../clients/bash-client;yarn staging-build)
-scp ../../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/dist/js/bash.js
+scp ../../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/assets/bash.js
 fi
 
 if [[ "$1" == "production" ]]; then
 (cd ../../clients/bash-client;yarn build)
-scp ../../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/dist/js/bash.js
+scp ../../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/assets/bash.js
 fi
