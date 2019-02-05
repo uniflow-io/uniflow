@@ -6,9 +6,9 @@ function Api(env, key) {
 }
 
 Api.prototype.endpoint = function(endpoint, params = []) {
-    let httpHost  = 'https://uniflow.io'
+    let httpHost  = 'https://api.uniflow.io'
     if(this.env === 'dev') {
-        httpHost  = 'http://uniflow.localhost'
+        httpHost  = 'http://uniflow-api.localhost'
     }
 
     const endpoints = {
