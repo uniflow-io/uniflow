@@ -1,5 +1,10 @@
 const defaultState = [
   {
+    tag: 'v1.1.3',
+    label: 'Gatsby integration',
+    date: '06/02/2019',
+  },
+  {
     tag: 'v1.1.2',
     label: 'Add folder',
     date: '21/01/2019',
