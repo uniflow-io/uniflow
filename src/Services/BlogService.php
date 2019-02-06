@@ -24,8 +24,9 @@ class BlogService
 
     public function __construct(
         TagAwareAdapter $cache
-    ) {
-        $this->cache         = $cache;
+    )
+    {
+        $this->cache = $cache;
     }
 
     /**
@@ -37,19 +38,21 @@ class BlogService
     public function getBlog($force = false)
     {
         $key       = 'blog';
+        $ttl       = 3600 * 24;
         $cacheItem = $this->cache->getItem($key);
         $cacheItem->tag('blog');
 
         if (!$cacheItem->isHit() || $force) {
-            $client = new Client();
+            $client   = new Client();
             $response = $client->get($this->url . '/latest?format=json');
 
-            $data = (string) $response->getBody();
+            $data = (string)$response->getBody();
             $data = substr($data, 16); //remove '])}while(1);</x>'
             $data = json_decode($data, true);
             $data = $data['payload']['references']['Post'];
 
             $cacheItem->set($data);
+            $cacheItem->expiresAfter($ttl);
             $this->cache->save($cacheItem);
         }
 
@@ -65,7 +68,7 @@ class BlogService
      */
     public function getArticle($slug, $force = false)
     {
-        $blog = $this->getBlog($force);
+        $blog    = $this->getBlog($force);
         $article = current(array_filter($blog, function ($item) use ($slug) {
             return $item['slug'] === $slug;
         }));
@@ -73,15 +76,15 @@ class BlogService
             return null;
         }
 
-        $key       = 'blog-'.$slug;
+        $key       = 'blog-' . $slug;
         $cacheItem = $this->cache->getItem($key);
         $cacheItem->tag('blog');
 
         if (!$cacheItem->isHit() || $force) {
-            $client = new Client();
+            $client   = new Client();
             $response = $client->get($this->url . '/' . $article['uniqueSlug'] . '?format=json');
 
-            $data = (string) $response->getBody();
+            $data = (string)$response->getBody();
             $data = substr($data, 16); //remove '])}while(1);</x>'
             $data = json_decode($data, true);
             $data = $data['payload']['value'];
