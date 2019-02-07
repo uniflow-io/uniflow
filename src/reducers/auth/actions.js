@@ -109,8 +109,8 @@ export const loginFacebook = (access_token, token = null) => {
           token === null
             ? {}
             : {
-              headers: {
-                'Uniflow-Authorization': `Bearer ${ token }`,
+              params: {
+                'bearer': token,
               },
             }
         )
@@ -156,8 +156,8 @@ export const loginGithub = (code, token = null) => {
           token === null
             ? {}
             : {
-              headers: {
-                'Uniflow-Authorization': `Bearer ${ token }`,
+              params: {
+                'bearer': token,
               },
             }
         )
@@ -201,8 +201,8 @@ export const loginMedium = (code, token = null) => {
       token === null
         ? {}
         : {
-          headers: {
-            'Uniflow-Authorization': `Bearer ${ token }`,
+          params: {
+            'bearer': token,
           },
         }
     )

@@ -172,8 +172,8 @@ export const fetchFeed = (username, path, token = null) => {
   return dispatch => {
     let config = {}
     if (token) {
-      config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${ token }`,
+      config['params'] = {
+        'bearer': token,
       }
     }
 
@@ -223,8 +223,8 @@ export const createProgram = (item, token) => {
 
     return request
       .post(`${ server.getBaseUrl() }/api/program/create`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -259,8 +259,8 @@ export const updateProgram = (item, token) => {
 
     return request
       .put(`${ server.getBaseUrl() }/api/program/update/${ item.id }`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -285,8 +285,8 @@ export const getProgramData = (item, token = null) => {
   return dispatch => {
     let config = {}
     if (token) {
-      config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${ token }`,
+      config['params'] = {
+        'bearer': token,
       }
     }
 
@@ -309,8 +309,8 @@ export const setProgramData = (item, token) => {
   return dispatch => {
     return request
       .put(`${ server.getBaseUrl() }/api/program/setData/${ item.id }`, item.data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -334,8 +334,8 @@ export const deleteProgram = (item, token) => {
   return dispatch => {
     return request
       .delete(`${ server.getBaseUrl() }/api/program/delete/${ item.id }`, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -413,8 +413,8 @@ export const getFolderTree = (username, token = null) => {
   return dispatch => {
     let config = {}
     if (token) {
-      config['headers'] = {
-        'Uniflow-Authorization': `Bearer ${ token }`,
+      config['params'] = {
+        'bearer': token,
       }
     }
 
@@ -443,8 +443,8 @@ export const createFolder = (item, token) => {
 
     return request
       .post(`${ server.getBaseUrl() }/api/folder/create`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -475,8 +475,8 @@ export const updateCurrentFolder = (item, token) => {
 
     return request
       .put(`${ server.getBaseUrl() }/api/folder/update/${ item.id }`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -500,8 +500,8 @@ export const deleteCurrentFolder = (item, token) => {
   return dispatch => {
     return request
       .delete(`${ server.getBaseUrl() }/api/folder/delete/${ item.id }`, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {

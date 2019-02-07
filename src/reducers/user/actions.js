@@ -12,8 +12,8 @@ export const fetchComponents = token => {
 
     return request
       .put(`${ server.getBaseUrl() }/api/user/getComponents`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -32,8 +32,8 @@ export const fetchSettings = token => {
   return dispatch => {
     return request
       .get(`${ server.getBaseUrl() }/api/user/getSettings`, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
@@ -61,8 +61,8 @@ export const updateSettings = (item, token) => {
 
     return request
       .put(`${ server.getBaseUrl() }/api/user/setSettings`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${ token }`,
+        params: {
+          'bearer': token,
         },
       })
       .then(response => {
