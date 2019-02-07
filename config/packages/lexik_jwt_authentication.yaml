@@ -10,3 +10,6 @@ lexik_jwt_authentication:
             enabled: true
             prefix:  Bearer
             name:    Uniflow-Authorization
+        query_parameter:
+            enabled: true
+            name:    bearer
