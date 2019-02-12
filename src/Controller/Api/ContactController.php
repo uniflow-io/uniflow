@@ -20,10 +20,56 @@ class ContactController extends AbstractController
      */
     protected $contactService;
 
+    /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
+
+    /**
+     * @var \Swift_Mailer
+     */
+    protected $mailer;
+
     public function __construct(
-        ContactService $contactService
+        ContactService $contactService,
+        \Twig_Environment $twig,
+        \Swift_Mailer $mailer
     ) {
         $this->contactService = $contactService;
+        $this->twig = $twig;
+        $this->mailer = $mailer;
+    }
+
+    /**
+     * @param $templateName
+     * @param $context
+     * @param $fromEmail
+     * @param $toEmail
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    protected function send($templateName, $context, $fromEmail, $toEmail)
+    {
+        $template = $this->twig->load($templateName);
+        $subject = $template->renderBlock('subject', $context);
+        $textBody = $template->renderBlock('body_text', $context);
+        $htmlBody = $template->renderBlock('body_html', $context);
+
+        $message = (new \Swift_Message())
+            ->setSubject($subject)
+            ->setFrom($fromEmail)
+            ->setTo($toEmail);
+
+        if (!empty($htmlBody)) {
+            $message->setBody($htmlBody, 'text/html')
+                ->addPart($textBody, 'text/plain');
+        } else {
+            $message->setBody($textBody);
+        }
+
+        $this->mailer->send($message);
     }
 
     /**
@@ -31,9 +77,12 @@ class ContactController extends AbstractController
      *
      * @param Request $request
      * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function create(Request $request)
     {
@@ -53,6 +102,10 @@ class ContactController extends AbstractController
 
         if ($form->isValid()) {
             $this->contactService->save($contact);
+
+            $this->send('mails/contact.html.twig', array(
+                'contact' => $contact,
+            ), $contact->getEmail(), 'contact@darkwood.fr');
 
             return new JsonResponse(true);
         }

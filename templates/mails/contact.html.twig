@@ -1,0 +1,10 @@
+{% extends "mails/layout.html.twig" %}
+{% block subject %}[Darkwood] Contact{% endblock %}
+
+{% block content %}
+    <span style="color:#EEEEEE; font-size:20px; font-weight: 300;">Bonjour Mathieu !</span><br /><br />
+
+    Une nouvelle demande de contact sur le site Uniflow :<br /><br />
+    email : {{ contact.email }}<br />
+    contenu : {{ contact.message }}<br />
+{% endblock %}
