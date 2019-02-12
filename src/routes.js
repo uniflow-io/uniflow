@@ -2,6 +2,7 @@ import {
   Admin,
   Article,
   Blog,
+  Contact,
   FAQ,
   Feed,
   Home,
@@ -48,6 +49,10 @@ const routes = {
     path: '/register',
     exact: true,
     component: Register,
+  },
+  contact: {
+    path: '/contact',
+    component: Contact,
   },
   faq: {
     path: '/faq',

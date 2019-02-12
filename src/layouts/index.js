@@ -253,7 +253,10 @@ class Footer extends Component {
     return (
       <footer className="main-footer">
         <div className="pull-right hidden-xs">
-          <Link to={pathTo('versions')}>
+          <Link to={pathTo('contact')} className="btn">
+            Contact
+          </Link>
+          <Link to={pathTo('versions')} className="btn">
             <b>Version</b> {version}
           </Link>
         </div>
