@@ -105,7 +105,7 @@ class ContactController extends AbstractController
 
             $this->send('mails/contact.html.twig', array(
                 'contact' => $contact,
-            ), $contact->getEmail(), 'contact@darkwood.fr');
+            ), $contact->getEmail(), 'matyo@uniflow.io');
 
             return new JsonResponse(true);
         }
