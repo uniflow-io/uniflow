@@ -8,6 +8,14 @@ require("dotenv").config({
 
 module.exports = {
     plugins: [
-        'gatsby-plugin-react-helmet'
+        'gatsby-plugin-react-helmet',
+        {
+            resolve: `gatsby-plugin-gtag`,
+            options: {
+                trackingId: `UA-2319330-13`,
+                head: true,
+                anonymize: false,
+            },
+        },
     ]
 }

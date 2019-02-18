@@ -4509,6 +4509,11 @@ gatsby-link@^2.0.8:
     "@types/reach__router" "^1.0.0"
     prop-types "^15.6.1"
 
+gatsby-plugin-gtag@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-gtag/-/gatsby-plugin-gtag-1.0.7.tgz#15c73e1b4a9c86da241efacbeb4eb389056c4ce0"
+  integrity sha512-FlGHCni3pLQ2FrKIol/zm/DP4slLpPLRpw/v+RAH4oFPWOa1cGzQ6COLWjjqKxoQp54TnRj2uTFdpqTWIqkK3g==
+
 gatsby-plugin-page-creator@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-page-creator/-/gatsby-plugin-page-creator-2.0.5.tgz#16b268142aa3515b5856bf802d8eec5a6320dc1c"

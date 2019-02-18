@@ -323,19 +323,6 @@ export default class Layout extends Component {
             href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i,900,900i|Lustria|Playfair+Display:400,400i,700,700i,900,900i"
             rel="stylesheet"
           />
-
-          {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2319330-13" />
-                <script>
-                    window.dataLayer = window.dataLayer || [];
-
-                    function gtag() {
-                        dataLayer.push(arguments);
-                    }
-
-                    gtag('js', new Date());
-
-                    gtag('config', 'UA-2319330-13');
-                </script> */}
         </Helmet>
         <UserManagerComponent location={this.props.location} />
 
