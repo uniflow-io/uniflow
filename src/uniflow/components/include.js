@@ -41,7 +41,7 @@ class ComponentInclude extends Component {
   }
 
   getFlow = programId => {
-    let program = this.props.feed.items[programId]
+    let program = this.props.feed.items['program_' + programId]
 
     return Promise.resolve()
       .then(() => {
