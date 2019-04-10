@@ -12,4 +12,10 @@ module.exports = function(socket) {
             callback(response.data)
         })
     });
+
+    socket.on('http.config', function (config, callback) {
+        axios(config).then((response) => {
+            callback(response.data)
+        })
+    });
 }
