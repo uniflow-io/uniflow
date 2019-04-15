@@ -144,9 +144,9 @@ export default class ComponentAssets extends Component {
         }).then(() => {
           if (this.state.variable) {
             let assets = this.state.assets.reduce(function (data, asset) {
-              data.push(asset[1])
+              data[asset[0]] = asset[1]
               return data
-            }, [])
+            }, {})
             runner.setValue(this.state.variable, assets)
           }
         })
