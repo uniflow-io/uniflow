@@ -56,7 +56,7 @@ run-back: ## Run symfony local server
 	$(CONSOLE) server:run 127.0.0.1:8091
 
 run-front: ## Run node local server
-	(cd front/frontend && yarn start)
+	(cd ../uniflow-io && ACTIVE_ENV=development gatsby develop -p 8090)
 
 build-front: ## Build node
 	(cd front/frontend && yarn build)
