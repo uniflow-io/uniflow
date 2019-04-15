@@ -56,9 +56,14 @@ class Blog extends Component {
                     <div className="box-body">
                       {blog[item].previewContent.bodyModel.paragraphs.map(
                         (paragraph, j) => [
-                          <Paragraph key={j} data={paragraph} />,
+                          <Paragraph key={j} data={paragraph} headline={true} />,
                         ]
                       )}
+                    </div>
+                    <div className="box-footer text-center">
+                      {blog[item].virtuals.tags.map((tag) => [
+                        <span className="label label-success pull-right">{tag.name}</span>
+                      ])}
                     </div>
                   </div>
                 </div>

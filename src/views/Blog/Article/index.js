@@ -62,7 +62,7 @@ class Article extends Component {
                 <div className="box-body">
                   {article &&
                     article.content.bodyModel.paragraphs.map((paragraph, j) => [
-                      <Paragraph key={j} data={paragraph} />,
+                      <Paragraph key={j} data={paragraph} headline={false} />,
                     ])}
                 </div>
               </div>
