@@ -61,8 +61,8 @@ class Blog extends Component {
                       )}
                     </div>
                     <div className="box-footer text-center">
-                      {blog[item].virtuals.tags.map((tag) => [
-                        <span className="label label-success pull-right">{tag.name}</span>
+                      {blog[item].virtuals.tags.map((tag, k) => [
+                        <span key={k} className="label label-success pull-right">{tag.name}</span>
                       ])}
                     </div>
                   </div>
