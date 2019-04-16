@@ -46,29 +46,31 @@ class Article extends Component {
           </ol>
         </section>
 
+        {article && (
         <section className="content">
           <div className="row">
             <div className="col-sm-6 col-sm-offset-3">
               <div className="box box-success">
                 <div className="box-header with-border">
                   <h3 className="box-title">
-                    {article
-                      ? moment(article.firstPublishedAt, 'x').format(
-                        'MMMM Do YYYY'
-                      )
-                      : ''}
+                    {moment(article.firstPublishedAt, 'x').format('MMMM Do YYYY')}
                   </h3>
                 </div>
                 <div className="box-body">
-                  {article &&
-                    article.content.bodyModel.paragraphs.map((paragraph, j) => [
+                  {article.content.bodyModel.paragraphs.map((paragraph, j) => [
                       <Paragraph key={j} data={paragraph} headline={false} />,
                     ])}
+                </div>
+                <div className="box-footer text-center">
+                  {article.virtuals.tags.map((tag, k) => [
+                    <span key={k} className="label label-success pull-right">{tag.name}</span>
+                  ])}
                 </div>
               </div>
             </div>
           </div>
         </section>
+        )}
       </div>
     )
   }
