@@ -45,6 +45,9 @@ import { matchPath } from '../utils'
 
 class MessengerPlatform extends Component {
   render() {
+      const { env } = this.props
+      console.log(env)
+
     return (
       <div>
         <Helmet>
@@ -82,6 +85,12 @@ class MessengerPlatform extends Component {
     )
   }
 }
+
+MessengerPlatform = connect(state => {
+    return {
+        env: state.env,
+    }
+})(MessengerPlatform)
 
 class Alert extends Component {
   componentDidMount() {

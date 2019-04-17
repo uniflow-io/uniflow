@@ -20,9 +20,9 @@ let store = createStore(
 )
 
 const ENV = {
-  facebookAppId: process.env.FACEBOOK_APP_ID,
-  githubAppId: process.env.GITHUB_APP_ID,
-  mediumAppId: process.env.MEDIUM_APP_ID,
+  facebookAppId: process.env.GATSBY_FACEBOOK_APP_ID,
+  githubAppId: process.env.GATSBY_GITHUB_APP_ID,
+  mediumAppId: process.env.GATSBY_MEDIUM_APP_ID,
 }
 store.dispatch(commitSetEnv(ENV))
 
