@@ -8,7 +8,7 @@ import {
   setCurrentFeed,
   getCurrentPath,
   createFolder,
-  feedPathTo
+  feedPathTo,
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 
@@ -86,7 +86,7 @@ class Navigation extends Component {
     )
   }
 
-  render () {
+  render() {
     const isCurrentUser =
       this.props.feed.username &&
       this.props.feed.username === this.props.user.username

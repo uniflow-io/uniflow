@@ -13,18 +13,18 @@ const defaultState = {
 
 const user = (state = defaultState, action) => {
   switch (action.type) {
-  case COMMIT_SET_COMPONENTS:
-    return {
-      ...state,
-      ...{ components: action.components },
-    }
-  case COMMIT_UPDATE_SETTINGS:
-    return {
-      ...state,
-      ...action.user,
-    }
-  default:
-    return state
+    case COMMIT_SET_COMPONENTS:
+      return {
+        ...state,
+        ...{ components: action.components },
+      }
+    case COMMIT_UPDATE_SETTINGS:
+      return {
+        ...state,
+        ...action.user,
+      }
+    default:
+      return state
   }
 }
 

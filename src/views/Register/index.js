@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {
   register,
   loginFacebookUrl,
-  loginGithubUrl
+  loginGithubUrl,
 } from '../../reducers/auth/actions'
 import { pathTo } from '../../routes'
 import { commitAddLog } from '../../reducers/logs/actions'
@@ -37,7 +37,7 @@ class Register extends Component {
       })
   }
 
-  render () {
+  render() {
     const { auth, env } = this.props
     const { email, password } = this.state
 

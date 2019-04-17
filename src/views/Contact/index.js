@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {
-  contact,
-} from '../../reducers/contact/actions'
+import { contact } from '../../reducers/contact/actions'
 import { pathTo } from '../../routes'
 import { Link } from 'gatsby'
 
@@ -12,7 +10,7 @@ class Contact extends Component {
     emailError: false,
     message: null,
     messageError: false,
-    sent: false
+    sent: false,
   }
 
   onChangeEmail = event => {
@@ -26,33 +24,33 @@ class Contact extends Component {
   onSubmit = e => {
     e.preventDefault()
 
-    let valid = true;
-    if(!this.state.email) {
+    let valid = true
+    if (!this.state.email) {
       valid = false
       this.setState({ emailError: true })
     } else {
       this.setState({ emailError: false })
     }
 
-    if(!this.state.message) {
+    if (!this.state.message) {
       valid = false
       this.setState({ messageError: true })
     } else {
       this.setState({ messageError: false })
     }
 
-    if(valid) {
+    if (valid) {
       this.props
         .dispatch(contact(this.state.email, this.state.message))
-        .then((data) => {
-          if(data === true) {
+        .then(data => {
+          if (data === true) {
             this.setState({ sent: true })
           }
         })
     }
   }
 
-  render () {
+  render() {
     const { email, emailError, message, messageError, sent } = this.state
 
     return (
@@ -83,51 +81,75 @@ class Contact extends Component {
                   {sent && (
                     <p className="text-center">Your message has been sent</p>
                   )}
-                  {!sent && ([
-                  <p className="text-center" key='say'>You got a question about Uniflow, write more here<br />It will be a pleasure to respond</p>,
-                  <form key='contactForm'>
-                    <div className={'form-group col-sm-12' + (emailError ? ' has-error' : '')}>
-                      {emailError && (
-                      <label className="control-label" htmlFor="email{{ _uid }}"><i
-                        className="fa fa-times-circle-o" />Enter your email</label>
-                        )}
-                      <input
-                        className="form-control"
-                        id="email{{ _uid }}"
-                        type="text"
-                        value={email || ''}
-                        onChange={this.onChangeEmail}
-                        placeholder="Email"
-                      />
-                    </div>
-
-                    <div className={'form-group col-sm-12' + (messageError ? ' has-error' : '')}>
-                      {messageError && (
-                        <label className="control-label" htmlFor="message{{ _uid }}"><i
-                          className="fa fa-times-circle-o" />Enter your message</label>
-                      )}
-                      <textarea
-                        className="form-control"
-                        id="message{{ _uid }}"
-                        type="message"
-                        value={message || ''}
-                        onChange={this.onChangeMessage}
-                        placeholder="Message"
-                        rows="15"
-                      />
-                    </div>
-
-                    <div className="form-group col-sm-12">
-                      <button
-                        type="submit"
-                        className="btn btn-primary btn-block btn-flat"
-                        onClick={this.onSubmit}
+                  {!sent && [
+                    <p className="text-center" key="say">
+                      You got a question about Uniflow, write more here
+                      <br />
+                      It will be a pleasure to respond
+                    </p>,
+                    <form key="contactForm">
+                      <div
+                        className={
+                          'form-group col-sm-12' +
+                          (emailError ? ' has-error' : '')
+                        }
                       >
-                        Send
-                      </button>
-                    </div>
-                  </form>
-                  ])}
+                        {emailError && (
+                          <label
+                            className="control-label"
+                            htmlFor="email{{ _uid }}"
+                          >
+                            <i className="fa fa-times-circle-o" />
+                            Enter your email
+                          </label>
+                        )}
+                        <input
+                          className="form-control"
+                          id="email{{ _uid }}"
+                          type="text"
+                          value={email || ''}
+                          onChange={this.onChangeEmail}
+                          placeholder="Email"
+                        />
+                      </div>
+
+                      <div
+                        className={
+                          'form-group col-sm-12' +
+                          (messageError ? ' has-error' : '')
+                        }
+                      >
+                        {messageError && (
+                          <label
+                            className="control-label"
+                            htmlFor="message{{ _uid }}"
+                          >
+                            <i className="fa fa-times-circle-o" />
+                            Enter your message
+                          </label>
+                        )}
+                        <textarea
+                          className="form-control"
+                          id="message{{ _uid }}"
+                          type="message"
+                          value={message || ''}
+                          onChange={this.onChangeMessage}
+                          placeholder="Message"
+                          rows="15"
+                        />
+                      </div>
+
+                      <div className="form-group col-sm-12">
+                        <button
+                          type="submit"
+                          className="btn btn-primary btn-block btn-flat"
+                          onClick={this.onSubmit}
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </form>,
+                  ]}
                 </div>
               </div>
             </div>

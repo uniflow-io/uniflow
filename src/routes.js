@@ -12,7 +12,7 @@ import {
   LoginMedium,
   Register,
   Settings,
-  Versions
+  Versions,
 } from './views'
 
 import pathToRegexp from 'path-to-regexp'
@@ -90,7 +90,7 @@ const routes = {
 
 export const pathTo = (view, params = {}) => {
   if (!(view in routes)) {
-    throw new Error(`There is no such view as ${ view }`)
+    throw new Error(`There is no such view as ${view}`)
   }
 
   return pathToRegexp.compile(routes[view].path)(params)

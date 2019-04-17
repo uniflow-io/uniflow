@@ -43,8 +43,48 @@ import { isGranted } from './../reducers/user/actions'
 import { getLastVersion } from './../reducers/versions/actions'
 import { matchPath } from '../utils'
 
+class MessengerPlatform extends Component {
+  render() {
+    return (
+      <div>
+        <Helmet>
+          <script
+            type="text/javascript"
+            innerHTML={`
+            window.fbAsyncInit = function() {
+                FB.init({
+                  xfbml            : true,
+                  version          : 'v3.2'
+                });
+              };
+            
+              (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+            `}
+          />
+        </Helmet>
+
+        {/* Load Facebook SDK for JavaScript */}
+        <div id="fb-root" />
+
+        {/* Your customer chat code */}
+        <div
+          className="fb-customerchat"
+          attribution="setup_tool"
+          page_id="1899593680350111"
+        />
+      </div>
+    )
+  }
+}
+
 class Alert extends Component {
-  componentDidMount () {
+  componentDidMount() {
     const { alert, logs } = this.props
 
     setTimeout(() => {
@@ -58,7 +98,7 @@ class Alert extends Component {
     this.props.dispatch(commitReadLog(id))
   }
 
-  render () {
+  render() {
     const { alert, logs } = this.props
 
     return (
@@ -84,7 +124,7 @@ Alert = connect(state => ({
 }))(Alert)
 
 class Alerts extends Component {
-  render () {
+  render() {
     const { logs } = this.props
 
     return (
@@ -174,7 +214,7 @@ class Header extends Component {
     this.props.dispatch(commitLogoutUser())
   }
 
-  render () {
+  render() {
     const { auth, user } = this.props
     const active = this.onLocation(this.props.location)
 
@@ -189,19 +229,19 @@ class Header extends Component {
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
                 user.username === null && (
-                <li className={active === 'dashboard' ? 'active' : ''}>
-                  <Link to={pathTo('feed')}>Dashboard</Link>
-                </li>
-              )}
+                  <li className={active === 'dashboard' ? 'active' : ''}>
+                    <Link to={pathTo('feed')}>Dashboard</Link>
+                  </li>
+                )}
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
                 user.username !== null && (
-                <li className={active === 'dashboard' ? 'active' : ''}>
-                  <Link to={pathTo('userFeed', { username: user.username })}>
+                  <li className={active === 'dashboard' ? 'active' : ''}>
+                    <Link to={pathTo('userFeed', { username: user.username })}>
                       Dashboard
-                  </Link>
-                </li>
-              )}
+                    </Link>
+                  </li>
+                )}
               <li className={active === 'faq' ? 'active' : ''}>
                 <Link to={pathTo('faq')}>FAQ</Link>
               </li>
@@ -247,7 +287,7 @@ Header = connect(state => ({
 }))(Header)
 
 class Footer extends Component {
-  render () {
+  render() {
     const { version } = this.props
 
     return (
@@ -302,7 +342,7 @@ Footer = connect(state => ({
 }))(Footer)
 
 export default class Layout extends Component {
-  render () {
+  render() {
     return (
       <div>
         <Helmet>
@@ -325,6 +365,7 @@ export default class Layout extends Component {
           />
         </Helmet>
         <UserManagerComponent location={this.props.location} />
+        <MessengerPlatform />
 
         <div className="wrapper">
           <Alerts />

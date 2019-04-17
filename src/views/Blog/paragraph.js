@@ -5,7 +5,7 @@ const TYPE_TITLE = 3
 const TYPE_IMAGE = 4
 
 class Paragraph extends Component {
-  render () {
+  render() {
     const { data, headline } = this.props
 
     if (data.type === TYPE_PARAGRAPH) {
@@ -15,7 +15,9 @@ class Paragraph extends Component {
     } else if (data.type === TYPE_IMAGE) {
       let width = headline ? 1400 : data['metadata']['originalWidth']
       let height = headline ? 420 : data['metadata']['originalHeight']
-      let src = `https://miro.medium.com/fit/c/${width}/${height}/${data['metadata']['id']}`
+      let src = `https://miro.medium.com/fit/c/${width}/${height}/${
+        data['metadata']['id']
+      }`
       return <img src={src} alt="" className="img-thumbnail" width="100%" />
     }
 

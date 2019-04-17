@@ -11,9 +11,9 @@ export const fetchComponents = token => {
     let data = Object.keys(components)
 
     return request
-      .put(`${ server.getBaseUrl() }/api/user/getComponents`, data, {
+      .put(`${server.getBaseUrl()}/api/user/getComponents`, data, {
         params: {
-          'bearer': token,
+          bearer: token,
         },
       })
       .then(response => {
@@ -31,9 +31,9 @@ export const fetchComponents = token => {
 export const fetchSettings = token => {
   return dispatch => {
     return request
-      .get(`${ server.getBaseUrl() }/api/user/getSettings`, {
+      .get(`${server.getBaseUrl()}/api/user/getSettings`, {
         params: {
-          'bearer': token,
+          bearer: token,
         },
       })
       .then(response => {
@@ -60,9 +60,9 @@ export const updateSettings = (item, token) => {
     }
 
     return request
-      .put(`${ server.getBaseUrl() }/api/user/setSettings`, data, {
+      .put(`${server.getBaseUrl()}/api/user/setSettings`, data, {
         params: {
-          'bearer': token,
+          bearer: token,
         },
       })
       .then(response => {

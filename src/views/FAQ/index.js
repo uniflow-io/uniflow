@@ -3,7 +3,7 @@ import { pathTo } from '../../routes'
 import { Link } from 'gatsby'
 
 export default class Index extends Component {
-  render () {
+  render() {
     return (
       <div className="content-wrapper">
         <section className="content-header">

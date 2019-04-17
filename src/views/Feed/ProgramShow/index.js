@@ -6,14 +6,14 @@ import {
   ListComponent,
   TagItComponent,
   ICheckBoxComponent,
-  Select2Component
+  Select2Component,
 } from 'uniflow/src/components'
 import { Runner } from '../../../models'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
-  commitSetFlow
+  commitSetFlow,
 } from 'uniflow/src/reducers/flow/actions'
 import {
   getCurrentProgram,
@@ -30,7 +30,7 @@ import {
   stringToPath,
   feedPathTo,
   deserialiseFlowData,
-  serialiseFlowData
+  serialiseFlowData,
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
@@ -45,7 +45,7 @@ class ProgramShow extends Component {
     folderTree: [],
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { program } = this.props
 
     this._componentIsMounted = true
@@ -55,11 +55,11 @@ class ProgramShow extends Component {
     this.onFetchFlowData()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this._componentIsMounted = false
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
     if (nextProps.program.id !== oldProps.program.id) {
@@ -335,7 +335,7 @@ class ProgramShow extends Component {
       }
     }
 
-    componentLabels.sort(function (component1, component2) {
+    componentLabels.sort(function(component1, component2) {
       let x = component1.label
       let y = component2.label
       return x < y ? -1 : x > y ? 1 : 0
@@ -354,7 +354,7 @@ class ProgramShow extends Component {
     return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
-  render () {
+  render() {
     const { program, tags, stack, user } = this.props
     const { folderTreeEdit, folderTree } = this.state
     const components = this.getComponents(user.components, program)

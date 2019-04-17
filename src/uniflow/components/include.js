@@ -3,7 +3,7 @@ import { Select2Component } from 'uniflow/src/components'
 import {
   getOrderedFeed,
   getProgramData,
-  deserialiseFlowData
+  deserialiseFlowData,
 } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
@@ -12,7 +12,7 @@ import components from '../../uniflow'
 import { commitSetFlow } from 'uniflow/src/reducers/flow/actions'
 
 class UiComponent extends Component {
-  render () {
+  render() {
     const { tag, bus } = this.props
     const TagName = components[tag]
 
@@ -26,17 +26,17 @@ class ComponentInclude extends Component {
     programId: null,
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.stack = createStore(flow)
   }
 
-  static tags () {
+  static tags() {
     return ['core']
   }
 
-  static clients () {
+  static clients() {
     return ['uniflow', 'bash']
   }
 
@@ -68,7 +68,7 @@ class ComponentInclude extends Component {
     })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { bus } = this.props
 
     bus.on('reset', this.deserialise)
@@ -78,7 +78,7 @@ class ComponentInclude extends Component {
     this.unsubscribe = this.stack.subscribe(() => this.forceUpdate())
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const { bus } = this.props
 
     bus.off('reset', this.deserialise)
@@ -88,7 +88,7 @@ class ComponentInclude extends Component {
     this.unsubscribe()
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     const oldProps = this.props
 
     if (nextProps.bus !== oldProps.bus) {
@@ -164,7 +164,7 @@ class ComponentInclude extends Component {
       })
   }
 
-  render () {
+  render() {
     const { running, programId } = this.state
     const stack = this.stack.getState()
 

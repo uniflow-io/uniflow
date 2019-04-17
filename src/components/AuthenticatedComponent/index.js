@@ -4,13 +4,13 @@ import { pathTo } from '../../routes'
 import { isGranted } from '../../reducers/user/actions'
 import { navigate } from 'gatsby'
 
-export default function requireAuthentication (Component, role = 'ROLE_USER') {
+export default function requireAuthentication(Component, role = 'ROLE_USER') {
   class AuthenticatedComponent extends React.Component {
-    componentWillMount () {
+    componentWillMount() {
       this.checkAuth(this.props.isAuthenticated, this.props.user)
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       this.checkAuth(nextProps.isAuthenticated, nextProps.user)
     }
 
@@ -22,7 +22,7 @@ export default function requireAuthentication (Component, role = 'ROLE_USER') {
       }
     }
 
-    render () {
+    render() {
       return (
         <div>
           {this.props.isAuthenticated === true ? (

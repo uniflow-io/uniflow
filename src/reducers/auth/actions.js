@@ -5,7 +5,7 @@ import {
   COMMIT_LOGIN_USER_REQUEST,
   COMMIT_LOGIN_USER_SUCCESS,
   COMMIT_LOGIN_USER_FAILURE,
-  COMMIT_LOGOUT_USER
+  COMMIT_LOGOUT_USER,
 } from './actionsTypes'
 
 export const commitLoginUserRequest = () => {
@@ -63,7 +63,7 @@ export const login = (username, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${ server.getBaseUrl() }/api/login_check`, {
+        .post(`${server.getBaseUrl()}/api/login_check`, {
           username: username,
           password: password,
         })
@@ -92,9 +92,9 @@ export const login = (username, password) => {
 export const loginFacebookUrl = facebookAppId => {
   const httphost =
     typeof window !== `undefined`
-      ? `${ window.location.protocol }//${ window.location.hostname }`
+      ? `${window.location.protocol}//${window.location.hostname}`
       : ''
-  return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${ facebookAppId }&response_type=token&redirect_uri=${ httphost }/login/facebook`
+  return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${facebookAppId}&response_type=token&redirect_uri=${httphost}/login/facebook`
 }
 
 export const loginFacebook = (access_token, token = null) => {
@@ -102,17 +102,17 @@ export const loginFacebook = (access_token, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${ server.getBaseUrl() }/api/login/facebook`,
+          `${server.getBaseUrl()}/api/login/facebook`,
           {
             access_token: access_token,
           },
           token === null
             ? {}
             : {
-              params: {
-                'bearer': token,
-              },
-            }
+                params: {
+                  bearer: token,
+                },
+              }
         )
         .then(response => {
           try {
@@ -139,9 +139,9 @@ export const loginFacebook = (access_token, token = null) => {
 export const loginGithubUrl = githubAppId => {
   const httphost =
     typeof window !== `undefined`
-      ? `${ window.location.protocol }//${ window.location.hostname }`
+      ? `${window.location.protocol}//${window.location.hostname}`
       : ''
-  return `https://github.com/login/oauth/authorize?client_id=${ githubAppId }&redirect_uri=${ httphost }/login/github`
+  return `https://github.com/login/oauth/authorize?client_id=${githubAppId}&redirect_uri=${httphost}/login/github`
 }
 
 export const loginGithub = (code, token = null) => {
@@ -149,17 +149,17 @@ export const loginGithub = (code, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${ server.getBaseUrl() }/api/login/github`,
+          `${server.getBaseUrl()}/api/login/github`,
           {
             code: code,
           },
           token === null
             ? {}
             : {
-              params: {
-                'bearer': token,
-              },
-            }
+                params: {
+                  bearer: token,
+                },
+              }
         )
         .then(response => {
           try {
@@ -186,25 +186,25 @@ export const loginGithub = (code, token = null) => {
 export const loginMediumUrl = mediumAppId => {
   const httphost =
     typeof window !== `undefined`
-      ? `${ window.location.protocol }//${ window.location.hostname }`
+      ? `${window.location.protocol}//${window.location.hostname}`
       : ''
-  return `https://medium.com/m/oauth/authorize?client_id=${ mediumAppId }&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${ httphost }/login/medium`
+  return `https://medium.com/m/oauth/authorize?client_id=${mediumAppId}&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${httphost}/login/medium`
 }
 
 export const loginMedium = (code, token = null) => {
   return dispatch => {
     return request.post(
-      `${ server.getBaseUrl() }/api/login/medium`,
+      `${server.getBaseUrl()}/api/login/medium`,
       {
         code: code,
       },
       token === null
         ? {}
         : {
-          params: {
-            'bearer': token,
-          },
-        }
+            params: {
+              bearer: token,
+            },
+          }
     )
   }
 }
@@ -213,7 +213,7 @@ export const register = (email, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${ server.getBaseUrl() }/api/register`, {
+        .post(`${server.getBaseUrl()}/api/register`, {
           email: email,
           password: password,
         })

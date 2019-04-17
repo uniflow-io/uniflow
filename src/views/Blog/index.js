@@ -11,7 +11,7 @@ class Blog extends Component {
     blog: {},
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.onFetchFlowData()
   }
 
@@ -21,7 +21,7 @@ class Blog extends Component {
     })
   }
 
-  render () {
+  render() {
     const { blog } = this.state
 
     return (
@@ -56,13 +56,22 @@ class Blog extends Component {
                     <div className="box-body">
                       {blog[item].previewContent.bodyModel.paragraphs.map(
                         (paragraph, j) => [
-                          <Paragraph key={j} data={paragraph} headline={true} />,
+                          <Paragraph
+                            key={j}
+                            data={paragraph}
+                            headline={true}
+                          />,
                         ]
                       )}
                     </div>
                     <div className="box-footer text-center">
                       {blog[item].virtuals.tags.map((tag, k) => [
-                        <span key={k} className="label label-success pull-right">{tag.name}</span>
+                        <span
+                          key={k}
+                          className="label label-success pull-right"
+                        >
+                          {tag.name}
+                        </span>,
                       ])}
                     </div>
                   </div>

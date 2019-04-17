@@ -13,7 +13,7 @@ class Admin extends Component {
     isSaving: false,
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.dispatch(fetchConfig(this.props.auth.token)).then(response => {
       this.setState({
         config: Object.assign({}, this.state.config, response.data),
@@ -43,7 +43,7 @@ class Admin extends Component {
     })
   }
 
-  render () {
+  render() {
     const { env } = this.props
     const { config } = this.state
 
