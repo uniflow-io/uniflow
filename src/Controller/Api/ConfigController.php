@@ -41,10 +41,6 @@ class ConfigController extends AbstractController
             throw new AccessDeniedException('This config does not have access to this section.');
         }
 
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('You are not alowed to create more program');
-        }
-
         $config = $this->configService->findOne();
         if (!$config) {
             $config = new Config();
@@ -68,10 +64,6 @@ class ConfigController extends AbstractController
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This config does not have access to this section.');
-        }
-
-        if (!$this->isGranted('ROLE_SUPER_ADMIN')) {
-            throw new AccessDeniedException('You are not alowed to create more program');
         }
 
         $config = $this->configService->findOne();
