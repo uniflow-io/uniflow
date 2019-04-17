@@ -45,9 +45,6 @@ import { matchPath } from '../utils'
 
 class MessengerPlatform extends Component {
   render() {
-      const { env } = this.props
-      console.log(env)
-
     return (
       <div>
         <Helmet>
@@ -79,18 +76,12 @@ class MessengerPlatform extends Component {
         <div
           className="fb-customerchat"
           attribution="setup_tool"
-          page_id="1899593680350111"
+          pageId="1899593680350111"
         />
       </div>
     )
   }
 }
-
-MessengerPlatform = connect(state => {
-    return {
-        env: state.env,
-    }
-})(MessengerPlatform)
 
 class Alert extends Component {
   componentDidMount() {
