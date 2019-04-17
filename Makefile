@@ -1,11 +1,11 @@
 clean:
 	rm -rf .cache public/*
 
-deploy-staging: clean
-	yarn build-staging
+deploy-preprod: clean
+	yarn build-preprod
 	ssh admin@ssh.darkwood.fr rm -rf /var/www/preprod.uniflow.io/public/*
 	scp -r ./public admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io
-	(cd ../clients/bash-client;yarn staging-build)
+	(cd ../clients/bash-client;yarn preprod-build)
 	ssh admin@ssh.darkwood.fr mkdir -p /var/www/preprod.uniflow.io/public/assets
 	scp ../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/assets/bash.js
 

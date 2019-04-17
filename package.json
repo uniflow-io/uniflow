@@ -35,7 +35,7 @@
   "license": "MIT",
   "scripts": {
     "build": "ACTIVE_ENV=production ./node_modules/.bin/gatsby build",
-    "build-staging": "ACTIVE_ENV=staging ./node_modules/.bin/gatsby build",
+    "build-preprod": "ACTIVE_ENV=preprod ./node_modules/.bin/gatsby build",
     "build-development": "ACTIVE_ENV=development ./node_modules/.bin/gatsby build",
     "dev": "ACTIVE_ENV=development ./node_modules/.bin/gatsby develop -p 8090",
     "start": "npm run develop",
