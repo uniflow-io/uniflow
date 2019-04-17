@@ -76,7 +76,7 @@ class MessengerPlatform extends Component {
         <div
           className="fb-customerchat"
           attribution="setup_tool"
-          pageId="1899593680350111"
+          page_id="1899593680350111"
         />
       </div>
     )
@@ -341,8 +341,9 @@ Footer = connect(state => ({
   version: getLastVersion(state.versions),
 }))(Footer)
 
-export default class Layout extends Component {
+class Layout extends Component {
   render() {
+      const { env } = this.props
     return (
       <div>
         <Helmet>
@@ -365,7 +366,7 @@ export default class Layout extends Component {
           />
         </Helmet>
         <UserManagerComponent location={this.props.location} />
-        <MessengerPlatform />
+        {['production', 'preprod'].indexOf(env.env) !== - 1 && (<MessengerPlatform />)}
 
         <div className="wrapper">
           <Alerts />
@@ -379,3 +380,9 @@ export default class Layout extends Component {
     )
   }
 }
+
+Layout = connect(state => ({
+    env: state.env,
+}))(Layout)
+
+export default Layout

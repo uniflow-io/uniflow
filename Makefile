@@ -5,7 +5,7 @@ deploy-preprod: clean
 	yarn build-preprod
 	ssh admin@ssh.darkwood.fr rm -rf /var/www/preprod.uniflow.io/public/*
 	scp -r ./public admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io
-	(cd ../clients/bash-client;yarn preprod-build)
+	(cd ../clients/bash-client;yarn build-preprod)
 	ssh admin@ssh.darkwood.fr mkdir -p /var/www/preprod.uniflow.io/public/assets
 	scp ../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/assets/bash.js
 

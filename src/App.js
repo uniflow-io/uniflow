@@ -20,6 +20,8 @@ let store = createStore(
 )
 
 const ENV = {
+  env: process.env.GATSBY_ENV,
+  apiUrl: process.env.GATSBY_API_URL,
   facebookAppId: process.env.GATSBY_FACEBOOK_APP_ID,
   githubAppId: process.env.GATSBY_GITHUB_APP_ID,
   mediumAppId: process.env.GATSBY_MEDIUM_APP_ID,
