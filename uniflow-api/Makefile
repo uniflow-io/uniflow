@@ -4,6 +4,13 @@ EXEC_PHP        = php
 CONSOLE         = $(EXEC_PHP) bin/console
 COMPOSER        = composer
 
+jwt: ## Generate JWT Certificates
+jwt:
+	@echo "-------\n>> Get the content of the variable JWT_PASSPHRASE in .env file to use as passphrase\n-------"
+	mkdir -p config/jwt
+	openssl genrsa -out config/jwt/private.pem -aes256 4096
+	openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+
 ##Symfony
 ##-------------
 
