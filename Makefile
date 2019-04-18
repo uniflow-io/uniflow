@@ -5,3 +5,5 @@ run: ## Run local server (with multi-sessions)
 	       select-pane -t 0  \; \
 	       split-window -v "(cd uniflow-front && yarn dev); read" \; \
 	       select-pane -t 2
+
+node-link:

@@ -1,0 +1,23 @@
+{
+  "name": "uniflow-browser-component",
+  "private": true,
+  "description": "Uniflow Browser component",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/browser-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/browser-component/issues"
+  },
+  "uniflow": {
+    "name": "browser",
+    "clients": ["uniflow", "phpstorm", "chrome"],
+    "tags": ["core"]
+  }
+}

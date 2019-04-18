@@ -1,0 +1,23 @@
+{
+  "name": "uniflow-if-component",
+  "private": true,
+  "description": "Uniflow If component",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/if-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/if-component/issues"
+  },
+  "uniflow": {
+    "name": "if",
+    "clients": ["uniflow", "phpstorm", "chrome"],
+    "tags": ["core"]
+  }
+}

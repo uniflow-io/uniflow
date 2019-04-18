@@ -1,0 +1,23 @@
+{
+  "name": "uniflow-chrome-component",
+  "private": true,
+  "description": "Uniflow Chrome component",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/chrome-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/chrome-component/issues"
+  },
+  "uniflow": {
+    "name": "chrome",
+    "clients": ["uniflow", "phpstorm", "chrome"],
+    "tags": ["core"]
+  }
+}

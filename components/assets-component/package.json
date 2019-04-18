@@ -1,0 +1,23 @@
+{
+  "name": "uniflow-assets-component",
+  "private": true,
+  "description": "Uniflow Assets component",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/assets-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/assets-component/issues"
+  },
+  "uniflow": {
+    "name": "assets",
+    "clients": ["uniflow", "phpstorm", "chrome"],
+    "tags": ["core"]
+  }
+}

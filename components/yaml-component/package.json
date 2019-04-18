@@ -1,0 +1,23 @@
+{
+  "name": "uniflow-yaml-component",
+  "private": true,
+  "description": "Uniflow Yaml component",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/yaml-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/yaml-component/issues"
+  },
+  "uniflow": {
+    "name": "yaml",
+    "clients": ["uniflow", "phpstorm", "chrome"],
+    "tags": ["core"]
+  }
+}
