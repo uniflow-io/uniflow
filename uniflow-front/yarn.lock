@@ -9672,6 +9672,11 @@ uniflow-javascript-component@../components/javascript-component:
   dependencies:
     uniflow "https://github.com/uniflow-io/uniflow.git"
 
+uniflow-uniflow-client@../clients/uniflow-client:
+  version "1.0.0"
+  dependencies:
+    babel-standalone "^6.26.0"
+
 "uniflow@https://github.com/uniflow-io/uniflow.git":
   version "1.1.0"
   resolved "https://github.com/uniflow-io/uniflow.git#441913804f4accc0cdcd5544380e43966a25c8e3"

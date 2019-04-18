@@ -16,6 +16,7 @@
     "url": "https://gitlab.com/uniflow-io/javascript-component/issues"
   },
   "uniflow": {
+    "name": "javascript",
     "clients": ["uniflow", "phpstorm", "chrome"],
     "tags": ["core"]
   }

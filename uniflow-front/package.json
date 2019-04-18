@@ -27,7 +27,8 @@
     "remote-browser": "^0.0.13",
     "socket.io-client": "^2.1.1",
     "uniflow": "https://github.com/uniflow-io/uniflow.git",
-    "uniflow-javascript-component": "../components/javascript-component"
+    "uniflow-javascript-component": "../components/javascript-component",
+    "uniflow-uniflow-client": "../clients/uniflow-client"
   },
   "keywords": [
     "gatsby"
