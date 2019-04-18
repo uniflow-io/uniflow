@@ -1,18 +1,10 @@
 import React, { Component } from 'react'
-import { AceComponent } from '../../components'
+import { AceComponent } from 'uniflow/src/components'
 
 export default class ComponentJavascript extends Component {
     state = {
       running: false,
       javascript: null
-    }
-
-    static tags () {
-      return ['core']
-    }
-
-    static clients () {
-      return ['uniflow', 'phpstorm', 'chrome']
     }
 
     componentDidMount () {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import { React, Component } from 'uniflow/src/react'
 import { AceComponent } from 'uniflow/src/components'
 
 export default class ComponentJavascript extends Component {
@@ -7,28 +7,28 @@ export default class ComponentJavascript extends Component {
       javascript: null
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return ['core']
     }
 
-    static clients () {
-      return ['uniflow', 'phpstorm', 'chrome']
+    static clients() {
+        return ['uniflow', 'bash']
     }
 
     componentDidMount () {
       const { bus } = this.props
 
       bus.on('reset', this.deserialise)
-      bus.on('compile', this.onCompile)
-      bus.on('execute', this.onExecute)
+      //bus.on('compile', this.onCompile)
+      //bus.on('execute', this.onExecute)
     }
 
     componentWillUnmount () {
       const { bus } = this.props
 
       bus.off('reset', this.deserialise)
-      bus.off('compile', this.onCompile)
-      bus.off('execute', this.onExecute)
+      //bus.off('compile', this.onCompile)
+      //bus.off('execute', this.onExecute)
     }
 
     componentWillReceiveProps (nextProps) {
@@ -36,12 +36,12 @@ export default class ComponentJavascript extends Component {
 
       if (nextProps.bus !== oldProps.bus) {
         oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', this.onCompile)
-        oldProps.bus.off('execute', this.onExecute)
+        //oldProps.bus.off('compile', this.onCompile)
+        //oldProps.bus.off('execute', this.onExecute)
 
         nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', this.onCompile)
-        nextProps.bus.on('execute', this.onExecute)
+        //nextProps.bus.on('compile', this.onCompile)
+        //nextProps.bus.on('execute', this.onExecute)
       }
     }
 

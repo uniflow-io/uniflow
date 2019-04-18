@@ -19,7 +19,7 @@ export default class SearchComponent extends Component {
     }
 
     render () {
-      const { components } = this.props
+      const { userComponents } = this.props
       const { search } = this.state
 
       return (
@@ -34,7 +34,7 @@ export default class SearchComponent extends Component {
                     onChange={this.onChange}
                     className='form-control pull-right'
                     id='search{{ _uid }}'
-                    options={components.map(component => {
+                    options={userComponents.map(component => {
                       return { value: component.key, label: component.label }
                     })}
                   />

@@ -357,7 +357,7 @@ class ProgramShow extends Component {
   render() {
     const { program, tags, stack, user } = this.props
     const { folderTreeEdit, folderTree } = this.state
-    const components = this.getComponents(user.components, program)
+    const userComponents = this.getComponents(user.components, program)
     const clients = {
       uniflow: 'Uniflow',
       bash: 'Bash',
@@ -550,6 +550,7 @@ class ProgramShow extends Component {
           stack={stack}
           runIndex={this.state.runIndex}
           components={components}
+          userComponents={userComponents}
           onPush={this.onPushFlow}
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}

@@ -1,7 +1,11 @@
-import components from 'uniflow/src/uniflow'
+import ComponentJavascript from 'uniflow-javascript-component/src'
 
-import ComponentInclude from './components/include'
+export default {
+    'javascript': ComponentJavascript
+}
+
+/*import ComponentInclude from './components/include'
 
 export default Object.assign(components, {
   //include: ComponentInclude,
-})
+})*/
