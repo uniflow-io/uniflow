@@ -7,5 +7,6 @@ run: ## Run local server (with multi-sessions)
 	       select-pane -t 2
 
 node-link:
-	for d in ./components/*; do (cd "$$d" && yarn install && yarn link); done
+	(cd uniflow && yarn install && yarn link)
+	for d in ./components/*; do (cd "$$d" && yarn install && yarn link && yarn link uniflow); done
 	for d in ./components/*; do (c=$${d/.\/components\//uniflow-} && cd uniflow-front && yarn link $$c) done
