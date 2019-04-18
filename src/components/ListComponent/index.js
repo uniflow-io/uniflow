@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { SearchComponent } from '../../components'
-import components from '../../uniflow'
 
 class UiComponent extends Component {
-    components = Object.assign({}, components, {
-      'search': SearchComponent
-    })
-
     render () {
-      const { tag, bus, onPush, onPop, onUpdate, components } = this.props
-      const TagName = this.components[tag]
+      const { tag, bus, onPush, onPop, onUpdate, components, userComponents } = this.props
+
+        let TagName = SearchComponent
+        if(tag !== 'search') {
+            TagName = components[tag]
+        }
 
       return <TagName bus={bus}
+        userComponents={userComponents}
         components={components}
         onPush={onPush}
         onPop={onPop}
@@ -62,7 +62,7 @@ class UiComponent extends Component {
 
 export default class ListComponent extends Component {
   render () {
-    const { stack, runIndex, onPush, onPop, onUpdate, components } = this.props
+    const { stack, runIndex, onPush, onPop, onUpdate, components, userComponents } = this.props
     const uiStack = (() => {
       let uiStack = [{
         component: 'search',
@@ -93,6 +93,7 @@ export default class ListComponent extends Component {
         tag={item.component}
         bus={item.bus}
         components={components}
+        userComponents={userComponents}
         onPush={component => {
           onPush(item.index, component)
         }}
