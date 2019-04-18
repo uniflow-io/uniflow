@@ -1,4 +1,4 @@
-import ComponentAssets from './components/assets'
+/*import ComponentAssets from './components/assets'
 import ComponentBash from './components/bash'
 import ComponentBrowser from './components/browser'
 import ComponentChrome from './components/chrome'
@@ -13,10 +13,10 @@ import ComponentSocketIO from './components/socketio'
 import ComponentText from './components/text'
 import ComponentTextList from './components/textlist'
 import ComponentWhile from './components/while'
-import ComponentYaml from './components/yaml'
+import ComponentYaml from './components/yaml'*/
 
 export default {
-  'assets': ComponentAssets,
+  /*'assets': ComponentAssets,
   'bash': ComponentBash,
   'browser': ComponentBrowser,
   'checkboxes': ComponentCheckBoxes,
@@ -31,5 +31,5 @@ export default {
   'text': ComponentText,
   'textlist': ComponentTextList,
   'while': ComponentWhile,
-  'yaml': ComponentYaml
+  'yaml': ComponentYaml*/
 }

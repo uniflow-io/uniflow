@@ -1,0 +1,21 @@
+{
+  "name": "uniflow-javascript-component",
+  "private": true,
+  "description": "Workflow your microtasks",
+  "version": "0.0.1",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "dependencies": {
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
+  },
+  "keywords": [
+    "gatsby"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/javascript-component.git"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/javascript-component/issues"
+  }
+}
