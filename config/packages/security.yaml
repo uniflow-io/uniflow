@@ -1,0 +1,43 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    role_hierarchy:
+        ROLE_USER_PRO: ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_USER_PRO
+
+    providers:
+        app_api_key_user_provider:
+            id: App\Security\ApiKeyUserProvider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/api/login_check
+            stateless: true
+            anonymous: true
+            json_login:
+                provider: app_api_key_user_provider
+                check_path:               /api/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            anonymous: true
+            guard:
+                provider: app_api_key_user_provider
+                authenticators:
+                - lexik_jwt_authentication.jwt_token_authenticator
+                - App\Security\ApiKeyAuthenticator
+                entry_point: lexik_jwt_authentication.jwt_token_authenticator
+
+    access_control:
+        #- { path: ^/api/login,    roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/api,          roles: ROLE_USER }
