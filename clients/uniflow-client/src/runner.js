@@ -1,4 +1,4 @@
-import Interpreter from '../../content/js/JS-Interpreter/interpreter'
+import Interpreter from '../libs/JS-Interpreter/interpreter'
 import { transform } from 'babel-standalone'
 
 export default class Runner {

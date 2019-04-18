@@ -12,7 +12,7 @@ export default class ComponentJavascript extends Component {
     }
 
     static clients() {
-        return ['uniflow', 'bash']
+        return ["uniflow", "phpstorm", "chrome"]
     }
 
     componentDidMount () {

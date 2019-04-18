@@ -1,0 +1,11 @@
+{
+  "name": "uniflow-uniflow-client",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "git+ssh://math@darkwood.fr:/home/math/git/uniflow.git",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-standalone": "^6.26.0"
+  }
+}
