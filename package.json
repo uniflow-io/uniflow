@@ -1,0 +1,22 @@
+{
+  "name": "uniflow",
+  "version": "1.1.0",
+  "description": "Workflow your microtasks",
+  "main": "src/index.js",
+  "keywords": [],
+  "author": "Mathieu Ledru",
+  "license": "MIT",
+  "dependencies": {
+    "brace": "^0.11.1",
+    "imports-loader": "^0.8.0",
+    "lz-string": "^1.4.4",
+    "promise-events": "^0.1.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-select": "^2.3.0",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.2.0",
+    "remote-browser": "^0.0.13",
+    "socket.io-client": "^2.1.1"
+  }
+}
