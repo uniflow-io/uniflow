@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import LZString from 'lz-string'
+import { uniflow } from '../package'
 import { onCompile, onExecute } from '../clients/uniflow'
 
 export default class AssetsComponent extends Component {
@@ -9,42 +10,42 @@ export default class AssetsComponent extends Component {
       assets: []
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {
-      const { bus } = this.props
+        const { bus } = this.props
 
-      bus.on('reset', this.deserialise)
-      bus.on('compile', this.onCompile)
-      bus.on('execute', this.onExecute)
+        bus.on('reset', this.deserialise)
+        bus.on('compile', onCompile.bind(this))
+        bus.on('execute', onExecute.bind(this))
     }
 
     componentWillUnmount () {
-      const { bus } = this.props
+        const { bus } = this.props
 
-      bus.off('reset', this.deserialise)
-      bus.off('compile', this.onCompile)
-      bus.off('execute', this.onExecute)
+        bus.off('reset', this.deserialise)
+        bus.off('compile', onCompile.bind(this))
+        bus.off('execute', onExecute.bind(this))
     }
 
     componentWillReceiveProps (nextProps) {
-      const oldProps = this.props
+        const oldProps = this.props
 
-      if (nextProps.bus !== oldProps.bus) {
-        oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', this.onCompile)
-        oldProps.bus.off('execute', this.onExecute)
+        if (nextProps.bus !== oldProps.bus) {
+            oldProps.bus.off('reset', this.deserialise)
+            oldProps.bus.off('compile', onCompile.bind(this))
+            oldProps.bus.off('execute', onExecute.bind(this))
 
-        nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', this.onCompile)
-        nextProps.bus.on('execute', this.onExecute)
-      }
+            nextProps.bus.on('reset', this.deserialise)
+            nextProps.bus.on('compile', onCompile.bind(this))
+            nextProps.bus.on('execute', onExecute.bind(this))
+        }
     }
 
     serialise = () => {
@@ -129,38 +130,6 @@ export default class AssetsComponent extends Component {
       event.preventDefault()
 
       this.props.onPop()
-    }
-
-    onCompile = (interpreter, scope, asyncWrapper) => {
-
-    }
-
-    onExecute = runner => {
-      return Promise
-        .resolve()
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: true }, resolve)
-          })
-        }).then(() => {
-          if (this.state.variable) {
-            let assets = this.state.assets.reduce(function (data, asset) {
-              data[asset[0]] = asset[1]
-              return data
-            }, {})
-            runner.setValue(this.state.variable, assets)
-          }
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            setTimeout(resolve, 500)
-          })
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: false }, resolve)
-          })
-        })
     }
 
     render () {

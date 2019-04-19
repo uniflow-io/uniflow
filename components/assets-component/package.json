@@ -5,6 +5,7 @@
   "version": "0.0.1",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "dependencies": {
+    "lz-string": "^1.4.4",
     "uniflow": "https://github.com/uniflow-io/uniflow.git"
   },
   "license": "MIT",
@@ -17,7 +18,7 @@
   },
   "uniflow": {
     "name": "assets",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["uniflow"],
     "tags": ["core"]
   }
 }

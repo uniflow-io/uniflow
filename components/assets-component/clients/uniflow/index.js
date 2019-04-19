@@ -7,10 +7,16 @@ const onExecute = function(runner) {
         .resolve()
         .then(() => {
             return new Promise(resolve => {
-                this.setState({running: true}, resolve)
+                this.setState({ running: true }, resolve)
             })
         }).then(() => {
-            return runner.eval(this.state.javascript)
+            if (this.state.variable) {
+                let assets = this.state.assets.reduce(function (data, asset) {
+                    data[asset[0]] = asset[1]
+                    return data
+                }, {})
+                runner.setValue(this.state.variable, assets)
+            }
         })
         .then(() => {
             return new Promise(resolve => {
@@ -19,9 +25,11 @@ const onExecute = function(runner) {
         })
         .then(() => {
             return new Promise(resolve => {
-                this.setState({running: false}, resolve)
+                this.setState({ running: false }, resolve)
             })
         })
 }
+
+
 
 export { onCompile, onExecute }
