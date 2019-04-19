@@ -3,7 +3,7 @@ import { AceComponent } from 'uniflow/src/components'
 import { uniflow } from '../package'
 import { onCompile, onExecute } from '../clients/uniflow'
 
-export default class ComponentJavascript extends Component {
+export default class JavascriptComponent extends Component {
     state = {
       running: false,
       javascript: null

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class ComponentBrowser extends Component {
+export default class BrowserComponent extends Component {
     state = {
       running: false,
       variable: null

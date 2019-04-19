@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Select2Component } from '../../components'
+import { Select2Component } from 'uniflow/src/components'
 
 /**
  * this component insert or set key-value to existing or new mapping into the yaml given in the arguments
@@ -4174,7 +4174,7 @@ let indentationSpace = Math.round(indentationSpaceAdverage.reduce(function (coun
     }
 })(scope)
 
-export default class ComponentYaml extends Component {
+export default class YamlComponent extends Component {
     state = {
         running: false,
         variable: null,

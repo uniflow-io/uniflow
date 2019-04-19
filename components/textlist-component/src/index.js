@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class ComponentTextList extends Component {
+export default class TextListComponent extends Component {
     state = {
       running: false,
       variable: null,

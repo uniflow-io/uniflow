@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { AceComponent } from '../../components'
+import { AceComponent } from 'uniflow/src/components'
 
-export default class ComponentText extends Component {
+export default class TextComponent extends Component {
     state = {
       running: false,
       variable: null,

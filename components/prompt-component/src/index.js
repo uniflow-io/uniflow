@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { AceComponent } from '../../components'
-import { Select2Component } from '../../components'
+import { AceComponent } from 'uniflow/src/components'
+import { Select2Component } from 'uniflow/src/components'
 
-export default class ComponentPrompt extends Component {
+export default class PromptComponent extends Component {
     state = {
       running: false,
       variable: null,

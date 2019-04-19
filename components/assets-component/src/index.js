@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import LZString from 'lz-string'
+import { onCompile, onExecute } from '../clients/uniflow'
 
-export default class ComponentAssets extends Component {
+export default class AssetsComponent extends Component {
     state = {
       running: false,
       variable: null,

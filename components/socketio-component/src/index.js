@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
 
-export default class ComponentSocketIO extends Component {
+export default class SocketIOComponent extends Component {
     state = {
       running: false,
       variable: null,

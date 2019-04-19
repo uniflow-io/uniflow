@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import { ListComponent } from '../../components'
-import createStore from '../../utils/createStore'
-import flow from '../../reducers/flow'
+import { ListComponent } from 'uniflow/src/components'
+import createStore from 'uniflow/src/utils/createStore'
+import flow from 'uniflow/src/reducers/flow'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow
-} from '../../reducers/flow/actions'
+} from 'uniflow/src/reducers/flow/actions'
 
-export default class ComponentWhile extends Component {
+export default class WhileComponent extends Component {
     state = {
       running: false,
       conditionStack: [],

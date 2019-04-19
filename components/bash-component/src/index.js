@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { AceComponent } from '../../components'
+import { AceComponent } from 'uniflow/src/components'
 
-export default class ComponentBash extends Component {
+export default class BashComponent extends Component {
     state = {
       running: false,
       bash: null

@@ -519,7 +519,7 @@ let scope = {};
   scope.PropertyAccessor = PropertyAccessor
 })(scope)
 
-export default class ComponentObject extends Component {
+export default class ObjectComponent extends Component {
     state = {
       running: false,
       variable: null,

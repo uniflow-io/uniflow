@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Select2Component } from '../../components'
+import { Select2Component } from 'uniflow/src/components'
 import io from 'socket.io-client'
 import { Browser } from 'remote-browser/web-client'
 
-export default class ComponentBrowser extends Component {
+export default class BrowserComponent extends Component {
     state = {
       running: false,
       variable: null,

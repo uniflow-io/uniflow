@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Select2Component } from '../../components'
+import { Select2Component } from 'uniflow/src/components'
 
-export default class ComponentSelect extends Component {
+export default class SelectComponent extends Component {
     state = {
       running: false,
       variable: null,

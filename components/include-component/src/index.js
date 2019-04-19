@@ -4,11 +4,11 @@ import {
     getOrderedFeed,
     getProgramData,
     deserialiseFlowData,
-} from '../../reducers/feed/actions'
+} from 'uniflow/src/reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
-import components from '../../uniflow'
+import components from 'uniflow/src/uniflow'
 import { commitSetFlow } from 'uniflow/src/reducers/flow/actions'
 
 class UiComponent extends Component {
@@ -20,7 +20,7 @@ class UiComponent extends Component {
     }
 }
 
-class ComponentInclude extends Component {
+class IncludeComponent extends Component {
     state = {
         running: false,
         programId: null,

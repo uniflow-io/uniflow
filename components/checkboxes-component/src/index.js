@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { ICheckBoxComponent } from '../../components'
+import { ICheckBoxComponent } from 'uniflow/src/components'
 
-export default class ComponentCheckBoxes extends Component {
+export default class CheckBoxesComponent extends Component {
     state = {
       running: false,
       variable: null,
