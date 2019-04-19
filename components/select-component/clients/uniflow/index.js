@@ -10,12 +10,10 @@ const onExecute = function(runner) {
                 this.setState({ running: true }, resolve)
             })
         }).then(() => {
-            if (this.state.variable) {
-                try {
-                    let builder = new SRL(this.state.expression)
-                    runner.setValue(this.state.variable, builder.get())
-                } catch (e) {
-                }
+            if (this.state.variable && runner.hasValue(this.state.variable)) {
+                this.setState({ choices: runner.getValue(this.state.variable) }, this.onUpdate)
+
+                runner.setValue(this.state.variable, this.state.selected)
             }
         })
         .then(() => {
