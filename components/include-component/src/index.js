@@ -225,4 +225,4 @@ export default connect(state => {
         auth: state.auth,
         feed: state.feed,
     }
-})(ComponentInclude)
+})(IncludeComponent)
