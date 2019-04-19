@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Select2Component } from 'uniflow/src/components'
-import io from 'socket.io-client'
-import { Browser } from 'remote-browser/web-client'
+import { uniflow } from '../package'
+import { onCompile, onExecute } from '../clients/uniflow'
 
 export default class BrowserComponent extends Component {
     state = {
@@ -14,12 +14,12 @@ export default class BrowserComponent extends Component {
       displayBrowserConnect: false
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     constructor (props) {
@@ -32,29 +32,29 @@ export default class BrowserComponent extends Component {
       const { bus } = this.props
 
       bus.on('reset', this.deserialise)
-      bus.on('compile', this.onCompile)
-      bus.on('execute', this.onExecute)
+        bus.on('compile', onCompile.bind(this))
+        bus.on('execute', onExecute.bind(this))
     }
 
     componentWillUnmount () {
       const { bus } = this.props
 
       bus.off('reset', this.deserialise)
-      bus.off('compile', this.onCompile)
-      bus.off('execute', this.onExecute)
+        bus.off('compile', onCompile.bind(this))
+        bus.off('execute', onExecute.bind(this))
     }
 
     componentWillReceiveProps (nextProps) {
       const oldProps = this.props
 
       if (nextProps.bus !== oldProps.bus) {
-        oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', this.onCompile)
-        oldProps.bus.off('execute', this.onExecute)
+          oldProps.bus.off('reset', this.deserialise)
+          oldProps.bus.off('compile', onCompile.bind(this))
+          oldProps.bus.off('execute', onExecute.bind(this))
 
-        nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', this.onCompile)
-        nextProps.bus.on('execute', this.onExecute)
+          nextProps.bus.on('reset', this.deserialise)
+          nextProps.bus.on('compile', onCompile.bind(this))
+          nextProps.bus.on('execute', onExecute.bind(this))
       }
     }
 
@@ -104,104 +104,6 @@ export default class BrowserComponent extends Component {
       event.preventDefault()
 
       this.props.onPop()
-    }
-
-    onCompile = (interpreter, scope, asyncWrapper) => {
-      let obj = {}
-
-      let constructorWrapper = function (host, ioPort, proxyPort, mode) {
-        let newBrowser = interpreter.createObjectProto(obj.BROWSER_PROTO)
-
-        let socket = io('https://' + host + ':' + ioPort)
-
-        let wrapper
-
-        let browser = new Browser()
-
-        wrapper = function (callback) {
-          let args = ['browser.connect', proxyPort, mode]
-
-          return new Promise(resolve => {
-            args.push(function (data) {
-              browser.connectionUrl = 'ws://' + host + ':' + proxyPort
-              browser.sessionId = 'default'
-              browser.negotiateConnection()
-                .then(() => {
-                  callback(interpreter.nativeToPseudo(data))
-                  resolve()
-                })
-            })
-            socket.emit.apply(socket, args)
-          })
-        }
-        interpreter.setProperty(newBrowser, 'connect', interpreter.createAsyncFunction(asyncWrapper(wrapper)))
-
-        wrapper = function (asyncFunction, args, callback) {
-          asyncFunction = interpreter.pseudoToNative(asyncFunction)
-          args = interpreter.pseudoToNative(args)
-          return browser.evaluateInBackground(asyncFunction, args)
-            .then(result => {
-              callback(interpreter.nativeToPseudo(result))
-            })
-        }
-        interpreter.setProperty(newBrowser, 'evaluateInBackground', interpreter.createAsyncFunction(asyncWrapper(wrapper)))
-
-        wrapper = function (tabId, asyncFunction, args, callback) {
-          tabId = interpreter.pseudoToNative(tabId)
-          asyncFunction = interpreter.pseudoToNative(asyncFunction)
-          args = interpreter.pseudoToNative(args)
-          return browser.evaluateInContent(tabId, asyncFunction, args)
-            .then(result => {
-              callback(interpreter.nativeToPseudo(result))
-            })
-        }
-        interpreter.setProperty(newBrowser, 'evaluateInContent', interpreter.createAsyncFunction(asyncWrapper(wrapper)))
-
-        return newBrowser
-      }
-      obj.Browser = interpreter.createNativeFunction(constructorWrapper, true)
-      obj.BROWSER_PROTO = interpreter.getProperty(obj.Browser, 'prototype')
-      interpreter.setProperty(scope, 'Browser', obj.Browser)
-    }
-
-    onExecute = runner => {
-      return Promise
-        .resolve()
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: true }, resolve)
-          })
-        }).then(() => {
-          return runner.eval('var ' + this.state.variable + ' = new Browser(\'' + this.state.host + '\', \'' + this.state.ioPort + '\', \'' + this.state.proxyPort + '\', \'' + this.state.mode + '\')')
-            .then(() => {
-              return runner.eval(this.state.variable + '.connect()')
-            })
-            .then(() => {
-              return new Promise(resolve => {
-                this.setState({ displayBrowserConnect: true }, resolve)
-              })
-            })
-            .then(() => {
-              return new Promise(resolve => {
-                this.resolveBrowserConnected = resolve
-              })
-            })
-            .then(() => {
-              return new Promise(resolve => {
-                this.setState({ displayBrowserConnect: false }, resolve)
-              })
-            })
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            setTimeout(resolve, 500)
-          })
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: false }, resolve)
-          })
-        })
     }
 
     render () {
