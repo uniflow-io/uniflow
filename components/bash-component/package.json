@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "bash",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["bash"],
     "tags": ["core"]
   }
 }
