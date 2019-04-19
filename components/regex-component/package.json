@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "regex",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["uniflow"],
     "tags": ["core"]
   }
 }

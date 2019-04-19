@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import io from 'socket.io-client'
 
 export default class SocketIOComponent extends Component {
@@ -9,12 +10,12 @@ export default class SocketIOComponent extends Component {
       port: null
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {

@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "while",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["uniflow"],
     "tags": ["core"]
   }
 }

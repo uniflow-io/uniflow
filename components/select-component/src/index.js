@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { Select2Component } from 'uniflow/src/components'
 
 export default class SelectComponent extends Component {
@@ -9,12 +10,12 @@ export default class SelectComponent extends Component {
       selected: null
     }
 
-    static tags () {
-      return ['ui']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {

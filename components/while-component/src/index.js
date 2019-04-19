@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { ListComponent } from 'uniflow/src/components'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
@@ -26,12 +27,12 @@ export default class WhileComponent extends Component {
       }
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {

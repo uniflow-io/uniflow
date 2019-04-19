@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { AceComponent } from 'uniflow/src/components'
 
 export default class TextComponent extends Component {
@@ -8,12 +9,12 @@ export default class TextComponent extends Component {
       text: null
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow', 'bash', 'chrome']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {

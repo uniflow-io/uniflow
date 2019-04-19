@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "yaml",
-    "clients": ["uniflow", "phpstorm", "chrome"],
-    "tags": ["core"]
+    "clients": ["uniflow"],
+    "tags": ["yaml"]
   }
 }

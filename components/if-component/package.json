@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "if",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["uniflow"],
     "tags": ["core"]
   }
 }

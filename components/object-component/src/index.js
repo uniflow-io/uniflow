@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import isObject from 'lodash/isObject'
 import isArray from 'lodash/isArray'
 
@@ -526,12 +527,12 @@ export default class ObjectComponent extends Component {
       keyvaluelist: []
     }
 
-    static tags () {
-      return ['ui']
+    static tags() {
+      return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+      return uniflow.clients
     }
 
     componentDidMount () {

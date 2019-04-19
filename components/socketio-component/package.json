@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "socketio",
-    "clients": ["uniflow", "phpstorm", "chrome"],
+    "clients": ["uniflow"],
     "tags": ["core"]
   }
 }

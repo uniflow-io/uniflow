@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { Select2Component } from 'uniflow/src/components'
 import {
     getOrderedFeed,
@@ -33,11 +34,11 @@ class IncludeComponent extends Component {
     }
 
     static tags() {
-        return ['core']
+        return uniflow.tags
     }
 
     static clients() {
-        return ['uniflow', 'bash']
+        return uniflow.clients
     }
 
     getFlow = programId => {

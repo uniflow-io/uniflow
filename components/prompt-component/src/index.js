@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { AceComponent } from 'uniflow/src/components'
 import { Select2Component } from 'uniflow/src/components'
 
@@ -13,12 +14,12 @@ export default class PromptComponent extends Component {
       input: null
     }
 
-    static tags () {
-      return ['core']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow', 'bash']
+    static clients() {
+        return uniflow.clients
     }
 
     constructor (props) {

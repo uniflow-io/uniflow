@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 
 export default class TextListComponent extends Component {
     state = {
@@ -7,12 +8,12 @@ export default class TextListComponent extends Component {
       textlist: []
     }
 
-    static tags () {
-      return ['ui']
+    static tags() {
+        return uniflow.tags
     }
 
-    static clients () {
-      return ['uniflow']
+    static clients() {
+        return uniflow.clients
     }
 
     componentDidMount () {

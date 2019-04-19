@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { uniflow } from '../package'
 import { Select2Component } from 'uniflow/src/components'
 
 /**
@@ -4182,12 +4183,12 @@ export default class YamlComponent extends Component {
         type: null
     }
 
-    static tags () {
-        return ['yaml']
+    static tags() {
+      return uniflow.tags
     }
 
-    static clients () {
-        return ['uniflow']
+    static clients() {
+      return uniflow.clients
     }
 
     componentDidMount () {
