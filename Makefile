@@ -10,3 +10,5 @@ node-link:
 	(cd uniflow && yarn install && yarn link)
 	for d in ./components/*; do (cd "$$d" && yarn install && yarn link && yarn link uniflow); done
 	for d in ./components/*; do (c=$${d/.\/components\//uniflow-} && cd uniflow-front && yarn link $$c) done
+	(cd clients/uniflow-client && yarn install && yarn link)
+	(cd uniflow-front && yarn link uniflow-uniflow-client)
