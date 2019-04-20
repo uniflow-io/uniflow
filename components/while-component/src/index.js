@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { onCompile, onExecute} from '../clients/uniflow'
 import { uniflow } from '../package'
 import { ListComponent } from 'uniflow/src/components'
 import createStore from 'uniflow/src/utils/createStore'
@@ -39,16 +40,16 @@ export default class WhileComponent extends Component {
       const { bus } = this.props
 
       bus.on('reset', this.deserialise)
-      bus.on('compile', this.onCompile)
-      bus.on('execute', this.onExecute)
+      bus.on('compile', onCompile.bind(this))
+      bus.on('execute', onExecute.bind(this))
     }
 
     componentWillUnmount () {
       const { bus } = this.props
 
       bus.off('reset', this.deserialise)
-      bus.off('compile', this.onCompile)
-      bus.off('execute', this.onExecute)
+      bus.off('compile', onCompile.bind(this))
+      bus.off('execute', onExecute.bind(this))
     }
 
     componentWillReceiveProps (nextProps) {
@@ -56,12 +57,12 @@ export default class WhileComponent extends Component {
 
       if (nextProps.bus !== oldProps.bus) {
         oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', this.onCompile)
-        oldProps.bus.off('execute', this.onExecute)
+        oldProps.bus.off('compile', onCompile.bind(this))
+        oldProps.bus.off('execute', onExecute.bind(this))
 
         nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', this.onCompile)
-        nextProps.bus.on('execute', this.onExecute)
+        nextProps.bus.on('compile', onCompile.bind(this))
+        nextProps.bus.on('execute', onExecute.bind(this))
       }
     }
 
@@ -171,56 +172,6 @@ export default class WhileComponent extends Component {
       event.preventDefault()
 
       this.props.onPop()
-    }
-
-    onCompile = (interpreter, scope, asyncWrapper) => {
-      [this.state.conditionStack, this.state.executeStack]
-        .forEach(stack => {
-          stack.forEach(item => {
-            item.bus.emit('compile', interpreter, scope)
-          })
-        })
-    }
-
-    onExecute = runner => {
-      return Promise
-        .resolve()
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: true }, resolve)
-          })
-        }).then(() => {
-          let stackEval = function (stack) {
-            return stack.reduce((promise, item) => {
-              return promise.then(() => {
-                return item.bus.emit('execute', runner)
-              })
-            }, Promise.resolve()).then(() => {
-              return runner.getReturn()
-            })
-          }
-
-          let promiseWhile = () => {
-            return stackEval(this.state.conditionStack)
-              .then(value => {
-                if (value === true) {
-                  return stackEval(this.state.executeStack).then(promiseWhile)
-                }
-              })
-          }
-
-          return promiseWhile()
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            setTimeout(resolve, 500)
-          })
-        })
-        .then(() => {
-          return new Promise(resolve => {
-            this.setState({ running: false }, resolve)
-          })
-        })
     }
 
     render () {
