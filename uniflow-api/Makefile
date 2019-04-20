@@ -51,22 +51,8 @@ update: ## Stop the crap and start working
 cache: .env vendor
 	$(CONSOLE) cache:clear
 
-run: ## Run local server (with multi-sessions)
-	if [ ! -x "$(command -v tmux)" ]; then brew install tmux; fi
-	tmux   new-session "make run-back; read" \;  \
-	       split-window -h \; \
-	       select-pane -t 0  \; \
-	       split-window -v "make run-front; read" \; \
-	       select-pane -t 2
-
-run-back: ## Run symfony local server
+run:
 	$(CONSOLE) server:run 127.0.0.1:8091
-
-run-front: ## Run node local server
-	(cd ../uniflow-io && ACTIVE_ENV=development gatsby develop -p 8090)
-
-build-front: ## Build node
-	(cd front/frontend && yarn build)
 
 ##
 ##DevOps

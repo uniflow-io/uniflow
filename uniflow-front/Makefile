@@ -17,10 +17,5 @@ deploy: clean
 	ssh admin@ssh.darkwood.fr mkdir -p /var/www/uniflow.io/public/assets
 	scp ../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/assets/bash.js
 
-run: ## Run local server (with multi-sessions)
-	if [ ! -x "$(command -v tmux)" ]; then brew install tmux; fi
-	tmux   new-session "(cd ../uniflow-api && make run-back); read" \;  \
-	       split-window -h \; \
-	       select-pane -t 0  \; \
-	       split-window -v "yarn dev; read" \; \
-	       select-pane -t 2
+run:
+	yarn dev
