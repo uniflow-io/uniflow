@@ -4,7 +4,7 @@ import BrowserComponent from 'uniflow-browser-component/src'
 import CheckboxesComponent from 'uniflow-checkboxes-component/src'
 import ChromeComponent from 'uniflow-chrome-component/src'
 import IfComponent from 'uniflow-if-component/src'
-//import IncludeComponent from 'uniflow-include-component/src'
+import IncludeComponent from 'uniflow-include-component/src'
 import JavascriptComponent from 'uniflow-javascript-component/src'
 import ObjectComponent from 'uniflow-object-component/src'
 import PromptComponent from 'uniflow-prompt-component/src'
@@ -23,7 +23,7 @@ export default {
     'checkboxes': CheckboxesComponent,
     'chrome': ChromeComponent,
     'if': IfComponent,
-    //'include': IncludeComponent,
+    'include': IncludeComponent,
     'javascript': JavascriptComponent,
     'object': ObjectComponent,
     'prompt': PromptComponent,

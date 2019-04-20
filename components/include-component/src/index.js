@@ -5,17 +5,16 @@ import {
     getOrderedFeed,
     getProgramData,
     deserialiseFlowData,
-} from 'uniflow/src/reducers/feed/actions'
+} from './reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
 import flow from 'uniflow/src/reducers/flow'
-import components from 'uniflow/src/uniflow'
 import { commitSetFlow } from 'uniflow/src/reducers/flow/actions'
 
 class UiComponent extends Component {
     render() {
         const { tag, bus } = this.props
-        const TagName = components[tag]
+        const TagName = this.props.components[tag]
 
         return <TagName bus={bus} />
     }
@@ -215,7 +214,7 @@ class IncludeComponent extends Component {
             </div>,
         ].concat(
             stack.map((item, i) => (
-                <UiComponent key={i} tag={item.component} bus={item.bus} />
+                <UiComponent key={i} components={this.props.components} tag={item.component} bus={item.bus} />
             ))
         )
     }
