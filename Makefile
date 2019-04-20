@@ -12,11 +12,18 @@ run-api:
 run-front:
 	(cd uniflow-front && make run)
 
-node-link-bash:
+node-link-bash-client:
 	(cd clients/bash-client && yarn install \
 	&& yarn link uniflow-bash-component \
 	&& yarn link uniflow-include-component \
 	&& yarn link uniflow-prompt-component \
+	&& yarn link uniflow-text-component  \
+	)
+
+node-link-chrome-client:
+	(cd clients/chrome-client && yarn install \
+	&& yarn link uniflow-chrome-component \
+	&& yarn link uniflow-javascript-component \
 	&& yarn link uniflow-text-component  \
 	)
 

@@ -1,9 +1,9 @@
-import ComponentChrome  from './components/chrome.js'
-import ComponentJavascript  from './components/javascript.js'
-import ComponentText  from './components/text.js'
+import ChromeComponent  from 'uniflow-chrome-component/clients/chrome'
+import JavascriptComponent  from 'uniflow-javascript-component/clients/chrome'
+import TextComponent  from 'uniflow-text-component/clients/chrome'
 
 export default {
-    'chrome': ComponentChrome,
-    'javascript': ComponentJavascript,
-    'text': ComponentText,
+    'chrome': ChromeComponent,
+    'javascript': JavascriptComponent,
+    'text': TextComponent,
 }
