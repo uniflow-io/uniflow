@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { uniflow } from '../package'
+import { onCompile, onExecute } from '../clients/uniflow'
 import { Select2Component } from 'uniflow/src/components'
 import {
     getOrderedFeed,
@@ -72,8 +73,8 @@ class IncludeComponent extends Component {
         const { bus } = this.props
 
         bus.on('reset', this.deserialise)
-        bus.on('compile', this.onCompile)
-        bus.on('execute', this.onExecute)
+        bus.on('compile', onCompile.bind(this))
+        bus.on('execute', onExecute.bind(this))
 
         this.unsubscribe = this.stack.subscribe(() => this.forceUpdate())
     }
@@ -82,8 +83,8 @@ class IncludeComponent extends Component {
         const { bus } = this.props
 
         bus.off('reset', this.deserialise)
-        bus.off('compile', this.onCompile)
-        bus.off('execute', this.onExecute)
+        bus.off('compile', onCompile.bind(this))
+        bus.off('execute', onExecute.bind(this))
 
         this.unsubscribe()
     }
@@ -93,12 +94,12 @@ class IncludeComponent extends Component {
 
         if (nextProps.bus !== oldProps.bus) {
             oldProps.bus.off('reset', this.deserialise)
-            oldProps.bus.off('compile', this.onCompile)
-            oldProps.bus.off('execute', this.onExecute)
+            oldProps.bus.off('compile', onCompile.bind(this))
+            oldProps.bus.off('execute', onExecute.bind(this))
 
             nextProps.bus.on('reset', this.deserialise)
-            nextProps.bus.on('compile', this.onCompile)
-            nextProps.bus.on('execute', this.onExecute)
+            nextProps.bus.on('compile', onCompile.bind(this))
+            nextProps.bus.on('execute', onExecute.bind(this))
         }
     }
 
@@ -124,44 +125,6 @@ class IncludeComponent extends Component {
         event.preventDefault()
 
         this.props.onPop()
-    }
-
-    onCompile = (interpreter, scope, asyncWrapper) => {
-        return this.getFlow(this.state.programId).then(() => {
-            let flow = this.stack.getState()
-            return flow.reduce((promise, item) => {
-                return promise.then(() => {
-                    return item.bus.emit('compile', interpreter, scope, asyncWrapper)
-                })
-            }, Promise.resolve())
-        })
-    }
-
-    onExecute = runner => {
-        return Promise.resolve()
-            .then(() => {
-                return new Promise(resolve => {
-                    this.setState({ running: true }, resolve)
-                })
-            })
-            .then(() => {
-                let flow = this.stack.getState()
-                return flow.reduce((promise, item) => {
-                    return promise.then(() => {
-                        return item.bus.emit('execute', runner)
-                    })
-                }, Promise.resolve())
-            })
-            .then(() => {
-                return new Promise(resolve => {
-                    setTimeout(resolve, 500)
-                })
-            })
-            .then(() => {
-                return new Promise(resolve => {
-                    this.setState({ running: false }, resolve)
-                })
-            })
     }
 
     render() {
