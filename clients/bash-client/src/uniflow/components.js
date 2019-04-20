@@ -1,11 +1,11 @@
-const ComponentBash = require('./components/bash.js')
-const ComponentInclude = require('./components/include.js')
-const ComponentPrompt = require('./components/prompt.js')
-const ComponentText = require('./components/text.js')
+const BashComponent = require('uniflow-bash-component/clients/bash/index')
+const IncludeComponent = require('uniflow-include-component/clients/bash/index')
+const PromptComponent = require('uniflow-prompt-component/clients/bash/index')
+const TextComponent = require('uniflow-text-component/clients/bash/index')
 
 module.exports = {
-    'bash': ComponentBash,
-    'include': ComponentInclude,
-    'prompt': ComponentPrompt,
-    'text': ComponentText,
+    'bash': BashComponent,
+    'include': IncludeComponent,
+    'prompt': PromptComponent,
+    'text': TextComponent,
 }

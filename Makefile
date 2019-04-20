@@ -12,9 +12,18 @@ run-api:
 run-front:
 	(cd uniflow-front && make run)
 
+node-link-bash:
+	(cd clients/bash-client && yarn install \
+	&& yarn link uniflow-bash-component \
+	&& yarn link uniflow-include-component \
+	&& yarn link uniflow-prompt-component \
+	&& yarn link uniflow-text-component  \
+	)
+
 node-link:
 	(cd uniflow && yarn install && yarn link)
+	(cd clients/uniflow-client && yarn install && yarn link)
+	(cd clients/bash-client && yarn install && yarn link uniflow-bash-component)
 	for d in ./components/*; do (cd "$$d" && yarn install && yarn link && yarn link uniflow); done
 	for d in ./components/*; do (c=$${d/.\/components\//uniflow-} && cd uniflow-front && yarn link $$c) done
-	(cd clients/uniflow-client && yarn install && yarn link)
 	(cd uniflow-front && yarn link uniflow && yarn link uniflow-uniflow-client)

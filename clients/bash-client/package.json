@@ -26,6 +26,10 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "merge": "^1.2.0"
+    "merge": "^1.2.0",
+    "uniflow-bash-component": "../../components/bash-component",
+    "uniflow-include-component": "../../components/include-component",
+    "uniflow-prompt-component": "../../components/prompt-component",
+    "uniflow-text-component": "../../components/text-component"
   }
 }
