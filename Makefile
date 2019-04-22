@@ -34,3 +34,11 @@ node-link:
 	for d in ./components/*; do (cd "$$d" && yarn install && yarn link && yarn link uniflow); done
 	for d in ./components/*; do (c=$${d/.\/components\//uniflow-} && cd uniflow-front && yarn link $$c) done
 	(cd uniflow-front && yarn link uniflow && yarn link uniflow-uniflow-client)
+
+init-remotes:
+	git remote add uniflow-api git@gitlab.com:uniflow-io/uniflow-api.git
+	git remote add uniflow-front git@gitlab.com:uniflow-io/uniflow-front.git
+
+split:
+	splitsh-lite --prefix=uniflow-api --target=refs/heads/uniflow-api && git push uniflow-api uniflow-api:master
+	splitsh-lite --prefix=uniflow-front --target=refs/heads/uniflow-front && git push uniflow-front uniflow-front:master
