@@ -1,6 +1,7 @@
 import AssetsComponent from 'uniflow-assets-component/src'
 import BashComponent from 'uniflow-bash-component/src'
 import BrowserComponent from 'uniflow-browser-component/src'
+import CanvasComponent from 'uniflow-canvas-component/src'
 import CheckboxesComponent from 'uniflow-checkboxes-component/src'
 import ChromeComponent from 'uniflow-chrome-component/src'
 import IfComponent from 'uniflow-if-component/src'
@@ -20,6 +21,7 @@ export default {
     'assets': AssetsComponent,
     'bash': BashComponent,
     'browser': BrowserComponent,
+    'canvas': CanvasComponent,
     'checkboxes': CheckboxesComponent,
     'chrome': ChromeComponent,
     'if': IfComponent,

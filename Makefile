@@ -49,6 +49,7 @@ init-remotes:
 	git remote add components-assets-component git@github.com:uniflow-io/assets-component.git || \
 	git remote add components-bash-component git@github.com:uniflow-io/bash-component.git || \
 	git remote add components-browser-component git@github.com:uniflow-io/browser-component.git || \
+	git remote add components-canvas-component git@github.com:uniflow-io/canvas-component.git || \
 	git remote add components-checkboxes-component git@github.com:uniflow-io/checkboxes-component.git || \
 	git remote add components-chrome-component git@github.com:uniflow-io/chrome-component.git || \
 	git remote add components-if-component git@github.com:uniflow-io/if-component.git || \
@@ -79,6 +80,7 @@ split:
 	splitsh-lite --prefix=components/assets-component --target=refs/heads/components-assets-component && git push components-assets-component components-assets-component:master
 	splitsh-lite --prefix=components/bash-component --target=refs/heads/components-bash-component && git push components-bash-component components-bash-component:master
 	splitsh-lite --prefix=components/browser-component --target=refs/heads/components-browser-component && git push components-browser-component components-browser-component:master
+	splitsh-lite --prefix=components/canvas-component --target=refs/heads/components-canvas-component && git push components-canvas-component components-canvas-component:master
 	splitsh-lite --prefix=components/checkboxes-component --target=refs/heads/components-checkboxes-component && git push components-checkboxes-component components-checkboxes-component:master
 	splitsh-lite --prefix=components/chrome-component --target=refs/heads/components-chrome-component && git push components-chrome-component components-chrome-component:master
 	splitsh-lite --prefix=components/if-component --target=refs/heads/components-if-component && git push components-if-component components-if-component:master
