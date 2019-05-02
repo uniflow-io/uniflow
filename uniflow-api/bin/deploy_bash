@@ -3,8 +3,8 @@
 # deploy bash
 (cd ../../clients/bash-client;yarn install)
 
-if [[ "$1" == "staging" ]]; then
-(cd ../../clients/bash-client;yarn staging-build)
+if [[ "$1" == "preprod" ]]; then
+(cd ../../clients/bash-client;yarn build-preprod)
 scp ../../clients/bash-client/dist/js/bash.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/assets/bash.js
 fi
 

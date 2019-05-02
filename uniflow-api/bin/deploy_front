@@ -3,9 +3,9 @@
 # deploy front
 (cd ../front;yarn install)
 
-if [[ "$1" == "staging" ]]; then
-# deploy staging
-(cd ../front;yarn staging-build)
+if [[ "$1" == "preprod" ]]; then
+# deploy preprod
+(cd ../front;yarn build-preprod)
 scp public/dist/js/bundle.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/dist/js/bundle.js
 fi
 
