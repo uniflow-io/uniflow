@@ -6,7 +6,7 @@ import { onCompile, onExecute } from '../clients/uniflow'
 export default class CheckBoxesComponent extends Component {
     state = {
       running: false,
-      callback: null
+      variable: null
     }
 
     static tags() {
@@ -48,17 +48,17 @@ export default class CheckBoxesComponent extends Component {
     }
 
     serialise = () => {
-      return [this.state.callback]
+      return [this.state.variable]
     }
 
     deserialise = data => {
-      let [callback] = data || [null, {}]
+      let [variable] = data || [null, {}]
 
-      this.setState({ callback: callback })
+      this.setState({ variable: variable })
     }
 
-    onChangeCallback = event => {
-      this.setState({ callback: event.target.value }, this.onUpdate)
+    onChangeVariable = event => {
+      this.setState({ variable: event.target.value }, this.onUpdate)
     }
 
     onUpdate = () => {
@@ -72,7 +72,7 @@ export default class CheckBoxesComponent extends Component {
     }
 
     render () {
-      const { running, callback } = this.state
+      const { running, variable } = this.state
 
       return (
         <div className='box box-info'>
@@ -85,10 +85,10 @@ export default class CheckBoxesComponent extends Component {
             </div>
             <div className='box-body'>
               <div className='form-group'>
-                <label htmlFor='callback{{ _uid }}' className='col-sm-2 control-label'>Callback</label>
+                <label htmlFor='variable{{ _uid }}' className='col-sm-2 control-label'>Variable</label>
 
                 <div className='col-sm-10'>
-                  <input id='callback{{ _uid }}' type='text' value={callback || ''} onChange={this.onChangeCallback} className='form-control' />
+                  <input id='variable{{ _uid }}' type='text' value={variable || ''} onChange={this.onChangeVariable} className='form-control' />
                 </div>
               </div>
 
