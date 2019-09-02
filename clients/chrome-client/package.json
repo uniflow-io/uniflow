@@ -23,9 +23,9 @@
     "copy-webpack-plugin": "^4.2.1",
     "imports-loader": "^0.7.1",
     "webextension-polyfill": "^0.2.1",
-    "webpack": "^4.6.0",
+    "webpack": "^4.39.3",
     "webpack-chrome-extension-reloader": "^0.6.6",
-    "webpack-cli": "^2.0.15"
+    "webpack-cli": "^3.3.7"
   },
   "dependencies": {
     "axios": "^0.18.0",
