@@ -1,4 +1,4 @@
-import AssetsComponent from 'uniflow-assets-component/src'
+/*import AssetsComponent from 'uniflow-assets-component/src'
 import BashComponent from 'uniflow-bash-component/src'
 import BrowserComponent from 'uniflow-browser-component/src'
 import CanvasComponent from 'uniflow-canvas-component/src'
@@ -36,4 +36,18 @@ export default {
     'textlist': TextlistComponent,
     'while': WhileComponent,
     'yaml': YamlComponent,
+}*/
+
+import BashComponent from 'uniflow-bash-component/src'
+import IncludeComponent from 'uniflow-include-component/src'
+import JavascriptComponent from 'uniflow-javascript-component/src'
+import PromptComponent from 'uniflow-prompt-component/src'
+import TextComponent from 'uniflow-text-component/src'
+
+export default {
+  'bash': BashComponent,
+  'include': IncludeComponent,
+  'javascript': JavascriptComponent,
+  'prompt': PromptComponent,
+  'text': TextComponent,
 }
