@@ -16,18 +16,17 @@ jwt:
 
 first-install: ## First install (DB/Schema/fixtures)
 	$(COMPOSER) install
-	$(CONSOLE) doctrine:database:drop --force
 	$(CONSOLE) doctrine:database:create
 	$(CONSOLE) doctrine:schema:create
-	$(CONSOLE) doctrine:fixtures:load -vvv --no-interaction  --group=base
+	$(CONSOLE) doctrine:fixtures:load -vvv --no-interaction
 	$(CONSOLE) translation:download
 	$(CONSOLE) cache:clear --env=prod
 
 fixtures: ## Replay fixtures
-	$(CONSOLE) search:clear
+	$(CONSOLE) cache:clear
 	$(CONSOLE) doctrine:schema:drop --force
 	$(CONSOLE) doctrine:schema:update --force
-	$(CONSOLE) doctrine:fixtures:load --env=dev -vvv --no-interaction  --group=base
+	$(CONSOLE) doctrine:fixtures:load --env=dev -vvv --no-interaction
 
 reload-db: ## Reload initial db
 	$(CONSOLE) doctrine:schema:drop --force
@@ -50,6 +49,9 @@ update: ## Stop the crap and start working
 
 cache: .env vendor
 	$(CONSOLE) cache:clear
+
+docker-run:
+	docker-compose up -d
 
 run:
 	$(CONSOLE) server:run 127.0.0.1:8091
