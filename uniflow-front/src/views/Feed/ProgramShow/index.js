@@ -322,26 +322,26 @@ class ProgramShow extends Component {
   }
 
   getFlows = (userFlows, program) => {
-    let componentLabels = []
+    let flowLabels = []
 
     for (let i = 0; i < userFlows.length; i++) {
       let key = userFlows[i]
 
       if (flows[key].clients().indexOf(program.client) !== -1) {
-        componentLabels.push({
+        flowLabels.push({
           key: key,
           label: flows[key].tags().join(' - ') + ' : ' + key,
         })
       }
     }
 
-    componentLabels.sort(function(flow1, flow2) {
+    flowLabels.sort(function(flow1, flow2) {
       let x = flow1.label
       let y = flow2.label
       return x < y ? -1 : x > y ? 1 : 0
     })
 
-    return componentLabels
+    return flowLabels
   }
 
   itemPathTo = item => {

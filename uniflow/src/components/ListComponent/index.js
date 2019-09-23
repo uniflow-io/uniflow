@@ -90,7 +90,7 @@ export default class ListComponent extends Component {
 
     return (uiStack.map((item, i) => (
       <UiComponent key={i}
-        tag={item.component}
+        tag={item.flow}
         bus={item.bus}
         flows={flows}
         userFlows={userFlows}
