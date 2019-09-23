@@ -1,7 +1,7 @@
 import { COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
 
 const defaultState = {
-  components: {},
+  flows: {},
   apiKey: null,
   username: null,
   firstName: null,
@@ -16,7 +16,7 @@ const user = (state = defaultState, action) => {
     case COMMIT_SET_FLOWS:
       return {
         ...state,
-        ...{ components: action.components },
+        ...{ flows: action.flows },
       }
     case COMMIT_UPDATE_SETTINGS:
       return {

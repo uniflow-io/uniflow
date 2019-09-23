@@ -3,16 +3,16 @@ import { SearchComponent } from '../../components'
 
 class UiComponent extends Component {
     render () {
-      const { tag, bus, onPush, onPop, onUpdate, components, userComponents } = this.props
+      const { tag, bus, onPush, onPop, onUpdate, flows, userFlows } = this.props
 
         let TagName = SearchComponent
         if(tag !== 'search') {
-            TagName = components[tag]
+            TagName = flows[tag]
         }
 
       return <TagName bus={bus}
-        userComponents={userComponents}
-        components={components}
+        userFlows={userFlows}
+        flows={flows}
         onPush={onPush}
         onPop={onPop}
         onUpdate={onUpdate} />
@@ -62,7 +62,7 @@ class UiComponent extends Component {
 
 export default class ListComponent extends Component {
   render () {
-    const { stack, runIndex, onPush, onPop, onUpdate, components, userComponents } = this.props
+    const { stack, runIndex, onPush, onPop, onUpdate, flows, userFlows } = this.props
     const uiStack = (() => {
       let uiStack = [{
         component: 'search',
@@ -92,8 +92,8 @@ export default class ListComponent extends Component {
       <UiComponent key={i}
         tag={item.component}
         bus={item.bus}
-        components={components}
-        userComponents={userComponents}
+        flows={flows}
+        userFlows={userFlows}
         onPush={component => {
           onPush(item.index, component)
         }}

@@ -19,14 +19,14 @@ export default class SearchComponent extends Component {
     }
 
     render () {
-      const { userComponents } = this.props
+      const { userFlows } = this.props
       const { search } = this.state
 
       return (
         <div className='box box-info'>
           <form className='form-horizontal' onSubmit={this.onSubmit}>
             <div className='box-header with-border'>
-              <h3 className='box-title pull-left' style={{ 'paddingTop': '8px' }}>Component</h3>
+              <h3 className='box-title pull-left' style={{ 'paddingTop': '8px' }}>Flow</h3>
               <div className='col-sm-10 pull-right' style={{ 'paddingRight': '0px' }}>
                 <div className='input-group'>
                   <Select2Component
@@ -34,8 +34,8 @@ export default class SearchComponent extends Component {
                     onChange={this.onChange}
                     className='form-control pull-right'
                     id='search{{ _uid }}'
-                    options={userComponents.map(component => {
-                      return { value: component.key, label: component.label }
+                    options={userFlows.map(flow => {
+                      return { value: flow.key, label: flow.label }
                     })}
                   />
                   <span className='input-group-btn'>
