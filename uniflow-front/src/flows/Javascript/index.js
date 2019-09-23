@@ -1,36 +1,35 @@
 import { React, Component } from 'uniflow/src/react'
 import { AceComponent } from 'uniflow/src/components'
-import { uniflow } from '../package'
-import { onCompile, onExecute } from '../clients/uniflow'
+//import { onCompile, onExecute } from '../clients/uniflow'
 
-export default class JavascriptComponent extends Component {
+export default class JavascriptFlow extends Component {
     state = {
       running: false,
       javascript: null
     }
 
     static tags() {
-        return uniflow.tags
+        return ['core']
     }
 
     static clients() {
-        return uniflow.clients
+        return ['uniflow', 'phpstorm', 'chrome']
     }
 
     componentDidMount () {
       const { bus } = this.props
 
       bus.on('reset', this.deserialise)
-      bus.on('compile', onCompile.bind(this))
-      bus.on('execute', onExecute.bind(this))
+      //bus.on('compile', onCompile.bind(this))
+      //bus.on('execute', onExecute.bind(this))
     }
 
     componentWillUnmount () {
       const { bus } = this.props
 
       bus.off('reset', this.deserialise)
-      bus.off('compile', onCompile.bind(this))
-      bus.off('execute', onExecute.bind(this))
+      //bus.off('compile', onCompile.bind(this))
+      //bus.off('execute', onExecute.bind(this))
     }
 
     componentWillReceiveProps (nextProps) {
@@ -38,12 +37,12 @@ export default class JavascriptComponent extends Component {
 
       if (nextProps.bus !== oldProps.bus) {
         oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', onCompile.bind(this))
-        oldProps.bus.off('execute', onExecute.bind(this))
+        //oldProps.bus.off('compile', onCompile.bind(this))
+        //oldProps.bus.off('execute', onExecute.bind(this))
 
         nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', onCompile.bind(this))
-        nextProps.bus.on('execute', onExecute.bind(this))
+        //nextProps.bus.on('compile', onCompile.bind(this))
+        //nextProps.bus.on('execute', onExecute.bind(this))
       }
     }
 

@@ -1,4 +1,4 @@
-import { COMMIT_SET_COMPONENTS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
+import { COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
 
 const defaultState = {
   components: {},
@@ -13,7 +13,7 @@ const defaultState = {
 
 const user = (state = defaultState, action) => {
   switch (action.type) {
-    case COMMIT_SET_COMPONENTS:
+    case COMMIT_SET_FLOWS:
       return {
         ...state,
         ...{ components: action.components },

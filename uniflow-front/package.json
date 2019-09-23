@@ -23,25 +23,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",
-    "uniflow": "https://github.com/uniflow-io/uniflow.git",
-    "uniflow-assets-component": "../components/assets-component",
-    "uniflow-bash-component": "../components/bash-component",
-    "uniflow-browser-component": "../components/browser-component",
-    "uniflow-checkboxes-component": "../components/checkboxes-component",
-    "uniflow-chrome-component": "../components/chrome-component",
-    "uniflow-if-component": "../components/if-component",
-    "uniflow-include-component": "../components/include-component",
-    "uniflow-javascript-component": "../components/javascript-component",
-    "uniflow-object-component": "../components/object-component",
-    "uniflow-prompt-component": "../components/prompt-component",
-    "uniflow-regex-component": "../components/regex-component",
-    "uniflow-select-component": "../components/select-component",
-    "uniflow-socketio-component": "../components/socketio-component",
-    "uniflow-text-component": "../components/text-component",
-    "uniflow-textlist-component": "../components/textlist-component",
-    "uniflow-while-component": "../components/while-component",
-    "uniflow-yaml-component": "../components/yaml-component",
-    "uniflow-uniflow-client": "../clients/uniflow-client"
+    "uniflow": "https://github.com/uniflow-io/uniflow.git"
   },
   "keywords": [
     "gatsby"

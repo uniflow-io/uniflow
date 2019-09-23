@@ -8,7 +8,7 @@ import {
   ICheckBoxComponent,
   Select2Component,
 } from 'uniflow/src/components'
-import Runner from 'uniflow-uniflow-client/src/runner'
+//import Runner from 'uniflow-uniflow-client/src/runner'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -34,7 +34,7 @@ import {
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
-import components from '../../../uniflow'
+import flows from '../../../flows'
 
 class ProgramShow extends Component {
   state = {
@@ -84,13 +84,13 @@ class ProgramShow extends Component {
         ? this.props.stack
         : this.props.stack.slice(0, index + 1)
 
-    let runner = new Runner()
+    /*let runner = new Runner()
 
     runner.run(stack, index => {
       return new Promise(resolve => {
         this.setState({ runIndex: index }, resolve)
       })
-    })
+    })*/
   }
 
   setFlow = stack => {
@@ -321,23 +321,23 @@ class ProgramShow extends Component {
       })
   }
 
-  getComponents = (userComponents, program) => {
+  getFlows = (userFlows, program) => {
     let componentLabels = []
 
-    for (let i = 0; i < userComponents.length; i++) {
-      let key = userComponents[i]
+    for (let i = 0; i < userFlows.length; i++) {
+      let key = userFlows[i]
 
-      if (components[key].clients().indexOf(program.client) !== -1) {
+      if (flows[key].clients().indexOf(program.client) !== -1) {
         componentLabels.push({
           key: key,
-          label: components[key].tags().join(' - ') + ' : ' + key,
+          label: flows[key].tags().join(' - ') + ' : ' + key,
         })
       }
     }
 
-    componentLabels.sort(function(component1, component2) {
-      let x = component1.label
-      let y = component2.label
+    componentLabels.sort(function(flow1, flow2) {
+      let x = flow1.label
+      let y = flow2.label
       return x < y ? -1 : x > y ? 1 : 0
     })
 
@@ -357,7 +357,7 @@ class ProgramShow extends Component {
   render() {
     const { program, tags, stack, user } = this.props
     const { folderTreeEdit, folderTree } = this.state
-    const userComponents = this.getComponents(user.components, program)
+    const userFlows = this.getFlows(user.flows, program)
     const clients = {
       uniflow: 'Uniflow',
       bash: 'Bash',
@@ -549,8 +549,8 @@ class ProgramShow extends Component {
         <ListComponent
           stack={stack}
           runIndex={this.state.runIndex}
-          components={components}
-          userComponents={userComponents}
+          flows={flows}
+          userFlows={userFlows}
           onPush={this.onPushFlow}
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchComponents, fetchSettings } from '../../reducers/user/actions'
+import { fetchFlows, fetchSettings } from '../../reducers/user/actions'
 import { matchRoute } from '../../routes'
 import {
   fetchFeed,
@@ -71,7 +71,7 @@ class UserManagerComponent extends Component {
 
   onFetchUser = token => {
     Promise.all([
-      this.props.dispatch(fetchComponents(token)),
+      this.props.dispatch(fetchFlows(token)),
       this.props.dispatch(fetchSettings(token)),
     ]).then(() => {
       const { location } = this.props

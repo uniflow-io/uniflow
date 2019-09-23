@@ -38,16 +38,8 @@ export default {
     'yaml': YamlComponent,
 }*/
 
-import BashComponent from 'uniflow-bash-component/src'
-import IncludeComponent from 'uniflow-include-component/src'
-import JavascriptComponent from 'uniflow-javascript-component/src'
-import PromptComponent from 'uniflow-prompt-component/src'
-import TextComponent from 'uniflow-text-component/src'
+import JavascriptFlow from './Javascript'
 
 export default {
-  'bash': BashComponent,
-  'include': IncludeComponent,
-  'javascript': JavascriptComponent,
-  'prompt': PromptComponent,
-  'text': TextComponent,
+  'javascript': JavascriptFlow,
 }

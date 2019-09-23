@@ -39,12 +39,12 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/getComponents", name="api_user_get_components", methods={"PUT"})
+     * @Route("/api/user/getFlows", name="api_user_get_flows", methods={"PUT"})
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function components(Request $request)
+    public function getFlows(Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();

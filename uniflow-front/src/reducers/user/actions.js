@@ -1,23 +1,23 @@
 import request from 'axios'
 import server from '../../utils/server'
 import uniq from 'lodash/uniq'
-import components from '../../uniflow'
-import { COMMIT_SET_COMPONENTS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
+import flows from '../../flows'
+import { COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
 import { commitLogoutUser } from '../auth/actions'
 import { commitAddLog } from '../logs/actions'
 
-export const fetchComponents = token => {
+export const fetchFlows = token => {
   return dispatch => {
-    let data = Object.keys(components)
+    let data = Object.keys(flows)
 
     return request
-      .put(`${server.getBaseUrl()}/api/user/getComponents`, data, {
+      .put(`${server.getBaseUrl()}/api/user/getFlows`, data, {
         params: {
           bearer: token,
         },
       })
       .then(response => {
-        dispatch(commitSetComponents(Object.values(response.data)))
+        dispatch(commitSetFlows(Object.values(response.data)))
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -81,11 +81,11 @@ export const updateSettings = (item, token) => {
       })
   }
 }
-export const commitSetComponents = components => {
+export const commitSetFlows = flows => {
   return dispatch => {
     dispatch({
-      type: COMMIT_SET_COMPONENTS,
-      components,
+      type: COMMIT_SET_FLOWS,
+      flows,
     })
     return Promise.resolve()
   }
