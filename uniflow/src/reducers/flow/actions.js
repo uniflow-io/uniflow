@@ -5,12 +5,12 @@ import {
   COMMIT_SET_FLOW
 } from './actionsTypes'
 
-export const commitPushFlow = (index, component) => {
+export const commitPushFlow = (index, flow) => {
   return dispatch => {
     dispatch({
       type: COMMIT_PUSH_FLOW,
       index,
-      component
+      flow
     })
     return Promise.resolve()
   }

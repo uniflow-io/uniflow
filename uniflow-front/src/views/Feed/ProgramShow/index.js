@@ -103,9 +103,9 @@ class ProgramShow extends Component {
     })
   }
 
-  onPushFlow = (index, component) => {
+  onPushFlow = (index, flow) => {
     this.props
-      .dispatch(commitPushFlow(index, component))
+      .dispatch(commitPushFlow(index, flow))
       .then(() => {
         return this.setFlow(this.props.stack)
       })

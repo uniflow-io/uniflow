@@ -73,7 +73,7 @@ export default class ListComponent extends Component {
         let item = stack[i]
 
         uiStack.push({
-          component: item.component,
+          component: item.flow,
           bus: item.bus,
           active: runIndex === i,
           index: i

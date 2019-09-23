@@ -13,7 +13,7 @@ const flow = (state = defaultState, action) => {
   case COMMIT_PUSH_FLOW:
     let newStatePush = state.slice()
     newStatePush.splice(action.index, 0, {
-      component: action.component,
+      flow: action.flow,
       bus: new Bus()
     })
     return newStatePush
