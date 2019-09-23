@@ -19,7 +19,6 @@ first-install: ## First install (DB/Schema/fixtures)
 	$(CONSOLE) doctrine:database:create
 	$(CONSOLE) doctrine:schema:create
 	$(CONSOLE) doctrine:fixtures:load -vvv --no-interaction
-	$(CONSOLE) translation:download
 	$(CONSOLE) cache:clear --env=prod
 
 fixtures: ## Replay fixtures
@@ -40,7 +39,6 @@ schema: ## Update database schema
 update: ## Stop the crap and start working
 	$(COMPOSER) install
 	$(CONSOLE) doctrine:schema:update --force
-	$(CONSOLE) translation:download
 	#$(CONSOLE) search:clear
 	#$(CONSOLE) search:import
 	$(CONSOLE) cache:clear
