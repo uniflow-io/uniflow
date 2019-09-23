@@ -125,8 +125,8 @@ class ProgramShow extends Component {
       })
   }
 
-  onUpdateFlow = (index, data) => {
-    this.props.dispatch(commitUpdateFlow(index, data)).then(() => {
+  onUpdateFlow = (index, data, code) => {
+    this.props.dispatch(commitUpdateFlow(index, data, code)).then(() => {
       this.onUpdateFlowData()
     })
   }

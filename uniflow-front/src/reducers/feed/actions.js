@@ -20,6 +20,7 @@ export const serialiseFlowData = data => {
     objData.push({
       flow: data[i].flow,
       data: data[i].data,
+      code: data[i].code
     })
   }
 
@@ -35,6 +36,7 @@ export const deserialiseFlowData = raw => {
     data.push({
       flow: objData[i].flow,
       data: objData[i].data,
+      code: objData[i].code,
       bus: new Bus(),
     })
   }

@@ -29,7 +29,10 @@ const flow = (state = defaultState, action) => {
 
       return {
         ...item,
-        ...{ data: action.data }
+        ...{
+          data: action.data,
+          code: action.code
+        }
       }
     })
   case COMMIT_SET_FLOW:

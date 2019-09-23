@@ -58,8 +58,12 @@ export default class JavascriptFlow extends Component {
       this.setState({ javascript: javascript }, this.onUpdate)
     }
 
+    onCode = () => {
+      return this.state.javascript
+    }
+
     onUpdate = () => {
-      this.props.onUpdate(this.serialise())
+      this.props.onUpdate(this.serialise(), this.onCode())
     }
 
     onDelete = event => {

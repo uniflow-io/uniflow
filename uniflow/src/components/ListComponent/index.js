@@ -100,8 +100,8 @@ export default class ListComponent extends Component {
         onPop={() => {
           onPop(item.index)
         }}
-        onUpdate={data => {
-          onUpdate(item.index, data)
+        onUpdate={(data, code) => {
+          onUpdate(item.index, data, code)
         }} />
     )))
   }
