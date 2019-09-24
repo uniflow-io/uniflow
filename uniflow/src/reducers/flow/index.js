@@ -30,8 +30,7 @@ const flow = (state = defaultState, action) => {
       return {
         ...item,
         ...{
-          data: action.data,
-          code: action.code
+          data: action.data
         }
       }
     })
