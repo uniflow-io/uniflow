@@ -20,7 +20,7 @@ export default class JavascriptFlow extends Component {
       const { bus } = this.props
 
       bus.on('reset', this.deserialise)
-      bus.on('compile', this.onCompile)
+      //bus.on('compile', onCompile.bind(this))
       //bus.on('execute', onExecute.bind(this))
     }
 
@@ -28,7 +28,7 @@ export default class JavascriptFlow extends Component {
       const { bus } = this.props
 
       bus.off('reset', this.deserialise)
-      bus.off('compile', this.onCompile)
+      //bus.off('compile', onCompile.bind(this))
       //bus.off('execute', onExecute.bind(this))
     }
 
@@ -37,11 +37,11 @@ export default class JavascriptFlow extends Component {
 
       if (nextProps.bus !== oldProps.bus) {
         oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', this.onCompile)
+        //oldProps.bus.off('compile', onCompile.bind(this))
         //oldProps.bus.off('execute', onExecute.bind(this))
 
         nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', this.onCompile)
+        //nextProps.bus.on('compile', onCompile.bind(this))
         //nextProps.bus.on('execute', onExecute.bind(this))
       }
     }
@@ -52,10 +52,6 @@ export default class JavascriptFlow extends Component {
 
     deserialise = data => {
       this.setState({ javascript: data })
-    }
-
-    onCompile = (client) => {
-      return this.state.javascript + '_' + client
     }
 
     onChangeJavascript = javascript => {
