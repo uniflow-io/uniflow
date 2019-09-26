@@ -3,31 +3,11 @@ function Program(data) {
 }
 
 Program.prototype.serialiseFlowData = function (data) {
-    let objData = [];
-
-    for (let i = 0; i < data.length; i++) {
-        objData.push({
-            component: data[i].component,
-            data: data[i].data
-        });
-    }
-
-    this.data = JSON.stringify(objData);
+    this.data = JSON.stringify(data);
 }
 
 Program.prototype.deserialiseFlowData = function () {
-    let objData = JSON.parse(this.data);
-
-    let data = [];
-
-    for (let i = 0; i < objData.length; i++) {
-        data.push({
-            component: objData[i].component,
-            data: objData[i].data
-        });
-    }
-
-    return data;
+    return JSON.parse(this.data);
 }
 
 module.exports = Program
