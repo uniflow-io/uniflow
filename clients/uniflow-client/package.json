@@ -6,6 +6,6 @@
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel-standalone": "^6.26.0"
+    "vm-browserify": "^1.1.0"
   }
 }

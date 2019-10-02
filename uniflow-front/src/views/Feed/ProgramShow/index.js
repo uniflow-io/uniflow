@@ -8,7 +8,7 @@ import {
   ICheckBoxComponent,
   Select2Component,
 } from 'uniflow/src/components'
-//import Runner from 'uniflow-uniflow-client/src/runner'
+import Runner from 'uniflow-uniflow-client/src/runner'
 import {
   commitPushFlow,
   commitPopFlow,
@@ -84,13 +84,13 @@ class ProgramShow extends Component {
         ? this.props.stack
         : this.props.stack.slice(0, index + 1)
 
-    /*let runner = new Runner()
+    let runner = new Runner()
 
     runner.run(stack, index => {
       return new Promise(resolve => {
         this.setState({ runIndex: index }, resolve)
       })
-    })*/
+    })
   }
 
   setFlow = stack => {
