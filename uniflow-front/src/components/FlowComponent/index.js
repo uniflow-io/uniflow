@@ -10,8 +10,13 @@ export default function withFlow(Component) {
     }
   }
 
-  FlowComponent.tags = Component.tags
-  FlowComponent.clients = Component.clients
+  FlowComponent.tags = Component.tags || function() {
+    return []
+  }
+
+  FlowComponent.clients = Component.clients || function() {
+    return []
+  }
 
   return FlowComponent
 }
