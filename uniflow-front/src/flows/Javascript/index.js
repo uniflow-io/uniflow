@@ -1,8 +1,8 @@
 import { React, Component } from 'uniflow/src/react'
 import { AceComponent } from 'uniflow/src/components'
-//import { onCompile, onExecute } from '../clients/uniflow'
+import { withFlow } from './../../components'
 
-export default class JavascriptFlow extends Component {
+class JavascriptFlow extends Component {
     state = {
       running: false,
       javascript: null
@@ -21,8 +21,7 @@ export default class JavascriptFlow extends Component {
 
       bus.on('reset', this.deserialise)
       bus.on('code', this.onCode)
-      //bus.on('compile', onCompile.bind(this))
-      //bus.on('execute', onExecute.bind(this))
+      bus.on('execute', this.onExecute)
     }
 
     componentWillUnmount () {
@@ -30,8 +29,7 @@ export default class JavascriptFlow extends Component {
 
       bus.off('reset', this.deserialise)
       bus.off('code', this.onCode)
-      //bus.off('compile', onCompile.bind(this))
-      //bus.off('execute', onExecute.bind(this))
+      bus.off('execute', this.onExecute)
     }
 
     componentWillReceiveProps (nextProps) {
@@ -40,13 +38,11 @@ export default class JavascriptFlow extends Component {
       if (nextProps.bus !== oldProps.bus) {
         oldProps.bus.off('reset', this.deserialise)
         oldProps.bus.off('code', this.onCode)
-        //oldProps.bus.off('compile', onCompile.bind(this))
-        //oldProps.bus.off('execute', onExecute.bind(this))
+        oldProps.bus.off('execute', this.onExecute)
 
         nextProps.bus.on('reset', this.deserialise)
         nextProps.bus.on('code', this.onCode)
-        //nextProps.bus.on('compile', onCompile.bind(this))
-        //nextProps.bus.on('execute', onExecute.bind(this))
+        nextProps.bus.on('execute', this.onExecute)
       }
     }
 
@@ -60,6 +56,28 @@ export default class JavascriptFlow extends Component {
 
     onCode = client => {
       return this.state.javascript
+    }
+
+    onExecute = (runner) => {
+      return Promise
+        .resolve()
+        .then(() => {
+          return new Promise(resolve => {
+            this.setState({running: true}, resolve)
+          })
+        }).then(() => {
+          return runner.eval(this.state.javascript)
+        })
+        .then(() => {
+          return new Promise(resolve => {
+            setTimeout(resolve, 500)
+          })
+        })
+        .then(() => {
+          return new Promise(resolve => {
+            this.setState({running: false}, resolve)
+          })
+        })
     }
 
     onChangeJavascript = javascript => {
@@ -102,3 +120,5 @@ export default class JavascriptFlow extends Component {
       )
     }
 }
+
+export default withFlow(JavascriptFlow)
