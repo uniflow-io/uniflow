@@ -66,7 +66,7 @@ class JavascriptFlow extends Component {
             this.setState({running: true}, resolve)
           })
         }).then(() => {
-          return runner.eval(this.state.javascript)
+          return runner.run(this.state.javascript)
         })
         .then(() => {
           return new Promise(resolve => {
