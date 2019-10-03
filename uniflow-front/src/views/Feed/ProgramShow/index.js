@@ -40,7 +40,6 @@ class ProgramShow extends Component {
   state = {
     fetchedSlug: null,
     fetchedUsername: null,
-    runIndex: null,
     folderTreeEdit: false,
     folderTree: [],
   }
@@ -86,11 +85,7 @@ class ProgramShow extends Component {
 
     let runner = new Runner()
 
-    runner.run(stack, index => {
-      return new Promise(resolve => {
-        this.setState({ runIndex: index }, resolve)
-      })
-    })
+    runner.run(stack)
   }
 
   setFlow = stack => {
@@ -553,7 +548,6 @@ class ProgramShow extends Component {
 
         <ListComponent
           stack={stack}
-          runIndex={this.state.runIndex}
           flows={flows}
           userFlows={userFlows}
           onPush={this.onPushFlow}
