@@ -18,7 +18,7 @@ install-node-client:
 install-chrome-client:
 	(cd clients/chrome-client && yarn install)
 
-install:
+install-front:
 	(cd uniflow && yarn install && yarn link)
 	(cd clients/uniflow-client && yarn install && yarn link)
 	(cd uniflow-front && yarn link uniflow && yarn link uniflow-uniflow-client)
