@@ -1,119 +1,122 @@
-import React, { Component } from 'react'
-import { Select2Component } from 'uniflow/src/components'
-import { onCompile, onExecute} from '../clients/uniflow'
+import React, {Component} from 'react'
+import {Select2Component} from 'uniflow/src/components'
+import {onCode, onExecute} from './runner'
 
 export default class SelectComponent extends Component {
-    state = {
-      running: false,
-      variable: null,
-      choices: [],
-      selected: null
+  state = {
+    running: false,
+    variable: null,
+    choices: [],
+    selected: null
+  }
+
+  static tags() {
+    return ['ui']
+  }
+
+  static clients() {
+    return ['uniflow']
+  }
+
+  componentDidMount() {
+    const {bus} = this.props
+    bus.on('reset', this.deserialise)
+    bus.on('code', onCode.bind(this))
+    bus.on('execute', onExecute.bind(this))
+  }
+
+  componentWillUnmount() {
+    const {bus} = this.props
+    bus.off('reset', this.deserialise)
+    bus.off('code', onCode.bind(this))
+    bus.off('execute', onExecute.bind(this))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const oldProps = this.props
+
+    if (nextProps.bus !== oldProps.bus) {
+      oldProps.bus.off('reset', this.deserialise)
+      oldProps.bus.off('code', onCode.bind(this))
+      oldProps.bus.off('execute', onExecute.bind(this))
+
+      nextProps.bus.on('reset', this.deserialise)
+      nextProps.bus.on('code', onCode.bind(this))
+      nextProps.bus.on('execute', onExecute.bind(this))
     }
+  }
 
-    static tags() {
-        return ['ui']
-    }
+  serialise = () => {
+    return [this.state.variable, this.state.choices, this.state.selected]
+  }
 
-    static clients() {
-        return ['uniflow']
-    }
+  deserialise = data => {
+    let [variable, choices, selected] = data || [null, [], null]
 
-    componentDidMount () {
-      const { bus } = this.props
+    this.setState({variable: variable, choices: choices, selected: selected})
+  }
 
-      bus.on('reset', this.deserialise)
-      bus.on('compile', onCompile.bind(this))
-      bus.on('execute', onExecute.bind(this))
-    }
+  onChangeVariable = event => {
+    this.setState({variable: event.target.value}, this.onUpdate)
+  }
 
-    componentWillUnmount () {
-      const { bus } = this.props
+  onChangeSelected = selected => {
+    this.setState({selected: selected}, this.onUpdate)
+  }
 
-      bus.off('reset', this.deserialise)
-      bus.off('compile', onCompile.bind(this))
-      bus.off('execute', onExecute.bind(this))
-    }
+  onUpdate = () => {
+    this.props.onUpdate(this.serialise())
+  }
 
-    componentWillReceiveProps (nextProps) {
-      const oldProps = this.props
+  onDelete = event => {
+    event.preventDefault()
 
-      if (nextProps.bus !== oldProps.bus) {
-        oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', onCompile.bind(this))
-        oldProps.bus.off('execute', onExecute.bind(this))
+    this.props.onPop()
+  }
 
-        nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', onCompile.bind(this))
-        nextProps.bus.on('execute', onExecute.bind(this))
-      }
-    }
+  render() {
+    const {running, variable, choices, selected} = this.state
 
-    serialise = () => {
-      return [this.state.variable, this.state.choices, this.state.selected]
-    }
+    return (
+      <div className='box box-info'>
+        <form className='form-horizontal'>
+          <div className='box-header with-border'>
+            <h3 className='box-title'>
+              <button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin'/> :
+                <i className='fa fa-refresh fa-cog'/>}</button>
+              Select
+            </h3>
+            <div className='box-tools pull-right'>
+              <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></button>
+            </div>
+          </div>
+          <div className='box-body'>
+            <div className='form-group'>
+              <label htmlFor='variable{{ _uid }}' className='col-sm-2 control-label'>Variable</label>
 
-    deserialise = data => {
-      let [variable, choices, selected] = data || [null, [], null]
-
-      this.setState({ variable: variable, choices: choices, selected: selected })
-    }
-
-    onChangeVariable = event => {
-      this.setState({ variable: event.target.value }, this.onUpdate)
-    }
-
-    onChangeSelected = selected => {
-      this.setState({ selected: selected }, this.onUpdate)
-    }
-
-    onUpdate = () => {
-      this.props.onUpdate(this.serialise())
-    }
-
-    onDelete = event => {
-      event.preventDefault()
-
-      this.props.onPop()
-    }
-
-    render () {
-      const { running, variable, choices, selected } = this.state
-
-      return (
-        <div className='box box-info'>
-          <form className='form-horizontal'>
-            <div className='box-header with-border'>
-              <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Select</h3>
-              <div className='box-tools pull-right'>
-                <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
+              <div className='col-sm-10'>
+                <input id='variable{{ _uid }}' type='text' value={variable || ''} onChange={this.onChangeVariable}
+                       className='form-control'/>
               </div>
             </div>
-            <div className='box-body'>
-              <div className='form-group'>
-                <label htmlFor='variable{{ _uid }}' className='col-sm-2 control-label'>Variable</label>
 
-                <div className='col-sm-10'>
-                  <input id='variable{{ _uid }}' type='text' value={variable || ''} onChange={this.onChangeVariable} className='form-control' />
-                </div>
-              </div>
+            <div className='form-group'>
+              <label htmlFor='select{{ _uid }}' className='col-sm-2 control-label'>Select</label>
 
-              <div className='form-group'>
-                <label htmlFor='select{{ _uid }}' className='col-sm-2 control-label'>Select</label>
-
-                <div className='col-sm-10'>
-                  <Select2Component
-                    value={selected}
-                    onChange={this.onChangeSelected}
-                    className='form-control' id='select{{ _uid }}'
-                    options={Object.keys(choices).map(value => {
-                      return { value: value, label: choices[value] }
-                    })}
-                  />
-                </div>
+              <div className='col-sm-10'>
+                <Select2Component
+                  value={selected}
+                  onChange={this.onChangeSelected}
+                  className='form-control' id='select{{ _uid }}'
+                  options={Object.keys(choices).map(value => {
+                    return {value: value, label: choices[value]}
+                  })}
+                />
               </div>
             </div>
-          </form>
-        </div>
-      )
-    }
+          </div>
+        </form>
+      </div>
+    )
+  }
 }

@@ -1,111 +1,115 @@
-import React, { Component } from 'react'
-import { AceComponent } from 'uniflow/src/components'
-import { onCompile, onExecute} from '../clients/uniflow'
+import React, {Component} from 'react'
+import {AceComponent} from 'uniflow/src/components'
+import {onCode, onExecute} from './runner'
 
 export default class TextComponent extends Component {
-    state = {
-      running: false,
-      variable: null,
-      text: null
+  state = {
+    running: false,
+    variable: null,
+    text: null
+  }
+
+  static tags() {
+    return ['core']
+  }
+
+  static clients() {
+    return ['uniflow', 'node', 'chrome']
+  }
+
+  componentDidMount() {
+    const {bus} = this.props
+    bus.on('reset', this.deserialise)
+    bus.on('code', onCode.bind(this))
+    bus.on('execute', onExecute.bind(this))
+  }
+
+  componentWillUnmount() {
+    const {bus} = this.props
+    bus.off('reset', this.deserialise)
+    bus.off('code', onCode.bind(this))
+    bus.off('execute', onExecute.bind(this))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const oldProps = this.props
+
+    if (nextProps.bus !== oldProps.bus) {
+      oldProps.bus.off('reset', this.deserialise)
+      oldProps.bus.off('code', onCode.bind(this))
+      oldProps.bus.off('execute', onExecute.bind(this))
+
+      nextProps.bus.on('reset', this.deserialise)
+      nextProps.bus.on('code', onCode.bind(this))
+      nextProps.bus.on('execute', onExecute.bind(this))
     }
+  }
 
-    static tags() {
-        return ['core']
-    }
+  serialise = () => {
+    return [this.state.variable, this.state.text]
+  }
 
-    static clients() {
-        return ['uniflow', 'node', 'chrome']
-    }
+  deserialise = data => {
+    let [variable, text] = data || [null, null]
 
-    componentDidMount () {
-      const { bus } = this.props
+    this.setState({variable: variable, text: text})
+  }
 
-      bus.on('reset', this.deserialise)
-      bus.on('compile', onCompile.bind(this))
-      bus.on('execute', onExecute.bind(this))
-    }
+  onChangeVariable = event => {
+    this.setState({variable: event.target.value}, this.onUpdate)
+  }
 
-    componentWillUnmount () {
-      const { bus } = this.props
+  onChangeText = text => {
+    this.setState({text: text}, this.onUpdate)
+  }
 
-      bus.off('reset', this.deserialise)
-      bus.off('compile', onCompile.bind(this))
-      bus.off('execute', onExecute.bind(this))
-    }
+  onUpdate = () => {
+    this.props.onUpdate(this.serialise())
+  }
 
-    componentWillReceiveProps (nextProps) {
-      const oldProps = this.props
+  onDelete = event => {
+    event.preventDefault()
 
-      if (nextProps.bus !== oldProps.bus) {
-        oldProps.bus.off('reset', this.deserialise)
-        oldProps.bus.off('compile', onCompile.bind(this))
-        oldProps.bus.off('execute', onExecute.bind(this))
+    this.props.onPop()
+  }
 
-        nextProps.bus.on('reset', this.deserialise)
-        nextProps.bus.on('compile', onCompile.bind(this))
-        nextProps.bus.on('execute', onExecute.bind(this))
-      }
-    }
+  render() {
+    const {running, variable, text} = this.state
 
-    serialise = () => {
-      return [this.state.variable, this.state.text]
-    }
+    return (
+      <div className='box box-info'>
+        <form className='form-horizontal'>
+          <div className='box-header with-border'>
+            <h3 className='box-title'>
+              <button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin'/> :
+                <i className='fa fa-refresh fa-cog'/>}</button>
+              Text
+            </h3>
+            <div className='box-tools pull-right'>
+              <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times'/></button>
+            </div>
+          </div>
+          <div className='box-body'>
+            <div className='form-group'>
+              <label htmlFor='variable{{ _uid }}' className='col-sm-2 control-label'>Variable</label>
 
-    deserialise = data => {
-      let [variable, text] = data || [null, null]
-
-      this.setState({ variable: variable, text: text })
-    }
-
-    onChangeVariable = event => {
-      this.setState({ variable: event.target.value }, this.onUpdate)
-    }
-
-    onChangeText = text => {
-      this.setState({ text: text }, this.onUpdate)
-    }
-
-    onUpdate = () => {
-      this.props.onUpdate(this.serialise())
-    }
-
-    onDelete = event => {
-      event.preventDefault()
-
-      this.props.onPop()
-    }
-
-    render () {
-      const { running, variable, text } = this.state
-
-      return (
-        <div className='box box-info'>
-          <form className='form-horizontal'>
-            <div className='box-header with-border'>
-              <h3 className='box-title'><button type='submit' className='btn btn-default'>{running ? <i className='fa fa-refresh fa-spin' /> : <i className='fa fa-refresh fa-cog' />}</button> Text</h3>
-              <div className='box-tools pull-right'>
-                <button className='btn btn-box-tool' onClick={this.onDelete}><i className='fa fa-times' /></button>
+              <div className='col-sm-10'>
+                <input id='variable{{ _uid }}' type='text' value={variable || ''} onChange={this.onChangeVariable}
+                       className='form-control'/>
               </div>
             </div>
-            <div className='box-body'>
-              <div className='form-group'>
-                <label htmlFor='variable{{ _uid }}' className='col-sm-2 control-label'>Variable</label>
 
-                <div className='col-sm-10'>
-                  <input id='variable{{ _uid }}' type='text' value={variable || ''} onChange={this.onChangeVariable} className='form-control' />
-                </div>
-              </div>
+            <div className='form-group'>
+              <label htmlFor='text{{ _uid }}' className='col-sm-2 control-label'>Text</label>
 
-              <div className='form-group'>
-                <label htmlFor='text{{ _uid }}' className='col-sm-2 control-label'>Text</label>
-
-                <div className='col-sm-10'>
-                  <AceComponent className='form-control' id='text{{ _uid }}' value={text} onChange={this.onChangeText} placeholder='Text' height='200' />
-                </div>
+              <div className='col-sm-10'>
+                <AceComponent className='form-control' id='text{{ _uid }}' value={text} onChange={this.onChangeText}
+                              placeholder='Text' height='200'/>
               </div>
             </div>
-          </form>
-        </div>
-      )
-    }
+          </div>
+        </form>
+      </div>
+    )
+  }
 }

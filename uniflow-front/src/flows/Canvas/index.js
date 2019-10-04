@@ -19,17 +19,15 @@ export default class CheckBoxesComponent extends Component {
 
   componentDidMount() {
     const {bus} = this.props
-
     bus.on('reset', this.deserialise)
-    bus.on('compile', onCompile.bind(this))
+    bus.on('code', onCode.bind(this))
     bus.on('execute', onExecute.bind(this))
   }
 
   componentWillUnmount() {
     const {bus} = this.props
-
     bus.off('reset', this.deserialise)
-    bus.off('compile', onCompile.bind(this))
+    bus.off('code', onCode.bind(this))
     bus.off('execute', onExecute.bind(this))
   }
 
@@ -38,11 +36,11 @@ export default class CheckBoxesComponent extends Component {
 
     if (nextProps.bus !== oldProps.bus) {
       oldProps.bus.off('reset', this.deserialise)
-      oldProps.bus.off('compile', onCompile.bind(this))
+      oldProps.bus.off('code', onCode.bind(this))
       oldProps.bus.off('execute', onExecute.bind(this))
 
       nextProps.bus.on('reset', this.deserialise)
-      nextProps.bus.on('compile', onCompile.bind(this))
+      nextProps.bus.on('code', onCode.bind(this))
       nextProps.bus.on('execute', onExecute.bind(this))
     }
   }
@@ -127,7 +125,7 @@ export default class CheckBoxesComponent extends Component {
               <label htmlFor='canvas{{ _uid }}' className='col-sm-2 control-label'>Canvas</label>
 
               <div className='col-sm-10'>
-                <canvas ref={(canvas) => this.canvas = canvas} id="canvas{{ _uid }}" width={width} height={height} />
+                <canvas ref={(canvas) => this.canvas = canvas} id="canvas{{ _uid }}" width={width} height={height}/>
               </div>
             </div>
           </div>
