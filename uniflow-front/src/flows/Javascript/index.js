@@ -21,16 +21,14 @@ class JavascriptComponent extends Component {
     const {bus} = this.props
     bus.on('reset', this.deserialise)
     bus.on('code', onCode.bind(this))
-    bus.on('code', this.onCode)
-    bus.on('execute', this.onExecute)
+    bus.on('execute', onExecute.bind(this))
   }
 
   componentWillUnmount() {
     const {bus} = this.props
     bus.off('reset', this.deserialise)
     bus.off('code', onCode.bind(this))
-    bus.off('code', this.onCode)
-    bus.off('execute', this.onExecute)
+    bus.off('execute', onExecute.bind(this))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,13 +37,11 @@ class JavascriptComponent extends Component {
     if (nextProps.bus !== oldProps.bus) {
       oldProps.bus.off('reset', this.deserialise)
       oldProps.bus.off('code', onCode.bind(this))
+      oldProps.bus.off('execute', onExecute.bind(this))
 
-      oldProps.bus.off('code', this.onCode)
-      oldProps.bus.off('execute', this.onExecute)
       nextProps.bus.on('reset', this.deserialise)
       nextProps.bus.on('code', onCode.bind(this))
-      nextProps.bus.on('code', this.onCode)
-      nextProps.bus.on('execute', this.onExecute)
+      nextProps.bus.on('execute', onExecute.bind(this))
     }
   }
 
@@ -55,32 +51,6 @@ class JavascriptComponent extends Component {
 
   deserialise = data => {
     this.setState({javascript: data})
-  }
-
-  onCode = client => {
-    return this.state.javascript
-  }
-
-  onExecute = (runner) => {
-    return Promise
-      .resolve()
-      .then(() => {
-        return new Promise(resolve => {
-          this.setState({running: true}, resolve)
-        })
-      }).then(() => {
-        return runner.run(this.state.javascript)
-      })
-      .then(() => {
-        return new Promise(resolve => {
-          setTimeout(resolve, 500)
-        })
-      })
-      .then(() => {
-        return new Promise(resolve => {
-          this.setState({running: false}, resolve)
-        })
-      })
   }
 
   onChangeJavascript = javascript => {
