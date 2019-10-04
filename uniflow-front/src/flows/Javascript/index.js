@@ -2,7 +2,7 @@ import { React, Component } from 'uniflow/src/react'
 import { AceComponent } from 'uniflow/src/components'
 import { withFlow } from './../../components'
 
-class JavascriptFlow extends Component {
+class JavascriptComponent extends Component {
     state = {
       running: false,
       javascript: null
@@ -121,4 +121,4 @@ class JavascriptFlow extends Component {
     }
 }
 
-export default withFlow(JavascriptFlow)
+export default withFlow(JavascriptComponent)
