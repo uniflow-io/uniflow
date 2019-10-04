@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# deploy node
+(cd ../../clients/node-client;yarn install)
+
+if [[ "$1" == "preprod" ]]; then
+(cd ../../clients/node-client;yarn build-preprod)
+scp ../../clients/node-client/dist/js/node.js admin@ssh.darkwood.fr:/var/www/preprod.uniflow.io/public/assets/node.js
+fi
+
+if [[ "$1" == "production" ]]; then
+(cd ../../clients/node-client;yarn build)
+scp ../../clients/node-client/dist/js/node.js admin@ssh.darkwood.fr:/var/www/uniflow.io/public/assets/node.js
+fi

@@ -11,7 +11,7 @@ module.exports = () => {
     return {
         entry: './src/index.js',
         output: {
-            filename: 'bash.js',
+            filename: 'node.js',
             publicPath: "/",
             path: path.resolve(__dirname, 'dist/js')
         },
@@ -21,7 +21,7 @@ module.exports = () => {
             },
             contentBase: "./dist/js",
             publicPath: "/",
-            filename: "bash.js",
+            filename: "node.js",
             historyApiFallback: true
         },
         module: {

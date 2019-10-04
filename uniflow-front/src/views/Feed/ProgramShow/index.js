@@ -360,7 +360,7 @@ class ProgramShow extends Component {
     const userFlows = this.getFlows(user.flows, program)
     const clients = {
       uniflow: 'Uniflow',
-      bash: 'Bash',
+      node: 'Node',
       phpstorm: 'PhpStorm',
       chrome: 'Chrome',
     }

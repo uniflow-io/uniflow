@@ -13,7 +13,7 @@ class JavascriptFlow extends Component {
     }
 
     static clients() {
-        return ['uniflow', 'phpstorm', 'chrome', 'bash']
+        return ['uniflow', 'phpstorm', 'chrome', 'node']
     }
 
     componentDidMount () {

@@ -12,25 +12,16 @@ run-api:
 run-front:
 	(cd uniflow-front && make run)
 
-node-link-bash-client:
-	(cd clients/bash-client && yarn install \
-	&& yarn link uniflow-bash-component \
-	&& yarn link uniflow-include-component \
-	&& yarn link uniflow-prompt-component \
-	&& yarn link uniflow-text-component  \
-	)
+node-link-node-client:
+	(cd clients/node-client && yarn install)
 
 node-link-chrome-client:
-	(cd clients/chrome-client && yarn install \
-	&& yarn link uniflow-chrome-component \
-	&& yarn link uniflow-javascript-component \
-	&& yarn link uniflow-text-component  \
-	)
+	(cd clients/chrome-client && yarn install)
 
 node-link:
 	(cd uniflow && yarn install && yarn link)
 	(cd clients/uniflow-client && yarn install && yarn link)
-	(cd clients/bash-client && yarn install && yarn link uniflow-bash-component)
+	(cd clients/node-client && yarn install && yarn link uniflow-node-component)
 	for d in ./components/*; do (cd "$$d" && yarn install && yarn link && yarn link uniflow); done
 	for d in ./components/*; do (c=$${d/.\/components\//uniflow-} && cd uniflow-front && yarn link $$c) done
 	(cd uniflow-front && yarn link uniflow && yarn link uniflow-uniflow-client)
@@ -40,14 +31,14 @@ init-remotes:
 	git remote add uniflow-front git@gitlab.com:uniflow-io/uniflow-front.git
 	git remote add uniflow git@github.com:uniflow-io/uniflow.git
 	git remote add docker git@github.com:uniflow-io/docker.git
-	git remote add clients-bash-client git@github.com:uniflow-io/bash-client.git
+	git remote add clients-node-client git@github.com:uniflow-io/node-client.git
 	git remote add clients-chrome-client git@github.com:uniflow-io/chrome-client.git
 	git remote add clients-mac-client git@github.com:uniflow-io/mac-client.git
 	git remote add clients-phpstorm-client git@github.com:uniflow-io/phpstorm-client.git
 	git remote add clients-server-client git@github.com:uniflow-io/server-client.git
 	git remote add clients-uniflow-client git@github.com:uniflow-io/uniflow-client.git
 	# git remote add components-assets-component git@github.com:uniflow-io/assets-component.git
-	# git remote add components-bash-component git@github.com:uniflow-io/bash-component.git
+	# git remote add components-node-component git@github.com:uniflow-io/node-component.git
 	# git remote add components-browser-component git@github.com:uniflow-io/browser-component.git
 	# git remote add components-canvas-component git@github.com:uniflow-io/canvas-component.git
 	# git remote add components-checkboxes-component git@github.com:uniflow-io/checkboxes-component.git
@@ -71,14 +62,14 @@ split:
 	splitsh-lite --prefix=uniflow-front --target=refs/heads/uniflow-front && git push uniflow-front uniflow-front:master
 	splitsh-lite --prefix=uniflow --target=refs/heads/uniflow && git push uniflow uniflow:master
 	splitsh-lite --prefix=docker --target=refs/heads/docker && git push docker docker:master
-	splitsh-lite --prefix=clients/bash-client --target=refs/heads/clients-bash-client && git push clients-bash-client clients-bash-client:master
+	splitsh-lite --prefix=clients/node-client --target=refs/heads/clients-node-client && git push clients-node-client clients-node-client:master
 	splitsh-lite --prefix=clients/chrome-client --target=refs/heads/clients-chrome-client && git push clients-chrome-client clients-chrome-client:master
 	splitsh-lite --prefix=clients/mac-client --target=refs/heads/clients-mac-client && git push clients-mac-client clients-mac-client:master
 	splitsh-lite --prefix=clients/phpstorm-client --target=refs/heads/clients-phpstorm-client && git push clients-phpstorm-client clients-phpstorm-client:master
 	splitsh-lite --prefix=clients/server-client --target=refs/heads/clients-server-client && git push clients-server-client clients-server-client:master
 	splitsh-lite --prefix=clients/uniflow-client --target=refs/heads/clients-uniflow-client && git push clients-uniflow-client clients-uniflow-client:master
 	# splitsh-lite --prefix=components/assets-component --target=refs/heads/components-assets-component && git push components-assets-component components-assets-component:master
-	# splitsh-lite --prefix=components/bash-component --target=refs/heads/components-bash-component && git push components-bash-component components-bash-component:master
+	# splitsh-lite --prefix=components/node-component --target=refs/heads/components-node-component && git push components-node-component components-node-component:master
 	# splitsh-lite --prefix=components/browser-component --target=refs/heads/components-browser-component && git push components-browser-component components-browser-component:master
 	# splitsh-lite --prefix=components/canvas-component --target=refs/heads/components-canvas-component && git push components-canvas-component components-canvas-component:master
 	# splitsh-lite --prefix=components/checkboxes-component --target=refs/heads/components-checkboxes-component && git push components-checkboxes-component components-checkboxes-component:master

@@ -125,8 +125,8 @@ RUN set -ex; \
 RUN set -ex; \
     \
     curl -fsSL -o bash-client.zip \
-        "https://github.com/uniflow-io/bash-client/archive/v${UNIFLOW_BASH_CLIENT_VERSION}.zip"; \
-    unzip bash-client.zip -d /tmp/
+        "https://github.com/uniflow-io/node-client/archive/v${UNIFLOW_BASH_CLIENT_VERSION}.zip"; \
+    unzip node-client.zip -d /tmp/
 
 # fix permissions
 RUN set -ex; \
@@ -159,12 +159,12 @@ RUN set -ex; \
     (cd /var/www/front; yarn install); \
     (cd /var/www/front; yarn build)
 
-# build uniflow-bash-client
+# build uniflow-node-client
 RUN set -ex; \
     \
-    (cd /tmp/bash-client-${UNIFLOW_BASH_CLIENT_VERSION}; yarn install); \
-    (cd /tmp/bash-client-${UNIFLOW_BASH_CLIENT_VERSION}; yarn build); \
-    cp /tmp/bash-client-${UNIFLOW_BASH_CLIENT_VERSION}/dist/js/bash.js /var/www/back/public/dist/js/bash.js
+    (cd /tmp/node-client-${UNIFLOW_BASH_CLIENT_VERSION}; yarn install); \
+    (cd /tmp/node-client-${UNIFLOW_BASH_CLIENT_VERSION}; yarn build); \
+    cp /tmp/node-client-${UNIFLOW_BASH_CLIENT_VERSION}/dist/js/node.js /var/www/back/public/dist/js/node.js
 
 # apply config
 COPY config/.env.local /var/www/back/.env.local

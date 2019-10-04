@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "bash",
-    "clients": ["bash"],
+    "clients": ["node"],
     "tags": ["core"]
   }
 }

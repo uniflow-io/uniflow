@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "prompt",
-    "clients": ["uniflow", "bash"],
+    "clients": ["uniflow", "node"],
     "tags": ["core"]
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "uniflow-bash-client",
+  "name": "uniflow-node-client",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -26,10 +26,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "merge": "^1.2.0",
-    "uniflow-bash-component": "../../components/bash-component",
-    "uniflow-include-component": "../../components/include-component",
-    "uniflow-prompt-component": "../../components/prompt-component",
-    "uniflow-text-component": "../../components/text-component"
+    "merge": "^1.2.0"
   }
 }

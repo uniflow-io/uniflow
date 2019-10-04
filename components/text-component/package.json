@@ -17,7 +17,7 @@
   },
   "uniflow": {
     "name": "text",
-    "clients": ["uniflow", "bash", "chrome"],
+    "clients": ["uniflow", "node", "chrome"],
     "tags": ["core"]
   }
 }

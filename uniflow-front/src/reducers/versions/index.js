@@ -71,7 +71,7 @@ const defaultState = [
   },
   {
     tag: 'v0.0.20',
-    label: 'Add bash runner',
+    label: 'Add node runner',
     date: '26/07/2018',
   },
   {

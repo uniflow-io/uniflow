@@ -20,7 +20,7 @@
   },
   "uniflow": {
     "name": "include",
-    "clients": ["uniflow", "bash"],
+    "clients": ["uniflow", "node"],
     "tags": ["core"]
   }
 }
