@@ -9,7 +9,7 @@
 
     const refreshButton = document.getElementById('refresh');
     const goToOptionsButton = document.getElementById('go-to-options');
-    const historyElement = document.getElementById('history')
+    const flowsElement = document.getElementById('flows')
 
     goToOptionsButton.addEventListener('click', () => {
         if (chrome.runtime.openOptionsPage) {
@@ -19,7 +19,7 @@
         }
     });
 
-    addEvent(historyElement, 'click', 'a', (e) => {
+    addEvent(flowsElement, 'click', 'a', (e) => {
         e.preventDefault()
 
         let itemId = e.target.getAttribute('href')
@@ -31,7 +31,6 @@
     });
 
     browser.runtime.onMessage.addListener((message) => {
-        console.log('front', message)
         if (message.channel === 'refresh-data') {
             let items = []
             for(let i = 0; i < message.data.length; i++) {
@@ -41,7 +40,7 @@
                 items.push(template)
             }
 
-            historyElement.innerHTML = items.join('');
+            flowsElement.innerHTML = items.join('');
         }
     });
 

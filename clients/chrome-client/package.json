@@ -30,8 +30,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
-    "uniflow-chrome-component": "../../components/chrome-component",
-    "uniflow-javascript-component": "../../components/javascript-component",
-    "uniflow-text-component": "../../components/text-component"
+    "vm-browserify": "^1.1.0"
   }
 }

@@ -1,6 +1,6 @@
 import Api from '../models/Api'
 import Runner from '../models/Runner'
-import History from '../models/History'
+import Program from '../models/Program'
 
 (function() {
     let api = null;
@@ -91,10 +91,10 @@ import History from '../models/History'
 
     browser.runtime.onMessage.addListener(function (message) {
         if(message.channel === 'run' && api) {
-            api.endpoint('history_data', {'id': message.id})
+            api.endpoint('program_data', {'id': message.id})
                 .then((response) => {
-                    let history = new History(response.data),
-                        stack = history.deserialiseFlowData(),
+                    let program = new Program(response.data),
+                        stack = program.deserialiseFlowData(),
                         background = {
                             evaluateInContent: (tabId, asyncFunction, args) => {
                                 return sendToTab(tabId, { asyncFunction, args, channel: 'evaluateInContent' })
@@ -114,7 +114,7 @@ import History from '../models/History'
             }, function(options) {
                 api = new Api(options.env, options.apiKey);
 
-                api.endpoint('history')
+                api.endpoint('program')
                     .then((response) => {
                         browser.runtime.sendMessage({
                             channel: 'refresh-data',

@@ -8,12 +8,12 @@ function Api(env, key) {
 Api.prototype.endpoint = function(endpoint, params = []) {
     let httpHost  = 'https://api.uniflow.io'
     if(this.env === 'dev') {
-        httpHost  = 'http://uniflow-api.localhost'
+        httpHost  = 'http://127.0.0.1:8091'
     }
 
     const endpoints = {
-        'history': `/api/program/me/list?client=chrome&apiKey=${this.key}`,
-        'history_data': `/api/program/getData/{id}?apiKey=${this.key}`
+        'program': `/api/program/me/list?client=chrome&apiKey=${this.key}`,
+        'program_data': `/api/program/getData/{id}?apiKey=${this.key}`
     }
     let path = Object.keys(params).reduce(function(path, key) {
         return path.replace('{' + key + '}', params[key]);

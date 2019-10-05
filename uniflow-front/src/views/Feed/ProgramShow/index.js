@@ -8,7 +8,7 @@ import {
   ICheckBoxComponent,
   Select2Component,
 } from 'uniflow/src/components'
-import Runner from 'uniflow-uniflow-client/src/runner'
+import Runner from 'uniflow-uniflow-client/src/models/Runner'
 import {
   commitPushFlow,
   commitPopFlow,

@@ -1,4 +1,4 @@
-import consoleBridge from './bridges/console'
+import consoleBridge from '../bridges/console'
 import vm from 'vm';
 
 export default class Runner {
