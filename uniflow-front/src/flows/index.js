@@ -1,5 +1,5 @@
-import AssetsComponent from './Assets'
-import BashComponent from './Bash'
+//import AssetsComponent from './Assets'
+//import BashComponent from './Bash'
 //import BrowserComponent from './Browser'
 //import CanvasComponent from './Canvas'
 //import CheckboxesComponent from './Checkboxes'
@@ -18,8 +18,8 @@ import JavascriptComponent from './Javascript'
 //import YamlComponent from './Yaml'
 
 export default {
-  'assets': AssetsComponent,
-  'bash': BashComponent,
+  //'assets': AssetsComponent,
+  //'bash': BashComponent,
   //'browser': BrowserComponent,
   //'canvas': CanvasComponent,
   //'checkboxes': CheckboxesComponent,
