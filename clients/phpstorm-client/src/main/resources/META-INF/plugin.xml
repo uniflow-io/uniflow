@@ -8,17 +8,25 @@
     <em>Phpstorm client for uniflow</em>
     ]]></description>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
+    <!--depends>com.jetbrains.php</depends-->
+    <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <projectService serviceImplementation="fr.darkwood.uniflow.Settings" />
+        <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
+                             displayName="Uniflow"
+                             id="Uniflow.SettingsForm"
+                             parentId="tools"
+                             nonDefaultProject="true"
+        />
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <group id="HistoryActionGroup" class="fr.darkwood.uniflow.actions.HistoryActionGroup" popup="true"
+               text="Uniflow" description="Uniflow plugin">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </group>
     </actions>
 </idea-plugin>
