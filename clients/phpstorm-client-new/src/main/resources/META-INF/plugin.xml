@@ -1,0 +1,24 @@
+<idea-plugin>
+    <id>fr.darkwood.uniflow</id>
+    <name>Uniflow</name>
+    <vendor email="matyo91@gmail.com" url="https://uniflow.io">Darkwood</vendor>
+
+    <description><![CDATA[
+    Uniflow plugin.<br>
+    <em>Phpstorm client</em>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
