@@ -26,7 +26,7 @@ public class Settings implements PersistentStateComponent<Settings> {
 
     public boolean pluginEnabled = false;
 
-    public boolean autoloadHistory = false;
+    public boolean autoloadProgram = false;
 
     public static Settings getInstance(Project project) {
         return ServiceManager.getService(project, Settings.class);

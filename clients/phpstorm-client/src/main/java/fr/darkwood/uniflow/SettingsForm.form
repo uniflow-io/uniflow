@@ -45,13 +45,13 @@
               <text value="Api Key"/>
             </properties>
           </component>
-          <component id="dedbe" class="javax.swing.JCheckBox" binding="autoloadHistoryCheckBox">
+          <component id="dedbe" class="javax.swing.JCheckBox" binding="autoloadProgramCheckBox">
             <constraints>
               <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
               <forms/>
             </constraints>
             <properties>
-              <text value="Autoload History List"/>
+              <text value="Autoload Program List"/>
             </properties>
           </component>
           <component id="d9c7" class="javax.swing.JTextField" binding="apiKeyField">

@@ -5,28 +5,28 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import fr.darkwood.uniflow.models.Api;
-import fr.darkwood.uniflow.models.History;
+import fr.darkwood.uniflow.models.Program;
 import fr.darkwood.uniflow.models.Runner;
 
 import java.io.IOException;
 
 public class ExecuteFlowAction extends AnAction {
     private Api api;
-    private History history;
+    private Program program;
 
-    public ExecuteFlowAction(Api api, History history) {
-        super(history.getTitle());
+    public ExecuteFlowAction(Api api, Program program) {
+        super(program.getTitle());
 
         this.api = api;
-        this.history = history;
+        this.program = program;
     }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         try {
-            String data = api.getHistoryData(this.history.getId());
-            this.history.setData(data);
-            JsonArray stack = this.history.deserialiseFlowData();
+            String data = api.getProgramData(this.program.getId());
+            this.program.setData(data);
+            JsonArray stack = this.program.deserialiseFlowData();
 
             Runner runner = new Runner();
             runner.run(stack, e);

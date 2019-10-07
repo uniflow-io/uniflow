@@ -18,7 +18,7 @@ public class SettingsForm implements Configurable {
 
     private JCheckBox pluginEnabled;
 
-    private JCheckBox autoloadHistoryCheckBox;
+    private JCheckBox autoloadProgramCheckBox;
     private JTextField apiKeyField;
     private JTextField envField;
 
@@ -47,7 +47,7 @@ public class SettingsForm implements Configurable {
         return
             !pluginEnabled.isSelected() == getSettings().pluginEnabled
 
-            || !autoloadHistoryCheckBox.isSelected() == getSettings().autoloadHistory
+            || !autoloadProgramCheckBox.isSelected() == getSettings().autoloadProgram
 
             || !apiKeyField.getText().equals(getSettings().apiKey)
             || !envField.getText().equals(getSettings().env)
@@ -59,7 +59,7 @@ public class SettingsForm implements Configurable {
 
         getSettings().pluginEnabled = pluginEnabled.isSelected();
 
-        getSettings().autoloadHistory = autoloadHistoryCheckBox.isSelected();
+        getSettings().autoloadProgram = autoloadProgramCheckBox.isSelected();
 
         getSettings().apiKey = apiKeyField.getText();
         getSettings().env = envField.getText();
@@ -82,7 +82,7 @@ public class SettingsForm implements Configurable {
 
         pluginEnabled.setSelected(getSettings().pluginEnabled);
 
-        autoloadHistoryCheckBox.setSelected(getSettings().autoloadHistory);
+        autoloadProgramCheckBox.setSelected(getSettings().autoloadProgram);
 
         apiKeyField.setText(getSettings().apiKey);
         envField.setText(getSettings().env);

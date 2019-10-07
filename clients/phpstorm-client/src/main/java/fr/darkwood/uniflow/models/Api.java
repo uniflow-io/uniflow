@@ -32,9 +32,9 @@ public class Api {
         return httpHost;
     }
 
-    public ArrayList<History> getHistory() throws IOException {
+    public ArrayList<Program> getProgram() throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/history/me/list/phpstorm";
+        String path = "/api/program/me/list/phpstorm";
 
         URL url = new URL(httpHost + path + "?apiKey=" + this.key);
         URLConnection con = url.openConnection();
@@ -48,24 +48,24 @@ public class Api {
         }
         in.close();
 
-        ArrayList<History> list = new  ArrayList<History>();
+        ArrayList<Program> list = new  ArrayList<Program>();
         JsonArray data = new JsonParser().parse(response.toString()).getAsJsonArray();
         for(int i = 0; i < data.size(); i++) {
             JsonObject item = data.get(i).getAsJsonObject();
 
-            History history = new History();
-            history.setId(item.get("id").getAsString());
-            history.setTitle(item.get("title").getAsString());
+            Program program = new Program();
+            program.setId(item.get("id").getAsString());
+            program.setTitle(item.get("title").getAsString());
 
-            list.add(history);
+            list.add(program);
         }
 
         return list;
     }
 
-    public String getHistoryData(String id) throws IOException {
+    public String getProgramData(String id) throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/history/getData/" + id;
+        String path = "/api/program/getData/" + id;
 
         URL url = new URL(httpHost + path + "?apiKey=" + this.key);
         URLConnection con = url.openConnection();
