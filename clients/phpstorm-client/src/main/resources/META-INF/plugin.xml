@@ -22,7 +22,7 @@
     </extensions>
 
     <actions>
-        <group id="HistoryActionGroup" class="fr.darkwood.uniflow.actions.HistoryActionGroup" popup="true"
+        <group id="ProgramActionGroup" class="fr.darkwood.uniflow.actions.ProgramActionGroup" popup="true"
                text="Uniflow" description="Uniflow plugin">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
