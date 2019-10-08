@@ -26,7 +26,7 @@ public class Api {
     {
         String httpHost = "https://uniflow.io";
         if(this.env.equals("dev")) {
-            httpHost  = "http://uniflow.localhost";
+            httpHost  = "http://127.0.0.1:8091";
         }
 
         return httpHost;
@@ -34,9 +34,9 @@ public class Api {
 
     public ArrayList<Program> getProgram() throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/program/me/list/phpstorm";
+        String path = "/api/program/me/list?client=phpstorm";
 
-        URL url = new URL(httpHost + path + "?apiKey=" + this.key);
+        URL url = new URL(httpHost + path + "&apiKey=" + this.key);
         URLConnection con = url.openConnection();
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
