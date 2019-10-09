@@ -1,24 +1,15 @@
 package fr.darkwood.uniflow.models;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.util.io.StreamUtil;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.darkwood.uniflow.components.Javascript;
+import fr.darkwood.uniflow.bridges.Phpstorm;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import java.util.Iterator;
 
 public class Runner {
     public void run(JsonArray stack, AnActionEvent event) {
@@ -51,29 +42,15 @@ public class Runner {
         });
         selectionModel.removeSelection();*/
 
-        Execute execute = new Execute();
-
-        for (int i = 0; i < stack.size(); i++) {
-            JsonObject item = stack.get(i).getAsJsonObject();
-
-            String componentClass = item.get("component").getAsString();
-
-            if(componentClass.equals("javascript")) {
-                String data = item.get("data").getAsString();
-                Javascript component = new Javascript();
-                component.deserialise(data);
-                component.onExecute(execute);
-            }
-        }
-
         try {
             ScriptEngineManager engineManager = new ScriptEngineManager();
             ScriptEngine engine = engineManager.getEngineByName("nashorn");
             ScriptContext context = engine.getContext();
             context.setAttribute("phpstorm", new Phpstorm(event), ScriptContext.ENGINE_SCOPE);
 
-            for (Iterator<String> it = execute.getCommands().iterator(); it.hasNext(); ) {
-                String code = it.next();
+            for (int i = 0; i < stack.size(); i++) {
+                JsonObject flow = stack.get(i).getAsJsonObject();
+                String code = flow.get("code").getAsString();
                 engine.eval(code);
             }
         } catch (ScriptException exception) {
