@@ -43,6 +43,7 @@ public class Runner {
             }
         });
         selectionModel.removeSelection();*/
+        V8 runtime = V8.createV8Runtime();
 
         try {
             ScriptEngineManager engineManager = new ScriptEngineManager();
