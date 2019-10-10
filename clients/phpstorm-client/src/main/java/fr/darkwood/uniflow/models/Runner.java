@@ -1,10 +1,12 @@
 package fr.darkwood.uniflow.models;
 
+import com.eclipsesource.v8.V8Object;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import com.eclipsesource.v8.V8;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.darkwood.uniflow.bridges.Console;
 import fr.darkwood.uniflow.bridges.Phpstorm;
 
 import javax.script.ScriptContext;
@@ -42,22 +44,27 @@ public class Runner {
                 exception.printStackTrace();
             }
         });
-        selectionModel.removeSelection();*/
-        V8 runtime = V8.createV8Runtime();
+        selectionModel.removeSelection();
 
-        try {
-            ScriptEngineManager engineManager = new ScriptEngineManager();
-            ScriptEngine engine = engineManager.getEngineByName("nashorn");
-            ScriptContext context = engine.getContext();
-            context.setAttribute("phpstorm", new Phpstorm(event), ScriptContext.ENGINE_SCOPE);
+        // bridge-phpstorm = new Phpstorm(event)
+        */
 
-            for (int i = 0; i < stack.size(); i++) {
-                JsonObject flow = stack.get(i).getAsJsonObject();
-                String code = flow.get("code").getAsString();
-                engine.eval(code);
-            }
-        } catch (ScriptException exception) {
-            exception.printStackTrace();
+        V8 vm = V8.createV8Runtime();
+
+        //console bridge
+        Console console = new Console();
+        V8Object v8Console = new V8Object(vm);
+        vm.add("console", v8Console);
+        v8Console.registerJavaMethod(console, "log", "log", new Class<?>[] { String.class });
+        v8Console.registerJavaMethod(console, "error", "error", new Class<?>[] { String.class });
+        v8Console.release();
+
+        for (int i = 0; i < stack.size(); i++) {
+            JsonObject flow = stack.get(i).getAsJsonObject();
+            String code = flow.get("code").getAsString();
+            vm.executeScript(code);
         }
+
+        vm.release(true);
     }
 }
