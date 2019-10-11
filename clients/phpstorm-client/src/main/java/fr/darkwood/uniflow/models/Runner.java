@@ -7,6 +7,7 @@ import com.eclipsesource.v8.V8;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.darkwood.uniflow.bridges.Console;
+import fr.darkwood.uniflow.bridges.Filesystem;
 import fr.darkwood.uniflow.bridges.Phpstorm;
 
 import javax.script.ScriptContext;
@@ -61,6 +62,17 @@ public class Runner {
 
         // phpstorm bridge
         Phpstorm phpstorm = new Phpstorm(event);
+        V8Object v8Phpstorm = new V8Object(vm);
+        vm.add("phpstorm", v8Phpstorm);
+        v8Phpstorm.registerJavaMethod(phpstorm, "getCurrentFilePath", "getCurrentFilePath", new Class<?>[] {});
+        v8Phpstorm.release();
+
+        // filesystem bridge
+        Filesystem filesystem = new Filesystem();
+        V8Object v8Filesystem = new V8Object(vm);
+        vm.add("filesystem", v8Filesystem);
+        v8Filesystem.registerJavaMethod(filesystem, "read", "read", new Class<?>[] { String.class });
+        v8Filesystem.release();
 
         for (int i = 0; i < stack.size(); i++) {
             JsonObject flow = stack.get(i).getAsJsonObject();
