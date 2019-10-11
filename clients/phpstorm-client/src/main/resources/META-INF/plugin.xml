@@ -12,18 +12,20 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="fr.darkwood.uniflow.Settings" />
-        <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
-                             displayName="Uniflow"
-                             id="Uniflow.SettingsForm"
-                             parentId="tools"
-                             nonDefaultProject="true"
+        <applicationService serviceImplementation="fr.darkwood.uniflow.Settings"/>
+        <applicationConfigurable instance="fr.darkwood.uniflow.SettingsForm"
+                                 displayName="Uniflow"
+                                 id="Uniflow.SettingsForm"
+                                 parentId="tools"
+                                 nonDefaultProject="true"
         />
     </extensions>
 
     <actions>
-        <group id="ProgramActionGroup" class="fr.darkwood.uniflow.actions.ProgramActionGroup" popup="true"
-               text="Uniflow" description="Uniflow plugin">
+        <group id="ProgramActionGroup"
+               class="fr.darkwood.uniflow.actions.ProgramActionGroup"
+               popup="true" text="Uniflow" description="Uniflow plugin"
+               icon="/icons/icon.png">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
             <add-to-group group-id="ToolsMenu" anchor="first"/>
