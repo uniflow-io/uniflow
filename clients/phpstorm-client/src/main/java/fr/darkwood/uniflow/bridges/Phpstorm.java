@@ -1,23 +1,35 @@
 package fr.darkwood.uniflow.bridges;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import fr.darkwood.uniflow.models.phpstorm.Event;
-import fr.darkwood.uniflow.models.phpstorm.Filesystem;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.vfs.VirtualFile;
 
 public class Phpstorm {
-    private Event event;
+    private AnActionEvent event;
     private Filesystem filesystem;
 
     public Phpstorm(AnActionEvent event) {
-        this.event = new Event(event);
+        this.event = event;
         this.filesystem = new Filesystem();
     }
 
-    public Event getEvent() {
+    public AnActionEvent getEvent() {
         return this.event;
     }
 
     public Filesystem getFilesystem() {
         return this.filesystem;
+    }
+
+    public Editor getEditor()
+    {
+        return this.event.getRequiredData(CommonDataKeys.EDITOR);
+    }
+
+    public String getCurrentFilePath() {
+        VirtualFile file = (VirtualFile) this.event.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE.getName());
+
+        return file.getPath();
     }
 }

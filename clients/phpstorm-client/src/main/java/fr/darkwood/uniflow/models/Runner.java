@@ -51,13 +51,16 @@ public class Runner {
 
         V8 vm = V8.createV8Runtime();
 
-        //console bridge
+        // console bridge
         Console console = new Console();
         V8Object v8Console = new V8Object(vm);
         vm.add("console", v8Console);
         v8Console.registerJavaMethod(console, "log", "log", new Class<?>[] { String.class });
         v8Console.registerJavaMethod(console, "error", "error", new Class<?>[] { String.class });
         v8Console.release();
+
+        // phpstorm bridge
+        Phpstorm phpstorm = new Phpstorm(event);
 
         for (int i = 0; i < stack.size(); i++) {
             JsonObject flow = stack.get(i).getAsJsonObject();

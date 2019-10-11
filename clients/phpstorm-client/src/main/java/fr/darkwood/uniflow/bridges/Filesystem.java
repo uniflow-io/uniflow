@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow.models.phpstorm;
+package fr.darkwood.uniflow.bridges;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
