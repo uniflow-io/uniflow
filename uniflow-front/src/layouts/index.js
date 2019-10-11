@@ -73,11 +73,11 @@ class MessengerPlatform extends Component {
         <div id="fb-root" />
 
         {/* Your customer chat code */}
-        <div
+        {/*<div
           className="fb-customerchat"
           attribution="setup_tool"
           page_id="1899593680350111"
-        />
+        />*/}
       </div>
     )
   }
