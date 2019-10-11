@@ -12,8 +12,8 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="fr.darkwood.uniflow.Settings"/>
-        <applicationConfigurable instance="fr.darkwood.uniflow.SettingsForm"
+        <projectService serviceImplementation="fr.darkwood.uniflow.Settings"/>
+        <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
                                  displayName="Uniflow"
                                  id="Uniflow.SettingsForm"
                                  parentId="tools"
