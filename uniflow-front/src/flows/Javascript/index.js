@@ -1,4 +1,4 @@
-import {React, Component} from 'react'
+import React, { Component } from 'react'
 import {onCode, onExecute} from './runner'
 import {withFlow, AceComponent} from '../../components'
 
