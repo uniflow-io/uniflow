@@ -5,7 +5,7 @@ The purpose of Uniflow is to workflow your microtasks. You have to :
 - Identify in your everyday life, you can think about tasks that are recurring.
 - Figure about if a small task will take less time to automate than doing it straight.
 
-This project is based on [flow programming](https://en.wikipedia.org/wiki/Flow-based_programming).
+This project is a combinaison on [Flow Based Programming](https://en.wikipedia.org/wiki/Flow-based_programming) and [Railway Oriented Programming](http://fsharpforfunandprofit.com/rop/) newly named as [Railway Flow Based Programming](https://medium.com/@anton.mishchuk/railway-flow-based-programming-with-flowex-ef04fd338e41).
 And is largely inspired by many projects : 
 - [NoFlow](https://noflojs.org/)
 - [Shortcut for iOS](https://apps.apple.com/us/app/shortcuts/id915249334)
