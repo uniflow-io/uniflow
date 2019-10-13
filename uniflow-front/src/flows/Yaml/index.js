@@ -32,17 +32,15 @@ export default class YamlComponent extends Component {
     bus.off('execute', onExecute.bind(this))
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props
+  componentDidUpdate(prevProps) {
+    if (this.props.bus !== prevProps.bus) {
+      prevProps.bus.off('reset', this.deserialise)
+      prevProps.bus.off('code', onCode.bind(this))
+      prevProps.bus.off('execute', onExecute.bind(this))
 
-    if (nextProps.bus !== oldProps.bus) {
-      oldProps.bus.off('reset', this.deserialise)
-      oldProps.bus.off('code', onCode.bind(this))
-      oldProps.bus.off('execute', onExecute.bind(this))
-
-      nextProps.bus.on('reset', this.deserialise)
-      nextProps.bus.on('code', onCode.bind(this))
-      nextProps.bus.on('execute', onExecute.bind(this))
+      this.props.bus.on('reset', this.deserialise)
+      this.props.bus.on('code', onCode.bind(this))
+      this.props.bus.on('execute', onExecute.bind(this))
     }
   }
 
