@@ -29,17 +29,19 @@ class UserManagerComponent extends Component {
     this.onLocation(location)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props
+  componentDidUpdate(prevProps) {
+    const { auth, location } = this.props
 
     if (
-      nextProps.auth.token !== oldProps.auth.token &&
-      nextProps.auth.isAuthenticated
+      auth.token !== prevProps.auth.token &&
+      auth.isAuthenticated
     ) {
-      this.onFetchUser(nextProps.auth.token)
+      this.onFetchUser(auth.token)
     }
 
-    this.onLocation(nextProps.location)
+    if(location.href !== prevProps.location.href) {
+      this.onLocation(location)
+    }
   }
 
   onLocation = location => {

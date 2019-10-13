@@ -58,13 +58,11 @@ class ProgramShow extends Component {
     this._componentIsMounted = false
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props
-
-    if (nextProps.program.id !== oldProps.program.id) {
+  componentDidUpdate(prevProps) {
+    if (this.props.program.id !== prevProps.program.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(nextProps.program.path)],
+        folderTree: [pathToString(this.props.program.path)],
       })
 
       this.onFetchFlowData()

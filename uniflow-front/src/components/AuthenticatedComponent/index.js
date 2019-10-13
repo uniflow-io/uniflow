@@ -10,8 +10,8 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
       this.checkAuth(this.props.isAuthenticated, this.props.user)
     }
 
-    componentWillReceiveProps(nextProps) {
-      this.checkAuth(nextProps.isAuthenticated, nextProps.user)
+    componentDidUpdate(prevProps) {
+      this.checkAuth(this.props.isAuthenticated, this.props.user)
     }
 
     checkAuth = (isAuthenticated, user) => {

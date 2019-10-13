@@ -39,8 +39,8 @@ class Settings extends Component {
     this.setState({ user: Object.assign({}, this.props.user) })
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ user: Object.assign({}, nextProps.user) })
+  componentDidUpdate(prevProps) {
+    this.setState({ user: Object.assign({}, this.props.user) })
   }
 
   onUpdateFirstname = event => {

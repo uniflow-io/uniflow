@@ -3,6 +3,9 @@ import ace from 'brace'
 import 'brace/mode/javascript'
 import 'brace/mode/batchfile'
 
+/**
+ * Component adapted from https://github.com/securingsincity/react-ace/blob/master/src/ace.tsx
+ */
 export default class AceComponent extends Component {
   componentDidMount () {
     const {
@@ -39,8 +42,8 @@ export default class AceComponent extends Component {
     this.editor = null
   }
 
-  componentWillReceiveProps (nextProps) {
-    //const oldProps = this.props
+  componentDidUpdate(prevProps) {
+    const nextProps = this.props;
 
     if (this.editor && this.editor.getValue() !== nextProps.value) {
       // editor.setValue is a synchronous function call, change event is emitted before setValue return.

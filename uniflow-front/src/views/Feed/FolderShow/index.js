@@ -26,13 +26,11 @@ class FolderShow extends Component {
     this.setState({ folderTree: [pathToString(folder.path)] })
   }
 
-  componentWillReceiveProps(nextProps) {
-    const oldProps = this.props
-
-    if (nextProps.folder.id !== oldProps.folder.id) {
+  componentDidUpdate(prevProps) {
+    if (this.props.folder.id !== prevProps.folder.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(nextProps.folder.path)],
+        folderTree: [pathToString(this.props.folder.path)],
       })
     }
   }
