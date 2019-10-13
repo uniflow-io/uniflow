@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import CreatableSelect from 'react-select/lib/Creatable'
+import Select from 'react-select'
 
 export default class TagItComponent extends Component {
   onChange = value => {
@@ -30,7 +30,7 @@ export default class TagItComponent extends Component {
     }
 
     return (
-      <CreatableSelect
+      <Select
         isMulti
         value={opts}
         onChange={this.onChange}
