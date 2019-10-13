@@ -6,7 +6,7 @@ import { navigate } from 'gatsby'
 
 export default function requireAuthentication(Component, role = 'ROLE_USER') {
   class AuthenticatedComponent extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
       this.checkAuth(this.props.isAuthenticated, this.props.user)
     }
 

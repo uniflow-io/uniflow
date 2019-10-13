@@ -6,7 +6,7 @@ import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 
 class LoginFacebook extends Component {
-  componentWillMount() {
+  componentDidMount() {
     let accessToken = this.getAccessToken()
     if (accessToken === null) {
       if (typeof window !== `undefined`) {

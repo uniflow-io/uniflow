@@ -6,7 +6,7 @@ import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
 
 class LoginGithub extends Component {
-  componentWillMount() {
+  componentDidMount() {
     let code = this.getCode()
     if (code === null) {
       if (typeof window !== `undefined`) {
