@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Select2Component} from 'uniflow/src/components'
+import {Select2Component} from '../components'
 import {onCode, onExecute} from './runner'
 
 export default class SelectComponent extends Component {

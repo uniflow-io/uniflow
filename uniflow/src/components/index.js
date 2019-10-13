@@ -1,6 +1,0 @@
-export { default as AceComponent } from './AceComponent'
-export { default as ListComponent } from './ListComponent'
-export { default as SearchComponent } from './SearchComponent'
-export { default as ICheckBoxComponent } from './ICheckBoxComponent'
-export { default as Select2Component } from './Select2Component'
-export { default as TagItComponent } from './TagItComponent'

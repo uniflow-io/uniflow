@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {AceComponent} from 'uniflow/src/components'
-import {Select2Component} from 'uniflow/src/components'
+import {AceComponent} from '../components'
+import {Select2Component} from '../components'
 import {onCode, onExecute} from './runner'
 
 export default class PromptComponent extends Component {

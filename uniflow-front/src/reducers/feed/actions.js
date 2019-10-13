@@ -11,7 +11,7 @@ import {
 } from './actionsTypes'
 import { commitLogoutUser } from '../auth/actions'
 import { pathTo } from '../../routes'
-import { Bus } from 'uniflow/src/models'
+import { Bus } from '../../models'
 
 export const serialiseFlowData = data => {
   let objData = []

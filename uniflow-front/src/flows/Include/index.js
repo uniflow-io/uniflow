@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
 import {onCode, onExecute} from './runner'
-import {Select2Component} from 'uniflow/src/components'
+import {Select2Component} from '../components'
 import {
   getOrderedFeed,
   getProgramData,
   deserialiseFlowData,
 } from '../../reducers/feed/actions'
 import {connect} from 'react-redux'
-import createStore from 'uniflow/src/utils/createStore'
-import flow from 'uniflow/src/reducers/flow'
-import {commitSetFlow} from 'uniflow/src/reducers/flow/actions'
+import createStore from '../utils/createStore'
+import flow from '../reducers/flow'
+import {commitSetFlow} from '../reducers/flow/actions'
 
 class UiComponent extends Component {
   render() {

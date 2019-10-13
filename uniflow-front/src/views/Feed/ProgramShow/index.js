@@ -7,14 +7,14 @@ import {
   TagItComponent,
   ICheckBoxComponent,
   Select2Component,
-} from 'uniflow/src/components'
+} from '../../../components'
 import Runner from 'uniflow-uniflow-client/src/models/Runner'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlow,
-} from 'uniflow/src/reducers/flow/actions'
+} from '../../../reducers/flow/actions'
 import {
   getCurrentProgram,
   getTags,

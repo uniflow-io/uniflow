@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {AceComponent} from 'uniflow/src/components'
+import {AceComponent} from '../components'
 import {onCode, onExecute} from './runner'
 
 export default class TextComponent extends Component {

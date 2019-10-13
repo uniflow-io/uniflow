@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import {onCode, onExecute} from './runner'
-import {ListComponent} from 'uniflow/src/components'
-import createStore from 'uniflow/src/utils/createStore'
-import flow from 'uniflow/src/reducers/flow'
+import {ListComponent} from '../components'
+import createStore from '../utils/createStore'
+import flow from '../reducers/flow'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow
-} from 'uniflow/src/reducers/flow/actions'
+} from '../reducers/flow/actions'
 
 export default class WhileComponent extends Component {
   state = {

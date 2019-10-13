@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {AceComponent} from 'uniflow/src/components'
+import {AceComponent} from '../components'
 import {onCompile, onExecute, SRL} from '../clients/uniflow'
 
 function copyTextToClipboard(text) {

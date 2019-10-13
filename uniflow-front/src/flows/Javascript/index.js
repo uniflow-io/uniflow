@@ -1,7 +1,6 @@
-import {React, Component} from 'uniflow/src/react'
+import {React, Component} from 'react'
 import {onCode, onExecute} from './runner'
-import {AceComponent} from 'uniflow/src/components'
-import {withFlow} from './../../components'
+import {withFlow, AceComponent} from '../../components'
 
 class JavascriptComponent extends Component {
   state = {

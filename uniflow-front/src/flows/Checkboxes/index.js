@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {ICheckBoxComponent} from 'uniflow/src/components'
+import {ICheckBoxComponent} from '../components'
 import {onCode, onExecute} from './runner'
 
 export default class CheckBoxesComponent extends Component {
