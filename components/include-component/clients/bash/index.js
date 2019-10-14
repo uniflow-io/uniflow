@@ -14,7 +14,7 @@ IncludeComponent.prototype.onExecute = function(runner, api, components) {
   return api.endpoint('program_data', {'id': this.programId})
     .then((response) => {
       let program = new Program(response.data),
-        stack = program.deserialiseFlowData()
+        stack = program.deserialiseRailData()
 
       return stack.reduce((promise, item) => {
         return promise.then(() => {

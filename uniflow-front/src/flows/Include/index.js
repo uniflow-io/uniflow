@@ -4,7 +4,7 @@ import {Select2Component} from '../components'
 import {
   getOrderedFeed,
   getProgramData,
-  deserialiseFlowData,
+  deserialiseRailData,
 } from '../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import createStore from '../utils/createStore'
@@ -54,11 +54,11 @@ class IncludeComponent extends Component {
 
         program.data = data
 
-        return this.setFlow(deserialiseFlowData(data))
+        return this.setRail(deserialiseRailData(data))
       })
   }
 
-  setFlow = rail => {
+  setRail = rail => {
     return this.rail.dispatch(commitSetFlow(rail)).then(() => {
       return Promise.all(
         rail.map(item => {

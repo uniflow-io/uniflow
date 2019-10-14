@@ -2,7 +2,7 @@ function Program(data) {
     Object.assign(this, data);
 }
 
-Program.prototype.serialiseFlowData = function (data) {
+Program.prototype.serialiseRailData = function (data) {
     let objData = [];
 
     for (let i = 0; i < data.length; i++) {
@@ -15,7 +15,7 @@ Program.prototype.serialiseFlowData = function (data) {
     this.data = JSON.stringify(objData);
 }
 
-Program.prototype.deserialiseFlowData = function () {
+Program.prototype.deserialiseRailData = function () {
     let objData = JSON.parse(this.data);
 
     let data = [];

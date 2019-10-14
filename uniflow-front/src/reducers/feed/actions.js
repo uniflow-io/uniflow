@@ -13,7 +13,7 @@ import { commitLogoutUser } from '../auth/actions'
 import { pathTo } from '../../routes'
 import { Bus } from '../../models'
 
-export const serialiseFlowData = data => {
+export const serialiseRailData = data => {
   let objData = []
 
   for (let i = 0; i < data.length; i++) {
@@ -27,7 +27,7 @@ export const serialiseFlowData = data => {
   return JSON.stringify(objData)
 }
 
-export const deserialiseFlowData = raw => {
+export const deserialiseRailData = raw => {
   let objData = JSON.parse(raw)
 
   let data = []

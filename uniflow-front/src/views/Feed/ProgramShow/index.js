@@ -29,8 +29,8 @@ import {
   pathToString,
   stringToPath,
   feedPathTo,
-  deserialiseFlowData,
-  serialiseFlowData,
+  deserialiseRailData,
+  serialiseRailData,
 } from '../../../reducers/feed/actions'
 import { commitAddLog } from '../../../reducers/logs/actions'
 import { connect } from 'react-redux'
@@ -86,7 +86,7 @@ class ProgramShow extends Component {
     runner.run(rail)
   }
 
-  setFlow = rail => {
+  setRail = rail => {
     return this.props.dispatch(commitSetFlow(rail)).then(() => {
       return Promise.all(
         rail.map(item => {
@@ -100,7 +100,7 @@ class ProgramShow extends Component {
     this.props
       .dispatch(commitPushFlow(index, flow))
       .then(() => {
-        return this.setFlow(this.props.rail)
+        return this.setRail(this.props.rail)
       })
       .then(() => {
         this.onUpdateFlowData()
@@ -111,7 +111,7 @@ class ProgramShow extends Component {
     this.props
       .dispatch(commitPopFlow(index))
       .then(() => {
-        return this.setFlow(this.props.rail)
+        return this.setRail(this.props.rail)
       })
       .then(() => {
         this.onUpdateFlowData()
@@ -152,7 +152,7 @@ class ProgramShow extends Component {
 
         if (program.slug !== this.props.program.slug) return
 
-        return this.setFlow(deserialiseFlowData(data))
+        return this.setRail(deserialiseRailData(data))
       })
       .then(() => {
         if (this.componentIsMounted()) {
@@ -165,7 +165,7 @@ class ProgramShow extends Component {
     let { program, rail, user, feed } = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
-    let data = serialiseFlowData(rail)
+    let data = serialiseRailData(rail)
     if (
       (feed.username === 'me' || user.username === feed.username) &&
       program.data !== data

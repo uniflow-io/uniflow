@@ -3,7 +3,7 @@ import server from '../../utils/server'
 import moment from 'moment'
 import { Bus } from 'uniflow/src/models'
 
-export const deserialiseFlowData = raw => {
+export const deserialiseRailData = raw => {
   let objData = JSON.parse(raw)
 
   let data = []

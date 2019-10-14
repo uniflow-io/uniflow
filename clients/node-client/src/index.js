@@ -67,7 +67,7 @@ function parseArgv(argv) {
         })
         .then((response) => {
             let program = new Program(response.data),
-                rail = program.deserialiseFlowData(),
+                rail = program.deserialiseRailData(),
                 runner = new Runner(commandArgs, api)
 
             runner.run(rail);

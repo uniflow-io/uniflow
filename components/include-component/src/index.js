@@ -5,7 +5,7 @@ import { Select2Component } from 'uniflow/src/components'
 import {
     getOrderedFeed,
     getProgramData,
-    deserialiseFlowData,
+    deserialiseRailData,
 } from './reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
@@ -55,7 +55,7 @@ class IncludeComponent extends Component {
 
                 program.data = data
 
-                return this.setFlow(deserialiseFlowData(data))
+                return this.setFlow(deserialiseRailData(data))
             })
     }
 
