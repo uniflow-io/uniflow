@@ -90,10 +90,7 @@ export const login = (username, password) => {
 }
 
 export const loginFacebookUrl = facebookAppId => {
-  const httphost =
-    typeof window !== `undefined`
-      ? `${window.location.protocol}//${window.location.hostname}`
-      : ''
+  const httphost = typeof window !== `undefined` ? `${window.location.origin}` : ''
   return `https://www.facebook.com/v3.2/dialog/oauth?client_id=${facebookAppId}&response_type=token&redirect_uri=${httphost}/login/facebook`
 }
 
@@ -137,10 +134,7 @@ export const loginFacebook = (access_token, token = null) => {
 }
 
 export const loginGithubUrl = githubAppId => {
-  const httphost =
-    typeof window !== `undefined`
-      ? `${window.location.protocol}//${window.location.hostname}`
-      : ''
+  const httphost = typeof window !== `undefined` ? `${window.location.origin}` : ''
   return `https://github.com/login/oauth/authorize?client_id=${githubAppId}&redirect_uri=${httphost}/login/github`
 }
 
@@ -184,10 +178,7 @@ export const loginGithub = (code, token = null) => {
 }
 
 export const loginMediumUrl = mediumAppId => {
-  const httphost =
-    typeof window !== `undefined`
-      ? `${window.location.protocol}//${window.location.hostname}`
-      : ''
+  const httphost = typeof window !== `undefined` ? `${window.location.origin}` : ''
   return `https://medium.com/m/oauth/authorize?client_id=${mediumAppId}&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${httphost}/login/medium`
 }
 
