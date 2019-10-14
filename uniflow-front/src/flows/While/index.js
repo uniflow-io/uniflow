@@ -2,12 +2,12 @@ import React, {Component} from 'react'
 import {onCode, onExecute} from './runner'
 import {ListComponent} from '../components'
 import createStore from '../utils/createStore'
-import flow from '../reducers/flow'
+import flow from '../reducers/rail'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow
-} from '../reducers/flow/actions'
+} from '../reducers/rail/actions'
 
 export default class WhileComponent extends Component {
   state = {
@@ -79,8 +79,8 @@ export default class WhileComponent extends Component {
   }
 
   deserialise = data => {
-    let createStoreStack = function (stack) {
-      return stack.reduce((promise, item, index) => {
+    let createStoreStack = function (rail) {
+      return rail.reduce((promise, item, index) => {
         return promise.then(store => {
           return store.dispatch(commitPushFlow(index, item.component))
             .then(() => {
@@ -114,9 +114,9 @@ export default class WhileComponent extends Component {
         return state
       })
     }).then(state => {
-      let resetStack = stack => {
-        for (let i = 0; i < stack.length; i++) {
-          let item = stack[i]
+      let resetStack = rail => {
+        for (let i = 0; i < rail.length; i++) {
+          let item = rail[i]
           item.bus.emit('reset', item.data)
         }
       }
@@ -186,7 +186,7 @@ export default class WhileComponent extends Component {
             </div>
           </form>
         </div>
-        <ListComponent stack={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
+        <ListComponent rail={this.state.conditionStack} runIndex={this.state.conditionRunIndex}
                        components={this.props.components}
                        onPush={(index, component) => {
                          this.onPushFlow(['conditionStack'], index, component)
@@ -205,7 +205,7 @@ export default class WhileComponent extends Component {
             </div>
           </form>
         </div>
-        <ListComponent stack={this.state.executeStack} runIndex={this.state.executeRunIndex}
+        <ListComponent rail={this.state.executeStack} runIndex={this.state.executeRunIndex}
                        components={this.props.components}
                        onPush={(index, component) => {
                          this.onPushFlow(['executeStack'], index, component)

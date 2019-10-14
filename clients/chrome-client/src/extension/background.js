@@ -94,7 +94,7 @@ import Program from '../models/Program'
             api.endpoint('program_data', {'id': message.id})
                 .then((response) => {
                     let program = new Program(response.data),
-                        stack = program.deserialiseFlowData(),
+                        rail = program.deserialiseFlowData(),
                         background = {
                             evaluateInContent: (tabId, asyncFunction, args) => {
                                 return sendToTab(tabId, { asyncFunction, args, channel: 'evaluateInContent' })
@@ -105,7 +105,7 @@ import Program from '../models/Program'
                         },
                         runner = new Runner(api, background)
 
-                    runner.run(stack);
+                    runner.run(rail);
                 })
         } else if(message.channel === 'refresh') {
             chrome.storage.sync.get({

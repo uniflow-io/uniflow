@@ -8,7 +8,7 @@ import {
 
 const defaultState = []
 
-const flow = (state = defaultState, action) => {
+const rail = (state = defaultState, action) => {
   switch (action.type) {
   case COMMIT_PUSH_FLOW:
     let newStatePush = state.slice()
@@ -36,10 +36,10 @@ const flow = (state = defaultState, action) => {
       }
     })
   case COMMIT_SET_FLOW:
-    return action.stack.slice()
+    return action.rail.slice()
   default:
     return state
   }
 }
 
-export default flow
+export default rail

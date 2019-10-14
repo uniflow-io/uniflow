@@ -136,12 +136,12 @@ const defaultState = [
   },
   {
     tag: 'v0.0.7',
-    label: 'Display active block when running a flow',
+    label: 'Display active block when running a rail',
     date: '22/11/2016',
   },
   {
     tag: 'v0.0.6',
-    label: 'Uniflow flow implementation',
+    label: 'Uniflow rail implementation',
     date: '18/11/2016',
   },
   {

@@ -21,15 +21,15 @@ class UiComponent extends Component {
 
 export default class ListComponent extends Component {
   render () {
-    const { stack, onPush, onPop, onUpdate, flows, userFlows } = this.props
+    const { rail, onPush, onPop, onUpdate, flows, userFlows } = this.props
     const uiStack = (() => {
       let uiStack = [{
         component: 'search',
         index: 0
       }]
 
-      for (let i = 0; i < stack.length; i++) {
-        let item = stack[i]
+      for (let i = 0; i < rail.length; i++) {
+        let item = rail[i]
 
         uiStack.push({
           component: item.flow,

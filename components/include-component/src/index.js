@@ -9,8 +9,8 @@ import {
 } from './reducers/feed/actions'
 import { connect } from 'react-redux'
 import createStore from 'uniflow/src/utils/createStore'
-import flow from 'uniflow/src/reducers/flow'
-import { commitSetFlow } from 'uniflow/src/reducers/flow/actions'
+import flow from 'uniflow/src/reducers/rail'
+import { commitSetFlow } from 'uniflow/src/reducers/rail/actions'
 
 class UiComponent extends Component {
     render() {

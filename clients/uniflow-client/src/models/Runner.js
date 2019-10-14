@@ -2,7 +2,7 @@ import consoleBridge from '../bridges/console'
 import vm from 'vm';
 
 export default class Runner {
-  run(stack) {
+  run(rail) {
     const context = new vm.createContext({
       console: consoleBridge
     });
@@ -13,7 +13,7 @@ export default class Runner {
       }
     }
 
-    return stack.reduce((promise, flow, index) => {
+    return rail.reduce((promise, flow, index) => {
       return promise
         .then(() => {
           return flow.bus.emit('execute', runner)

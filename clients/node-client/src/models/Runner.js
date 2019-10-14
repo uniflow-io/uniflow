@@ -7,13 +7,13 @@ function Runner(commandArgs, api) {
   this.api = api
 }
 
-Runner.prototype.run = function (stack) {
+Runner.prototype.run = function (rail) {
   const context = new vm.createContext({
     Bash: bashBridge(this.commandArgs),
     console: consoleBridge,
   });
 
-  return stack.reduce((promise, flow) => {
+  return rail.reduce((promise, flow) => {
     return promise.then(() => {
       return vm.runInContext(flow.code || '', context);
     })

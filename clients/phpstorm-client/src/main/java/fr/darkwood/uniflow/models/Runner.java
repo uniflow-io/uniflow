@@ -16,7 +16,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 public class Runner {
-    public void run(JsonArray stack, AnActionEvent event) {
+    public void run(JsonArray rail, AnActionEvent event) {
 
         //Get all the required data from data keys
         /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
@@ -74,8 +74,8 @@ public class Runner {
         v8Filesystem.registerJavaMethod(filesystem, "read", "read", new Class<?>[] { String.class });
         v8Filesystem.release();
 
-        for (int i = 0; i < stack.size(); i++) {
-            JsonObject flow = stack.get(i).getAsJsonObject();
+        for (int i = 0; i < rail.size(); i++) {
+            JsonObject flow = rail.get(i).getAsJsonObject();
             String code = flow.get("code").getAsString();
             vm.executeScript(code);
         }

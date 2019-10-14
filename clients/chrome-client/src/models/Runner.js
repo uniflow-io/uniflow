@@ -7,12 +7,12 @@ export default class Runner {
         this.background = background
     }
 
-    run(stack) {
+    run(rail) {
         const context = new vm.createContext({
             console: consoleBridge(this.background)
         });
 
-        return stack.reduce((promise, flow) => {
+        return rail.reduce((promise, flow) => {
             return promise.then(() => {
                 return vm.runInContext(flow.code || '', context);
             })

@@ -35,11 +35,11 @@ export const commitUpdateFlow = (index, data, code) => {
     return Promise.resolve()
   }
 }
-export const commitSetFlow = stack => {
+export const commitSetFlow = rail => {
   return dispatch => {
     dispatch({
       type: COMMIT_SET_FLOW,
-      stack
+      rail
     })
     return Promise.resolve()
   }

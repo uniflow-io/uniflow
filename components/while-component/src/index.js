@@ -3,12 +3,12 @@ import { onCompile, onExecute} from '../clients/uniflow'
 import { uniflow } from '../package'
 import { ListComponent } from 'uniflow/src/components'
 import createStore from 'uniflow/src/utils/createStore'
-import flow from 'uniflow/src/reducers/flow'
+import flow from 'uniflow/src/reducers/rail'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow
-} from 'uniflow/src/reducers/flow/actions'
+} from 'uniflow/src/reducers/rail/actions'
 
 export default class WhileComponent extends Component {
     state = {

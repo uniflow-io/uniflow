@@ -371,7 +371,7 @@ class ProgramController extends AbstractController
         $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
-            'flow' => array_map(function (Program $program) {
+            'rail' => array_map(function (Program $program) {
                 return array(
                     'title' => $program->getTitle(),
                     'slug' => $program->getSlug(),

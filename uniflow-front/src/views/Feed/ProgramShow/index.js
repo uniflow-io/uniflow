@@ -14,7 +14,7 @@ import {
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlow,
-} from '../../../reducers/flow/actions'
+} from '../../../reducers/rail/actions'
 import {
   getCurrentProgram,
   getTags,
@@ -76,20 +76,20 @@ class ProgramShow extends Component {
   run = (event, index) => {
     event.preventDefault()
 
-    let stack =
+    let rail =
       index === undefined
-        ? this.props.stack
-        : this.props.stack.slice(0, index + 1)
+        ? this.props.rail
+        : this.props.rail.slice(0, index + 1)
 
     let runner = new Runner()
 
-    runner.run(stack)
+    runner.run(rail)
   }
 
-  setFlow = stack => {
-    return this.props.dispatch(commitSetFlow(stack)).then(() => {
+  setFlow = rail => {
+    return this.props.dispatch(commitSetFlow(rail)).then(() => {
       return Promise.all(
-        stack.map(item => {
+        rail.map(item => {
           return item.bus.emit('reset', item.data)
         })
       )
@@ -100,7 +100,7 @@ class ProgramShow extends Component {
     this.props
       .dispatch(commitPushFlow(index, flow))
       .then(() => {
-        return this.setFlow(this.props.stack)
+        return this.setFlow(this.props.rail)
       })
       .then(() => {
         this.onUpdateFlowData()
@@ -111,7 +111,7 @@ class ProgramShow extends Component {
     this.props
       .dispatch(commitPopFlow(index))
       .then(() => {
-        return this.setFlow(this.props.stack)
+        return this.setFlow(this.props.rail)
       })
       .then(() => {
         this.onUpdateFlowData()
@@ -119,8 +119,8 @@ class ProgramShow extends Component {
   }
 
   onUpdateFlow = (index, data) => {
-    /* @todo find a way for not storing code into the data flow */
-    this.props.stack[index].bus.emit('code', this.props.program.client)
+    /* @todo find a way for not storing code into the data rail */
+    this.props.rail[index].bus.emit('code', this.props.program.client)
       .then(codes => {
         let code = codes.join(';')
         return this.props.dispatch(commitUpdateFlow(index, data, code))
@@ -162,10 +162,10 @@ class ProgramShow extends Component {
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let { program, stack, user, feed } = this.props
+    let { program, rail, user, feed } = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
-    let data = serialiseFlowData(stack)
+    let data = serialiseFlowData(rail)
     if (
       (feed.username === 'me' || user.username === feed.username) &&
       program.data !== data
@@ -353,7 +353,7 @@ class ProgramShow extends Component {
   }
 
   render() {
-    const { program, tags, stack, user } = this.props
+    const { program, tags, rail, user } = this.props
     const { folderTreeEdit, folderTree } = this.state
     const userFlows = this.getFlows(user.flows, program)
     const clients = {
@@ -545,7 +545,7 @@ class ProgramShow extends Component {
         </div>
 
         <ListComponent
-          stack={stack}
+          rail={rail}
           flows={flows}
           userFlows={userFlows}
           onPush={this.onPushFlow}
@@ -565,6 +565,6 @@ export default connect(state => {
     program: getCurrentProgram(state.feed),
     tags: getTags(state.feed),
     feed: state.feed,
-    stack: state.flow,
+    rail: state.rail,
   }
 })(ProgramShow)

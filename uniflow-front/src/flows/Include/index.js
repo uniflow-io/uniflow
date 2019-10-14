@@ -8,8 +8,8 @@ import {
 } from '../../reducers/feed/actions'
 import {connect} from 'react-redux'
 import createStore from '../utils/createStore'
-import flow from '../reducers/flow'
-import {commitSetFlow} from '../reducers/flow/actions'
+import flow from '../reducers/rail'
+import {commitSetFlow} from '../reducers/rail/actions'
 
 class UiComponent extends Component {
   render() {
@@ -29,7 +29,7 @@ class IncludeComponent extends Component {
   constructor(props) {
     super(props)
 
-    this.stack = createStore(flow)
+    this.rail = createStore(flow)
   }
 
   static tags() {
@@ -58,10 +58,10 @@ class IncludeComponent extends Component {
       })
   }
 
-  setFlow = stack => {
-    return this.stack.dispatch(commitSetFlow(stack)).then(() => {
+  setFlow = rail => {
+    return this.rail.dispatch(commitSetFlow(rail)).then(() => {
       return Promise.all(
-        stack.map(item => {
+        rail.map(item => {
           return item.bus.emit('reset', item.data)
         })
       )
@@ -74,7 +74,7 @@ class IncludeComponent extends Component {
     bus.on('code', onCode.bind(this))
     bus.on('execute', onExecute.bind(this))
 
-    this.unsubscribe = this.stack.subscribe(() => this.forceUpdate())
+    this.unsubscribe = this.rail.subscribe(() => this.forceUpdate())
   }
 
   componentWillUnmount() {
@@ -124,7 +124,7 @@ class IncludeComponent extends Component {
 
   render() {
     const {running, programId} = this.state
-    const stack = this.stack.getState()
+    const rail = this.rail.getState()
 
     return [
       <div className="box box-info" key="info">
@@ -171,7 +171,7 @@ class IncludeComponent extends Component {
         </form>
       </div>,
     ].concat(
-      stack.map((item, i) => (
+      rail.map((item, i) => (
         <UiComponent key={i} components={this.props.components} tag={item.component} bus={item.bus}/>
       ))
     )
