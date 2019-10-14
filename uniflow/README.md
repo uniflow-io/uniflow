@@ -19,6 +19,7 @@ And is largely inspired by many projects :
 - [n8n.io](https://github.com/n8n-io/n8n)
 - [UIVision](https://ui.vision/x/desktop-automation)
 - [Flowex](https://github.com/antonmi/flowex)
+- [Chickenfoot](http://up.csail.mit.edu/chickenfoot)
 - [nvAlt](http://brettterpstra.com/projects/nvalt)
 
 Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface.
