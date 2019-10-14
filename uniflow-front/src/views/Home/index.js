@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { pathTo } from '../../routes'
 import { Link } from 'gatsby'
-import { getLastPublicProgram, feedPathTo } from '../../reducers/feed/actions'
+import { getLastPublicPrograms, feedPathTo } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Home extends Component {
   state = {
-    flow: [],
+    programs: [],
   }
 
   componentDidMount() {
@@ -14,8 +14,8 @@ class Home extends Component {
   }
 
   onFetchFlowData = () => {
-    this.props.dispatch(getLastPublicProgram()).then(flow => {
-      this.setState({ flow: flow })
+    this.props.dispatch(getLastPublicPrograms()).then(programs => {
+      this.setState({ programs: programs })
     })
   }
 
@@ -27,7 +27,7 @@ class Home extends Component {
   }
 
   render() {
-    const { flow } = this.state
+    const { programs } = this.state
 
     return (
       <div id="home" className="content-wrapper">
@@ -54,7 +54,7 @@ class Home extends Component {
                 </div>
                 <div className="box-body">
                   <dl className="dl-horizontal">
-                    {flow.map((item, i) => [
+                    {programs.map((item, i) => [
                       <dt key={i * 2}>
                         <Link to={this.itemPathTo(item)}>{item.title}</Link>
                       </dt>,

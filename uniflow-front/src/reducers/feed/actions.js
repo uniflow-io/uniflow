@@ -371,12 +371,12 @@ export const setCurrentUsername = username => {
   }
 }
 
-export const getLastPublicProgram = () => {
+export const getLastPublicPrograms = () => {
   return dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/program/last-public`)
       .then(response => {
-        return response.data.flow
+        return response.data.programs
       })
   }
 }
