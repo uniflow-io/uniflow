@@ -451,7 +451,7 @@ export const createFolder = (item, token) => {
       })
       .then(response => {
         let item = response.data
-        item.type = 'program'
+        item.type = 'folder'
 
         dispatch(commitUpdateFeed(item))
 
