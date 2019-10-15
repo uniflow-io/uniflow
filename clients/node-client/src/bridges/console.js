@@ -1,1 +1,1 @@
-export default console
+module.exports = console
