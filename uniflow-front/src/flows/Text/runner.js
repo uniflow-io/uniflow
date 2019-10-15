@@ -4,9 +4,9 @@ const onCode = function (client) {
   }
 
   let text = this.state.text || ''
-  text = text.replace(/\"/g, '\\"')
+  text = JSON.stringify(text)
 
-  return this.state.variable + ' = "' + text + '"'
+  return this.state.variable + ' = ' + text
 }
 
 const onExecute = function(runner) {

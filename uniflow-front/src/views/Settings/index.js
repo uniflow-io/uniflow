@@ -121,10 +121,7 @@ class Settings extends Component {
 
   getClipboard = user => {
     if (user.apiKey) {
-      return (
-        'node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=' +
-        user.apiKey
-      )
+      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey}`
     }
 
     return null

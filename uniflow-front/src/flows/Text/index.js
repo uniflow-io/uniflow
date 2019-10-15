@@ -14,7 +14,7 @@ export default class TextComponent extends Component {
   }
 
   static clients() {
-    return ['uniflow', 'node', 'chrome']
+    return ['uniflow', 'node', 'chrome', 'phpstorm']
   }
 
   componentDidMount() {
