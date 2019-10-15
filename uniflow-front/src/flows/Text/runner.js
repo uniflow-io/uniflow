@@ -1,12 +1,12 @@
 const onCode = function (client) {
-  if(!this.state.variable || !this.state.text) {
+  if(!this.state.variable) {
     return ''
   }
 
-  let text = this.state.text
+  let text = this.state.text || ''
   text = text.replace(/\"/g, '\\"')
 
-  return this.state.variable + '= "' + text + '"'
+  return this.state.variable + ' = "' + text + '"'
 }
 
 const onExecute = function(runner) {
