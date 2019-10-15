@@ -12,7 +12,7 @@ import JavascriptComponent from './Javascript'
 //import RegexComponent from './Regex'
 //import SelectComponent from './Select'
 //import SocketioComponent from './Socketio'
-//import TextComponent from './Text'
+import TextComponent from './Text'
 //import TextlistComponent from './Textlist'
 //import WhileComponent from './While'
 //import YamlComponent from './Yaml'
@@ -32,7 +32,7 @@ export default {
   //'regex': RegexComponent,
   //'select': SelectComponent,
   //'socketio': SocketioComponent,
-  //'text': TextComponent,
+  'text': TextComponent,
   //'textlist': TextlistComponent,
   //'while': WhileComponent,
   //'yaml': YamlComponent,

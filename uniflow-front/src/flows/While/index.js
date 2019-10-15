@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {onCode, onExecute} from './runner'
-import {ListComponent} from '../components'
+import {ListComponent} from '../../components'
 import createStore from '../utils/createStore'
 import flow from '../reducers/rail'
 import {

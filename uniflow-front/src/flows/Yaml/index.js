@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {onCode, onExecute} from './runner'
-import {Select2Component} from '../components'
+import {Select2Component} from '../../components'
 
 export default class YamlComponent extends Component {
   state = {

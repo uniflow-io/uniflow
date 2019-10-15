@@ -10,6 +10,9 @@ export default class Runner {
     let runner = {
       run: (code) => {
         return vm.runInContext(code || '', context);
+      },
+      getContext: () => {
+        return context
       }
     }
 
