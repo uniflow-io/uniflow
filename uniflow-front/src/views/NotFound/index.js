@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
+import React, {Component} from 'react'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
 
 export default class NotFound extends Component {
   render() {
@@ -14,7 +14,7 @@ export default class NotFound extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">404</li>

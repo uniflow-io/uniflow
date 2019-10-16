@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../../routes'
-import { Link } from 'gatsby'
-import { getArticle } from '../../../reducers/blog/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {pathTo} from '../../../routes'
+import {Link} from 'gatsby'
+import {getArticle} from '../../../reducers/blog/actions'
+import {connect} from 'react-redux'
 import Paragraph from './../paragraph'
 import moment from 'moment'
 
@@ -16,15 +16,15 @@ class Article extends Component {
   }
 
   onFetchFlowData = () => {
-    const { slug } = this.props
+    const {slug} = this.props
 
     this.props.dispatch(getArticle(slug)).then(article => {
-      this.setState({ article: article })
+      this.setState({article: article})
     })
   }
 
   render() {
-    const { article } = this.state
+    const {article} = this.state
 
     return (
       <div id="blog" className="content-wrapper">
@@ -36,7 +36,7 @@ class Article extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li>
@@ -61,7 +61,7 @@ class Article extends Component {
                   <div className="box-body">
                     {article.content.bodyModel.paragraphs.map(
                       (paragraph, j) => [
-                        <Paragraph key={j} data={paragraph} headline={false} />,
+                        <Paragraph key={j} data={paragraph} headline={false}/>,
                       ]
                     )}
                   </div>

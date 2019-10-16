@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import { getLastPublicPrograms, feedPathTo } from '../../reducers/feed/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
+import {getLastPublicPrograms, feedPathTo} from '../../reducers/feed/actions'
+import {connect} from 'react-redux'
 
 class Home extends Component {
   state = {
@@ -15,7 +15,7 @@ class Home extends Component {
 
   onFetchFlowData = () => {
     this.props.dispatch(getLastPublicPrograms()).then(programs => {
-      this.setState({ programs: programs })
+      this.setState({programs: programs})
     })
   }
 
@@ -27,7 +27,7 @@ class Home extends Component {
   }
 
   render() {
-    const { programs } = this.state
+    const {programs} = this.state
 
     return (
       <div id="home" className="content-wrapper">
@@ -39,7 +39,7 @@ class Home extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
           </ol>

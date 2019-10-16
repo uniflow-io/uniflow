@@ -1,7 +1,7 @@
 import request from 'axios'
 import server from '../../utils/server'
-import { commitLogoutUser } from '../auth/actions'
-import { commitAddLog } from '../logs/actions'
+import {commitLogoutUser} from '../auth/actions'
+import {commitAddLog} from '../logs/actions'
 
 export const fetchConfig = token => {
   return dispatch => {

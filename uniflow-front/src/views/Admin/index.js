@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { fetchConfig, updateConfig } from '../../reducers/config/actions'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import { loginMediumUrl } from '../../reducers/auth/actions'
+import React, {Component} from 'react'
+import {fetchConfig, updateConfig} from '../../reducers/config/actions'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
+import {loginMediumUrl} from '../../reducers/auth/actions'
 
 class Admin extends Component {
   state = {
@@ -24,7 +24,7 @@ class Admin extends Component {
   onRevokeMedium = event => {
     event.preventDefault()
     this.setState(
-      { config: { ...this.state.config, ...{ mediumToken: null } } },
+      {config: {...this.state.config, ...{mediumToken: null}}},
       this.onUpdate
     )
   }
@@ -34,18 +34,18 @@ class Admin extends Component {
       event.preventDefault()
     }
 
-    this.setState({ isSaving: true }, () => {
+    this.setState({isSaving: true}, () => {
       this.props
         .dispatch(updateConfig(this.state.config, this.props.auth.token))
         .then(() => {
-          this.setState({ isSaving: false })
+          this.setState({isSaving: false})
         })
     })
   }
 
   render() {
-    const { env } = this.props
-    const { config } = this.state
+    const {env} = this.props
+    const {config} = this.state
 
     return (
       <div className="content-wrapper">
@@ -57,7 +57,7 @@ class Admin extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Admin</li>
@@ -81,14 +81,14 @@ class Admin extends Component {
                             onClick={this.onRevokeMedium}
                             className="btn btn-info"
                           >
-                            <i className="fa fa-medium" /> Revoke Medium
+                            <i className="fa fa-medium"/> Revoke Medium
                           </button>
                         )) || (
                           <a
                             href={loginMediumUrl(env.mediumAppId)}
                             className="btn btn-block btn-social btn-medium"
                           >
-                            <i className="fa fa-medium" /> Connect with Medium
+                            <i className="fa fa-medium"/> Connect with Medium
                           </a>
                         )}
                       </div>

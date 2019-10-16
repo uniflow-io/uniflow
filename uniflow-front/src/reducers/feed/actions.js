@@ -9,9 +9,9 @@ import {
   COMMIT_SET_CURRENT_FOLDER,
   COMMIT_SET_CURRENT_USERNAME,
 } from './actionsTypes'
-import { commitLogoutUser } from '../auth/actions'
-import { pathTo } from '../../routes'
-import { Bus } from '../../models'
+import {commitLogoutUser} from '../auth/actions'
+import {pathTo} from '../../routes'
+import {Bus} from '../../models'
 
 export const serialiseRailData = data => {
   let objData = []
@@ -104,12 +104,12 @@ export const getProgramBySlug = (state, slug) => {
 }
 
 export const getTags = state => {
-  let tags = Object.keys(state.items).reduce(function(previous, key) {
+  let tags = Object.keys(state.items).reduce(function (previous, key) {
     return previous.concat(state.items[key].tags)
   }, [])
 
   // filter unique
-  tags = tags.filter(function(value, index, self) {
+  tags = tags.filter(function (value, index, self) {
     return self.indexOf(value) === index
   })
 
@@ -394,7 +394,7 @@ export const feedPathTo = (path, username = null) => {
   let slugs = pathToSlugs(path)
 
   if (username) {
-    return pathTo('userFeed', Object.assign({ username: username }, slugs))
+    return pathTo('userFeed', Object.assign({username: username}, slugs))
   }
 
   return pathTo('feed', slugs)

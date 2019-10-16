@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Select from 'react-select'
 
 export default class Select2Component extends Component {
@@ -8,8 +8,8 @@ export default class Select2Component extends Component {
     }
   }
 
-  render () {
-    const { value, options } = this.props
+  render() {
+    const {value, options} = this.props
     const customStyles = {
       menu: (provided, state) => ({
         ...provided,

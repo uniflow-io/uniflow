@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
-import { SearchComponent } from '../../components'
+import React, {Component} from 'react'
+import {SearchComponent} from '../../components'
 
 class UiComponent extends Component {
-    render () {
-      const { tag, bus, onPush, onPop, onUpdate, flows, userFlows } = this.props
+  render() {
+    const {tag, bus, onPush, onPop, onUpdate, flows, userFlows} = this.props
 
-        let TagName = SearchComponent
-        if(tag !== 'search') {
-            TagName = flows[tag]
-        }
-
-      return <TagName bus={bus}
-        userFlows={userFlows}
-        flows={flows}
-        onPush={onPush}
-        onPop={onPop}
-        onUpdate={onUpdate} />
+    let TagName = SearchComponent
+    if (tag !== 'search') {
+      TagName = flows[tag]
     }
+
+    return <TagName bus={bus}
+                    userFlows={userFlows}
+                    flows={flows}
+                    onPush={onPush}
+                    onPop={onPop}
+                    onUpdate={onUpdate}/>
+  }
 }
 
 export default class ListComponent extends Component {
-  render () {
-    const { rail, onPush, onPop, onUpdate, flows, userFlows } = this.props
+  render() {
+    const {rail, onPush, onPop, onUpdate, flows, userFlows} = this.props
     const uiStack = (() => {
       let uiStack = [{
         component: 'search',
@@ -48,19 +48,19 @@ export default class ListComponent extends Component {
 
     return (uiStack.map((item, i) => (
       <UiComponent key={i}
-        tag={item.component}
-        bus={item.bus}
-        flows={flows}
-        userFlows={userFlows}
-        onPush={component => {
-          onPush(item.index, component)
-        }}
-        onPop={() => {
-          onPop(item.index)
-        }}
-        onUpdate={data => {
-          onUpdate(item.index, data)
-        }} />
+                   tag={item.component}
+                   bus={item.bus}
+                   flows={flows}
+                   userFlows={userFlows}
+                   onPush={component => {
+                     onPush(item.index, component)
+                   }}
+                   onPop={() => {
+                     onPop(item.index)
+                   }}
+                   onUpdate={data => {
+                     onUpdate(item.index, data)
+                   }}/>
     )))
   }
 }

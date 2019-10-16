@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 const TYPE_PARAGRAPH = 1
 const TYPE_TITLE = 3
@@ -6,7 +6,7 @@ const TYPE_IMAGE = 4
 
 class Paragraph extends Component {
   render() {
-    const { data, headline } = this.props
+    const {data, headline} = this.props
 
     if (data.type === TYPE_PARAGRAPH) {
       return <p>{data.text}</p>
@@ -18,10 +18,10 @@ class Paragraph extends Component {
       let src = `https://miro.medium.com/fit/c/${width}/${height}/${
         data['metadata']['id']
       }`
-      return <img src={src} alt="" className="img-thumbnail" width="100%" />
+      return <img src={src} alt="" className="img-thumbnail" width="100%"/>
     }
 
-    return <div />
+    return <div/>
   }
 }
 

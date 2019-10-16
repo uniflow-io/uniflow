@@ -1,4 +1,4 @@
-import { COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
+import {COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS} from './actionsTypes'
 
 const defaultState = {
   flows: {},
@@ -16,7 +16,7 @@ const user = (state = defaultState, action) => {
     case COMMIT_SET_FLOWS:
       return {
         ...state,
-        ...{ flows: action.flows },
+        ...{flows: action.flows},
       }
     case COMMIT_UPDATE_SETTINGS:
       return {

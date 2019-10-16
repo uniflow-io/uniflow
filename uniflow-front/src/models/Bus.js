@@ -5,19 +5,19 @@ EventEmitter.prototype.getMaxListeners = function () {
 }
 
 export default class Bus {
-  constructor () {
+  constructor() {
     this.events = new EventEmitter()
   }
 
-  on () {
+  on() {
     return this.events.on.apply(this.events, arguments)
   }
 
-  off (eventName, listener) {
+  off(eventName, listener) {
     return this.events.removeListener.call(this.events, eventName, listener)
   }
 
-  emit () {
+  emit() {
     return this.events.emit.apply(this.events, arguments)
   }
 }

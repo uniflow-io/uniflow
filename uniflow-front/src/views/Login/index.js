@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {
   login,
   loginFacebookUrl,
   loginGithubUrl,
 } from '../../reducers/auth/actions'
-import { pathTo } from '../../routes'
-import { commitAddLog } from '../../reducers/logs/actions'
-import { Link, navigate } from 'gatsby'
+import {pathTo} from '../../routes'
+import {commitAddLog} from '../../reducers/logs/actions'
+import {Link, navigate} from 'gatsby'
 
 class Index extends Component {
   state = {
@@ -16,11 +16,11 @@ class Index extends Component {
   }
 
   onChangeUsername = event => {
-    this.setState({ username: event.target.value })
+    this.setState({username: event.target.value})
   }
 
   onChangePassword = event => {
-    this.setState({ password: event.target.value })
+    this.setState({password: event.target.value})
   }
 
   onSubmit = e => {
@@ -38,8 +38,8 @@ class Index extends Component {
   }
 
   render() {
-    const { auth, env } = this.props
-    const { username, password } = this.state
+    const {auth, env} = this.props
+    const {username, password} = this.state
 
     return (
       <div className="content-wrapper">
@@ -51,7 +51,7 @@ class Index extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Login</li>
@@ -105,7 +105,7 @@ class Index extends Component {
                         href={loginFacebookUrl(env.facebookAppId)}
                         className="btn btn-block btn-social btn-facebook"
                       >
-                        <i className="fa fa-facebook" /> Login with Facebook
+                        <i className="fa fa-facebook"/> Login with Facebook
                       </a>
                     </div>
 
@@ -114,7 +114,7 @@ class Index extends Component {
                         href={loginGithubUrl(env.githubAppId)}
                         className="btn btn-block btn-social btn-github"
                       >
-                        <i className="fa fa-github" /> Login with Github
+                        <i className="fa fa-github"/> Login with Github
                       </a>
                     </div>
                   </form>

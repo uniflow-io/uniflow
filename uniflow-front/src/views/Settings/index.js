@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {
   updateSettings,
   commitUpdateSettings,
 } from '../../reducers/user/actions'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import { loginFacebookUrl, loginGithubUrl } from '../../reducers/auth/actions'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
+import {loginFacebookUrl, loginGithubUrl} from '../../reducers/auth/actions'
 
 function copyTextToClipboard(text) {
   let textArea = document.createElement('textarea')
@@ -17,7 +17,8 @@ function copyTextToClipboard(text) {
 
   try {
     document.execCommand('copy')
-  } catch (err) {}
+  } catch (err) {
+  }
 
   document.body.removeChild(textArea)
 }
@@ -36,41 +37,41 @@ class Settings extends Component {
   }
 
   componentDidMount() {
-    this.setState({ user: Object.assign({}, this.props.user) })
+    this.setState({user: Object.assign({}, this.props.user)})
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.user !== this.props.user) {
-      this.setState({ user: Object.assign({}, this.props.user) })
+    if (prevProps.user !== this.props.user) {
+      this.setState({user: Object.assign({}, this.props.user)})
     }
   }
 
   onUpdateFirstname = event => {
     this.setState({
-      user: { ...this.state.user, ...{ firstname: event.target.value } },
+      user: {...this.state.user, ...{firstname: event.target.value}},
     })
   }
 
   onUpdateLastname = event => {
     this.setState({
-      user: { ...this.state.user, ...{ lastname: event.target.value } },
+      user: {...this.state.user, ...{lastname: event.target.value}},
     })
   }
 
   onUpdateUsername = event => {
     this.setState({
-      user: { ...this.state.user, ...{ username: event.target.value } },
+      user: {...this.state.user, ...{username: event.target.value}},
     })
   }
 
   onUpdateApiKey = event => {
     this.setState({
-      user: { ...this.state.user, ...{ apiKey: event.target.value } },
+      user: {...this.state.user, ...{apiKey: event.target.value}},
     })
   }
 
   onCopyApiUsage = event => {
-    const { user } = this.state
+    const {user} = this.state
     const clipbard = this.getClipboard(user)
 
     copyTextToClipboard(clipbard)
@@ -79,7 +80,7 @@ class Settings extends Component {
   onRevokeFacebook = event => {
     event.preventDefault()
     this.setState(
-      { user: { ...this.state.user, ...{ facebookId: null } } },
+      {user: {...this.state.user, ...{facebookId: null}}},
       this.onUpdate
     )
   }
@@ -87,7 +88,7 @@ class Settings extends Component {
   onRevokeGithub = event => {
     event.preventDefault()
     this.setState(
-      { user: { ...this.state.user, ...{ githubId: null } } },
+      {user: {...this.state.user, ...{githubId: null}}},
       this.onUpdate
     )
   }
@@ -97,11 +98,11 @@ class Settings extends Component {
       event.preventDefault()
     }
 
-    this.setState({ isSaving: true }, () => {
+    this.setState({isSaving: true}, () => {
       this.props
         .dispatch(updateSettings(this.state.user, this.props.auth.token))
         .then(() => {
-          this.setState({ isSaving: false })
+          this.setState({isSaving: false})
         })
     })
   }
@@ -115,7 +116,7 @@ class Settings extends Component {
     }
 
     this.props.dispatch(
-      commitUpdateSettings({ ...this.props.user, ...{ apiKey: apiKey } })
+      commitUpdateSettings({...this.props.user, ...{apiKey: apiKey}})
     )
   }
 
@@ -128,8 +129,8 @@ class Settings extends Component {
   }
 
   render() {
-    const { env } = this.props
-    const { user, isSaving } = this.state
+    const {env} = this.props
+    const {user, isSaving} = this.state
     const clipbard = this.getClipboard(user)
 
     return (
@@ -142,7 +143,7 @@ class Settings extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Settings</li>
@@ -225,14 +226,14 @@ class Settings extends Component {
                             onClick={this.onRevokeFacebook}
                             className="btn btn-info"
                           >
-                            <i className="fa fa-facebook" /> Revoke Facebook
+                            <i className="fa fa-facebook"/> Revoke Facebook
                           </button>
                         )) || (
                           <a
                             href={loginFacebookUrl(env.facebookAppId)}
                             className="btn btn-block btn-social btn-facebook"
                           >
-                            <i className="fa fa-facebook" /> Connect with
+                            <i className="fa fa-facebook"/> Connect with
                             Facebook
                           </a>
                         )}
@@ -251,14 +252,14 @@ class Settings extends Component {
                             onClick={this.onRevokeGithub}
                             className="btn btn-info"
                           >
-                            <i className="fa fa-github" /> Revoke Github
+                            <i className="fa fa-github"/> Revoke Github
                           </button>
                         )) || (
                           <a
                             href={loginGithubUrl(env.githubAppId)}
                             className="btn btn-block btn-social btn-github"
                           >
-                            <i className="fa fa-github" /> Connect with Github
+                            <i className="fa fa-github"/> Connect with Github
                           </a>
                         )}
                       </div>
@@ -307,7 +308,7 @@ class Settings extends Component {
                               className="btn btn-default"
                               onClick={this.onCopyApiUsage}
                             >
-                              <i className="fa fa-clipboard" />
+                              <i className="fa fa-clipboard"/>
                             </button>
                           </div>
                           <input

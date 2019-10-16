@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
+import {connect} from 'react-redux'
 
 class Versions extends Component {
   render() {
-    const { versions } = this.props
+    const {versions} = this.props
 
     return (
       <div className="content-wrapper">
@@ -17,7 +17,7 @@ class Versions extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Versions</li>
@@ -37,7 +37,7 @@ class Versions extends Component {
                   <li key={'label-' + index}>
                     <div className="timeline-item">
                       <h3 className="timeline-header">{value.label}</h3>
-                      <div className="timeline-body" />
+                      <div className="timeline-body"/>
                       <div className="timeline-footer">
                         <span className="label label-primary fa fa-tag">
                           {' '}

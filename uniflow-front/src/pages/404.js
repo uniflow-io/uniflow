@@ -1,4 +1,4 @@
 import React from 'react'
-import { NotFound } from '../views'
+import {NotFound} from '../views'
 
-export default () => <NotFound />
+export default () => <NotFound/>

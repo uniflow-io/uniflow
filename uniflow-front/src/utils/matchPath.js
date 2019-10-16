@@ -12,7 +12,7 @@ let compilePath = function compilePath(pattern, options) {
 
   let keys = []
   let re = pathToRegexp(pattern, keys, options)
-  let compiledPattern = { re: re, keys: keys }
+  let compiledPattern = {re: re, keys: keys}
 
   if (cacheCount < cacheLimit) {
     cache[pattern] = compiledPattern
@@ -30,7 +30,7 @@ let matchPath = function matchPath(pathname) {
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
   let parent = arguments[2]
 
-  if (typeof options === 'string') options = { path: options }
+  if (typeof options === 'string') options = {path: options}
 
   let _options = options
 
@@ -76,7 +76,7 @@ let matchPath = function matchPath(pathname) {
     path: path, // the path pattern used to match
     url: path === '/' && url === '' ? '/' : url, // the matched portion of the URL
     isExact: isExact, // whether or not we matched exactly
-    params: keys.reduce(function(memo, key, index) {
+    params: keys.reduce(function (memo, key, index) {
       memo[key.name] = values[index]
       return memo
     }, {}),

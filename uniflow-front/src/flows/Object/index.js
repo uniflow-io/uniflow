@@ -536,7 +536,7 @@ export default class ObjectComponent extends Component {
   }
 
   static clients() {
-    return ['uniflow']
+    return ['uniflow', 'phpstorm', 'chrome', 'node']
   }
 
   componentDidMount() {

@@ -1,5 +1,5 @@
 const onCode = function (client) {
-  if(!this.state.bash) {
+  if (!this.state.bash) {
     return ''
   }
 

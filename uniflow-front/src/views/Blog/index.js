@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import { getBlog } from '../../reducers/blog/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
+import {getBlog} from '../../reducers/blog/actions'
+import {connect} from 'react-redux'
 import Paragraph from './paragraph'
 import moment from 'moment'
 
@@ -17,12 +17,12 @@ class Blog extends Component {
 
   onFetchFlowData = () => {
     this.props.dispatch(getBlog()).then(blog => {
-      this.setState({ blog: blog })
+      this.setState({blog: blog})
     })
   }
 
   render() {
-    const { blog } = this.state
+    const {blog} = this.state
 
     return (
       <div id="blog" className="content-wrapper">
@@ -34,7 +34,7 @@ class Blog extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('blog')}>
-                <i className="fa fa-dashboard" /> Blog
+                <i className="fa fa-dashboard"/> Blog
               </Link>
             </li>
           </ol>
@@ -42,7 +42,7 @@ class Blog extends Component {
 
         <section className="content">
           {Object.keys(blog).map((item, i) => [
-            <Link to={pathTo('article', { slug: blog[item].slug })} key={i}>
+            <Link to={pathTo('article', {slug: blog[item].slug})} key={i}>
               <div className="row">
                 <div className="col-sm-6 col-sm-offset-3">
                   <div className="box box-success">

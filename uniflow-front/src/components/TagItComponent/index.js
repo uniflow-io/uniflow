@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Select from 'react-select'
 
 export default class TagItComponent extends Component {
@@ -10,7 +10,7 @@ export default class TagItComponent extends Component {
     }
   }
 
-  render () {
+  render() {
     const {
       value,
       options
@@ -25,7 +25,7 @@ export default class TagItComponent extends Component {
     let opts = []
     if (value) {
       opts = value.map(data => {
-        return { value: data, label: data }
+        return {value: data, label: data}
       })
     }
 

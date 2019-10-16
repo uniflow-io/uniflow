@@ -16,8 +16,8 @@ import {
 } from './views'
 
 import pathToRegexp from 'path-to-regexp'
-import { requireAuthentication } from './components'
-import { matchPath } from './utils'
+import {requireAuthentication} from './components'
+import {matchPath} from './utils'
 
 const routes = {
   home: {

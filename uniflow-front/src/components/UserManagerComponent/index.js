@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { fetchFlows, fetchSettings } from '../../reducers/user/actions'
-import { matchRoute } from '../../routes'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {fetchFlows, fetchSettings} from '../../reducers/user/actions'
+import {matchRoute} from '../../routes'
 import {
   fetchFeed,
   getProgramBySlug,
@@ -11,7 +11,7 @@ import {
   getCurrentPath,
   feedPathTo,
 } from '../../reducers/feed/actions'
-import { navigate } from 'gatsby'
+import {navigate} from 'gatsby'
 import moment from 'moment'
 
 class UserManagerComponent extends Component {
@@ -20,7 +20,7 @@ class UserManagerComponent extends Component {
   }
 
   componentDidMount() {
-    const { auth, location } = this.props
+    const {auth, location} = this.props
 
     if (auth.isAuthenticated) {
       this.onFetchUser(auth.token)
@@ -30,7 +30,7 @@ class UserManagerComponent extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { auth, location } = this.props
+    const {auth, location} = this.props
 
     if (
       auth.token !== prevProps.auth.token &&
@@ -39,7 +39,7 @@ class UserManagerComponent extends Component {
       this.onFetchUser(auth.token)
     }
 
-    if(location.href !== prevProps.location.href) {
+    if (location.href !== prevProps.location.href) {
       this.onLocation(location)
     }
   }
@@ -76,7 +76,7 @@ class UserManagerComponent extends Component {
       this.props.dispatch(fetchFlows(token)),
       this.props.dispatch(fetchSettings(token)),
     ]).then(() => {
-      const { location } = this.props
+      const {location} = this.props
 
       this.onLocation(location)
     })
@@ -90,8 +90,8 @@ class UserManagerComponent extends Component {
     slug4 = null,
     slug5 = null
   ) => {
-    const { fetching } = this.state
-    const { feed } = this.props
+    const {fetching} = this.state
+    const {feed} = this.props
 
     if (fetching) {
       return
@@ -99,7 +99,7 @@ class UserManagerComponent extends Component {
 
     Promise.resolve()
       .then(resolve => {
-        this.setState({ fetching: true }, resolve)
+        this.setState({fetching: true}, resolve)
       })
       .then(() => {
         let path = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
@@ -123,7 +123,7 @@ class UserManagerComponent extends Component {
 
         return Promise.resolve()
           .then(() => {
-            const { auth, feed } = this.props
+            const {auth, feed} = this.props
 
             let slug = path.length > 0 ? path[path.length - 1] : null
             let sameDirectory =
@@ -148,14 +148,14 @@ class UserManagerComponent extends Component {
               })
           })
           .then(() => {
-            const { feed } = this.props
+            const {feed} = this.props
 
             let slug = path.length > 0 ? path[path.length - 1] : null
 
             let program = getProgramBySlug(feed, slug)
             if (program) {
               this.props.dispatch(
-                setCurrentFeed({ type: program.type, id: program.id })
+                setCurrentFeed({type: program.type, id: program.id})
               )
             } else if (feed.folder) {
               this.props.dispatch(setCurrentFeed(null))
@@ -180,7 +180,7 @@ class UserManagerComponent extends Component {
               if (keys.length > 0) {
                 let item = items[keys[0]]
                 this.props.dispatch(
-                  setCurrentFeed({ type: item.type, id: item.id })
+                  setCurrentFeed({type: item.type, id: item.id})
                 )
               } else {
                 this.props.dispatch(setCurrentFeed(null))
@@ -188,7 +188,7 @@ class UserManagerComponent extends Component {
             }
           })
           .then(() => {
-            const { user, feed } = this.props
+            const {user, feed} = this.props
             const isCurrentUser =
               feed.username && feed.username === user.username
 
@@ -207,12 +207,12 @@ class UserManagerComponent extends Component {
           })
       })
       .then(resolve => {
-        this.setState({ fetching: false }, resolve)
+        this.setState({fetching: false}, resolve)
       })
   }
 
   render() {
-    return <div />
+    return <div/>
   }
 }
 

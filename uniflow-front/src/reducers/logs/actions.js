@@ -1,4 +1,4 @@
-import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from './actionsTypes'
+import {COMMIT_ADD_LOG, COMMIT_READ_LOG} from './actionsTypes'
 
 export const getNewLogs = state => {
   return Object.keys(state).reduce((newLogs, key) => {

@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { Link, navigate } from 'gatsby'
-import { pathTo } from '../../../routes'
-import { loginFacebook } from '../../../reducers/auth/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {Link, navigate} from 'gatsby'
+import {pathTo} from '../../../routes'
+import {loginFacebook} from '../../../reducers/auth/actions'
+import {commitAddLog} from '../../../reducers/logs/actions'
+import {connect} from 'react-redux'
 
 class LoginFacebook extends Component {
   componentDidMount() {
@@ -50,7 +50,7 @@ class LoginFacebook extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Login</li>

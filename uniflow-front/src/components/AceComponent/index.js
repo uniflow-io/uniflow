@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import ace from 'brace'
 import 'brace/mode/javascript'
 import 'brace/mode/batchfile'
@@ -7,7 +7,7 @@ import 'brace/mode/batchfile'
  * Component adapted from https://github.com/securingsincity/react-ace/blob/master/src/ace.tsx
  */
 export default class AceComponent extends Component {
-  componentDidMount () {
+  componentDidMount() {
     const {
       value,
       mode
@@ -37,7 +37,7 @@ export default class AceComponent extends Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.editor.destroy()
     this.editor = null
   }
@@ -55,15 +55,15 @@ export default class AceComponent extends Component {
     }
   }
 
-  render () {
-    const { width, height } = this.props
+  render() {
+    const {width, height} = this.props
 
     return (
       <div ref={container => (this.container = container)}
-        style={{
-          height: height ? height + 'px' : '100%',
-          width: width ? width + 'px' : '100%'
-        }} />
+           style={{
+             height: height ? height + 'px' : '100%',
+             width: width ? width + 'px' : '100%'
+           }}/>
     )
   }
 }

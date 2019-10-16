@@ -1,5 +1,5 @@
-import { Log } from '../../models'
-import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from './actionsTypes'
+import {Log} from '../../models'
+import {COMMIT_ADD_LOG, COMMIT_READ_LOG} from './actionsTypes'
 
 let id = 1
 const defaultState = {}
@@ -27,7 +27,7 @@ const logs = (state = defaultState, action) => {
 
         return {
           ...item,
-          ...{ status: 'read' },
+          ...{status: 'read'},
         }
       })
     default:

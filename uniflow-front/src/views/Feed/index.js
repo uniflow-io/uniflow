@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Navigation from './Navigation'
 import ProgramShow from './ProgramShow'
 import FolderShow from './FolderShow'
-import { getCurrentProgram } from '../../reducers/feed/actions'
-import { connect } from 'react-redux'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
+import {getCurrentProgram} from '../../reducers/feed/actions'
+import {connect} from 'react-redux'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
 
 class Feed extends Component {
   render() {
-    const { feed } = this.props
+    const {feed} = this.props
     const currentProgram = getCurrentProgram(feed)
 
     return (
@@ -22,7 +22,7 @@ class Feed extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Feed</li>
@@ -32,14 +32,14 @@ class Feed extends Component {
         <section className="content">
           <div className="row">
             <div className="col-sm-2">
-              <Navigation />
+              <Navigation/>
             </div>
             <div className="col-sm-10">
               {feed.username &&
-                currentProgram &&
-                currentProgram.type === 'program' && <ProgramShow />}
+              currentProgram &&
+              currentProgram.type === 'program' && <ProgramShow/>}
               {feed.username && currentProgram === null && feed.folder && (
-                <FolderShow />
+                <FolderShow/>
               )}
             </div>
           </div>

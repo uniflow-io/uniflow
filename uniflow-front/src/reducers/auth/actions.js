@@ -106,10 +106,10 @@ export const loginFacebook = (access_token, token = null) => {
           token === null
             ? {}
             : {
-                params: {
-                  bearer: token,
-                },
-              }
+              params: {
+                bearer: token,
+              },
+            }
         )
         .then(response => {
           try {
@@ -150,10 +150,10 @@ export const loginGithub = (code, token = null) => {
           token === null
             ? {}
             : {
-                params: {
-                  bearer: token,
-                },
-              }
+              params: {
+                bearer: token,
+              },
+            }
         )
         .then(response => {
           try {
@@ -192,10 +192,10 @@ export const loginMedium = (code, token = null) => {
       token === null
         ? {}
         : {
-            params: {
-              bearer: token,
-            },
-          }
+          params: {
+            bearer: token,
+          },
+        }
     )
   }
 }

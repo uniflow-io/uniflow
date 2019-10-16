@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { navigate } from 'gatsby'
+import React, {Component} from 'react'
+import {navigate} from 'gatsby'
 import debounce from 'lodash/debounce'
 import {
   getFolderTree,
@@ -11,8 +11,8 @@ import {
   getCurrentPath,
   feedPathTo,
 } from '../../../reducers/feed/actions'
-import { connect } from 'react-redux'
-import { Select2Component } from '../../../components'
+import {connect} from 'react-redux'
+import {Select2Component} from '../../../components'
 
 class FolderShow extends Component {
   state = {
@@ -21,9 +21,9 @@ class FolderShow extends Component {
   }
 
   componentDidMount() {
-    const { folder } = this.props
+    const {folder} = this.props
 
-    this.setState({ folderTree: [pathToString(folder.path)] })
+    this.setState({folderTree: [pathToString(folder.path)]})
   }
 
   componentDidUpdate(prevProps) {
@@ -40,7 +40,7 @@ class FolderShow extends Component {
       .dispatch(
         commitSetCurrentFolder({
           ...this.props.folder,
-          ...{ title: event.target.value },
+          ...{title: event.target.value},
         })
       )
       .then(() => {
@@ -53,7 +53,7 @@ class FolderShow extends Component {
       .dispatch(
         commitSetCurrentFolder({
           ...this.props.folder,
-          ...{ slug: event.target.value },
+          ...{slug: event.target.value},
         })
       )
       .then(() => {
@@ -66,7 +66,7 @@ class FolderShow extends Component {
       .dispatch(
         commitSetCurrentFolder({
           ...this.props.folder,
-          ...{ path: stringToPath(selected) },
+          ...{path: stringToPath(selected)},
         })
       )
       .then(() => {
@@ -103,7 +103,7 @@ class FolderShow extends Component {
   onFolderEdit = event => {
     event.preventDefault()
 
-    const { feed, folder } = this.props
+    const {feed, folder} = this.props
 
     this.props
       .dispatch(getFolderTree(feed.username, this.props.auth.token))
@@ -138,8 +138,8 @@ class FolderShow extends Component {
   }
 
   render() {
-    const { folderTreeEdit, folderTree } = this.state
-    const { folder } = this.props
+    const {folderTreeEdit, folderTree} = this.state
+    const {folder} = this.props
 
     return (
       <div>
@@ -148,7 +148,7 @@ class FolderShow extends Component {
             <h3 className="box-title">Infos</h3>
             <div className="box-tools pull-right">
               <button className="btn btn-box-tool" onClick={this.onDelete}>
-                <i className="fa fa-times" />
+                <i className="fa fa-times"/>
               </button>
             </div>
           </div>
@@ -210,7 +210,7 @@ class FolderShow extends Component {
                       className="form-control"
                       id="info_path_{{ _uid }}"
                       options={folderTree.map(value => {
-                        return { value: value, label: value }
+                        return {value: value, label: value}
                       })}
                     />
                   )) || (
@@ -220,7 +220,7 @@ class FolderShow extends Component {
                         className="btn btn-primary"
                         onClick={this.onFolderEdit}
                       >
-                        <i className="fa fa-edit fa-fw" />
+                        <i className="fa fa-edit fa-fw"/>
                       </button>
                       {pathToString(folder.path)}
                     </div>

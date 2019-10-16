@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { contact } from '../../reducers/contact/actions'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {contact} from '../../reducers/contact/actions'
+import {pathTo} from '../../routes'
+import {Link} from 'gatsby'
 
 class Contact extends Component {
   state = {
@@ -14,11 +14,11 @@ class Contact extends Component {
   }
 
   onChangeEmail = event => {
-    this.setState({ email: event.target.value })
+    this.setState({email: event.target.value})
   }
 
   onChangeMessage = event => {
-    this.setState({ message: event.target.value })
+    this.setState({message: event.target.value})
   }
 
   onSubmit = e => {
@@ -27,16 +27,16 @@ class Contact extends Component {
     let valid = true
     if (!this.state.email) {
       valid = false
-      this.setState({ emailError: true })
+      this.setState({emailError: true})
     } else {
-      this.setState({ emailError: false })
+      this.setState({emailError: false})
     }
 
     if (!this.state.message) {
       valid = false
-      this.setState({ messageError: true })
+      this.setState({messageError: true})
     } else {
-      this.setState({ messageError: false })
+      this.setState({messageError: false})
     }
 
     if (valid) {
@@ -44,14 +44,14 @@ class Contact extends Component {
         .dispatch(contact(this.state.email, this.state.message))
         .then(data => {
           if (data === true) {
-            this.setState({ sent: true })
+            this.setState({sent: true})
           }
         })
     }
   }
 
   render() {
-    const { email, emailError, message, messageError, sent } = this.state
+    const {email, emailError, message, messageError, sent} = this.state
 
     return (
       <div className="content-wrapper">
@@ -63,7 +63,7 @@ class Contact extends Component {
           <ol className="breadcrumb">
             <li>
               <Link to={pathTo('home')}>
-                <i className="fa fa-dashboard" /> Home
+                <i className="fa fa-dashboard"/> Home
               </Link>
             </li>
             <li className="active">Contact</li>
@@ -84,7 +84,7 @@ class Contact extends Component {
                   {!sent && [
                     <p className="text-center" key="say">
                       You got a question about Uniflow, write more here
-                      <br />
+                      <br/>
                       It will be a pleasure to respond
                     </p>,
                     <form key="contactForm">
@@ -99,7 +99,7 @@ class Contact extends Component {
                             className="control-label"
                             htmlFor="email{{ _uid }}"
                           >
-                            <i className="fa fa-times-circle-o" />
+                            <i className="fa fa-times-circle-o"/>
                             Enter your email
                           </label>
                         )}
@@ -124,7 +124,7 @@ class Contact extends Component {
                             className="control-label"
                             htmlFor="message{{ _uid }}"
                           >
-                            <i className="fa fa-times-circle-o" />
+                            <i className="fa fa-times-circle-o"/>
                             Enter your message
                           </label>
                         )}

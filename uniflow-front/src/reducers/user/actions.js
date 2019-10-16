@@ -2,9 +2,9 @@ import request from 'axios'
 import server from '../../utils/server'
 import uniq from 'lodash/uniq'
 import flows from '../../flows'
-import { COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS } from './actionsTypes'
-import { commitLogoutUser } from '../auth/actions'
-import { commitAddLog } from '../logs/actions'
+import {COMMIT_SET_FLOWS, COMMIT_UPDATE_SETTINGS} from './actionsTypes'
+import {commitLogoutUser} from '../auth/actions'
+import {commitAddLog} from '../logs/actions'
 
 export const fetchFlows = token => {
   return dispatch => {

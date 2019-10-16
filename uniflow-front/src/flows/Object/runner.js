@@ -3,10 +3,10 @@ const onCode = function (client) {
     return ''
   }
 
-  let text = this.state.text || ''
-  text = JSON.stringify(text)
+  let object = this.transform()
+  object = JSON.stringify(object)
 
-  return this.state.variable + ' = ' + text
+  return this.state.variable + ' = ' + object
 }
 
 const onExecute = function (runner) {
@@ -20,7 +20,9 @@ const onExecute = function (runner) {
       if (this.state.variable) {
         let context = runner.getContext()
         if (context[this.state.variable]) {
-          this.setState({text: context[this.state.variable]}, this.onUpdate)
+          let object = context[this.state.variable]
+          let keyvaluelist = this.reverseTransform(object)
+          this.setState({keyvaluelist: keyvaluelist}, this.onUpdate)
         } else {
           runner.run(onCode.bind(this)('uniflow'))
         }

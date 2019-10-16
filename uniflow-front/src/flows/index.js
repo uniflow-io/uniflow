@@ -7,7 +7,7 @@ import BashComponent from './Bash'
 //import IfComponent from './If'
 //import IncludeComponent from './Include'
 import JavascriptComponent from './Javascript'
-//import ObjectComponent from './Object'
+import ObjectComponent from './Object'
 //import PromptComponent from './Prompt'
 //import RegexComponent from './Regex'
 //import SelectComponent from './Select'
@@ -27,7 +27,7 @@ export default {
   //'if': IfComponent,
   //'include': IncludeComponent,
   'javascript': JavascriptComponent,
-  //'object': ObjectComponent,
+  'object': ObjectComponent,
   //'prompt': PromptComponent,
   //'regex': RegexComponent,
   //'select': SelectComponent,

@@ -1,4 +1,5 @@
-import { default as Log } from './Log'
-export { default as Bus } from './Bus'
+import {default as Log} from './Log'
 
-export { Log }
+export {default as Bus} from './Bus'
+
+export {Log}

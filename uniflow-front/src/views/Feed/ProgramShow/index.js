@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { navigate } from 'gatsby'
+import React, {Component} from 'react'
+import {navigate} from 'gatsby'
 import debounce from 'lodash/debounce'
 import {
   AceComponent,
@@ -32,8 +32,8 @@ import {
   deserialiseRailData,
   serialiseRailData,
 } from '../../../reducers/feed/actions'
-import { commitAddLog } from '../../../reducers/logs/actions'
-import { connect } from 'react-redux'
+import {commitAddLog} from '../../../reducers/logs/actions'
+import {connect} from 'react-redux'
 import flows from '../../../flows'
 
 class ProgramShow extends Component {
@@ -45,11 +45,11 @@ class ProgramShow extends Component {
   }
 
   componentDidMount() {
-    const { program } = this.props
+    const {program} = this.props
 
     this._componentIsMounted = true
 
-    this.setState({ folderTree: [pathToString(program.path)] })
+    this.setState({folderTree: [pathToString(program.path)]})
 
     this.onFetchFlowData()
   }
@@ -125,12 +125,12 @@ class ProgramShow extends Component {
         let code = codes.join(';')
         return this.props.dispatch(commitUpdateFlow(index, data, code))
       }).then(() => {
-        this.onUpdateFlowData()
-      })
+      this.onUpdateFlowData()
+    })
   }
 
   onFetchFlowData = debounce(() => {
-    let { program } = this.props
+    let {program} = this.props
 
     Promise.resolve()
       .then(() => {
@@ -156,13 +156,13 @@ class ProgramShow extends Component {
       })
       .then(() => {
         if (this.componentIsMounted()) {
-          this.setState({ fetchedSlug: program.slug })
+          this.setState({fetchedSlug: program.slug})
         }
       })
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let { program, rail, user, feed } = this.props
+    let {program, rail, user, feed} = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
     let data = serialiseRailData(rail)
@@ -185,7 +185,7 @@ class ProgramShow extends Component {
       .dispatch(
         commitUpdateFeed({
           ...this.props.program,
-          ...{ title: event.target.value },
+          ...{title: event.target.value},
         })
       )
       .then(() => {
@@ -198,7 +198,7 @@ class ProgramShow extends Component {
       .dispatch(
         commitUpdateFeed({
           ...this.props.program,
-          ...{ slug: event.target.value },
+          ...{slug: event.target.value},
         })
       )
       .then(() => {
@@ -211,7 +211,7 @@ class ProgramShow extends Component {
       .dispatch(
         commitUpdateFeed({
           ...this.props.program,
-          ...{ path: stringToPath(selected) },
+          ...{path: stringToPath(selected)},
         })
       )
       .then(() => {
@@ -222,7 +222,7 @@ class ProgramShow extends Component {
   onChangeClient = selected => {
     this.props
       .dispatch(
-        commitUpdateFeed({ ...this.props.program, ...{ client: selected } })
+        commitUpdateFeed({...this.props.program, ...{client: selected}})
       )
       .then(() => {
         this.onUpdate()
@@ -231,7 +231,7 @@ class ProgramShow extends Component {
 
   onChangeTags = tags => {
     this.props
-      .dispatch(commitUpdateFeed({ ...this.props.program, ...{ tags: tags } }))
+      .dispatch(commitUpdateFeed({...this.props.program, ...{tags: tags}}))
       .then(() => {
         this.onUpdate()
       })
@@ -242,7 +242,7 @@ class ProgramShow extends Component {
       .dispatch(
         commitUpdateFeed({
           ...this.props.program,
-          ...{ description: description },
+          ...{description: description},
         })
       )
       .then(() => {
@@ -253,7 +253,7 @@ class ProgramShow extends Component {
   onChangePublic = value => {
     this.props
       .dispatch(
-        commitUpdateFeed({ ...this.props.program, ...{ public: value } })
+        commitUpdateFeed({...this.props.program, ...{public: value}})
       )
       .then(() => {
         this.onUpdate()
@@ -284,7 +284,7 @@ class ProgramShow extends Component {
       })
       .then(() => {
         return this.props.dispatch(
-          setCurrentFeed({ type: program.type, id: program.id })
+          setCurrentFeed({type: program.type, id: program.id})
         )
       })
       .catch(log => {
@@ -303,7 +303,7 @@ class ProgramShow extends Component {
   onFolderEdit = event => {
     event.preventDefault()
 
-    const { feed } = this.props
+    const {feed} = this.props
 
     this.props
       .dispatch(getFolderTree(feed.username, this.props.auth.token))
@@ -333,7 +333,7 @@ class ProgramShow extends Component {
       }
     }
 
-    flowLabels.sort(function(flow1, flow2) {
+    flowLabels.sort(function (flow1, flow2) {
       let x = flow1.label
       let y = flow2.label
       return x < y ? -1 : x > y ? 1 : 0
@@ -353,8 +353,8 @@ class ProgramShow extends Component {
   }
 
   render() {
-    const { program, tags, rail, user } = this.props
-    const { folderTreeEdit, folderTree } = this.state
+    const {program, tags, rail, user} = this.props
+    const {folderTreeEdit, folderTree} = this.state
     const userFlows = this.getFlows(user.flows, program)
     const clients = {
       uniflow: 'Uniflow',
@@ -370,10 +370,10 @@ class ProgramShow extends Component {
             <h3 className="box-title">Infos</h3>
             <div className="box-tools pull-right">
               <button className="btn btn-box-tool" onClick={this.onDuplicate}>
-                <i className="fa fa-clone" />
+                <i className="fa fa-clone"/>
               </button>
               <button className="btn btn-box-tool" onClick={this.onDelete}>
-                <i className="fa fa-times" />
+                <i className="fa fa-times"/>
               </button>
             </div>
           </div>
@@ -435,7 +435,7 @@ class ProgramShow extends Component {
                       className="form-control"
                       id="info_path_{{ _uid }}"
                       options={folderTree.map(value => {
-                        return { value: value, label: value }
+                        return {value: value, label: value}
                       })}
                     />
                   )) || (
@@ -445,7 +445,7 @@ class ProgramShow extends Component {
                         className="btn btn-primary"
                         onClick={this.onFolderEdit}
                       >
-                        <i className="fa fa-edit fa-fw" />
+                        <i className="fa fa-edit fa-fw"/>
                       </button>
                       {pathToString(program.path)}
                     </div>
@@ -468,7 +468,7 @@ class ProgramShow extends Component {
                     className="form-control"
                     id="info_client_{{ _uid }}"
                     options={Object.keys(clients).map(value => {
-                      return { value: value, label: clients[value] }
+                      return {value: value, label: clients[value]}
                     })}
                   />
                 </div>
@@ -490,7 +490,7 @@ class ProgramShow extends Component {
                     value={program.tags}
                     onChange={this.onChangeTags}
                     options={tags.map(tag => {
-                      return { value: tag, label: tag }
+                      return {value: tag, label: tag}
                     })}
                     placeholder="Tags"
                   />
@@ -538,7 +538,7 @@ class ProgramShow extends Component {
           <div className="box-footer">
             {program.client === 'uniflow' && (
               <button className="btn btn-success" onClick={this.run}>
-                <i className="fa fa-fw fa-play" /> Play
+                <i className="fa fa-fw fa-play"/> Play
               </button>
             )}
           </div>

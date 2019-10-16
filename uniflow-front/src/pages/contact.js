@@ -1,4 +1,4 @@
 import React from 'react'
-import { Contact } from '../views'
+import {Contact} from '../views'
 
-export default () => <Contact />
+export default () => <Contact/>
