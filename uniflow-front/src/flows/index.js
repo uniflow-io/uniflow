@@ -9,7 +9,7 @@ import CanvasComponent from './Canvas'
 import JavascriptComponent from './Javascript'
 import ObjectComponent from './Object'
 //import PromptComponent from './Prompt'
-//import RegexComponent from './Regex'
+import RegexComponent from './Regex'
 //import SelectComponent from './Select'
 //import SocketioComponent from './Socketio'
 import TextComponent from './Text'
@@ -29,7 +29,7 @@ export default {
   'javascript': JavascriptComponent,
   'object': ObjectComponent,
   //'prompt': PromptComponent,
-  //'regex': RegexComponent,
+  'regex': RegexComponent,
   //'select': SelectComponent,
   //'socketio': SocketioComponent,
   'text': TextComponent,

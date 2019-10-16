@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {AceComponent} from '../../components'
-import {onCompile, onExecute, SRL} from '../clients/uniflow'
+import {onCode, onExecute, SRL} from './runner'
 
 function copyTextToClipboard(text) {
   let textArea = document.createElement('textarea')
@@ -29,7 +29,7 @@ export default class RegexComponent extends Component {
   }
 
   static clients() {
-    return ['uniflow']
+    return ['uniflow', 'node', 'chrome', 'phpstorm']
   }
 
   componentDidMount() {
