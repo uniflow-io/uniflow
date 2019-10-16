@@ -129,6 +129,10 @@ export default class RegexComponent extends Component {
             </div>
 
             <div className='form-group'>
+              <div className='col-md-offset-2 col-sm-10'><a href="https://simple-regex.com/" target="_blank">SRL - Simple Regex Language</a></div>
+            </div>
+
+            <div className='form-group'>
               <label htmlFor='expression{{ _uid }}' className='col-sm-2 control-label'>Expression</label>
 
               <div className='col-sm-10'>
