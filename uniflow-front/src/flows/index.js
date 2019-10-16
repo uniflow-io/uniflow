@@ -1,7 +1,7 @@
 //import AssetsComponent from './Assets'
 import BashComponent from './Bash'
 //import BrowserComponent from './Browser'
-import CanvasComponent from './Canvas'
+//import CanvasComponent from './Canvas'
 //import CheckboxesComponent from './Checkboxes'
 //import ChromeComponent from './Chrome'
 //import IfComponent from './If'
@@ -21,7 +21,7 @@ export default {
   //'assets': AssetsComponent,
   'bash': BashComponent,
   //'browser': BrowserComponent,
-  'canvas': CanvasComponent,
+  //'canvas': CanvasComponent,
   //'checkboxes': CheckboxesComponent,
   //'chrome': ChromeComponent,
   //'if': IfComponent,
