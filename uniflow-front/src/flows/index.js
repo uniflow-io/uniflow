@@ -1,5 +1,5 @@
 //import AssetsComponent from './Assets'
-//import BashComponent from './Bash'
+import BashComponent from './Bash'
 //import BrowserComponent from './Browser'
 //import CanvasComponent from './Canvas'
 //import CheckboxesComponent from './Checkboxes'
@@ -19,7 +19,7 @@ import TextComponent from './Text'
 
 export default {
   //'assets': AssetsComponent,
-  //'bash': BashComponent,
+  'bash': BashComponent,
   //'browser': BrowserComponent,
   //'canvas': CanvasComponent,
   //'checkboxes': CheckboxesComponent,
