@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {onCompile, onExecute} from '../clients/uniflow'
+import {onCode, onExecute} from './runner'
 
 export default class CheckBoxesComponent extends Component {
   state = {
