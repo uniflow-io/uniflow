@@ -21,6 +21,7 @@ And is largely inspired by many projects :
 - [Flowex](https://github.com/antonmi/flowex)
 - [Chickenfoot](http://up.csail.mit.edu/chickenfoot)
 - [Tray.io](https://tray.io)
+- [Refinery.io](https://www.refinery.io)
 - [nvAlt](http://brettterpstra.com/projects/nvalt)
 
 Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface.
