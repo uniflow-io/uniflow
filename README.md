@@ -13,6 +13,7 @@ And is largely inspired by many projects :
 - [Google Blockly](https://developers.google.com/blockly)
 - [Huginn](https://github.com/huginn/huginn)
 - [IFTTT](https://ifttt.com/)
+- [n8n.io](https://github.com/n8n-io/n8n)
 - [NoFlow](https://noflojs.org/)
 - [Nodered](https://nodered.org/)
 - [Refinery.io](https://www.refinery.io)
@@ -21,10 +22,8 @@ And is largely inspired by many projects :
 - [Tray.io](https://tray.io)
 - [UIVision](https://ui.vision/x/desktop-automation)
 - [Zapier](https://zapier.com/)
-- [n8n.io](https://github.com/n8n-io/n8n)
-- [nvAlt](http://brettterpstra.com/projects/nvalt)
 
-Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface.
+Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface that include the philosophy of [nvAlt](http://brettterpstra.com/projects/nvalt).
 And the runner is specificaly implemented to various way on : Browser, Node, Your own software plugins...
 
 More informations at [https://uniflow.io](https://uniflow.io)
