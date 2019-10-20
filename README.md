@@ -16,6 +16,7 @@ And is largely inspired by many projects :
 - [n8n.io](https://github.com/n8n-io/n8n)
 - [NoFlow](https://noflojs.org/)
 - [Nodered](https://nodered.org/)
+- [Pipedream](https://pipedream.com)
 - [Refinery.io](https://www.refinery.io)
 - [Scriptable.app](https://apps.apple.com/us/app/scriptable/id1405459188)
 - [Shortcut for iOS](https://apps.apple.com/us/app/shortcuts/id915249334)
