@@ -1,11 +1,11 @@
 ---
-title: Connected Login
+title: Connected login
 date: 2018-12-13
 author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## Connected Login
+## Connected login
 
 You can now use your Facebook or Github profile to login to the app.
 
