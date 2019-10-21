@@ -1,11 +1,11 @@
 ---
-title: Case study Wordblitz
+title: Wordblitz
 date: 2019-04-15
 author: "Mathieu Ledru"
 tags: ["case-study"]
 ---
 
-## Case study Wordblitz
+## Wordblitz
 
 If you know well the facebook game Wordblitz, then you can easily beat your opponent.
 
