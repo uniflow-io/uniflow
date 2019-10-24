@@ -2,7 +2,7 @@
 title: How we manage sourcing ?
 date: 2019-10-17
 author: "Mathieu Ledru"
-tags: ["case-study"]
+tags: ["blog"]
 ---
 
 ## How we manage sourcing ?
