@@ -1,0 +1,8 @@
+- title: Documentation
+  key: docs
+  breadcrumbTitle: Docs
+  items:
+    - title: Introduction
+      link: /docs
+    - title: FAQ
+      link: /docs/faq
