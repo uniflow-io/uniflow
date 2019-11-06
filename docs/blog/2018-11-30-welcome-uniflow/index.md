@@ -2,6 +2,7 @@
 title: Welcome Uniflow !
 date: 2018-11-30
 author: "Mathieu Ledru"
+cover: images/cover.png
 tags: ["blog"]
 ---
 

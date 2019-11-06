@@ -2,6 +2,7 @@
 title: Wordblitz
 date: 2019-04-15
 author: "Mathieu Ledru"
+cover: images/cover.png
 tags: ["case-study"]
 ---
 
