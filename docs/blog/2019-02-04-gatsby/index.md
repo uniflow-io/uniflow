@@ -5,6 +5,4 @@ author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## Gatsby
-
 Now the front is fast and use modern technology as uniflow become a static website. This was possible thanks to gatsby. ⚡️

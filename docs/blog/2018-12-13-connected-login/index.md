@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## Connected login
-
 You can now use your Facebook or Github profile to login to the app.
 
 Enjoy the flow 🎉

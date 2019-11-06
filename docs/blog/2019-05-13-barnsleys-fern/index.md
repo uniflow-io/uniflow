@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["case-study"]
 ---
 
-## Barnsley’s fern
-
 The purpose of this article is to render a fractal from Michael Barnsley.
 
 ![result](images/result.png)

@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["case-study"]
 ---
 
-## Wordblitz
-
 If you know well the facebook game Wordblitz, then you can easily beat your opponent.
 
 Here we created a public flow https://uniflow.io/public/feed/wordblitz-solver

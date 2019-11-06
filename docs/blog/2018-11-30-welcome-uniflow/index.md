@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## Welcome Uniflow !
-
 It’s a great pleasure to annonce public and release of [uniflow.io](https://uniflow.io)
 
 This platform as [saas](https://en.wikipedia.org/wiki/Software_as_a_service) will help you managing your daily recurring tasks.

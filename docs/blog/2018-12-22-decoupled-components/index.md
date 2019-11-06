@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## Decoupled components
-
 🚀 We finally split the project into severals components.
 
 This means that the code will be easier to maintain and all components can now evolve separately.

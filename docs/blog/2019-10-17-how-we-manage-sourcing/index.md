@@ -5,8 +5,6 @@ author: "Mathieu Ledru"
 tags: ["blog"]
 ---
 
-## How we manage sourcing ?
-
 At Uniflow, there is an issue about how we manage our sources repositories.
 
 As a fact, we use **Git** for versioning the repositories as git is largely adopted, there is no reason to replace that tool over time.
