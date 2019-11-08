@@ -1,6 +1,4 @@
-- title: Documentation
-  key: docs
-  breadcrumbTitle: Docs
+- title: Prologue
   items:
     - title: Introduction
       link: /docs
