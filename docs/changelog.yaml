@@ -4,7 +4,7 @@
   date: "2019-11-10"
 -
   tag: "v1.1.6"
-  label: "Add Blog"
+  label: "Move medium Blog to internal blog"
   date: "2019-11-01"
 -
   tag: "v1.1.5"
@@ -24,7 +24,7 @@
   date: "2019-01-21"
 -
   tag: "v1.1.1"
-  label: "Add blog"
+  label: "Add blog from medium"
   date: "2019-01-10"
 -
   tag: "v1.1.0"
