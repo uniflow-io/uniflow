@@ -2,5 +2,5 @@
   items:
     - title: Introduction
       link: /docs
-    - title: FAQ
-      link: /docs/faq
+    - title: Concepts
+      link: /docs/concepts
