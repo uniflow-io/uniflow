@@ -1,5 +1,5 @@
 ---
-title: FAQ
+title: Concepts
 ---
 
 ## What is a flow ?
