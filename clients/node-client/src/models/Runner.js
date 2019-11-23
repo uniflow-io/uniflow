@@ -1,5 +1,6 @@
 const bashBridge = require('../bridges/bash')
 const consoleBridge = require('../bridges/console')
+const filesystemBridge = require('../bridges/filesystem')
 const readlineBridge = require('../bridges/readline')
 const processBridge = require('../bridges/process')
 const vm = require('vm')
@@ -13,6 +14,7 @@ Runner.prototype.run = function (rail) {
   const context = new vm.createContext({
     Bash: bashBridge(this.commandArgs),
     console: consoleBridge,
+    filesystem: filesystemBridge,
     readline: readlineBridge,
     process: processBridge,
   });
