@@ -13,6 +13,7 @@ And is largely inspired by many projects :
 - [Google Blockly](https://developers.google.com/blockly)
 - [Huginn](https://github.com/huginn/huginn)
 - [IFTTT](https://ifttt.com/)
+- [Integromat](https://www.integromat.com/)
 - [n8n.io](https://github.com/n8n-io/n8n)
 - [NoFlow](https://noflojs.org/)
 - [Nodered](https://nodered.org/)
