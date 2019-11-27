@@ -2,7 +2,8 @@
 title: Bootstrap 4
 date: 2019-11-22
 author: "Mathieu Ledru"
-cover: ["images/cover.svg", "images/cover.png"]
+cover: images/cover.svg
+cover_seo: images/cover.png
 tags: ["blog"]
 ---
 

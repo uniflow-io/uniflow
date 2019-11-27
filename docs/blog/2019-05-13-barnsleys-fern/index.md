@@ -3,6 +3,7 @@ title: Barnsley’s fern
 date: 2019-05-13
 author: "Mathieu Ledru"
 cover: images/cover.png
+cover_seo: images/cover.png
 tags: ["case-study"]
 ---
 

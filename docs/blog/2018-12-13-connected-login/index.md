@@ -3,6 +3,7 @@ title: Connected login
 date: 2018-12-13
 author: "Mathieu Ledru"
 cover: images/cover.png
+cover_seo: images/cover.png
 tags: ["blog"]
 ---
 

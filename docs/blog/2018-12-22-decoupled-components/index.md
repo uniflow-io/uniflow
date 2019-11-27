@@ -3,6 +3,7 @@ title: Decoupled components
 date: 2018-12-22
 author: "Mathieu Ledru"
 cover: images/cover.png
+cover_seo: images/cover.png
 tags: ["blog"]
 ---
 
