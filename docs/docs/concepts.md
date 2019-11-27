@@ -2,7 +2,7 @@
 title: Concepts
 ---
 
-#### What is a flow ?
+#### What is a Flow ?
 
 [Flow-Based Programming](https://en.wikipedia.org/wiki/Flow-based_programming)
 is a data-centered approach for designing program. This is a paradigm that
@@ -13,7 +13,7 @@ A Flow here is viewed as : - an isolated implemented process for
 business-logic at bottom layer. - a component that is a part of
 communication logic of the application at top layer.
 
-#### What is a rail ?
+#### What is a Rail ?
 
 [Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)
 pattern in functional programming presents a program, or its part, as a
