@@ -4,3 +4,7 @@
       link: /docs
     - title: Concepts
       link: /docs/concepts
+- title: Getting Started
+  items:
+    - title: Quick Start
+      link: /quick-start
