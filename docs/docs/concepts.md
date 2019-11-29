@@ -9,9 +9,10 @@ is a data-centered approach for designing program. This is a paradigm that
 defines an application as a network of independent processes exchanging
 data via message passing.
 
-A Flow here is viewed as : - an isolated implemented process for
-business-logic at bottom layer. - a component that is a part of
-communication logic of the application at top layer.
+A Flow here is viewed as :
+- an isolated implemented process for business-logic at bottom layer.
+- a component that is a part of communication logic of the application
+at top layer.
 
 #### What is a Rail ?
 
