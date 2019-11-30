@@ -21,7 +21,7 @@ Runner.prototype.run = function (rail) {
 
   return rail.reduce((promise, flow) => {
     return promise.then(() => {
-      return vm.runInContext(flow.code || '', context);
+      return vm.runInContext(flow.codes.node || '', context);
     })
   }, Promise.resolve())
 }

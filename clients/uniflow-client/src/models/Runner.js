@@ -16,7 +16,7 @@ export default class Runner {
       }
     }
 
-    return rail.reduce((promise, flow, index) => {
+    return rail.reduce((promise, flow) => {
       return promise
         .then(() => {
           return flow.bus.emit('execute', runner)
