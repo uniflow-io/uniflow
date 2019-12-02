@@ -1,5 +1,5 @@
 {
-  "name": "uniflow-node-client",
+  "name": "@uniflow-io/node-client",
   "version": "1.0.0",
   "description": "Uniflow node client",
   "author": "Mathieu Ledru <matyo91@gmail.com>",

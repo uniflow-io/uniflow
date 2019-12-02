@@ -1,7 +1,7 @@
 {
-  "name": "uniflow-node-client",
+  "name": "@uniflow-io/phpstorm-client",
   "version": "1.0.0",
-  "description": "Uniflow node client",
+  "description": "Uniflow phpstorm client",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
@@ -12,7 +12,6 @@
     "uniflow-client"
   ],
   "license": "MIT",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
