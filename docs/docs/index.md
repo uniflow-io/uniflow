@@ -2,15 +2,15 @@
 title: Introduction
 ---
 
-#### Why ?
+## Why ?
 
 Workflow your micro
 
-#### How ?
+## How ?
 
 Think macro, act micro
 
-#### Mono Flow, the inspiration
+## Mono Flow, the inspiration
 
 I am very big fan of doing NoFlow, Workflow for iOS, IFTTT, Automator,
 Zapier, Datafire, Huggin and google Blocky. The flow programming is very
@@ -23,7 +23,7 @@ top to bottom. At the end, you can make anything into each block, so
 have conditions, loops and so on as long as something is delivered at
 the end. For the interface, I also did pick up the philosophy of nvALT.
 
-#### What content it deserve
+## What content it deserve
 
 The goal is to deserve everything. So, a block can be a simple text
 transformation as it can be a very specific process. The harmony is
