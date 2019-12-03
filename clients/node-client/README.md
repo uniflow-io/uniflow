@@ -1,3 +1,3 @@
-# uniflow-node-client
+# node-client
 
 This is official Uniflow client for Node
