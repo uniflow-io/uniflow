@@ -8,3 +8,7 @@
   items:
     - title: Quick Start
       link: /docs/quick-start
+- title: Contribute
+  items:
+    - title: How to create a client
+      link: /docs/how-to-create-a-client
