@@ -8,7 +8,15 @@
   items:
     - title: Quick Start
       link: /docs/quick-start
+- title: Creating a Client
+  items:
+    - title: Naming a Client
+      link: /docs/naming-a-client
+    - title: Adding a bridge
+      link: /docs/adding-a-bridge
+    - title: Linking to Uniflow
+      link: /docs/linking-to-uniflow
 - title: Contribute
   items:
-    - title: How to create a client
-      link: /docs/how-to-create-a-client
+    - title: Submit to Client Library
+      link: /docs/submit-to-client-library
