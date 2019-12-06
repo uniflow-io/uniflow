@@ -12,6 +12,8 @@
   items:
     - title: Naming a Client
       link: /docs/naming-a-client
+    - title: Railing a Client
+      link: /docs/railing-a-client
     - title: Adding a Bridge to Client
       link: /docs/adding-a-bridge-to-client
     - title: Linking Uniflow to Client
