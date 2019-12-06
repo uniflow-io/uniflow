@@ -12,10 +12,10 @@
   items:
     - title: Naming a Client
       link: /docs/naming-a-client
-    - title: Adding a bridge
-      link: /docs/adding-a-bridge
-    - title: Linking to Uniflow
-      link: /docs/linking-to-uniflow
+    - title: Adding a Bridge to Client
+      link: /docs/adding-a-bridge-to-client
+    - title: Linking Uniflow to Client
+      link: /docs/linking-uniflow-to-client
 - title: Contribute
   items:
     - title: Submit to Client Library
