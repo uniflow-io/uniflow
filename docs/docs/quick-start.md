@@ -18,9 +18,9 @@ Click `Play` button.
 Rail will be executed from top to bottom. Result Flow at the bottom will
 then display a text that is ordered by lines.
 
-To create your own program, you should first
+To create your own Program, you should first
 [register](https://uniflow.io/register) a new account. Then you just
 type a unique title and press enter on `Search` area.
 
-`Search` area is also used to filter your programs, as same as create
+`Search` area is also used to filter your Programs, as same as create
 new folders.

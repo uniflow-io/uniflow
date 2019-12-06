@@ -4,7 +4,7 @@ title: Concepts
 
 ## What is a Flow ?
 
-[Flow-Based Programming](https://en.wikipedia.org/wiki/Flow-based_programming)
+[Flow-Based Programming](https://jpaulm.github.io/fbp/index.html)
 is a data-centered approach for designing program. This is a paradigm that
 defines an application as a network of independent processes exchanging
 data via message passing.
@@ -20,14 +20,19 @@ at top layer.
 pattern in functional programming presents a program, or its part, as a
 pipeline of functions : output of one function is an input for another.
 
-A rail is then a representation of the program.
+A Rail is then a representation of the Flows that will be executed.
+
+## What is a Program ?
+
+A Program is globally use for naming and identifying a Rail and it's Flows.
+As a shortcut, we when talking about Flows, we are talking about Programs.
 
 ## What is a Client ?
 
-A client is a running a program that depends on it's environment. It
-must implement it's own rail logic and link to uniflow.
+A Client is a running a Program that depends on it's environment. It
+must implement it's own Rail logic and link to Uniflow.
 
 ## What is a Bridge ?
 
-A bridge is a part of implementation of the environment that will be
-linked to the flow bottom layer.
+A Bridge is a part of implementation of the environment that will be
+linked to the Flow bottom layer.
