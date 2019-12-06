@@ -18,7 +18,7 @@
       link: /docs/adding-a-bridge-to-client
     - title: Linking Uniflow to Client
       link: /docs/linking-uniflow-to-client
-- title: Contribute
+- title: Contributing
   items:
-    - title: Submit to Client Library
-      link: /docs/submit-to-client-library
+    - title: Submitting to Client Library
+      link: /docs/submitting-to-client-library
