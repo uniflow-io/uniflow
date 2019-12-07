@@ -1,6 +1,6 @@
 ---
 title: So many clients
-date: 2019-11-30
+date: 2019-12-07
 author: "Mathieu Ledru"
 cover: images/cover.png
 cover_seo: images/cover.png
