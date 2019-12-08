@@ -12,13 +12,12 @@ export default class Runner {
     const context = new vm.createContext({
       console: consoleBridge(this.background),
       chrome: chromeBridge(this.background),
-    });
+    })
 
     return rail.reduce((promise, flow) => {
       return promise.then(() => {
-        return vm.runInContext(flow.codes.chrome || '', context);
+        return vm.runInContext(flow.codes.chrome || '', context)
       })
     }, Promise.resolve())
   }
 }
-

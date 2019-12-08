@@ -1,7 +1,7 @@
 const cp = require('child_process')
 const merge = require('merge')
 
-let defSpawnOptions = {stdio: 'inherit'}
+let defSpawnOptions = { stdio: 'inherit' }
 
 /**
  * @summary Get shell program meta for current platform
@@ -10,9 +10,9 @@ let defSpawnOptions = {stdio: 'inherit'}
  */
 function getShell() {
   if (process.platform === 'win32') {
-    return {cmd: 'cmd', arg: '/C'}
+    return { cmd: 'cmd', arg: '/C' }
   } else {
-    return {cmd: 'sh', arg: '-c'}
+    return { cmd: 'sh', arg: '-c' }
   }
 }
 
@@ -22,7 +22,7 @@ function execSh(command, commandArgs, options, callback) {
   }
 
   if (options === true) {
-    options = {stdio: null}
+    options = { stdio: null }
   }
 
   if (typeof options === 'function') {
@@ -31,8 +31,7 @@ function execSh(command, commandArgs, options, callback) {
   } else {
     options = options || {}
     options = merge(true, defSpawnOptions, options)
-    callback = callback || function () {
-    }
+    callback = callback || function() {}
   }
 
   let child
@@ -52,18 +51,18 @@ function execSh(command, commandArgs, options, callback) {
   }
 
   if (child.stdout) {
-    child.stdout.on('data', function (data) {
+    child.stdout.on('data', function(data) {
       stdout += data
     })
   }
 
   if (child.stderr) {
-    child.stderr.on('data', function (data) {
+    child.stderr.on('data', function(data) {
       stderr += data
     })
   }
 
-  child.on('close', function (code) {
+  child.on('close', function(code) {
     if (code) {
       let e = new Error('Shell command exit with non zero code: ' + code)
       e.code = code
@@ -76,18 +75,18 @@ function execSh(command, commandArgs, options, callback) {
   return child
 }
 
-module.exports = function (commandArgs) {
+module.exports = function(commandArgs) {
   return {
-    exec: function (command) {
+    exec: function(command) {
       return new Promise((resolve, reject) => {
         execSh(command, commandArgs, {}, function(err, stdout, stderr) {
-          if(err) {
+          if (err) {
             reject(stderr)
           } else {
             resolve(stdout)
           }
         })
       })
-    }
+    },
   }
 }

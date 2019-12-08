@@ -10,18 +10,18 @@ function Runner(commandArgs, api) {
   this.api = api
 }
 
-Runner.prototype.run = function (rail) {
+Runner.prototype.run = function(rail) {
   const context = new vm.createContext({
     Bash: bashBridge(this.commandArgs),
     console: consoleBridge,
     filesystem: filesystemBridge,
     readline: readlineBridge,
     process: processBridge,
-  });
+  })
 
   return rail.reduce((promise, flow) => {
     return promise.then(() => {
-      return vm.runInContext(flow.codes.node || '', context);
+      return vm.runInContext(flow.codes.node || '', context)
     })
   }, Promise.resolve())
 }

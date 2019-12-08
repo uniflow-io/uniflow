@@ -18,7 +18,15 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "clients/uniflow-client"
   },
+  "scripts": {
+    "format": "./node_modules/.bin/prettier --write \"src/**/*.js\"",
+    "upgrade-all": "./node_modules/.bin/npx yarn-upgrade-all"
+  },
   "dependencies": {
-    "vm-browserify": "^1.1.0"
+    "vm-browserify": "^1.1.2"
+  },
+  "devDependencies": {
+    "npx": "^10.2.0",
+    "prettier": "^1.19.1"
   }
 }
