@@ -1,9 +1,8 @@
 ---
-title: Submitting to Client Library
+title: Submitting to Library
 ---
 
-In order to add your Client to the [Client
-Library](https://uniflow.io/clients), you need to :
+In order to add your Card to the [Library](https://uniflow.io/library), you need to :
 
 1. Publish a package to npm (learn how on the [npm
 docs](https://docs.npmjs.com/getting-started/publishing-npm-packages)).

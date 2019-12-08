@@ -21,7 +21,7 @@ For instance, if I decide to write a new flow, why this specific flow can't have
 
 The underling concept here is to create a unified paradigm context for multiple distinct and specific clients.
 
-Moreover, a new dedicated [Client](https://uniflow.io/clients) 🦄 section is now open to list all available clients. To get more information about client, refer to the [Doc](https://uniflow.io/docs/concepts) 📚.
+Moreover, a new dedicated [Library](https://uniflow.io/library) 📖 section is now open to list all available clients 🦄. To get more information about client, refer to the [Doc](https://uniflow.io/docs/concepts) 📚.
 
 All this is now possible at Uniflow 💧 today 🚀.
 
