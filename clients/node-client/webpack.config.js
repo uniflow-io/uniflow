@@ -4,7 +4,11 @@ module.exports = () => {
     let loaders = [{
         loader: 'babel-loader',
         options: {
-            presets: ['env', 'react', 'es2015', 'flow', 'stage-0']
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+              '@babel/preset-flow'
+            ]
         }
     }]
 

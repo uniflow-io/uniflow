@@ -25,24 +25,22 @@
     "format": "./node_modules/.bin/prettier --write \"src/**/*.js\"",
     "upgrade-all": "./node_modules/.bin/npx yarn-upgrade-all"
   },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "fs-extra": "^8.1.0",
+    "merge": "^1.2.1"
+  },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-transform-react-jsx": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-flow": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
     "npx": "^10.2.0",
     "prettier": "^1.19.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
-  },
-  "dependencies": {
-    "axios": "^0.19.0",
-    "fs-extra": "^8.1.0",
-    "merge": "^1.2.1"
   }
 }
