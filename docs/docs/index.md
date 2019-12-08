@@ -4,11 +4,11 @@ title: Introduction
 
 ## Why ?
 
-Workflow your micro
+Workflow your micro.
 
 ## How ?
 
-Think macro, act micro
+Think macro, act micro.
 
 ## Mono Flow, the inspiration
 
