@@ -12,5 +12,5 @@ docs](https://docs.npmjs.com/getting-started/publishing-npm-packages)).
 
 After doing so, Algolia will take up to 12 hours to add it to the
 library search index (the exact time necessary is still unknown), and
-wait for the rebuild of https://uniflow.io to automatically include your
+wait for the rebuild of [uniflow.io](https://uniflow.io) to automatically include your
 client page to the website.
