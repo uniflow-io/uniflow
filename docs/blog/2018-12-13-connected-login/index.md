@@ -1,11 +1,11 @@
 ---
 title: Connected login
 date: 2018-12-13
-author: "Mathieu Ledru"
+author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
-coverAuthor: rawpixel
-coverOriginalUrl: https://unsplash.com/photos/C05KN4h8WKw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+coverAuthor: Wikimedia
+coverOriginalUrl: https://upload.wikimedia.org/wikipedia/commons/9/9b/Social_Network_Analysis_Visualization.png
 tags: ["blog"]
 ---
 

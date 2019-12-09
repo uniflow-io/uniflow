@@ -1,11 +1,11 @@
 ---
 title: Wordblitz
 date: 2019-04-15
-author: "Mathieu Ledru"
+author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
-coverAuthor: rawpixel
-coverOriginalUrl: https://unsplash.com/photos/C05KN4h8WKw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+coverAuthor: Wordblitz
+coverOriginalUrl: https://www.facebook.com/pages/category/Just-For-Fun/Word-Blitz-509575059455621/
 tags: ["case-study"]
 ---
 

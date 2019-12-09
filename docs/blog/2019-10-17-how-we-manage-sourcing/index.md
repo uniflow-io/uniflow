@@ -1,11 +1,11 @@
 ---
 title: How we manage sourcing ?
 date: 2019-10-17
-author: "Mathieu Ledru"
+author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
-coverAuthor: rawpixel
-coverOriginalUrl: https://unsplash.com/photos/C05KN4h8WKw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+coverAuthor: Git
+coverOriginalUrl: https://git-scm.com/
 tags: ["blog"]
 ---
 

@@ -1,11 +1,11 @@
 ---
 title: Folders
 date: 2019-01-29
-author: "Mathieu Ledru"
+author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
-coverAuthor: rawpixel
-coverOriginalUrl: https://unsplash.com/photos/C05KN4h8WKw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText
+coverAuthor: Wikimedia
+coverOriginalUrl: https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Blue_folder_seth_yastrov_01.svg/1280px-Blue_folder_seth_yastrov_01.svg.png
 tags: ["blog"]
 ---
 
