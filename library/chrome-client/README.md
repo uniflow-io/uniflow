@@ -1,3 +1,3 @@
 # chrome-client
 
-This is official Uniflow client for Google Chrome 
+This is official Uniflow Client for Google Chrome 

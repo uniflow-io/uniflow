@@ -1,3 +1,3 @@
 # phpstorm-client
 
-This is official Uniflow client for Phpstorm
+This is official Uniflow Client for Phpstorm
