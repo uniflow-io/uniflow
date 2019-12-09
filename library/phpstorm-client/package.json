@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/clients/phpstorm-client#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/phpstorm-client#readme",
   "keywords": [
     "uniflow",
     "uniflow-client"
@@ -15,6 +15,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
-    "directory": "clients/phpstorm-client"
+    "directory": "library/phpstorm-client"
   }
 }

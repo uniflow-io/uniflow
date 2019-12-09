@@ -13,7 +13,7 @@ Think macro, act micro.
 ## Mono Flow, the inspiration
 
 I am very big fan of doing NoFlow, Workflow for iOS, IFTTT, Automator,
-Zapier, Datafire, Huggin and Google Blockly. The flow programming is very
+Zapier, Datafire, Huggin and Google Blockly. Flow Based Programming is very
 interesting because you assemble blocs like Lego pieces. What can become
 complicated is when you assemble its too much because you get a graph
 like spaghetti. So, I made the choice to make it human readable and to
