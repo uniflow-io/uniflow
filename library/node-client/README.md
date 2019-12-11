@@ -1,3 +1,3 @@
 # node-client
 
-This is official Uniflow Client for Node
+This is official Node Client for Uniflow
