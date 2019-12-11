@@ -21,6 +21,7 @@ And is largely inspired by many projects :
 - [Refinery.io](https://www.refinery.io)
 - [Scriptable.app](https://apps.apple.com/us/app/scriptable/id1405459188)
 - [Shortcut for iOS](https://apps.apple.com/us/app/shortcuts/id915249334)
+- [Titanoboa](https://titanoboa.io)
 - [Tray.io](https://tray.io)
 - [UIVision](https://ui.vision/x/desktop-automation)
 - [Zapier](https://zapier.com/)
