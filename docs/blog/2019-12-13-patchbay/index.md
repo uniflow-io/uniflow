@@ -2,7 +2,7 @@
 title: Patchbay
 date: 2019-12-13
 author: Mathieu Ledru
-cover: images/cover.png
+cover: images/cover.svg
 coverSeo: images/cover.png
 coverAuthor: Patchbay
 coverOriginalUrl: https://patchbay.pub
