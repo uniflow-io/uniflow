@@ -13,5 +13,6 @@ tags: ["blog"]
  MPMC functionality. This is the Poor man's replacement for services such as
   ngrok, IFTTT, serverless applications.
 
-Here, we will see how to implement a simple producer, to reflect Patchbay
- phylosphy.
+Here, we will see how to implement a simple consumer producer, to reflect
+ Patchbay phylosphy.
+

@@ -1,10 +1,12 @@
 import consoleBridge from '../bridges/console'
+import httpBridge from '../bridges/http'
 import vm from 'vm'
 
 export default class Runner {
   run(rail) {
     const context = new vm.createContext({
       console: consoleBridge,
+      http: httpBridge,
     })
 
     let runner = {

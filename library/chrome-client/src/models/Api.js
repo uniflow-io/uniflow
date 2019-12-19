@@ -8,7 +8,7 @@ function Api(env, key) {
 Api.prototype.endpoint = function(endpoint, params = []) {
   let httpHost = 'https://api.uniflow.io'
   if (this.env === 'dev') {
-    httpHost = 'http://127.0.0.1:8091'
+    httpHost = 'https://127.0.0.1:8091'
   }
 
   const endpoints = {

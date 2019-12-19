@@ -1,3 +1,4 @@
+const https = require('https')
 const axios = require('axios')
 
 function Api(env, key) {
@@ -8,8 +9,14 @@ function Api(env, key) {
 Api.prototype.endpoint = function(endpoint, params = []) {
   let httpHost = 'https://api.uniflow.io'
   if (this.env === 'dev') {
-    httpHost = 'http://127.0.0.1:8091'
+    httpHost = 'https://127.0.0.1:8091'
   }
+  const instance = axios.create({
+    baseURL: httpHost,
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: this.env !== 'dev'
+    })
+  });
 
   const endpoints = {
     program: `/api/program/me/list?client=node&apiKey=${this.key}`,
@@ -19,7 +26,7 @@ Api.prototype.endpoint = function(endpoint, params = []) {
     return path.replace('{' + key + '}', params[key])
   }, endpoints[endpoint])
 
-  return axios.get(httpHost + path)
+  return instance.get(path)
 }
 
 module.exports = Api

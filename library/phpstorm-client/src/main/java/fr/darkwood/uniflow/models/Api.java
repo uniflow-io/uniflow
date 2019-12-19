@@ -24,9 +24,9 @@ public class Api {
 
     private String getHttpHost()
     {
-        String httpHost = "https://uniflow.io";
+        String httpHost = "https://api.uniflow.io";
         if(this.env.equals("dev")) {
-            httpHost  = "http://127.0.0.1:8091";
+            httpHost  = "https://127.0.0.1:8091";
         }
 
         return httpHost;
