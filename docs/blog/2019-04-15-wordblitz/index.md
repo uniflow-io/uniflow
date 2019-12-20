@@ -11,7 +11,7 @@ tags: ["case-study"]
 
 If you know well the facebook game Wordblitz, then you can easily beat your opponent.
 
-Here we created a public flow https://uniflow.io/public/feed/wordblitz-solver
+Here we created a public flow [wordblitz-solver](https://uniflow.io/public/feed/wordblitz-solver)
 
 The purpose of this flow is to solve find lots of words in restricted time that are contains into the 4x4 letter grid as show below :
 

@@ -11,7 +11,7 @@ tags: ["case-study"]
 
 The purpose of this article is to render a fractal from Michael Barnsley.
 
-You can render this by gooing to https://uniflow.io/public/feed/barnsleys-fern
+You can render this by gooing to [barnsleys-fern](https://uniflow.io/public/feed/barnsleys-fern)
 
 Then click on play button to run the flow.
 
