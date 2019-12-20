@@ -6,7 +6,7 @@ cover: images/cover.svg
 coverSeo: images/cover.png
 coverAuthor: Patchbay
 coverOriginalUrl: https://patchbay.pub
-tags: ["blog"]
+tags: ["case-study"]
 ---
 
 [Patchbay](https://patchbay.pub) is stripped-down service that includes the
