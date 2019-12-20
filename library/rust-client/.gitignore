@@ -1,2 +1,8 @@
+# NPM
+node_modules
+*.log
+npm-debug.log*
+
+# rust
 /target
 **/*.rs.bk
