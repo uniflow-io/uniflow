@@ -28,8 +28,7 @@ Run one Uniflow consumer by clicking on play button to run the flow.
 Run one Node consumer by executing
 
 ```bash
-$ node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api
--key} simple-patchbay-consumer
+node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} simple-patchbay-consumer
 ```
 
 The two running consumers will wait for the consumer to be executed.
@@ -39,8 +38,7 @@ You can go to [simple-patchbay-producer](https://uniflow.io/public/feed/simple-p
 Run Node consumer by executing
 
 ```bash
-$ node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api
-                              -key} simple-patchbay-producer
+node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} simple-patchbay-producer
 ```
 
 It will then unlock the two previously consumers. On Uniflow and Node
