@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow.models;
+package io.uniflow.models;
 
 import com.eclipsesource.v8.V8Object;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -6,9 +6,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.eclipsesource.v8.V8;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import fr.darkwood.uniflow.bridges.Console;
-import fr.darkwood.uniflow.bridges.Filesystem;
-import fr.darkwood.uniflow.bridges.Phpstorm;
+import io.uniflow.bridges.Console;
+import io.uniflow.bridges.Filesystem;
+import io.uniflow.bridges.Phpstorm;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;

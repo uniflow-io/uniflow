@@ -1,12 +1,12 @@
-package fr.darkwood.uniflow.actions;
+package io.uniflow.actions;
 
 import com.google.gson.JsonArray;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
-import fr.darkwood.uniflow.models.Api;
-import fr.darkwood.uniflow.models.Program;
-import fr.darkwood.uniflow.models.Runner;
+import io.uniflow.models.Api;
+import io.uniflow.models.Program;
+import io.uniflow.models.Runner;
 
 import java.io.IOException;
 

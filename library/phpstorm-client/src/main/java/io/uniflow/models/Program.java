@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow.models;
+package io.uniflow.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;

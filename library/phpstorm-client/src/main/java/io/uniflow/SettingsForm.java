@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow;
+package io.uniflow;
 
 import com.intellij.ide.actions.ShowSettingsUtilImpl;
 import com.intellij.openapi.options.Configurable;

@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow;
+package io.uniflow;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;

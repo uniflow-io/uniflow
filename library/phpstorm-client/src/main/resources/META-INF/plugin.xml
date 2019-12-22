@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>fr.darkwood.uniflow</id>
+    <id>io.uniflow</id>
     <name>Uniflow</name>
     <vendor email="matyo91@gmail.com" url="https://uniflow.io">Darkwood</vendor>
 
@@ -12,8 +12,8 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="fr.darkwood.uniflow.Settings"/>
-        <projectConfigurable instance="fr.darkwood.uniflow.SettingsForm"
+        <projectService serviceImplementation="io.uniflow.Settings"/>
+        <projectConfigurable instance="io.uniflow.SettingsForm"
                                  displayName="Uniflow"
                                  id="Uniflow.SettingsForm"
                                  parentId="tools"
@@ -23,7 +23,7 @@
 
     <actions>
         <group id="ProgramActionGroup"
-               class="fr.darkwood.uniflow.actions.ProgramActionGroup"
+               class="io.uniflow.actions.ProgramActionGroup"
                popup="true" text="Uniflow" description="Uniflow plugin"
                icon="/icons/icon.png">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>

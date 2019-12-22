@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow.bridges;
+package io.uniflow.bridges;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;

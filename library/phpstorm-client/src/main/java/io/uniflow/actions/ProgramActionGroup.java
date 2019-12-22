@@ -1,11 +1,11 @@
-package fr.darkwood.uniflow.actions;
+package io.uniflow.actions;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import fr.darkwood.uniflow.Settings;
-import fr.darkwood.uniflow.models.Api;
-import fr.darkwood.uniflow.models.Program;
+import io.uniflow.Settings;
+import io.uniflow.models.Api;
+import io.uniflow.models.Program;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

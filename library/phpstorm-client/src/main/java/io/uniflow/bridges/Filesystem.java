@@ -1,4 +1,4 @@
-package fr.darkwood.uniflow.bridges;
+package io.uniflow.bridges;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
