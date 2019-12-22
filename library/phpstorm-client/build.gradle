@@ -2,11 +2,11 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.10'
 }
 
-group 'fr.darkwood'
+group 'io.uniflow'
 version '1.0-SNAPSHOT'
 
 intellij {
-    version '2019.2.3'
+    version '2019.3.1'
 }
 patchPluginXml {
     changeNotes """

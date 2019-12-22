@@ -1,7 +1,7 @@
 <idea-plugin>
-    <id>io.uniflow</id>
+    <id>io.uniflow.uniflow</id>
     <name>Uniflow</name>
-    <vendor email="matyo91@gmail.com" url="https://uniflow.io">Darkwood</vendor>
+    <vendor email="matyo91@gmail.com" url="https://uniflow.io">Uniflow</vendor>
 
     <description><![CDATA[
     Uniflow plugin.<br>

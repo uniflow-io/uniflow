@@ -76,7 +76,7 @@ public class Runner {
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();
-            String code = flow.get("codes").getAsJsonObject().get('phpstorm').getAsString();
+            String code = flow.get("codes").getAsJsonObject().get("phpstorm").getAsString();
             vm.executeScript(code);
         }
 
