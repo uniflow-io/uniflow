@@ -8,6 +8,7 @@ use std::error::Error;
 use std::collections::HashMap;
 
 mod models;
+mod bridges;
 use models::api::Api;
 use models::program::Program;
 use models::runner::Runner;

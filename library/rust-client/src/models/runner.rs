@@ -2,7 +2,7 @@ extern crate mini_v8;
 
 use serde_json::Value;
 use mini_v8::{MiniV8};
-use crate::models::bridges::console::console_bridge;
+use crate::bridges::console::console_bridge;
 
 pub struct Runner {
   //command_args: String
