@@ -8,7 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.uniflow.bridges.Console;
 import io.uniflow.bridges.Filesystem;
-import io.uniflow.bridges.Phpstorm;
+import io.uniflow.bridges.Jetbrains;
 import io.uniflow.bridges.TextPrompt;
 
 import javax.script.ScriptContext;
@@ -47,7 +47,7 @@ public class Runner {
         });
         selectionModel.removeSelection();
 
-        // bridge-phpstorm = new Phpstorm(event)
+        // bridge-jetbrains = new Jetbrains(event)
         */
 
         V8 vm = V8.createV8Runtime();
@@ -60,12 +60,12 @@ public class Runner {
         v8Console.registerJavaMethod(console, "error", "error", new Class<?>[] { String.class });
         v8Console.release();
 
-        // phpstorm bridge
-        Phpstorm phpstorm = new Phpstorm(event);
-        V8Object v8Phpstorm = new V8Object(vm);
-        vm.add("phpstorm", v8Phpstorm);
-        v8Phpstorm.registerJavaMethod(phpstorm, "getCurrentFilePath", "getCurrentFilePath", new Class<?>[] {});
-        v8Phpstorm.release();
+        // jetbrains bridge
+        Jetbrains jetbrains = new Jetbrains(event);
+        V8Object v8Jetbrains = new V8Object(vm);
+        vm.add("jetbrains", v8Jetbrains);
+        v8Jetbrains.registerJavaMethod(jetbrains, "getCurrentFilePath", "getCurrentFilePath", new Class<?>[] {});
+        v8Jetbrains.release();
 
         // filesystem bridge
         Filesystem filesystem = new Filesystem();
@@ -83,7 +83,7 @@ public class Runner {
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();
-            String code = flow.get("codes").getAsJsonObject().get("phpstorm").getAsString();
+            String code = flow.get("codes").getAsJsonObject().get("jetbrains").getAsString();
             vm.executeScript(code);
         }
 

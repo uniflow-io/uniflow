@@ -34,7 +34,7 @@ public class Api {
 
     public ArrayList<Program> getProgram() throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/program/me/list?client=phpstorm";
+        String path = "/api/program/me/list?client=jetbrains";
 
         URL url = new URL(httpHost + path + "&apiKey=" + this.key);
         URLConnection con = url.openConnection();

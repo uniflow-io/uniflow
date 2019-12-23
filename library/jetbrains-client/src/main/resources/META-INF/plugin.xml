@@ -5,7 +5,7 @@
 
     <description><![CDATA[
     Uniflow plugin.<br>
-    <em>Phpstorm Client for uniflow</em>
+    <em>Jetbrains Client for uniflow</em>
     ]]></description>
 
     <!--depends>com.jetbrains.php</depends-->

@@ -5,11 +5,11 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
 
-public class Phpstorm {
+public class Jetbrains {
     private AnActionEvent event;
     private Filesystem filesystem;
 
-    public Phpstorm(AnActionEvent event) {
+    public Jetbrains(AnActionEvent event) {
         this.event = event;
         this.filesystem = new Filesystem();
     }
