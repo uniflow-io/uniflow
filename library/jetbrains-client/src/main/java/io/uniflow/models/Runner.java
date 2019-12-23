@@ -75,11 +75,11 @@ public class Runner {
         v8Filesystem.release();
 
         // filesystem bridge
-        /*TextPrompt textPrompt = new TextPrompt(event);
+        TextPrompt textPrompt = new TextPrompt(event);
         V8Object v8TextPrompt = new V8Object(vm);
         vm.add("textPrompt", v8TextPrompt);
         v8TextPrompt.registerJavaMethod(textPrompt, "prompt", "prompt", new Class<?>[] { String.class });
-        v8TextPrompt.release();*/
+        v8TextPrompt.release();
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();
