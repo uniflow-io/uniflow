@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import io.uniflow.bridges.Console;
 import io.uniflow.bridges.Filesystem;
 import io.uniflow.bridges.Phpstorm;
+import io.uniflow.bridges.TextPrompt;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -72,6 +73,13 @@ public class Runner {
         vm.add("filesystem", v8Filesystem);
         v8Filesystem.registerJavaMethod(filesystem, "read", "read", new Class<?>[] { String.class });
         v8Filesystem.release();
+
+        // filesystem bridge
+        /*TextPrompt textPrompt = new TextPrompt(event);
+        V8Object v8TextPrompt = new V8Object(vm);
+        vm.add("textPrompt", v8TextPrompt);
+        v8TextPrompt.registerJavaMethod(textPrompt, "prompt", "prompt", new Class<?>[] { String.class });
+        v8TextPrompt.release();*/
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();
