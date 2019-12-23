@@ -17,7 +17,6 @@ import javax.script.ScriptException;
 
 public class Runner {
     public void run(JsonArray rail, AnActionEvent event) {
-
         //Get all the required data from data keys
         /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
         final Project project = e.getProject();
