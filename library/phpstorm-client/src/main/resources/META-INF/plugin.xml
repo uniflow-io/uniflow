@@ -1,11 +1,11 @@
 <idea-plugin>
     <id>io.uniflow.uniflow</id>
-    <name>Uniflow</name>
+    <name>Uniflow Client</name>
     <vendor email="matyo91@gmail.com" url="https://uniflow.io">Uniflow</vendor>
 
     <description><![CDATA[
     Uniflow plugin.<br>
-    <em>Phpstorm client for uniflow</em>
+    <em>Phpstorm Client for uniflow</em>
     ]]></description>
 
     <!--depends>com.jetbrains.php</depends-->

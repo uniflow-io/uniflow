@@ -1,0 +1,2 @@
+buildPlugin:
+	./gradlew clean buildPlugin

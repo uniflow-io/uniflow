@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'io.uniflow'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 intellij {
     version '2019.3.1'
