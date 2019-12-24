@@ -11,45 +11,8 @@ import io.uniflow.bridges.Filesystem;
 import io.uniflow.bridges.Jetbrains;
 import io.uniflow.bridges.TextPrompt;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 public class Runner {
     public void run(JsonArray rail, AnActionEvent event) {
-        //Get all the required data from data keys
-        /*final Editor editor = e.getRequiredData(CommonDataKeys.EDITOR);
-        final Project project = e.getProject();
-        //Access document, caret, and selection
-        final Document document = editor.getDocument();
-        final SelectionModel selectionModel = editor.getSelectionModel();
-        final int start = selectionModel.getSelectionStart();
-        final int end = selectionModel.getSelectionEnd();
-
-        WriteCommandAction.runWriteCommandAction(project, () -> {
-            try {
-                String path = "/js/bundle.js";
-                String javascript = getFileTemplateContent(path);
-                Code javaObj = new Code();
-
-                ScriptEngineManager engineManager = new ScriptEngineManager();
-                ScriptEngine engine = engineManager.getEngineByName("nashorn");
-                ScriptContext context = engine.getContext();
-                context.setAttribute("javaObj", javaObj, ScriptContext.ENGINE_SCOPE);
-
-                Object result = engine.eval(javascript);
-                String text = result.toString();
-                document.replaceString(start, end, text);
-            } catch (ScriptException | IOException exception) {
-                exception.printStackTrace();
-            }
-        });
-        selectionModel.removeSelection();
-
-        // bridge-jetbrains = new Jetbrains(event)
-        */
-
         V8 vm = V8.createV8Runtime();
 
         // console bridge
@@ -76,10 +39,10 @@ public class Runner {
 
         // filesystem bridge
         TextPrompt textPrompt = new TextPrompt(event);
-        V8Object v8TextPrompt = new V8Object(vm);
-        vm.add("textPrompt", v8TextPrompt);
-        v8TextPrompt.registerJavaMethod(textPrompt, "prompt", "prompt", new Class<?>[] { String.class });
-        v8TextPrompt.release();
+        /*V8Object v8TextPrompt = new V8Object(vm);
+        vm.add("prompt", v8TextPrompt);
+        v8TextPrompt.registerJavaMethod(textPrompt.text(), "text");
+        v8TextPrompt.release();*/
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();
