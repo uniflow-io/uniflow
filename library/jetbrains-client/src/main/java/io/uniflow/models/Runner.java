@@ -39,10 +39,10 @@ public class Runner {
 
         // filesystem bridge
         TextPrompt textPrompt = new TextPrompt(event);
-        /*V8Object v8TextPrompt = new V8Object(vm);
+        V8Object v8TextPrompt = new V8Object(vm);
         vm.add("prompt", v8TextPrompt);
         v8TextPrompt.registerJavaMethod(textPrompt.text(), "text");
-        v8TextPrompt.release();*/
+        v8TextPrompt.release();
 
         for (int i = 0; i < rail.size(); i++) {
             JsonObject flow = rail.get(i).getAsJsonObject();

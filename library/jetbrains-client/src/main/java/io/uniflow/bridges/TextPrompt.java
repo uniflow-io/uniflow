@@ -18,12 +18,15 @@ public class TextPrompt {
         this.event = event;
     }
 
-    /*public JavaCallback text() {
+    private void createUIComponents() {
+    }
+
+    public JavaCallback text() {
         return new JavaCallback() {
 
             @Override
             public Boolean invoke(final V8Object receiver, final V8Array parameters) {
-                DialogWrapper dialogWrapper = new DialogWrapper(TextPrompt.this.root, false) {
+                DialogWrapper dialogWrapper = new DialogWrapper(TextPrompt.this.event.getProject(), false) {
                     {
                         init();
                         setTitle("Prompt");
@@ -38,13 +41,7 @@ public class TextPrompt {
                     @Nullable
                     @Override
                     protected JComponent createCenterPanel() {
-                        JPanel dialogPanel = new JPanel(new BorderLayout());
-
-                        JLabel label = new JLabel("testing");
-                        label.setPreferredSize(new Dimension(100, 100));
-                        dialogPanel.add(label, BorderLayout.CENTER);
-
-                        return dialogPanel;
+                        return TextPrompt.this.root;
                     }
 
                     @Override
@@ -53,19 +50,8 @@ public class TextPrompt {
                     }
                 };
 
-                boolean b = dialogWrapper.showAndGet();
-                *//*if (b) {
-                    ColumnAlignerModel model = textAlignmentHistoryForm.getModel();
-                    if (model != null) {
-                        init(model);
-                    }
-                }*//*
-                return b;
+                return dialogWrapper.showAndGet();
             }
         };
-    }*/
-
-    private void createUIComponents() {
-        //textfields = new JPanel();
     }
 }
