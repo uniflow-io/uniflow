@@ -5,7 +5,7 @@ plugins {
 def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
 
 group 'io.uniflow'
-version '1.0.2'
+version '1.0.3'
 
 intellij {
     version '2019.3.1'
