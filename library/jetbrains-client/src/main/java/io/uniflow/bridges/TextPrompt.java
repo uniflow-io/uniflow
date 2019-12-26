@@ -26,6 +26,8 @@ public class TextPrompt {
 
             @Override
             public Boolean invoke(final V8Object receiver, final V8Array parameters) {
+                V8Function callback = (V8Function) parameters.get(0);
+
                 DialogWrapper dialogWrapper = new DialogWrapper(TextPrompt.this.event.getProject(), false) {
                     {
                         init();
@@ -46,6 +48,12 @@ public class TextPrompt {
 
                     @Override
                     protected void doOKAction() {
+                        /*V8 v8;
+                        V8Array callbackParameters = new V8Array(v8);
+                        callbackParameters.push(TextPrompt.this.textarea.toString()):
+                        callback.call(receiver, );*/
+                        callback.call(receiver, null);
+
                         super.doOKAction();
                     }
                 };
