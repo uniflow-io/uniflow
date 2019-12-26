@@ -2,16 +2,16 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.10'
 }
 
+def htmlFixer = { htmlFile -> file(htmlFile).text.replace('<html>', '').replace('</html>', '') }
+
 group 'io.uniflow'
-version '1.0'
+version '1.0.2'
 
 intellij {
     version '2019.3.1'
 }
 patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    changeNotes = htmlFixer('src/main/resources/META-INF/change-notes.html')
 }
 repositories {
     mavenCentral()

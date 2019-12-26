@@ -5,8 +5,22 @@
 
     <description><![CDATA[
     Uniflow plugin.<br>
-    <em>Jetbrains Client for uniflow</em>
+    <em>Jetbrains Client for Uniflow</em>.
+
+    Workflow your micro.
+
+    Uniflow allows you to create your own Flows, in order to workflow and automate your daily tasks by using Jetbrains Plugins.
+    By using Uniflow Jetbrains Client, you will benefit browser automation built on top Jetbrains Plugin environment.
+
+    To connect you account to Uniflow : go to Tools -> Uniflow. Add your API key that you set on your account at https://uniflow.io/settings.
+
+    More usage exemples can be found on https://uniflow.io
     ]]></description>
+
+    <change-notes><![CDATA[Initial release of the plugin.
+    It allows connecting to uniflow.io and implement a plugin environment
+    Changes can be found https://github.com/uniflow-io/uniflow/tree/master/library/jetbrains-client/CHANGELOG.md
+    ]]></change-notes>
 
     <!--depends>com.jetbrains.php</depends-->
     <depends>com.intellij.modules.platform</depends>
