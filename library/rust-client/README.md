@@ -35,3 +35,5 @@ $ ninja -C out.gn/x64.release
 $ export V8_SOURCE=/usr/local/lib/v8/v8
 $ export V8_LIBS=/usr/local/lib/v8/v8/out.gn/x64.release/obj
 $ cargo run -- --api-key={your-api-key} [--env=dev] program
+
+## (hold) https://github.com/denoland/rusty_v8
