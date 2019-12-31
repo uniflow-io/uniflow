@@ -17,8 +17,10 @@
     More usage exemples can be found on https://uniflow.io
     ]]></description>
 
-    <change-notes><![CDATA[Initial release of the plugin.
-    It allows connecting to uniflow.io and implement a plugin environment
+    <change-notes><![CDATA[
+    Version : 1.0.4
+    * Update changelog automation
+
     Changes can be found https://github.com/uniflow-io/uniflow/tree/master/library/jetbrains-client/CHANGELOG.md
     ]]></change-notes>
 

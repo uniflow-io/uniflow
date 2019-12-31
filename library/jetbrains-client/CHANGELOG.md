@@ -1,6 +1,9 @@
 Changelog
 =========
 
+# 1.0.4
+* Update changelog automation
+
 # 1.0.3
 * Update changelog automation
 
