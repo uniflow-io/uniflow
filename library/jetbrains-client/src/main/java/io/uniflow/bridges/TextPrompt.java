@@ -7,8 +7,12 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class TextPrompt {
+public class TextPrompt implements Bridge {
+    private V8 vm;
+    private ArrayList<V8Value> refs;
+
     private AnActionEvent event;
     private JPanel root;
     private JTextArea textarea;
@@ -16,6 +20,7 @@ public class TextPrompt {
 
     public TextPrompt(AnActionEvent event) {
         this.event = event;
+        this.refs = new ArrayList<>();
     }
 
     private void createUIComponents() {
@@ -48,11 +53,11 @@ public class TextPrompt {
 
                     @Override
                     protected void doOKAction() {
-                        /*V8 v8;
-                        V8Array callbackParameters = new V8Array(v8);
-                        callbackParameters.push(TextPrompt.this.textarea.toString()):
-                        callback.call(receiver, );*/
-                        callback.call(receiver, null);
+                        V8Array callbackParameters = new V8Array(callback.getRuntime());
+                        callbackParameters.push(TextPrompt.this.textarea.getText());
+                        callback.call(receiver, callbackParameters);
+
+                        refs.add(callbackParameters);
 
                         super.doOKAction();
                     }
@@ -61,5 +66,29 @@ public class TextPrompt {
                 return dialogWrapper.showAndGet();
             }
         };
+    }
+
+    public void register(V8 vm) {
+        this.vm = vm;
+        /*vm.addReferenceHandler(new ReferenceHandler() {
+            @Override
+            public void v8HandleCreated(V8Value object) {
+                System.out.println(object.toString());
+            }
+
+            @Override
+            public void v8HandleDisposed(V8Value object) {
+                System.out.println(object.toString());
+            }
+        });*/
+
+        V8Object v8TextPrompt = new V8Object(vm);
+        vm.add("prompt", v8TextPrompt);
+        v8TextPrompt.registerJavaMethod(this.text(), "text");
+        v8TextPrompt.release();
+    }
+
+    public void release() {
+
     }
 }

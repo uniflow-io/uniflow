@@ -1,5 +1,7 @@
 package io.uniflow.bridges;
 
+import com.eclipsesource.v8.V8;
+import com.eclipsesource.v8.V8Object;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -9,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class Filesystem {
+public class Filesystem implements Bridge {
     private LocalFileSystem localFileSystem;
 
     public Filesystem() {
@@ -55,5 +57,17 @@ public class Filesystem {
     public String[] list(String path, boolean recursive, boolean showDirectory)
     {
         return new String[]{};
+    }
+
+
+    public void register(V8 vm) {
+        V8Object v8Filesystem = new V8Object(vm);
+        vm.add("filesystem", v8Filesystem);
+        v8Filesystem.registerJavaMethod(this, "read", "read", new Class<?>[] { String.class });
+        v8Filesystem.release();
+    }
+
+    public void release() {
+
     }
 }
