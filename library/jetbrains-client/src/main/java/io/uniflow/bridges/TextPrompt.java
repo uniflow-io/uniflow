@@ -69,19 +69,6 @@ public class TextPrompt implements Bridge {
     }
 
     public void register(V8 vm) {
-        this.vm = vm;
-        /*vm.addReferenceHandler(new ReferenceHandler() {
-            @Override
-            public void v8HandleCreated(V8Value object) {
-                System.out.println(object.toString());
-            }
-
-            @Override
-            public void v8HandleDisposed(V8Value object) {
-                System.out.println(object.toString());
-            }
-        });*/
-
         V8Object v8TextPrompt = new V8Object(vm);
         vm.add("prompt", v8TextPrompt);
         v8TextPrompt.registerJavaMethod(this.text(), "text");
@@ -89,6 +76,8 @@ public class TextPrompt implements Bridge {
     }
 
     public void release() {
-
+        for (V8Value ref: refs) {
+            ref.release();
+        }
     }
 }

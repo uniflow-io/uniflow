@@ -1,6 +1,8 @@
 package io.uniflow.models;
 
+import com.eclipsesource.v8.ReferenceHandler;
 import com.eclipsesource.v8.V8Object;
+import com.eclipsesource.v8.V8Value;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 
 import com.eclipsesource.v8.V8;
@@ -21,6 +23,26 @@ public class Runner {
         }};
 
         V8 vm = V8.createV8Runtime();
+
+        /**
+         * @// TODO: 14/01/2020
+         * - search for memory leak
+         * - then remove vmObjects
+         * - then make vm.release(true)
+         */
+        ArrayList<V8Value> vmObjects = new ArrayList<>();
+        vm.addReferenceHandler(new ReferenceHandler() {
+            @Override
+            public void v8HandleCreated(V8Value object) {
+                vmObjects.add(object);
+            }
+
+            @Override
+            public void v8HandleDisposed(V8Value object) {
+                vmObjects.remove(object);
+            }
+        });
+
         for (Bridge bridge : bridges) {
             bridge.register(vm);
         }
@@ -34,6 +56,12 @@ public class Runner {
         for (Bridge bridge : bridges) {
             bridge.release();
         }
-        vm.release(true);
+
+        for (V8Value vmObject : vmObjects) {
+            vmObject.release();
+        }
+
+        //vm.release(true);
+        vm.release(false);
     }
 }
