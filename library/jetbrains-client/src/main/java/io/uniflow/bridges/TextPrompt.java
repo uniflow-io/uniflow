@@ -17,6 +17,7 @@ public class TextPrompt implements Bridge {
     private JPanel root;
     private JTextArea textarea;
     private JPanel textfields;
+    private JLabel inputField;
 
     public TextPrompt(AnActionEvent event) {
         this.event = event;
@@ -31,7 +32,11 @@ public class TextPrompt implements Bridge {
 
             @Override
             public Boolean invoke(final V8Object receiver, final V8Array parameters) {
-                V8Function callback = (V8Function) parameters.get(0);
+                String inputField = parameters.get(0).toString();
+                V8Function callback = (V8Function) parameters.get(1);
+
+                TextPrompt.this.inputField.setText(inputField.toString());
+                TextPrompt.this.textarea.setText("");
 
                 DialogWrapper dialogWrapper = new DialogWrapper(TextPrompt.this.event.getProject(), false) {
                     {
