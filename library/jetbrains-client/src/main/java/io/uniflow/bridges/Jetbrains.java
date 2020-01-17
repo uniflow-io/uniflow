@@ -3,6 +3,7 @@ package io.uniflow.bridges;
 import com.eclipsesource.v8.V8;
 import com.eclipsesource.v8.V8Array;
 import com.eclipsesource.v8.V8Object;
+import com.eclipsesource.v8.V8Value;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Caret;
@@ -50,7 +51,7 @@ public class Jetbrains implements Bridge {
         return selections;
     }
 
-    public void setCurrentSelection(int i, String text) {
+    public void setCurrentSelection(V8Value i, String text) {
         List<Caret> carets = this.getEditor().getCaretModel().getAllCarets();
         Caret caret = carets.get(i);
         Editor editor = this.getEditor();
