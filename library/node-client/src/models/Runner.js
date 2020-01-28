@@ -5,6 +5,8 @@ const readlineBridge = require('../bridges/readline')
 const processBridge = require('../bridges/process')
 const axiosBridge = require('../bridges/axios')
 const httpBridge = require('../bridges/http')
+const querystringBridge = require('../bridges/querystring')
+const child_processBridge = require('../bridges/child_process')
 const vm = require('vm')
 
 function Runner(commandArgs, api) {
@@ -21,6 +23,8 @@ Runner.prototype.run = function(rail) {
     process: processBridge,
     axios: axiosBridge,
     http: httpBridge,
+    querystring: querystringBridge,
+    child_process: child_processBridge,
   })
 
   return rail.reduce((promise, flow) => {
