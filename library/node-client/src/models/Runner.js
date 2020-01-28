@@ -3,6 +3,7 @@ const consoleBridge = require('../bridges/console')
 const filesystemBridge = require('../bridges/filesystem')
 const readlineBridge = require('../bridges/readline')
 const processBridge = require('../bridges/process')
+const axiosBridge = require('../bridges/axios')
 const httpBridge = require('../bridges/http')
 const vm = require('vm')
 
@@ -18,6 +19,7 @@ Runner.prototype.run = function(rail) {
     filesystem: filesystemBridge,
     readline: readlineBridge,
     process: processBridge,
+    axios: axiosBridge,
     http: httpBridge,
   })
 
