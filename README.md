@@ -5,7 +5,7 @@ The purpose of Uniflow is to workflow your micro. You have to :
 - Identify in your everyday life, you can think about things that are recurring.
 - Figure about if a something will take less time to automate than doing it straight.
 
-This project is a combinaison on [Flow Based Programming](https://en.wikipedia.org/wiki/Flow-based_programming) and [Railway Oriented Programming](http://fsharpforfunandprofit.com/rop/) named as [Railway Flow Based Programming](https://medium.com/@anton.mishchuk/railway-flow-based-programming-with-flowex-ef04fd338e41).
+This project is a combinaison on [Flow Based Programming](https://jpaulm.github.io/fbp/index.html) and [Railway Oriented Programming](http://fsharpforfunandprofit.com/rop/) named as [Railway Flow Based Programming](https://medium.com/@anton.mishchuk/railway-flow-based-programming-with-flowex-ef04fd338e41).
 And is largely inspired by many projects : 
 - [Chickenfoot](http://up.csail.mit.edu/chickenfoot)
 - [Datafire](https://github.com/DataFire/DataFire)
