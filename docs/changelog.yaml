@@ -1,4 +1,8 @@
 -
+  tag: "v1.1.11"
+  label: "Api Platform"
+  date: "2020-02-09"
+-
   tag: "v1.1.10"
   label: "Symfony 5"
   date: "2019-12-11"
