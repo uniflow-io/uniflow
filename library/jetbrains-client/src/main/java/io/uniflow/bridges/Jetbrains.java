@@ -6,10 +6,14 @@ import com.eclipsesource.v8.V8Object;
 import com.eclipsesource.v8.V8Value;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +40,12 @@ public class Jetbrains implements Bridge {
         return this.event.getRequiredData(CommonDataKeys.EDITOR);
     }
 
+    public String getCurrentFilePath() {
+        VirtualFile file = (VirtualFile) this.event.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE.getName());
+
+        return file.getPath();
+    }
+
     public V8Array getCurrentSelections() {
         V8Array selections = new V8Array(this.vm);
         List<Caret> carets = this.getEditor().getCaretModel().getAllCarets();
@@ -51,21 +61,25 @@ public class Jetbrains implements Bridge {
         return selections;
     }
 
-    public void setCurrentSelection(V8Value i, String text) {
+    public void setCurrentSelection(int i, String text) {
         List<Caret> carets = this.getEditor().getCaretModel().getAllCarets();
         Caret caret = carets.get(i);
         Editor editor = this.getEditor();
-        editor.getDocument().replaceString(
-            caret.getSelectionStart(),
-            caret.getSelectionEnd(),
-            text
-        );
-    }
 
-    public String getCurrentFilePath() {
-        VirtualFile file = (VirtualFile) this.event.getDataContext().getData(CommonDataKeys.VIRTUAL_FILE.getName());
-
-        return file.getPath();
+        WriteCommandAction.runWriteCommandAction(editor.getProject(), () -> {
+            editor.getDocument().replaceString(
+                caret.getSelectionStart(),
+                caret.getSelectionEnd(),
+                text
+            );
+        });
+        /*ApplicationManager.getApplication().runWriteAction(() -> {
+            editor.getDocument().replaceString(
+                caret.getSelectionStart(),
+                caret.getSelectionEnd(),
+                text
+            );
+        });*/
     }
 
     public void register(V8 vm) {
@@ -75,7 +89,7 @@ public class Jetbrains implements Bridge {
         vm.add("jetbrains", v8Jetbrains);
         v8Jetbrains.registerJavaMethod(this, "getCurrentFilePath", "getCurrentFilePath", new Class<?>[] {});
         v8Jetbrains.registerJavaMethod(this, "getCurrentSelections", "getCurrentSelections", new Class<?>[] {});
-        v8Jetbrains.registerJavaMethod(this, "setCurrentSelection", "setCurrentSelection", new Class<?>[] {});
+        v8Jetbrains.registerJavaMethod(this, "setCurrentSelection", "setCurrentSelection", new Class<?>[] { int.class, String.class });
         v8Jetbrains.release();
     }
 
