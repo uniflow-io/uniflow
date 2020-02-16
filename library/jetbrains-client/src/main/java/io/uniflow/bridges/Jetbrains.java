@@ -73,13 +73,6 @@ public class Jetbrains implements Bridge {
                 text
             );
         });
-        /*ApplicationManager.getApplication().runWriteAction(() -> {
-            editor.getDocument().replaceString(
-                caret.getSelectionStart(),
-                caret.getSelectionEnd(),
-                text
-            );
-        });*/
     }
 
     public void register(V8 vm) {
