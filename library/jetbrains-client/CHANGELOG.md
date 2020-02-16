@@ -1,6 +1,10 @@
 Changelog
 =========
 
+# 1.0.5
+* Add bridges `jetbrains` and `prompt`
+* Update memory management
+
 # 1.0.4
 * Update changelog automation
 
