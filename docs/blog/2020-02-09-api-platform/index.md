@@ -4,7 +4,7 @@ date: 2020-02-09
 author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
-coverAuthor: les-tilleuls.coop
+coverAuthor: Api Platform
 coverOriginalUrl: https://api-platform.com
 tags: ["blog"]
 ---
