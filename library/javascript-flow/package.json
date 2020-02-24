@@ -1,0 +1,21 @@
+{
+  "name": "@uniflow-io/javascript-flow",
+  "version": "1.0.2",
+  "description": "Uniflow javascript flow",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/uniflow-io/uniflow/issues"
+  },
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/javascript-flow#readme",
+  "keywords": [
+    "uniflow",
+    "uniflow-flow"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uniflow-io/uniflow.git",
+    "directory": "library/javascript-flow"
+  }
+}
