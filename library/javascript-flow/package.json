@@ -17,5 +17,13 @@
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/javascript-flow"
+  },
+  "uniflow": {
+    "name": "Javascript",
+    "tags": ["core"],
+    "clients": ["uniflow", "jetbrains", "chrome", "node", "rust"]
+  },
+  "dependencies": {
+    "react": "^16.12.0"
   }
 }

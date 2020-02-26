@@ -1,1 +1,5 @@
-export default () => {}
+import React from 'react'
+
+export default () => {
+  return <div>testing</div>
+}
