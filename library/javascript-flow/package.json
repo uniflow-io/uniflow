@@ -20,8 +20,16 @@
   },
   "uniflow": {
     "name": "Javascript",
-    "tags": ["core"],
-    "clients": ["uniflow", "jetbrains", "chrome", "node", "rust"]
+    "tags": [
+      "core"
+    ],
+    "clients": [
+      "uniflow",
+      "jetbrains",
+      "chrome",
+      "node",
+      "rust"
+    ]
   },
   "dependencies": {
     "react": "^16.12.0"
