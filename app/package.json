@@ -1,0 +1,19 @@
+{
+  "name": "@uniflow-io/app",
+  "version": "1.1.11",
+  "description": "Workflow your micro",
+  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "bugs": {
+    "url": "https://gitlab.com/uniflow-io/uniflow-io/issues"
+  },
+  "homepage": "https://gitlab.com/uniflow-io/uniflow-io#uniflow",
+  "keywords": [
+    "uniflow"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/uniflow-io/uniflow-io.git",
+    "directory": "app"
+  }
+}
