@@ -5,7 +5,7 @@ import { faDotCircle } from '@fortawesome/free-regular-svg-icons'
 
 export default class Search extends Component {
   state = {
-    search: 'javascript',
+    search: '@uniflow-io/javascript-flow',
   }
 
   onSubmit = event => {
@@ -23,7 +23,7 @@ export default class Search extends Component {
   render() {
     const { userFlows } = this.props
     const { search } = this.state
-
+    
     return (
       <form className="form-sm-horizontal" onSubmit={this.onSubmit}>
         <div className="form-group row">

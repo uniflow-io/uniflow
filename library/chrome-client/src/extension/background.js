@@ -1,6 +1,6 @@
-import Api from '../models/Api'
-import Runner from '../models/Runner'
-import Program from '../models/Program'
+import Api from '../models/api'
+import Runner from '../models/runner'
+import Program from '../models/program'
 
 ;(function() {
   let api = null

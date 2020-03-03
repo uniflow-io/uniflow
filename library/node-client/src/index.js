@@ -1,6 +1,6 @@
-const Program = require('./models/Program')
-const Runner = require('./models/Runner')
-const Api = require('./models/Api')
+const Program = require('./models/program')
+const Runner = require('./models/runner')
+const Api = require('./models/api')
 
 function parseArgv(argv) {
   // Removing node/bin and called script name
