@@ -64,15 +64,15 @@ class PromptFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onChangeMessageVariable = event => {
-    this.setState({ messageVariable: event.target.value }, this.onUpdate)
+    this.setState({ messageVariable: event.target.value }, onUpdate(this))
   }
 
   onChangeType = type => {
-    this.setState({ type: type }, this.onUpdate)
+    this.setState({ type: type }, onUpdate(this))
   }
 
   onChangeInputString = event => {
@@ -97,10 +97,6 @@ class PromptFlow extends Component {
       }
       reader.readAsText(file)
     })
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
   }
 
   onInputSave = event => {

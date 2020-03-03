@@ -71,15 +71,11 @@ class RegexFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onChangeExpression = expression => {
-    this.setState({ expression: expression }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ expression: expression }, onUpdate(this))
   }
 
   getGenerated = () => {

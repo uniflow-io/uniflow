@@ -256,7 +256,7 @@ class IfFlow extends Component {
 
     let elseIfs = this.state.elseIfs.slice()
     elseIfs.splice(index, 1)
-    this.setState({ elseIfs: elseIfs }, this.onUpdate)
+    this.setState({ elseIfs: elseIfs }, onUpdate(this))
   }
 
   onAddElseIf = event => {
@@ -274,7 +274,7 @@ class IfFlow extends Component {
       executeRail: [],
       executeRunIndex: null,
     })
-    this.setState({ elseIfs: elseIfs }, this.onUpdate)
+    this.setState({ elseIfs: elseIfs }, onUpdate(this))
   }
 
   onRemoveElse = event => {
@@ -282,7 +282,7 @@ class IfFlow extends Component {
 
     this.store.else = null
 
-    this.setState({ else: null }, this.onUpdate)
+    this.setState({ else: null }, onUpdate(this))
   }
 
   onAddElse = event => {
@@ -299,12 +299,8 @@ class IfFlow extends Component {
           executeRunIndex: null,
         },
       },
-      this.onUpdate
+      onUpdate(this)
     )
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
   }
 
   render() {

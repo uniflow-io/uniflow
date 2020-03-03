@@ -56,7 +56,7 @@ class TextListFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onAddText = event => {
@@ -64,7 +64,7 @@ class TextListFlow extends Component {
 
     let newStateTextlists = this.state.textList.slice()
     newStateTextlists.push('')
-    this.setState({ textList: newStateTextlists }, this.onUpdate)
+    this.setState({ textList: newStateTextlists }, onUpdate(this))
   }
 
   onUpdateText = (event, index) => {
@@ -78,18 +78,14 @@ class TextListFlow extends Component {
           return event.target.value
         }),
       },
-      this.onUpdate
+      onUpdate(this)
     )
   }
 
   onRemoveText = (event, index) => {
     let newStateTextlists = this.state.textList.slice()
     newStateTextlists.splice(index, 1)
-    this.setState({ textList: newStateTextlists }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ textList: newStateTextlists }, onUpdate(this))
   }
 
   render() {

@@ -61,7 +61,7 @@ class AssetsFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onFiles = event => {
@@ -90,9 +90,8 @@ class AssetsFlow extends Component {
       }, Promise.resolve())
       .then(() => {
         event.target.value = ''
-
-        this.onUpdate()
       })
+      .then(onUpdate(this))
   }
 
   onDownloadFile = (event, index) => {
@@ -121,18 +120,14 @@ class AssetsFlow extends Component {
           return [event.target.value, asset[1]]
         }),
       },
-      this.onUpdate
+      onUpdate(this)
     )
   }
 
   onRemoveFile = (event, index) => {
     let newStateAssets = this.state.assets.slice()
     newStateAssets.splice(index, 1)
-    this.setState({ assets: newStateAssets }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ assets: newStateAssets }, onUpdate(this))
   }
 
   render() {

@@ -103,7 +103,7 @@ class ObjectFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onUpdateItemKey = (event, index) => {
@@ -120,7 +120,7 @@ class ObjectFlow extends Component {
           }
         }),
       },
-      this.onUpdate
+      onUpdate(this)
     )
   }
 
@@ -138,7 +138,7 @@ class ObjectFlow extends Component {
           }
         }),
       },
-      this.onUpdate
+      onUpdate(this)
     )
   }
 
@@ -147,7 +147,7 @@ class ObjectFlow extends Component {
 
     let keyValueList = this.state.keyValueList.slice()
     keyValueList.splice(index, 1)
-    this.setState({ keyValueList: keyValueList }, this.onUpdate)
+    this.setState({ keyValueList: keyValueList }, onUpdate(this))
   }
 
   onAddItem = event => {
@@ -155,11 +155,7 @@ class ObjectFlow extends Component {
 
     let keyValueList = this.state.keyValueList.slice()
     keyValueList.push({ key: '', value: '' })
-    this.setState({ keyValueList: keyValueList }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ keyValueList: keyValueList }, onUpdate(this))
   }
 
   render() {

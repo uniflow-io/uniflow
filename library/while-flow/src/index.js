@@ -144,7 +144,7 @@ class WhileFlow extends Component {
           this.setState(state, resolve)
         })
       })
-      .then(this.onUpdate)
+      .then(onUpdate(this))
   }
 
   onPushFlow = (propertyPath, index, flow) => {
@@ -157,10 +157,6 @@ class WhileFlow extends Component {
 
   onUpdateFlow = (propertyPath, index, data) => {
     this.dispatchFlow(propertyPath, commitUpdateFlow(index, data))
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
   }
 
   render() {

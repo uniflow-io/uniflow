@@ -55,19 +55,15 @@ class CanvasFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onChangeWidth = event => {
-    this.setState({ width: event.target.value }, this.onUpdate)
+    this.setState({ width: event.target.value }, onUpdate(this))
   }
 
   onChangeHeight = event => {
-    this.setState({ height: event.target.value }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ height: event.target.value }, onUpdate(this))
   }
 
   render() {

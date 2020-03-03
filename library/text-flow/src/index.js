@@ -54,15 +54,11 @@ class TextFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, this.onUpdate)
+    this.setState({ variable: event.target.value }, onUpdate(this))
   }
 
   onChangeText = text => {
-    this.setState({ text: text }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ text: text }, onUpdate(this))
   }
 
   render() {

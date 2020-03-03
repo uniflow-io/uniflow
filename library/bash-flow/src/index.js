@@ -49,11 +49,7 @@ class BashFlow extends Component {
   }
 
   onChangeBash = bash => {
-    this.setState({ bash: bash }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ bash: bash }, onUpdate(this))
   }
 
   render() {
