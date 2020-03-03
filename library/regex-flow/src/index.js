@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import { onCode, onExecute, SRL } from './runner'
+import { onCode, onExecute } from './runner'
+import SRL from 'srl'
 import {
   setBusEvents,
   componentDidMount,

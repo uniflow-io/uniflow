@@ -31,6 +31,7 @@
     ]
   },
   "dependencies": {
-    "@uniflow-io/uniflow-client": "^1.1.11"
+    "@uniflow-io/uniflow-client": "^1.1.11",
+    "srl": "^0.2.3"
   }
 }

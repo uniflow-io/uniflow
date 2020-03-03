@@ -32,6 +32,7 @@
     ]
   },
   "dependencies": {
-    "@uniflow-io/uniflow-client": "^1.1.11"
+    "@uniflow-io/uniflow-client": "^1.1.11",
+    "property-accessor": "^1.0.0"
   }
 }
