@@ -8,6 +8,12 @@
   items:
     - title: Quick Start
       link: /docs/quick-start
+- title: Creating a Flow
+  items:
+    - title: Naming a Flow
+      link: /docs/naming-a-flow
+    - title: Customizing a Flow
+      link: /docs/customizing-a-flow
 - title: Creating a Client
   items:
     - title: Naming a Client
