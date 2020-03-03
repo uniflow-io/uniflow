@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
-import { onCode, onExecute } from './runner'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import { onCode } from './runner'
 import {
   setBusEvents,
   componentDidMount,
   componentWillUnmount,
   componentDidUpdate,
-  onExecuteHelper,
   onUpdate,
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
 
-class JavascriptFlow extends Component {
+class BashFlow extends Component {
   state = {
     isRunning: false,
-    javascript: null,
+    bash: null,
   }
 
   constructor(props) {
@@ -24,7 +23,6 @@ class JavascriptFlow extends Component {
       {
         deserialize: this.deserialize,
         code: onCode.bind(this),
-        execute: onExecuteHelper(onExecute.bind(this), this),
       },
       this
     )
@@ -43,25 +41,29 @@ class JavascriptFlow extends Component {
   }
 
   serialize = () => {
-    return this.state.javascript
+    return this.state.bash
   }
 
   deserialize = data => {
-    this.setState({ javascript: data })
+    this.setState({ bash: data })
   }
 
-  onChangeJavascript = javascript => {
-    this.setState({ javascript: javascript }, onUpdate(this))
+  onChangeBash = bash => {
+    this.setState({ bash: bash }, this.onUpdate)
+  }
+
+  onUpdate = () => {
+    onUpdate(this)
   }
 
   render() {
     const { clients, onRun } = this.props
-    const { isRunning, javascript } = this.state
+    const { isRunning, bash } = this.state
 
     return (
       <>
         <FlowHeader
-          title="Javascript"
+          title="Bash"
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
@@ -69,22 +71,19 @@ class JavascriptFlow extends Component {
         />
         <form className="form-sm-horizontal">
           <div className="form-group row">
-            <label
-              htmlFor="javascript{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
-              Javascript
+            <label htmlFor="bash{{ _uid }}" className="col-sm-2 col-form-label">
+              Bash
             </label>
 
             <div className="col-sm-10">
               <Ace
                 className="form-control"
-                id="javascript{{ _uid }}"
-                value={javascript}
-                onChange={this.onChangeJavascript}
-                placeholder="Javascript"
+                id="bash{{ _uid }}"
+                value={bash}
+                onChange={this.onChangeBash}
+                placeholder="Bash"
                 height="200"
-                mode="javascript"
+                mode="batchfile"
               />
             </div>
           </div>
@@ -94,4 +93,4 @@ class JavascriptFlow extends Component {
   }
 }
 
-export default JavascriptFlow
+export default BashFlow

@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/uniflow-client",
-  "version": "1.0.2",
+  "version": "1.1.11",
   "description": "Uniflow uniflow client",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "bugs": {
@@ -25,9 +25,5 @@
   "dependencies": {
     "axios": "^0.19.0",
     "vm-browserify": "^1.1.2"
-  },
-  "devDependencies": {
-    "npx": "^10.2.0",
-    "prettier": "^1.19.1"
   }
 }

@@ -1,12 +1,12 @@
 {
-  "name": "@uniflow-io/javascript-flow",
+  "name": "@uniflow-io/bash-flow",
   "version": "1.1.11",
-  "description": "Uniflow javascript flow",
+  "description": "Uniflow bash flow",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/javascript-flow#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/bash-flow#readme",
   "keywords": [
     "uniflow",
     "uniflow-flow"
@@ -16,15 +16,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
-    "directory": "library/javascript-flow"
+    "directory": "library/bash-flow"
   },
   "uniflow": {
-    "name": "Javascript",
+    "name": "Bash",
     "tags": [
       "core"
     ],
     "clients": [
-      "uniflow"
+      "node"
     ]
   },
   "dependencies": {

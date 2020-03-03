@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { onCode, onExecute } from './runner'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import { onCode, onExecute } from './runner'
 import {
   setBusEvents,
   componentDidMount,
@@ -11,10 +11,11 @@ import {
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
 
-class JavascriptFlow extends Component {
+class TextFlow extends Component {
   state = {
     isRunning: false,
-    javascript: null,
+    variable: null,
+    text: null,
   }
 
   constructor(props) {
@@ -43,25 +44,35 @@ class JavascriptFlow extends Component {
   }
 
   serialize = () => {
-    return this.state.javascript
+    return [this.state.variable, this.state.text]
   }
 
   deserialize = data => {
-    this.setState({ javascript: data })
+    let [variable, text] = data || [null, null]
+
+    this.setState({ variable: variable, text: text })
   }
 
-  onChangeJavascript = javascript => {
-    this.setState({ javascript: javascript }, onUpdate(this))
+  onChangeVariable = event => {
+    this.setState({ variable: event.target.value }, this.onUpdate)
+  }
+
+  onChangeText = text => {
+    this.setState({ text: text }, this.onUpdate)
+  }
+
+  onUpdate = () => {
+    onUpdate(this)
   }
 
   render() {
     const { clients, onRun } = this.props
-    const { isRunning, javascript } = this.state
+    const { isRunning, variable, text } = this.state
 
     return (
       <>
         <FlowHeader
-          title="Javascript"
+          title="Text"
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
@@ -70,21 +81,36 @@ class JavascriptFlow extends Component {
         <form className="form-sm-horizontal">
           <div className="form-group row">
             <label
-              htmlFor="javascript{{ _uid }}"
+              htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
             >
-              Javascript
+              Variable
+            </label>
+
+            <div className="col-sm-10">
+              <input
+                id="variable{{ _uid }}"
+                type="text"
+                value={variable || ''}
+                onChange={this.onChangeVariable}
+                className="form-control"
+              />
+            </div>
+          </div>
+
+          <div className="form-group row">
+            <label htmlFor="text{{ _uid }}" className="col-sm-2 col-form-label">
+              Text
             </label>
 
             <div className="col-sm-10">
               <Ace
                 className="form-control"
-                id="javascript{{ _uid }}"
-                value={javascript}
-                onChange={this.onChangeJavascript}
-                placeholder="Javascript"
+                id="text{{ _uid }}"
+                value={text}
+                onChange={this.onChangeText}
+                placeholder="Text"
                 height="200"
-                mode="javascript"
               />
             </div>
           </div>
@@ -94,4 +120,4 @@ class JavascriptFlow extends Component {
   }
 }
 
-export default JavascriptFlow
+export default TextFlow
