@@ -24,6 +24,7 @@ class UiItem extends Component {
         '@uniflow-io/canvas-flow': () => import('../../../canvas-flow/src'),
         '@uniflow-io/if-flow': () => import('../../../if-flow/src'),
         '@uniflow-io/javascript-flow': () => import('../../../javascript-flow/src'),
+        '@uniflow-io/object-flow': () => import('../../../object-flow/src'),
         '@uniflow-io/prompt-flow': () => import('../../../prompt-flow/src'),
         '@uniflow-io/regex-flow': () => import('../../../regex-flow/src'),
         '@uniflow-io/text-flow': () => import('../../../text-flow/src'),
