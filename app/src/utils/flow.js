@@ -59,7 +59,9 @@ const onExecuteHelper = (onExecute, self) => {
 }
 
 const onUpdate = self => {
-  self.props.onUpdate(self.serialise())
+  return () => {
+    self.props.onUpdate(self.serialize())
+  }
 }
 
 const onDelete = self => {

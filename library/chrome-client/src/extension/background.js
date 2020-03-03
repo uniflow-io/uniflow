@@ -94,7 +94,7 @@ import Program from '../models/Program'
     if (message.channel === 'run' && api) {
       api.endpoint('program_data', { id: message.id }).then(response => {
         let program = new Program(response.data),
-          rail = program.deserialiseRailData(),
+          rail = program.deserializeRailData(),
           background = {
             evaluateInContent: (tabId, asyncFunction, args) => {
               return sendToTab(tabId, {

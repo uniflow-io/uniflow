@@ -22,7 +22,7 @@ class JavascriptFlow extends Component {
 
     setBusEvents(
       {
-        reset: this.deserialise,
+        deserialize: this.deserialize,
         code: onCode.bind(this),
         execute: onExecuteHelper(onExecute.bind(this), this),
       },
@@ -42,20 +42,16 @@ class JavascriptFlow extends Component {
     componentDidUpdate(prevProps, this)
   }
 
-  serialise = () => {
+  serialize = () => {
     return this.state.javascript
   }
 
-  deserialise = data => {
+  deserialize = data => {
     this.setState({ javascript: data })
   }
 
   onChangeJavascript = javascript => {
-    this.setState({ javascript: javascript }, this.onUpdate)
-  }
-
-  onUpdate = () => {
-    onUpdate(this)
+    this.setState({ javascript: javascript }, onUpdate(this))
   }
 
   render() {

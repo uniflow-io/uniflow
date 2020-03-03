@@ -26,7 +26,7 @@ public class ExecuteFlowAction extends AnAction {
         try {
             String data = api.getProgramData(this.program.getId());
             this.program.setData(data);
-            JsonArray rail = this.program.deserialiseRailData();
+            JsonArray rail = this.program.deserializeRailData();
 
             Runner runner = new Runner();
             runner.run(rail, e);

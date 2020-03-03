@@ -70,7 +70,7 @@ function parseArgv(argv) {
     })
     .then(response => {
       let program = new Program(response.data),
-        rail = program.deserialiseRailData(),
+        rail = program.deserializeRailData(),
         runner = new Runner(commandArgs, api)
 
       runner.run(rail)
