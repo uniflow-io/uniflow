@@ -10,9 +10,9 @@ defines an application as a network of independent processes exchanging
 data via message passing.
 
 A Flow here is viewed as :
-- an isolated implemented process for business-logic at bottom layer.
 - a component that is a part of communication logic of the application
 at top layer.
+- an isolated implemented process for business-logic at bottom layer.
 
 ## What is a Rail ?
 
