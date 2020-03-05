@@ -30,7 +30,7 @@ class User implements UserInterface, \Serializable
     protected $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @Assert\Length(
      *      min = 2,
@@ -40,7 +40,7 @@ class User implements UserInterface, \Serializable
      * )
      * @ORM\Column(type="string", length=32, unique=true, nullable=true)
      */
-    protected $username = '';
+    protected $username;
 
     /**
      * @var string

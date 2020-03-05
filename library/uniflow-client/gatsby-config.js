@@ -1,6 +1,6 @@
 const activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
 const projectPath = './'
-const docsPath = '../../../docs'
+const docsPath = '../../docs'
 
 console.log(`Using environment config: '${activeEnv}'`)
 

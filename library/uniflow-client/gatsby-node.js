@@ -2,6 +2,7 @@ const {createFilePath} = require(`gatsby-source-filesystem`)
 const _ = require('lodash')
 const fs = require('fs')
 const activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
+const localPackages = '../'
 
 exports.onCreateWebpackConfig = ({stage, loaders, actions}) => {
     const isSSR = stage.includes(`html`)
@@ -34,10 +35,9 @@ exports.sourceNodes = async ({
         createNode
     } = actions;
 
-    const localPackages = `../uniflow/library`
     fs.readdirSync(localPackages)
         .filter(file => {
-            return !/^\..*$/.test(file)
+            return fs.existsSync(`${localPackages}/${file}/package.json`)
         })
         .forEach(file => {
             const readme = fs.readFileSync(`${localPackages}/${file}/README.md`, 'utf8')
