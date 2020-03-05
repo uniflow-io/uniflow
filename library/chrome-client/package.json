@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/chrome-client",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Uniflow chrome client",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "bugs": {
@@ -11,7 +11,7 @@
     "uniflow",
     "uniflow-client"
   ],
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",

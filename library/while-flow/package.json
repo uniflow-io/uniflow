@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/while-flow",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "Uniflow while flow",
   "author": "Mathieu Ledru <matyo91@gmail.com>",
   "bugs": {
@@ -11,7 +11,7 @@
     "uniflow",
     "uniflow-flow"
   ],
-  "license": "MIT",
+  "license": "Commons Clause + MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -28,6 +28,6 @@
     ]
   },
   "dependencies": {
-    "@uniflow-io/uniflow-client": "^1.1.11"
+    "@uniflow-io/uniflow-client": "^1.1.12"
   }
 }

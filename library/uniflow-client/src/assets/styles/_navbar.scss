@@ -1,0 +1,44 @@
+.navbar {
+  padding: 0 $spacer;
+}
+
+.navbar-top {
+  z-index: 20;
+  position: relative;
+  top: 0;
+  background-color: rgba($white, 0.8);
+  border-bottom: 1px solid $light;
+  flex-wrap: nowrap;
+  position: -webkit-sticky;
+  position: sticky;
+  transition: background-color .3s,border-color,.3s;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.navbar-nav {
+  .nav-link {
+    margin: 0;
+    padding-top: $spacer;
+    padding-bottom: $spacer;
+
+    color: $navbar-light-color;
+
+    @include hover-focus {
+      color: $navbar-light-hover-color;
+    }
+
+    &.disabled {
+      color: $navbar-light-disabled-color;
+    }
+
+    &.active {
+      color: $primary;
+      border-bottom: $border-width solid $primary !important;
+
+      @include hover-focus {
+        color: $link-hover-color
+      }
+    }
+  }
+}

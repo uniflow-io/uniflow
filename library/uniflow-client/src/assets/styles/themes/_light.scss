@@ -1,0 +1,23 @@
+$text-color: #433422;
+$primary-color: #007bff;
+$secondary-color: #eadec2;
+$success-color: #00835c;
+$info-color: #17a2b8;
+$bg-color: #f1e7d0;
+$input-color: #eadec2;
+$input-border-color: #ded0bf;
+$border-color: #ded0bf;
+$checkbox-color: #007bff;
+
+body.theme-light {
+  .btn-secondary {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+  }
+  .badge-secondary {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+  }
+}

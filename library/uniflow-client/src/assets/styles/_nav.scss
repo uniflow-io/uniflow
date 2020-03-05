@@ -1,0 +1,29 @@
+.nav-bottom {
+  border-top: $border-width solid $border-color;
+  background-color: white !important;
+
+  .nav-link {
+    margin: 0;
+    padding-top: $spacer;
+    padding-bottom: $spacer;
+    color: $navbar-light-color;
+
+    @include hover-focus {
+      color: $navbar-light-hover-color;
+    }
+
+    &.disabled {
+      color: $navbar-light-disabled-color;
+    }
+
+    &.active {
+      color: $primary;
+      border-top: $border-width solid $primary !important;
+
+      @include hover-focus {
+        color: $link-hover-color !important;
+      }
+    }
+  }
+}
+

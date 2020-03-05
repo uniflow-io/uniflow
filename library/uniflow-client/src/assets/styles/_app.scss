@@ -1,0 +1,31 @@
+body {
+  padding-bottom: 60px;
+
+  @include media-breakpoint-up(md) {
+    padding-bottom: 0;
+  }
+}
+
+#home {
+  .navbar-top {
+    border-bottom: 0;
+  }
+
+  .navbar-nav {
+    .nav-link {
+      &.active {
+        border-bottom: 0 !important;
+      }
+    }
+  }
+}
+
+#gatsby-noscript {
+  display: block;
+  position: relative;
+  color: #0c5460;
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  padding: .75rem 1.25rem;
+  text-align: center;
+}

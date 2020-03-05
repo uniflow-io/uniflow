@@ -1,0 +1,203 @@
+$text-color: #433422;
+$link-hover-color: darken($primary-color, 15%);
+$primary-color: #007bff;
+$secondary-color: #eadec2;
+$success-color: #00835c;
+$info-color: #17a2b8;
+$bg-color: #f1e7d0;
+$input-color: #eadec2;
+$input-border-color: #ded0bf;
+$border-color: #ded0bf;
+$checkbox-color: #007bff;
+
+body.theme-sepia {
+  color: $text-color;
+  background-color: $bg-color;
+
+  a {
+    color: $primary-color;
+
+    @include hover-focus {
+      color: $link-hover-color;
+    }
+  }
+
+  input {
+    background-color: $input-color;
+    border-color: $input-border-color;
+
+    :focus {
+      box-shadow: inset 0 0 0 1px $primary-color;
+    }
+  }
+
+  .border-top {
+    border-top-color: $border-color !important;
+  }
+
+  .form-control {
+    background-color: $input-color;
+
+    &:focus {
+      background-color: $input-color;
+      border-color: $input-border-color;
+    }
+  }
+
+  .custom-select {
+    background-color: $bg-color;
+  }
+
+  .custom-control-label::before {
+    background-color: #ded0bf;
+    border-color: $input-border-color;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: $checkbox-color;
+    border-color: $input-border-color;
+  }
+
+  .input-group-text {
+    background-color: $secondary-color;
+    border-color: $border-color;
+    color: darken($text-color, 5%);
+  }
+
+  .btn {
+    color: $text-color;
+  }
+  .btn-primary {
+    color: lighten($text-color, 80%);
+  }
+  .btn-secondary {
+    color: lighten($text-color, 20%);
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+  }
+  .badge-secondary {
+    color: lighten($text-color, 20%);
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+  }
+  .btn-primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+  }
+  .btn-success {
+    color: lighten($text-color, 80%);
+    background-color: $success-color;
+    border-color: $success-color;
+  }
+  .btn-info {
+    color: lighten($text-color, 80%);
+    background-color: $info-color;
+    border-color: $info-color;
+  }
+  .btn-social {
+    color: lighten($text-color, 80%);
+  }
+
+  .text-secondary {
+    color: rgba($text-color, 0.8) !important;
+  }
+
+  .navbar-top {
+    background-color: rgba($bg-color, 0.8);
+    border-bottom-color: $border-color;
+  }
+
+  .navbar-nav .nav-link {
+    color: rgba($text-color, 0.8);
+
+    @include hover-focus {
+      color: rgba($text-color, 0.5);
+    }
+
+    &.active {
+      color: $primary-color;
+
+      @include hover-focus {
+        color: $link-hover-color;
+      }
+    }
+  }
+
+  .nav-bottom {
+    border-top: $border-width solid $border-color;
+    background-color: $bg-color !important;
+
+    .nav-link {
+      color: rgba($text-color, 0.8);
+
+      @include hover-focus {
+        color: rgba($text-color, 0.5);
+      }
+
+      &.active {
+        color: $primary-color;
+        border-top: $border-width solid $primary-color !important;
+
+        @include hover-focus {
+          color: $link-hover-color !important;
+        }
+      }
+    }
+  }
+
+  .card {
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+  }
+
+  .sidebar {
+    border-right-color: $border-color;
+  }
+
+  .sidebar-search {
+    border-bottom-color: $border-color;
+  }
+
+  .sidebar-items {
+    li {
+      @include hover-focus {
+        span {
+          color: rgba($text-color, 0.5) !important;
+
+          &.link {
+            color: $link-hover-color !important;
+          }
+        }
+      }
+
+      &.active {
+        span.link {
+          color: $primary-color;
+
+          &:before {
+            background-color: $primary-color;
+          }
+        }
+      }
+
+      span {
+        &.link {
+          color: rgba($text-color, 0.8);
+
+          @include hover-focus {
+            color: darken($primary-color, 15%);
+          }
+        }
+      }
+    }
+  }
+
+  ul.timeline:before {
+    content: ' ';
+    background: $gray-500;
+  }
+
+  ul.timeline > li:before {
+    background: $bg-color;
+  }
+}

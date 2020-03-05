@@ -1,0 +1,7 @@
+.form-sm-horizontal {
+  @include media-breakpoint-up(sm) {
+    .form-group .col-form-label:first-child {
+      text-align: right;
+    }
+  }
+}

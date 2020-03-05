@@ -1,0 +1,113 @@
+.sidebar {
+  z-index: 10;
+  overflow: auto;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-right: $grid-gutter-width / 2;
+  padding-left: $grid-gutter-width / 2;
+
+  @include media-breakpoint-up(sm) {
+    position: sticky;
+    border-right: 1px solid $light;
+    top: 0;
+    height: 100vh;
+    width: 180px;
+  }
+
+  @include media-breakpoint-up(md) {
+    width: 240px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    width: 300px;
+  }
+}
+
+.sidebar-search {
+  position: relative; // To contain the Algolia search
+  padding: 1rem 15px;
+  margin-right: -15px;
+  margin-left: -15px;
+  border-bottom: 1px solid $light;
+}
+
+.sidebar-nav {
+  margin-right: -$grid-gutter-width / 2;
+  margin-left: -$grid-gutter-width / 2;
+  padding: $spacer;
+
+  ul {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  @include media-breakpoint-up(sm) {
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+  }
+}
+
+.sidebar-items {
+  li {
+    padding: 0;
+    position: relative;
+
+    @include hover-focus {
+      span {
+        color: $navbar-light-hover-color !important;
+
+        &.link {
+          color: $link-hover-color !important;
+        }
+      }
+    }
+
+    &.active {
+      padding: 0 0 0 0.8rem;
+
+      span.link {
+        position: relative;
+        color: $link-color;
+
+        &:before {
+          content: " ";
+          width: 8px;
+          height: 8px;
+          border-radius: 10px;
+          position: absolute;
+          left: -.8rem;
+          top: 55%;
+          margin-top: -5px;
+          background-color: $link-color;
+          animation: scaleIn .7s forwards;
+        }
+      }
+    }
+
+    &>span {
+      display: block;
+
+      &.link {
+        display: block;
+        padding: .25em 0;
+        text-decoration: none;
+        color: rgba($black, .5);
+
+        @include hover-focus {
+          color: darken($link-color, 15%);
+        }
+      }
+    }
+
+    a {
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      text-indent: -1000px;
+    }
+  }
+}
