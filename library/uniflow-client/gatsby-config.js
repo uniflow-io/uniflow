@@ -1,5 +1,6 @@
 const activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
-const uniflowPath = './'
+const projectPath = './'
+const docsPath = '../../../docs'
 
 console.log(`Using environment config: '${activeEnv}'`)
 
@@ -175,42 +176,42 @@ module.exports = {
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/src/assets/images`,
+                path: `${projectPath}/src/assets/images`,
                 name: 'images',
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/docs/changelog.yaml`,
+                path: `${docsPath}/changelog.yaml`,
                 name: 'changelog',
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/docs/docs.yaml`,
+                path: `${docsPath}/docs.yaml`,
                 name: 'doc',
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/docs/docs`,
+                path: `${docsPath}/docs`,
                 name: 'doc',
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/docs/contributors`,
+                path: `${docsPath}/contributors`,
                 name: 'contributors',
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-                path: `${uniflowPath}/docs/blog`,
+                path: `${docsPath}/blog`,
                 name: 'blog',
             },
         }
