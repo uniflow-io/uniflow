@@ -65,7 +65,7 @@ public class Api {
 
     public String getProgramData(String id) throws IOException {
         String httpHost = this.getHttpHost();
-        String path = "/api/program/getData/" + id;
+        String path = "/api/program/get-data/" + id;
 
         URL url = new URL(httpHost + path + "?apiKey=" + this.key);
         URLConnection con = url.openConnection();

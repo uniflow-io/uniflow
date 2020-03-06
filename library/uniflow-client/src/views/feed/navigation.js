@@ -65,7 +65,6 @@ class Navigation extends Component {
             name: this.state.search,
             clients: ['uniflow'],
             tags: [],
-            description: '',
             path: getCurrentPath(this.props.feed),
           },
           this.props.auth.token

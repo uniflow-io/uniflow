@@ -8,9 +8,9 @@ import { commitAddLog } from '../logs/actions'
 export const fetchSettings = token => {
   return dispatch => {
     return request
-      .get(`${server.getBaseUrl()}/api/user/getSettings`, {
-        params: {
-          bearer: token,
+      .get(`${server.getBaseUrl()}/api/user/get-settings`, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
@@ -37,9 +37,9 @@ export const updateSettings = (item, token) => {
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/user/setSettings`, data, {
-        params: {
-          bearer: token,
+      .put(`${server.getBaseUrl()}/api/user/set-settings`, data, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
@@ -75,12 +75,8 @@ export const isGranted = (user, attributes) => {
   let roles = ['ROLE_USER']
   for (let i = 0; i < user.roles.length; i++) {
     let role = user.roles[i]
-    if (role === 'ROLE_USER_PRO') {
+    if (role === 'ROLE_SUPER_ADMIN') {
       roles.push('ROLE_USER')
-      roles.push('ROLE_USER_PRO')
-    } else if (role === 'ROLE_SUPER_ADMIN') {
-      roles.push('ROLE_USER')
-      roles.push('ROLE_USER_PRO')
       roles.push('ROLE_SUPER_ADMIN')
     } else {
       roles.push(role)

@@ -63,7 +63,7 @@ export const login = (username, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/login_check`, {
+        .post(`${server.getBaseUrl()}/api/auth/login`, {
           username: username,
           password: password,
         })
@@ -100,15 +100,15 @@ export const facebookLogin = (access_token, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/login/facebook`,
+          `${server.getBaseUrl()}/api/auth/login_facebook`,
           {
             access_token: access_token,
           },
           token === null
             ? {}
             : {
-                params: {
-                  bearer: token,
+                headers: {
+                  'Uniflow-Authorization': `Bearer ${token}`,
                 },
               }
         )
@@ -145,15 +145,15 @@ export const githubLogin = (code, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/login/github`,
+          `${server.getBaseUrl()}/api/auth/login_github`,
           {
             code: code,
           },
           token === null
             ? {}
             : {
-                params: {
-                  bearer: token,
+                headers: {
+                  'Uniflow-Authorization': `Bearer ${token}`,
                 },
               }
         )
@@ -183,7 +183,7 @@ export const register = (email, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/register`, {
+        .post(`${server.getBaseUrl()}/api/auth/register`, {
           email: email,
           password: password,
         })

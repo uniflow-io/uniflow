@@ -2,7 +2,10 @@
   "name": "@uniflow-io/regex-flow",
   "version": "1.1.12",
   "description": "Uniflow regex flow",
-  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo@uniflow.io"
+  },
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
@@ -11,7 +14,7 @@
     "uniflow",
     "uniflow-flow"
   ],
-  "license": "Commons Clause + MIT",
+  "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",

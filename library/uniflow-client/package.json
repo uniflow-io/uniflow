@@ -2,7 +2,10 @@
   "name": "@uniflow-io/uniflow-client",
   "version": "1.1.12",
   "description": "Uniflow uniflow client",
-  "author": "Mathieu Ledru <matyo91@gmail.com>",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo@uniflow.io"
+  },
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
@@ -11,7 +14,7 @@
     "uniflow",
     "uniflow-client"
   ],
-  "license": "Commons Clause + MIT",
+  "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -37,7 +40,7 @@
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@mdx-js/mdx": "^1.5.3",
     "@mdx-js/react": "^1.5.3",
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "brace": "^0.11.1",
     "gatsby": "^2.18.16",

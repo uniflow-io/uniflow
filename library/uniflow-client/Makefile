@@ -3,11 +3,6 @@
 clean:
 	rm -rf .cache public
 
-local-testing-build: clean
-	npm run build-preprod
-	symfony server:ca:install
-	(cd public; symfony server:start)
-
 run:
 	npm run dev
 

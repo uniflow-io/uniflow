@@ -43,6 +43,12 @@ exports.sourceNodes = async ({
             const readme = fs.readFileSync(`${localPackages}/${file}/README.md`, 'utf8')
             const packageJson = JSON.parse(fs.readFileSync(`${localPackages}/${file}/package.json`, 'utf8'))
             const parentId = createNodeId(`card ${file}`);
+            
+            if(!packageJson.keywords || !packageJson.keywords.reduce((hasCatalogList, keyword) => {
+              return hasCatalogList || keyword.indexOf('uniflow-') === 0
+            }, false)) {
+              return
+            }
 
             const readmeNode = {
                 id: createNodeId(`readme ${file}`),

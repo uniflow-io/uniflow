@@ -19,7 +19,7 @@ impl Api {
 
         let endpoints: HashMap<&str, String> = [
             ("program", String::from(["/api/program/me/list?client=rust&apiKey=", &self.key].concat())),
-            ("program_data", String::from(["/api/program/getData/{id}?apiKey=", &self.key].concat())),
+            ("program_data", String::from(["/api/program/get-data/{id}?apiKey=", &self.key].concat())),
         ].iter().cloned().collect();
 
         let mut path: String = endpoints.get(endpoint).unwrap().to_string();

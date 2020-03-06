@@ -20,7 +20,7 @@ Api.prototype.endpoint = function(endpoint, params = []) {
 
   const endpoints = {
     program: `/api/program/me/list?client=node&apiKey=${this.key}`,
-    program_data: `/api/program/getData/{id}?apiKey=${this.key}`,
+    program_data: `/api/program/get-data/{id}?apiKey=${this.key}`,
   }
   let path = Object.keys(params).reduce(function(path, key) {
     return path.replace('{' + key + '}', params[key])
