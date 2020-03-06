@@ -50,8 +50,6 @@ class ConfigService
 
     public function getJson(Config $config): array
     {
-        return [
-            'mediumToken' => $config->getMediumToken(),
-        ];
+        return [];
     }
 }

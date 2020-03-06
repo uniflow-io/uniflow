@@ -179,30 +179,6 @@ export const githubLogin = (code, token = null) => {
   }
 }
 
-export const mediumLoginUrl = mediumAppId => {
-  const httphost =
-    typeof window !== `undefined` ? `${window.location.origin}` : ''
-  return `https://medium.com/m/oauth/authorize?client_id=${mediumAppId}&scope=basicProfile,listPublications&state=medium&response_type=code&redirect_uri=${httphost}/login/medium`
-}
-
-export const mediumLogin = (code, token = null) => {
-  return dispatch => {
-    return request.post(
-      `${server.getBaseUrl()}/api/login/medium`,
-      {
-        code: code,
-      },
-      token === null
-        ? {}
-        : {
-            params: {
-              bearer: token,
-            },
-          }
-    )
-  }
-}
-
 export const register = (email, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {

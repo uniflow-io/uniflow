@@ -23,42 +23,8 @@ class Config
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $mediumToken;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $mediumRefreshToken;
-
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getMediumToken(): ?string
-    {
-        return $this->mediumToken;
-    }
-
-    public function setMediumToken(?string $mediumToken): self
-    {
-        $this->mediumToken = $mediumToken;
-
-        return $this;
-    }
-
-    public function getMediumRefreshToken(): ?string
-    {
-        return $this->mediumRefreshToken;
-    }
-
-    public function setMediumRefreshToken(?string $mediumRefreshToken): self
-    {
-        $this->mediumRefreshToken = $mediumRefreshToken;
-
-        return $this;
     }
 }

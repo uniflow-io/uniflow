@@ -34,12 +34,6 @@ class SecurityController extends AbstractController
     /** @var string */
     protected $appOauthGithubSecret;
 
-    /** @var string */
-    protected $appOauthMediumId;
-
-    /** @var string */
-    protected $appOauthMediumSecret;
-
     /** @var UserService */
     protected $userService;
 
@@ -62,8 +56,6 @@ class SecurityController extends AbstractController
         $appOauthFacebookId,
         $appOauthGithubId,
         $appOauthGithubSecret,
-        $appOauthMediumId,
-        $appOauthMediumSecret,
         UserService $userService,
         ConfigService $configService,
         JWTTokenManagerInterface $jwtTokenManager,
@@ -74,8 +66,6 @@ class SecurityController extends AbstractController
         $this->appOauthFacebookId = $appOauthFacebookId;
         $this->appOauthGithubId = $appOauthGithubId;
         $this->appOauthGithubSecret = $appOauthGithubSecret;
-        $this->appOauthMediumId = $appOauthMediumId;
-        $this->appOauthMediumSecret = $appOauthMediumSecret;
         $this->userService = $userService;
         $this->configService = $configService;
         $this->jwtTokenManager = $jwtTokenManager;
@@ -246,64 +236,6 @@ class SecurityController extends AbstractController
         return new JsonResponse([
             'token' => $this->jwtTokenManager->create($user)
         ]);
-    }
-
-    /**
-     * @Route("/api/login/medium", name="api_login_medium", methods={"POST"})
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function mediumLogin(Request $request)
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        $code = null;
-
-        $content = $request->getContent();
-        if (!empty($content)) {
-            $data = json_decode($content, true);
-            $code = isset($data['code']) ? $data['code'] : null;
-        }
-
-        // Get the token's Medium app.
-        $response = $this->httpClient->request('POST', 'https://api.medium.com/v1/tokens', [
-            'headers' => [
-                'Accept' => 'application/json'
-            ],
-            'body' => [
-                'client_id' => $this->appOauthMediumId,
-                'client_secret' => $this->appOauthMediumSecret,
-                'code' => $code,
-                'grant_type' => 'authorization_code',
-                'redirect_uri' => 'https:'.$this->generateUrl('loginMedium', [], UrlGeneratorInterface::NETWORK_PATH),
-            ]
-        ]);
-
-        $tokenResp = $response->toArray();
-        if (!$tokenResp || !isset($tokenResp['access_token'])) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
-        $token = $tokenResp['access_token'];
-        $refreshToken = $tokenResp['refresh_token'];
-
-        $config = $this->configService->findOne();
-        if (!$config) {
-            $config = new Config();
-        }
-        $config->setMediumToken($token);
-        $config->setMediumRefreshToken($refreshToken);
-
-        $this->configService->save($config);
-
-        return new JsonResponse();
     }
 
     /**

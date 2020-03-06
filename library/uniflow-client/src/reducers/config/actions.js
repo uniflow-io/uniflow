@@ -23,7 +23,6 @@ export const fetchConfig = token => {
 export const updateConfig = (item, token) => {
   return dispatch => {
     let data = {
-      mediumToken: item.mediumToken,
     }
 
     return request

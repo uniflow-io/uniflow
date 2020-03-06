@@ -12,7 +12,6 @@ import {
   Login,
   FacebookLogin,
   GithubLogin,
-  MediumLogin,
   Register,
   Settings,
   Tag,
@@ -44,11 +43,6 @@ const routes = {
     path: '/login/github',
     exact: true,
     component: GithubLogin,
-  },
-  mediumLogin: {
-    path: '/login/medium',
-    exact: true,
-    component: MediumLogin,
   },
   register: {
     path: '/register',

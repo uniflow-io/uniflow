@@ -3,7 +3,6 @@ import { COMMIT_SET_ENV } from './actions-types'
 const defaultState = {
   facebookAppId: null,
   githubAppId: null,
-  mediumAppId: null,
 }
 
 const env = (state = defaultState, action) => {
