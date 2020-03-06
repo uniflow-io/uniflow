@@ -32,9 +32,6 @@ class Admin extends Component {
   }
 
   render() {
-    const { env } = this.props
-    const { config } = this.state
-
     return (
       <>
         <section className="section container-fluid">
