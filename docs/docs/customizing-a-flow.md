@@ -21,4 +21,4 @@ It's then recommended to :
 - implement `onCode` method that will generate code specific logic when executing the Flow on it's Client.
 - implement `onDelete` method to pop the Flow on the current Rail.
 
-Have a look at [javascript-flow](https://uniflow.io/library/uniflow-io-javascript-flow) is the most basic Flow you can implement.
+Have a look at [uniflow-flow-javascript](https://uniflow.io/library/uniflow-io-uniflow-flow-javascript) is the most basic Flow you can implement.

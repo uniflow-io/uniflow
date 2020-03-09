@@ -1,0 +1,36 @@
+{
+  "name": "@uniflow-io/uniflow-flow-canvas",
+  "version": "1.1.12",
+  "description": "Uniflow canvas flow",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo@uniflow.io"
+  },
+  "bugs": {
+    "url": "https://github.com/uniflow-io/uniflow/issues"
+  },
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-flow-canvas#readme",
+  "keywords": [
+    "uniflow",
+    "uniflow-flow"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uniflow-io/uniflow.git",
+    "directory": "library/uniflow-flow-canvas"
+  },
+  "uniflow": {
+    "name": "Canvas",
+    "tags": [
+      "ui"
+    ],
+    "clients": [
+      "uniflow"
+    ]
+  },
+  "dependencies": {
+    "@uniflow-io/uniflow-client": "^1.1.12"
+  }
+}

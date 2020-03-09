@@ -11,7 +11,7 @@ tags: ["case-study"]
 
 Sometimes, when you are web developing your sites, you need data generation.
 
-Here we will generate data for forms, by using [Chrome Client](https://uniflow.io/library/uniflow-io-chrome-client).
+Here we will generate data for forms, by using [Chrome Client](https://uniflow.io/library/uniflow-io-uniflow-client-chrome).
 
 First, you have to install the chrome extension on [Google Chrome web store](https://chrome.google.com/webstore/detail/uniflow-client/addfkelofconemofddhmmdgdiolnhppl)
 

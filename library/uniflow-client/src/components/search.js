@@ -5,7 +5,7 @@ import { faDotCircle } from '@fortawesome/free-regular-svg-icons'
 
 export default class Search extends Component {
   state = {
-    search: '@uniflow-io/javascript-flow',
+    search: '@uniflow-io/uniflow-flow-javascript',
   }
 
   onSubmit = event => {
