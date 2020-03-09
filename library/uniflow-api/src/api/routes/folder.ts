@@ -31,7 +31,7 @@ export default (app: Router) => {
           }
         }
         
-        let data = [[]]
+        let data: string[][] = [[]]
         const folders = await folderService.findByUser(fetchUser)
         for (const folder of folders) {
           data.push(await folderService.toPath(folder))

@@ -22,11 +22,8 @@
     "directory": "library/uniflow-client-node"
   },
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --env.NODE_ENV=development --hot --inline -d --progress --colors --config webpack.config.js",
-    "build-preprod": "./node_modules/.bin/webpack --env.NODE_ENV=preprod --mode production -p --progress --colors --config webpack.config.js",
-    "build": "./node_modules/.bin/webpack --env.NODE_ENV=production -p --progress --colors --config webpack.config.js",
-    "format": "./node_modules/.bin/prettier --write \"src/**/*.js\"",
-    "upgrade-all": "./node_modules/.bin/npx yarn-upgrade-all"
+    "build": "webpack --mode production -p --progress --colors --config webpack.config.js",
+    "dev": "webpack-dev-server --hot --inline -d --progress --colors --config webpack.config.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -40,8 +37,6 @@
     "@babel/preset-flow": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
-    "npx": "^10.2.0",
-    "prettier": "^1.19.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"

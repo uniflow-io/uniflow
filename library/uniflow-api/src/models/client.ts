@@ -5,7 +5,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm';
-import {Program} from "./program";
 import {ProgramClient} from "./program-client";
 
 @Entity()

@@ -2,16 +2,21 @@ import * as argon2 from 'argon2';
 import request from 'axios'
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
-import { Service } from 'typedi';
-import { Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import config from '../config';
 import { Exception } from '../exception';
 import { User } from '../models';
 
 @Service()
 export default class AuthService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  private userRepository: Repository<User>;
+  
+  constructor(
+    @Inject(type => User) user: User
+  ) {
+    this.userRepository = getRepository(User)
+  }
 
   public async register(inputUser: User): Promise<{ user: User; token: string }> {
     try {

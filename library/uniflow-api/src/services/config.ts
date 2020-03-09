@@ -1,12 +1,17 @@
-import { Service } from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import { Config } from '../models';
 
 @Service()
 export default class ConfigService {
-  constructor(@InjectRepository(Config) private readonly configRepository: Repository<Config>) {}
+  private configRepository: Repository<Config>;
 
+  constructor(
+    @Inject(type => Config) config: Config
+  ) {
+    this.configRepository = getRepository(Config)
+  }
+  
   public async save(config: Config): Promise<Config> {
     return await this.configRepository.save(config);
   }

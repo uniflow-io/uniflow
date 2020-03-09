@@ -1,7 +1,7 @@
 const {createFilePath} = require(`gatsby-source-filesystem`)
 const _ = require('lodash')
 const fs = require('fs')
-const activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
+const activeEnv = process.env.NODE_ENV || 'development'
 const localPackages = '../'
 
 exports.onCreateWebpackConfig = ({stage, loaders, actions}) => {

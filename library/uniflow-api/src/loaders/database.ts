@@ -1,14 +1,13 @@
 import Container from 'typedi';
-import { Connection, createConnection, useContainer } from 'typeorm';
+import { Connection, createConnection, useContainer, ConnectionOptions } from 'typeorm';
 import config from '../config';
 import { Client, Config, Contact, Folder, Program, Tag, User } from '../models';
-import {ProgramClient} from "../models/program-client";
-import {ProgramTag} from "../models/program-tag";
+import {ProgramClient, ProgramTag} from "../models";
 
 export default async (): Promise<Connection> => {
   const dbType = await config.get('database.type') as string;
 
-  let connectionOptions
+  let connectionOptions: ConnectionOptions
 
   switch (dbType) {
     case 'mongodb':
@@ -44,7 +43,7 @@ export default async (): Promise<Connection> => {
     case 'sqlite':
       connectionOptions = {
         type: 'sqlite',
-        database: './database.sqlite',
+        database: await config.get('database.sqlite.database') as string,
       };
       break;
       
@@ -62,5 +61,5 @@ export default async (): Promise<Connection> => {
   useContainer(Container);
 
   // create a connection using modified connection options
-  return await createConnection(connectionOptions);;
+  return await createConnection(connectionOptions);
 };

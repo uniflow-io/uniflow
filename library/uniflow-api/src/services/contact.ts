@@ -1,14 +1,19 @@
-import nodemailer from 'nodemailer'
-import { Service } from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import * as nodemailer from 'nodemailer'
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import { Contact } from '../models';
 import config from '../config'
 
 @Service()
 export default class ContactService {
-  constructor(@InjectRepository(Contact) private readonly contactRepository: Repository<Contact>) {}
+  private contactRepository: Repository<Contact>;
 
+  constructor(
+    @Inject(type => Contact) contact: Contact
+  ) {
+    this.contactRepository = getRepository(Contact)
+  }
+  
   public async save(contact: Contact): Promise<Contact> {
     return await this.contactRepository.save(contact);
   }

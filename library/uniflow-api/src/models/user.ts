@@ -1,7 +1,8 @@
 import {
   Column,
   CreateDateColumn,
-  Entity, ManyToOne, OneToMany,
+  Entity,
+  OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
 import {Folder} from "./folder";

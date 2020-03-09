@@ -33,7 +33,7 @@ export class Folder {
   user: User;
   
   @ManyToOne(type => Folder, parent => parent.children)
-  parent: Folder
+  parent: Folder | undefined
 
   @OneToMany(type => Folder, child => child.parent, {
     cascade: ['insert']

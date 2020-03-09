@@ -1,11 +1,13 @@
-build
-dist
-lib
+# logs
+/*.log
 
-# Logs
-logs
-*.log
-npm-debug.log*
+# npm
+/node_modules
+/package-lock.json
 
-.env.local
-docker-compose.override.yml
+# dotenv
+/.env.*
+
+# typescript
+/dist
+/database.sqlite

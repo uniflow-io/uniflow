@@ -1,12 +1,17 @@
-import { Service } from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import { User } from '../models';
 import slugify from "slugify";
 
 @Service()
 export default class UserService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  private userRepository: Repository<User>;
+
+  constructor(
+    @Inject(type => User) user: User
+  ) {
+    this.userRepository = getRepository(User)
+  }
 
   public async save(user: User): Promise<User> {
     return await this.userRepository.save(user);

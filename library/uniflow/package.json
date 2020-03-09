@@ -1,0 +1,96 @@
+{
+  "name": "@uniflow-io/uniflow",
+  "version": "1.1.12",
+  "description": "Uniflow uniflow",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo@uniflow.io"
+  },
+  "bugs": {
+    "url": "https://github.com/uniflow-io/uniflow/issues"
+  },
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow#readme",
+  "keywords": [
+    "uniflow"
+  ],
+  "license": "MIT",
+  "main": "dist/main.ts",
+  "types": "dist/main.d.ts",
+  "files": [
+    "bin",
+    "dist",
+    "oclif.manifest.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uniflow-io/uniflow.git",
+    "directory": "library/uniflow"
+  },
+  "oclif": {
+    "commands": "./dist/commands",
+    "bin": "uniflow"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf ./dist && tsc -b && oclif-dev manifest",
+    "start": "run-script-os",
+    "start:default": "cd bin && ./uniflow",
+    "start:windows": "cd bin && uniflow",
+    "watch": "tsc --watch"
+  },
+  "bin": {
+    "uniflow": "./bin/uniflow"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "@oclif/command": "^1.5.18",
+    "@oclif/errors": "^1.2.2",
+    "@uniflow-io/uniflow-api": "^1.1.12",
+    "@uniflow-io/uniflow-client": "^1.1.12",
+    "argon2": "0.26.0",
+    "axios": "^0.19.2",
+    "body-parser": "1.19.0",
+    "celebrate": "11.0.1",
+    "convict": "^5.2.0",
+    "cors": "2.8.5",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "express-jwt": "5.3.1",
+    "helmet": "3.21.2",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "8.5.1",
+    "mongodb": "3.5.3",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.4.4",
+    "open": "^7.0.0",
+    "reflect-metadata": "0.1.13",
+    "run-script-os": "^1.0.7",
+    "slugify": "^1.4.0",
+    "sqlite3": "^4.1.1",
+    "typedi": "0.8.0",
+    "typeorm": "0.2.22"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
+    "@types/convict": "^4.2.1",
+    "@types/cors": "2.8.6",
+    "@types/dotenv": "8.2.0",
+    "@types/express": "4.17.2",
+    "@types/express-jwt": "0.0.42",
+    "@types/hapi__joi": "^16.0.12",
+    "@types/helmet": "0.0.45",
+    "@types/joi": "^14.3.4",
+    "@types/jsonwebtoken": "^8.3.8",
+    "@types/morgan": "1.7.37",
+    "@types/node": "13.7.4",
+    "@types/nodemailer": "^6.4.0",
+    "@types/open": "^6.1.0",
+    "nodemon": "2.0.2",
+    "ts-node": "8.6.2",
+    "typescript": "^3.8.2"
+  }
+}

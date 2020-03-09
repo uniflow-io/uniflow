@@ -1,15 +1,20 @@
 import { Service, Inject } from 'typedi';
-import { Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
-import {Program, ProgramTag} from '../models';
+import { Repository, getRepository } from 'typeorm';
+import { Program, ProgramTag } from '../models';
 import TagService from "./tag";
 
 @Service()
 export default class ProgramTagService {
+  private programTagRepository: Repository<ProgramTag>;
+  private tagService: TagService;
+
   constructor(
-    @InjectRepository(ProgramTag) private readonly programTagRepository: Repository<ProgramTag>,
-    @Inject(type => TagService) private readonly tagService: TagService,
-  ) {}
+    @Inject(type => ProgramTag) programTag: ProgramTag,
+    @Inject(type => TagService) tagService: TagService
+  ) {
+    this.programTagRepository = getRepository(ProgramTag)
+    this.tagService = tagService
+  }
 
   public async save(programTag: ProgramTag): Promise<ProgramTag> {
     return await this.programTagRepository.save(programTag);
@@ -19,8 +24,8 @@ export default class ProgramTagService {
     return await this.programTagRepository.findOne(id);
   }
 
-  public async manageByProgramAndTagNames(program: Program, names: string[]): Promise<ProgramTag[] | undefined> {
-    let programTags = []
+  public async manageByProgramAndTagNames(program: Program, names: string[]): Promise<ProgramTag[]> {
+    let programTags: ProgramTag[] = []
     if(program.id) {
       let qb = this.programTagRepository.createQueryBuilder('pt')
         .select('pt')
@@ -48,8 +53,8 @@ export default class ProgramTagService {
     return programTags
   }
 
-  public async toTagNames(program: Program): Promise<string[] | undefined> {
-    let programTags = []
+  public async toTagNames(program: Program): Promise<string[]> {
+    let programTags: ProgramTag[] = []
     if(program.id) {
       let qb = this.programTagRepository.createQueryBuilder('pt')
         .select('pt')

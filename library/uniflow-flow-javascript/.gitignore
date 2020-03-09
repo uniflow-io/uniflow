@@ -1,4 +1,6 @@
-# NPM
-node_modules
-*.log
-npm-debug.log*
+# logs
+/*.log
+
+# npm
+/node_modules
+/package-lock.json

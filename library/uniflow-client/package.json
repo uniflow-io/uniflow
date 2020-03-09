@@ -15,22 +15,16 @@
     "uniflow-client"
   ],
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-client"
   },
   "scripts": {
-    "dev": "ACTIVE_ENV=development gatsby develop -p 8090",
-    "dev-https": "ACTIVE_ENV=development gatsby develop -p 8090 --https",
-    "build-development": "ACTIVE_ENV=development gatsby build",
-    "build-preprod": "ACTIVE_ENV=preprod gatsby build",
-    "build": "ACTIVE_ENV=production gatsby build",
-    "serve": "gatsby serve -p 9090",
-    "format": "prettier --write \"src/**/*.js\"",
-    "upgrade-all": "npx yarn-upgrade-all",
-    "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
+    "build": "gatsby build",
+    "dev": "gatsby develop -p 8090",
+    "serve": "gatsby serve -p 9090"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
@@ -75,9 +69,5 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "vm-browserify": "^1.1.2"
-  },
-  "devDependencies": {
-    "npx": "^10.2.0",
-    "prettier": "^1.19.1"
   }
 }

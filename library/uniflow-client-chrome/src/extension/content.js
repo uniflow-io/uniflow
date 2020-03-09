@@ -5,7 +5,6 @@
     if (message.channel === 'evaluateInContent') {
       const { asyncFunction, args } = message
       Promise.resolve()
-        // eslint-disable-next-line no-eval
         .then(() =>
           eval(`(${asyncFunction}).apply(null, ${JSON.stringify(args)})`)
         )

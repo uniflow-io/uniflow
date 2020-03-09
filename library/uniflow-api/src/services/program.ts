@@ -1,18 +1,27 @@
 import slugify from 'slugify'
 import {Inject, Service} from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Repository, getRepository } from 'typeorm';
 import {Folder, Program, User} from '../models';
 import { FolderService, ProgramClientService, ProgramTagService } from "./";
 
 @Service()
 export default class ProgramService {
+  private programRepository: Repository<Program>;
+  private folderService: FolderService;
+  private programClientService: ProgramClientService;
+  private programTagService: ProgramTagService;
+
   constructor(
-    @InjectRepository(Program) private readonly programRepository: Repository<Program>,
-    @Inject(type => FolderService) private readonly folderService: FolderService,
-    @Inject(type => ProgramClientService) private readonly programClientService: ProgramClientService,
-    @Inject(type => ProgramTagService) private readonly programTagService: ProgramTagService,
-  ) {}
+    @Inject(type => Program) program: Program,
+    @Inject(type => FolderService) folderService: FolderService,
+    @Inject(type => ProgramClientService) programClientService: ProgramClientService,
+    @Inject(type => ProgramTagService) programTagService: ProgramTagService,
+  ) {
+    this.programRepository = getRepository(Program)
+    this.folderService = folderService
+    this.programClientService = programClientService
+    this.programTagService = programTagService
+  }
 
   public async save(program: Program): Promise<Program> {
     return await this.programRepository.save(program);

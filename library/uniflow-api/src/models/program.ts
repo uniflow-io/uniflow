@@ -3,7 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  ManyToOne, OneToMany,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import {Folder} from "./folder";
 import {User} from "./user";
@@ -34,7 +35,7 @@ export class Program {
   user: User
 
   @ManyToOne(type => Folder, folder => folder.programs)
-  folder: Folder
+  folder: Folder | undefined
   
   @OneToMany(type => ProgramClient, programClient => programClient.program, {
     cascade: ['insert']

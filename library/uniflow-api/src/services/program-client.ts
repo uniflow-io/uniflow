@@ -1,15 +1,20 @@
 import { Service, Inject } from 'typedi';
-import { Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
-import {Program, ProgramClient} from '../models';
+import { Repository, getRepository } from 'typeorm';
+import { Program, ProgramClient} from '../models';
 import ClientService from "./client";
 
 @Service()
 export default class ProgramClientService {
+  private programClientRepository: Repository<ProgramClient>;
+  private clientService: ClientService;
+
   constructor(
-    @InjectRepository(ProgramClient) private readonly programClientRepository: Repository<ProgramClient>,
-    @Inject(type => ClientService) private readonly clientService: ClientService,
-  ) {}
+    @Inject(type => ProgramClient) programClient: ProgramClient,
+    @Inject(type => ClientService) clientService: ClientService
+  ) {
+    this.programClientRepository = getRepository(ProgramClient)
+    this.clientService = clientService
+  }
 
   public async save(programClient: ProgramClient): Promise<ProgramClient> {
     return await this.programClientRepository.save(programClient);
@@ -19,8 +24,8 @@ export default class ProgramClientService {
     return await this.programClientRepository.findOne(id);
   }
 
-  public async manageByProgramAndClientNames(program: Program, names: string[]): Promise<ProgramClient[] | undefined> {
-    let programClients = []
+  public async manageByProgramAndClientNames(program: Program, names: string[]): Promise<ProgramClient[]> {
+    let programClients: ProgramClient[] = []
     if(program.id) {
       let qb = this.programClientRepository.createQueryBuilder('pc')
         .select('pc')
@@ -48,8 +53,8 @@ export default class ProgramClientService {
     return programClients
   }
 
-  public async toClientNames(program: Program): Promise<string[] | undefined> {
-    let programClients = []
+  public async toClientNames(program: Program): Promise<string[]> {
+    let programClients: ProgramClient[] = []
     if(program.id) {
       let qb = this.programClientRepository.createQueryBuilder('pc')
         .select('pc')

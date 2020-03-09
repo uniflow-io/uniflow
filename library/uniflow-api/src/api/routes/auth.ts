@@ -6,7 +6,7 @@ import { AuthService } from '../../services';
 import { withToken, withUser } from "../middlewares";
 const route = Router();
 
-export default app => {
+export default (app: Router) => {
   app.use('/auth', route);
 
   route.post(

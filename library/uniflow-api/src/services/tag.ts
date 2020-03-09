@@ -1,11 +1,16 @@
-import { Service } from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import { Tag } from '../models';
 
 @Service()
 export default class TagService {
-  constructor(@InjectRepository(Tag) private readonly tagRepository: Repository<Tag>) {}
+  private tagRepository: Repository<Tag>;
+
+  constructor(
+    @Inject(type => Tag) tag: Tag
+  ) {
+    this.tagRepository = getRepository(Tag)
+  }
 
   public async save(tag: Tag): Promise<Tag> {
     return await this.tagRepository.save(tag);
@@ -24,7 +29,7 @@ export default class TagService {
     return await this.tagRepository.findOne(id);
   }
 
-  public async findOrCreateByNames(names: string[]): Promise<Tag[] | undefined> {
+  public async findOrCreateByNames(names: string[]): Promise<Tag[]> {
     let tags = []
     for(const name of names) {
       let tag = await this.tagRepository.findOne({name})
@@ -40,7 +45,7 @@ export default class TagService {
     return tags
   }
 
-  public async toNames(tags: Tag[]): Promise<string[] | undefined> {
+  public async toNames(tags: Tag[]): Promise<string[]> {
     return tags.map((tag) => {
       return tag.name
     })

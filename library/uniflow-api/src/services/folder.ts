@@ -1,12 +1,17 @@
 import slugify from 'slugify'
-import { Service } from 'typedi';
-import { FindOneOptions, Repository, IsNull } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import {Folder, User} from '../models';
 
 @Service()
 export default class FolderService {
-  constructor(@InjectRepository(Folder) private readonly folderRepository: Repository<Folder>) {}
+  private folderRepository: Repository<Folder>;
+
+  constructor(
+    @Inject(type => Folder) folder: Folder
+  ) {
+    this.folderRepository = getRepository(Folder)
+  }
 
   public async save(folder: Folder): Promise<Folder> {
     return await this.folderRepository.save(folder);
@@ -35,7 +40,7 @@ export default class FolderService {
     return await qb.getOne();
   }
 
-  public async findOneByUserAndPath(user: User, path: string[]): Promise<Folder> {
+  public async findOneByUserAndPath(user: User, path: string[]): Promise<Folder | undefined> {
     const level = path.length
     if (level === 0) {
       return undefined
@@ -61,13 +66,13 @@ export default class FolderService {
     return await qb.getOne()
   }
 
-  public async findOneParent(folder: Folder): Promise<Folder> {
+  public async findOneParent(folder: Folder): Promise<Folder | undefined> {
     let qb = this.folderRepository.createQueryBuilder('f')
       .select('f')
       .leftJoinAndSelect('f.parent', 'parent')
       .andWhere('f.id = :id').setParameter('id', folder.id)
 
-    return (await qb.getOne()).parent
+    return (await qb.getOne())?.parent
   }
 
   public async findByUser(user: User): Promise<Folder[]> {

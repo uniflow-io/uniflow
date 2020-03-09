@@ -102,7 +102,7 @@ export default (app: Router) => {
 
       const client = req.params.client
       let programs = []
-      let folders = []
+      let folders: Folder[] = []
       if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
         programs = await programService.findLastByUserAndClientAndFolder(fetchUser, client, parentFolder)
         folders = await folderService.findByUserAndParent(fetchUser, parentFolder)
@@ -112,12 +112,12 @@ export default (app: Router) => {
       
       let children = []
       for(const program of programs) {
-        let item = await programService.getJson(program)
+        let item: any = await programService.getJson(program)
         item['type'] = 'program'
         children.push(item)
       }
       for(const folder of folders) {
-        let item = await folderService.getJson(folder)
+        let item: any = await folderService.getJson(folder)
         item['type'] = 'folder'
         children.push(item)
       }

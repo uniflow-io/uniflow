@@ -1,11 +1,12 @@
-import bodyParser from 'body-parser';
+import * as bodyParser from 'body-parser';
+import {NextFunction, Request, Response} from "express";
 import { errors, isCelebrate } from 'celebrate';
-import cors from 'cors';
+import * as cors from 'cors';
 import * as express from 'express';
-import helmet from 'helmet';
+import * as helmet from 'helmet';
 import routes from '../api/routes';
 
-export default (app: express.Application) => {
+export default (app: express.Application, staticMiddleware: any) => {
   app.enable('trust proxy');
   app.use(cors());
   app.use(helmet());
@@ -13,17 +14,17 @@ export default (app: express.Application) => {
   app.use(errors());
 
   app.use('/api', routes);
-  app.use('/', express.static('./public'));
+  app.use('/', staticMiddleware);
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
-    const error: Error = new Error('Not Found');
+    const error: any = new Error('Not Found');
     error['status'] = 404;
     next(error);
   });
 
   /// error handlers
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     /**
      * Handle 401 thrown by express-jwt library
      */
@@ -46,7 +47,7 @@ export default (app: express.Application) => {
     return next(err);
   });
 
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(err.status || 500);
     res.json({
       errors: {

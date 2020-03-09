@@ -389,6 +389,9 @@ export const getLastPublicPrograms = () => {
       .then(response => {
         return response.data.programs
       })
+      .catch(error => {
+        return []
+      })
   }
 }
 

@@ -1,11 +1,16 @@
-import { Service } from 'typedi';
-import { FindOneOptions, Repository } from 'typeorm';
-import { InjectRepository } from 'typeorm-typedi-extensions';
+import { Service, Inject } from 'typedi';
+import { Repository, getRepository } from 'typeorm';
 import { Client } from '../models';
 
 @Service()
 export default class ClientService {
-  constructor(@InjectRepository(Client) private readonly clientRepository: Repository<Client>) {}
+  private clientRepository: Repository<Client>;
+
+  constructor(
+    @Inject(type => Client) client: Client
+  ) {
+    this.clientRepository = getRepository(Client)
+  }
 
   public async save(client: Client): Promise<Client> {
     return await this.clientRepository.save(client);
@@ -15,7 +20,7 @@ export default class ClientService {
     return await this.clientRepository.findOne(id);
   }
 
-  public async findOrCreateByNames(names: string[]): Promise<Client[] | undefined> {
+  public async findOrCreateByNames(names: string[]): Promise<Client[]> {
     let clients = []
     for(const name of names) {
       let client = await this.clientRepository.findOne({name})
@@ -31,7 +36,7 @@ export default class ClientService {
     return clients
   }
 
-  public async toNames(clients: Client[]): Promise<string[] | undefined> {
+  public async toNames(clients: Client[]): Promise<string[]> {
     return clients.map((client) => {
       return client.name
     })

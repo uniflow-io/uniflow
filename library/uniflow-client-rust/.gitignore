@@ -1,8 +1,10 @@
-# NPM
-node_modules
-*.log
-npm-debug.log*
+# logs
+/*.log
+
+# npm
+/node_modules
+/package-lock.json
 
 # rust
 /target
-**/*.rs.bk
+/**/*.rs.bk

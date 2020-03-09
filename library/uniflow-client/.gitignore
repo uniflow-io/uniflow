@@ -1,15 +1,13 @@
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# logs
+/*.log
 
-# Dependency directories
-node_modules/
+# npm
+/node_modules
+/package-lock.json
 
-# dotenv environment variables file
-.env.*
+# dotenv
+/.env.*
 
-# gatsby files
-.cache/
-public
+# gatsby
+/.cache
+/public

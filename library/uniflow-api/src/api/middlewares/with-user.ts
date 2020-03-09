@@ -1,4 +1,5 @@
 import { Container } from 'typedi';
+import {NextFunction, Request, Response} from "express";
 import UserService from '../../services/user';
 
 /**
@@ -7,7 +8,7 @@ import UserService from '../../services/user';
  * @param {*} res  Express res Object
  * @param {*} next  Express next Function
  */
-const withUser = async (req, res, next) => {
+const withUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.token) {
       return next();

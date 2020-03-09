@@ -1,4 +1,4 @@
-const activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
+const activeEnv = process.env.NODE_ENV || 'development'
 const projectPath = './'
 const docsPath = '../../docs'
 
