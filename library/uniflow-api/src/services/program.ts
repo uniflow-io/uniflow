@@ -1,7 +1,7 @@
 import slugify from 'slugify'
-import {Inject, Service} from 'typedi';
+import { Service, Container } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import {Folder, Program, User} from '../models';
+import { Folder, Program, User} from '../models';
 import { FolderService, ProgramClientService, ProgramTagService } from "./";
 
 @Service()
@@ -11,16 +11,11 @@ export default class ProgramService {
   private programClientService: ProgramClientService;
   private programTagService: ProgramTagService;
 
-  constructor(
-    @Inject(type => Program) program: Program,
-    @Inject(type => FolderService) folderService: FolderService,
-    @Inject(type => ProgramClientService) programClientService: ProgramClientService,
-    @Inject(type => ProgramTagService) programTagService: ProgramTagService,
-  ) {
+  constructor() {
     this.programRepository = getRepository(Program)
-    this.folderService = folderService
-    this.programClientService = programClientService
-    this.programTagService = programTagService
+    this.folderService = Container.get(FolderService)
+    this.programClientService = Container.get(ProgramClientService)
+    this.programTagService = Container.get(ProgramTagService)
   }
 
   public async save(program: Program): Promise<Program> {

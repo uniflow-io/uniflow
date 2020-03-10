@@ -11,3 +11,7 @@
 # gatsby
 /.cache
 /public
+
+# typescript
+/dist
+oclif.manifest.json

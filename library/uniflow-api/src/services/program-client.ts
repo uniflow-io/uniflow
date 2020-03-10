@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi';
+import { Service, Container } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Program, ProgramClient} from '../models';
 import ClientService from "./client";
@@ -8,12 +8,9 @@ export default class ProgramClientService {
   private programClientRepository: Repository<ProgramClient>;
   private clientService: ClientService;
 
-  constructor(
-    @Inject(type => ProgramClient) programClient: ProgramClient,
-    @Inject(type => ClientService) clientService: ClientService
-  ) {
+  constructor() {
     this.programClientRepository = getRepository(ProgramClient)
-    this.clientService = clientService
+    this.clientService = Container.get(ClientService)
   }
 
   public async save(programClient: ProgramClient): Promise<ProgramClient> {

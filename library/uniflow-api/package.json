@@ -1,7 +1,7 @@
 {
   "name": "@uniflow-io/uniflow-api",
   "version": "1.1.12",
-  "description": "Uniflow uniflow api",
+  "description": "Uniflow api",
   "author": {
     "name": "Mathieu Ledru",
     "email": "matyo@uniflow.io"
@@ -14,26 +14,38 @@
     "uniflow"
   ],
   "license": "MIT",
-  "main": "dist/main.ts",
-  "types": "dist/main.d.ts",
-  "files": [
-    "dist"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-api"
   },
-  "scripts": {
-    "build": "tsc",
-    "prepack": "rm -rf ./dist && tsc -b",
-    "dev": "nodemon",
-    "watch": "tsc --watch"
-  },
   "engines": {
     "node": ">=8.0.0"
   },
+  "main": "dist/main.ts",
+  "types": "dist/main.d.ts",
+  "files": [
+    "bin",
+    "dist",
+    "public",
+    "oclif.manifest.json"
+  ],
+  "oclif": {
+    "commands": "./dist/commands",
+    "bin": "uniflow-api"
+  },
+  "bin": {
+    "uniflow-api": "./bin/uniflow-api"
+  },
+  "scripts": {
+    "prepack": "make build",
+    "start": "run-script-os",
+    "start:default": "cd bin && ./uniflow-api",
+    "start:windows": "cd bin && uniflow-api"
+  },
   "dependencies": {
+    "@oclif/command": "^1.5.18",
+    "@oclif/errors": "^1.2.2",
     "argon2": "0.26.0",
     "axios": "^0.19.2",
     "body-parser": "1.19.0",
@@ -56,6 +68,7 @@
     "typeorm": "0.2.22"
   },
   "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
     "@types/convict": "^4.2.1",
     "@types/cors": "2.8.6",
     "@types/dotenv": "8.2.0",
@@ -69,6 +82,7 @@
     "@types/node": "13.7.4",
     "@types/nodemailer": "^6.4.0",
     "nodemon": "2.0.2",
+    "run-script-os": "^1.1.1",
     "ts-node": "8.6.2",
     "typescript": "^3.8.2"
   }

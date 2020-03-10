@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Client } from '../models';
 
@@ -6,9 +6,7 @@ import { Client } from '../models';
 export default class ClientService {
   private clientRepository: Repository<Client>;
 
-  constructor(
-    @Inject(type => Client) client: Client
-  ) {
+  constructor() {
     this.clientRepository = getRepository(Client)
   }
 

@@ -11,3 +11,4 @@
 # typescript
 /dist
 /database.sqlite
+oclif.manifest.json

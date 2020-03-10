@@ -5,7 +5,7 @@ import {
   join as pathJoin,
 } from 'path';
 import config from './config';
-import {database, server} from '@uniflow-io/uniflow-api/src/loaders';
+import { database, server } from '@uniflow-io/uniflow-api/src/loaders';
 
 export default async function app(): Promise<express.Application> {
   const PORT = config.get('port');
@@ -24,7 +24,6 @@ export default async function app(): Promise<express.Application> {
         process.exit(1);
         return;
       }
-      console.log(`Uniflow api ready on port: ${PORT}`);
 
       resolve(app)
     });

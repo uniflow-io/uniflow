@@ -8,7 +8,7 @@ const envFound = dotenv.config({
 });
 if (!envFound) {
   // Throw generic error
-  throw new Error("Couldn't find .env.local file");
+  throw new Error(`Couldn't find .env.${activeEnv} file`);
 }
 
 const config = convict({
@@ -100,50 +100,43 @@ const config = convict({
       },
     },
   },
-
   port: {
     format: Number,
-    default: 8091,
+    default: 8090,
     arg: 'port',
     env: 'PORT',
     doc: 'HTTP port uniflow can be reached'
   },
-
   jwtSecret: {
     format: String,
     default: 'uniflow',
     env: 'JWT_SECRET',
     doc: 'JWT secret'
   },
-
   facebookAppId: {
     format: String,
     default: '',
     env: 'FACEBOOK_APP_ID',
     doc: 'Facebook App Id'
   },
-
   githubAppId: {
     format: String,
     default: '',
     env: 'GITHUB_APP_ID',
     doc: 'Github App Id'
   },
-
   githubAppSecret: {
     format: String,
     default: '',
     env: 'GITHUB_APP_SECRET',
     doc: 'Github App Secret'
   },
-
   mailerUrl: {
     format: String,
     default: '',
     env: 'MAILER_URL',
     doc: 'Mailer Url'
   },
-
 });
 
 config.validate({

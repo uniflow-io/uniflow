@@ -12,9 +12,23 @@
     <div class="container">
         <div class="py-5 text-center">
             <img class="d-block mx-auto mb-4" src="/icons/icon-512x512.png" alt="Uniflow API" width="72" height="72">
-            <h2>Uniflow API</h2>
+            <h2 id="title">Uniflow API</h2>
             <p><small>From <a href="https://uniflow.io">https://uniflow.io</a></small></p>
         </div>
     </div>
+    <script type="application/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var req = new XMLHttpRequest();
+            req.overrideMimeType("application/json");
+            req.onload  = function() {
+                var data = JSON.parse(req.responseText);
+                var title = `Uniflow API ${data.version}`
+                document.title = title
+                document.getElementById('title').innerText = title
+            };
+            req.open("GET", '/api/version');
+            req.send();
+        });
+    </script>
 </body>
 </html>

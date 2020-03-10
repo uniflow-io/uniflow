@@ -2,7 +2,7 @@ import * as argon2 from 'argon2';
 import request from 'axios'
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import config from '../config';
 import { Exception } from '../exception';
@@ -12,9 +12,7 @@ import { User } from '../models';
 export default class AuthService {
   private userRepository: Repository<User>;
   
-  constructor(
-    @Inject(type => User) user: User
-  ) {
+  constructor() {
     this.userRepository = getRepository(User)
   }
 

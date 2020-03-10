@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { User } from '../models';
 import slugify from "slugify";
@@ -7,9 +7,7 @@ import slugify from "slugify";
 export default class UserService {
   private userRepository: Repository<User>;
 
-  constructor(
-    @Inject(type => User) user: User
-  ) {
+  constructor() {
     this.userRepository = getRepository(User)
   }
 

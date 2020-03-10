@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import * as express from 'express';
 import config from './config';
-import {database, server} from './loaders';
+import { database, server } from './loaders';
 
-export default async function main(): Promise<express.Application> {
+export default async function app(): Promise<express.Application> {
   const PORT = config.get('port');
 
   await database();
@@ -18,7 +18,6 @@ export default async function main(): Promise<express.Application> {
         process.exit(1);
         return;
       }
-      console.log(`Uniflow api ready on port: ${PORT}`);
 
       resolve(app)
     });

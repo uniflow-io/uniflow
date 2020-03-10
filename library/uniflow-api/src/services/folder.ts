@@ -1,5 +1,5 @@
 import slugify from 'slugify'
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import {Folder, User} from '../models';
 
@@ -7,9 +7,7 @@ import {Folder, User} from '../models';
 export default class FolderService {
   private folderRepository: Repository<Folder>;
 
-  constructor(
-    @Inject(type => Folder) folder: Folder
-  ) {
+  constructor() {
     this.folderRepository = getRepository(Folder)
   }
 

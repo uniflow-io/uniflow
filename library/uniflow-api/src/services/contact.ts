@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer'
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Contact } from '../models';
 import config from '../config'
@@ -8,9 +8,7 @@ import config from '../config'
 export default class ContactService {
   private contactRepository: Repository<Contact>;
 
-  constructor(
-    @Inject(type => Contact) contact: Contact
-  ) {
+  constructor() {
     this.contactRepository = getRepository(Contact)
   }
   

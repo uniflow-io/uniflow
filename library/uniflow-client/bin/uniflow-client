@@ -13,7 +13,7 @@ var versionFlags = [
 	'--version'
 ];
 if (versionFlags.includes(process.argv.slice(-1)[0])) {
-	console.log('Uniflow v' + require('../package').version);
+	console.log('Uniflow client v' + require('../package').version);
 	process.exit(0);
 }
 

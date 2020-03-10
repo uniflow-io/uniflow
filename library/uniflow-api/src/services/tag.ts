@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Tag } from '../models';
 
@@ -6,9 +6,7 @@ import { Tag } from '../models';
 export default class TagService {
   private tagRepository: Repository<Tag>;
 
-  constructor(
-    @Inject(type => Tag) tag: Tag
-  ) {
+  constructor() {
     this.tagRepository = getRepository(Tag)
   }
 

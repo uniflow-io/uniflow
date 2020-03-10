@@ -1,3 +1,3 @@
-import app from './app'
+import { Start } from './commands/start'
 
-app();
+Start.run()

@@ -8,11 +8,11 @@ import app from "../app";
 let processExistCode = 0;
 
 export class Start extends Command {
-	static description = 'Starts uniflow.';
+	static description = 'Starts uniflow api.';
 
 	static examples = [
-		`$ uniflow start`,
-		`$ uniflow start -o`,
+		`$ uniflow-api start`,
+		`$ uniflow-api start -o`,
 	];
 
 	static flags = {
@@ -63,7 +63,7 @@ export class Start extends Command {
 				await app();
 
 				const url = `http://localhost:${config.get('port')}`;
-				this.log(`\nUniflow v${require('../../package.json').version} is ready on:\n${url}`);
+				this.log(`\nUniflow api v${require('../../package.json').version} is ready on:\n${url}`);
 
 				// Allow to open uniflow editor by pressing "o"
 				if (Boolean(process.stdout.isTTY) && process.stdin.setRawMode) {

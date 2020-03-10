@@ -1,4 +1,4 @@
-import { Service, Inject } from 'typedi';
+import { Service, Container } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Program, ProgramTag } from '../models';
 import TagService from "./tag";
@@ -8,12 +8,9 @@ export default class ProgramTagService {
   private programTagRepository: Repository<ProgramTag>;
   private tagService: TagService;
 
-  constructor(
-    @Inject(type => ProgramTag) programTag: ProgramTag,
-    @Inject(type => TagService) tagService: TagService
-  ) {
+  constructor() {
     this.programTagRepository = getRepository(ProgramTag)
-    this.tagService = tagService
+    this.tagService = Container.get(TagService)
   }
 
   public async save(programTag: ProgramTag): Promise<ProgramTag> {
