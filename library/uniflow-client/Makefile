@@ -2,17 +2,19 @@
 ##usage :
 ##-------
 
+NPM_BIN = ./node_modules/.bin
+
 build: clean ## build
-	test ! -f .env.local && cp .env .env.local
-	tsc -b
-	oclif-dev manifest
-	GATSBY_ACTIVE_ENV=local gatsby build
+	if [ ! -f .env.local ]; then cp .env .env.local; fi
+	$(NPM_BIN)/tsc -b
+	$(NPM_BIN)/oclif-dev manifest
+	GATSBY_ACTIVE_ENV=local $(NPM_BIN)/gatsby build
 
 clean: ## clean
 	rm -rf .cache dist public
 
 dev: ## dev
-	GATSBY_ACTIVE_ENV=development gatsby develop -p 8090
+	GATSBY_ACTIVE_ENV=development $(NPM_BIN)/gatsby develop -p 8090
 
 serve: build ## serve
 	NODE_ENV=local ./bin/uniflow-client

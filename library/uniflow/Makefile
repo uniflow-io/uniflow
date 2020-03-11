@@ -2,16 +2,18 @@
 ##usage :
 ##-------
 
+NPM_BIN = ./node_modules/.bin
+
 build: clean ## build
-	test ! -f .env.local && cp .env .env.local
-	tsc -b
-	oclif-dev manifest
+	if [ ! -f .env.local ]; then cp .env .env.local; fi
+	$(NPM_BIN)/tsc -b
+	$(NPM_BIN)/oclif-dev manifest
 
 clean: ## clean
 	rm -rf dist database.sqlite oclif.manifest.json
 
 dev: ## dev
-	NODE_ENV=development nodemon
+	NODE_ENV=development $(NPM_BIN)/nodemon
 
 serve: build ## serve
 	NODE_ENV=local ./bin/uniflow

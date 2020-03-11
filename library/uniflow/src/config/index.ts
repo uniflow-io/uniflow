@@ -48,6 +48,12 @@ const config = convict({
         default: '127.0.0.1',
         env: 'DB_MYSQLDB_HOST'
       },
+      user: {
+        doc: 'MySQL User',
+        format: String,
+        default: 'root',
+        env: 'DB_MYSQLDB_USER'
+      },
       password: {
         doc: 'MySQL Password',
         format: String,
@@ -59,12 +65,6 @@ const config = convict({
         format: Number,
         default: 3306,
         env: 'DB_MYSQLDB_PORT'
-      },
-      user: {
-        doc: 'MySQL User',
-        format: String,
-        default: 'root',
-        env: 'DB_MYSQLDB_USER'
       },
     },
     postgresdb: {
@@ -80,6 +80,12 @@ const config = convict({
         default: 'localhost',
         env: 'DB_POSTGRESDB_HOST'
       },
+      user: {
+        doc: 'PostgresDB User',
+        format: String,
+        default: 'root',
+        env: 'DB_POSTGRESDB_USER'
+      },
       password: {
         doc: 'PostgresDB Password',
         format: String,
@@ -91,12 +97,6 @@ const config = convict({
         format: Number,
         default: 5432,
         env: 'DB_POSTGRESDB_PORT'
-      },
-      user: {
-        doc: 'PostgresDB User',
-        format: String,
-        default: 'root',
-        env: 'DB_POSTGRESDB_USER'
       },
     },
   },
