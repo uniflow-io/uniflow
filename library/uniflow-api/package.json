@@ -59,6 +59,7 @@
     "mongodb": "3.5.3",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.4",
+    "open": "^7.0.3",
     "reflect-metadata": "0.1.13",
     "slugify": "^1.4.0",
     "sqlite3": "^4.1.1",

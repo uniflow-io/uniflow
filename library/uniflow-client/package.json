@@ -72,6 +72,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",
+    "open": "^7.0.3",
     "path-to-regexp": "^6.1.0",
     "promise-events": "^0.1.6",
     "react": "^16.12.0",
