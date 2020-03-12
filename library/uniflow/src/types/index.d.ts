@@ -1,4 +1,4 @@
-import { User } from '@uniflow-io/uniflow-api/src/models';
+import { User } from '@uniflow-io/uniflow-api/dist/models';
 
 declare global {
   namespace Express {
