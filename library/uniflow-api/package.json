@@ -34,9 +34,7 @@
     "commands": "./dist/commands",
     "bin": "uniflow-api"
   },
-  "bin": {
-    "uniflow-api": "./bin/uniflow-api"
-  },
+  "bin": "./bin/uniflow-api",
   "scripts": {
     "prepack": "make build",
     "start": "run-script-os",

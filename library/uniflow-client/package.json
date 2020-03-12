@@ -30,9 +30,7 @@
     "commands": "./dist/commands",
     "bin": "uniflow-client"
   },
-  "bin": {
-    "uniflow-client": "./bin/uniflow-client"
-  },
+  "bin": "./bin/uniflow-client",
   "scripts": {
     "prepack": "make build",
     "start": "run-script-os",
