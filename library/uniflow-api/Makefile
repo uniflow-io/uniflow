@@ -2,10 +2,11 @@
 ##usage :
 ##-------
 
+NODE_ENV ?= local
 NPM_BIN = ./node_modules/.bin
 
 build: clean ## build
-	if [ ! -f .env.local ]; then cp .env .env.local; fi
+	if [ ! -f .env.$(NODE_ENV) ]; then cp .env .env.$(NODE_ENV); fi
 	$(NPM_BIN)/tsc -b
 	$(NPM_BIN)/oclif-dev manifest
 
@@ -16,7 +17,7 @@ dev: ## dev
 	NODE_ENV=development $(NPM_BIN)/nodemon
 
 serve: build ## serve
-	NODE_ENV=local ./bin/uniflow-api
+	./bin/uniflow-api
 
 # DEFAULT
 .DEFAULT_GOAL := help

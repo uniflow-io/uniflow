@@ -1,8 +1,14 @@
 const {createFilePath} = require(`gatsby-source-filesystem`)
 const _ = require('lodash')
 const fs = require('fs')
-const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
 const localPackages = '../'
+const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development'
+
+console.log(`Using environment config: '${activeEnv}'`)
+
+require("dotenv").config({
+  path: `.env.${activeEnv}`,
+})
 
 exports.onCreateWebpackConfig = ({stage, loaders, actions}) => {
     const isSSR = stage.includes(`html`)
@@ -11,7 +17,7 @@ exports.onCreateWebpackConfig = ({stage, loaders, actions}) => {
         module: {
           rules: isSSR ? [
               {
-                  test: /brace|remote-browser/,
+                  test: /brace/,
                   use: loaders.null(),
               }
           ] : [],
