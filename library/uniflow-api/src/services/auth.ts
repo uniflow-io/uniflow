@@ -58,7 +58,7 @@ export default class AuthService {
       || await this.userRepository.findOne({ email: username });
 
     if (!userRecord) {
-      throw new Exception('User not found!', 404);
+      throw new Exception('Bad credentials', 401);
     }
     /**
      * We use verify from argon2 to prevent 'timing based' attacks
@@ -74,7 +74,7 @@ export default class AuthService {
        */
       return { user, token };
     } else {
-      throw new Error('Invalid Password');
+      throw new Exception('Bad credentials', 401);
     }
   }
 
