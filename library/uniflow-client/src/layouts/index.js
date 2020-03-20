@@ -237,8 +237,8 @@ class Header extends Component {
             aria-label="Uniflow"
             to={pathTo('home')}
           >
-            <Img
-              fixed={logo.childImageSharp.fixed}
+            <img
+              src={logo.publicURL}
               width="36"
               height="36"
               className="d-block"
@@ -585,14 +585,15 @@ class Layout extends Component {
             }
             logo: file(
               sourceInstanceName: { eq: "images" }
+              relativePath: { eq: "logo.svg" }
+            ) {
+              publicURL
+            }
+            logoSeo: file(
+              sourceInstanceName: { eq: "images" }
               relativePath: { eq: "logo.png" }
             ) {
               publicURL
-              childImageSharp {
-                fixed(width: 36, height: 36) {
-                  ...GatsbyImageSharpFixed
-                }
-              }
             }
             changeLogTags: allChangelogYaml(limit: 1) {
               edges {
@@ -603,7 +604,7 @@ class Layout extends Component {
             }
           }
         `}
-        render={({ site: { siteMetadata }, logo, changeLogTags }) => (
+        render={({ site: { siteMetadata }, logo, logoSeo, changeLogTags }) => (
           <>
             <Helmet>
               <html lang="en" />
@@ -628,7 +629,7 @@ class Layout extends Component {
               <meta property="og:site_name" content={siteMetadata.title} />
               <meta
                 property="og:image"
-                content={`${env.url}${logo.publicURL}`}
+                content={`${env.url}${logoSeo.publicURL}`}
               />
               <meta property="og:image:width" content="512" />
               <meta property="og:image:height" content="512" />
