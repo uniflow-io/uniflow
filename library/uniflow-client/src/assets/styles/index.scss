@@ -3,6 +3,7 @@
 @import "bootstrap/scss/bootstrap";
 
 // bootstrap override
+@import "reboot";
 @import "fonts";
 @import "images";
 @import "forms";
@@ -11,11 +12,13 @@
 @import "nav";
 @import "navbar";
 @import "card";
+@import "badge";
+@import "utilities";
 
 // components
+@import "themes";
 @import "sidebar";
 @import "section";
 @import "timeline";
 @import "user";
 @import "app";
-@import "themes";

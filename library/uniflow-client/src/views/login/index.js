@@ -8,7 +8,7 @@ import {
 import { pathTo } from '../../routes'
 import { commitAddLog } from '../../reducers/logs/actions'
 import { Link, navigate } from 'gatsby'
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -53,24 +53,34 @@ class Login extends Component {
               <article className="card-body">
                 <form>
                   <div className="form-group">
-                    <input
-                      className="form-control"
-                      id="username{{ _uid }}"
-                      type="text"
-                      value={username || ''}
-                      onChange={this.onChangeUsername}
-                      placeholder="Email or Username"
-                    />
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text"><FontAwesomeIcon icon={faUser} /></div>
+                      </div>
+                      <input
+                        className="form-control"
+                        id="username{{ _uid }}"
+                        type="text"
+                        value={username || ''}
+                        onChange={this.onChangeUsername}
+                        placeholder="Email or Username"
+                      />
+                    </div>
                   </div>
                   <div className="form-group">
-                    <input
-                      className="form-control"
-                      id="password{{ _uid }}"
-                      type="password"
-                      value={password || ''}
-                      onChange={this.onChangePassword}
-                      placeholder="Password"
-                    />
+                    <div className="input-group">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text"><FontAwesomeIcon icon={faKey} /></div>
+                      </div>
+                      <input
+                        className="form-control"
+                        id="password{{ _uid }}"
+                        type="password"
+                        value={password || ''}
+                        onChange={this.onChangePassword}
+                        placeholder="Password"
+                      />
+                    </div>
                   </div>
                   <div className="row">
                     <div className="col-md-12">
@@ -87,14 +97,17 @@ class Login extends Component {
                     </div>
                   </div>
                 </form>
-                <p>
-                  <a
-                    href={facebookLoginUrl(env.facebookAppId)}
-                    className="btn btn-block btn-social btn-facebook"
-                  >
-                    <FontAwesomeIcon icon={faFacebookF} /> Login with Facebook
-                  </a>
-                </p>
+                {env.facebookAppId && (
+                  <p>
+                    <a
+                      href={facebookLoginUrl(env.facebookAppId)}
+                      className="btn btn-block btn-social btn-facebook"
+                    >
+                      <FontAwesomeIcon icon={faFacebookF} /> Login with Facebook
+                    </a>
+                  </p>
+                )}
+                {env.githubAppId && (
                 <p>
                   <a
                     href={githubLoginUrl(env.githubAppId)}
@@ -103,6 +116,7 @@ class Login extends Component {
                     <FontAwesomeIcon icon={faGithub} /> Login with Github
                   </a>
                 </p>
+                )}
               </article>
             </div>
             <p>

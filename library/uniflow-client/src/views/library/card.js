@@ -38,7 +38,7 @@ class Card extends Component {
                   </div>
                   <div className="col-auto">
                   {card.fields.catalogs.map((catalog, j) => (
-                    <span key={j} className="badge badge-secondary mr-1">
+                    <span key={j} className="badge badge-light mr-1">
                       {catalog}
                     </span>
                   ))}

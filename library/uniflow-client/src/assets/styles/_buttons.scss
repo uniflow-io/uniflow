@@ -1,3 +1,19 @@
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    background-color: var(--#{$color}-color);
+    border-color: var(--#{$color}-color);
+
+    @include hover {
+      background-color: var(--#{$color}-hover-color);
+      border-color: var(--#{$color}-hover-color);
+    }
+  }
+}
+
+.btn-social {
+  color: var(--text-color);
+}
+
 .btn-social {
   position: relative;
   padding-left: 44px;

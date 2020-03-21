@@ -4,13 +4,13 @@
 
 .navbar-top {
   z-index: 20;
-  position: relative;
   top: 0;
-  background-color: rgba($white, 0.8);
-  border-bottom: 1px solid $light;
+  right: 0;
+  left: 0;
+  background-color: var(--navbar-top-color);
+  border-bottom: 1px solid var(--border-color);
   flex-wrap: nowrap;
-  position: -webkit-sticky;
-  position: sticky;
+  position: fixed;
   transition: background-color .3s,border-color,.3s;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
@@ -22,22 +22,19 @@
     padding-top: $spacer;
     padding-bottom: $spacer;
 
-    color: $navbar-light-color;
+    color: var(--secondary-color);
 
     @include hover-focus {
-      color: $navbar-light-hover-color;
-    }
-
-    &.disabled {
-      color: $navbar-light-disabled-color;
+      color: var(--secondary-hover-color);
     }
 
     &.active {
-      color: $primary;
-      border-bottom: $border-width solid $primary !important;
+      color: var(--primary-color);
+      border-bottom: $border-width solid var(--primary-color) !important;
 
       @include hover-focus {
-        color: $link-hover-color
+        color: var(--primary-hover-color);
+        border-bottom-color: var(--primary-hover-color) !important;
       }
     }
   }

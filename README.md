@@ -1,9 +1,11 @@
 UNIFLOW
 =======
 
-The purpose of Uniflow is to workflow your micro. You have to :
-- Identify in your everyday life, you can think about things that are recurring.
-- Figure about if a something will take less time to automate than doing it straight.
+Uniflow is a Free and Open licensed Workflow Automation Tool.
+
+You have to :
+- Identify in your everyday life, you can think about tasks that are recurring.
+- Figure about if a task will take less time to automate than doing it straight.
 
 This project is a combinaison on [Flow Based Programming](https://jpaulm.github.io/fbp/index.html) and [Railway Oriented Programming](http://fsharpforfunandprofit.com/rop/) named as [Railway Flow Based Programming](https://medium.com/@anton.mishchuk/railway-flow-based-programming-with-flowex-ef04fd338e41).
 

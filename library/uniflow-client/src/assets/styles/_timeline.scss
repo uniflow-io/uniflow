@@ -5,7 +5,7 @@ ul.timeline {
 
 ul.timeline:before {
   content: ' ';
-  background: rgba($black, .2);
+  background: var(--secondary-color);
   display: inline-block;
   position: absolute;
   left: 29px;
@@ -20,11 +20,11 @@ ul.timeline > li {
 
 ul.timeline > li:before {
   content: ' ';
-  background: white;
+  background: var(--bg-color);
   display: inline-block;
   position: absolute;
   border-radius: 50%;
-  border: 3px solid $primary;
+  border: 3px solid var(--primary-color);
   left: 20px;
   width: 20px;
   height: 20px;

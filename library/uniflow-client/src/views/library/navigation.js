@@ -91,12 +91,12 @@ class Navigation extends Component {
                     <span className="link">
                       {card.name}{' '}
                       {card.fields.catalogs.map((catalog, j) => (
-                        <span key={j} className="badge badge-secondary mr-1">
+                        <span key={j} className="badge badge-light mr-1">
                           {catalog}
                         </span>
                       ))}
                     </span>
-                    <span className="text-secondary">{card.description}</span>
+                    <span>{card.description}</span>
                     <Link to={this.itemPathTo(card)}>{card.name}</Link>
                   </li>
                 )

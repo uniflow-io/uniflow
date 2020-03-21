@@ -190,7 +190,7 @@ class Navigation extends Component {
                       {item.type === 'program' && (<>{item.name} </>)}
                       {item.type === 'program' &&
                         item.tags.map((tag, j) => (
-                          <span key={j} className="badge badge-secondary mr-1">
+                          <span key={j} className="badge badge-light mr-1">
                             {tag}
                           </span>
                         ))}

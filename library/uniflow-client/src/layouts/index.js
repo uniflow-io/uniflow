@@ -4,7 +4,6 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import Helmet from 'react-helmet'
 import { Link, graphql, StaticQuery } from 'gatsby'
-import Img from 'gatsby-image'
 import { connect } from 'react-redux'
 import routes, { pathTo } from '../routes'
 import { UserManager } from '../components'
@@ -123,6 +122,13 @@ class Header extends Component {
       })
     ) {
       return 'home'
+    } else if (
+      matchPath(location.pathname, {
+        path: routes.flows.path,
+        exact: true,
+      })
+    ) {
+      return 'flows'
     } else if (
       matchPath(location.pathname, {
         path: routes.doc.path,
@@ -250,10 +256,10 @@ class Header extends Component {
             <ul className="navbar-nav bd-navbar-nav flex-row">
               <li className="nav-item">
                 <Link
-                  className={`nav-link${active === 'home' ? ' active' : ''}`}
-                  to={pathTo('home')}
+                  className={`nav-link${active === 'flows' ? ' active' : ''}`}
+                  to={pathTo('flows')}
                 >
-                  Home
+                  Flows
                 </Link>
               </li>
               {auth.isAuthenticated &&
@@ -454,13 +460,13 @@ class Header extends Component {
             )}
           </ul>
         </header>
-        <ul className="nav nav-bottom fixed-bottom justify-content-center d-flex d-md-none">
+        <ul className="nav nav-bar-bottom fixed-bottom justify-content-center d-flex d-md-none">
           <li className="nav-item">
             <Link
-              className={`nav-link${active === 'home' ? ' active' : ''}`}
-              to={pathTo('home')}
+              className={`nav-link${active === 'flows' ? ' active' : ''}`}
+              to={pathTo('flows')}
             >
-              Home
+              Flows
             </Link>
           </li>
           {auth.isAuthenticated &&
@@ -552,9 +558,9 @@ class Footer extends Component {
     return (
       <footer className="text-muted d-flex border-top">
         <div className="container-fluid">
-          <ul className="nav justify-content-end">
+          <ul className="nav nav-bottom justify-content-end">
             <li className="nav-item">
-              <Link className="nav-link text-secondary" to={pathTo('contact')}>
+              <Link className="nav-link" to={pathTo('contact')}>
                 Contact
               </Link>
             </li>

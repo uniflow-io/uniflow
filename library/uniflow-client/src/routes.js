@@ -9,6 +9,7 @@ import {
   Doc,
   Feed,
   Home,
+  Flows,
   Login,
   FacebookLogin,
   GithubLogin,
@@ -48,6 +49,10 @@ const routes = {
     path: '/register',
     exact: true,
     component: Register,
+  },
+  flows: {
+    path: '/flows',
+    component: Flows,
   },
   contact: {
     path: '/contact',

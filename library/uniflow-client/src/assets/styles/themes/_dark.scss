@@ -1,198 +1,21 @@
-$text-color: #ebf4f1;
-$link-hover-color: darken($primary-color, 15%);
-$primary-color: #007bff;
-$secondary-color: #576068;
-$success-color: #195028;
-$info-color: #17778d;
-$bg-color: #091a28;
-$input-color: #0e2233;
-$input-border-color: #0f2b3d;
-$border-color: #002651;
-$checkbox-color: #007bff;
+$app-themes: () !default;
+$app-themes: map-merge(
+  (
+    "dark": (
+      "text": #EBF4F1,
+      "bg": #091A28,
+      "input": #0E2233,
+      "border": #0F2B3D,
 
-body.theme-dark {
-  color: $text-color;
-  background-color: $bg-color;
-
-  a {
-    color: $primary-color;
-
-    @include hover-focus {
-      color: $link-hover-color;
-    }
-  }
-
-  input {
-    background-color: $input-color;
-    border-color: $input-border-color;
-
-    :focus {
-      box-shadow: inset 0 0 0 1px $primary-color;
-    }
-  }
-
-  .border-top {
-    border-top-color: $border-color !important;
-  }
-
-  .form-control {
-    background-color: $input-color;
-
-    &:focus {
-      background-color: $input-color;
-      border-color: $input-border-color;
-    }
-  }
-
-  .custom-select {
-    background-color: $bg-color;
-  }
-
-  .custom-control-label::before {
-    background-color: darken($primary-color, 20%);
-    border-color: $input-border-color;
-  }
-
-  .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: darken($primary-color, 10%);
-    border-color: $input-border-color;
-  }
-
-  .input-group-text {
-    background-color: $secondary-color;
-    border-color: $border-color;
-    color: darken($text-color, 5%);
-  }
-
-  .btn {
-    color: $text-color;
-  }
-  .btn-secondary {
-    color: darken($text-color, 5%);
-    background-color: $secondary-color;
-    border-color: $secondary-color;
-  }
-  .badge-secondary {
-    color: darken($text-color, 5%);
-    background-color: $secondary-color;
-    border-color: $secondary-color;
-  }
-  .btn-primary {
-    background-color: $primary-color;
-    border-color: $primary-color;
-  }
-  .btn-success {
-    background-color: $success-color;
-    border-color: $success-color;
-  }
-  .btn-info {
-    background-color: $info-color;
-    border-color: $info-color;
-  }
-  .btn-social {
-    color: $text-color;
-  }
-
-  .text-secondary {
-    color: rgba($text-color, 0.8) !important;
-  }
-
-  .navbar-top {
-    background-color: rgba($bg-color, 0.8);
-    border-bottom-color: $border-color;
-  }
-
-  .navbar-nav .nav-link {
-    color: rgba($text-color, 0.8);
-
-    @include hover-focus {
-      color: rgba($text-color, 0.5);
-    }
-
-    &.active {
-      color: $primary-color;
-
-      @include hover-focus {
-        color: $link-hover-color;
-      }
-    }
-  }
-
-  .nav-bottom {
-    border-top: $border-width solid $border-color;
-    background-color: $bg-color !important;
-
-    .nav-link {
-      color: rgba($text-color, 0.8);
-
-      @include hover-focus {
-        color: rgba($text-color, 0.5);
-      }
-
-      &.active {
-        color: $primary-color;
-        border-top: $border-width solid $primary-color !important;
-
-        @include hover-focus {
-          color: $link-hover-color !important;
-        }
-      }
-    }
-  }
-
-  .card {
-    background-color: $bg-color;
-    border: 1px solid $border-color;
-  }
-
-  .sidebar {
-    border-right-color: $border-color;
-  }
-
-  .sidebar-search {
-    border-bottom-color: $border-color;
-  }
-
-  .sidebar-items {
-    li {
-      @include hover-focus {
-        span {
-          color: rgba($text-color, 0.5) !important;
-
-          &.link {
-            color: $link-hover-color !important;
-          }
-        }
-      }
-
-      &.active {
-        span.link {
-          color: $primary-color;
-
-          &:before {
-            background-color: $primary-color;
-          }
-        }
-      }
-
-      span {
-        &.link {
-          color: rgba($text-color, 0.8);
-
-          @include hover-focus {
-            color: darken($primary-color, 15%);
-          }
-        }
-      }
-    }
-  }
-
-  ul.timeline:before {
-    content: ' ';
-    background: $gray-500;
-  }
-
-  ul.timeline > li:before {
-    background: $bg-color;
-  }
-}
+      "primary": #0066CC,
+      "secondary": #576068,
+      "success": #009924,
+      "danger": #99000F,
+      "warning": #997300,
+      "info": #008599,
+      "light": #bdbdbd,
+      "dark": #1A1452,
+    ),
+  ),
+  $app-themes
+);

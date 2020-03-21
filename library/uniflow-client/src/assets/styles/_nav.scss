@@ -1,27 +1,33 @@
 .nav-bottom {
-  border-top: $border-width solid $border-color;
-  background-color: white !important;
+  .nav-link {
+    color: var(--secondary-color);
+
+    @include hover-focus {
+      color: var(--secondary-hover-color);
+    }
+  }
+}
+
+.nav-bar-bottom {
+  border-top: $border-width solid var(--border-color);
+  background-color: var(--bg-color) !important;
 
   .nav-link {
     margin: 0;
     padding-top: $spacer;
     padding-bottom: $spacer;
-    color: $navbar-light-color;
+    color: var(--secondary-color);
 
     @include hover-focus {
-      color: $navbar-light-hover-color;
-    }
-
-    &.disabled {
-      color: $navbar-light-disabled-color;
+      color: var(--secondary-hover-color);
     }
 
     &.active {
-      color: $primary;
-      border-top: $border-width solid $primary !important;
+      color: var(--primary-color);
+      border-top: $border-width solid var(--primary-color) !important;
 
       @include hover-focus {
-        color: $link-hover-color !important;
+        color: var(--primary-hover-color) !important;
       }
     }
   }

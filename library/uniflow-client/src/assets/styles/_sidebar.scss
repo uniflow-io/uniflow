@@ -9,9 +9,9 @@
 
   @include media-breakpoint-up(sm) {
     position: sticky;
-    border-right: 1px solid $light;
+    border-right: 1px solid var(--border-color);
     top: 0;
-    height: 100vh;
+    height: calc(100vh - 60px);
     width: 180px;
   }
 
@@ -29,7 +29,7 @@
   padding: 1rem 15px;
   margin-right: -15px;
   margin-left: -15px;
-  border-bottom: 1px solid $light;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .sidebar-nav {
@@ -43,7 +43,7 @@
   }
 
   @include media-breakpoint-up(sm) {
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - 134px);
     overflow-y: auto;
   }
 }
@@ -55,10 +55,14 @@
 
     @include hover-focus {
       span {
-        color: $navbar-light-hover-color !important;
+        color: var(--text-color) !important;
 
         &.link {
-          color: $link-hover-color !important;
+          color: var(--primary-hover-color) !important;
+
+          &:before {
+            background-color: var(--primary-hover-color) !important;
+          }
         }
       }
     }
@@ -68,7 +72,7 @@
 
       span.link {
         position: relative;
-        color: $link-color;
+        color: var(--primary-color);
 
         &:before {
           content: " ";
@@ -79,7 +83,7 @@
           left: -.8rem;
           top: 55%;
           margin-top: -5px;
-          background-color: $link-color;
+          background-color: var(--primary-color);
           animation: scaleIn .7s forwards;
         }
       }
@@ -87,15 +91,19 @@
 
     &>span {
       display: block;
+      color: var(--secondary-color);
+
+      @include hover-focus {
+        color: var(--secondary-color);
+      }
 
       &.link {
         display: block;
         padding: .25em 0;
         text-decoration: none;
-        color: rgba($black, .5);
 
         @include hover-focus {
-          color: darken($link-color, 15%);
+          color: var(--primary-color);
         }
       }
     }

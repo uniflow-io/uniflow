@@ -1,8 +1,8 @@
 .user {
   overflow: hidden;
-  background-color: $card-bg;
+  background-color: var(--bg-color);
   background-clip: border-box;
-  border: $card-border-width solid $card-border-color;
+  border: $card-border-width solid var(--border-color);
   @include border-radius($card-border-radius);
 }
 

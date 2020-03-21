@@ -19,17 +19,17 @@ class UiItem extends Component {
     if (tag !== 'search') {
       // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
-        '@uniflow-io/assets-flow': () => import('../../../uniflow-flow-assets/src'),
-        '@uniflow-io/bash-flow': () => import('../../../uniflow-flow-bash/src'),
-        '@uniflow-io/canvas-flow': () => import('../../../uniflow-flow-canvas/src'),
-        '@uniflow-io/if-flow': () => import('../../../uniflow-flow-if/src'),
-        '@uniflow-io/javascript-flow': () => import('../../../uniflow-flow-javascript/src'),
-        '@uniflow-io/object-flow': () => import('../../../uniflow-flow-object/src'),
-        '@uniflow-io/prompt-flow': () => import('../../../uniflow-flow-prompt/src'),
-        '@uniflow-io/regex-flow': () => import('../../../uniflow-flow-regex/src'),
-        '@uniflow-io/text-flow': () => import('../../../uniflow-flow-text/src'),
-        '@uniflow-io/text-flow-list': () => import('../../../uniflow-flow-text-list/src'),
-        '@uniflow-io/while-flow': () => import('../../../uniflow-flow-while/src'),
+        '@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
+        '@uniflow-io/uniflow-flow-bash': () => import('../../../uniflow-flow-bash/src'),
+        '@uniflow-io/uniflow-flow-canvas': () => import('../../../uniflow-flow-canvas/src'),
+        '@uniflow-io/uniflow-flow-if': () => import('../../../uniflow-flow-if/src'),
+        '@uniflow-io/uniflow-flow-javascript': () => import('../../../uniflow-flow-javascript/src'),
+        '@uniflow-io/uniflow-flow-object': () => import('../../../uniflow-flow-object/src'),
+        '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
+        '@uniflow-io/uniflow-flow-regex': () => import('../../../uniflow-flow-regex/src'),
+        '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
+        '@uniflow-io/uniflow-flow-text-list': () => import('../../../uniflow-flow-text-list/src'),
+        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),
       }
       TagName = lazy(lasyImports[tag])
     }

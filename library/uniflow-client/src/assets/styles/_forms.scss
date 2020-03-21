@@ -1,7 +1,37 @@
+.form-control {
+  background-color: var(--input-color);
+  border-color: var(--border-color);
+
+  &:focus {
+    background-color: var(--input-color);
+    border-color: var(--border-color);
+  }
+}
+
 .form-sm-horizontal {
   @include media-breakpoint-up(sm) {
     .form-group .col-form-label:first-child {
       text-align: right;
     }
   }
+}
+
+.custom-select {
+  background-color: var(--bg-color);
+}
+
+.custom-control-label::before {
+  background-color: var(--secondary-color);
+  border-color: var(--border-color);
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  background-color: var(--primary-color);
+  border-color: var(--border-color);
+}
+
+.input-group-text {
+  background-color: var(--border-color);
+  border-color: var(--border-color);
+  color: var(--text-color);
 }

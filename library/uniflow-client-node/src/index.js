@@ -14,7 +14,7 @@ function parseArgv(argv) {
 
   // For each argument
   argv.forEach(function(arg, index) {
-    // Seperate argument, for a key/value return
+    // Separate argument, for a key/value return
     arg = arg.split('=')
 
     // Retrieve the argument name

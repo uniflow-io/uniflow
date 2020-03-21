@@ -4,7 +4,7 @@ title: Naming a Flow
 
 A Flow can be anything representing your top layer interface you will interact with.
 
-So it's choosen name must fit what the Flow does.
+So it's chosen name must fit what the Flow does.
 
 As each Flow is implemented for any language, only `package.json` file
 is required at root of the project Flow directory.
