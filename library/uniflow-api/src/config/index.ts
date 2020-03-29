@@ -107,6 +107,12 @@ const config = convict({
     env: 'PORT',
     doc: 'HTTP port uniflow api can be reached'
   },
+  corsAllowOrigin: {
+    format: String,
+    default: '*',
+    env: 'CORS_ALLOW_ORIGIN',
+    doc: 'CORS allow origin'
+  },
   jwtSecret: {
     format: String,
     default: 'uniflow',

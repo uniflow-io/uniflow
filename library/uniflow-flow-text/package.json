@@ -21,6 +21,9 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-flow-text"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "uniflow": {
     "name": "Text",
     "tags": [

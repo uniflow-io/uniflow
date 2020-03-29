@@ -47,7 +47,6 @@ class ObjectFlow extends Component {
   }
 
   transform = () => {
-    let accessor = new PropertyAccessor()
     return this.state.keyValueList.reduce(function(object, item) {
       if (item.key) {
         let value = item.value
@@ -56,7 +55,8 @@ class ObjectFlow extends Component {
         }
 
         try {
-          accessor.setValue(object, item.key, value)
+          let accessor = new PropertyAccessor(object)
+          accessor.set(item.key, value)
         } catch (e) {}
       }
       return object

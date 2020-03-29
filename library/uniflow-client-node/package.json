@@ -21,6 +21,9 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-client-node"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "webpack --mode production -p --progress --colors --config webpack.config.js",
     "dev": "webpack-dev-server --hot --inline -d --progress --colors --config webpack.config.js"

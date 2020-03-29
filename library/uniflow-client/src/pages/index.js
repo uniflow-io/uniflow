@@ -6,7 +6,7 @@ export default ({ location }) => {
   const HomePage = withPage(Home, 'home', {
     location: location,
     title: 'Uniflow',
-    description: 'Workflow your micro',
+    description: 'Unified Workflow Automation Tool',
   })
 
   return <HomePage />

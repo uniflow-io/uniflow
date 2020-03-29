@@ -51,7 +51,7 @@ const Home = () => {
   
   return (
     <>
-      {/*<div className="section-wrapper" style={{
+      <div className="section-wrapper" style={{
         background: `url("data:image/svg+xml;utf8,${svg}")`
       }}>
         <section className="section container vh-100">
@@ -62,7 +62,7 @@ const Home = () => {
             </div>
           </div>
         </section>
-      </div>*/}
+      </div>
       <section className="section container">
         <div className="row py-5">
           <div className="col-lg-12 text-center">

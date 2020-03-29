@@ -12,7 +12,7 @@ module.exports = {
     siteMetadata: {
         title: `Uniflow`,
         siteUrl: `https://uniflow.io`,
-        description: `Workflow your micro`,
+        description: `Unified Workflow Automation Tool`,
         twitter: `@uniflow_io`,
     },
     mapping: {

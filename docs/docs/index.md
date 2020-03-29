@@ -4,7 +4,7 @@ title: Introduction
 
 ## Why ?
 
-Workflow your micro.
+Unified Workflow Automation Tool.
 
 ## How ?
 

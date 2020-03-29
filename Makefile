@@ -7,7 +7,7 @@ LERNA        = node_modules/.bin/lerna
 clean: ## clean
 	$(LERNA) run clean;
 	$(LERNA) clean -y;
-	rm -rf node_modules package-lock.json
+	rm -rf node_modules
 
 install: ## install
 	npm install

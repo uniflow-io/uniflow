@@ -19,6 +19,9 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=8.0.0"
   },

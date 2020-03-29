@@ -20,6 +20,9 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-client"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "bin",
     "dist",

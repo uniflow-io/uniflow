@@ -21,6 +21,9 @@
     "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-flow-regex"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "uniflow": {
     "name": "Regex",
     "tags": [

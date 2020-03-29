@@ -6,7 +6,7 @@ export default ({ location }) => {
   const FlowsPage = withPage(Flows, 'flows', {
     location: location,
     title: 'Uniflow',
-    description: 'Workflow your micro',
+    description: 'Unified Workflow Automation Tool',
   })
 
   return <FlowsPage />

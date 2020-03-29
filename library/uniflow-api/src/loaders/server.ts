@@ -5,10 +5,13 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import routes from '../api/routes';
+import config from '../config';
 
 export default (app: express.Application, staticMiddleware: any) => {
   app.enable('trust proxy');
-  app.use(cors());
+  app.use(cors({
+    "origin": config.get('corsAllowOrigin')
+  }));
   app.use(helmet());
   app.use(bodyParser.json());
   app.use(errors());
