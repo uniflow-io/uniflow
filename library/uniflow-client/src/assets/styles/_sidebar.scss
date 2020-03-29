@@ -11,7 +11,7 @@
     position: sticky;
     border-right: 1px solid var(--border-color);
     top: 0;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 61px);
     width: 180px;
   }
 
@@ -43,7 +43,7 @@
   }
 
   @include media-breakpoint-up(sm) {
-    max-height: calc(100vh - 134px);
+    max-height: calc(100vh - 61px - 74px);
     overflow-y: auto;
   }
 }

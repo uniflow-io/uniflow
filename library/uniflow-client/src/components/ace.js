@@ -12,7 +12,7 @@ import { connect } from 'react-redux'
  */
 class Ace extends Component {
   componentDidMount() {
-    const { value, mode, app } = this.props
+    const { value, mode, app, layout } = this.props
 
     this.silent = false
 
@@ -42,6 +42,12 @@ class Ace extends Component {
     } else if (app.theme === 'sepia') {
       this.editor.setTheme('ace/theme/solarized_light')
     }
+
+    if(layout === 'text') {
+      this.editor.setOptions({
+        maxLines: Infinity
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -63,13 +69,13 @@ class Ace extends Component {
   }
 
   render() {
-    const { width, height } = this.props
+    const { width, height, layout } = this.props
 
     return (
       <div
         ref={container => (this.container = container)}
         style={{
-          height: height ? height + 'px' : '100%',
+          height:  height || layout !== 'text' ? height + 'px' : '100%',
           width: width ? width + 'px' : '100%',
         }}
       />

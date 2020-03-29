@@ -22,6 +22,9 @@ const components = {
       {props.children}
     </a>
   },
+  img: props => <span className="text-center">
+    <img className="img-fluid mx-auto" alt={props.alt} {...props} />
+  </span>,
   Link,
   code: props => {
     let mode = ""
@@ -37,8 +40,8 @@ const components = {
 
     return <code {...props}>
       <Ace
+        layout='text'
         value={props.children}
-        height="200"
         mode={mode}
       />
     </code>
