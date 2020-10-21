@@ -21,4 +21,5 @@ export default jwt({
   userProperty: 'token', // Use req.token to store the JWT
   getToken: getTokenFromHeader, // How to extract the JWT from the request
   credentialsRequired: false,
+  algorithms: ['HS256'],
 });

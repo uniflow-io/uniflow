@@ -7,9 +7,9 @@
     "email": "matyo@uniflow.io"
   },
   "bugs": {
-    "url": "https://github.com/uniflow-io/uniflow/issues"
+    "url": "https://github.com/darkwood-fr/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-flow-object#readme",
+  "homepage": "https://github.com/darkwood-fr/uniflow/tree/master/library/uniflow-flow-object#readme",
   "keywords": [
     "uniflow",
     "uniflow-flow"
@@ -18,7 +18,7 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/uniflow-io/uniflow.git",
+    "url": "https://github.com/darkwood-fr/uniflow.git",
     "directory": "library/uniflow-flow-object"
   },
   "publishConfig": {

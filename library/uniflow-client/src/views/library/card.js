@@ -13,7 +13,7 @@ class Card extends Component {
     let repository = card.repository.url
     let editUrl = null
     if (card.official) {
-      repository = `https://github.com/uniflow-io/uniflow/tree/master/${card.repository.directory}`
+      repository = `https://github.com/darkwood-fr/uniflow/tree/master/${card.repository.directory}`
       editUrl = `${repository}/README.md`
     }
 

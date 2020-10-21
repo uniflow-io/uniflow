@@ -30,10 +30,10 @@ class Changelog extends Component {
                       <a
                         href={
                           items[index + 1]
-                            ? `https://github.com/uniflow-io/uniflow/compare/${
+                            ? `https://github.com/darkwood-fr/uniflow/compare/${
                                 items[index + 1].node.tag
                               }...${items[index].node.tag}`
-                            : `https://github.com/uniflow-io/uniflow/releases/tag/${item.node.tag}`
+                            : `https://github.com/darkwood-fr/uniflow/releases/tag/${item.node.tag}`
                         }
                         target="_blank"
                         rel="noopener noreferrer"

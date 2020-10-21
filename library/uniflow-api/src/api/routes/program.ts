@@ -9,136 +9,7 @@ import {Exception} from "../../exception";
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/program', route);
-
-  route.get(
-    '/:username/list',
-    withToken,
-    withUser,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const userService = Container.get(UserService);
-        const programService = Container.get(ProgramService);
-
-        if(req.params.username === 'me' && !req.user) {
-          throw new Exception('Not authorized', 401);
-        }
-
-        let fetchUser = undefined
-        if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-          fetchUser = req.user
-        } else {
-          fetchUser = await userService.findOneByUsername(req.params.username)
-          if(!fetchUser) {
-            throw new Exception('User not found', 404);
-          }
-        }
-
-        const client = req.params.client
-        let programs = []
-        if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-          programs = await programService.findLastByUserAndClient(fetchUser, client)
-        } else {
-          programs = await programService.findLastPublicByUserAndClient(fetchUser, client)
-        }
-
-        let data = []
-        for(const program of programs) {
-          let item = await programService.getJson(program)
-          
-          data.push(item)
-        }
-
-        return res.json(data).status(200);
-      } catch (e) {
-        console.log(' error ', e);
-        return next(e);
-      }
-    }
-  );
-  
-  const treeRoute = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userService = Container.get(UserService);
-      const programService = Container.get(ProgramService);
-      const folderService = Container.get(FolderService);
-      
-      if(req.params.username === 'me' && !req.user) {
-        throw new Exception('Not authorized', 401);
-      }
-      
-      let fetchUser = undefined
-      if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-        fetchUser = req.user
-      } else {
-        fetchUser = await userService.findOneByUsername(req.params.username)
-        if(!fetchUser) {
-          throw new Exception('User not found', 404);
-        }
-      }
-      
-      const path = [
-        req.params.slug1,
-        req.params.slug2,
-        req.params.slug3,
-        req.params.slug4,
-        req.params.slug5,
-      ].filter((el) => {
-        return !!el;
-      })
-      
-      let parentFolder = undefined
-      if(path.length > 0) {
-        let program = await programService.findOneByUserAndPath(fetchUser, path)
-        if (program) {
-          parentFolder = program.folder
-        } else {
-          parentFolder = await folderService.findOneByUserAndPath(fetchUser, path)
-          if(!parentFolder) {
-            throw new Exception('Program or Folder not found', 404);
-          }
-        }
-      }
-
-      const client = req.params.client
-      let programs = []
-      let folders: Folder[] = []
-      if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-        programs = await programService.findLastByUserAndClientAndFolder(fetchUser, client, parentFolder)
-        folders = await folderService.findByUserAndParent(fetchUser, parentFolder)
-      } else {
-        programs = await programService.findLastPublicByUserAndClientAndFolder(fetchUser, client, parentFolder)
-      }
-      
-      let children = []
-      for(const program of programs) {
-        let item: any = await programService.getJson(program)
-        item['type'] = 'program'
-        children.push(item)
-      }
-      for(const folder of folders) {
-        let item: any = await folderService.getJson(folder)
-        item['type'] = 'folder'
-        children.push(item)
-      }
-
-        return res.json({
-        'folder': parentFolder ? await folderService.getJson(parentFolder) : null,
-        'children': children
-      }).status(200);
-    } catch (e) {
-      console.log(' error ', e);
-      return next(e);
-    }
-  }
-
-  route.get('/:username/tree/:slug1/:slug2/:slug3/:slug4/:slug5', withToken, withUser, treeRoute);
-  route.get('/:username/tree/:slug1/:slug2/:slug3/:slug4', withToken, withUser, treeRoute);
-  route.get('/:username/tree/:slug1/:slug2/:slug3', withToken, withUser, treeRoute);
-  route.get('/:username/tree/:slug1/:slug2', withToken, withUser, treeRoute);
-  route.get('/:username/tree/:slug1', withToken, withUser, treeRoute);
-  route.get('/:username/tree', withToken, withUser, treeRoute);
-
+  app.use('/programs', route);
 
   route.get(
     '/last-public',
@@ -220,7 +91,7 @@ export default (app: Router) => {
   );
 
   route.put(
-    '/update/:id',
+    '/:uid/update',
     celebrate({
       body: Joi.object({
         name: Joi.string(),
@@ -276,7 +147,7 @@ export default (app: Router) => {
   );
 
   route.get(
-    '/get-data/:id',
+    '/:uid/data',
     withToken,
     withUser,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -303,7 +174,7 @@ export default (app: Router) => {
   );
 
   route.put(
-    '/set-data/:id',
+    '/:uid/data',
     withToken,
     requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
@@ -334,7 +205,7 @@ export default (app: Router) => {
   );
 
   route.delete(
-    '/delete/:id',
+    '/:uid/delete',
     withToken,
     requireUser,
     async (req: Request, res: Response, next: NextFunction) => {

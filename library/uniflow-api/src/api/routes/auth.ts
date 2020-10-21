@@ -7,7 +7,7 @@ import { withToken, withUser } from "../middlewares";
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/auth', route);
+  app.use('/', route);
 
   route.post(
     '/register',
@@ -42,7 +42,7 @@ export default (app: Router) => {
         const { username, password } = req.body;
         const authService = Container.get(AuthService);
         const { token } = await authService.login(username, password);
-        return res.json({ token }).status(200);
+        return res.json({ token }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);
@@ -51,7 +51,7 @@ export default (app: Router) => {
   );
 
   route.post(
-    '/login_facebook',
+    '/login-facebook',
     celebrate({
       body: Joi.object({
         access_token: Joi.string().required(),
@@ -64,7 +64,7 @@ export default (app: Router) => {
         const { access_token } = req.body;
         const authService = Container.get(AuthService);
         const { token } = await authService.facebookLogin(access_token, req.user);
-        return res.json({ token }).status(200);
+        return res.json({ token }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);
@@ -73,7 +73,7 @@ export default (app: Router) => {
   );
 
   route.post(
-    '/login_github',
+    '/login-github',
     celebrate({
       body: Joi.object({
         code: Joi.string().required(),
@@ -86,7 +86,7 @@ export default (app: Router) => {
         const { code } = req.body;
         const authService = Container.get(AuthService);
         const { token } = await authService.githubLogin(code, req.user);
-        return res.json({ token }).status(200);
+        return res.json({ token }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);

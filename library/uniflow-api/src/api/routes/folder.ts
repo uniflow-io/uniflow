@@ -1,52 +1,15 @@
 import {NextFunction, Request, Response, Router} from 'express';
-import {requireUser, withToken, withUser} from "../middlewares";
+import {requireUser, withToken} from "../middlewares";
 import {Container} from "typedi";
 import { FolderService } from "../../services";
 import {Folder} from "../../models";
 import {celebrate, Joi} from "celebrate";
 import {Exception} from "../../exception";
-import UserService from "../../services/user";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/folder', route);
-
-  route.get(
-    '/:username/tree',
-    withToken,
-    withUser,
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const folderService = Container.get(FolderService);
-        const userService = Container.get(UserService);
-
-        let fetchUser = undefined
-        if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-          fetchUser = req.user
-        } else {
-          fetchUser = await userService.findOneByUsername(req.params.username)
-          if(!fetchUser) {
-            throw new Exception('User not found', 404);
-          }
-        }
-        
-        let data: string[][] = [[]]
-        const folders = await folderService.findByUser(fetchUser)
-        for (const folder of folders) {
-          data.push(await folderService.toPath(folder))
-        }
-        data.sort((path1, path2) => {
-          return path1.join('/').localeCompare(path2.join('/'))
-        })
-
-        return res.json(data).status(400);
-      } catch (e) {
-        console.log(' error ', e);
-        return next(e);
-      }
-    },
-  );
+  app.use('/folders', route);
   
   route.post(
     '/create',
@@ -86,7 +49,7 @@ export default (app: Router) => {
   );
 
   route.put(
-    '/update/:id',
+    '/:uid/update',
     celebrate({
       body: Joi.object({
         name: Joi.string(),
@@ -129,7 +92,7 @@ export default (app: Router) => {
   );
 
   route.delete(
-    '/delete/:id',
+    '/:uid/delete',
     withToken,
     requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
