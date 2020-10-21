@@ -19,12 +19,12 @@ module.exports = {
         'Mdx.frontmatter.author': 'ContributorsYaml.name'
     },
     plugins: [
-        {
+        /*{
             resolve: `gatsby-source-npm-package-search`,
             options: {
                 keywords: [`uniflow-client`, `uniflow-flow`],
             },
-        },
+        },*/
         `gatsby-plugin-sass`,
         'gatsby-plugin-react-helmet',
         {
