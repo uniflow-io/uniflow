@@ -2,7 +2,7 @@ import {NextFunction, Request, Response, Router} from 'express';
 import {Container} from "typedi";
 import { ContactService } from "../../services";
 import {Contact} from "../../models";
-import {celebrate, Joi} from "celebrate";
+import { celebrate, Joi, Segments } from 'celebrate';
 
 const route = Router();
 
@@ -12,7 +12,7 @@ export default (app: Router) => {
   route.post(
     '/create',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         email: Joi.string(),
         message: Joi.string(),
       }),

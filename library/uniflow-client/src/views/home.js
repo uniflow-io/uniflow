@@ -58,7 +58,7 @@ const Home = () => {
           <div className="row h-100 align-items-center">
             <div className="col-md-12 text-center">
               <h1>Unified Workflow Automation Tool</h1>
-              <p>Take advantage of Railway Flow Based Programming to automate your recurring tasks.</p>
+              <p>Take advantage of Flow Based Programming to automate your recurring tasks.</p>
             </div>
           </div>
         </section>

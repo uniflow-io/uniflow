@@ -3,7 +3,7 @@ import {requireUser, withToken, withUser} from "../middlewares";
 import {Container} from "typedi";
 import { UserService, FolderService, ConfigService, ProgramService } from "../../services";
 import { Config, Folder } from "../../models";
-import {celebrate, Joi} from "celebrate";
+import { celebrate, Joi, Segments } from 'celebrate';
 import {Exception} from "../../exception";
 
 const route = Router();
@@ -30,7 +30,7 @@ export default (app: Router) => {
   route.put(
     '/:uid/settings',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         firstname: Joi.string().allow(null, ''),
         lastname: Joi.string().allow(null, ''),
         username: Joi.string().allow(null, ''),

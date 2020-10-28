@@ -1,4 +1,4 @@
-import { celebrate, Joi } from 'celebrate';
+import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
 import { User } from '../../models';
@@ -12,7 +12,7 @@ export default (app: Router) => {
   route.post(
     '/register',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         email: Joi.string().required(),
         password: Joi.string().required(),
       }),
@@ -32,7 +32,7 @@ export default (app: Router) => {
   route.post(
     '/login',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         username: Joi.string().required(),
         password: Joi.string().required(),
       }),
@@ -53,7 +53,7 @@ export default (app: Router) => {
   route.post(
     '/login-facebook',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         access_token: Joi.string().required(),
       }),
     }),
@@ -75,7 +75,7 @@ export default (app: Router) => {
   route.post(
     '/login-github',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         code: Joi.string().required(),
       }),
     }),

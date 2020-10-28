@@ -3,7 +3,7 @@ import {requireUser, withToken} from "../middlewares";
 import {Container} from "typedi";
 import { FolderService } from "../../services";
 import {Folder} from "../../models";
-import {celebrate, Joi} from "celebrate";
+import { celebrate, Joi, Segments } from 'celebrate';
 import {Exception} from "../../exception";
 
 const route = Router();
@@ -14,7 +14,7 @@ export default (app: Router) => {
   route.post(
     '/create',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         name: Joi.string(),
         slug: Joi.string(),
         path: Joi.array(),
@@ -51,7 +51,7 @@ export default (app: Router) => {
   route.put(
     '/:uid/update',
     celebrate({
-      body: Joi.object({
+      [Segments.BODY]: Joi.object().keys({
         name: Joi.string(),
         slug: Joi.string(),
         path: Joi.array(),

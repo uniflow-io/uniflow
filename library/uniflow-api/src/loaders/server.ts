@@ -1,6 +1,6 @@
 import * as bodyParser from 'body-parser';
 import {NextFunction, Request, Response} from "express";
-import { errors, isCelebrate } from 'celebrate';
+import { errors, isCelebrateError } from 'celebrate';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
@@ -20,7 +20,7 @@ export default (app: express.Application, staticMiddleware: any) => {
   app.use('/', staticMiddleware);
 
   /// catch 404 and forward to error handler
-  app.use((req, res, next) => {
+  app.use((req: Request, re: Response, next: NextFunction) => {
     const error: any = new Error('Not Found');
     error['status'] = 404;
     next(error);
@@ -41,10 +41,10 @@ export default (app: express.Application, staticMiddleware: any) => {
     /**
      * Handle validation error thrown by Celebrate + Joi
      */
-    if (isCelebrate(err)) {
+    if (isCelebrateError(err)) {
       return res
         .status(422)
-        .send({ error: err.joi.details })
+        .send({ error: err.message })
         .end();
     }
     return next(err);

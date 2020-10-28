@@ -63,7 +63,7 @@ export const login = (username, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/auth/login`, {
+        .post(`${server.getBaseUrl()}/api/login`, {
           username: username,
           password: password,
         })
@@ -100,7 +100,7 @@ export const facebookLogin = (access_token, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/auth/login_facebook`,
+          `${server.getBaseUrl()}/api/login-facebook`,
           {
             access_token: access_token,
           },
@@ -145,7 +145,7 @@ export const githubLogin = (code, token = null) => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/auth/login_github`,
+          `${server.getBaseUrl()}/api/login-github`,
           {
             code: code,
           },
@@ -183,7 +183,7 @@ export const register = (email, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/auth/register`, {
+        .post(`${server.getBaseUrl()}/api/register`, {
           email: email,
           password: password,
         })
