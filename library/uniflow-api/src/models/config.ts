@@ -13,7 +13,7 @@ export class Config {
 
   @Column()
   @Generated("uuid")
-  uuid: string;
+  uid: string;
 
   @CreateDateColumn()
   created: Date

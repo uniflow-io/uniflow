@@ -15,7 +15,7 @@ export class Tag {
 
   @Column()
   @Generated("uuid")
-  uuid: string;
+  uid: string;
 
   @Column({
     type: "varchar",
