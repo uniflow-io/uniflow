@@ -5,10 +5,10 @@ import { COMMIT_UPDATE_SETTINGS } from './actions-types'
 import { commitLogoutUser } from '../auth/actions'
 import { commitAddLog } from '../logs/actions'
 
-export const fetchSettings = token => {
+export const fetchSettings = (uid, token) => {
   return dispatch => {
     return request
-      .get(`${server.getBaseUrl()}/api/user/get-settings`, {
+      .get(`${server.getBaseUrl()}/api/users/${uid}/settings`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
@@ -37,7 +37,7 @@ export const updateSettings = (item, token) => {
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/user/set-settings`, data, {
+      .put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },

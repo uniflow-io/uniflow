@@ -23,7 +23,7 @@ class UserManager extends Component {
     const { auth, location } = this.props
 
     if (auth.isAuthenticated) {
-      this.onFetchUser(auth.token)
+      this.onFetchUser(auth.uid, auth.token)
     }
 
     this.onLocation(location)
@@ -33,7 +33,7 @@ class UserManager extends Component {
     const { auth, location } = this.props
 
     if (auth.token !== prevProps.auth.token && auth.isAuthenticated) {
-      this.onFetchUser(auth.token)
+      this.onFetchUser(auth.uid, auth.token)
     }
 
     if (location.href !== prevProps.location.href) {
@@ -68,9 +68,9 @@ class UserManager extends Component {
     }
   }
 
-  onFetchUser = token => {
+  onFetchUser = (uid, token) => {
     Promise.all([
-      this.props.dispatch(fetchSettings(token)),
+      this.props.dispatch(fetchSettings(uid, token)),
     ]).then(() => {
       const { location } = this.props
 

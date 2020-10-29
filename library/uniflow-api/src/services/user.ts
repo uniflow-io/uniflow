@@ -45,6 +45,7 @@ export default class UserService {
   
   public async getJson(user: User): Promise<Object> {
     return {
+      'uid': user.uid,
       'firstname': user.firstname,
       'lastname': user.lastname,
       'username': user.username,

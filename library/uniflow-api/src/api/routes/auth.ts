@@ -20,8 +20,8 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const authService = Container.get(AuthService);
-        const { token } = await authService.register(req.body as User);
-        return res.json({ token }).status(201);
+        const { token, user } = await authService.register(req.body as User);
+        return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);
@@ -41,8 +41,8 @@ export default (app: Router) => {
       try {
         const { username, password } = req.body;
         const authService = Container.get(AuthService);
-        const { token } = await authService.login(username, password);
-        return res.json({ token }).status(201);
+        const { token, user } = await authService.login(username, password);
+        return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);
@@ -63,8 +63,8 @@ export default (app: Router) => {
       try {
         const { access_token } = req.body;
         const authService = Container.get(AuthService);
-        const { token } = await authService.facebookLogin(access_token, req.user);
-        return res.json({ token }).status(201);
+        const { token, user } = await authService.facebookLogin(access_token, req.user);
+        return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);
@@ -85,8 +85,8 @@ export default (app: Router) => {
       try {
         const { code } = req.body;
         const authService = Container.get(AuthService);
-        const { token } = await authService.githubLogin(code, req.user);
-        return res.json({ token }).status(201);
+        const { token, user } = await authService.githubLogin(code, req.user);
+        return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
         console.log(' error ', e);
         return next(e);

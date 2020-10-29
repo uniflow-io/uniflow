@@ -1,6 +1,7 @@
 import { COMMIT_UPDATE_SETTINGS } from './actions-types'
 
 const defaultState = {
+  uid: null,
   apiKey: null,
   username: null,
   firstName: null,
