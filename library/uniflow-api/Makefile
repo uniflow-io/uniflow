@@ -19,8 +19,8 @@ dev: ## dev
 serve: build ## serve
 	./bin/uniflow-api
 
-typeorm-cli:
-	NODE_ENV=development node --require ts-node/register ./node_modules/typeorm/cli.js schema:sync -f ./src/ormconfig.ts
+typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migration:create -n Toto"
+	node --require ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts $(CMD)
 
 # DEFAULT
 .DEFAULT_GOAL := help

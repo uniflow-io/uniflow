@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import * as express from 'express';
-import config from './config';
+import { env } from './config';
 import { database, server } from './loaders';
 
 export default async function app(): Promise<express.Application> {
-  const PORT = config.get('port');
+  const PORT = env.get('port');
 
   await database();
   

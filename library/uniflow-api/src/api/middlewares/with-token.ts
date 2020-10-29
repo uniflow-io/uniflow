@@ -1,5 +1,5 @@
 import * as jwt from 'express-jwt';
-import config from '../../config';
+import { env } from '../../config';
 import {Request} from "express";
 
 /**
@@ -17,7 +17,7 @@ const getTokenFromHeader = (req: any) => {
 };
 
 export default jwt({
-  secret: config.get('jwtSecret'), // The _secret_ to sign the JWTs
+  secret: env.get('jwtSecret'), // The _secret_ to sign the JWTs
   userProperty: 'token', // Use req.token to store the JWT
   getToken: getTokenFromHeader, // How to extract the JWT from the request
   credentialsRequired: false,

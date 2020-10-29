@@ -4,7 +4,7 @@ import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import config from '../config';
+import { env } from '../config';
 import { Exception } from '../exception';
 import { User } from '../models';
 
@@ -83,7 +83,7 @@ export default class AuthService {
     const appResponse = await request.get(`https://graph.facebook.com/app/?access_token=${access_token}`)
 
     // Make sure it's the correct app.
-    if (!appResponse.data.id || appResponse.data.id !== config.get('facebookAppId')) {
+    if (!appResponse.data.id || appResponse.data.id !== env.get('facebookAppId')) {
       throw new Exception('Bad credentials', 401);
     }
 
@@ -125,8 +125,8 @@ export default class AuthService {
   public async githubLogin(code: string, user?: User): Promise<{ user: User; token: string }> {
     // Get the token's Github app.
     const appResponse = await request.post(`https://github.com/login/oauth/access_token`, {
-      'client_id': config.get('githubAppId'),
-      'client_secret': config.get('githubAppSecret'),
+      'client_id': env.get('githubAppId'),
+      'client_secret': env.get('githubAppSecret'),
       'code': code
     }, {
       headers: {
@@ -192,7 +192,7 @@ export default class AuthService {
         name: user.email,
         exp: exp.getTime() / 1000,
       },
-      config.get('jwtSecret'),
+      env.get('jwtSecret'),
     );
   }
 }

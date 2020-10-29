@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Command, flags } from '@oclif/command';
 import * as open from 'open';
 
-import config from '../config';
+import { env } from '../config';
 import app from "../app";
 
 let processExistCode = 0;
@@ -27,7 +27,7 @@ export class Start extends Command {
 	 * Opens the UI in browser
 	 */
 	static openBrowser() {
-    const url = `http://localhost:${config.get('port')}`;
+    const url = `http://localhost:${env.get('port')}`;
 
 		open(url, { wait: true })
 			.catch((error: Error) => {
@@ -62,7 +62,7 @@ export class Start extends Command {
 			try {
 				await app();
 
-				const url = `http://localhost:${config.get('port')}`;
+				const url = `http://localhost:${env.get('port')}`;
 				this.log(`\nUniflow api v${require('../../package.json').version} is ready on:\n${url}`);
 
 				// Allow to open uniflow editor by pressing "o"

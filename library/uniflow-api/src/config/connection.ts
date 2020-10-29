@@ -55,9 +55,10 @@ export default async (): Promise<ConnectionOptions> => {
     entities: [Client, Config, Contact, Folder, Program, ProgramClient, ProgramTag, Tag, User],
     //synchronize: true,
     migrationsTableName: "migration",
-    migrations: ["migrations/*.js"],
+    migrations: ["src/migrations/*.ts"],
     cli: {
-        "migrationsDir": "migrations"
+      "entitiesDir": "src/models",
+      "migrationsDir": "src/migrations"
     },
     logging: false
   });

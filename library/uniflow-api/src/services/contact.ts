@@ -2,7 +2,7 @@ import * as nodemailer from 'nodemailer'
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { Contact } from '../models';
-import config from '../config'
+import { env } from '../config'
 
 @Service()
 export default class ContactService {
@@ -21,7 +21,7 @@ export default class ContactService {
   }
   
   public async send(contact: Contact): Promise<boolean> {
-    const smtpTransporter = nodemailer.createTransport(config.get('mailerUrl'));
+    const smtpTransporter = nodemailer.createTransport(env.get('mailerUrl'));
     await smtpTransporter.sendMail({
       from: 'no-reply@uniflow.io',
       to: 'matyo@uniflow.io',
