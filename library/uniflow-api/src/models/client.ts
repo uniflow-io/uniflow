@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm';
@@ -11,6 +12,10 @@ import {ProgramClient} from "./program-client";
 export class Client {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
 
   @Column({
     type: "varchar",

@@ -19,6 +19,9 @@ dev: ## dev
 serve: build ## serve
 	./bin/uniflow-api
 
+typeorm-cli:
+	NODE_ENV=development node --require ts-node/register ./node_modules/typeorm/cli.js schema:sync -f ./src/ormconfig.ts
+
 # DEFAULT
 .DEFAULT_GOAL := help
 help:

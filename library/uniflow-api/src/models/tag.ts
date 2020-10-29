@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm';
@@ -11,6 +12,10 @@ import {ProgramTag} from "./program-tag";
 export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
 
   @Column({
     type: "varchar",

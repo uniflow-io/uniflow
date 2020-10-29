@@ -1,6 +1,8 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn
 } from 'typeorm';
 
@@ -8,6 +10,10 @@ import {
 export class Config {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
 
   @CreateDateColumn()
   created: Date

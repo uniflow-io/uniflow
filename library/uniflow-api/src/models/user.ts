@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -12,6 +13,10 @@ import {Program} from "./program";
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
   
   @Column({
     type: "varchar",

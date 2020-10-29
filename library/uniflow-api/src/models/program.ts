@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
@@ -15,6 +16,10 @@ import {ProgramTag} from "./program-tag";
 export class Program {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
   
   @Column({
     type: "varchar",

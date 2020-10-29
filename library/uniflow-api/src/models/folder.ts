@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany
@@ -13,6 +14,10 @@ import {Program} from "./program";
 export class Folder {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated("uuid")
+  uuid: string;
 
   @Column({
     type: "varchar",
