@@ -18,4 +18,4 @@ At the same time we wanted a more spaced interface, to make things more Hero con
 Boopstrap 4 was chosen to focus on responsive, mobile-first site 📱.
 
 More over, the [Blog](https://uniflow.io/blog) 📝 and [Doc](https://uniflow.io/docs) 📚 sections are now part of the site.
-Everyone can contribute to theses on [Github](https://github.com/darkwood-fr/uniflow) 
+Everyone can contribute to theses on [Github](https://github.com/uniflow-io/uniflow) 

@@ -17,7 +17,7 @@ The purpose here is : do we use **monolithic repository** or **multiple standalo
 
 There is a great article https://blog.shopsys.com/how-to-maintain-multiple-git-repositories-with-ease-61a5e17152e0 that presents the **pro** and the **con** of both usages.
 
-What we choose for now is **monolithic repository** as the projet grow fast and we got multiple dependencies along all sub repositories and all public contributions will be centralized to https://github.com/darkwood-fr/uniflow.
+What we choose for now is **monolithic repository** as the projet grow fast and we got multiple dependencies along all sub repositories and all public contributions will be centralized to https://github.com/uniflow-io/uniflow.
 
 But the issue when using **monolithic repository** is the fact that you want have both **Public** and **Private** repositories.
 

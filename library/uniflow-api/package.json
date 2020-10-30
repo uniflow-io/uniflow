@@ -7,16 +7,16 @@
     "email": "matyo@uniflow.io"
   },
   "bugs": {
-    "url": "https://github.com/darkwood-fr/uniflow/issues"
+    "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/darkwood-fr/uniflow/tree/master/library/uniflow-api#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-api#readme",
   "keywords": [
     "uniflow"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/darkwood-fr/uniflow.git",
+    "url": "https://github.com/uniflow-io/uniflow.git",
     "directory": "library/uniflow-api"
   },
   "publishConfig": {

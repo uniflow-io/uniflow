@@ -26,7 +26,7 @@ class Index extends Component {
                 </MDXProvider>
                 <p>
                   <a
-                    href={`https://github.com/darkwood-fr/uniflow/tree/master/docs/docs/${doc.parent.relativePath}`}
+                    href={`https://github.com/uniflow-io/uniflow/tree/master/docs/docs/${doc.parent.relativePath}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
