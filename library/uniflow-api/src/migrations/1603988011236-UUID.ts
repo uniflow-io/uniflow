@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner, getRepository, Repository} from "typeorm";
 import {RandomGenerator} from "typeorm/util/RandomGenerator"
-import { User, Folder, Tag, Program, Client, Config, Contact } from '../models';
+import { User, Folder, Tag, Program, Client, Config, Contact } from '../entities';
 
 export class UUID1603988011236 implements MigrationInterface {
     name = 'UUID1603988011236'

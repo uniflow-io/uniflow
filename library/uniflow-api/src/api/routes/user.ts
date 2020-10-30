@@ -2,7 +2,7 @@ import {NextFunction, Request, Response, Router} from 'express';
 import {requireUser, withToken, withUser} from "../middlewares";
 import {Container} from "typedi";
 import { UserService, FolderService, ConfigService, ProgramService } from "../../services";
-import { Config, Folder } from "../../models";
+import { Config, Folder } from "../../entities";
 import { celebrate, Joi, Segments } from 'celebrate';
 import {Exception} from "../../exception";
 

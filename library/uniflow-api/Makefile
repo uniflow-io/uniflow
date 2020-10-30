@@ -22,6 +22,9 @@ serve: build ## serve
 typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migration:create -n Toto"
 	node --require ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts $(CMD)
 
+test: ## test
+	$(NPM_BIN)/jest
+
 # DEFAULT
 .DEFAULT_GOAL := help
 help:

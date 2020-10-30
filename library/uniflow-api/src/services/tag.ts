@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Tag } from '../models';
+import { Tag } from '../entities';
 
 @Service()
 export default class TagService {

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import {Container} from "typedi";
 import { ContactService } from "../../services";
-import {Contact} from "../../models";
+import {Contact} from "../../entities";
 import { celebrate, Joi, Segments } from 'celebrate';
 
 const route = Router();

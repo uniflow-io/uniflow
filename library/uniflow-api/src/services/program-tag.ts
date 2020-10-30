@@ -1,6 +1,6 @@
 import { Service, Container } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Program, ProgramTag } from '../models';
+import { Program, ProgramTag } from '../entities';
 import TagService from "./tag";
 
 @Service()

@@ -1,7 +1,7 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Container } from 'typedi';
-import { User } from '../../models';
+import { User } from '../../entities';
 import { AuthService } from '../../services';
 import { withToken, withUser } from "../middlewares";
 const route = Router();

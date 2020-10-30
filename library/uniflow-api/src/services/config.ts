@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Config } from '../models';
+import { Config } from '../entities';
 
 @Service()
 export default class ConfigService {

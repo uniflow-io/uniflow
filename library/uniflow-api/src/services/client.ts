@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Client } from '../models';
+import { Client } from '../entities';
 
 @Service()
 export default class ClientService {

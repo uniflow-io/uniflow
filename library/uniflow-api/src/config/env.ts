@@ -26,7 +26,7 @@ const config = convict({
         doc: 'sqlite Database',
         format: String,
         default: './database.sqlite',
-        env: 'DB_POSTGRES_DATABASE'
+        env: 'DB_SQLITE_DATABASE'
       }
     },
     mongodb: {

@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { User } from '../models';
+import { User } from '../entities';
 import slugify from "slugify";
 
 @Service()

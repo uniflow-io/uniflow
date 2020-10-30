@@ -6,7 +6,7 @@ import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
 import { env } from '../config';
 import { Exception } from '../exception';
-import { User } from '../models';
+import { User } from '../entities';
 
 @Service()
 export default class AuthService {

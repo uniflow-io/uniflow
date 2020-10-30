@@ -1,7 +1,7 @@
 import * as nodemailer from 'nodemailer'
 import { Service } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Contact } from '../models';
+import { Contact } from '../entities';
 import { env } from '../config'
 
 @Service()

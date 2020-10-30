@@ -1,7 +1,7 @@
 import slugify from 'slugify'
 import { Service, Container } from 'typedi';
 import { Repository, getRepository } from 'typeorm';
-import { Folder, Program, User} from '../models';
+import { Folder, Program, User} from '../entities';
 import { FolderService, ProgramClientService, ProgramTagService } from "./";
 
 @Service()

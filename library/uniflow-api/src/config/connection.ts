@@ -1,8 +1,7 @@
 import Container from 'typedi';
 import { ConnectionOptions } from 'typeorm';
 import env from './env';
-import { Client, Config, Contact, Folder, Program, Tag, User } from '../models';
-import {ProgramClient, ProgramTag} from "../models";
+import { Client, Config, Contact, Folder, Program, ProgramClient, ProgramTag, Tag, User } from '../entities';
 
 export default async (): Promise<ConnectionOptions> => {
   const dbType = await env.get('database.type') as string;
