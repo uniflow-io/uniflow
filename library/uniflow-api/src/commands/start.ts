@@ -3,7 +3,7 @@ import { Command, flags } from '@oclif/command';
 import * as open from 'open';
 
 import { env } from '../config';
-import app from "../app";
+import App from "../app";
 
 let processExistCode = 0;
 
@@ -60,7 +60,8 @@ export class Start extends Command {
 		// Wrap that the process does not close but we can still use async
 		(async () => {
 			try {
-				await app();
+				const app = new App()
+				await app.start();
 
 				const url = `http://localhost:${env.get('port')}`;
 				this.log(`\nUniflow api v${require('../../package.json').version} is ready on:\n${url}`);

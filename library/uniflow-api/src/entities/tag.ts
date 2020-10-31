@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm';
-import {ProgramTag} from "./program-tag";
+import ProgramTag from "./program-tag";
 
 @Entity()
-export class Tag {
+export default class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 

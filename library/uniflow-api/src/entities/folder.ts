@@ -7,11 +7,11 @@ import {
   ManyToOne,
   OneToMany
 } from 'typeorm';
-import {User} from "./user";
-import {Program} from "./program";
+import User from "./user";
+import Program from "./program";
 
 @Entity()
-export class Folder {
+export default class Folder {
   @PrimaryGeneratedColumn()
   id: number;
 

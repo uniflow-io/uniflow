@@ -2,11 +2,11 @@ import {
   Entity,
   ManyToOne,
 } from 'typeorm';
-import {Client} from "./client";
-import {Program} from "./program";
+import Client from "./client";
+import Program from "./program";
 
 @Entity()
-export class ProgramClient {
+export default class ProgramClient {
   @ManyToOne(type => Program, program => program.clients, {
     primary: true
   })

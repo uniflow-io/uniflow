@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany
 } from 'typeorm';
-import {ProgramClient} from "./program-client";
+import ProgramClient from "./program-client";
 
 @Entity()
-export class Client {
+export default class Client {
   @PrimaryGeneratedColumn()
   id: number;
 

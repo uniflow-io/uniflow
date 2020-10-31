@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Config {
+export default class Config {
   @PrimaryGeneratedColumn()
   id: number;
 

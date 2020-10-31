@@ -7,7 +7,7 @@ import * as helmet from 'helmet';
 import routes from '../api/routes';
 import { env } from '../config';
 
-export default (app: express.Application, staticMiddleware: any) => {
+export default (app: express.Application, staticMiddleware: any): express.Application => {
   app.enable('trust proxy');
   app.use(cors({
     "origin": env.get('corsAllowOrigin')
@@ -58,4 +58,6 @@ export default (app: express.Application, staticMiddleware: any) => {
       },
     });
   });
+
+  return app
 };

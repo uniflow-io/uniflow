@@ -2,11 +2,11 @@ import {
   Entity,
   ManyToOne,
 } from 'typeorm';
-import {Tag} from "./tag";
-import {Program} from "./program";
+import Tag from "./tag";
+import Program from "./program";
 
 @Entity()
-export class ProgramTag {
+export default class ProgramTag {
   @ManyToOne(type => Program, program => program.tags, {
     primary: true
   })

@@ -1,9 +1,9 @@
-export { Client } from './client';
-export { Config } from './config';
-export { Contact } from './contact';
-export { Folder } from './folder';
-export { Program } from './program';
-export { ProgramClient } from './program-client';
-export { ProgramTag } from './program-tag';
-export { Tag } from './tag';
-export { User } from './user';
+export { default as Client } from './client';
+export { default as Config } from './config';
+export { default as Contact } from './contact';
+export { default as Folder } from './folder';
+export { default as Program } from './program';
+export { default as ProgramClient } from './program-client';
+export { default as ProgramTag } from './program-tag';
+export { default as Tag } from './tag';
+export { default as User } from './user';

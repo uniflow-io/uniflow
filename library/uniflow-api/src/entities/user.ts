@@ -6,11 +6,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
-import {Folder} from "./folder";
-import {Program} from "./program";
+import Folder from "./folder";
+import Program from "./program";
 
 @Entity()
-export class User {
+export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
