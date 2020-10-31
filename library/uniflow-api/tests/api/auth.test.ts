@@ -1,17 +1,37 @@
+import App from "../../src/app";
+import * as supertest from 'supertest';
+import { expect } from 'chai';
+
 describe('auth', () => {
-    /*beforeAll(async () => {
-        await connection.create();
+    let app: App = new App();
+
+    beforeAll(async () => {
+        await app.start()
     });
 
     afterAll(async () => {
-        await connection.close();
+        await app.close()
     });
 
-    beforeEach(async () => {
-        await connection.clear();
-    });*/
+    it('POST /api/register', (done) => {
+        supertest(app.app())
+            .post('/api/register')
+            .send({
+                email: 'test@gmail.com',
+                password: '1234'
+            })
+            .expect(200)
+            .end((err, res) => {
+                try {
+                    if (err) throw err;
 
-    it('creates a user', () => {
-        // TODO
+                    const { data } = res.body;
+                    expect(data).to.have.all.keys('token', 'uid')
+
+                    return done();
+                } catch (err) {
+                    return done(err);
+                }
+            })
     });
 })

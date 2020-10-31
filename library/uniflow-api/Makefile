@@ -23,7 +23,10 @@ typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migrati
 	node --require ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts $(CMD)
 
 test: ## test
-	$(NPM_BIN)/jest
+	if [ -f database.test.sqlite ]; then rm database.test.sqlite; fi
+	NODE_ENV=test node --require ts-node/register ./node_modules/typeorm/cli.js -f ./src/ormconfig.ts schema:sync
+	NODE_ENV=test $(NPM_BIN)/ts-node --transpile-only ./src/fixtures/index.ts
+	NODE_ENV=test $(NPM_BIN)/jest
 
 # DEFAULT
 .DEFAULT_GOAL := help
