@@ -17,7 +17,7 @@ describe('auth', () => {
         supertest(app.app())
             .post('/api/register')
             .send({
-                email: 'test@gmail.com',
+                email: 'tester@gmail.com',
                 password: '1234'
             })
             .expect(200)
@@ -25,7 +25,7 @@ describe('auth', () => {
                 try {
                     if (err) throw err;
 
-                    const { data } = res.body;
+                    const data = res.body;
                     expect(data).to.have.all.keys('token', 'uid')
 
                     return done();
