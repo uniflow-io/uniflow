@@ -42,7 +42,7 @@ export default (app: Router) => {
           'message': 'Folder not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -85,7 +85,7 @@ export default (app: Router) => {
           'message': 'Folder not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -108,7 +108,7 @@ export default (app: Router) => {
 
         return res.json(true).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },

@@ -23,7 +23,7 @@ export default (app: Router) => {
         const { token, user } = await authService.register(req.body as User);
         return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -44,7 +44,7 @@ export default (app: Router) => {
         const { token, user } = await authService.login(username, password);
         return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -66,7 +66,7 @@ export default (app: Router) => {
         const { token, user } = await authService.facebookLogin(access_token, req.user);
         return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -88,7 +88,7 @@ export default (app: Router) => {
         const { token, user } = await authService.githubLogin(code, req.user);
         return res.json({ token, uid: user.uid }).status(201);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },

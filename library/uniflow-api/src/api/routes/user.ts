@@ -21,7 +21,7 @@ export default (app: Router) => {
         
         return res.json(await userService.getJson(req.user)).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -61,7 +61,7 @@ export default (app: Router) => {
           'message': 'User not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -82,7 +82,7 @@ export default (app: Router) => {
         
         return res.json(await configService.getJson(config)).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -111,7 +111,7 @@ export default (app: Router) => {
           'message': 'Config not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -157,7 +157,7 @@ export default (app: Router) => {
 
         return res.json(data).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     }
@@ -233,7 +233,7 @@ export default (app: Router) => {
         'children': children
       }).status(200);
     } catch (e) {
-      console.log(' error ', e);
+      //console.log(' error ', e);
       return next(e);
     }
   }
@@ -275,7 +275,7 @@ export default (app: Router) => {
 
         return res.json(data).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },

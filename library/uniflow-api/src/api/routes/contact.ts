@@ -34,7 +34,7 @@ export default (app: Router) => {
           'message': 'Contact not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },

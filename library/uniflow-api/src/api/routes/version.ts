@@ -9,7 +9,7 @@ export default (app: Router) => {
           version: `v${require('../../../package.json').version}`
         }).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     }

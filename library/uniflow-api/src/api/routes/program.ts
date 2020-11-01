@@ -34,7 +34,7 @@ export default (app: Router) => {
           'programs': programItems
         }).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     }
@@ -84,7 +84,7 @@ export default (app: Router) => {
           'message': 'Program not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -140,7 +140,7 @@ export default (app: Router) => {
           'message': 'Program not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -167,7 +167,7 @@ export default (app: Router) => {
 
         return res.json({'data': program.data}).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -198,7 +198,7 @@ export default (app: Router) => {
           'message': 'Program not valid',
         }).status(400);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },
@@ -221,7 +221,7 @@ export default (app: Router) => {
 
         return res.json(true).status(200);
       } catch (e) {
-        console.log(' error ', e);
+        //console.log(' error ', e);
         return next(e);
       }
     },

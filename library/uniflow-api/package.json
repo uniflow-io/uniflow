@@ -101,10 +101,7 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "testMatch": [
-      "**/tests/**/*.test.ts",
-      "!**/tests/coverage/**",
-      "!**/tests/utils/**",
-      "!**/tests/images/**"
+      "**/tests/**/*.test.ts"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
