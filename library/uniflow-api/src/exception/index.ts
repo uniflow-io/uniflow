@@ -17,17 +17,8 @@ interface ExtendedErrorInterface {
  * 4. link - Know more link
  */
 class Exception extends Error {
-  constructor(message: string, status: number = 500, code?: string, link?: string) {
+  constructor(message: string, status: number = 500, code?: string) {
     super(message);
-
-    /**
-     * When a link is provided, we append a new line to the error message but only
-     * in the dev mode
-     */
-    const isDev = process.env.NODE_ENV && /dev/i.test(process.env.NODE_ENV);
-    if (isDev && link) {
-      message = `${message}\n> More details: ${link}/${code}`;
-    }
 
     /**
      * Set error message

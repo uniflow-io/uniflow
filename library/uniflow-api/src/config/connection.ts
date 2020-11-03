@@ -1,10 +1,11 @@
 import Container from 'typedi';
 import { ConnectionOptions } from 'typeorm';
-import env from './env';
 import { Client, Config, Contact, Folder, Program, ProgramClient, ProgramTag, Tag, User } from '../entities';
+import * as convict from 'convict';
+import { AppConfig } from './params';
 
-export default async (): Promise<ConnectionOptions> => {
-  const dbType = await env.get('database.type') as string;
+export default async (params: convict.Config<AppConfig>): Promise<ConnectionOptions> => {
+  const dbType = await params.get('database.type') as string;
 
   let connectionOptions: ConnectionOptions
 
@@ -12,7 +13,7 @@ export default async (): Promise<ConnectionOptions> => {
     case 'mongodb':
       connectionOptions = {
         type: 'mongodb',
-        url: await env.get('database.mongodb.connectionUrl') as string,
+        url: await params.get('database.mongodb.connectionUrl') as string,
         useNewUrlParser: true,
       };
       break;
@@ -20,29 +21,29 @@ export default async (): Promise<ConnectionOptions> => {
     case 'postgres':
       connectionOptions = {
         type: 'postgres',
-        database: await env.get('database.postgres.database') as string,
-        host: await env.get('database.postgres.host') as string,
-        password: await env.get('database.postgres.password') as string,
-        port: await env.get('database.postgres.port') as number,
-        username: await env.get('database.postgres.user') as string,
+        database: await params.get('database.postgres.database') as string,
+        host: await params.get('database.postgres.host') as string,
+        password: await params.get('database.postgres.password') as string,
+        port: await params.get('database.postgres.port') as number,
+        username: await params.get('database.postgres.user') as string,
       };
       break;
 
     case 'mysql':
       connectionOptions = {
         type: 'mysql',
-        database: await env.get('database.mysql.database') as string,
-        host: await env.get('database.mysql.host') as string,
-        password: await env.get('database.mysql.password') as string,
-        port: await env.get('database.mysql.port') as number,
-        username: await env.get('database.mysql.user') as string
+        database: await params.get('database.mysql.database') as string,
+        host: await params.get('database.mysql.host') as string,
+        password: await params.get('database.mysql.password') as string,
+        port: await params.get('database.mysql.port') as number,
+        username: await params.get('database.mysql.user') as string
       };
       break;
 
     case 'sqlite':
       connectionOptions = {
         type: 'sqlite',
-        database: await env.get('database.sqlite.database') as string,
+        database: await params.get('database.sqlite.database') as string,
       };
       break;
       

@@ -2,7 +2,7 @@ import App from "../src/app";
 import * as supertest from 'supertest';
 
 describe('front', () => {
-    let app: App = new App();
+    let app: App = new App('test');
 
     beforeAll(async () => {
         await app.start()

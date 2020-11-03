@@ -4,7 +4,7 @@ import { expect, assert } from 'chai';
 import { isUid } from '../utils'
 
 describe('auth', () => {
-    let app: App = new App();
+    let app: App = new App('test');
 
     beforeAll(async () => {
         await app.start()
@@ -75,6 +75,39 @@ describe('auth', () => {
     it('POST /api/login bad credentials', (done) => {
         supertest(app.app())
             .post('/api/login')
+            .send({
+                username: 'test@gmail.com',
+                password: 'badpassword'
+            })
+            .expect(401, done)
+    });
+
+    it('POST /api/login-facebook success', (done) => {
+        supertest(app.app())
+            .post('/api/login-facebook')
+            .send({
+                access_token: 'valid-facebook-token',
+            })
+            .expect(200)
+            .end((err, res) => {
+                try {
+                    if (err) throw err;
+
+                    const data = res.body;
+                    expect(data).to.have.all.keys('token', 'uid')
+
+                    assert.isTrue(isUid(data.uid))
+
+                    return done();
+                } catch (err) {
+                    return done(err);
+                }
+            })
+    });
+
+    it('POST /api/login-facebook bad credentials', (done) => {
+        supertest(app.app())
+            .post('/api/login-facebook')
             .send({
                 username: 'test@gmail.com',
                 password: 'badpassword'
