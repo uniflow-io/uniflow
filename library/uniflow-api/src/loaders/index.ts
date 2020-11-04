@@ -1,2 +1,2 @@
-export { default as database } from './database';
-export { default as server } from './server';
+export { default as DatabaseLoader } from './database-loader';
+export { default as ServerLoader } from './server-loader';

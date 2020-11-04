@@ -1,3 +1,3 @@
-export { default as requireUser } from './require-user';
-export { default as withUser } from './with-user';
-export { default as withToken } from './with-token';
+export { default as RequireUserMiddleware } from './require-user-middleware';
+export { default as WithUserMiddleware } from './with-user-middleware';
+export { default as WithTokenMiddleware } from './with-token-middleware';

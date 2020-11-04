@@ -1,8 +1,10 @@
 import App from "../src/app";
 import * as supertest from 'supertest';
+import Container from "typedi";
 
 describe('front', () => {
-    let app: App = new App('test');
+    Container.set('env', process.env.NODE_ENV || 'test')
+    const app: App = Container.get(App)
 
     beforeAll(async () => {
         await app.start()
@@ -13,7 +15,7 @@ describe('front', () => {
     });
 
     it('GET /', (done) => {
-        supertest(app.app())
+        supertest(app.getApp())
             .get('/')
             .send()
             .expect(200, done);

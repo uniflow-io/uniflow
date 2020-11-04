@@ -1,6 +1,6 @@
-import {MigrationInterface, QueryRunner, getRepository, Repository} from "typeorm";
-import {RandomGenerator} from "typeorm/util/RandomGenerator"
-import { User, Folder, Tag, Program, Client, Config, Contact } from '../entities';
+import { MigrationInterface, QueryRunner, getRepository, Repository } from "typeorm";
+import { RandomGenerator } from "typeorm/util/RandomGenerator"
+import { UserEntity, FolderEntity, TagEntity, ProgramEntity, ClientEntity, ConfigEntity, ContactEntity } from '../entities';
 
 export class UUID1603988011236 implements MigrationInterface {
     name = 'UUID1603988011236'
@@ -22,13 +22,13 @@ export class UUID1603988011236 implements MigrationInterface {
                 await userRepository.save(user)
             }
         }
-        await seedUID(User)
-        await seedUID(Folder)
-        await seedUID(Tag)
-        await seedUID(Program)
-        await seedUID(Client)
-        await seedUID(Config)
-        await seedUID(Contact)
+        await seedUID(UserEntity)
+        await seedUID(FolderEntity)
+        await seedUID(TagEntity)
+        await seedUID(ProgramEntity)
+        await seedUID(ClientEntity)
+        await seedUID(ConfigEntity)
+        await seedUID(ContactEntity)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

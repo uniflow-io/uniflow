@@ -1,9 +1,4 @@
-interface ExtendedErrorInterface {
-  name: string;
-  message: string;
-  code: string;
-  status: number;
-}
+import { ExceptionInterface } from "../types";
 
 /**
  * Exception to extend the error class to allow additional properties.
@@ -79,5 +74,5 @@ class Exception extends Error {
   }
 }
 
-interface Exception extends ExtendedErrorInterface {}
+interface Exception extends ExceptionInterface {}
 export { Exception };

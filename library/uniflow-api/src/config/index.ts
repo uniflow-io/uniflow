@@ -1,2 +1,2 @@
-export { default as connection } from './connection';
-export { default as params } from './params';
+export { default as ConnectionConfig } from './connection-config';
+export { default as ParamsConfig } from './params-config';

@@ -1,54 +1,55 @@
-import 'reflect-metadata';
 import * as express from 'express';
 import * as convict from 'convict'
-import { params } from './config';
-import { database, server } from './loaders';
+import { ParamsConfig } from './config';
+import { DatabaseLoader, ServerLoader } from './loaders';
 import { Server as HttpServer } from 'http';
 import { Connection } from 'typeorm';
-import { AppConfig } from './config/params';
+import { AppConfig } from './config/params-config';
+import { Service } from 'typedi';
 
+@Service()
 export default class App {
-	private _params: convict.Config<AppConfig>
-	private _app: express.Application;
-	private _connection: Connection;
-	private _server: HttpServer;
+	private server: HttpServer;
 
-	constructor(env: string) {
-		this._params = params(env)
+	constructor(
+		private paramsConfig: ParamsConfig,
+		private databaseLoader: DatabaseLoader,
+		private serverLoader: ServerLoader
+	) {}
+
+	public getParams(): convict.Config<AppConfig> {
+		return this.paramsConfig.getConfig();
 	}
 
-	public params(): convict.Config<AppConfig> {
-		return this._params;
+	public getApp(): express.Application {
+		return this.serverLoader.getApp();
 	}
 
-	public app(): express.Application {
-		return this._app;
+	public getConnection(): Connection {
+		return this.databaseLoader.getConnection();
 	}
 
-	public connection(): Connection {
-		return this._connection;
-	}
-
-	public server(): HttpServer {
-		return this._server;
+	public getServer(): HttpServer {
+		return this.server;
 	}
 
 	public async start(): Promise<void> {
-		this._connection = await database(this._params);
+		await this.databaseLoader.load();
+		await this.serverLoader.load()
 		
 		return new Promise((resolve) => {
-			const PORT = this._params.get('port');
-			this._app = server(express(), express.static('./public'));
-			this._app.on('error', (err: any) => {
+			const PORT = this.paramsConfig.getConfig().get('port');
+			const app = this.serverLoader.getApp()
+			app.on('error', (err: any) => {
 				console.log(err);
 				process.exit(1);
 			})
-			this._server = this._app.listen(PORT, resolve);
+			this.server = app.listen(PORT, resolve);
 		})
 	}
 
 	public async close(): Promise<void> {
-		this._server.close();
-		this._connection.close();
+		this.server.close();
+		this.databaseLoader.getConnection().close();
 	}
 }
