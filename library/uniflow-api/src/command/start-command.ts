@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import * as open from 'open';
-import Container from 'typedi';
+import { default as Container } from '../container';
 import { Command, flags } from '@oclif/command';
 import App from "../app";
 
@@ -59,7 +59,6 @@ export default class StartCommand extends Command {
 		// Wrap that the process does not close but we can still use async
 		(async () => {
 			try {
-				Container.set('env', process.env.NODE_ENV || 'development')
 				const app = Container.get(App)
 				await app.start();
 

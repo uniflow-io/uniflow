@@ -1,11 +1,11 @@
 import * as express from 'express';
 import * as convict from 'convict'
+import { Service } from 'typedi';
 import { ParamsConfig } from './config';
 import { DatabaseLoader, ServerLoader } from './loader';
 import { Server as HttpServer } from 'http';
 import { Connection } from 'typeorm';
 import { AppConfig } from './config/params-config';
-import { Service } from 'typedi';
 
 @Service()
 export default class App {

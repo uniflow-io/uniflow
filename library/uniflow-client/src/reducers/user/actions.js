@@ -26,8 +26,8 @@ export const fetchSettings = (uid, token) => {
   }
 }
 export const updateSettings = (item, token) => {
-  return dispatch => {
-    let data = {
+  return async dispatch => {
+    const data = {
       firstname: item.firstname,
       lastname: item.lastname,
       username: item.username,
@@ -36,26 +36,24 @@ export const updateSettings = (item, token) => {
       githubId: item.githubId,
     }
 
-    return request
-      .put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        },
-      })
-      .then(response => {
-        dispatch(commitUpdateSettings(data))
-
-        return data
-      })
-      .catch(error => {
-        if (error.request.status === 400) {
-          dispatch(commitAddLog(error.response.data.message))
-        } else if (error.request.status === 401) {
-          dispatch(commitLogoutUser())
-        } else {
-          throw error
-        }
-      })
+    try {
+      await request
+        .put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
+          headers: {
+            'Uniflow-Authorization': `Bearer ${token}`,
+          },
+        })
+      dispatch(commitUpdateSettings(data))
+      return data
+    } catch (error) {
+      if (error.request.status === 400) {
+        dispatch(commitAddLog(error.response.data.message))
+      } else if (error.request.status === 401) {
+        dispatch(commitLogoutUser())
+      } else {
+        throw error
+      }
+    }
   }
 }
 export const commitUpdateSettings = user => {

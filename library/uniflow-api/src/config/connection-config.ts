@@ -60,10 +60,10 @@ export default class ConnectionConfig {
       entities: [ClientEntity, ConfigEntity, ContactEntity, FolderEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity],
       //synchronize: true,
       migrationsTableName: "migration",
-      migrations: ["src/migrations/*.ts"],
+      migrations: ["src/migration/*.ts"],
       cli: {
-        "entitiesDir": "src/models",
-        "migrationsDir": "src/migrations"
+        "entitiesDir": "src/entity",
+        "migrationsDir": "src/migration"
       },
       logging: false
     });

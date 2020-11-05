@@ -17,15 +17,17 @@ export const commitLoginUserRequest = () => {
   }
 }
 
-export const commitLoginUserSuccess = token => {
+export const commitLoginUserSuccess = (token, uid) => {
   if (typeof window !== `undefined`) {
     window.localStorage.setItem('token', token)
+    window.localStorage.setItem('uid', uid)
   }
 
   return dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_SUCCESS,
       token,
+      uid,
     })
     return Promise.resolve()
   }
@@ -34,6 +36,7 @@ export const commitLoginUserSuccess = token => {
 export const commitLoginUserFailure = (error, message = null) => {
   if (typeof window !== `undefined`) {
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('uid')
   }
 
   return dispatch => {
@@ -49,6 +52,7 @@ export const commitLoginUserFailure = (error, message = null) => {
 export const commitLogoutUser = () => {
   if (typeof window !== `undefined`) {
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('uid')
   }
 
   return dispatch => {
@@ -70,7 +74,7 @@ export const login = (username, password) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -115,7 +119,7 @@ export const facebookLogin = (access_token, token = null) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -160,7 +164,7 @@ export const githubLogin = (code, token = null) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -190,7 +194,7 @@ export const register = (email, password) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({

@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { NextFunction, Request, Response } from "express";
 import { UserService } from '../service';
-import { MiddlewareInterface } from '../type';
+import { MiddlewareInterface } from './interfaces';
 
 @Service()
 export default class WithUserMiddleware implements MiddlewareInterface {
@@ -27,8 +27,7 @@ export default class WithUserMiddleware implements MiddlewareInterface {
         req.user = user;
         return next();
       } catch (e) {
-        console.log(' Error attaching user to req');
-        console.log(e);
+        //console.log(e);
         return next(e);
       }
     }

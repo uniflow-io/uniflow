@@ -1,9 +1,8 @@
-import Container from "typedi";
+import { default as Container } from "./container";
 import { DatabaseLoader } from "./loader";
 import { UserFixture } from "./fixture";
 
 const loadFixtures = async () => {
-    Container.set('env', process.env.NODE_ENV || 'development')
     const databaseLoader = Container.get(DatabaseLoader)
     const userFixture = Container.get(UserFixture)
 

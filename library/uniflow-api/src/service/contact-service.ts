@@ -1,13 +1,13 @@
-import * as nodemailer from 'nodemailer'
-import { Service } from 'typedi';
+import { Inject, Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ContactEntity } from '../entity';
-import { ParamsConfig } from '../config'
+import { MailerInterface } from './mailer/interfaces';
 
 @Service()
 export default class ContactService {
   constructor(
-    private paramsConfig: ParamsConfig
+    @Inject('MailerInterface')
+    private mailer: MailerInterface
   ) {}
 
   private getContactRepository(): Repository<ContactEntity> {
@@ -23,8 +23,7 @@ export default class ContactService {
   }
   
   public async send(contact: ContactEntity): Promise<boolean> {
-    const smtpTransporter = nodemailer.createTransport(this.paramsConfig.getConfig().get('mailerUrl'));
-    await smtpTransporter.sendMail({
+    return await this.mailer.send({
       from: 'no-reply@uniflow.io',
       to: 'matyo@uniflow.io',
       subject: '[Uniflow] Contact',
@@ -109,8 +108,6 @@ export default class ContactService {
 </body>
 </html>`
     })
-    
-    return true;
   }
 
   public async isValid(contact: ContactEntity): Promise<boolean> {

@@ -1,9 +1,9 @@
-import App from "../src/app";
-import * as supertest from 'supertest';
-import Container from "typedi";
+import 'mocha'
+import { testApp } from './utils';
+import { default as Container } from "../src/container"
+import { default as App } from "../src/app";
 
 describe('front', () => {
-    Container.set('env', process.env.NODE_ENV || 'test')
     const app: App = Container.get(App)
 
     beforeAll(async () => {
@@ -15,7 +15,7 @@ describe('front', () => {
     });
 
     it('GET /', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .get('/')
             .send()
             .expect(200, done);

@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import { UserEntity } from '../entity';
 
 declare global {
@@ -10,25 +9,10 @@ declare global {
   }
 }
 
-export interface MiddlewareInterface {
-  middleware(): any;
-}
-
-export interface ControllerInterface {
-  routes(app: Router): Router;
-}
-
-export interface LoaderInterface {
-  load(): Promise<void>;
-}
-
-export interface FixtureInterface {
-  load(): Promise<void>;
-}
-
-export interface ExceptionInterface {
-  name: string;
-  message: string;
-  code: string;
-  status: number;
-}
+export { ControllerInterface } from '../controller/interfaces'
+export { ExceptionInterface } from '../exception/interfaces'
+export { FixtureInterface } from '../fixture/interfaces'
+export { LoaderInterface } from '../loader/interfaces'
+export { MiddlewareInterface } from '../middleware/interfaces'
+export { RequestInterface, RequestConfig, ResponseInterface } from '../service/request/interfaces'
+export { MailerInterface, MailerOptions } from '../service/mailer/interfaces'

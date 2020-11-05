@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import { Service } from 'typedi';
-import { ControllerInterface } from '../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class VersionController implements ControllerInterface {
@@ -9,9 +9,9 @@ export default class VersionController implements ControllerInterface {
       '/version',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          return res.json({
-            version: `v${require('../../../package.json').version}`
-          }).status(200);
+          return res.status(200).json({
+            version: `v${require('../../package.json').version}`
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

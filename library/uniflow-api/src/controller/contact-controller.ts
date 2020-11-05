@@ -3,7 +3,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
 import { ContactService } from "../service";
 import { ContactEntity } from "../entity";
-import { ControllerInterface } from '../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class ContactController implements ControllerInterface {
@@ -32,12 +32,12 @@ export default class ContactController implements ControllerInterface {
             await this.contactService.save(contact)
             await this.contactService.send(contact)
     
-            return res.json(true).status(200);
+            return res.status(201).json(true);
           }
     
-          return res.json({
+          return res.status(400).json({
             'message': 'Contact not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

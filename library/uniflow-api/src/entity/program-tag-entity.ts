@@ -5,7 +5,7 @@ import {
 import { TagEntity, ProgramEntity } from "../entity";
 
 @Entity({
-  name: 'program-tag'
+  name: 'program_tag'
 })
 export default class ProgramTagEntity {
   @ManyToOne(type => ProgramEntity, program => program.tags, {

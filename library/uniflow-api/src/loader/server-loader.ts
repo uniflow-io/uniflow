@@ -7,7 +7,7 @@ import { AuthController, ContactController, FolderController, ProgramController,
 import { NextFunction, Request, Response, Router } from "express";
 import { errors, isCelebrateError } from 'celebrate';
 import { ParamsConfig } from '../config';
-import { LoaderInterface } from '../type';
+import { LoaderInterface } from './interfaces';
 
 @Service()
 export default class ServerLoader implements LoaderInterface {
@@ -80,12 +80,13 @@ export default class ServerLoader implements LoaderInterface {
     });
   
     this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-      res.status(err.status || 500);
-      res.json({
-        errors: {
-          message: err.message,
-        },
-      });
+      res
+        .status(err.status || 500)
+        .json({
+          errors: {
+            message: err.message,
+          },
+        });
     });
   }
 }

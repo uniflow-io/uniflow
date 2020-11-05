@@ -1,11 +1,10 @@
-import * as supertest from 'supertest';
+import 'mocha'
 import { expect, assert } from 'chai';
-import { isUid } from '../utils'
-import { Container } from "typedi";
-import App from "../../src/app";
+import { testApp, isUid } from '../utils'
+import { default as Container } from "../../src/container";
+import { default as App } from "../../src/app";
 
 describe('auth', () => {
-    Container.set('env', process.env.NODE_ENV || 'test')
     const app: App = Container.get(App)
 
     beforeAll(async () => {
@@ -17,13 +16,13 @@ describe('auth', () => {
     });
 
     it('POST /api/register success', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/register')
             .send({
-                email: 'test.register@gmail.com',
-                password: '1234'
+                email: 'user_register@uniflow.io',
+                password: 'user_register'
             })
-            .expect(200)
+            .expect(201)
             .end((err, res) => {
                 try {
                     if (err) throw err;
@@ -41,23 +40,23 @@ describe('auth', () => {
     });
 
     it('POST /api/register already exist', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/register')
             .send({
-                email: 'test@gmail.com',
+                email: 'user@uniflow.io',
                 password: '1234'
             })
             .expect(401, done)
     });
 
     it('POST /api/login success', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/login')
             .send({
-                username: 'test@gmail.com',
-                password: 'test'
+                username: 'user@uniflow.io',
+                password: 'user_password'
             })
-            .expect(200)
+            .expect(201)
             .end((err, res) => {
                 try {
                     if (err) throw err;
@@ -75,22 +74,22 @@ describe('auth', () => {
     });
 
     it('POST /api/login bad credentials', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/login')
             .send({
-                username: 'test@gmail.com',
+                username: 'user@uniflow.io',
                 password: 'badpassword'
             })
             .expect(401, done)
-    });/*
+    });
 
     it('POST /api/login-facebook success', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/login-facebook')
             .send({
                 access_token: 'valid-facebook-token',
             })
-            .expect(200)
+            .expect(201)
             .end((err, res) => {
                 try {
                     if (err) throw err;
@@ -108,12 +107,43 @@ describe('auth', () => {
     });
 
     it('POST /api/login-facebook bad credentials', (done) => {
-        supertest(app.getApp())
+        testApp(app)
             .post('/api/login-facebook')
             .send({
-                username: 'test@gmail.com',
-                password: 'badpassword'
+                access_token: 'invalid-facebook-token',
             })
             .expect(401, done)
-    });*/
+    });
+
+    it('POST /api/login-github success', (done) => {
+        testApp(app)
+            .post('/api/login-github')
+            .send({
+                code: 'valid-github-code',
+            })
+            .expect(201)
+            .end((err, res) => {
+                try {
+                    if (err) throw err;
+
+                    const data = res.body;
+                    expect(data).to.have.all.keys('token', 'uid')
+
+                    assert.isTrue(isUid(data.uid))
+
+                    return done();
+                } catch (err) {
+                    return done(err);
+                }
+            })
+    });
+
+    it('POST /api/login-github bad credentials', (done) => {
+        testApp(app)
+            .post('/api/login-github')
+            .send({
+                code: 'invalid-github-code',
+            })
+            .expect(401, done)
+    });
 })

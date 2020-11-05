@@ -382,10 +382,10 @@ export const setCurrentUsername = username => {
   }
 }
 
-export const getLastPublicPrograms = () => {
+export const getPublicPrograms = () => {
   return dispatch => {
     return request
-      .get(`${server.getBaseUrl()}/api/program/last-public`)
+      .get(`${server.getBaseUrl()}/api/programs/public`)
       .then(response => {
         return response.data.programs
       })

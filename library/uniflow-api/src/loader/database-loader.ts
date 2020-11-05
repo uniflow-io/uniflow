@@ -1,7 +1,7 @@
 import { Service, Container } from 'typedi';
 import { Connection, createConnection, useContainer } from 'typeorm';
 import { ConnectionConfig } from '../config';
-import { LoaderInterface } from '../type';
+import { LoaderInterface } from './interfaces';
 
 @Service()
 export default class DatabaseLoader implements LoaderInterface {

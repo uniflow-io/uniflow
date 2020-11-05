@@ -1,5 +1,4 @@
-import { Container } from 'typedi'
+import { default as Container } from './container'
 import { ConnectionConfig } from './config'
 
-Container.set('env', process.env.NODE_ENV || 'development')
 module.exports = Container.get(ConnectionConfig).getConfig()

@@ -1,18 +1,20 @@
 import * as argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
-import request from 'axios'
 import { randomBytes } from 'crypto';
-import { Service } from 'typedi';
+import { Inject, Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ParamsConfig } from '../config';
 import { Exception } from '../exception';
 import { UserEntity } from '../entity';
+import { RequestInterface } from './request/interfaces';
 
 @Service()
 export default class AuthService {
   constructor(
-    private paramsConfig: ParamsConfig
-  ) { }
+    private paramsConfig: ParamsConfig,
+    @Inject('RequestInterface')
+    private request: RequestInterface
+  ) {}
 
   private getUserRepository(): Repository<UserEntity> {
     return getRepository(UserEntity)
@@ -82,7 +84,7 @@ export default class AuthService {
 
   public async facebookLogin(access_token: string, user?: UserEntity): Promise<{ user: UserEntity; token: string }> {
     // Get the token's Facebook app info.
-    const appResponse = await request.get(`https://graph.facebook.com/app/?access_token=${access_token}`)
+    const appResponse = await this.request.get(`https://graph.facebook.com/app/?access_token=${access_token}`)
 
     // Make sure it's the correct app.
     if (!appResponse.data.id || appResponse.data.id !== this.paramsConfig.getConfig().get('facebookAppId')) {
@@ -90,7 +92,7 @@ export default class AuthService {
     }
 
     // Get the token's Facebook user info.
-    const tokenResponse = await request.get(`https://graph.facebook.com/me/?access_token=${access_token}`)
+    const tokenResponse = await this.request.get(`https://graph.facebook.com/me/?access_token=${access_token}`)
 
     if (!tokenResponse.data.id) {
       throw new Exception('Bad credentials', 401);
@@ -126,7 +128,7 @@ export default class AuthService {
 
   public async githubLogin(code: string, user?: UserEntity): Promise<{ user: UserEntity; token: string }> {
     // Get the token's Github app.
-    const appResponse = await request.post(`https://github.com/login/oauth/access_token`, {
+    const appResponse = await this.request.post(`https://github.com/login/oauth/access_token`, {
       'client_id': this.paramsConfig.getConfig().get('githubAppId'),
       'client_secret': this.paramsConfig.getConfig().get('githubAppSecret'),
       'code': code
@@ -141,8 +143,8 @@ export default class AuthService {
     }
 
     // Get the token's Github user info.
-    const tokenResponse = await request.get(`https://api.github.com/user`, {
-      'headers': {
+    const tokenResponse = await this.request.get(`https://api.github.com/user`, {
+      headers: {
         'Accept': 'application/json',
         'User-Agent': 'Uniflow App',
         'Authorization': `Bearer ${appResponse.data.access_token}`

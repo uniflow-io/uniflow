@@ -1,7 +1,7 @@
 import * as jwt from 'express-jwt';
-import { MiddlewareInterface } from '../type';
+import { MiddlewareInterface } from './interfaces';
 import { Service } from 'typedi';
-import { ParamsConfig } from '../../config';
+import { ParamsConfig } from '../config';
 
 /**
  * We are assuming that the JWT will come in a header with the form

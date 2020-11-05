@@ -4,7 +4,7 @@ import { Service } from 'typedi';
 import { UserEntity } from '../entity';
 import { AuthService } from '../service';
 import { WithTokenMiddleware, WithUserMiddleware } from "../middleware";
-import { ControllerInterface } from '../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class AuthController implements ControllerInterface {
@@ -30,7 +30,7 @@ export default class AuthController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const { token, user } = await this.authService.register(req.body as UserEntity);
-          return res.json({ token, uid: user.uid }).status(201);
+          return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -50,7 +50,7 @@ export default class AuthController implements ControllerInterface {
         try {
           const { username, password } = req.body;
           const { token, user } = await this.authService.login(username, password);
-          return res.json({ token, uid: user.uid }).status(201);
+          return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -71,7 +71,7 @@ export default class AuthController implements ControllerInterface {
         try {
           const { access_token } = req.body;
           const { token, user } = await this.authService.facebookLogin(access_token, req.user);
-          return res.json({ token, uid: user.uid }).status(201);
+          return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -92,7 +92,7 @@ export default class AuthController implements ControllerInterface {
         try {
           const { code } = req.body;
           const { token, user } = await this.authService.githubLogin(code, req.user);
-          return res.json({ token, uid: user.uid }).status(201);
+          return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

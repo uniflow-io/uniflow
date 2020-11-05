@@ -5,7 +5,7 @@ import { RequireUserMiddleware, WithTokenMiddleware } from "../middleware";
 import { FolderService } from "../service";
 import { FolderEntity } from "../entity";
 import { Exception } from "../exception";
-import { ControllerInterface } from '../../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class FolderController implements ControllerInterface {
@@ -42,12 +42,12 @@ export default class FolderController implements ControllerInterface {
           if(await this.folderService.isValid(folder)) {
             await this.folderService.save(folder)
     
-            return res.json(await this.folderService.getJson(folder)).status(200);
+            return res.status(200).json(await this.folderService.getJson(folder));
           }
     
-          return res.json({
+          return res.status(400).json({
             'message': 'Folder not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -83,12 +83,12 @@ export default class FolderController implements ControllerInterface {
           if(await this.folderService.isValid(folder)) {
             await this.folderService.save(folder)
   
-            return res.json(await this.folderService.getJson(folder)).status(200);
+            return res.status(200).json(await this.folderService.getJson(folder));
           }
   
-          return res.json({
+          return res.status(400).json({
             'message': 'Folder not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -109,7 +109,7 @@ export default class FolderController implements ControllerInterface {
   
           await this.folderService.remove(folder)
   
-          return res.json(true).status(200);
+          return res.status(200).json(true);
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

@@ -10,7 +10,9 @@ class Admin extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchConfig(this.props.auth.token)).then(response => {
+    const { auth } = this.props
+
+    this.props.dispatch(fetchConfig(auth.token, auth.uid)).then(response => {
       this.setState({
         config: Object.assign({}, this.state.config, response.data),
       })
@@ -18,13 +20,15 @@ class Admin extends Component {
   }
 
   onUpdate = event => {
+    const { auth } = this.props
+
     if (event) {
       event.preventDefault()
     }
 
     this.setState({ isSaving: true }, () => {
       this.props
-        .dispatch(updateConfig(this.state.config, this.props.auth.token))
+        .dispatch(updateConfig(this.state.config, auth.token, auth.uid))
         .then(() => {
           this.setState({ isSaving: false })
         })

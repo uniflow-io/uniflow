@@ -5,7 +5,7 @@ import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "
 import { UserService, FolderService, ConfigService, ProgramService } from "../service";
 import { ConfigEntity } from "../entity";
 import { Exception } from "../exception";
-import { ControllerInterface } from '../../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class UserController implements ControllerInterface {
@@ -27,10 +27,10 @@ export default class UserController implements ControllerInterface {
     route.get(
       '/:uid/settings',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.requireUser.middleware('ROLE_USER', true),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          return res.json(await this.userService.getJson(req.user)).status(200);
+          return res.status(200).json(await this.userService.getJson(req.user));
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -51,7 +51,7 @@ export default class UserController implements ControllerInterface {
         }),
       }),
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.requireUser.middleware('ROLE_USER', true),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           if(req.body.username && req.body.username !== req.user.username) {
@@ -63,12 +63,12 @@ export default class UserController implements ControllerInterface {
           if(await this.userService.isValid(user)) {
             await this.userService.save(user)
     
-            return res.json(await this.userService.getJson(user)).status(200);
+            return res.status(200).json(await this.userService.getJson(user));
           }
     
-          return res.json({
+          return res.status(400).json({
             'message': 'User not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -77,9 +77,9 @@ export default class UserController implements ControllerInterface {
     );
   
     route.get(
-      '/:uid/config',
+      '/:uid/admin-config',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.requireUser.middleware('ROLE_SUPER_ADMIN', true),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let config = await this.configService.findOne();
@@ -87,7 +87,7 @@ export default class UserController implements ControllerInterface {
             config = new ConfigEntity()
           }
           
-          return res.json(await this.configService.getJson(config)).status(200);
+          return res.status(200).json(await this.configService.getJson(config));
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -96,9 +96,9 @@ export default class UserController implements ControllerInterface {
     );
   
     route.put(
-      '/:uid/config',
+      '/:uid/admin-config',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.requireUser.middleware('ROLE_SUPER_ADMIN', true),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let config = await this.configService.findOne();
@@ -109,12 +109,12 @@ export default class UserController implements ControllerInterface {
           if(await this.configService.isValid(config)) {
             await this.configService.save(config)
     
-            return res.json(await this.configService.getJson(config)).status(200);
+            return res.status(200).json(await this.configService.getJson(config));
           }
     
-          return res.json({
+          return res.status(400).json({
             'message': 'Config not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -157,7 +157,7 @@ export default class UserController implements ControllerInterface {
             data.push(item)
           }
   
-          return res.json(data).status(200);
+          return res.status(200).json(data);
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -226,10 +226,10 @@ export default class UserController implements ControllerInterface {
           children.push(item)
         }
   
-          return res.json({
+          return res.status(200).json({
           'folder': parentFolder ? await this.folderService.getJson(parentFolder) : null,
           'children': children
-        }).status(200);
+        });
       } catch (e) {
         //console.log(' error ', e);
         return next(e);
@@ -268,7 +268,7 @@ export default class UserController implements ControllerInterface {
             return path1.join('/').localeCompare(path2.join('/'))
           })
   
-          return res.json(data).status(400);
+          return res.status(400).json(data);
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

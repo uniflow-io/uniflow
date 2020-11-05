@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
-import { getLastPublicPrograms, feedPathTo } from '../reducers/feed/actions'
+import { getPublicPrograms, feedPathTo } from '../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Flows extends Component {
@@ -13,7 +13,7 @@ class Flows extends Component {
   }
 
   onFetchFlowData = () => {
-    this.props.dispatch(getLastPublicPrograms()).then(programs => {
+    this.props.dispatch(getPublicPrograms()).then(programs => {
       this.setState({ programs: programs })
     })
   }

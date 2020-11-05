@@ -40,5 +40,4 @@ export class UUID1603988011236 implements MigrationInterface {
         await queryRunner.query("ALTER TABLE `folder` DROP COLUMN `uid`");
         await queryRunner.query("ALTER TABLE `user` DROP COLUMN `uid`");
     }
-
 }

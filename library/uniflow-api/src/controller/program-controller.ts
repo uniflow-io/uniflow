@@ -5,7 +5,7 @@ import { ProgramService, ProgramClientService, ProgramTagService, FolderService,
 import { ProgramEntity } from "../entity";
 import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { Exception } from "../exception";
-import { ControllerInterface } from '../../type';
+import { ControllerInterface } from './interfaces';
 
 @Service()
 export default class ProgramController implements ControllerInterface {
@@ -26,7 +26,7 @@ export default class ProgramController implements ControllerInterface {
     app.use('/programs', route);
 
     route.get(
-      '/last-public',
+      '/public',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let programItems = []
@@ -41,9 +41,9 @@ export default class ProgramController implements ControllerInterface {
             })
           }
 
-          return res.json({
+          return res.status(200).json({
             'programs': programItems
-          }).status(200);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -82,12 +82,12 @@ export default class ProgramController implements ControllerInterface {
             await this.programService.save(program)
             await this.tagService.clear()
 
-            return res.json(await this.programService.getJson(program)).status(200);
+            return res.status(200).json(await this.programService.getJson(program));
           }
 
-          return res.json({
+          return res.status(400).json({
             'message': 'Program not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -132,12 +132,12 @@ export default class ProgramController implements ControllerInterface {
             await this.programService.save(program)
             await this.tagService.clear()
 
-            return res.json(await this.programService.getJson(program)).status(200);
+            return res.status(200).json(await this.programService.getJson(program));
           }
 
-          return res.json({
+          return res.status(400).json({
             'message': 'Program not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -162,7 +162,7 @@ export default class ProgramController implements ControllerInterface {
             }
           }
 
-          return res.json({'data': program.data}).status(200);
+          return res.status(200).json({'data': program.data});
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -186,12 +186,12 @@ export default class ProgramController implements ControllerInterface {
           if(await this.programService.isValid(program)) {
             await this.programService.save(program)
 
-            return res.json(true).status(200);
+            return res.status(200).json(true);
           }
 
-          return res.json({
+          return res.status(400).json({
             'message': 'Program not valid',
-          }).status(400);
+          });
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -212,7 +212,7 @@ export default class ProgramController implements ControllerInterface {
 
           await this.programService.remove(program)
 
-          return res.json(true).status(200);
+          return res.status(200).json(true);
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
