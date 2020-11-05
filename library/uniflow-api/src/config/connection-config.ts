@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { ConnectionOptions } from 'typeorm';
-import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entities';
+import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
 import ParamsConfig from './params-config';
 
 @Service()

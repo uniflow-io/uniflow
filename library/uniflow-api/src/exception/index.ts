@@ -1,4 +1,4 @@
-import { ExceptionInterface } from "../types";
+import { ExceptionInterface } from "../type";
 
 /**
  * Exception to extend the error class to allow additional properties.

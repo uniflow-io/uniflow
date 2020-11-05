@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as convict from 'convict'
 import { ParamsConfig } from './config';
-import { DatabaseLoader, ServerLoader } from './loaders';
+import { DatabaseLoader, ServerLoader } from './loader';
 import { Server as HttpServer } from 'http';
 import { Connection } from 'typeorm';
 import { AppConfig } from './config/params-config';

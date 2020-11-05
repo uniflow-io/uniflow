@@ -21,7 +21,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "typeRoots": [
-      "./src/types",
+      "./src/type",
       "./node_modules/@types"
     ]
   },
