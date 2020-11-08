@@ -29,6 +29,12 @@ interface DatabaseConfig {
   },
 }
 
+interface MailChimpConfig {
+  apiKey: string,
+  serverPrefix: string,
+  listId: string,
+}
+
 export type AppConfig = {
   database: DatabaseConfig,
   port: number,
@@ -38,6 +44,7 @@ export type AppConfig = {
   githubAppId: string,
   githubAppSecret: string,
   mailerUrl: string,
+  mailchimp: MailChimpConfig,
 };
 
 @Service()
@@ -185,6 +192,26 @@ export default class ParamsConfig {
         default: '',
         env: 'MAILER_URL',
         doc: 'Mailer Url'
+      },
+      mailchimp: {
+        apiKey: {
+          doc: 'Mailchimp api key',
+          format: String,
+          default: '',
+          env: 'MAILCHIMP_API_KEY'
+        },
+        serverPrefix: {
+          doc: 'Mailchimp server prefix',
+          format: String,
+          default: '',
+          env: 'MAILCHIMP_SERVER_PREFIX'
+        },
+        listId: {
+          doc: 'Mailchimp list Id',
+          format: String,
+          default: '',
+          env: 'MAILCHIMP_LIST_ID'
+        },
       },
     }, {
       env: envConfig

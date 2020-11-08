@@ -3,6 +3,7 @@ export { default as ClientService } from './client-service';
 export { default as ConfigService } from './config-service';
 export { default as ContactService } from './contact-service';
 export { default as FolderService } from './folder-service';
+export { default as LeadService } from './lead-service';
 export { default as ProgramService } from './program-service';
 export { default as ProgramClientService } from './program-client-service';
 export { default as ProgramTagService } from './program-tag-service';

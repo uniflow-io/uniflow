@@ -1,2 +1,2 @@
-export { default as MailerMocked } from './mailer-mocked';
-export { default as Mailer } from './mailer';
+export { default as MockedMailer } from './mocked-mailer';
+export { default as NodeMailer } from './node-mailer';

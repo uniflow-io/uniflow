@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { ConnectionOptions } from 'typeorm';
-import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
+import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
 import ParamsConfig from './params-config';
 
 @Service()
@@ -57,7 +57,7 @@ export default class ConnectionConfig {
     }
   
     Object.assign(connectionOptions, {
-      entities: [ClientEntity, ConfigEntity, ContactEntity, FolderEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity],
+      entities: [ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity],
       //synchronize: true,
       migrationsTableName: "migration",
       migrations: ["src/migration/*.ts"],

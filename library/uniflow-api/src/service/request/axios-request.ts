@@ -3,7 +3,7 @@ import { Service } from 'typedi';
 import { RequestConfig, RequestInterface, ResponseInterface } from './interfaces';
 
 @Service()
-export default class Request implements RequestInterface {
+export default class AxiosRequest implements RequestInterface {
   get(url: string, config?: RequestConfig): Promise<ResponseInterface> {
     return request.get(url, config)
   }

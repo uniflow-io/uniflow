@@ -23,7 +23,7 @@ export default class AuthController implements ControllerInterface {
       '/register',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
-          email: Joi.string().required(),
+          email: Joi.string().required().email(),
           password: Joi.string().required(),
         }),
       }),

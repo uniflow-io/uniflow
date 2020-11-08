@@ -1,2 +1,2 @@
-export { default as RequestMocked } from './request-mocked';
-export { default as Request } from './request';
+export { default as MockedRequest } from './mocked-request';
+export { default as AxiosRequest } from './axios-request';

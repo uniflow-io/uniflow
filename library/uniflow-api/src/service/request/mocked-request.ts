@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import { RequestConfig, RequestInterface, ResponseInterface } from './interfaces';
 
 @Service()
-export default class RequestMocked implements RequestInterface {
+export default class MockedRequest implements RequestInterface {
   get(url: string, config?: RequestConfig): Promise<ResponseInterface> {
     let d = undefined
 
