@@ -25,8 +25,8 @@ export default class StartCommand extends Command {
 	/**
 	 * Opens the UI in browser
 	 */
-	static openBrowser() {
-    	const url = `http://localhost:${env.get('port')}`;
+	static openBrowser(app: App) {
+    	const url = `http://localhost:${app.getParams().get('port')}`;
 
 		open(url, { wait: true })
 			.catch((error: Error) => {
@@ -73,12 +73,12 @@ export default class StartCommand extends Command {
 					let inputText = '';
 
 					if (flags.open) {
-						StartCommand.openBrowser();
+						StartCommand.openBrowser(app);
 					}
 					this.log(`\nPress "o" to open in Browser.`);
 					process.stdin.on("data", (key: string) => {
 						if (key === 'o') {
-							StartCommand.openBrowser();
+							StartCommand.openBrowser(app);
 							inputText = '';
 						} else if (key.charCodeAt(0) === 3) {
 							// Ctrl + c got pressed
