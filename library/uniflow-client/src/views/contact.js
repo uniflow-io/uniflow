@@ -8,7 +8,7 @@ class Contact extends Component {
     email: '',
     message: '',
     errors: {},
-    status: 'form',
+    state: 'form',
   }
 
   onChangeEmail = event => {
@@ -21,33 +21,35 @@ class Contact extends Component {
 
   onSubmit = e => {
     e.preventDefault()
-    
-    this.props
+
+    this.setState({ state: 'sending' }, () => {
+      this.props
       .dispatch(contact(this.state.email, this.state.message))
       .then(data => {
         if (data === true) {
-          this.setState({ status: 'sent' })
+          this.setState({ state: 'sent' })
         }
       })
       .catch(error => {
         if(error instanceof ApiException) {
-          this.setState({ errors: {...error.errors} })
+          this.setState({ state: 'form', errors: {...error.errors} })
         }
       })
+    })
   }
 
   render() {
-    const { email, message, errors, status } = this.state
+    const { email, message, errors, state } = this.state
 
     return (
       <section className="section container-fluid">
         <div className="row">
           <div className="col-md-12">
             <h3>Contact</h3>
-            {status === 'sent' && (
+            {state === 'sent' && (
               <p className="text-center">Your message has been sent</p>
             )}
-            {status === 'form' && [
+            {(state === 'form' || state === 'sending') && [
               <p className="text-center" key="say">
                 You got a question about Uniflow, write more here
                 <br />
@@ -99,6 +101,7 @@ class Contact extends Component {
                   <button
                     type="submit"
                     className="btn btn-primary btn-block btn-flat"
+                    disabled={state === 'sending'}
                     onClick={this.onSubmit}
                   >
                     Send

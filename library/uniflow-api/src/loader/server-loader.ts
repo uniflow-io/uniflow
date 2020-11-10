@@ -3,7 +3,7 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import { Service } from 'typedi';
-import { AuthController, ContactController, FolderController, ProgramController, UserController, VersionController } from '../controller';
+import { AuthController, ContactController, FolderController, LeadController, ProgramController, UserController, VersionController } from '../controller';
 import { NextFunction, Request, Response, Router } from "express";
 import { /*errors, */isCelebrateError } from 'celebrate';
 import { ParamsConfig } from '../config';
@@ -17,6 +17,7 @@ export default class ServerLoader implements LoaderInterface {
     private authController: AuthController,
     private contactController: ContactController,
     private folderController: FolderController,
+    private leadController: LeadController,
     private programController: ProgramController,
     private userController: UserController,
     private versionController: VersionController,
@@ -41,6 +42,7 @@ export default class ServerLoader implements LoaderInterface {
     this.authController.routes(router);
     this.contactController.routes(router);
     this.folderController.routes(router);
+    this.leadController.routes(router);
     this.programController.routes(router);
     this.userController.routes(router);
     this.versionController.routes(router);

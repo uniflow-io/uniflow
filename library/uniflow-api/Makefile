@@ -19,12 +19,12 @@ dev: ## dev
 serve: build ## serve
 	./bin/uniflow-api
 
-typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migration:create -n Toto"
-	node --require ts-node/register $(NPM_BIN)/typeorm -f ./src/ormconfig.ts $(CMD)
+typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migration:generate -n Name"
+	$(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts $(CMD)
 
 test: ## test
 	if [ -f database.test.sqlite ]; then rm database.test.sqlite; fi
-	NODE_ENV=test node --require ts-node/register $(NPM_BIN)/typeorm -f ./src/ormconfig.ts schema:sync
+	NODE_ENV=test $(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts schema:sync
 	NODE_ENV=test $(NPM_BIN)/ts-node --transpile-only ./src/fixtures.ts
 	NODE_ENV=test $(NPM_BIN)/jest --maxWorkers=1
 

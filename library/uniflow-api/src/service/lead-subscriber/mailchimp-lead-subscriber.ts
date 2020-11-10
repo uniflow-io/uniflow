@@ -6,7 +6,7 @@ import { LeadSubscriberOptions, LeadSubscriberInterface } from './interfaces';
 
 @Service()
 export default class MailchimpLeadSubscriber implements LeadSubscriberInterface {
-  private mailchimp
+  private mailchimp: any
 
   constructor(
     private paramsConfig: ParamsConfig,
@@ -24,6 +24,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     await this.mailchimp.lists.setListMember(
       this.paramsConfig.getConfig().get('mailchimp.listId'),
       subscriberHash, {
+        email_address: email,
         status_if_new: "subscribed",
       }
     );
