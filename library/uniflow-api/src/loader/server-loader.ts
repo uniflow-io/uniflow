@@ -5,7 +5,7 @@ import * as helmet from 'helmet';
 import { Service } from 'typedi';
 import { AuthController, ContactController, FolderController, ProgramController, UserController, VersionController } from '../controller';
 import { NextFunction, Request, Response, Router } from "express";
-import { errors, isCelebrateError } from 'celebrate';
+import { /*errors, */isCelebrateError } from 'celebrate';
 import { ParamsConfig } from '../config';
 import { LoaderInterface } from './interfaces';
 
@@ -35,7 +35,7 @@ export default class ServerLoader implements LoaderInterface {
     }));
     this.app.use(helmet());
     this.app.use(bodyParser.json());
-    this.app.use(errors());
+    //this.app.use(errors());
   
     const router = Router();
     this.authController.routes(router);
@@ -63,7 +63,7 @@ export default class ServerLoader implements LoaderInterface {
       if (err.name === 'UnauthorizedError') {
         return res
           .status(err.status)
-          .send({ message: err.message })
+          .send({ messages: [err.message] })
           .end();
       }
   
@@ -71,9 +71,24 @@ export default class ServerLoader implements LoaderInterface {
        * Handle validation error thrown by Celebrate + Joi
        */
       if (isCelebrateError(err)) {
+        const validation: any = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [segment, joiError] of err.details.entries()) {
+          for (const joiErrorItem of joiError.details) {
+            validation.push({
+              source: segment,
+              key: joiErrorItem.path.join('.'),
+              messages: [joiErrorItem.message],
+            })
+          }
+        }
+
         return res
           .status(422)
-          .send({ error: err.message })
+          .send({
+            messages: [err.message],
+            validation: validation,
+          })
           .end();
       }
       return next(err);
@@ -82,11 +97,8 @@ export default class ServerLoader implements LoaderInterface {
     this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
       res
         .status(err.status || 500)
-        .json({
-          errors: {
-            message: err.message,
-          },
-        });
+        .json({ messages: [err.message] })
+        .end();
     });
   }
 }

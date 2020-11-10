@@ -67,7 +67,7 @@ export default class UserController implements ControllerInterface {
           }
     
           return res.status(400).json({
-            'message': 'User not valid',
+            'messages': ['User not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);
@@ -113,7 +113,7 @@ export default class UserController implements ControllerInterface {
           }
     
           return res.status(400).json({
-            'message': 'Config not valid',
+            'messages': ['Config not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);

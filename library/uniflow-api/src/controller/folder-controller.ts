@@ -46,7 +46,7 @@ export default class FolderController implements ControllerInterface {
           }
     
           return res.status(400).json({
-            'message': 'Folder not valid',
+            'messages': ['Folder not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);
@@ -87,7 +87,7 @@ export default class FolderController implements ControllerInterface {
           }
   
           return res.status(400).json({
-            'message': 'Folder not valid',
+            'messages': ['Folder not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);

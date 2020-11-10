@@ -1,5 +1,6 @@
 import request from 'axios'
 import server from '../../utils/server'
+import { ApiException } from '../../exceptions'
 
 export const contact = (email, message) => {
   return dispatch => {
@@ -10,6 +11,9 @@ export const contact = (email, message) => {
       })
       .then(response => {
         return response.data
+      })
+      .catch(error => {
+        throw new ApiException(server.handleErrors(error.response))
       })
   }
 }

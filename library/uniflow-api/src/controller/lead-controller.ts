@@ -33,7 +33,7 @@ export default class LeadController implements ControllerInterface {
           }
     
           return res.status(400).json({
-            'message': 'Lead not valid',
+            'messages': ['Lead not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);

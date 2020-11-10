@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { fetchConfig, updateConfig } from '../reducers/config/actions'
+import { fetchConfig, updateConfig } from '../reducers/user/actions'
 import { connect } from 'react-redux'
 
 class Admin extends Component {

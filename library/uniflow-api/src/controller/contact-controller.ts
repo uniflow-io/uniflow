@@ -20,8 +20,8 @@ export default class ContactController implements ControllerInterface {
       '/create',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
-          email: Joi.string(),
-          message: Joi.string(),
+          email: Joi.string().required().email(),
+          message: Joi.string().required(),
         }),
       }),
       async (req: Request, res: Response, next: NextFunction) => {
@@ -36,7 +36,7 @@ export default class ContactController implements ControllerInterface {
           }
     
           return res.status(400).json({
-            'message': 'Contact not valid',
+            'messages': ['Contact not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);

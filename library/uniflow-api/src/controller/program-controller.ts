@@ -86,7 +86,7 @@ export default class ProgramController implements ControllerInterface {
           }
 
           return res.status(400).json({
-            'message': 'Program not valid',
+            'messages': ['Program not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);
@@ -136,7 +136,7 @@ export default class ProgramController implements ControllerInterface {
           }
 
           return res.status(400).json({
-            'message': 'Program not valid',
+            'messages': ['Program not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);
@@ -190,7 +190,7 @@ export default class ProgramController implements ControllerInterface {
           }
 
           return res.status(400).json({
-            'message': 'Program not valid',
+            'messages': ['Program not valid'],
           });
         } catch (e) {
           //console.log(' error ', e);
