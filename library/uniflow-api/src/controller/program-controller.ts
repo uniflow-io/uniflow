@@ -4,7 +4,7 @@ import { Service} from "typedi";
 import { ProgramService, ProgramClientService, ProgramTagService, FolderService, TagService } from "../service";
 import { ProgramEntity } from "../entity";
 import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
-import { Exception } from "../exception";
+import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 
 @Service()
@@ -114,7 +114,7 @@ export default class ProgramController implements ControllerInterface {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)
           if (!program) {
-            throw new Exception('Program not found', 404);
+            throw new ApiException('Program not found', 404);
           }
           
           program.name = req.body.name
@@ -153,12 +153,12 @@ export default class ProgramController implements ControllerInterface {
         try {
           let program = await this.programService.findOne(req.params.id)
           if (!program) {
-            throw new Exception('Program not found', 404);
+            throw new ApiException('Program not found', 404);
           }
           
           if(!program.public) {
             if(!req.user || program.user.id != req.user.id) {
-              throw new Exception('Not authorized', 401);
+              throw new ApiException('Not authorized', 401);
             }
           }
 
@@ -178,7 +178,7 @@ export default class ProgramController implements ControllerInterface {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)
           if (!program) {
-            throw new Exception('Program not found', 404);
+            throw new ApiException('Program not found', 404);
           }
 
           program.data = req.body.data
@@ -207,7 +207,7 @@ export default class ProgramController implements ControllerInterface {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)
           if (!program) {
-            throw new Exception('Program not found', 404);
+            throw new ApiException('Program not found', 404);
           }
 
           await this.programService.remove(program)

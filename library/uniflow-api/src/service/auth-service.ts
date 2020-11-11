@@ -4,7 +4,7 @@ import { randomBytes } from 'crypto';
 import { Inject, Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ParamsConfig } from '../config';
-import { Exception } from '../exception';
+import { ApiException } from '../exception';
 import { UserEntity } from '../entity';
 import { RequestInterface } from './request/interfaces';
 
@@ -52,7 +52,7 @@ export default class AuthService {
       Reflect.deleteProperty(user, 'salt');
       return { user, token };
     } catch (error) {
-      throw new Exception('Not authorized', 401);
+      throw new ApiException('Not authorized', 401);
     }
   }
 
@@ -62,7 +62,7 @@ export default class AuthService {
       || await this.getUserRepository().findOne({ email: username });
 
     if (!userRecord) {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
     /**
      * We use verify from argon2 to prevent 'timing based' attacks
@@ -78,7 +78,7 @@ export default class AuthService {
        */
       return { user, token };
     } else {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
   }
 
@@ -88,14 +88,14 @@ export default class AuthService {
 
     // Make sure it's the correct app.
     if (!appResponse.data.id || appResponse.data.id !== this.paramsConfig.getConfig().get('facebookAppId')) {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
 
     // Get the token's Facebook user info.
     const tokenResponse = await this.request.get(`https://graph.facebook.com/me/?access_token=${access_token}`)
 
     if (!tokenResponse.data.id) {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
 
     const facebookId = tokenResponse.data.id;
@@ -139,7 +139,7 @@ export default class AuthService {
     })
 
     if (!appResponse.data.access_token) {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
 
     // Get the token's Github user info.
@@ -153,7 +153,7 @@ export default class AuthService {
 
     // Try to fetch user by it's token ID, create it otherwise.
     if (!tokenResponse.data.id) {
-      throw new Exception('Bad credentials', 401);
+      throw new ApiException('Bad credentials', 401);
     }
 
     const githubId = tokenResponse.data.id;

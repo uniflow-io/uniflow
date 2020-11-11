@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../service';
-import { Exception } from "../exception";
+import { ApiException } from "../exception";
 import { MiddlewareInterface } from './interfaces';
 import { UserEntity } from '../entity';
 
@@ -42,21 +42,21 @@ export default class RequireUserMiddleware implements MiddlewareInterface {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
         if (!req.token) {
-          throw new Exception('Not authorized', 401);
+          throw new ApiException('Not authorized', 401);
         }
         
         const userRecord = await this.userService.findOne(req.token.id);
         if (!userRecord) {
-          throw new Exception('Not authorized', 401);
+          throw new ApiException('Not authorized', 401);
         }
 
         if(!this.isGranted(userRecord, [role])) {
-          throw new Exception('Not authorized', 401);
+          throw new ApiException('Not authorized', 401);
         }
 
         if(isSameUser) {
           if(req.params.uid !== userRecord.uid) {
-            throw new Exception('Not authorized', 401);
+            throw new ApiException('Not authorized', 401);
           }
         }
         

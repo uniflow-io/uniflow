@@ -4,7 +4,7 @@ import { NextFunction, Request, Response, Router} from 'express';
 import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { UserService, FolderService, ConfigService, ProgramService } from "../service";
 import { ConfigEntity } from "../entity";
-import { Exception } from "../exception";
+import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 
 @Service()
@@ -129,7 +129,7 @@ export default class UserController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           if(req.params.username === 'me' && !req.user) {
-            throw new Exception('Not authorized', 401);
+            throw new ApiException('Not authorized', 401);
           }
   
           let fetchUser = undefined
@@ -138,7 +138,7 @@ export default class UserController implements ControllerInterface {
           } else {
             fetchUser = await this.userService.findOneByUsername(req.params.username)
             if(!fetchUser) {
-              throw new Exception('User not found', 404);
+              throw new ApiException('User not found', 404);
             }
           }
   
@@ -168,7 +168,7 @@ export default class UserController implements ControllerInterface {
     /*const treeRoute = async (req: Request, res: Response, next: NextFunction) => {
       try {
         if(req.params.username === 'me' && !req.user) {
-          throw new Exception('Not authorized', 401);
+          throw new ApiException('Not authorized', 401);
         }
         
         let fetchUser = undefined
@@ -177,7 +177,7 @@ export default class UserController implements ControllerInterface {
         } else {
           fetchUser = await this.userService.findOneByUsername(req.params.username)
           if(!fetchUser) {
-            throw new Exception('User not found', 404);
+            throw new ApiException('User not found', 404);
           }
         }
         
@@ -199,7 +199,7 @@ export default class UserController implements ControllerInterface {
           } else {
             parentFolder = await this.folderService.findOneByUserAndPath(fetchUser, path)
             if(!parentFolder) {
-              throw new Exception('Program or Folder not found', 404);
+              throw new ApiException('Program or Folder not found', 404);
             }
           }
         }
@@ -255,7 +255,7 @@ export default class UserController implements ControllerInterface {
           } else {
             fetchUser = await this.userService.findOneByUsername(req.params.username)
             if(!fetchUser) {
-              throw new Exception('User not found', 404);
+              throw new ApiException('User not found', 404);
             }
           }
           

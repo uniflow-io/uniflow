@@ -4,7 +4,7 @@ import { Service } from "typedi";
 import { RequireUserMiddleware, WithTokenMiddleware } from "../middleware";
 import { FolderService } from "../service";
 import { FolderEntity } from "../entity";
-import { Exception } from "../exception";
+import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 
 @Service()
@@ -70,7 +70,7 @@ export default class FolderController implements ControllerInterface {
         try {
           let folder = await this.folderService.findOneByUser(req.user, req.params.id)
           if (!folder) {
-            throw new Exception('Folder not found', 404);
+            throw new ApiException('Folder not found', 404);
           }
           
           folder.name = req.body.name
@@ -104,7 +104,7 @@ export default class FolderController implements ControllerInterface {
         try {
           let folder = await this.folderService.findOneByUser(req.user, req.params.id)
           if (!folder) {
-            throw new Exception('Folder not found', 404);
+            throw new ApiException('Folder not found', 404);
           }
   
           await this.folderService.remove(folder)
