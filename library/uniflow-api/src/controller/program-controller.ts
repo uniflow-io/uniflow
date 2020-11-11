@@ -26,11 +26,11 @@ export default class ProgramController implements ControllerInterface {
     app.use('/programs', route);
 
     route.get(
-      '/public',
+      '/',
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let programItems = []
-          const programs = await this.programService.findLastPublic(15)
+          const programs = await this.programService.findPublic()
           for(const program of programs) {
             programItems.push({
               'name': program.name,

@@ -15,9 +15,9 @@ describe('auth', () => {
         await app.close()
     });
 
-    it('GET /api/programs/public success', (done) => {
+    it('GET /api/programs success', (done) => {
         testApp(app)
-            .get('/api/programs/public')
+            .get('/api/programs')
             .expect(200)
             .end((err, res) => {
                 try {

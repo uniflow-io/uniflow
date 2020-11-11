@@ -73,7 +73,7 @@ export default class ProgramService {
     return await qb.getOne();
   }
 
-  public async findLastPublic(limit?: number): Promise<ProgramEntity[]> {
+  public async findPublic(limit?: number): Promise<ProgramEntity[]> {
     let qb = this.getProgramRepository().createQueryBuilder('p')
       .select('p')
       .leftJoinAndSelect('p.user', 'u')
