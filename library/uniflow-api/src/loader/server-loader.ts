@@ -5,7 +5,7 @@ import * as helmet from 'helmet';
 import { Service } from 'typedi';
 import { AuthController, ContactController, FolderController, LeadController, ProgramController, UserController, VersionController } from '../controller';
 import { NextFunction, Request, Response, Router } from "express";
-import { /*errors, */isCelebrateError } from 'celebrate';
+import { isCelebrateError } from 'celebrate';
 import { ParamsConfig } from '../config';
 import { LoaderInterface } from './interfaces';
 
@@ -36,7 +36,6 @@ export default class ServerLoader implements LoaderInterface {
     }));
     this.app.use(helmet());
     this.app.use(bodyParser.json());
-    //this.app.use(errors());
   
     const router = Router();
     this.authController.routes(router);

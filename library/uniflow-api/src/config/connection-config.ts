@@ -55,15 +55,22 @@ export default class ConnectionConfig {
       default:
         throw new Error(`The database "${dbType}" is currently not supported!`);
     }
+
+    let basePath = './src'
+    let extension = 'ts'
+    if(this.params.getConfig().get('env') === 'production' || this.params.getConfig().get('env') === 'preprod') {
+      basePath = './dist'
+      extension = 'js'
+    }
   
     Object.assign(connectionOptions, {
       entities: [ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity],
       //synchronize: true,
-      migrationsTableName: "migration",
-      migrations: ["src/migration/*.ts"],
+      migrationsTableName: `migration`,
+      migrations: [`${basePath}/migration/*.${extension}`],
       cli: {
-        "entitiesDir": "src/entity",
-        "migrationsDir": "src/migration"
+        "entitiesDir": `${basePath}/entity`,
+        "migrationsDir": `${basePath}/migration`
       },
       logging: false
     });

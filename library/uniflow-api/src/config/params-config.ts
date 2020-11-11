@@ -36,6 +36,7 @@ interface MailChimpConfig {
 }
 
 export type AppConfig = {
+  env: 'development' | 'preprod' | 'production' | 'test',
   database: DatabaseConfig,
   port: number,
   corsAllowOrigin: string,
@@ -60,8 +61,15 @@ export default class ParamsConfig {
       // Throw generic error
       throw new Error(`Couldn't find .env.${this.env} file`);
     }
+    envConfig['NODE_ENV'] = this.env
     
     const config = convict<AppConfig>({
+      env: {
+        doc: 'Type of database to use',
+        format: ['development' , 'preprod' , 'production' , 'test'],
+        default: 'development',
+        env: 'NODE_ENV'
+      },
       database: {
         type: {
           doc: 'Type of database to use',
