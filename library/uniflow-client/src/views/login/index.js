@@ -14,8 +14,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class Login extends Component {
   state = {
-    username: null,
-    password: null,
+    username: '',
+    password: '',
   }
 
   onChangeUsername = event => {

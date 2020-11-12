@@ -1,7 +1,6 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from 'typedi';
-import { UserEntity } from '../entity';
 import { AuthService } from '../service';
 import { WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { ControllerInterface } from './interfaces';
@@ -18,25 +17,6 @@ export default class AuthController implements ControllerInterface {
     const route = Router();
 
     app.use('/', route);
-
-    route.post(
-      '/register',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          email: Joi.string().required().email(),
-          password: Joi.string().required(),
-        }),
-      }),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const { token, user } = await this.authService.register(req.body as UserEntity);
-          return res.status(201).json({ token, uid: user.uid });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
 
     route.post(
       '/login',

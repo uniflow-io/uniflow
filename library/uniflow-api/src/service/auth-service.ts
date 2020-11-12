@@ -1,81 +1,40 @@
 import * as argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
-import { randomBytes } from 'crypto';
 import { Inject, Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ParamsConfig } from '../config';
 import { ApiException } from '../exception';
 import { UserEntity } from '../entity';
 import { RequestInterface } from './request/interfaces';
+import UserService from './user-service';
 
 @Service()
 export default class AuthService {
   constructor(
     private paramsConfig: ParamsConfig,
     @Inject('RequestInterface')
-    private request: RequestInterface
+    private request: RequestInterface,
+    private userService: UserService,
   ) {}
 
   private getUserRepository(): Repository<UserEntity> {
     return getRepository(UserEntity)
   }
 
-  public async register(inputUser: UserEntity): Promise<{ user: UserEntity; token: string }> {
-    try {
-      const salt = randomBytes(32);
-
-      /**
-       * Hash password first
-       */
-      const hashedPassword = await argon2.hash(inputUser.password, { salt });
-      const userRecord = await this.getUserRepository().save({
-        ...inputUser,
-        salt: salt.toString('hex'),
-        password: hashedPassword,
-        role: 'ROLE_USER',
-      });
-
-      if (!userRecord) {
-        throw new Error('User cannot be created');
-      }
-
-      // await this.mailer.SendWelcomeEmail(userRecord);
-
-      /**
-       * @TODO This is not the best way to deal with this
-       * There should exist a 'Mapper' layer
-       * that transforms data from layer to layer
-       */
-      const token = this.generateToken(userRecord);
-      const user = userRecord;
-      Reflect.deleteProperty(user, 'password');
-      Reflect.deleteProperty(user, 'salt');
-      return { user, token };
-    } catch (error) {
-      throw new ApiException('Not authorized', 401);
-    }
-  }
-
   public async login(username: string, password: string): Promise<{ user: UserEntity; token: string }> {
-    const userRecord =
-      await this.getUserRepository().findOne({ username })
-      || await this.getUserRepository().findOne({ email: username });
+    const user = await this.getUserRepository().findOne({ username })
+              || await this.getUserRepository().findOne({ email: username });
 
-    if (!userRecord) {
+    if (!user) {
       throw new ApiException('Bad credentials', 401);
     }
-    /**
-     * We use verify from argon2 to prevent 'timing based' attacks
-     */
-    const validPassword = await argon2.verify(userRecord.password, password);
+
+    const validPassword = await argon2.verify(user.password, password);
     if (validPassword) {
-      const token = this.generateToken(userRecord);
-      const user = userRecord;
+      const token = this.generateToken(user);
       Reflect.deleteProperty(user, 'password');
       Reflect.deleteProperty(user, 'salt');
-      /**
-       * Return user and token
-       */
+
       return { user, token };
     } else {
       throw new ApiException('Bad credentials', 401);
@@ -112,9 +71,9 @@ export default class AuthService {
       user = new UserEntity();
       user.facebookId = facebookId;
       user.email = facebookEmail;
-      user.password = Math.random().toString(36).slice(-8)
+      user.password = this.generatePassword()
 
-      return this.register(user)
+      user = await this.userService.create(user)
     } else if (!user.facebookId) {
       user.facebookId = facebookId;
 
@@ -170,9 +129,9 @@ export default class AuthService {
       user = new UserEntity();
       user.githubId = githubId;
       user.email = githubEmail;
-      user.password = Math.random().toString(36).slice(-8)
+      user.password = this.generatePassword()
 
-      return this.register(user)
+      user = await this.userService.create(user)
     } else if (!user.facebookId) {
       user.githubId = githubId;
 
@@ -198,5 +157,9 @@ export default class AuthService {
       },
       this.paramsConfig.getConfig().get('jwtSecret'),
     );
+  }
+
+  private generatePassword(): string {
+    return `${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}`
   }
 }

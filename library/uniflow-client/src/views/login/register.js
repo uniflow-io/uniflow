@@ -14,8 +14,8 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons'
 
 class Register extends Component {
   state = {
-    email: null,
-    password: null,
+    email: '',
+    password: '',
   }
 
   onChangeEmail = event => {

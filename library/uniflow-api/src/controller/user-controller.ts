@@ -3,7 +3,7 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router} from 'express';
 import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { UserService, FolderService, ConfigService, ProgramService } from "../service";
-import { ConfigEntity } from "../entity";
+import { ConfigEntity, UserEntity } from "../entity";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 
@@ -23,6 +23,25 @@ export default class UserController implements ControllerInterface {
     const route = Router();
 
     app.use('/users', route);
+
+    route.post(
+      '/',
+      celebrate({
+        [Segments.BODY]: Joi.object().keys({
+          email: Joi.string().required().email(),
+          password: Joi.string().required(),
+        }),
+      }),
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const user = await this.userService.create(req.body as UserEntity);
+          return res.status(201).json({ uid: user.uid });
+        } catch (e) {
+          //console.log(' error ', e);
+          return next(e);
+        }
+      },
+    );
 
     route.get(
       '/:uid/settings',

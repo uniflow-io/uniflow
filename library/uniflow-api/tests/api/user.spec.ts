@@ -1,6 +1,6 @@
 import 'mocha'
 import { expect, assert } from 'chai';
-import { loginApp, testApp } from '../utils';
+import { isUid, loginApp, testApp } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
@@ -13,6 +13,40 @@ describe('auth', () => {
 
     afterAll(async () => {
         await app.close()
+    });
+
+    it('POST /api/users success', (done) => {
+        testApp(app)
+            .post('/api/users')
+            .send({
+                email: 'user2@uniflow.io',
+                password: 'user2_password'
+            })
+            .expect(201)
+            .end((err, res) => {
+                try {
+                    if (err) throw err;
+
+                    const data = res.body;
+                    expect(data).to.have.all.keys('uid')
+
+                    assert.isTrue(isUid(data.uid))
+
+                    return done();
+                } catch (err) {
+                    return done(err);
+                }
+            })
+    });
+
+    it('POST /api/users already exist', (done) => {
+        testApp(app)
+            .post('/api/users')
+            .send({
+                email: 'user@uniflow.io',
+                password: 'user_password_new'
+            })
+            .expect(401, done)
     });
 
     it('GET /api/users/:uid/settings success', async (done) => {

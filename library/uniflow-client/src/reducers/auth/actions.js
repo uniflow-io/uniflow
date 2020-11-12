@@ -187,24 +187,12 @@ export const register = (email, password) => {
   return dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/register`, {
+        .post(`${server.getBaseUrl()}/api/users`, {
           email: email,
           password: password,
         })
         .then(response => {
-          try {
-            jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
-          } catch (e) {
-            return dispatch(
-              commitLoginUserFailure({
-                response: {
-                  status: 403,
-                  statusText: 'Invalid token',
-                },
-              })
-            )
-          }
+          return login(email, password)(dispatch)
         })
         .catch(error => {
           dispatch(commitLoginUserFailure(error, error.response.data.message))

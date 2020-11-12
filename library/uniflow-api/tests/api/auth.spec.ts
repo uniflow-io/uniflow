@@ -15,40 +15,6 @@ describe('auth', () => {
         await app.close()
     });
 
-    it('POST /api/register success', (done) => {
-        testApp(app)
-            .post('/api/register')
-            .send({
-                email: 'user_register@uniflow.io',
-                password: 'user_register'
-            })
-            .expect(201)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
-
-                    const data = res.body;
-                    expect(data).to.have.all.keys('token', 'uid')
-
-                    assert.isTrue(isUid(data.uid))
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
-    });
-
-    it('POST /api/register already exist', (done) => {
-        testApp(app)
-            .post('/api/register')
-            .send({
-                email: 'user@uniflow.io',
-                password: '1234'
-            })
-            .expect(401, done)
-    });
-
     it('POST /api/login success', (done) => {
         testApp(app)
             .post('/api/login')
