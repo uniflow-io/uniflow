@@ -3,8 +3,8 @@ import { UserEntity } from '../entity';
 declare global {
   namespace Express {
     export interface Request {
+      token?: { id: string }
       user: UserEntity
-      token: any
     }
   }
 }

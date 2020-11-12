@@ -3,7 +3,7 @@ import { NextFunction, Request, Response, Router} from 'express';
 import { Service} from "typedi";
 import { ProgramService, ProgramClientService, ProgramTagService, FolderService, TagService } from "../service";
 import { ProgramEntity } from "../entity";
-import { RequireUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
+import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 
@@ -16,7 +16,7 @@ export default class ProgramController implements ControllerInterface {
     private programTagService: ProgramTagService,
     private tagService: TagService,
     private withToken: WithTokenMiddleware,
-    private requireUser: RequireUserMiddleware,
+    private requireRoleUser: RequireRoleUserMiddleware,
     private withUser: WithUserMiddleware
   ) {}
 
@@ -50,9 +50,130 @@ export default class ProgramController implements ControllerInterface {
         }
       }
     );
+  
+    /*route.get(
+      '/:username/programs',
+      this.withToken.middleware(),
+      this.withUser.middleware(),
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          if(req.params.username === 'me' && !req.user) {
+            throw new ApiException('Not authorized', 401);
+          }
+  
+          let fetchUser = undefined
+          if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
+            fetchUser = req.user
+          } else {
+            fetchUser = await this.userService.findOneByUsername(req.params.username)
+            if(!fetchUser) {
+              throw new ApiException('User not found', 404);
+            }
+          }
+  
+          const client = req.params.client
+          let programs = []
+          if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
+            programs = await this.programService.findLastByUserAndClient(fetchUser, client)
+          } else {
+            programs = await this.programService.findLastPublicByUserAndClient(fetchUser, client)
+          }
+  
+          let data = []
+          for(const program of programs) {
+            let item = await this.programService.getJson(program)
+            
+            data.push(item)
+          }
+  
+          return res.status(200).json(data);
+        } catch (e) {
+          //console.log(' error ', e);
+          return next(e);
+        }
+      }
+    );*/
+    
+    /*const treeRoute = async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        if(req.params.username === 'me' && !req.user) {
+          throw new ApiException('Not authorized', 401);
+        }
+        
+        let fetchUser = undefined
+        if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
+          fetchUser = req.user
+        } else {
+          fetchUser = await this.userService.findOneByUsername(req.params.username)
+          if(!fetchUser) {
+            throw new ApiException('User not found', 404);
+          }
+        }
+        
+        const path = [
+          req.params.slug1,
+          req.params.slug2,
+          req.params.slug3,
+          req.params.slug4,
+          req.params.slug5,
+        ].filter((el) => {
+          return !!el;
+        })
+        
+        let parentFolder = undefined
+        if(path.length > 0) {
+          let program = await this.programService.findOneByUserAndPath(fetchUser, path)
+          if (program) {
+            parentFolder = program.folder
+          } else {
+            parentFolder = await this.folderService.findOneByUserAndPath(fetchUser, path)
+            if(!parentFolder) {
+              throw new ApiException('Program or Folder not found', 404);
+            }
+          }
+        }
+  
+        const client = req.params.client
+        let programs = []
+        let folders: Folder[] = []
+        if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
+          programs = await this.programService.findLastByUserAndClientAndFolder(fetchUser, client, parentFolder)
+          folders = await this.folderService.findByUserAndParent(fetchUser, parentFolder)
+        } else {
+          programs = await this.programService.findLastPublicByUserAndClientAndFolder(fetchUser, client, parentFolder)
+        }
+        
+        let children = []
+        for(const program of programs) {
+          let item: any = await this.programService.getJson(program)
+          item['type'] = 'program'
+          children.push(item)
+        }
+        for(const folder of folders) {
+          let item: any = await this.folderService.getJson(folder)
+          item['type'] = 'folder'
+          children.push(item)
+        }
+  
+          return res.status(200).json({
+          'folder': parentFolder ? await this.folderService.getJson(parentFolder) : null,
+          'children': children
+        });
+      } catch (e) {
+        //console.log(' error ', e);
+        return next(e);
+      }
+    }
+  
+    route.get('/:username/tree/:slug1/:slug2/:slug3/:slug4/:slug5', this.withToken.middleware(), this.withUser.middleware(), treeRoute);
+    route.get('/:username/tree/:slug1/:slug2/:slug3/:slug4', this.withToken.middleware(), this.withUser.middleware(), treeRoute);
+    route.get('/:username/tree/:slug1/:slug2/:slug3', this.withToken.middleware(), this.withUser.middleware(), treeRoute);
+    route.get('/:username/tree/:slug1/:slug2', this.withToken.middleware(), this.withUser.middleware(), treeRoute);
+    route.get('/:username/tree/:slug1', this.withToken.middleware(), this.withUser.middleware(), treeRoute);
+    route.get('/:username/tree', this.withToken.middleware(), this.withUser.middleware(), treeRoute);*/
     
     route.post(
-      '/create',
+      '/',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
@@ -65,7 +186,8 @@ export default class ProgramController implements ControllerInterface {
         }),
       }),
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let program = new ProgramEntity();
@@ -96,7 +218,7 @@ export default class ProgramController implements ControllerInterface {
     );
 
     route.put(
-      '/:uid/update',
+      '/:uid',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
@@ -109,7 +231,8 @@ export default class ProgramController implements ControllerInterface {
         }),
       }),
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)
@@ -146,7 +269,7 @@ export default class ProgramController implements ControllerInterface {
     );
 
     route.get(
-      '/:uid/data',
+      '/:uid/flows',
       this.withToken.middleware(),
       this.withUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
@@ -171,9 +294,10 @@ export default class ProgramController implements ControllerInterface {
     );
 
     route.put(
-      '/:uid/data',
+      '/:uid/flows',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)
@@ -200,9 +324,10 @@ export default class ProgramController implements ControllerInterface {
     );
 
     route.delete(
-      '/:uid/delete',
+      '/:uid',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let program = await this.programService.findOneByUser(req.user, req.params.id)

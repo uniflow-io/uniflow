@@ -129,7 +129,7 @@ export default class FolderService {
   
   public async getJson(folder: FolderEntity): Promise<Object> {
     return {
-      'id': folder.id,
+      'uid': folder.uid,
       'name': folder.name,
       'slug': folder.slug,
       'path': await this.toPath(folder.parent),

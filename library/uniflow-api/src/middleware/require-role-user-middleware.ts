@@ -6,7 +6,7 @@ import { MiddlewareInterface } from './interfaces';
 import { UserEntity } from '../entity';
 
 @Service()
-export default class RequireUserMiddleware implements MiddlewareInterface {
+export default class RequireRoleUserMiddleware implements MiddlewareInterface {
   constructor(
     private userService: UserService
   ) {}
@@ -38,32 +38,13 @@ export default class RequireUserMiddleware implements MiddlewareInterface {
     return false
   }
 
-  middleware(role: string = 'ROLE_USER', isSameUser: boolean = false): any {
+  middleware(role: string = 'ROLE_USER'): any {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (!req.token) {
-          throw new ApiException('Not authorized', 401);
-        }
-        
-        const userRecord = await this.userService.findOne(req.token.id);
-        if (!userRecord) {
+        if(!req.user || !this.isGranted(req.user, [role])) {
           throw new ApiException('Not authorized', 401);
         }
 
-        if(!this.isGranted(userRecord, [role])) {
-          throw new ApiException('Not authorized', 401);
-        }
-
-        if(isSameUser) {
-          if(req.params.uid !== userRecord.uid) {
-            throw new ApiException('Not authorized', 401);
-          }
-        }
-        
-        const user = userRecord;
-        Reflect.deleteProperty(user, 'password');
-        Reflect.deleteProperty(user, 'salt');
-        req.user = user;
         return next();
       } catch (e) {
         //console.log(e);

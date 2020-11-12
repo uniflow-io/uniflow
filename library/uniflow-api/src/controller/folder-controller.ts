@@ -1,7 +1,7 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
-import { RequireUserMiddleware, WithTokenMiddleware } from "../middleware";
+import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { FolderService } from "../service";
 import { FolderEntity } from "../entity";
 import { ApiException } from "../exception";
@@ -12,7 +12,8 @@ export default class FolderController implements ControllerInterface {
   constructor(
     private folderService: FolderService,
     private withToken: WithTokenMiddleware,
-    private requireUser: RequireUserMiddleware
+    private withUser: WithUserMiddleware,
+    private requireRoleUser: RequireRoleUserMiddleware
   ) {}
 
   routes(app: Router): Router {
@@ -20,23 +21,57 @@ export default class FolderController implements ControllerInterface {
 
     app.use('/folders', route);
   
+    route.get(
+      '/',
+      this.withToken.middleware(),
+      this.withUser.middleware(),
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          let fetchUser = undefined
+          if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
+            fetchUser = req.user
+          } else {
+            fetchUser = await this.userService.findOneByUsername(req.params.username)
+            if(!fetchUser) {
+              throw new ApiException('User not found', 404);
+            }
+          }
+          
+          let data: string[][] = [[]]
+          const folders = await this.folderService.findByUser(fetchUser)
+          for (const folder of folders) {
+            data.push(await this.folderService.toPath(folder))
+          }
+          data.sort((path1, path2) => {
+            return path1.join('/').localeCompare(path2.join('/'))
+          })
+  
+          return res.status(400).json(data);
+        } catch (e) {
+          //console.log(' error ', e);
+          return next(e);
+        }
+      },
+    );
+
     route.post(
-      '/create',
+      '/',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
-          name: Joi.string(),
+          name: Joi.string().required(),
           slug: Joi.string(),
           path: Joi.array(),
         }),
       }),
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let folder = new FolderEntity();
           folder.name = req.body.name
-          folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug)
-          folder.parent = await this.folderService.findOneByUserAndPath(req.user, req.body.path)
+          folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug || req.body.name)
+          folder.parent = await this.folderService.findOneByUserAndPath(req.user, req.body.path || [])
           folder.user = req.user
     
           if(await this.folderService.isValid(folder)) {
@@ -56,7 +91,7 @@ export default class FolderController implements ControllerInterface {
     );
   
     route.put(
-      '/:uid/update',
+      '/:uid',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
@@ -65,7 +100,8 @@ export default class FolderController implements ControllerInterface {
         }),
       }),
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let folder = await this.folderService.findOneByUser(req.user, req.params.id)
@@ -97,9 +133,10 @@ export default class FolderController implements ControllerInterface {
     );
   
     route.delete(
-      '/:uid/delete',
+      '/:uid',
       this.withToken.middleware(),
-      this.requireUser.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let folder = await this.folderService.findOneByUser(req.user, req.params.id)
