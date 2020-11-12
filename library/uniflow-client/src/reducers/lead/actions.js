@@ -5,7 +5,7 @@ import { ApiException } from '../../exceptions'
 export const newsletter = (email) => {
   return dispatch => {
     return request
-      .post(`${server.getBaseUrl()}/api/leads/create`, {
+      .post(`${server.getBaseUrl()}/api/leads`, {
         email: email,
       })
       .then(response => {

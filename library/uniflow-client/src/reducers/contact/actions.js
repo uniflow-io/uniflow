@@ -5,7 +5,7 @@ import { ApiException } from '../../exceptions'
 export const contact = (email, message) => {
   return dispatch => {
     return request
-      .post(`${server.getBaseUrl()}/api/contacts/create`, {
+      .post(`${server.getBaseUrl()}/api/contacts`, {
         email: email,
         message: message,
       })

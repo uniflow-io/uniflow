@@ -15,9 +15,9 @@ describe('auth', () => {
         await app.close()
     });
 
-    it('POST /api/contacts/create success', (done) => {
+    it('POST /api/contacts success', (done) => {
         testApp(app)
-            .post('/api/contacts/create')
+            .post('/api/contacts')
             .send({
                 email: 'test@gmail.com',
                 message: 'test message'

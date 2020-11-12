@@ -16,7 +16,7 @@ export default class LeadController implements ControllerInterface {
     app.use('/leads', route);
   
     route.post(
-      '/create',
+      '/',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           email: Joi.string().required().email(),
