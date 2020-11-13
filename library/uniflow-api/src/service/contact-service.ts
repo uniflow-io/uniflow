@@ -1,26 +1,15 @@
 import { Inject, Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { ContactEntity } from '../entity';
+import { ContactRepository } from '../repository';
 import { MailerInterface } from './mailer/interfaces';
 
 @Service()
 export default class ContactService {
   constructor(
+    private contactRepository: ContactRepository,
     @Inject('MailerInterface')
     private mailer: MailerInterface
   ) {}
-
-  private getContactRepository(): Repository<ContactEntity> {
-    return getRepository(ContactEntity)
-  }
-  
-  public async save(contact: ContactEntity): Promise<ContactEntity> {
-    return await this.getContactRepository().save(contact);
-  }
-
-  public async findOne(id?: string | number): Promise<ContactEntity | undefined> {
-    return await this.getContactRepository().findOne(id);
-  }
   
   public async send(contact: ContactEntity): Promise<boolean> {
     return await this.mailer.send({

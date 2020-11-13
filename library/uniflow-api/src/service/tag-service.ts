@@ -1,38 +1,26 @@
 import { Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { TagEntity } from '../entity';
+import { TagRepository } from '../repository';
 
 @Service()
 export default class TagService {
-  private getTagRepository(): Repository<TagEntity> {
-    return getRepository(TagEntity)
-  }
-
-  public async save(tag: TagEntity): Promise<TagEntity> {
-    return await this.getTagRepository().save(tag);
-  }
-
-  public async clear(): Promise<TagEntity[]> {
-    let qb = this.getTagRepository().createQueryBuilder('t')
-      .select('t')
-      .leftJoinAndSelect('t.programs', 'pt')
-      .andWhere('pt.program is NULL')
-    
-    return await this.getTagRepository().remove(await qb.getMany())
-  }
+  constructor(
+    private tagRepository: TagRepository,
+  ) {}
   
   public async findOne(id?: string | number): Promise<TagEntity | undefined> {
-    return await this.getTagRepository().findOne(id);
+    return await this.tagRepository.findOne(id);
   }
 
   public async findOrCreateByNames(names: string[]): Promise<TagEntity[]> {
     let tags = []
     for(const name of names) {
-      let tag = await this.getTagRepository().findOne({name})
+      let tag = await this.tagRepository.findOne({name})
       if(!tag) {
         tag = new TagEntity()
         tag.name = name
-        await this.save(tag)
+        await this.tagRepository.save(tag)
       }
 
       tags.push(tag);

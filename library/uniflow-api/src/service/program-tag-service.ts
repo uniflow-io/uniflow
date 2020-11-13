@@ -1,39 +1,23 @@
 import { Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ProgramEntity, ProgramTagEntity } from '../entity';
+import { ProgramTagRepository } from '../repository';
 import { TagService } from "../service";
 
 @Service()
 export default class ProgramTagService {
   constructor(
+    private programTagRepository: ProgramTagRepository,
     private tagService: TagService
   ) {}
-  
-  private getProgramTagRepository(): Repository<ProgramTagEntity> {
-    return getRepository(ProgramTagEntity)
-  }
-
-  public async save(programTag: ProgramTagEntity): Promise<ProgramTagEntity> {
-    return await this.getProgramTagRepository().save(programTag);
-  }
-
-  public async findOne(id?: string | number): Promise<ProgramTagEntity | undefined> {
-    return await this.getProgramTagRepository().findOne(id);
-  }
 
   public async manageByProgramAndTagNames(program: ProgramEntity, names: string[]): Promise<ProgramTagEntity[]> {
     let programTags: ProgramTagEntity[] = []
     if(program.id) {
-      let qb = this.getProgramTagRepository().createQueryBuilder('pt')
-        .select('pt')
-        .leftJoinAndSelect('pt.program', 'p')
-        .leftJoinAndSelect('pt.tag', 'c')
-        .andWhere('pt.program = :program').setParameter('program', program.id)
-
-      programTags = await qb.getMany();
+      programTags = await this.programTagRepository.findByProgram(program)
     }
 
-    await this.getProgramTagRepository().remove(programTags)
+    await this.programTagRepository.remove(programTags)
 
     programTags = []
 
@@ -53,13 +37,7 @@ export default class ProgramTagService {
   public async toTagNames(program: ProgramEntity): Promise<string[]> {
     let programTags: ProgramTagEntity[] = []
     if(program.id) {
-      let qb = this.getProgramTagRepository().createQueryBuilder('pt')
-        .select('pt')
-        .leftJoinAndSelect('pt.program', 'p')
-        .leftJoinAndSelect('pt.tag', 'c')
-        .andWhere('pt.program = :program').setParameter('program', program.id)
-
-      programTags = await qb.getMany();
+      programTags = await this.programTagRepository.findByProgram(program)
     }
 
     return this.tagService.toNames(

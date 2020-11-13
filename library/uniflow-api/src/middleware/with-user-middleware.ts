@@ -1,12 +1,12 @@
 import { Service } from 'typedi';
 import { NextFunction, Request, Response } from "express";
-import { UserService } from '../service';
 import { MiddlewareInterface } from './interfaces';
+import { UserRepository } from '../repository';
 
 @Service()
 export default class WithUserMiddleware implements MiddlewareInterface {
   constructor(
-    private userService: UserService
+    private userRepository: UserRepository
   ) {}
 
   middleware(): any {
@@ -16,12 +16,11 @@ export default class WithUserMiddleware implements MiddlewareInterface {
           return next();
         }
         
-        const userRecord = await this.userService.findOne(req.token.id);
-        if (!userRecord) {
+        const user = await this.userRepository.findOne(req.token.id);
+        if (!user) {
           return next();
         }
         
-        const user = userRecord;
         Reflect.deleteProperty(user, 'password');
         Reflect.deleteProperty(user, 'salt');
         req.user = user;

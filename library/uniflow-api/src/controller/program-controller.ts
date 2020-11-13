@@ -1,20 +1,23 @@
 import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router} from 'express';
 import { Service} from "typedi";
-import { ProgramService, ProgramClientService, ProgramTagService, FolderService, TagService } from "../service";
+import { ProgramService, ProgramClientService, ProgramTagService, FolderService } from "../service";
 import { ProgramEntity } from "../entity";
 import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
+import { FolderRepository, ProgramRepository, TagRepository } from '../repository';
 
 @Service()
 export default class ProgramController implements ControllerInterface {
   constructor(
+    private folderRepository: FolderRepository,
+    private tagRepository: TagRepository,
+    private programRepository: ProgramRepository,
     private folderService: FolderService,
     private programService: ProgramService,
     private programClientService: ProgramClientService,
     private programTagService: ProgramTagService,
-    private tagService: TagService,
     private withToken: WithTokenMiddleware,
     private requireRoleUser: RequireRoleUserMiddleware,
     private withUser: WithUserMiddleware
@@ -30,7 +33,7 @@ export default class ProgramController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           let programItems = []
-          const programs = await this.programService.findPublic()
+          const programs = await this.programRepository.findPublic()
           for(const program of programs) {
             programItems.push({
               'name': program.name,
@@ -194,15 +197,15 @@ export default class ProgramController implements ControllerInterface {
           program.name = req.body.name
           program.slug = await this.programService.generateUniqueSlug(req.user, req.body.slug)
           program.user = req.user
-          program.folder = await this.folderService.findOneByUserAndPath(req.user, req.body.path)
+          program.folder = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
           program.description = req.body.description
           program.public = req.body.public
 
           if(await this.programService.isValid(program)) {
-            await this.programService.save(program)
-            await this.tagService.clear()
+            await this.programRepository.save(program)
+            await this.tagRepository.clear()
 
             return res.status(200).json(await this.programService.getJson(program));
           }
@@ -235,7 +238,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programService.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -245,15 +248,15 @@ export default class ProgramController implements ControllerInterface {
             program.slug = await this.programService.generateUniqueSlug(req.user, req.body.slug)
           }
           program.user = req.user
-          program.folder = await this.folderService.findOneByUserAndPath(req.user, req.body.path)
+          program.folder = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
           program.description = req.body.description
           program.public = req.body.public
 
           if(await this.programService.isValid(program)) {
-            await this.programService.save(program)
-            await this.tagService.clear()
+            await this.programRepository.save(program)
+            await this.tagRepository.clear()
 
             return res.status(200).json(await this.programService.getJson(program));
           }
@@ -274,7 +277,7 @@ export default class ProgramController implements ControllerInterface {
       this.withUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programService.findOne(req.params.id)
+          let program = await this.programRepository.findOne(req.params.id)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -300,7 +303,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programService.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -308,7 +311,7 @@ export default class ProgramController implements ControllerInterface {
           program.data = req.body.data
 
           if(await this.programService.isValid(program)) {
-            await this.programService.save(program)
+            await this.programRepository.save(program)
 
             return res.status(200).json(true);
           }
@@ -330,12 +333,12 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programService.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
 
-          await this.programService.remove(program)
+          await this.programRepository.remove(program)
 
           return res.status(200).json(true);
         } catch (e) {

@@ -6,10 +6,13 @@ import { FolderService } from "../service";
 import { FolderEntity } from "../entity";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
+import { FolderRepository, UserRepository } from '../repository';
 
 @Service()
 export default class FolderController implements ControllerInterface {
   constructor(
+    private userRepository: UserRepository,
+    private folderRepository: FolderRepository,
     private folderService: FolderService,
     private withToken: WithTokenMiddleware,
     private withUser: WithUserMiddleware,
@@ -31,14 +34,14 @@ export default class FolderController implements ControllerInterface {
           if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
             fetchUser = req.user
           } else {
-            fetchUser = await this.userService.findOneByUsername(req.params.username)
+            fetchUser = await this.userRepository.findOne({username: req.params.username})
             if(!fetchUser) {
               throw new ApiException('User not found', 404);
             }
           }
           
           let data: string[][] = [[]]
-          const folders = await this.folderService.findByUser(fetchUser)
+          const folders = await this.folderRepository.findByUser(fetchUser)
           for (const folder of folders) {
             data.push(await this.folderService.toPath(folder))
           }
@@ -71,11 +74,11 @@ export default class FolderController implements ControllerInterface {
           let folder = new FolderEntity();
           folder.name = req.body.name
           folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug || req.body.name)
-          folder.parent = await this.folderService.findOneByUserAndPath(req.user, req.body.path || [])
+          folder.parent = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path || [])
           folder.user = req.user
     
           if(await this.folderService.isValid(folder)) {
-            await this.folderService.save(folder)
+            await this.folderRepository.save(folder)
     
             return res.status(200).json(await this.folderService.getJson(folder));
           }
@@ -104,7 +107,7 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderService.findOneByUser(req.user, req.params.id)
+          let folder = await this.folderRepository.findOneByUser(req.user, req.params.id)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
@@ -113,11 +116,11 @@ export default class FolderController implements ControllerInterface {
           if (req.body.slug && folder.slug !== req.body.slug) {
             folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug)
           }
-          folder.parent = await this.folderService.findOneByUserAndPath(req.user, req.body.path)
+          folder.parent = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path)
           folder.user = req.user
   
           if(await this.folderService.isValid(folder)) {
-            await this.folderService.save(folder)
+            await this.folderRepository.save(folder)
   
             return res.status(200).json(await this.folderService.getJson(folder));
           }
@@ -139,12 +142,12 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderService.findOneByUser(req.user, req.params.id)
+          let folder = await this.folderRepository.findOneByUser(req.user, req.params.id)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
   
-          await this.folderService.remove(folder)
+          await this.folderRepository.remove(folder)
   
           return res.status(200).json(true);
         } catch (e) {

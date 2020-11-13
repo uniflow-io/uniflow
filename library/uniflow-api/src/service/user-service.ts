@@ -5,22 +5,19 @@ import { getRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entity';
 import { randomBytes } from 'crypto';
 import { ApiException } from '../exception';
+import { UserRepository } from '../repository';
 
 @Service()
 export default class UserService {
-  private getUserRepository(): Repository<UserEntity> {
-    return getRepository(UserEntity)
-  }
-
-  public async save(user: UserEntity): Promise<UserEntity> {
-    return await this.getUserRepository().save(user);
-  }
+  constructor(
+    private userRepository: UserRepository,
+  ) {}
 
   public async create(inputUser: UserEntity): Promise<UserEntity> {
     try {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(inputUser.password, { salt });
-      const user = await this.getUserRepository().save({
+      const user = await this.userRepository.save({
         ...inputUser,
         password: hashedPassword,
         salt: salt.toString('hex'),
@@ -38,15 +35,7 @@ export default class UserService {
       throw new ApiException('Not authorized', 401);
     }
   }
-
-  public async findOne(id?: string | number): Promise<UserEntity | undefined> {
-    return await this.getUserRepository().findOne(id);
-  }
-
-  public async findOneByUsername(username: string): Promise<UserEntity | undefined> {
-    return await this.getUserRepository().findOne({username});
-  }
-
+  
   public async generateUniqueUsername(username: string): Promise<string> {
     username = slugify(username, {
       replacement: '-',
@@ -54,7 +43,7 @@ export default class UserService {
       strict: true,
     })
 
-    const user = await this.getUserRepository().findOne({username})
+    const user = await this.userRepository.findOne({username})
     if(user) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
       return await this.generateUniqueUsername(`${username}-${suffix}` )

@@ -1,39 +1,23 @@
 import { Service } from 'typedi';
 import { getRepository, Repository } from 'typeorm';
 import { ProgramEntity, ProgramClientEntity} from '../entity';
+import { ProgramClientRepository } from '../repository';
 import { ClientService } from "../service";
 
 @Service()
 export default class ProgramClientService {
   constructor(
+    private programClientRepository: ProgramClientRepository,
     private clientService: ClientService
   ) {}
-
-  private getProgramClientRepository(): Repository<ProgramClientEntity> {
-    return getRepository(ProgramClientEntity)
-  }
-
-  public async save(programClient: ProgramClientEntity): Promise<ProgramClientEntity> {
-    return await this.getProgramClientRepository().save(programClient);
-  }
-
-  public async findOne(id?: string | number): Promise<ProgramClientEntity | undefined> {
-    return await this.getProgramClientRepository().findOne(id);
-  }
 
   public async manageByProgramAndClientNames(program: ProgramEntity, names: string[]): Promise<ProgramClientEntity[]> {
     let programClients: ProgramClientEntity[] = []
     if(program.id) {
-      let qb = this.getProgramClientRepository().createQueryBuilder('pc')
-        .select('pc')
-        .leftJoinAndSelect('pc.program', 'p')
-        .leftJoinAndSelect('pc.client', 'c')
-        .andWhere('pc.program = :program').setParameter('program', program.id)
-
-      programClients = await qb.getMany();
+      programClients = await this.programClientRepository.findByProgram(program)
     }
     
-    await this.getProgramClientRepository().remove(programClients)
+    await this.programClientRepository.remove(programClients)
     
     programClients = []
 
@@ -53,13 +37,7 @@ export default class ProgramClientService {
   public async toClientNames(program: ProgramEntity): Promise<string[]> {
     let programClients: ProgramClientEntity[] = []
     if(program.id) {
-      let qb = this.getProgramClientRepository().createQueryBuilder('pc')
-        .select('pc')
-        .leftJoinAndSelect('pc.program', 'p')
-        .leftJoinAndSelect('pc.client', 'c')
-        .andWhere('pc.program = :program').setParameter('program', program.id)
-
-      programClients = await qb.getMany();
+      programClients = await this.programClientRepository.findByProgram(program)
     }
     
     return this.clientService.toNames(

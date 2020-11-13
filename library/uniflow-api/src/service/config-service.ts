@@ -1,21 +1,13 @@
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { ConfigEntity } from '../entity';
+import { ConfigRepository } from '../repository';
 
 @Service()
 export default class ConfigService {
-  private getConfigRepository(): Repository<ConfigEntity> {
-    return getRepository(ConfigEntity)
-  }
+  constructor(
+    private configRepository: ConfigRepository,
+  ) {}
   
-  public async save(config: ConfigEntity): Promise<ConfigEntity> {
-    return await this.getConfigRepository().save(config);
-  }
-
-  public async findOne(id?: string | number): Promise<ConfigEntity | undefined> {
-    return await this.getConfigRepository().findOne(id);
-  }
-
   public async isValid(config: ConfigEntity): Promise<boolean> {
     return true
   }

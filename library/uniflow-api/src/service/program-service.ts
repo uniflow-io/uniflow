@@ -1,49 +1,18 @@
 import slugify from 'slugify'
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
-import { FolderEntity, ProgramEntity, UserEntity} from '../entity';
+import { ProgramEntity, UserEntity} from '../entity';
+import { FolderRepository, ProgramRepository } from '../repository';
 import { FolderService, ProgramClientService, ProgramTagService } from "../service";
 
 @Service()
 export default class ProgramService {
   constructor(
+    private programRepository: ProgramRepository,
+    private folderRepository: FolderRepository,
     private folderService: FolderService,
     private programClientService: ProgramClientService,
     private programTagService: ProgramTagService,
   ) {}
-
-  private getProgramRepository(): Repository<ProgramEntity> {
-    return getRepository(ProgramEntity)
-  }
-
-  public async save(program: ProgramEntity): Promise<ProgramEntity> {
-    return await this.getProgramRepository().save(program);
-  }
-  
-  public async remove(program: ProgramEntity): Promise<ProgramEntity> {
-    return await this.getProgramRepository().remove(program);
-  }
-
-  public async findOne(id?: string | number): Promise<ProgramEntity | undefined> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.id = :id').setParameter('id', id)
-
-    return await qb.getOne();
-  }
-
-  public async findOneByUser(user: UserEntity, id: string | number): Promise<ProgramEntity | undefined> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.id = :id').setParameter('id', id)
-      .andWhere('p.user = :user').setParameter('user', user.id)
-
-    return await qb.getOne();
-  }
 
   public async findOneByUserAndPath(user: UserEntity, path: string[]): Promise<ProgramEntity | undefined> {
     const level = path.length
@@ -53,117 +22,10 @@ export default class ProgramService {
 
     let folder = undefined
     if (level > 1) {
-      folder = await this.folderService.findOneByUserAndPath(user, path.slice(0, level - 1))
+      folder = await this.folderRepository.findOneByUserAndPath(user, path.slice(0, level - 1))
     }
 
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.user = :user').setParameter('user', user.id)
-      .andWhere('p.slug = :slug').setParameter('slug', path[level - 1])
-      .orderBy('p.updated', 'DESC')
-
-    if (folder) {
-      qb.andWhere('p.folder = :folder').setParameter('folder', folder.id)
-    } else {
-      qb.andWhere('p.folder is NULL')
-    }
-
-    return await qb.getOne();
-  }
-
-  public async findPublic(limit?: number): Promise<ProgramEntity[]> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.public = :public').setParameter('public', true)
-      .orderBy('p.updated', 'DESC')
-
-    if (limit) {
-      qb.limit(limit)
-    }
-
-    return await qb.getMany();
-  }
-
-  public async findLastByUserAndClient(user: UserEntity, client?: string): Promise<ProgramEntity[]> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.user = :user').setParameter('user', user.id)
-      .orderBy('p.updated', 'DESC')
-
-    if (client) {
-      qb.leftJoin('p.client', 'c')
-      qb.andWhere('c.name = :name').setParameter('name', client)
-    }
-
-    return await qb.getMany();
-  }
-
-  public async findLastByUserAndClientAndFolder(user: UserEntity, client?: string, folder?: FolderEntity): Promise<ProgramEntity[]> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.user = :user').setParameter('user', user.id)
-      .orderBy('p.updated', 'DESC')
-    
-    if (client) {
-      qb.leftJoin('p.client', 'c')
-      qb.andWhere('c.name = :name').setParameter('name', client)
-    }
-    
-    if (folder) {
-      qb.andWhere('p.folder = :folder').setParameter('folder', folder.id)
-    } else {
-      qb.andWhere('p.folder is NULL')
-    }
-    
-    return await qb.getMany();
-  }
-
-  public async findLastPublicByUserAndClient(user: UserEntity, client?: string): Promise<ProgramEntity[]> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.user = :user').setParameter('user', user.id)
-      .andWhere('p.public = :public').setParameter('public', true)
-      .orderBy('p.updated', 'DESC')
-
-    if (client) {
-      qb.leftJoin('p.client', 'c')
-      qb.andWhere('c.name = :name').setParameter('name', client)
-    }
-
-    return await qb.getMany();
-  }
-
-  public async findLastPublicByUserAndClientAndFolder(user: UserEntity, client?: string, folder?: FolderEntity): Promise<ProgramEntity[]> {
-    let qb = this.getProgramRepository().createQueryBuilder('p')
-      .select('p')
-      .leftJoinAndSelect('p.user', 'u')
-      .leftJoinAndSelect('p.folder', 'f')
-      .andWhere('p.user = :user').setParameter('user', user.id)
-      .andWhere('p.public = :public').setParameter('public', true)
-      .orderBy('p.updated', 'DESC')
-
-    if (client) {
-      qb.leftJoin('p.client', 'c')
-      qb.andWhere('c.name = :name').setParameter('name', client)
-    }
-
-    if (folder) {
-      qb.andWhere('p.folder = :folder').setParameter('folder', folder.id)
-    } else {
-      qb.andWhere('p.folder is NULL')
-    }
-
-    return await qb.getMany();
+    return await this.programRepository.findOneByUserAndSlug(user, path[level - 1], folder)
   }
   
   public async generateUniqueSlug(user: UserEntity, slug: string): Promise<string> {
@@ -173,7 +35,7 @@ export default class ProgramService {
       strict: true,
     })
     
-    const program = await this.getProgramRepository().findOne({user, slug})
+    const program = await this.programRepository.findOne({user, slug})
     if(program) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
       return await this.generateUniqueSlug(user, `${slug}-${suffix}` )
@@ -188,7 +50,7 @@ export default class ProgramService {
   
   public async getJson(program: ProgramEntity): Promise<Object> {
     return {
-      'id': program.id,
+      'uid': program.uid,
       'name': program.name,
       'slug': program.slug,
       'path': await this.folderService.toPath(program.folder),

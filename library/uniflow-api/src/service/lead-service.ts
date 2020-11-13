@@ -1,25 +1,18 @@
 import { Inject, Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { LeadEntity } from '../entity';
+import { LeadRepository } from '../repository';
 import { LeadSubscriberInterface, LeadSubscriberOptions } from './lead-subscriber/interfaces';
 
 @Service()
 export default class LeadService {
   constructor(
+    private leadRepository: LeadRepository,
     @Inject('LeadSubscriberInterface')
     private leadSubscriber: LeadSubscriberInterface
   ) {}
-
-  private getLeadRepository(): Repository<LeadEntity> {
-    return getRepository(LeadEntity)
-  }
-
-  public async save(lead: LeadEntity): Promise<LeadEntity> {
-    return await this.getLeadRepository().save(lead);
-  }
   
   public async create(email: string, options: LeadSubscriberOptions): Promise<LeadEntity> {
-    let lead = await this.findOneByEmail(email)
+    let lead = await this.leadRepository.findOne({email})
     if(!lead) {
       lead = new LeadEntity()
       lead.email = email
@@ -30,15 +23,7 @@ export default class LeadService {
       lead.optinNewsletter = true
     }
 
-    return await this.getLeadRepository().save(lead);
-  }
-
-  public async findOneByEmail(email: string): Promise<LeadEntity | undefined> {
-    let qb = this.getLeadRepository().createQueryBuilder('l')
-      .select('l')
-      .andWhere('l.email = :email').setParameter('email', email)
-
-    return await qb.getOne();
+    return await this.leadRepository.save(lead);
   }
 
   public async isValid(email: string): Promise<boolean> {

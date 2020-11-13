@@ -5,10 +5,13 @@ import { RequireSameUserMiddleware, RequireRoleUserMiddleware, WithTokenMiddlewa
 import { UserService, ConfigService } from "../service";
 import { ConfigEntity, UserEntity } from "../entity";
 import { ControllerInterface } from './interfaces';
+import { ConfigRepository, UserRepository } from "../repository";
 
 @Service()
 export default class UserController implements ControllerInterface {
   constructor(
+    private userRepository: UserRepository,
+    private configRepository: ConfigRepository,
     private userService: UserService,
     private configService: ConfigService,
     private withToken: WithTokenMiddleware,
@@ -82,7 +85,7 @@ export default class UserController implements ControllerInterface {
           let user = Object.assign(req.user, req.body);
     
           if(await this.userService.isValid(user)) {
-            await this.userService.save(user)
+            await this.userRepository.save(user)
     
             return res.status(200).json(await this.userService.getJson(user));
           }
@@ -105,7 +108,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let config = await this.configService.findOne();
+          let config = await this.configRepository.findOne();
           if(!config) {
             config = new ConfigEntity()
           }
@@ -126,13 +129,13 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let config = await this.configService.findOne();
+          let config = await this.configRepository.findOne();
           if(!config) {
             config = new ConfigEntity()
           }
     
           if(await this.configService.isValid(config)) {
-            await this.configService.save(config)
+            await this.configRepository.save(config)
     
             return res.status(200).json(await this.configService.getJson(config));
           }
