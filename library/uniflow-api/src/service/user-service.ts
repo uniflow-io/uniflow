@@ -1,7 +1,6 @@
 import * as argon2 from 'argon2';
 import slugify from "slugify";
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entity';
 import { randomBytes } from 'crypto';
 import { ApiException } from '../exception';

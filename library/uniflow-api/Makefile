@@ -2,6 +2,7 @@
 ##usage :
 ##-------
 
+MAKE = make
 NODE_ENV ?= local
 NPM_BIN = ./node_modules/.bin
 
@@ -19,13 +20,17 @@ dev: ## dev
 serve: build ## serve
 	./bin/uniflow-api
 
-typeorm-cli: ## typeorm-cli : NODE_ENV=development make typeorm-cli CMD="migration:generate -n Name"
+typeorm: ## typeorm
 	$(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts $(CMD)
+
+fixtures: ## fixtures
+	$(MAKE) typeorm CMD="schema:drop"
+	$(MAKE) typeorm CMD="schema:sync"
+	$(NPM_BIN)/ts-node --transpile-only ./src/fixtures.ts
 
 test: ## test
 	if [ -f database.test.sqlite ]; then rm database.test.sqlite; fi
-	NODE_ENV=test $(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts schema:sync
-	NODE_ENV=test $(NPM_BIN)/ts-node --transpile-only ./src/fixtures.ts
+	NODE_ENV=test $(MAKE) fixtures
 	NODE_ENV=test $(NPM_BIN)/jest --maxWorkers=1
 
 # DEFAULT

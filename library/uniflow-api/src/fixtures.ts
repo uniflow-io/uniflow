@@ -1,14 +1,16 @@
 import { default as Container } from "./container";
 import { DatabaseLoader } from "./loader";
-import { UserFixture } from "./fixture";
+import { FolderFixture, UserFixture } from "./fixture";
 
 const loadFixtures = async () => {
     const databaseLoader = Container.get(DatabaseLoader)
     const userFixture = Container.get(UserFixture)
+    const folderFixture = Container.get(FolderFixture)
 
     try {
         await databaseLoader.load()
         await userFixture.load()
+        await folderFixture.load()
     } catch (err) {
         throw err;
     } finally {

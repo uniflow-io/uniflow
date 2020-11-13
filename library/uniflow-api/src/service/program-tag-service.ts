@@ -1,5 +1,4 @@
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { ProgramEntity, ProgramTagEntity } from '../entity';
 import { ProgramTagRepository } from '../repository';
 import { TagService } from "../service";

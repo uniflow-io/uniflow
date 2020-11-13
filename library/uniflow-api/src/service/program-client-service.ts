@@ -1,5 +1,4 @@
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { ProgramEntity, ProgramClientEntity} from '../entity';
 import { ProgramClientRepository } from '../repository';
 import { ClientService } from "../service";

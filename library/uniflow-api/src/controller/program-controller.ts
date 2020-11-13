@@ -238,7 +238,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.uid)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -277,7 +277,7 @@ export default class ProgramController implements ControllerInterface {
       this.withUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programRepository.findOne(req.params.id)
+          let program = await this.programRepository.findOne(req.params.uid)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -303,7 +303,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.uid)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -333,7 +333,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let program = await this.programRepository.findOneByUser(req.user, req.params.id)
+          let program = await this.programRepository.findOneByUser(req.user, req.params.uid)
           if (!program) {
             throw new ApiException('Program not found', 404);
           }

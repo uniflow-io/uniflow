@@ -107,12 +107,15 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderRepository.findOneByUser(req.user, req.params.id)
+          let folder = await this.folderRepository.findOneByUser(req.user, req.params.uid)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
           
-          folder.name = req.body.name
+          if(req.body.name) {
+            folder.name = req.body.name
+          }
+          
           if (req.body.slug && folder.slug !== req.body.slug) {
             folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug)
           }
@@ -142,7 +145,7 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderRepository.findOneByUser(req.user, req.params.id)
+          let folder = await this.folderRepository.findOneByUser(req.user, req.params.uid)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
