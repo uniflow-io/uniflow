@@ -33,8 +33,6 @@ export default class LeadService {
   public async getJson(lead: LeadEntity): Promise<Object> {
     return {
       'email': lead.email,
-      'created': lead.created.toISOString(),
-      'updated': lead.updated.toISOString(),
     }
   }
 }
