@@ -19,8 +19,8 @@ describe('auth', () => {
         testApp(app)
             .post('/api/users')
             .send({
-                email: 'user2@uniflow.io',
-                password: 'user2_password'
+                email: 'new_user@uniflow.io',
+                password: 'new_user_password'
             })
             .expect(201)
             .end((err, res) => {
