@@ -9,6 +9,10 @@ import ReferencesFixture from './references-fixture';
 
 @Service()
 export default class UserFixture implements FixtureInterface {
+    public static get USERS():Array<string> {
+        return Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `user${i?i:''}@uniflow.io`))
+    }
+
     constructor(
         private refs: ReferencesFixture,
         private userRepository: UserRepository,
@@ -22,7 +26,6 @@ export default class UserFixture implements FixtureInterface {
         user.role = user.role || 'ROLE_USER'
 
         this.refs.set(`user-${user.email}`, user)
-        
         return await this.userRepository.save(user)
     }
 
@@ -35,11 +38,13 @@ export default class UserFixture implements FixtureInterface {
             role: 'ROLE_SUPER_ADMIN',
         } as UserEntity)
 
-        await this.save({
-            firstname: faker.name.firstName(),
-            lastname: faker.name.lastName(),
-            email: 'user@uniflow.io',
-            password: 'user_password',
-        } as UserEntity)
+        for(let i = 0; i < 10; i++) {
+            await this.save({
+                firstname: faker.name.firstName(),
+                lastname: faker.name.lastName(),
+                email: `user${i?i:''}@uniflow.io`,
+                password: `user${i?i:''}_password`,
+            } as UserEntity)
+        }
     }
 }

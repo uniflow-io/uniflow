@@ -30,7 +30,6 @@ export default class ProgramEntity {
   @Column({
     type: "varchar",
     length: 255,
-    unique: true,
     nullable: false,
   })
   slug: string;
@@ -62,7 +61,7 @@ export default class ProgramEntity {
     nullable: false,
     default: false,
   })
-  public: string;
+  public: boolean;
 
   @Column({
     type: "text",

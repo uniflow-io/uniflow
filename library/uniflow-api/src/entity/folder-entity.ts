@@ -31,7 +31,6 @@ export default class FolderEntity {
     type: "varchar",
     length: 255,
     nullable: false,
-    unique: true,
   })
   slug: string;
 
