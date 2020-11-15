@@ -18,11 +18,11 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
     return await qb.getOne();
   }
 
-  public async findOneByUser(user: UserEntity, id: string | number): Promise<FolderEntity | undefined> {
+  public async findOneByUserAndUid(user: UserEntity, uid: string): Promise<FolderEntity | undefined> {
     const qb = this.getRepository<FolderEntity>().createQueryBuilder('f')
       .select('f')
       .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.id = :id').setParameter('id', id)
+      .andWhere('f.uid = :uid').setParameter('uid', uid)
       .andWhere('f.user = :user').setParameter('user', user.id)
 
     return await qb.getOne();
@@ -61,29 +61,5 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
       .andWhere('f.id = :id').setParameter('id', folder.id)
 
     return (await qb.getOne())?.parent
-  }
-
-  public async findByUser(user: UserEntity): Promise<FolderEntity[]> {
-    const qb = this.getRepository<FolderEntity>()
-      .createQueryBuilder('f')
-      .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.user = :user').setParameter('user', user.id)
-
-    return await qb.getMany()
-  }
-
-  public async findByUserAndParent(user: UserEntity, parent?: FolderEntity): Promise<FolderEntity[]> {
-    const qb = this.getRepository<FolderEntity>()
-      .createQueryBuilder('f')
-      .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.user = :user').setParameter('user', user.id)
-
-    if (parent) {
-      qb.andWhere('f.parent = :parent').setParameter('parent', parent.id)
-    } else {
-      qb.andWhere('f.parent is NULL')
-    }
-    
-    return await qb.getMany()
   }
 }

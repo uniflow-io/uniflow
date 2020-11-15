@@ -2,21 +2,18 @@ import { Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import { ApiException } from "../exception";
 import { MiddlewareInterface } from './interfaces';
-
-const checkUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { TypeChecker } from '../model';
 
 @Service()
 export default class RequireSameUserMiddleware implements MiddlewareInterface {
   middleware(): any {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (!req.user) {
+        if (!req.user || !req.params.uid) {
           throw new ApiException('Not authorized', 401);
         }
 
-        if(checkUUID.test(req.params.uid) && req.params.uid === req.user.uid) {
-          return next();
-        } else if (req.user.username && req.params.uid === req.user.username) {
+        if(TypeChecker.isSameUser(req.params.uid, req.user)) {
           return next();
         }
         

@@ -1,15 +1,32 @@
 import slugify from 'slugify'
 import { Service } from 'typedi';
 import { FolderEntity, UserEntity } from '../entity';
-import { FolderRepository } from '../repository';
+import { ApiException } from '../exception';
+import { TypeChecker } from '../model';
+import { FolderRepository, ProgramRepository } from '../repository';
 
 @Service()
 export default class FolderService {
   constructor(
     private folderRepository: FolderRepository,
+    private programRepository: ProgramRepository,
   ) {}
 
-  public async toPath(folder?: FolderEntity): Promise<string[]> {
+  public async delete(folder: FolderEntity): Promise<FolderEntity> {
+    const folderChildren = await this.folderRepository.find({parent: folder})
+    for(const folderChild of folderChildren) {
+      await this.delete(folderChild)
+    }
+
+    const programs = await this.programRepository.find({folder: folder})
+    for(const program of programs) {
+      this.programRepository.remove(program)
+    }
+    
+    return await this.folderRepository.remove(folder)
+  }
+
+  public async toPath(folder?: FolderEntity): Promise<string> {
     let path = []
     
     while(folder) {
@@ -18,27 +35,38 @@ export default class FolderService {
       folder = await this.folderRepository.findOneParent(folder)
     }
     
-    return path
+    return `/${path.join('/')}`
+  }
+
+  public async fromPath(user: UserEntity, path: string): Promise<FolderEntity|undefined> {
+    if(!TypeChecker.isPath(path)) {
+      throw new ApiException('not a path')
+    }
+
+    return await this.folderRepository.findOneByUserAndPath(user, path.slice(1).split('/'))
   }
   
-  public async generateUniqueSlug(user: UserEntity, slug: string): Promise<string> {
+  public async generateUniqueSlug(slug: string, user: UserEntity, parent?: FolderEntity): Promise<string> {
     slug = slugify(slug, {
       replacement: '-',
       lower: true,
       strict: true,
     })
     
-    const folder = await this.folderRepository.findOne({user, slug})
+    const folder = await this.folderRepository.findOne({user, parent, slug})
     if(folder) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.generateUniqueSlug(user, `${slug}-${suffix}` )
+      return await this.generateUniqueSlug(`${slug}-${suffix}`, user, parent)
     }
     
     return slug
   }
 
   public async isValid(folder: FolderEntity): Promise<boolean> {
-    return true
+    let isValid = true
+    isValid &&= folder.name !== undefined
+    isValid &&= folder.name !== ''
+    return isValid
   }
   
   public async getJson(folder: FolderEntity): Promise<Object> {

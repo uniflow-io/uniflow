@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { ProgramEntity, ProgramTagEntity } from '../entity';
 import { ProgramTagRepository } from '../repository';
-import { TagService } from "../service";
+import TagService from "./tag-service";
 
 @Service()
 export default class ProgramTagService {

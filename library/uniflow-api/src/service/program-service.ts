@@ -1,44 +1,31 @@
 import slugify from 'slugify'
 import { Service } from 'typedi';
-import { ProgramEntity, UserEntity} from '../entity';
-import { FolderRepository, ProgramRepository } from '../repository';
-import { FolderService, ProgramClientService, ProgramTagService } from "../service";
+import { FolderEntity, ProgramEntity, UserEntity} from '../entity';
+import { ProgramRepository } from '../repository';
+import FolderService from './folder-service'
+import ProgramClientService from './program-client-service'
+import ProgramTagService from './program-tag-service'
 
 @Service()
 export default class ProgramService {
   constructor(
     private programRepository: ProgramRepository,
-    private folderRepository: FolderRepository,
     private folderService: FolderService,
     private programClientService: ProgramClientService,
     private programTagService: ProgramTagService,
   ) {}
-
-  public async findOneByUserAndPath(user: UserEntity, path: string[]): Promise<ProgramEntity | undefined> {
-    const level = path.length
-    if (level === 0) {
-      return undefined
-    }
-
-    let folder = undefined
-    if (level > 1) {
-      folder = await this.folderRepository.findOneByUserAndPath(user, path.slice(0, level - 1))
-    }
-
-    return await this.programRepository.findOneByUserAndSlug(user, path[level - 1], folder)
-  }
   
-  public async generateUniqueSlug(user: UserEntity, slug: string): Promise<string> {
+  public async generateUniqueSlug(user: UserEntity, slug: string, folder?: FolderEntity): Promise<string> {
     slug = slugify(slug, {
       replacement: '-',
       lower: true,
       strict: true,
     })
     
-    const program = await this.programRepository.findOne({user, slug})
+    const program = await this.programRepository.findOne({user, folder, slug})
     if(program) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.generateUniqueSlug(user, `${slug}-${suffix}` )
+      return await this.generateUniqueSlug(user, `${slug}-${suffix}`, folder)
     }
     
     return slug
@@ -58,6 +45,7 @@ export default class ProgramService {
       'tags': await this.programTagService.toTagNames(program),
       'description': program.description,
       'public': program.public,
+      'user': program.user.username || program.user.uid,
       'created': program.created.toISOString(),
       'updated': program.updated.toISOString(),
     }

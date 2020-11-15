@@ -3,15 +3,14 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
 import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { FolderService } from "../service";
-import { FolderEntity } from "../entity";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
-import { FolderRepository, UserRepository } from '../repository';
+import { FolderRepository } from '../repository';
+import { TypeChecker } from '../model';
 
 @Service()
 export default class FolderController implements ControllerInterface {
   constructor(
-    private userRepository: UserRepository,
     private folderRepository: FolderRepository,
     private folderService: FolderService,
     private withToken: WithTokenMiddleware,
@@ -24,82 +23,16 @@ export default class FolderController implements ControllerInterface {
 
     app.use('/folders', route);
   
-    route.get(
-      '/',
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          let fetchUser = undefined
-          if(req.user && (req.params.username === 'me' || req.params.username === req.user.username)) {
-            fetchUser = req.user
-          } else {
-            fetchUser = await this.userRepository.findOne({username: req.params.username})
-            if(!fetchUser) {
-              throw new ApiException('User not found', 404);
-            }
-          }
-          
-          let data: string[][] = [[]]
-          const folders = await this.folderRepository.findByUser(fetchUser)
-          for (const folder of folders) {
-            data.push(await this.folderService.toPath(folder))
-          }
-          data.sort((path1, path2) => {
-            return path1.join('/').localeCompare(path2.join('/'))
-          })
-  
-          return res.status(400).json(data);
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    route.post(
-      '/',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          name: Joi.string().required(),
-          slug: Joi.string(),
-          path: Joi.array(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          let folder = new FolderEntity();
-          folder.name = req.body.name
-          folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug || req.body.name)
-          folder.parent = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path || [])
-          folder.user = req.user
-    
-          if(await this.folderService.isValid(folder)) {
-            await this.folderRepository.save(folder)
-    
-            return res.status(200).json(await this.folderService.getJson(folder));
-          }
-    
-          return res.status(400).json({
-            'messages': ['Folder not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-  
     route.put(
       '/:uid',
       celebrate({
+        [Segments.PARAMS]: Joi.object().keys({
+          uid: Joi.string().custom(TypeChecker.joiUuid)
+        }),
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
-          slug: Joi.string(),
-          path: Joi.array(),
+          slug: Joi.string().custom(TypeChecker.joiSlug),
+          path: Joi.string().custom(TypeChecker.joiPath),
         }),
       }),
       this.withToken.middleware(),
@@ -107,19 +40,16 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderRepository.findOneByUser(req.user, req.params.uid)
+          const folder = await this.folderRepository.findOneByUserAndUid(req.user, req.params.uid)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
           
-          if(req.body.name) {
-            folder.name = req.body.name
-          }
-          
+          folder.name = req.body.name
+          folder.parent = await this.folderService.fromPath(req.user, req.body.path)
           if (req.body.slug && folder.slug !== req.body.slug) {
-            folder.slug = await this.folderService.generateUniqueSlug(req.user, req.body.slug)
+            folder.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, folder.parent)
           }
-          folder.parent = await this.folderRepository.findOneByUserAndPath(req.user, req.body.path)
           folder.user = req.user
   
           if(await this.folderService.isValid(folder)) {
@@ -140,17 +70,22 @@ export default class FolderController implements ControllerInterface {
   
     route.delete(
       '/:uid',
+      celebrate({
+        [Segments.PARAMS]: Joi.object().keys({
+          uid: Joi.string().custom(TypeChecker.joiUuid)
+        })
+      }),
       this.withToken.middleware(),
       this.withUser.middleware(),
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let folder = await this.folderRepository.findOneByUser(req.user, req.params.uid)
+          const folder = await this.folderRepository.findOneByUserAndUid(req.user, req.params.uid)
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
   
-          await this.folderRepository.remove(folder)
+          await this.folderService.delete(folder)
   
           return res.status(200).json(true);
         } catch (e) {

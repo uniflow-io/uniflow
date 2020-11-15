@@ -12,6 +12,30 @@ export default class UserService {
     private userRepository: UserRepository,
   ) {}
 
+  public isGranted(user: UserEntity, attributes: Array<string> | string): boolean {
+    if (!Array.isArray(attributes)) {
+      attributes = [attributes]
+    }
+  
+    let roles = []
+    if (user.role === 'ROLE_SUPER_ADMIN') {
+      roles.push('ROLE_USER')
+      roles.push('ROLE_SUPER_ADMIN')
+    } else {
+      roles.push(user.role)
+    }
+  
+    for (const attribute of attributes) {
+      for (const role of roles) {
+        if (attribute === role) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
   public async create(inputUser: UserEntity): Promise<UserEntity> {
     try {
       const salt = randomBytes(32);

@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { ProgramEntity, ProgramClientEntity} from '../entity';
 import { ProgramClientRepository } from '../repository';
-import { ClientService } from "../service";
+import ClientService from "./client-service";
 
 @Service()
 export default class ProgramClientService {

@@ -24,9 +24,8 @@ describe('auth', () => {
                     if (err) throw err;
 
                     const data = res.body;
-                    expect(data).to.have.all.keys('programs')
 
-                    assert.isArray(data.programs)
+                    assert.isArray(data)
 
                     return done();
                 } catch (err) {
