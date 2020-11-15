@@ -28,22 +28,22 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
     return await qb.getOne();
   }
 
-  public async findOneByUserAndPath(user: UserEntity, path: string[]): Promise<FolderEntity | undefined> {
-    const level = path.length
+  public async findOneByUserAndPath(user: UserEntity, paths: string[]): Promise<FolderEntity | undefined> {
+    const level = paths.length
     if (level === 0) {
       return undefined
     }
     
     let parent = undefined
     if (level > 1) {
-      parent = await this.findOneByUserAndPath(user, path.slice(0, level - 1))
+      parent = await this.findOneByUserAndPath(user, paths.slice(0, level - 1))
     }
 
     const qb = this.getRepository<FolderEntity>()
       .createQueryBuilder('f')
       .leftJoinAndSelect('f.parent', 'parent')
       .andWhere('f.user = :user').setParameter('user', user.id)
-      .andWhere('f.slug = :slug').setParameter('slug', path[level - 1])
+      .andWhere('f.slug = :slug').setParameter('slug', paths[level - 1])
     
     if (parent) {
       qb.andWhere('f.parent = :parent').setParameter('parent', parent.id)

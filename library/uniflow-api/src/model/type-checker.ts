@@ -5,6 +5,7 @@ const checkUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f
 const checkUsername = /^[0-9a-z-]+$/i;
 const checkPath = /^\/|(\/[a-z0-9-]+)+$/i;
 const checkSlug = /^[0-9a-z-]+$/i;
+const checkApiKey = /^[0-9a-z]{32}$/i;
 
 export default class TypeChecker {
     public static isUuid(value: string): boolean {
@@ -21,6 +22,10 @@ export default class TypeChecker {
 
     public static isSlug(value: string): boolean {
         return checkSlug.test(value)
+    }
+
+    public static isApiKey(value: string): boolean {
+        return checkApiKey.test(value)
     }
 
     public static isSameUser(value: string, user: UserEntity): boolean {
@@ -67,6 +72,14 @@ export default class TypeChecker {
 
     public static joiSlug(value: any, helpers: any) {
         if(TypeChecker.isSlug(value)) {
+            return value
+        }
+        
+        return helpers.error('any.invalid')
+    }
+
+    public static joiApiKey(value: any, helpers: any) {
+        if(TypeChecker.isApiKey(value)) {
             return value
         }
         

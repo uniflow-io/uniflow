@@ -42,6 +42,7 @@ export default class UserFixture implements FixtureInterface {
             await this.save({
                 firstname: faker.name.firstName(),
                 lastname: faker.name.lastName(),
+                username: faker.random.arrayElement<string|undefined>([undefined, `user${i?i:''}`]),
                 email: `user${i?i:''}@uniflow.io`,
                 password: `user${i?i:''}_password`,
             } as UserEntity)

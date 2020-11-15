@@ -3,7 +3,7 @@ import server from '../../utils/server'
 import { ApiException } from '../../exceptions'
 
 export const contact = (email, message) => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .post(`${server.getBaseUrl()}/api/contacts`, {
         email: email,

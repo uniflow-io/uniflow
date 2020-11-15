@@ -5,9 +5,9 @@ import {
   COMMIT_CLEAR_FEED,
   COMMIT_UPDATE_FEED,
   COMMIT_DELETE_FEED,
-  COMMIT_SET_CURRENT_FEED,
-  COMMIT_SET_CURRENT_FOLDER,
-  COMMIT_SET_CURRENT_USERNAME,
+  COMMIT_SET_CURRENT_SLUG,
+  COMMIT_SET_CURRENT_FOLDER_PATH,
+  COMMIT_SET_CURRENT_UID,
 } from './actions-types'
 import { commitLogoutUser } from '../auth/actions'
 import { pathTo } from '../../routes'
@@ -44,19 +44,8 @@ export const deserializeRailData = raw => {
   return rail
 }
 
-export const getCurrentProgram = state => {
-  return state.current
-    ? state.items[`${state.current.type}_${state.current.id}`]
-    : null
-}
-export const getCurrentPath = state => {
-  let path = []
-  if (state.folder) {
-    path = state.folder.path.slice()
-    path.push(state.folder.slug)
-  }
-
-  return path
+export const getCurrentItem = state => {
+  return state.slug ? state.items[`${state.slug}`] : null
 }
 
 export const getOrderedFeed = (state, filter) => {
@@ -64,27 +53,27 @@ export const getOrderedFeed = (state, filter) => {
 
   if (filter !== undefined) {
     keys = keys.filter(key => {
-      let item = state.items[key]
-      let words = ''
+      const item = state.items[key]
+      let words = []
       if (item.type === 'program') {
-        words = item.name
-        for (let i = 0; i < item.tags.length; i++) {
-          words += ' ' + item.tags[i]
+        words.push(item.entity.name)
+        for (let i = 0; i < item.entity.tags.length; i++) {
+          words .push(item.entity.tags[i])
         }
       } else if (item.type === 'folder') {
-        words = item.name
+        words.push(item.entity.name)
       }
-      words = words.toLowerCase()
+      words = words.join(' ').toLowerCase()
 
       return words.indexOf(filter) !== -1
     })
   }
 
   keys.sort((keyA, keyB) => {
-    let itemA = state.items[keyA]
-    let itemB = state.items[keyB]
+    const itemA = state.items[keyA]
+    const itemB = state.items[keyB]
 
-    return moment(itemB.updated).diff(moment(itemA.updated))
+    return moment(itemB.entity.updated).diff(moment(itemA.entity.updated))
   })
 
   return keys.map(key => {
@@ -120,7 +109,7 @@ export const getTags = state => {
 }
 
 export const commitClearFeed = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_CLEAR_FEED,
     })
@@ -128,7 +117,7 @@ export const commitClearFeed = () => {
   }
 }
 export const commitUpdateFeed = item => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_UPDATE_FEED,
       item,
@@ -137,7 +126,7 @@ export const commitUpdateFeed = item => {
   }
 }
 export const commitDeleteFeed = item => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_DELETE_FEED,
       item,
@@ -145,36 +134,36 @@ export const commitDeleteFeed = item => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFeed = current => {
-  return dispatch => {
+export const commitSetCurrentSlug = slug => {
+  return async dispatch => {
     dispatch({
-      type: COMMIT_SET_CURRENT_FEED,
-      current,
+      type: COMMIT_SET_CURRENT_SLUG,
+      slug,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFolder = folder => {
-  return dispatch => {
+export const commitSetCurrentFolderPath = folderPath => {
+  return async dispatch => {
     dispatch({
-      type: COMMIT_SET_CURRENT_FOLDER,
-      folder,
+      type: COMMIT_SET_CURRENT_FOLDER_PATH,
+      folderPath,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentUsername = username => {
-  return dispatch => {
+export const commitSetCurrentUid = uid => {
+  return async dispatch => {
     dispatch({
-      type: COMMIT_SET_CURRENT_USERNAME,
-      username,
+      type: COMMIT_SET_CURRENT_UID,
+      uid,
     })
     return Promise.resolve()
   }
 }
 
-export const fetchFeed = (username, path, token = null) => {
-  return dispatch => {
+export const fetchFeed = (uid, path, token = null) => {
+  return async dispatch => {
     let config = {}
     if (token) {
       config = {
@@ -184,27 +173,25 @@ export const fetchFeed = (username, path, token = null) => {
       }
     }
 
-    return request
-      .get(
-        `${server.getBaseUrl()}/api/program/${username}/tree${
-          path.length > 0 ? '/' + path.join('/') : ''
-        }`,
-        config
-      )
-      .then(response => {
+    return Promise.all([
+        request.get(`${server.getBaseUrl()}/api/users/${uid}/programs?path=${path}`, config),
+        request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${path}`, config)
+      ])
+      .then(([programsResponse, foldersResponse]) => {
         dispatch(commitClearFeed())
 
-        for (let i = 0; i < response.data['children'].length; i++) {
-          let item = response.data['children'][i]
-
-          dispatch(commitUpdateFeed(item))
+        for (const folder of foldersResponse.data) {
+          dispatch(commitUpdateFeed({
+            entity: folder,
+            type: 'folder',
+          }))
         }
-
-        dispatch(
-          commitSetCurrentFolder(
-            response.data['folder'] ? response.data['folder'] : null
-          )
-        )
+        for (const program of programsResponse.data) {
+          dispatch(commitUpdateFeed({
+            entity: program,
+            type: 'program',
+          }))
+        }
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -217,7 +204,7 @@ export const fetchFeed = (username, path, token = null) => {
 }
 
 export const createProgram = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     let data = {
       name: item.name,
       slug: item.name,
@@ -253,7 +240,7 @@ export const createProgram = (item, token) => {
 }
 
 export const updateProgram = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     let data = {
       name: item.name,
       slug: item.slug,
@@ -289,7 +276,7 @@ export const updateProgram = (item, token) => {
 }
 
 export const getProgramData = (item, token = null) => {
-  return dispatch => {
+  return async dispatch => {
     let config = {}
     if (token) {
       config = {
@@ -315,7 +302,7 @@ export const getProgramData = (item, token = null) => {
 }
 
 export const setProgramData = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     let data = {
       data: item.data,
     }
@@ -344,7 +331,7 @@ export const setProgramData = (item, token) => {
 }
 
 export const deleteProgram = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .delete(`${server.getBaseUrl()}/api/program/delete/${item.id}`, {
         headers: {
@@ -366,28 +353,36 @@ export const deleteProgram = (item, token) => {
   }
 }
 
-export const setCurrentFeed = current => {
-  return dispatch => {
-    dispatch(commitSetCurrentFeed(current))
+export const setCurrentSlug = slug => {
+  return async dispatch => {
+    dispatch(commitSetCurrentSlug(slug))
 
-    return Promise.resolve(current)
+    return Promise.resolve(slug)
   }
 }
 
-export const setCurrentUsername = username => {
-  return dispatch => {
-    dispatch(commitSetCurrentUsername(username))
+export const setCurrentFolderPath = folderPath => {
+  return async dispatch => {
+    dispatch(commitSetCurrentFolderPath(folderPath))
 
-    return Promise.resolve(username)
+    return Promise.resolve(folderPath)
+  }
+}
+
+export const setCurrentUid = uid => {
+  return async dispatch => {
+    dispatch(commitSetCurrentUid(uid))
+
+    return Promise.resolve(uid)
   }
 }
 
 export const getPublicPrograms = () => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/programs`)
       .then(response => {
-        return response.data.programs
+        return response.data
       })
       .catch(error => {
         return []
@@ -395,38 +390,39 @@ export const getPublicPrograms = () => {
   }
 }
 
-export const pathToSlugs = path => {
+const entityToSlugs = entity => {
+  let paths = entity.path === '/' ? [] : entity.path.split('/').slice(1)
+  paths.push(entity.slug)
+  
   let slugs = {}
-  for (let i = 0; i < path.length; i++) {
-    slugs[`slug${i + 1}`] = path[i]
+  for (let i = 0; i < paths.length; i++) {
+    slugs[`slug${i + 1}`] = paths[i]
   }
 
   return slugs
 }
 
-export const feedPathTo = (path, username = null) => {
-  let slugs = pathToSlugs(path)
+export const feedPathTo = (entity, user = null) => {
+  const slugs = entityToSlugs(entity)
 
-  if (username) {
-    return pathTo('userFeed', Object.assign({ username: username }, slugs))
+  const isCurrentUser = user && (entity.user === user.uid || entity.user === user.username)
+  if (isCurrentUser) {
+    return pathTo('feed', slugs)
   }
-
-  return pathTo('feed', slugs)
+  
+  return pathTo('userFeed', Object.assign({ uid: entity.user }, slugs))
 }
 
-export const pathToString = path => {
-  return `/${path.join('/')}`
+export const pathsToPath = paths => {
+  return `/${paths.join('/')}`
 }
 
-export const stringToPath = value => {
-  if (value === '/') {
-    return []
-  }
-  return value.slice(1).split('/')
+export const pathToPaths = path => {
+  return path === '/' ? [] : path.split('/').slice(1)
 }
 
-export const getFolderTree = (username, token = null) => {
-  return dispatch => {
+export const getFolderTree = (uid, token = null) => {
+  return async dispatch => {
     let config = {}
     if (token) {
       config = {
@@ -437,7 +433,7 @@ export const getFolderTree = (username, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/folder/${username}/tree`, config)
+      .get(`${server.getBaseUrl()}/api/folder/${uid}/tree`, config)
       .then(response => {
         return response.data
       })
@@ -452,7 +448,7 @@ export const getFolderTree = (username, token = null) => {
 }
 
 export const createFolder = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     let data = {
       name: item.name,
       slug: item.name,
@@ -484,7 +480,7 @@ export const createFolder = (item, token) => {
 }
 
 export const updateCurrentFolder = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     let data = {
       name: item.name,
       slug: item.slug,
@@ -500,7 +496,7 @@ export const updateCurrentFolder = (item, token) => {
       .then(response => {
         let item = response.data
 
-        dispatch(commitSetCurrentFolder(item))
+        dispatch(commitSetCurrentFolderPath(item))
 
         return item
       })
@@ -515,7 +511,7 @@ export const updateCurrentFolder = (item, token) => {
 }
 
 export const deleteCurrentFolder = (item, token) => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .delete(`${server.getBaseUrl()}/api/folder/delete/${item.id}`, {
         headers: {
@@ -523,7 +519,7 @@ export const deleteCurrentFolder = (item, token) => {
         },
       })
       .then(response => {
-        // dispatch(commitSetCurrentFolder(null))
+        // dispatch(commitSetCurrentFolderPath(null))
 
         return response.data
       })

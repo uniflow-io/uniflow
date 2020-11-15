@@ -8,9 +8,9 @@ import {
   getFolderTree,
   updateCurrentFolder,
   deleteCurrentFolder,
-  pathToString,
-  stringToPath,
-  commitSetCurrentFolder,
+  pathsToPath,
+  pathToPaths,
+  commitSetCurrentFolderPath,
   getCurrentPath,
   feedPathTo,
 } from '../../reducers/feed/actions'
@@ -25,14 +25,14 @@ class Folder extends Component {
   componentDidMount() {
     const { folder } = this.props
 
-    this.setState({ folderTree: [pathToString(folder.path)] })
+    this.setState({ folderTree: [folder.path] })
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.folder.id !== prevProps.folder.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(this.props.folder.path)],
+        folderTree: [this.props.folder.path],
       })
     }
   }
@@ -40,7 +40,7 @@ class Folder extends Component {
   onChangeTitle = event => {
     this.props
       .dispatch(
-        commitSetCurrentFolder({
+        commitSetCurrentFolderPath({
           ...this.props.folder,
           ...{ name: event.target.value },
         })
@@ -53,7 +53,7 @@ class Folder extends Component {
   onChangeSlug = event => {
     this.props
       .dispatch(
-        commitSetCurrentFolder({
+        commitSetCurrentFolderPath({
           ...this.props.folder,
           ...{ slug: event.target.value },
         })
@@ -66,9 +66,9 @@ class Folder extends Component {
   onChangePath = selected => {
     this.props
       .dispatch(
-        commitSetCurrentFolder({
+        commitSetCurrentFolderPath({
           ...this.props.folder,
-          ...{ path: stringToPath(selected) },
+          ...{ path: pathToPaths(selected) },
         })
       )
       .then(() => {
@@ -93,11 +93,11 @@ class Folder extends Component {
       .dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
         const isCurrentUser =
-          this.props.feed.username &&
-          this.props.feed.username === this.props.user.username
+          this.props.feed.uid &&
+          this.props.feed.uid === this.props.user.uid
 
         navigate(
-          feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
+          feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
         )
       })
   }
@@ -108,14 +108,14 @@ class Folder extends Component {
     const { feed, folder } = this.props
 
     this.props
-      .dispatch(getFolderTree(feed.username, this.props.auth.token))
+      .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
         let folderPath = folder.path.slice()
         folderPath.push(folder.slug)
-        folderPath = pathToString(folderPath)
+        folderPath = pathsToPath(folderPath)
 
         folderTree = folderTree.map(path => {
-          return pathToString(path)
+          return pathsToPath(path)
         })
         folderTree = folderTree.filter(value => {
           return value.startsWith(folderPath) === false
@@ -130,13 +130,13 @@ class Folder extends Component {
 
   itemPathTo = item => {
     const isCurrentUser =
-      this.props.feed.username &&
-      this.props.feed.username === this.props.user.username
+      this.props.feed.uid &&
+      this.props.feed.uid === this.props.user.uid
 
     let path = item.path.slice()
     path.push(item.slug)
 
-    return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
+    return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
   }
 
   render() {
@@ -215,7 +215,7 @@ class Folder extends Component {
             <div className="col-sm-10">
               {(folderTreeEdit && (
                 <Select
-                  value={pathToString(folder.path)}
+                  value={folder.path}
                   onChange={this.onChangePath}
                   className="form-control"
                   id="info_path_{{ _uid }}"
@@ -227,12 +227,12 @@ class Folder extends Component {
                 <div>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-secondary"
                     onClick={this.onFolderEdit}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </button>{' '}
-                  {pathToString(folder.path)}
+                  {folder.path}
                 </div>
               )}
             </div>
@@ -247,7 +247,6 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    folder: state.feed.folder,
     feed: state.feed,
   }
 })(Folder)

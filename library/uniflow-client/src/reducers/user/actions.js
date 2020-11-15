@@ -49,7 +49,7 @@ export const updateConfig = (item, token, uid) => {
   }
 }
 export const fetchSettings = (uid, token) => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .get(`${server.getBaseUrl()}/api/users/${uid}/settings`, {
         headers: {
@@ -100,7 +100,7 @@ export const updateSettings = (item, token) => {
   }
 }
 export const commitUpdateSettings = user => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_UPDATE_SETTINGS,
       user,

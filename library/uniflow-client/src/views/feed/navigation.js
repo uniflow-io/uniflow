@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import {
   getOrderedFeed,
   createProgram,
-  setCurrentFeed,
+  setCurrentSlug,
   getCurrentPath,
   createFolder,
   feedPathTo,
@@ -46,8 +46,8 @@ class Navigation extends Component {
         )
       )
       .then(item => {
-        return this.props.dispatch(setCurrentFeed(null)).then(() => {
-          navigate(this.itemPathTo(item))
+        return this.props.dispatch(setCurrentSlug(null)).then(() => {
+          navigate(feedPathTo(item, this.props.user))
         })
       })
       .catch(log => {
@@ -72,9 +72,9 @@ class Navigation extends Component {
       )
       .then(item => {
         return this.props
-          .dispatch(setCurrentFeed({ type: item.type, id: item.id }))
+          .dispatch(setCurrentSlug({ type: item.type, id: item.id }))
           .then(() => {
-            navigate(this.itemPathTo(item))
+            navigate(feedPathTo(item, this.props.user))
           })
       })
       .catch(log => {
@@ -82,45 +82,26 @@ class Navigation extends Component {
       })
   }
 
-  itemPathTo = item => {
-    const isCurrentUser =
-      this.props.feed.username &&
-      this.props.feed.username === this.props.user.username
-
-    let path = item.path.slice()
-    path.push(item.slug)
-
-    return feedPathTo(
-      path,
-      item.public || isCurrentUser ? this.props.feed.username : null
-    )
-  }
-
   render() {
-    const isCurrentUser =
-      this.props.feed.username &&
-      this.props.feed.username === this.props.user.username
+    const { user } = this.props
+    const isCurrentUser = this.props.feed.uid === this.props.auth.uid
     const isFolderActive = () => {
       return this.props.feed.current === null ? 'active' : null
     }
     const isActive = item => {
-      return this.props.feed.current &&
-        this.props.feed.current.type === item.type &&
-        this.props.feed.current.id === item.id
-        ? 'active'
-        : null
+      return this.props.feed.slug === item.entity.slug ? 'active' : null
     }
 
     const backTo = () => {
       let path = getCurrentPath(this.props.feed).slice(0, -1)
 
-      return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
+      return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
     }
 
     const folderTo = () => {
       let path = getCurrentPath(this.props.feed)
 
-      return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
+      return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
     }
 
     return (
@@ -184,18 +165,18 @@ class Navigation extends Component {
                     <span className="link">
                       {item.type === 'folder' && (
                         <>
-                          <FontAwesomeIcon icon={faFolder} /> {item.name}{' '}
+                          <FontAwesomeIcon icon={faFolder} /> {item.entity.name}{' '}
                         </>
                       )}
-                      {item.type === 'program' && (<>{item.name} </>)}
+                      {item.type === 'program' && (<>{item.entity.name} </>)}
                       {item.type === 'program' &&
-                        item.tags.map((tag, j) => (
+                        item.entity.tags.map((tag, j) => (
                           <span key={j} className="badge badge-light mr-1">
                             {tag}
                           </span>
                         ))}
                     </span>
-                    <Link to={this.itemPathTo(item)}>{item.name}</Link>
+                    <Link to={feedPathTo(item.entity, user)}>{item.entity.name}</Link>
                   </li>
                 )
               )}

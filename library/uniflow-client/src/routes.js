@@ -107,7 +107,7 @@ const routes = {
     component: requireAuthentication(Feed),
   },
   userFeed: {
-    path: '/:username/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
+    path: '/:uid/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',
     component: Feed,
   },
 }

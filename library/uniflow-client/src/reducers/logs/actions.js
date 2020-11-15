@@ -10,7 +10,7 @@ export const getNewLogs = state => {
 }
 
 export const commitAddLog = message => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_ADD_LOG,
       message,
@@ -19,7 +19,7 @@ export const commitAddLog = message => {
   }
 }
 export const commitReadLog = id => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_READ_LOG,
       id,

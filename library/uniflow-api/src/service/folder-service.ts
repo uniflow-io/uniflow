@@ -27,15 +27,15 @@ export default class FolderService {
   }
 
   public async toPath(folder?: FolderEntity): Promise<string> {
-    let path = []
+    let paths = []
     
     while(folder) {
-      path.unshift(folder.slug)
+      paths.unshift(folder.slug)
       
       folder = await this.folderRepository.findOneParent(folder)
     }
     
-    return `/${path.join('/')}`
+    return `/${paths.join('/')}`
   }
 
   public async fromPath(user: UserEntity, path: string): Promise<FolderEntity|undefined> {
@@ -43,7 +43,8 @@ export default class FolderService {
       throw new ApiException('not a path')
     }
 
-    return await this.folderRepository.findOneByUserAndPath(user, path.slice(1).split('/'))
+    const paths = path === '/' ? [] : path.split('/').slice(1)
+    return await this.folderRepository.findOneByUserAndPath(user, paths)
   }
   
   public async generateUniqueSlug(slug: string, user: UserEntity, parent?: FolderEntity): Promise<string> {
@@ -54,7 +55,8 @@ export default class FolderService {
     })
     
     const folder = await this.folderRepository.findOne({user, parent, slug})
-    if(folder) {
+    const program = await this.programRepository.findOne({user, folder: parent, slug})
+    if(folder || program) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
       return await this.generateUniqueSlug(`${slug}-${suffix}`, user, parent)
     }
@@ -75,6 +77,7 @@ export default class FolderService {
       'name': folder.name,
       'slug': folder.slug,
       'path': await this.toPath(folder.parent),
+      'user': folder.user.username || folder.user.uid,
       'created': folder.created.toISOString(),
       'updated': folder.updated.toISOString(),
     }

@@ -9,7 +9,7 @@ import {
 } from './actions-types'
 
 export const commitLoginUserRequest = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_REQUEST,
     })
@@ -23,7 +23,7 @@ export const commitLoginUserSuccess = (token, uid) => {
     window.localStorage.setItem('uid', uid)
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_SUCCESS,
       token,
@@ -39,7 +39,7 @@ export const commitLoginUserFailure = (error, message = null) => {
     window.localStorage.removeItem('uid')
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_FAILURE,
       status: error.response.status,
@@ -55,7 +55,7 @@ export const commitLogoutUser = () => {
     window.localStorage.removeItem('uid')
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGOUT_USER,
     })
@@ -64,7 +64,7 @@ export const commitLogoutUser = () => {
 }
 
 export const login = (username, password) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(`${server.getBaseUrl()}/api/login`, {
@@ -100,7 +100,7 @@ export const facebookLoginUrl = facebookAppId => {
 }
 
 export const facebookLogin = (access_token, token = null) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
@@ -145,7 +145,7 @@ export const githubLoginUrl = githubAppId => {
 }
 
 export const githubLogin = (code, token = null) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
@@ -184,7 +184,7 @@ export const githubLogin = (code, token = null) => {
 }
 
 export const register = (email, password) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(`${server.getBaseUrl()}/api/users`, {

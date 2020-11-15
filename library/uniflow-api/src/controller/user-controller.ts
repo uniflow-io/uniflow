@@ -81,12 +81,12 @@ export default class UserController implements ControllerInterface {
           uid: Joi.string().custom(TypeChecker.joiUuidOrUsername)
         }),
         [Segments.BODY]: Joi.object().keys({
-          firstname: Joi.string().allow(null, ''),
-          lastname: Joi.string().allow(null, ''),
+          firstname: Joi.string().allow(null),
+          lastname: Joi.string().allow(null),
           username: Joi.string().allow(null).custom(TypeChecker.joiUsername),
-          apiKey: Joi.string().allow(null, ''),
-          facebookId: Joi.string().allow(null, ''),
-          githubId: Joi.string().allow(null, ''),
+          apiKey: Joi.string().allow(null).custom(TypeChecker.joiApiKey),
+          facebookId: Joi.string().allow(null),
+          githubId: Joi.string().allow(null),
         }),
       }),
       this.withToken.middleware(),
@@ -197,8 +197,11 @@ export default class UserController implements ControllerInterface {
           }
 
           const data = []
-          const parent = req.query.path ? this.folderService.fromPath(user, req.query.path as string) : undefined
-          const folders = await this.folderRepository.find({user})
+          const parent = req.query.path ? await this.folderService.fromPath(user, req.query.path as string) : undefined
+          const folders = await this.folderRepository.find({
+            where: {user, parent},
+            relations: ['parent', 'user'],
+          })
           for (const folder of folders) {
             data.push(await this.folderService.getJson(folder))
           }
@@ -273,7 +276,10 @@ export default class UserController implements ControllerInterface {
           const data = []
           const folder = req.query.path ? await this.folderService.fromPath(user, req.query.path as string) : undefined
           const isPublic = req.user && TypeChecker.isSameUser(req.params.uid, req.user) ? undefined : true
-          const programs = await this.programRepository.find({user, folder, public: isPublic})
+          const programs = await this.programRepository.find({
+            where: {user, folder, public: isPublic},
+            relations: ['folder', 'user'],
+          })
           for (const program of programs) {
             data.push(await this.programService.getJson(program))
           }
@@ -295,7 +301,7 @@ export default class UserController implements ControllerInterface {
           path: Joi.string().custom(TypeChecker.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
-          description: Joi.string().allow(null, ''),
+          description: Joi.string().allow(null),
           public: Joi.boolean(),
         }),
       }),
@@ -309,7 +315,7 @@ export default class UserController implements ControllerInterface {
           program.name = req.body.name
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path)
-          program.slug = await this.programService.generateUniqueSlug(req.user, req.body.slug, program.folder)
+          program.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, program.folder)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
           program.description = req.body.description

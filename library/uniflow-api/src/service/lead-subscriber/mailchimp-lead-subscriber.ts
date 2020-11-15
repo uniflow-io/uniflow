@@ -45,4 +45,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       }
     );
   }
+
+  public async sync(): Promise<any> {
+  }
 }

@@ -63,7 +63,7 @@ export default class ProgramController implements ControllerInterface {
           path: Joi.string().custom(TypeChecker.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
-          description: Joi.string().allow(null, ''),
+          description: Joi.string().allow(null),
           public: Joi.boolean(),
         }),
       }),
@@ -81,7 +81,7 @@ export default class ProgramController implements ControllerInterface {
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path)
           if (req.body.slug && program.slug !== req.body.slug) {
-            program.slug = await this.programService.generateUniqueSlug(req.user, req.body.slug, program.folder)
+            program.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, program.folder)
           }
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)

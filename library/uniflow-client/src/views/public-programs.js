@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
-import { getPublicPrograms, feedPathTo } from '../reducers/feed/actions'
 import { connect } from 'react-redux'
+import { getPublicPrograms, feedPathTo } from '../reducers/feed/actions'
 
-class Flows extends Component {
+class PublicPrograms extends Component {
   state = {
     programs: [],
   }
@@ -14,19 +14,13 @@ class Flows extends Component {
 
   onFetchFlowData = () => {
     this.props.dispatch(getPublicPrograms()).then(programs => {
-      this.setState({ programs: programs })
+      this.setState({ programs })
     })
-  }
-
-  itemPathTo = item => {
-    let path = item.path.slice()
-    path.push(item.slug)
-
-    return feedPathTo(path, item.username)
   }
 
   render() {
     const { programs } = this.state
+    const { user } = this.props
 
     return (
       <section className="section container-fluid">
@@ -34,15 +28,12 @@ class Flows extends Component {
           <div className="col-md-12">
             <h3>Public Flows</h3>
             <dl className="row">
-              {programs.map((item, i) => [
-                <dt
-                  className="col-md-2 text-md-right font-weight-normal"
-                  key={i * 2}
-                >
-                  <Link to={this.itemPathTo(item)}>{item.name}</Link>
+              {programs.map((program, i) => [
+                <dt className="col-md-2 text-md-right font-weight-normal" key={i * 2}>
+                  <Link to={feedPathTo(program, user)}>{program.name}</Link>
                 </dt>,
                 <dd className="col-md-10" key={i * 2 + 1}>
-                  {item.description}
+                  {program.description}
                 </dd>,
               ])}
             </dl>
@@ -53,6 +44,8 @@ class Flows extends Component {
   }
 }
 
-export default connect(() => {
-  return {}
-})(Flows)
+export default connect(state => {
+  return {
+    user: state.user,
+  }
+})(PublicPrograms)

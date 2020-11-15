@@ -12,8 +12,8 @@ class Settings extends Component {
     user: {
       apiKey: null,
       username: null,
-      firstName: null,
-      lastName: null,
+      firstname: null,
+      lastname: null,
       facebookId: null,
       githubId: null,
     },
@@ -85,7 +85,7 @@ class Settings extends Component {
   }
 
   generateKey = () => {
-    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
     let apiKey = ''
     for (let i = 0; i < 32; i++) {

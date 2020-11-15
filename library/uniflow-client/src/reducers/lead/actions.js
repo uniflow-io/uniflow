@@ -3,7 +3,7 @@ import server from '../../utils/server'
 import { ApiException } from '../../exceptions'
 
 export const newsletter = (email) => {
-  return dispatch => {
+  return async dispatch => {
     return request
       .post(`${server.getBaseUrl()}/api/leads`, {
         email: email,

@@ -1,7 +1,5 @@
-import slugify from 'slugify'
 import { Service } from 'typedi';
-import { FolderEntity, ProgramEntity, UserEntity} from '../entity';
-import { ProgramRepository } from '../repository';
+import { ProgramEntity } from '../entity';
 import FolderService from './folder-service'
 import ProgramClientService from './program-client-service'
 import ProgramTagService from './program-tag-service'
@@ -9,27 +7,10 @@ import ProgramTagService from './program-tag-service'
 @Service()
 export default class ProgramService {
   constructor(
-    private programRepository: ProgramRepository,
     private folderService: FolderService,
     private programClientService: ProgramClientService,
     private programTagService: ProgramTagService,
   ) {}
-  
-  public async generateUniqueSlug(user: UserEntity, slug: string, folder?: FolderEntity): Promise<string> {
-    slug = slugify(slug, {
-      replacement: '-',
-      lower: true,
-      strict: true,
-    })
-    
-    const program = await this.programRepository.findOne({user, folder, slug})
-    if(program) {
-      const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.generateUniqueSlug(user, `${slug}-${suffix}`, folder)
-    }
-    
-    return slug
-  }
 
   public async isValid(program: ProgramEntity): Promise<boolean> {
     return true

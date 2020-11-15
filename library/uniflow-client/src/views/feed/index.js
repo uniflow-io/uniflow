@@ -2,25 +2,23 @@ import React, { Component } from 'react'
 import Navigation from './navigation'
 import Program from './program'
 import Folder from './folder'
-import { getCurrentProgram } from '../../reducers/feed/actions'
+import { getCurrentItem } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Feed extends Component {
   render() {
-    const { flows, feed  } = this.props
-    const currentProgram = getCurrentProgram(feed)
+    const { flows, feed } = this.props
+    const item = getCurrentItem(feed)
 
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
           <Navigation />
-          {feed.username &&
-            currentProgram &&
-            currentProgram.type === 'program' &&
-            <Program flows={flows} />
+          {item && item.type === 'program' &&
+            <Program program={item.entity} flows={flows} />
           }
-          {feed.username && currentProgram === null && feed.folder &&
-            <Folder />
+          {item && item.type === 'folder' &&
+            <Folder folder={item.entity} />
           }
         </div>
       </div>

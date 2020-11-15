@@ -19,7 +19,6 @@ import {
   commitSetRail,
 } from '../../reducers/rail/actions'
 import {
-  getCurrentProgram,
   getTags,
   commitUpdateFeed,
   createProgram,
@@ -27,10 +26,10 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setCurrentFeed,
+  setCurrentSlug,
   getFolderTree,
-  pathToString,
-  stringToPath,
+  pathsToPath,
+  pathToPaths,
   feedPathTo,
   deserializeRailData,
   serializeRailData,
@@ -42,7 +41,7 @@ import { pathTo } from '../../routes'
 class Program extends Component {
   state = {
     fetchedSlug: null,
-    fetchedUsername: null,
+    fetchedUid: null,
     folderTreeEdit: false,
     folderTree: [],
   }
@@ -53,7 +52,7 @@ class Program extends Component {
     this._componentIsMounted = true
     this._componentShouldUpdate = true
 
-    this.setState({ folderTree: [pathToString(program.path)] })
+    this.setState({ folderTree: [program.path] })
 
     this.onFetchFlowData()
   }
@@ -66,7 +65,7 @@ class Program extends Component {
     if (this.props.program.id !== prevProps.program.id) {
       this.setState({
         folderTreeEdit: false,
-        folderTree: [pathToString(this.props.program.path)],
+        folderTree: [this.props.program.path],
       })
 
       this.onFetchFlowData()
@@ -187,7 +186,7 @@ class Program extends Component {
 
     let data = serializeRailData(rail)
     if (
-      (feed.username === 'me' || user.username === feed.username) &&
+      (feed.uid === 'me' || user.uid === feed.uid) &&
       program.data !== data
     ) {
       program.data = data
@@ -226,7 +225,7 @@ class Program extends Component {
     this.props
       .dispatch(commitUpdateFeed({
         ...this.props.program,
-        ...{ path: stringToPath(selected) },
+        ...{ path: pathToPaths(selected) },
       }))
       .then(this.onUpdate)
   }
@@ -271,7 +270,7 @@ class Program extends Component {
     this.props
       .dispatch(updateProgram(this.props.program, this.props.auth.token))
       .then(() => {
-        const path = this.itemPathTo(this.props.program)
+        const path = feedPathTo(this.props.program, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -294,7 +293,7 @@ class Program extends Component {
       })
       .then(() => {
         return this.props.dispatch(
-          setCurrentFeed({ type: program.type, id: program.id })
+          setCurrentSlug({ type: program.type, id: program.id })
         )
       })
       .catch(log => {
@@ -316,10 +315,10 @@ class Program extends Component {
     const { feed } = this.props
 
     this.props
-      .dispatch(getFolderTree(feed.username, this.props.auth.token))
+      .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
         folderTree = folderTree.map(path => {
-          return pathToString(path)
+          return pathsToPath(path)
         })
 
         this.setState({
@@ -355,16 +354,6 @@ class Program extends Component {
     })
 
     return flowLabels
-  }
-
-  itemPathTo = item => {
-    const isCurrentUser =
-      this.props.feed.username &&
-      this.props.feed.username === this.props.user.username
-
-    let path = item.path.slice()
-    path.push(item.slug)
-    return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
   getNodeClipboard = () => {
@@ -490,7 +479,7 @@ class Program extends Component {
             <div className="col-sm-10">
               {(folderTreeEdit && (
                 <Select
-                  value={pathToString(program.path)}
+                  value={program.path}
                   onChange={this.onChangePath}
                   className="form-control"
                   id="info_path_{{ _uid }}"
@@ -507,7 +496,7 @@ class Program extends Component {
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </button>{' '}
-                  {pathToString(program.path)}
+                  {program.path}
                 </div>
               )}
             </div>
@@ -567,7 +556,7 @@ class Program extends Component {
               Public
             </label>
 
-            {user.username && (
+            {user.uid && (
               <div className="col-sm-10">
                 <Checkbox
                   className="form-control-plaintext"
@@ -577,9 +566,9 @@ class Program extends Component {
                 />
               </div>
             )}
-            {!user.username && (
+            {!user.uid && (
               <div className="col-sm-10 col-form-label">
-                <Link to={pathTo('settings')}>set your username</Link>
+                <Link to={pathTo('settings')}>set your uid</Link>
               </div>
             )}
           </div>
@@ -709,7 +698,6 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    program: getCurrentProgram(state.feed),
     tags: getTags(state.feed),
     feed: state.feed,
     rail: state.rail,
