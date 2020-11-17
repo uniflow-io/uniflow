@@ -264,7 +264,7 @@ class Header extends Component {
               </li>
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
-                user.uid === null && (
+                user.username === null && (
                   <li className="nav-item">
                     <Link
                       className={`nav-link${
@@ -278,13 +278,13 @@ class Header extends Component {
                 )}
               {auth.isAuthenticated &&
                 isGranted(user, 'ROLE_USER') &&
-                user.uid !== null && (
+                user.username !== null && (
                   <li className="nav-item">
                     <Link
                       className={`nav-link${
                         active === 'dashboard' ? ' active' : ''
                       }`}
-                      to={pathTo('userFeed', { uid: user.uid })}
+                      to={pathTo('userFeed', { uid: user.username })}
                     >
                       Dashboard
                     </Link>
@@ -471,7 +471,7 @@ class Header extends Component {
           </li>
           {auth.isAuthenticated &&
             isGranted(user, 'ROLE_USER') &&
-            user.uid === null && (
+            user.username === null && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${
@@ -485,13 +485,13 @@ class Header extends Component {
             )}
           {auth.isAuthenticated &&
             isGranted(user, 'ROLE_USER') &&
-            user.uid !== null && (
+            user.username !== null && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${
                     active === 'dashboard' ? ' active' : ''
                   }`}
-                  to={pathTo('userFeed', { uid: user.uid })}
+                  to={pathTo('userFeed', { uid: user.username })}
                 >
                   Dashboard
                 </Link>

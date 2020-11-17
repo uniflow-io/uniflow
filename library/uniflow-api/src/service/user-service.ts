@@ -59,20 +59,22 @@ export default class UserService {
     }
   }
   
-  public async generateUniqueUsername(username: string): Promise<string> {
+  public async setUsername(user: UserEntity, username: string): Promise<UserEntity> {
     username = slugify(username, {
       replacement: '-',
       lower: true,
       strict: true,
     })
 
-    const user = await this.userRepository.findOne({username})
-    if(user) {
+    const existUser = await this.userRepository.findOne({username})
+    if(existUser) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.generateUniqueUsername(`${username}-${suffix}` )
+      return await this.setUsername(user, `${username}-${suffix}`)
     }
 
-    return username
+    user.username = username
+
+    return user
   }
 
   public async isValid(user: UserEntity): Promise<boolean> {

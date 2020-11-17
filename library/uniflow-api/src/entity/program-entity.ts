@@ -54,7 +54,7 @@ export default class ProgramEntity {
     type: "text",
     nullable: true,
   })
-  description: string;
+  description: string|null;
 
   @Column({
     type: "boolean",
@@ -67,7 +67,7 @@ export default class ProgramEntity {
     type: "text",
     nullable: true,
   })
-  data: string;
+  data: string|null;
 
   @CreateDateColumn()
   created: Date

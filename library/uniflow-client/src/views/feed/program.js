@@ -28,8 +28,6 @@ import {
   setProgramData,
   setCurrentSlug,
   getFolderTree,
-  pathsToPath,
-  pathToPaths,
   feedPathTo,
   deserializeRailData,
   serializeRailData,
@@ -233,7 +231,7 @@ class Program extends Component {
         type: 'program',
         entity: {
           ...this.props.program,
-          ...{ path: pathToPaths(selected) },
+          ...{ path: selected },
         }
       }))
       .then(this.onUpdate)
@@ -338,10 +336,6 @@ class Program extends Component {
     this.props
       .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
-        folderTree = folderTree.map(path => {
-          return pathsToPath(path)
-        })
-
         this.setState({
           folderTreeEdit: true,
           folderTree: folderTree,

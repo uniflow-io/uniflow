@@ -82,12 +82,12 @@ export default class UserController implements ControllerInterface {
           uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
         }),
         [Segments.BODY]: Joi.object().keys({
-          firstname: Joi.string().allow(null),
-          lastname: Joi.string().allow(null),
-          username: Joi.string().allow(null).custom(TypeCheckerModel.joiUsername),
-          apiKey: Joi.string().allow(null).custom(TypeCheckerModel.joiApiKey),
-          facebookId: Joi.string().allow(null),
-          githubId: Joi.string().allow(null),
+          firstname: Joi.string().allow(null, ''),
+          lastname: Joi.string().allow(null, ''),
+          username: Joi.string().allow(null, '').custom(TypeCheckerModel.joiUsername),
+          apiKey: Joi.string().allow(null, '').custom(TypeCheckerModel.joiApiKey),
+          facebookId: Joi.string().allow(null, ''),
+          githubId: Joi.string().allow(null, ''),
         }),
       }),
       this.withToken.middleware(),
@@ -96,11 +96,19 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          if(req.body.username && req.body.username !== req.user.username) {
-            req.body.username = await this.userService.generateUniqueUsername(req.body.username)
-          }
+          let user = req.body as UserEntity;
+          user.firstname = user.firstname ? user.firstname : null
+          user.lastname = user.lastname ? user.lastname : null
+          user.username = user.username ? user.username : null
+          user.apiKey = user.apiKey ? user.apiKey : null
+          user.facebookId = user.facebookId ? user.facebookId : null
+          user.githubId = user.githubId ? user.githubId : null
           
-          const user = Object.assign(req.user, req.body);
+          if(user.username && user.username !== req.user.username) {
+            await this.userService.setUsername(user, user.username)
+          }
+
+          user = Object.assign(req.user, user);
     
           if(await this.userService.isValid(user)) {
             await this.userRepository.save(user)
@@ -315,7 +323,7 @@ export default class UserController implements ControllerInterface {
           path: Joi.string().custom(TypeCheckerModel.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
-          description: Joi.string().allow(null),
+          description: Joi.string().allow(null, ''),
           public: Joi.boolean(),
         }),
       }),
@@ -332,7 +340,7 @@ export default class UserController implements ControllerInterface {
           await this.folderService.setSlug(program, req.body.slug)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
-          program.description = req.body.description
+          program.description = req.body.description ? req.body.description : null
           program.public = req.body.public
 
           if(await this.programService.isValid(program)) {

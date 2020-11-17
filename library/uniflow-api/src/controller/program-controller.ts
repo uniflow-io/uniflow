@@ -63,7 +63,7 @@ export default class ProgramController implements ControllerInterface {
           path: Joi.string().custom(TypeCheckerModel.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
-          description: Joi.string().allow(null),
+          description: Joi.string().allow(null, ''),
           public: Joi.boolean(),
         }),
       }),

@@ -25,7 +25,7 @@ export default class UserEntity {
     unique: true,
     nullable: true,
   })
-  username: string;
+  username: string|null;
 
   @Column({
     type: "varchar",
@@ -40,7 +40,7 @@ export default class UserEntity {
     length: 255,
     nullable: true,
   })
-  password: string;
+  password: string|null;
 
   @Column({
     type: "varchar",
@@ -54,35 +54,35 @@ export default class UserEntity {
     length: 255,
     nullable: true,
   })
-  firstname: string;
+  firstname: string|null;
 
   @Column({
     type: "varchar",
     length: 255,
     nullable: true,
   })
-  lastname: string;
+  lastname: string|null;
 
   @Column({
     type: "varchar",
     length: 255,
     nullable: true,
   })
-  facebookId: string;
+  facebookId: string|null;
 
   @Column({
     type: "varchar",
     length: 255,
     nullable: true,
   })
-  githubId: string;
+  githubId: string|null;
 
   @Column({
     type: "varchar",
     length: 255,
     nullable: true,
   })
-  apiKey: string;
+  apiKey: string|null;
 
   @Column({
     type: "varchar",

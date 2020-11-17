@@ -6,7 +6,7 @@ import {
   getOrderedFeed,
   createProgram,
   setCurrentSlug,
-  getCurrentPath,
+  getCurrentItem,
   createFolder,
   feedPathTo,
 } from '../../reducers/feed/actions'
@@ -85,25 +85,21 @@ class Navigation extends Component {
   }
 
   render() {
-    const { user } = this.props
-    const isCurrentUser = this.props.feed.uid === this.props.auth.uid
+    const { user, feed } = this.props
+    const currentItem = getCurrentItem(feed)
     const isFolderActive = () => {
-      return this.props.feed.current === null ? 'active' : null
+      return true ? 'active' : null
     }
     const isActive = item => {
-      return this.props.feed.slug === item.entity.slug ? 'active' : null
+      return currentItem && currentItem.entity.slug === item.entity.slug ? 'active' : null
     }
 
-    const backTo = () => {
-      let path = this.props.feed.folderPath.slice(0, -1)
-
-      return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
+    const backTo = (folder) => {
+      return feedPathTo(folder, this.props.user, true)
     }
 
-    const folderTo = () => {
-      let path = this.props.feed.folderPath
-
-      return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
+    const folderTo = (folder) => {
+      return feedPathTo(folder, this.props.user)
     }
 
     return (

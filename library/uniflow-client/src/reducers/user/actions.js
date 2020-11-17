@@ -80,13 +80,12 @@ export const updateSettings = (item, token) => {
     }
 
     try {
-      await request
-        .put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
-          headers: {
-            'Uniflow-Authorization': `Bearer ${token}`,
-          },
-        })
-      dispatch(commitUpdateSettings(data))
+      const response = await request.put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
+      })
+      dispatch(commitUpdateSettings(response.data))
       return data
     } catch (error) {
       if (error.request.status === 400) {

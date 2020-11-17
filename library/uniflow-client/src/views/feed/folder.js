@@ -8,10 +8,7 @@ import {
   getFolderTree,
   updateCurrentFolder,
   deleteCurrentFolder,
-  pathsToPath,
-  pathToPaths,
   commitSetCurrentFolderPath,
-  getCurrentPath,
   feedPathTo,
 } from '../../reducers/feed/actions'
 import { Select } from '../../components'
@@ -68,7 +65,7 @@ class Folder extends Component {
       .dispatch(
         commitSetCurrentFolderPath({
           ...this.props.folder,
-          ...{ path: pathToPaths(selected) },
+          ...{ path: selected },
         })
       )
       .then(() => {
@@ -90,18 +87,10 @@ class Folder extends Component {
   onDelete = event => {
     event.preventDefault()
 
-    let path = this.props.feed.folderPath.slice(0, -1)
-
     return this.props
       .dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        const isCurrentUser =
-          this.props.feed.uid &&
-          this.props.feed.uid === this.props.user.uid
-
-        navigate(
-          feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
-        )
+        navigate(feedPathTo(this.props.folder, this.props.user, true))
       })
   }
 
@@ -113,15 +102,8 @@ class Folder extends Component {
     this.props
       .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
-        let folderPath = folder.path.slice()
-        folderPath.push(folder.slug)
-        folderPath = pathsToPath(folderPath)
-
-        folderTree = folderTree.map(path => {
-          return pathsToPath(path)
-        })
         folderTree = folderTree.filter(value => {
-          return value.startsWith(folderPath) === false
+          return value.startsWith(`${folder.path}/${folder.slug}`) === false
         })
 
         this.setState({

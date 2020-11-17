@@ -134,20 +134,16 @@ export const getCurrentItem = state => {
   return null
 }
 
-const entityToSlugs = entity => {
+export const feedPathTo = (entity, user = null, toParent = false) => {
   let paths = entity.path === '/' ? [] : entity.path.split('/').slice(1)
-  paths.push(entity.slug)
+  if(!toParent) {
+    paths.push(entity.slug)
+  }
   
   let slugs = {}
   for (let i = 0; i < paths.length; i++) {
     slugs[`slug${i + 1}`] = paths[i]
   }
-
-  return slugs
-}
-
-export const feedPathTo = (entity, user = null) => {
-  const slugs = entityToSlugs(entity)
 
   const isCurrentUser = user && (entity.user === user.uid || entity.user === user.username)
   if (isCurrentUser) {
@@ -155,14 +151,6 @@ export const feedPathTo = (entity, user = null) => {
   }
   
   return pathTo('userFeed', Object.assign({ uid: entity.user }, slugs))
-}
-
-export const pathsToPath = paths => {
-  return `/${paths.join('/')}`
-}
-
-export const pathToPaths = path => {
-  return path === '/' ? [] : path.split('/').slice(1)
 }
 
 export const getPublicPrograms = () => {
@@ -448,9 +436,19 @@ export const getFolderTree = (uid, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/folder/${uid}/tree`, config)
+      .get(`${server.getBaseUrl()}/api/users/${uid}/folders`, config)
       .then(response => {
-        return response.data
+        const folders = response.data
+        let tree = []
+        for(const folder of folders) {
+          tree.push(folder.path)
+        }
+        // filter unique
+        tree = tree.filter(function(value, index, self) {
+          return self.indexOf(value) === index
+        })
+
+        return tree.sort()
       })
       .catch(error => {
         if (error.request.status === 401) {
