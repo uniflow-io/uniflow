@@ -1,4 +1,3 @@
-import { helpers } from "faker";
 import { UserEntity } from "../entity";
 
 const checkUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -7,7 +6,7 @@ const checkPath = /^\/|(\/[a-z0-9-]+)+$/i;
 const checkSlug = /^[0-9a-z-]+$/i;
 const checkApiKey = /^[0-9a-z]{32}$/i;
 
-export default class TypeChecker {
+export default class TypeCheckerModel {
     public static isUuid(value: string): boolean {
         return checkUUID.test(value)
     }
@@ -29,7 +28,7 @@ export default class TypeChecker {
     }
 
     public static isSameUser(value: string, user: UserEntity): boolean {
-        if(TypeChecker.isUuid(value) && value === user.uid) {
+        if(TypeCheckerModel.isUuid(value) && value === user.uid) {
             return true
         } else if (user.username && value === user.username) {
             return true
@@ -39,7 +38,7 @@ export default class TypeChecker {
     }
     
     public static joiUuid(value: any, helpers: any) {
-        if(TypeChecker.isUuid(value)) {
+        if(TypeCheckerModel.isUuid(value)) {
             return value
         }
         
@@ -47,7 +46,7 @@ export default class TypeChecker {
     }
 
     public static joiUsername(value: any, helpers: any) {
-        if(TypeChecker.isUsername(value)) {
+        if(TypeCheckerModel.isUsername(value)) {
             return value
         }
         
@@ -55,7 +54,7 @@ export default class TypeChecker {
     }
     
     public static joiUuidOrUsername(value: any, helpers: any) {
-        if(TypeChecker.isUuid(value) || TypeChecker.isUsername(value)) {
+        if(TypeCheckerModel.isUuid(value) || TypeCheckerModel.isUsername(value)) {
             return value
         }
         
@@ -63,7 +62,7 @@ export default class TypeChecker {
     }
 
     public static joiPath(value: any, helpers: any) {
-        if(TypeChecker.isPath(value)) {
+        if(TypeCheckerModel.isPath(value)) {
             return value
         }
         
@@ -71,7 +70,7 @@ export default class TypeChecker {
     }
 
     public static joiSlug(value: any, helpers: any) {
-        if(TypeChecker.isSlug(value)) {
+        if(TypeCheckerModel.isSlug(value)) {
             return value
         }
         
@@ -79,7 +78,7 @@ export default class TypeChecker {
     }
 
     public static joiApiKey(value: any, helpers: any) {
-        if(TypeChecker.isApiKey(value)) {
+        if(TypeCheckerModel.isApiKey(value)) {
             return value
         }
         

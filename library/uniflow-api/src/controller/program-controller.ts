@@ -6,7 +6,7 @@ import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } fr
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 import { ProgramRepository, TagRepository } from '../repository';
-import { TypeChecker } from '../model';
+import { TypeCheckerModel } from '../model';
 
 @Service()
 export default class ProgramController implements ControllerInterface {
@@ -55,12 +55,12 @@ export default class ProgramController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeChecker.joiUuid)
+          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
-          slug: Joi.string().custom(TypeChecker.joiSlug),
-          path: Joi.string().custom(TypeChecker.joiPath),
+          slug: Joi.string().custom(TypeCheckerModel.joiSlug),
+          path: Joi.string().custom(TypeCheckerModel.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
           description: Joi.string().allow(null),
@@ -112,7 +112,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid/flows',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeChecker.joiUuid)
+          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
         }),
       }),
       this.withToken.middleware(),
@@ -145,7 +145,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid/flows',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeChecker.joiUuid)
+          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
           data: Joi.string(),
@@ -183,7 +183,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeChecker.joiUuid)
+          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
         }),
       }),
       this.withToken.middleware(),

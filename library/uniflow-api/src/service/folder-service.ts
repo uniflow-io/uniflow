@@ -3,7 +3,7 @@ import { Service } from 'typedi';
 import { IsNull } from 'typeorm';
 import { FolderEntity, ProgramEntity, UserEntity } from '../entity';
 import { ApiException } from '../exception';
-import { TypeChecker } from '../model';
+import { TypeCheckerModel } from '../model';
 import { FolderRepository, ProgramRepository } from '../repository';
 
 @Service()
@@ -40,7 +40,7 @@ export default class FolderService {
   }
 
   public async fromPath(user: UserEntity, path: string): Promise<FolderEntity|undefined> {
-    if(!TypeChecker.isPath(path)) {
+    if(!TypeCheckerModel.isPath(path)) {
       throw new ApiException('not a path')
     }
 

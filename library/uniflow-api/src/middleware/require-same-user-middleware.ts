@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import { NextFunction, Request, Response } from 'express';
 import { ApiException } from "../exception";
 import { MiddlewareInterface } from './interfaces';
-import { TypeChecker } from '../model';
+import { TypeCheckerModel } from '../model';
 
 @Service()
 export default class RequireSameUserMiddleware implements MiddlewareInterface {
@@ -13,7 +13,7 @@ export default class RequireSameUserMiddleware implements MiddlewareInterface {
           throw new ApiException('Not authorized', 401);
         }
 
-        if(TypeChecker.isSameUser(req.params.uid, req.user)) {
+        if(TypeCheckerModel.isSameUser(req.params.uid, req.user)) {
           return next();
         }
         
