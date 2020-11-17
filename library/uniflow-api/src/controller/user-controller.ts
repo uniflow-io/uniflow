@@ -248,7 +248,7 @@ export default class UserController implements ControllerInterface {
         try {
           const folder = new FolderEntity();
           folder.name = req.body.name
-          folder.parent = await this.folderService.fromPath(req.user, req.body.path)
+          folder.parent = await this.folderService.fromPath(req.user, req.body.path || '/')
           folder.user = req.user
           await this.folderService.setSlug(folder, req.body.slug || req.body.name)
     
@@ -288,7 +288,7 @@ export default class UserController implements ControllerInterface {
           }
 
           let where: any = {user}
-          const isPublicOnly = req.user && TypeCheckerModel.isSameUser(req.params.uid, req.user)
+          const isPublicOnly = !req.user || !TypeCheckerModel.isSameUser(req.params.uid, req.user)
           if(isPublicOnly) {
             where = {...where, public: true}
           }
@@ -336,8 +336,8 @@ export default class UserController implements ControllerInterface {
           const program = new ProgramEntity();
           program.name = req.body.name
           program.user = req.user
-          program.folder = await this.folderService.fromPath(req.user, req.body.path)
-          await this.folderService.setSlug(program, req.body.slug)
+          program.folder = await this.folderService.fromPath(req.user, req.body.path || '/')
+          await this.folderService.setSlug(program, req.body.slug || req.body.name)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
           program.description = req.body.description ? req.body.description : null

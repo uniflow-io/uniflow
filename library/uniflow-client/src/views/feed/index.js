@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Navigation from './navigation'
 import Program from './program'
 import Folder from './folder'
-import { getCurrentItem } from '../../reducers/feed/actions'
+import { getCurrentFeedItem } from '../../reducers/feed/actions'
 import { connect } from 'react-redux'
 
 class Feed extends Component {
   render() {
     const { flows, feed } = this.props
-    const currentItem = getCurrentItem(feed)
+    const currentItem = getCurrentFeedItem(feed)
 
     return (
       <div className="container-fluid">
@@ -17,8 +17,8 @@ class Feed extends Component {
           {currentItem && currentItem.type === 'program' &&
             <Program program={currentItem.entity} flows={flows} />
           }
-          {currentItem && currentItem.type === 'folder' &&
-            <Folder folder={currentItem.entity} />
+          {!currentItem && feed.parentFolder && feed.parentFolder.slug === feed.slug &&
+            <Folder folder={feed.parentFolder} />
           }
         </div>
       </div>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
 import { connect } from 'react-redux'
-import { getPublicPrograms, feedPathTo } from '../reducers/feed/actions'
+import { toFeedPath } from '../reducers/feed/actions'
+import { getFlows } from '../reducers/flows/actions'
 
-class PublicPrograms extends Component {
+class Flows extends Component {
   state = {
     programs: [],
   }
@@ -13,7 +14,7 @@ class PublicPrograms extends Component {
   }
 
   onFetchFlowData = () => {
-    this.props.dispatch(getPublicPrograms()).then(programs => {
+    this.props.dispatch(getFlows()).then(programs => {
       this.setState({ programs })
     })
   }
@@ -26,11 +27,11 @@ class PublicPrograms extends Component {
       <section className="section container-fluid">
         <div className="row">
           <div className="col-md-12">
-            <h3>Public Flows</h3>
+            <h3>Flows</h3>
             <dl className="row">
               {programs.map((program, i) => [
                 <dt className="col-md-2 text-md-right font-weight-normal" key={i * 2}>
-                  <Link to={feedPathTo(program, user)}>{program.name}</Link>
+                  <Link to={toFeedPath(program, user)}>{program.name}</Link>
                 </dt>,
                 <dd className="col-md-10" key={i * 2 + 1}>
                   {program.description}
@@ -48,4 +49,4 @@ export default connect(state => {
   return {
     user: state.user,
   }
-})(PublicPrograms)
+})(Flows)

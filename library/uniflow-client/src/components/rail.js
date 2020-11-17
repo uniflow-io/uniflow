@@ -19,7 +19,7 @@ class UiItem extends Component {
     if (tag !== 'search') {
       // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
-        /*'@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
+        '@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
         '@uniflow-io/uniflow-flow-bash': () => import('../../../uniflow-flow-bash/src'),
         '@uniflow-io/uniflow-flow-canvas': () => import('../../../uniflow-flow-canvas/src'),
         '@uniflow-io/uniflow-flow-if': () => import('../../../uniflow-flow-if/src'),
@@ -29,7 +29,7 @@ class UiItem extends Component {
         '@uniflow-io/uniflow-flow-regex': () => import('../../../uniflow-flow-regex/src'),
         '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
         '@uniflow-io/uniflow-flow-text-list': () => import('../../../uniflow-flow-text-list/src'),
-        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),*/
+        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),
       }
       TagName = lazy(lasyImports[tag])
     }

@@ -1,9 +1,9 @@
 import React from 'react'
-import { PublicPrograms } from '../views'
+import { Flows } from '../views'
 import { withPage } from '../helpers'
 
 export default ({ location }) => {
-  const FlowsPage = withPage(PublicPrograms, 'flows', {
+  const FlowsPage = withPage(Flows, 'flows', {
     location: location,
     title: 'Uniflow',
     description: 'Unified Workflow Automation Tool',

@@ -26,9 +26,9 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setCurrentSlug,
+  setSlugFeed,
   getFolderTree,
-  feedPathTo,
+  toFeedPath,
   deserializeRailData,
   serializeRailData,
 } from '../../reducers/feed/actions'
@@ -289,7 +289,7 @@ class Program extends Component {
     this.props
       .dispatch(updateProgram(this.props.program, this.props.auth.token))
       .then(() => {
-        const path = feedPathTo(this.props.program, this.props.user)
+        const path = toFeedPath(this.props.program, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -312,7 +312,7 @@ class Program extends Component {
       })
       .then(() => {
         return this.props.dispatch(
-          setCurrentSlug({ type: program.type, id: program.id })
+          setSlugFeed({ type: program.type, id: program.id })
         )
       })
       .catch(log => {

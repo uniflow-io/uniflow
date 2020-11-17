@@ -5,9 +5,9 @@ import {
   COMMIT_CLEAR_FEED,
   COMMIT_UPDATE_FEED,
   COMMIT_DELETE_FEED,
-  COMMIT_SET_CURRENT_SLUG,
-  COMMIT_SET_CURRENT_FOLDER_PATH,
-  COMMIT_SET_CURRENT_UID,
+  COMMIT_SET_PARENT_FOLDER_FEED,
+  COMMIT_SET_SLUG_FEED,
+  COMMIT_SET_UID_FEED,
 } from './actions-types'
 import { commitLogoutUser } from '../auth/actions'
 import { pathTo } from '../../routes'
@@ -52,6 +52,7 @@ export const commitClearFeed = () => {
     return Promise.resolve()
   }
 }
+
 export const commitUpdateFeed = item => {
   return async dispatch => {
     dispatch({
@@ -61,6 +62,7 @@ export const commitUpdateFeed = item => {
     return Promise.resolve()
   }
 }
+
 export const commitDeleteFeed = item => {
   return async dispatch => {
     dispatch({
@@ -70,63 +72,66 @@ export const commitDeleteFeed = item => {
     return Promise.resolve()
   }
 }
-export const commitSetCurrentSlug = slug => {
+
+export const commitSetParentFolderFeed = parentFolder => {
   return async dispatch => {
     dispatch({
-      type: COMMIT_SET_CURRENT_SLUG,
+      type: COMMIT_SET_PARENT_FOLDER_FEED,
+      parentFolder,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitSetSlugFeed = slug => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_SET_SLUG_FEED,
       slug,
     })
     return Promise.resolve()
   }
 }
-export const commitSetCurrentFolderPath = folderPath => {
+
+export const commitSetUidFeed = uid => {
   return async dispatch => {
     dispatch({
-      type: COMMIT_SET_CURRENT_FOLDER_PATH,
-      folderPath,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitSetCurrentUid = uid => {
-  return async dispatch => {
-    dispatch({
-      type: COMMIT_SET_CURRENT_UID,
+      type: COMMIT_SET_UID_FEED,
       uid,
     })
     return Promise.resolve()
   }
 }
 
-export const setCurrentSlug = slug => {
+export const setParentFolderFeed = parentFolder => {
   return async dispatch => {
-    dispatch(commitSetCurrentSlug(slug))
+    dispatch(commitSetParentFolderFeed(parentFolder))
+
+    return Promise.resolve(parentFolder)
+  }
+}
+
+export const setSlugFeed = slug => {
+  return async dispatch => {
+    dispatch(commitSetSlugFeed(slug))
 
     return Promise.resolve(slug)
   }
 }
 
-export const setCurrentFolderPath = folderPath => {
+export const setUidFeed = uid => {
   return async dispatch => {
-    dispatch(commitSetCurrentFolderPath(folderPath))
-
-    return Promise.resolve(folderPath)
-  }
-}
-
-export const setCurrentUid = uid => {
-  return async dispatch => {
-    dispatch(commitSetCurrentUid(uid))
+    dispatch(commitSetUidFeed(uid))
 
     return Promise.resolve(uid)
   }
 }
 
-export const getCurrentItem = state => {
-  if(!state.slug) return null
+export const getCurrentFeedItem = feed => {
+  if(!feed.slug) return null
 
-  for(const [key, item] of Object.entries(state.items)) {
-    if(item.entity.slug === state.slug) {
+  for(const item of Object.values(feed.items)) {
+    if(item.entity.slug === feed.slug) {
       return item
     }
   }
@@ -134,7 +139,7 @@ export const getCurrentItem = state => {
   return null
 }
 
-export const feedPathTo = (entity, user = null, toParent = false) => {
+export const toFeedPath = (entity, user, toParent = false) => {
   let paths = entity.path === '/' ? [] : entity.path.split('/').slice(1)
   if(!toParent) {
     paths.push(entity.slug)
@@ -145,25 +150,12 @@ export const feedPathTo = (entity, user = null, toParent = false) => {
     slugs[`slug${i + 1}`] = paths[i]
   }
 
-  const isCurrentUser = user && (entity.user === user.uid || entity.user === user.username)
+  const isCurrentUser = entity.user === user.uid || entity.user === user.username
   if (isCurrentUser) {
     return pathTo('feed', slugs)
   }
   
   return pathTo('userFeed', Object.assign({ uid: entity.user }, slugs))
-}
-
-export const getPublicPrograms = () => {
-  return async dispatch => {
-    return request
-      .get(`${server.getBaseUrl()}/api/programs`)
-      .then(response => {
-        return response.data
-      })
-      .catch(() => {
-        return []
-      })
-  }
 }
 
 export const getTags = state => {
@@ -189,7 +181,7 @@ export const getOrderedFeed = (state, filter) => {
       if (item.type === 'program') {
         words.push(item.entity.name)
         for (let i = 0; i < item.entity.tags.length; i++) {
-          words .push(item.entity.tags[i])
+          words.push(item.entity.tags[i])
         }
       } else if (item.type === 'folder') {
         words.push(item.entity.name)
@@ -212,21 +204,7 @@ export const getOrderedFeed = (state, filter) => {
   })
 }
 
-export const getProgramBySlug = (state, slug) => {
-  let keys = Object.keys(state.items)
-
-  let slugKeys = keys.filter(key => {
-    return state.items[key].type === 'program' && state.items[key].slug === slug
-  })
-
-  if (slugKeys.length > 0) {
-    return state.items[slugKeys[0]]
-  }
-
-  return null
-}
-
-export const fetchFeed = (uid, path, token = null) => {
+export const fetchFeed = (uid, paths, token = null) => {
   return async dispatch => {
     let config = {}
     if (token) {
@@ -237,33 +215,78 @@ export const fetchFeed = (uid, path, token = null) => {
       }
     }
 
-    return Promise.all([
-        request.get(`${server.getBaseUrl()}/api/users/${uid}/programs?path=${path}`, config),
-        request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${path}`, config)
-      ])
-      .then(([programsResponse, foldersResponse]) => {
-        dispatch(commitClearFeed())
+    const path = `/${paths.join('/')}`
+    const parentPath = `/${paths.slice(0, -1).join('/')}`
+    const parentParentPath = `/${paths.slice(0, -2).join('/')}`
+    const slug = paths.length > 0 ? paths[paths.length - 1] : null
+    const parentSlug = paths.length > 1 ? paths[paths.length - 2] : null
+    let feedFolderPath = parentPath
+    let feedProgramPath = parentPath
+    let parentFolderFound = undefined
 
+    dispatch(commitSetUidFeed(uid))
+    dispatch(commitSetSlugFeed(slug))
+    dispatch(commitSetParentFolderFeed(null))
+    dispatch(commitClearFeed())
+    if(paths.length > 0) {
+      await request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${parentPath}`, config)
+      .then((foldersResponse) => {
+        parentFolderFound = false
+        for (const folder of foldersResponse.data) {
+          if(folder.path === parentPath && folder.slug === slug) {
+            dispatch(commitSetParentFolderFeed(folder))
+            feedFolderPath = path
+            feedProgramPath = path
+            parentFolderFound = true
+          }
+        }
+
+        if(parentFolderFound === false) {
+          for (const folder of foldersResponse.data) {
+            dispatch(commitUpdateFeed({
+              type: 'folder',
+              entity: folder,
+            }))
+          }
+          feedFolderPath = parentParentPath
+        }
+      })
+    }
+
+    return Promise.all([
+      request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${feedFolderPath}`, config),
+      request.get(`${server.getBaseUrl()}/api/users/${uid}/programs?path=${feedProgramPath}`, config),
+    ])
+    .then(([foldersResponse, programsResponse]) => {
+      if(parentFolderFound === true || parentFolderFound === undefined) {
         for (const folder of foldersResponse.data) {
           dispatch(commitUpdateFeed({
             type: 'folder',
             entity: folder,
           }))
         }
-        for (const program of programsResponse.data) {
-          dispatch(commitUpdateFeed({
-            type: 'program',
-            entity: program,
-          }))
+      } if(parentFolderFound === false) {
+        for (const folder of foldersResponse.data) {
+          if(folder.path === parentParentPath && folder.slug === parentSlug) {
+            dispatch(commitSetParentFolderFeed(folder))
+          }
         }
-      })
-      .catch(error => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser())
-        } else {
-          throw error
-        }
-      })
+      }
+
+      for (const program of programsResponse.data) {
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program,
+        }))
+      }
+    })
+    .catch(error => {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser())
+      } else {
+        throw error
+      }
+    })
   }
 }
 
@@ -439,14 +462,10 @@ export const getFolderTree = (uid, token = null) => {
       .get(`${server.getBaseUrl()}/api/users/${uid}/folders`, config)
       .then(response => {
         const folders = response.data
-        let tree = []
+        let tree = ['/']
         for(const folder of folders) {
-          tree.push(folder.path)
+          tree.push(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`)
         }
-        // filter unique
-        tree = tree.filter(function(value, index, self) {
-          return self.indexOf(value) === index
-        })
 
         return tree.sort()
       })
@@ -494,7 +513,7 @@ export const createFolder = (folder, uid, token) => {
   }
 }
 
-export const updateCurrentFolder = (folder, token) => {
+export const updateParentFolder = (folder, token) => {
   return async dispatch => {
     let data = {
       name: folder.name,
@@ -511,7 +530,7 @@ export const updateCurrentFolder = (folder, token) => {
       .then(response => {
         folder = response.data
 
-        dispatch(commitSetCurrentFolderPath(folder))
+        dispatch(commitSetParentFolderFeed(folder))
 
         return folder
       })
@@ -525,7 +544,7 @@ export const updateCurrentFolder = (folder, token) => {
   }
 }
 
-export const deleteCurrentFolder = (folder, token) => {
+export const deleteParentFolder = (folder, token) => {
   return async dispatch => {
     return request
       .delete(`${server.getBaseUrl()}/api/folders/${folder.uid}`, {
@@ -534,7 +553,7 @@ export const deleteCurrentFolder = (folder, token) => {
         },
       })
       .then(response => {
-        // dispatch(commitSetCurrentFolderPath(null))
+        // dispatch(commitSetParentFolderFeed(undefined))
 
         return response.data
       })

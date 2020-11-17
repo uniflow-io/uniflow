@@ -5,10 +5,10 @@ import { connect } from 'react-redux'
 import {
   getOrderedFeed,
   createProgram,
-  setCurrentSlug,
-  getCurrentItem,
+  setSlugFeed,
+  getCurrentFeedItem,
   createFolder,
-  feedPathTo,
+  toFeedPath,
 } from '../../reducers/feed/actions'
 import { commitAddLog } from '../../reducers/logs/actions'
 import {
@@ -34,21 +34,20 @@ class Navigation extends Component {
 
   onCreateFolder = event => {
     event.preventDefault()
+    const { feed } = this.props
+    const folderPath = feed.parentFolder ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`: '/'
 
     this.props
-      .dispatch(
-        createFolder(
-          {
-            name: this.state.search,
-            path: this.props.feed.folderPath,
-          },
-          this.props.auth.uid,
-          this.props.auth.token
-        )
-      )
+      .dispatch(createFolder({
+          name: this.state.search,
+          path: folderPath,
+        },
+        this.props.auth.uid,
+        this.props.auth.token
+      ))
       .then(item => {
-        return this.props.dispatch(setCurrentSlug(null)).then(() => {
-          navigate(feedPathTo(item, this.props.user))
+        return this.props.dispatch(setSlugFeed(null)).then(() => {
+          navigate(toFeedPath(item, this.props.user))
         })
       })
       .catch(log => {
@@ -58,25 +57,24 @@ class Navigation extends Component {
 
   onSubmit = event => {
     event.preventDefault()
+    const { feed } = this.props
+    const folderPath = feed.parentFolder ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`: '/'
 
     this.props
-      .dispatch(
-        createProgram(
-          {
-            name: this.state.search,
-            clients: ['uniflow'],
-            tags: [],
-            path: this.props.feed.folderPath,
-          },
-          this.props.auth.uid,
-          this.props.auth.token
-        )
-      )
+      .dispatch(createProgram({
+          name: this.state.search,
+          clients: ['uniflow'],
+          tags: [],
+          path: folderPath,
+        },
+        this.props.auth.uid,
+        this.props.auth.token
+      ))
       .then(item => {
         return this.props
-          .dispatch(setCurrentSlug({ type: item.type, id: item.id }))
+          .dispatch(setSlugFeed({ type: item.type, id: item.id }))
           .then(() => {
-            navigate(feedPathTo(item, this.props.user))
+            navigate(toFeedPath(item, this.props.user))
           })
       })
       .catch(log => {
@@ -86,20 +84,12 @@ class Navigation extends Component {
 
   render() {
     const { user, feed } = this.props
-    const currentItem = getCurrentItem(feed)
+    const currentItem = getCurrentFeedItem(feed)
     const isFolderActive = () => {
-      return true ? 'active' : null
+      return this.props.feed.parentFolder && this.props.feed.parentFolder.slug === this.props.feed.slug ? 'active' : null
     }
     const isActive = item => {
       return currentItem && currentItem.entity.slug === item.entity.slug ? 'active' : null
-    }
-
-    const backTo = (folder) => {
-      return feedPathTo(folder, this.props.user, true)
-    }
-
-    const folderTo = (folder) => {
-      return feedPathTo(folder, this.props.user)
     }
 
     return (
@@ -145,16 +135,16 @@ class Navigation extends Component {
         >
           <div className="sidebar-section">
             <ul className="sidebar-items">
-              {this.props.feed.folder && [
+              {this.props.feed.parentFolder && [
                 <li key={'back'}>
                   <span className="link">
                     <FontAwesomeIcon icon={faArrowLeft} /> Back
                   </span>
-                  <Link to={backTo()}>Back</Link>
+                  <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user, true)}>Back</Link>
                 </li>,
                 <li className={isFolderActive()} key={'folder'}>
                   <span className="link">.</span>
-                  <Link to={folderTo()}>.</Link>
+                  <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user)}>.</Link>
                 </li>,
               ]}
               {getOrderedFeed(this.props.feed, this.state.search).map(
@@ -174,7 +164,7 @@ class Navigation extends Component {
                           </span>
                         ))}
                     </span>
-                    <Link to={feedPathTo(item.entity, user)}>{item.entity.name}</Link>
+                    <Link to={toFeedPath(item.entity, user)}>{item.entity.name}</Link>
                   </li>
                 )
               )}

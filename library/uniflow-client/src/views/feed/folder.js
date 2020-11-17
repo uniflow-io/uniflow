@@ -6,10 +6,10 @@ import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   getFolderTree,
-  updateCurrentFolder,
-  deleteCurrentFolder,
-  commitSetCurrentFolderPath,
-  feedPathTo,
+  updateParentFolder,
+  deleteParentFolder,
+  setParentFolderFeed,
+  toFeedPath,
 } from '../../reducers/feed/actions'
 import { Select } from '../../components'
 
@@ -37,7 +37,7 @@ class Folder extends Component {
   onChangeTitle = event => {
     this.props
       .dispatch(
-        commitSetCurrentFolderPath({
+        setParentFolderFeed({
           ...this.props.folder,
           ...{ name: event.target.value },
         })
@@ -50,7 +50,7 @@ class Folder extends Component {
   onChangeSlug = event => {
     this.props
       .dispatch(
-        commitSetCurrentFolderPath({
+        setParentFolderFeed({
           ...this.props.folder,
           ...{ slug: event.target.value },
         })
@@ -63,7 +63,7 @@ class Folder extends Component {
   onChangePath = selected => {
     this.props
       .dispatch(
-        commitSetCurrentFolderPath({
+        setParentFolderFeed({
           ...this.props.folder,
           ...{ path: selected },
         })
@@ -75,9 +75,9 @@ class Folder extends Component {
 
   onUpdate = debounce(() => {
     this.props
-      .dispatch(updateCurrentFolder(this.props.folder, this.props.auth.token))
+      .dispatch(updateParentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        const path = feedPathTo(this.props.folder, this.props.user)
+        const path = toFeedPath(this.props.folder, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -88,9 +88,9 @@ class Folder extends Component {
     event.preventDefault()
 
     return this.props
-      .dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
+      .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        navigate(feedPathTo(this.props.folder, this.props.user, true))
+        navigate(toFeedPath(this.props.folder, this.props.user, true))
       })
   }
 
