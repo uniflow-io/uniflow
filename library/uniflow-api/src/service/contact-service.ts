@@ -14,7 +14,7 @@ export default class ContactService {
   public async send(contact: ContactEntity): Promise<boolean> {
     return await this.mailer.send({
       from: 'no-reply@uniflow.io',
-      to: 'matyo@uniflow.io',
+      to: 'matyo91@gmail.com',
       subject: '[Uniflow] Contact',
       html: `
       <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
