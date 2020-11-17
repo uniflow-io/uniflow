@@ -72,7 +72,10 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOneByUserAndUid(req.user, req.params.uid)
+          const program = await this.programRepository.findOne({
+            where: {user: req.user, uid: req.params.uid},
+            relations: ['user', 'folder'],
+          })
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -81,7 +84,7 @@ export default class ProgramController implements ControllerInterface {
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path)
           if (req.body.slug && program.slug !== req.body.slug) {
-            program.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, program.folder)
+            await this.folderService.setSlug(program, req.body.slug)
           }
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
@@ -116,7 +119,10 @@ export default class ProgramController implements ControllerInterface {
       this.withUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOneByUid(req.params.uid)
+          const program = await this.programRepository.findOne({
+            where: {uid: req.params.uid},
+            relations: ['user']
+          })
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -142,7 +148,7 @@ export default class ProgramController implements ControllerInterface {
           uid: Joi.string().custom(TypeChecker.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
-          data: Joi.array(),
+          data: Joi.string(),
         }),
       }),
       this.withToken.middleware(),
@@ -150,7 +156,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOneByUserAndUid(req.user, req.params.uid)
+          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -185,7 +191,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOneByUserAndUid(req.user, req.params.uid)
+          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
           if (!program) {
             throw new ApiException('Program not found', 404);
           }

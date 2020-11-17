@@ -80,14 +80,17 @@ class Folder extends Component {
     this.props
       .dispatch(updateCurrentFolder(this.props.folder, this.props.auth.token))
       .then(() => {
-        navigate(this.itemPathTo(this.props.folder))
+        const path = feedPathTo(this.props.folder, this.props.user)
+        if (typeof window !== `undefined` && window.location.pathname !== path) {
+          navigate(path)
+        }
       })
   }, 500)
 
   onDelete = event => {
     event.preventDefault()
 
-    let path = getCurrentPath(this.props.feed).slice(0, -1)
+    let path = this.props.feed.folderPath.slice(0, -1)
 
     return this.props
       .dispatch(deleteCurrentFolder(this.props.folder, this.props.auth.token))
@@ -126,17 +129,6 @@ class Folder extends Component {
           folderTree: folderTree,
         })
       })
-  }
-
-  itemPathTo = item => {
-    const isCurrentUser =
-      this.props.feed.uid &&
-      this.props.feed.uid === this.props.user.uid
-
-    let path = item.path.slice()
-    path.push(item.slug)
-
-    return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
   }
 
   render() {

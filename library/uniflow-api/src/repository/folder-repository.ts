@@ -9,25 +9,6 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
     return getRepository<FolderEntity>(FolderEntity)
   }
 
-  public async findOne(id?: any): Promise<FolderEntity | undefined> {
-    const qb = this.getRepository<FolderEntity>().createQueryBuilder('f')
-      .select('f')
-      .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.id = :id').setParameter('id', id)
-
-    return await qb.getOne();
-  }
-
-  public async findOneByUserAndUid(user: UserEntity, uid: string): Promise<FolderEntity | undefined> {
-    const qb = this.getRepository<FolderEntity>().createQueryBuilder('f')
-      .select('f')
-      .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.uid = :uid').setParameter('uid', uid)
-      .andWhere('f.user = :user').setParameter('user', user.id)
-
-    return await qb.getOne();
-  }
-
   public async findOneByUserAndPath(user: UserEntity, paths: string[]): Promise<FolderEntity | undefined> {
     const level = paths.length
     if (level === 0) {

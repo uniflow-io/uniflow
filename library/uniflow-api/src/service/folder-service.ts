@@ -1,6 +1,7 @@
 import slugify from 'slugify'
 import { Service } from 'typedi';
-import { FolderEntity, UserEntity } from '../entity';
+import { IsNull } from 'typeorm';
+import { FolderEntity, ProgramEntity, UserEntity } from '../entity';
 import { ApiException } from '../exception';
 import { TypeChecker } from '../model';
 import { FolderRepository, ProgramRepository } from '../repository';
@@ -47,21 +48,30 @@ export default class FolderService {
     return await this.folderRepository.findOneByUserAndPath(user, paths)
   }
   
-  public async generateUniqueSlug(slug: string, user: UserEntity, parent?: FolderEntity): Promise<string> {
+  public async setSlug(entity: FolderEntity | ProgramEntity, slug: string): Promise<FolderEntity | ProgramEntity> {
     slug = slugify(slug, {
       replacement: '-',
       lower: true,
       strict: true,
     })
     
-    const folder = await this.folderRepository.findOne({user, parent, slug})
-    const program = await this.programRepository.findOne({user, folder: parent, slug})
+    let parent = undefined
+    if(entity instanceof FolderEntity) {
+      parent = entity.parent
+    } else if(entity instanceof ProgramEntity) {
+      parent = entity.folder
+    }
+
+    const folder = await this.folderRepository.findOne({user: entity.user, parent: parent ? parent : IsNull(), slug})
+    const program = await this.programRepository.findOne({user: entity.user, folder: parent ? parent : IsNull(), slug})
     if(folder || program) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.generateUniqueSlug(`${slug}-${suffix}`, user, parent)
+      return await this.setSlug(entity, `${slug}-${suffix}`)
     }
+
+    entity.slug = slug
     
-    return slug
+    return entity
   }
 
   public async isValid(folder: FolderEntity): Promise<boolean> {

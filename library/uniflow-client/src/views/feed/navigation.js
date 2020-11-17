@@ -40,8 +40,9 @@ class Navigation extends Component {
         createFolder(
           {
             name: this.state.search,
-            path: getCurrentPath(this.props.feed),
+            path: this.props.feed.folderPath,
           },
+          this.props.auth.uid,
           this.props.auth.token
         )
       )
@@ -65,8 +66,9 @@ class Navigation extends Component {
             name: this.state.search,
             clients: ['uniflow'],
             tags: [],
-            path: getCurrentPath(this.props.feed),
+            path: this.props.feed.folderPath,
           },
+          this.props.auth.uid,
           this.props.auth.token
         )
       )
@@ -93,13 +95,13 @@ class Navigation extends Component {
     }
 
     const backTo = () => {
-      let path = getCurrentPath(this.props.feed).slice(0, -1)
+      let path = this.props.feed.folderPath.slice(0, -1)
 
       return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
     }
 
     const folderTo = () => {
-      let path = getCurrentPath(this.props.feed)
+      let path = this.props.feed.folderPath
 
       return feedPathTo(path, isCurrentUser ? this.props.feed.uid : null)
     }

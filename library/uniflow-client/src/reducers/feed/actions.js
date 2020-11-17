@@ -45,7 +45,15 @@ export const deserializeRailData = raw => {
 }
 
 export const getCurrentItem = state => {
-  return state.slug ? state.items[`${state.slug}`] : null
+  if(!state.slug) return null
+
+  for(const [key, item] of Object.entries(state.items)) {
+    if(item.entity.slug === state.slug) {
+      return item
+    }
+  }
+
+  return null
 }
 
 export const getOrderedFeed = (state, filter) => {
@@ -182,14 +190,14 @@ export const fetchFeed = (uid, path, token = null) => {
 
         for (const folder of foldersResponse.data) {
           dispatch(commitUpdateFeed({
-            entity: folder,
             type: 'folder',
+            entity: folder,
           }))
         }
         for (const program of programsResponse.data) {
           dispatch(commitUpdateFeed({
-            entity: program,
             type: 'program',
+            entity: program,
           }))
         }
       })
@@ -203,31 +211,33 @@ export const fetchFeed = (uid, path, token = null) => {
   }
 }
 
-export const createProgram = (item, token) => {
+export const createProgram = (program, uid, token) => {
   return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.name,
-      path: item.path,
-      clients: item.clients,
-      tags: item.tags,
-      description: item.description,
+      name: program.name,
+      slug: program.name,
+      path: program.path,
+      clients: program.clients,
+      tags: program.tags,
+      description: program.description,
       public: false,
     }
 
     return request
-      .post(`${server.getBaseUrl()}/api/program/create`, data, {
+      .post(`${server.getBaseUrl()}/api/users/${uid}/programs`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
-        item.type = 'program'
+        program = response.data
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
 
-        return item
+        return program
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -239,31 +249,33 @@ export const createProgram = (item, token) => {
   }
 }
 
-export const updateProgram = (item, token) => {
+export const updateProgram = (program, token) => {
   return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.slug,
-      path: item.path,
-      clients: item.clients,
-      tags: item.tags,
-      description: item.description,
-      public: item.public,
+      name: program.name,
+      slug: program.slug,
+      path: program.path,
+      clients: program.clients,
+      tags: program.tags,
+      description: program.description,
+      public: program.public,
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/program/update/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/programs/${program.uid}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
-        item.type = 'program'
+        program = response.data
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
 
-        return item
+        return program
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -275,7 +287,7 @@ export const updateProgram = (item, token) => {
   }
 }
 
-export const getProgramData = (item, token = null) => {
+export const getProgramData = (program, token = null) => {
   return async dispatch => {
     let config = {}
     if (token) {
@@ -287,7 +299,7 @@ export const getProgramData = (item, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/program/get-data/${item.id}`, config)
+      .get(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, config)
       .then(response => {
         return response.data.data
       })
@@ -301,22 +313,25 @@ export const getProgramData = (item, token = null) => {
   }
 }
 
-export const setProgramData = (item, token) => {
+export const setProgramData = (program, token) => {
   return async dispatch => {
     let data = {
-      data: item.data,
+      data: program.data,
     }
     
     return request
-      .put(`${server.getBaseUrl()}/api/program/set-data/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        item.updated = moment()
+        program.updated = moment()
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
 
         return response.data
       })
@@ -330,16 +345,16 @@ export const setProgramData = (item, token) => {
   }
 }
 
-export const deleteProgram = (item, token) => {
+export const deleteProgram = (program, token) => {
   return async dispatch => {
     return request
-      .delete(`${server.getBaseUrl()}/api/program/delete/${item.id}`, {
+      .delete(`${server.getBaseUrl()}/api/programs/${program.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        dispatch(commitDeleteFeed(item))
+        dispatch(commitDeleteFeed(program))
 
         return response.data
       })
@@ -384,7 +399,7 @@ export const getPublicPrograms = () => {
       .then(response => {
         return response.data
       })
-      .catch(error => {
+      .catch(() => {
         return []
       })
   }
@@ -447,27 +462,29 @@ export const getFolderTree = (uid, token = null) => {
   }
 }
 
-export const createFolder = (item, token) => {
+export const createFolder = (folder, uid, token) => {
   return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.name,
-      path: item.path,
+      name: folder.name,
+      slug: folder.name,
+      path: folder.path,
     }
 
     return request
-      .post(`${server.getBaseUrl()}/api/folder/create`, data, {
+      .post(`${server.getBaseUrl()}/api/users/${uid}/folders`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
-        item.type = 'folder'
+        folder = response.data
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'folder',
+          entity: folder,
+        }))
 
-        return item
+        return folder
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -479,26 +496,26 @@ export const createFolder = (item, token) => {
   }
 }
 
-export const updateCurrentFolder = (item, token) => {
+export const updateCurrentFolder = (folder, token) => {
   return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.slug,
-      path: item.path,
+      name: folder.name,
+      slug: folder.slug,
+      path: folder.path,
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/folder/update/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/folders/${folder.uid}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
+        folder = response.data
 
-        dispatch(commitSetCurrentFolderPath(item))
+        dispatch(commitSetCurrentFolderPath(folder))
 
-        return item
+        return folder
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -510,10 +527,10 @@ export const updateCurrentFolder = (item, token) => {
   }
 }
 
-export const deleteCurrentFolder = (item, token) => {
+export const deleteCurrentFolder = (folder, token) => {
   return async dispatch => {
     return request
-      .delete(`${server.getBaseUrl()}/api/folder/delete/${item.id}`, {
+      .delete(`${server.getBaseUrl()}/api/folders/${folder.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },

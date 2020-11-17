@@ -206,8 +206,11 @@ class Program extends Component {
   onChangeTitle = event => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ name: event.target.value },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ name: event.target.value },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -215,8 +218,11 @@ class Program extends Component {
   onChangeSlug = event => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ slug: event.target.value },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ slug: event.target.value },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -224,8 +230,11 @@ class Program extends Component {
   onChangePath = selected => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ path: pathToPaths(selected) },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ path: pathToPaths(selected) },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -233,8 +242,11 @@ class Program extends Component {
   onChangeClients = clients => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ clients: clients }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ clients: clients }
+        }
       }))
       .then(this.onUpdate)
   }
@@ -242,8 +254,11 @@ class Program extends Component {
   onChangeTags = tags => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ tags: tags }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ tags: tags }
+        }
       }))
       .then(this.onUpdate)
   }
@@ -251,8 +266,11 @@ class Program extends Component {
   onChangeDescription = description => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ description: description },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ description: description },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -260,8 +278,11 @@ class Program extends Component {
   onChangePublic = value => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ public: value }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ public: value }
+        }
       }))
       .then(this.onUpdate)
   }
@@ -284,7 +305,7 @@ class Program extends Component {
     program.name += ' Copy'
 
     this.props
-      .dispatch(createProgram(program, this.props.auth.token))
+      .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
       .then(item => {
         Object.assign(program, item)
         return this.props.dispatch(
@@ -610,7 +631,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="form-group row">
                 <label
-                  htmlFor="settings_key"
+                  htmlFor="program_node_api_key"
                   className="col-sm-2 col-form-label"
                 >
                   Node usage
@@ -629,7 +650,7 @@ class Program extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="settings_key"
+                      id="program_node_api_key"
                       value={clipboard || ''}
                       readOnly
                       placeholder="api key"
@@ -644,7 +665,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="form-group row">
                 <label
-                  htmlFor="settings_key"
+                  htmlFor="program_node_api_rust"
                   className="col-sm-2 col-form-label"
                 >
                   Rust usage
@@ -663,7 +684,7 @@ class Program extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="settings_key"
+                      id="program_node_api_rust"
                       value={clipboard || ''}
                       readOnly
                       placeholder="api key"

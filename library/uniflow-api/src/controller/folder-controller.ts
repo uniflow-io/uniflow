@@ -40,17 +40,20 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const folder = await this.folderRepository.findOneByUserAndUid(req.user, req.params.uid)
+          const folder = await this.folderRepository.findOne({
+            where: {user: req.user, uid: req.params.uid},
+            relations: ['user', 'parent']
+          })
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
           
           folder.name = req.body.name
           folder.parent = await this.folderService.fromPath(req.user, req.body.path)
-          if (req.body.slug && folder.slug !== req.body.slug) {
-            folder.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, folder.parent)
-          }
           folder.user = req.user
+          if (req.body.slug && folder.slug !== req.body.slug) {
+            await this.folderService.setSlug(folder, req.body.slug)
+          }
   
           if(await this.folderService.isValid(folder)) {
             await this.folderRepository.save(folder)
@@ -80,7 +83,7 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const folder = await this.folderRepository.findOneByUserAndUid(req.user, req.params.uid)
+          const folder = await this.folderRepository.findOne({user: req.user, uid: req.params.uid})
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }

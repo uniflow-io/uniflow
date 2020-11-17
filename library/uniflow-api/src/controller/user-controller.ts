@@ -8,6 +8,7 @@ import { ControllerInterface } from './interfaces';
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
 import { TypeChecker } from "../model";
+import { IsNull } from "typeorm";
 
 @Service()
 export default class UserController implements ControllerInterface {
@@ -196,12 +197,17 @@ export default class UserController implements ControllerInterface {
             throw new ApiException('User not found', 404);
           }
 
-          const data = []
-          const parent = req.query.path ? await this.folderService.fromPath(user, req.query.path as string) : undefined
+          let where: any = {user}
+          if(req.query.path) {
+            const parent = await this.folderService.fromPath(user, req.query.path as string)
+            where = {...where, parent: parent ? parent : IsNull()}
+          }
           const folders = await this.folderRepository.find({
-            where: {user, parent},
+            where,
             relations: ['parent', 'user'],
           })
+          
+          const data = []
           for (const folder of folders) {
             data.push(await this.folderService.getJson(folder))
           }
@@ -235,8 +241,8 @@ export default class UserController implements ControllerInterface {
           const folder = new FolderEntity();
           folder.name = req.body.name
           folder.parent = await this.folderService.fromPath(req.user, req.body.path)
-          folder.slug = await this.folderService.generateUniqueSlug(req.body.slug || req.body.name, req.user, folder.parent)
           folder.user = req.user
+          await this.folderService.setSlug(folder, req.body.slug || req.body.name)
     
           if(await this.folderService.isValid(folder)) {
             await this.folderRepository.save(folder)
@@ -273,13 +279,21 @@ export default class UserController implements ControllerInterface {
             throw new ApiException('User not found', 404);
           }
 
-          const data = []
-          const folder = req.query.path ? await this.folderService.fromPath(user, req.query.path as string) : undefined
-          const isPublic = req.user && TypeChecker.isSameUser(req.params.uid, req.user) ? undefined : true
+          let where: any = {user}
+          const isPublicOnly = req.user && TypeChecker.isSameUser(req.params.uid, req.user)
+          if(isPublicOnly) {
+            where = {...where, public: true}
+          }
+          if(req.query.path) {
+            const folder = await this.folderService.fromPath(user, req.query.path as string)
+            where = {...where, folder: folder ? folder : IsNull()}
+          }
           const programs = await this.programRepository.find({
-            where: {user, folder, public: isPublic},
+            where,
             relations: ['folder', 'user'],
           })
+          
+          const data = []
           for (const program of programs) {
             data.push(await this.programService.getJson(program))
           }
@@ -315,7 +329,7 @@ export default class UserController implements ControllerInterface {
           program.name = req.body.name
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path)
-          program.slug = await this.folderService.generateUniqueSlug(req.body.slug, req.user, program.folder)
+          await this.folderService.setSlug(program, req.body.slug)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
           program.description = req.body.description
