@@ -25,7 +25,7 @@ export default class AuthService {
     const user = await this.getUserRepository().findOne({ username })
               || await this.getUserRepository().findOne({ email: username });
 
-    if (!user) {
+    if (!user || !user.password) {
       throw new ApiException('Bad credentials', 401);
     }
 

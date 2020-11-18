@@ -39,7 +39,7 @@ export default class UserService {
   public async create(inputUser: UserEntity): Promise<UserEntity> {
     try {
       const salt = randomBytes(32);
-      const hashedPassword = await argon2.hash(inputUser.password, { salt });
+      const hashedPassword = await argon2.hash(inputUser.password as string, { salt });
       const user = await this.userRepository.save({
         ...inputUser,
         password: hashedPassword,

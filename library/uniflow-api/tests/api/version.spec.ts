@@ -7,14 +7,6 @@ import { default as App } from "../../src/app";
 describe('auth', () => {
     const app: App = Container.get(App)
 
-    beforeAll(async () => {
-        await app.start()
-    });
-
-    afterAll(async () => {
-        await app.close()
-    });
-
     it('GET /api/version success', (done) => {
         testApp(app)
             .get('/api/version')

@@ -111,6 +111,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/dist/"
-    ]
+    ],
+    "setupFilesAfterEnv": ["./tests/hooks.ts"]
   }
 }
