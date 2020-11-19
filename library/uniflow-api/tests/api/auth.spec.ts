@@ -1,107 +1,90 @@
-import 'mocha'
+import { describe, test } from '@jest/globals'
 import { expect, assert } from 'chai';
-import { testApp, isUid } from '../utils'
+import * as faker from 'faker'
+import { expectUid, expectAllValidationKeys, expectNotAuthorisedUri, expectUnprocessableEntityUri, expectCreatedUri } from '../utils'
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('auth', () => {
     const app: App = Container.get(App)
 
-    it('POST /api/login success', (done) => {
-        testApp(app)
-            .post('/api/login')
-            .send({
+    test('POST /api/login success', async () => {
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: '/api/login',
+            data: {
                 username: 'user@uniflow.io',
                 password: 'user_password'
-            })
-            .expect(201)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
-
-                    const data = res.body;
-                    expect(data).to.have.all.keys('token', 'uid')
-
-                    assert.isTrue(isUid(data.uid))
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
+            }
+        })
+        expect(body).to.have.all.keys('token', 'uid')
+        expectUid(body.uid)
     });
 
-    it('POST /api/login bad credentials', (done) => {
-        testApp(app)
-            .post('/api/login')
-            .send({
+    test('POST /api/login bad credentials', async () => {
+        await expectNotAuthorisedUri(app, {
+            protocol: 'post',
+            uri: '/api/login',
+            data: {
                 username: 'user@uniflow.io',
                 password: 'badpassword'
-            })
-            .expect(401, done)
+            }
+        })
     });
 
-    it('POST /api/login-facebook success', (done) => {
-        testApp(app)
-            .post('/api/login-facebook')
-            .send({
+    test.each([null, '', faker.random.words()])('POST /api/login bad username format', async (username: string) => {
+        await expectUnprocessableEntityUri(app, {
+            protocol: 'post',
+            uri: '/api/login',
+            data: {
+                username: username,
+                password: 'anypassword',
+            },
+            validationKeys: ['username']
+        })
+    });
+
+    test('POST /api/login-facebook success', async () => {
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: '/api/login-facebook',
+            data: {
                 access_token: 'valid-facebook-token',
-            })
-            .expect(201)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
-
-                    const data = res.body;
-                    expect(data).to.have.all.keys('token', 'uid')
-
-                    assert.isTrue(isUid(data.uid))
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
+            }
+        })
+        expect(body).to.have.all.keys('token', 'uid')
+        expectUid(body.uid)
     });
 
-    it('POST /api/login-facebook bad credentials', (done) => {
-        testApp(app)
-            .post('/api/login-facebook')
-            .send({
+    test('POST /api/login-facebook bad credentials', async () => {
+        await expectNotAuthorisedUri(app, {
+            protocol: 'post',
+            uri: '/api/login-facebook',
+            data: {
                 access_token: 'invalid-facebook-token',
-            })
-            .expect(401, done)
+            }
+        })
     });
 
-    it('POST /api/login-github success', (done) => {
-        testApp(app)
-            .post('/api/login-github')
-            .send({
+    test('POST /api/login-github success', async () => {
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: '/api/login-github',
+            data: {
                 code: 'valid-github-code',
-            })
-            .expect(201)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
-
-                    const data = res.body;
-                    expect(data).to.have.all.keys('token', 'uid')
-
-                    assert.isTrue(isUid(data.uid))
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
+            }
+        })
+        expect(body).to.have.all.keys('token', 'uid')
+        expectUid(body.uid)
     });
 
-    it('POST /api/login-github bad credentials', (done) => {
-        testApp(app)
-            .post('/api/login-github')
-            .send({
+    test('POST /api/login-github bad credentials', async () => {
+        await expectNotAuthorisedUri(app, {
+            protocol: 'post',
+            uri: '/api/login-github',
+            data: {
                 code: 'invalid-github-code',
-            })
-            .expect(401, done)
+            }
+        })
     });
 })

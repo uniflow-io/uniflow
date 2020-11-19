@@ -13,20 +13,6 @@ export default class FolderService {
     private programRepository: ProgramRepository,
   ) {}
 
-  public async delete(folder: FolderEntity): Promise<FolderEntity> {
-    const folderChildren = await this.folderRepository.find({parent: folder})
-    for(const folderChild of folderChildren) {
-      await this.delete(folderChild)
-    }
-
-    const programs = await this.programRepository.find({folder: folder})
-    for(const program of programs) {
-      this.programRepository.remove(program)
-    }
-    
-    return await this.folderRepository.remove(folder)
-  }
-
   public async toPath(folder?: FolderEntity): Promise<string> {
     let paths = []
     

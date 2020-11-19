@@ -48,7 +48,7 @@ export default class App {
 		})
 	}
 
-	public async close(): Promise<void> {
+	public async stop(): Promise<void> {
 		this.server.close();
 		this.databaseLoader.getConnection().close();
 	}

@@ -318,7 +318,7 @@ export default class UserController implements ControllerInterface {
       '/:uid/programs',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
-          name: Joi.string(),
+          name: Joi.string().required(),
           slug: Joi.string().custom(TypeCheckerModel.joiSlug),
           path: Joi.string().custom(TypeCheckerModel.joiPath),
           clients: Joi.array(),
@@ -338,10 +338,10 @@ export default class UserController implements ControllerInterface {
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path || '/')
           await this.folderService.setSlug(program, req.body.slug || req.body.name)
-          program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
-          program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
+          program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients || [])
+          program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags || [])
           program.description = req.body.description ? req.body.description : null
-          program.public = req.body.public
+          program.public = req.body.public || false
 
           if(await this.programService.isValid(program)) {
             await this.programRepository.save(program)

@@ -10,9 +10,9 @@ export default abstract class AbstractRepository<Entity> implements RepositoryIn
     return await this.getRepository<Entity>().save(entity);
   }
 
-  public async remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
-  public async remove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
-  public async remove(entityOrEntities: any, options?: RemoveOptions): Promise<Entity | Entity[]> {
+  public async safeRemove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
+  public async safeRemove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
+  public async safeRemove(entityOrEntities: any, options?: RemoveOptions): Promise<Entity | Entity[]> {
     return await this.getRepository<Entity>().remove(entityOrEntities, options);
   }
 

@@ -1,4 +1,7 @@
-# Barnsley’s fern
+---
+title: Barnsley’s fern
+date: 2020-11-06
+---
 
 Do you want to draw custom things ?
 

@@ -16,7 +16,7 @@ export default class ProgramTagService {
       programTags = await this.programTagRepository.findByProgram(program)
     }
 
-    await this.programTagRepository.remove(programTags)
+    await this.programTagRepository.safeRemove(programTags)
 
     programTags = []
 

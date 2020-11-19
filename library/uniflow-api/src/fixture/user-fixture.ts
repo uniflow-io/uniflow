@@ -22,7 +22,7 @@ export default class UserFixture implements FixtureInterface {
         const salt = randomBytes(32);
 
         user.salt = salt.toString('hex')
-        user.password = await argon2.hash(user.password, { salt });
+        user.password = await argon2.hash(user.password as string, { salt });
         user.role = user.role || 'ROLE_USER'
 
         this.refs.set(`user-${user.email}`, user)

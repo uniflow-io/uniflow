@@ -1,32 +1,43 @@
-import 'mocha'
+import { describe, test } from '@jest/globals'
 import { assert } from 'chai';
-import { testApp } from '../utils';
+import * as faker from 'faker'
+import { expectCreatedUri, expectIncludeValidationKeys, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('auth', () => {
+describe('contact', () => {
     const app: App = Container.get(App)
 
-    it('POST /api/contacts success', (done) => {
-        testApp(app)
-            .post('/api/contacts')
-            .send({
-                email: 'test@gmail.com',
-                message: 'test message'
-            })
-            .expect(201)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
+    test.each([{
+        email: faker.internet.email(),
+        message: faker.random.words(),
+    }])('POST /api/contacts success', async (data: any) => {
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: '/api/contacts',
+            data: data
+        })
+        assert.isTrue(body)
+    });
 
-                    const data = res.body;
-
-                    assert.isTrue(data)
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
+    test.each([{
+        email: faker.internet.email(),
+        message: null,
+    }, {
+        email: faker.internet.email(),
+        message: '',
+    }, {
+        email: null,
+        message: faker.random.words(),
+    }, {
+        email: '',
+        message: faker.random.words(),
+    }])('POST /api/contacts bad data format', async (data: any) => {
+        await expectUnprocessableEntityUri(app, {
+            protocol: 'post',
+            uri: '/api/contacts',
+            data: data,
+            validationKeys: ['email', 'message']
+        })
     });
 })

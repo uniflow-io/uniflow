@@ -1,29 +1,18 @@
-import 'mocha'
-import { expect, assert } from 'chai';
-import { testApp, isVersion } from '../utils';
+import { describe, test } from '@jest/globals'
+import { expect } from 'chai';
+import { expectVersion, expectOkUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('auth', () => {
+describe('version', () => {
     const app: App = Container.get(App)
 
-    it('GET /api/version success', (done) => {
-        testApp(app)
-            .get('/api/version')
-            .expect(200)
-            .end((err, res) => {
-                try {
-                    if (err) throw err;
-
-                    const data = res.body;
-                    expect(data).to.have.all.keys('version')
-
-                    assert.isTrue(isVersion(data.version))
-
-                    return done();
-                } catch (err) {
-                    return done(err);
-                }
-            })
+    test('GET /api/version success', async () => {
+        const { body } = await expectOkUri(app, {
+            protocol: 'get',
+            uri: `/api/version`,
+        });
+        expect(body).to.have.all.keys('version')
+        expectVersion(body.version)
     });
 })

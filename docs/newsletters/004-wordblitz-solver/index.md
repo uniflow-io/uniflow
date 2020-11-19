@@ -1,4 +1,7 @@
-# Wordblitz Solver 
+---
+title: Wordblitz Solver
+date: 2020-11-04
+---
 
 Did you ever face your friends on funny smart games ? Sometimes you just want show your victory over your friends.
 Let me introduce Wordblitz, a Facebook crossword game, where the most world you found in a limited time, the more points you score. The winner is the one with the most points.

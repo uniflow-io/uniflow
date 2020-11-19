@@ -7,10 +7,6 @@ export default class TagService {
   constructor(
     private tagRepository: TagRepository,
   ) {}
-  
-  public async findOne(id?: string | number): Promise<TagEntity | undefined> {
-    return await this.tagRepository.findOne(id);
-  }
 
   public async findOrCreateByNames(names: string[]): Promise<TagEntity[]> {
     let tags = []

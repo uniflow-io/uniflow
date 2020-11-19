@@ -80,16 +80,28 @@ export default class ProgramController implements ControllerInterface {
             throw new ApiException('Program not found', 404);
           }
           
-          program.name = req.body.name
+          if(req.body.name) {
+            program.name = req.body.name
+          }
           program.user = req.user
-          program.folder = await this.folderService.fromPath(req.user, req.body.path)
+          if(req.body.path) {
+            program.folder = await this.folderService.fromPath(req.user, req.body.path)
+          }
           if (req.body.slug && program.slug !== req.body.slug) {
             await this.folderService.setSlug(program, req.body.slug)
           }
-          program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
-          program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
-          program.description = req.body.description
-          program.public = req.body.public
+          if(req.body.clients) {
+            program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
+          }
+          if(req.body.tags) {
+            program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
+          }
+          if(req.body.description) {
+            program.description = req.body.description
+          }
+          if(req.body.public) {
+            program.public = req.body.public
+          }
 
           if(await this.programService.isValid(program)) {
             await this.programRepository.save(program)
@@ -103,6 +115,33 @@ export default class ProgramController implements ControllerInterface {
           });
         } catch (e) {
           //console.log(' error ', e);
+          return next(e);
+        }
+      },
+    );
+
+    route.delete(
+      '/:uid',
+      celebrate({
+        [Segments.PARAMS]: Joi.object().keys({
+          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+        }),
+      }),
+      this.withToken.middleware(),
+      this.withUser.middleware(),
+      this.requireRoleUser.middleware(),
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
+          if (!program) {
+            throw new ApiException('Program not found', 404);
+          }
+
+          await this.programRepository.safeRemove(program)
+
+          return res.status(200).json(true);
+        } catch (e) {
+          console.log(' error ', e);
           return next(e);
         }
       },
@@ -172,33 +211,6 @@ export default class ProgramController implements ControllerInterface {
           return res.status(400).json({
             'messages': ['Program not valid'],
           });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    route.delete(
-      '/:uid',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
-          if (!program) {
-            throw new ApiException('Program not found', 404);
-          }
-
-          await this.programRepository.remove(program)
-
-          return res.status(200).json(true);
         } catch (e) {
           //console.log(' error ', e);
           return next(e);

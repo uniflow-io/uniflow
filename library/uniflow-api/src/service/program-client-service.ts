@@ -16,7 +16,7 @@ export default class ProgramClientService {
       programClients = await this.programClientRepository.findByProgram(program)
     }
     
-    await this.programClientRepository.remove(programClients)
+    await this.programClientRepository.safeRemove(programClients)
     
     programClients = []
 

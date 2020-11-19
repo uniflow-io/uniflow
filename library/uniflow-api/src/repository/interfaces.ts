@@ -3,8 +3,8 @@ import { FindConditions, FindManyOptions, FindOneOptions, ObjectID, RemoveOption
 export interface RepositoryInterface<Entity> {
   getRepository<Entity>(): Repository<Entity>;
   save(entity: Entity): Promise<Entity>;
-  remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
-  remove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
+  safeRemove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
+  safeRemove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
   count(options?: FindManyOptions<Entity>): Promise<number>;
   count(conditions?: FindConditions<Entity>): Promise<number>;
   find(options?: FindManyOptions<Entity>): Promise<Entity[]>;

@@ -1,4 +1,7 @@
-# How can we help you ? 
+---
+title: How can we help you ?
+date: 2020-11-03
+---
 
 Do you ever think about a task that you are dooing reccurently, but you can't really get it off by hand.
 Think about your smart copy and paste task that you are duty to do. This small action that mess your day, because you know there is a way to do it automatically.

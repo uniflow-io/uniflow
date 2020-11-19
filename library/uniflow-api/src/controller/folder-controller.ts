@@ -48,8 +48,12 @@ export default class FolderController implements ControllerInterface {
             throw new ApiException('Folder not found', 404);
           }
           
-          folder.name = req.body.name
-          folder.parent = await this.folderService.fromPath(req.user, req.body.path)
+          if(req.body.name) {
+            folder.name = req.body.name
+          }
+          if(req.body.path) {
+            folder.parent = await this.folderService.fromPath(req.user, req.body.path)
+          }
           folder.user = req.user
           if (req.body.slug && folder.slug !== req.body.slug) {
             await this.folderService.setSlug(folder, req.body.slug)
@@ -88,7 +92,7 @@ export default class FolderController implements ControllerInterface {
             throw new ApiException('Folder not found', 404);
           }
   
-          await this.folderService.delete(folder)
+          await this.folderRepository.safeRemove(folder)
   
           return res.status(200).json(true);
         } catch (e) {

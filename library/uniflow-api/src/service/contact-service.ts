@@ -1,16 +1,14 @@
 import { Inject, Service } from 'typedi';
 import { ContactEntity } from '../entity';
-import { ContactRepository } from '../repository';
 import { MailerInterface } from './mailer/interfaces';
 
 @Service()
 export default class ContactService {
   constructor(
-    private contactRepository: ContactRepository,
     @Inject('MailerInterface')
     private mailer: MailerInterface
   ) {}
-  
+
   public async send(contact: ContactEntity): Promise<boolean> {
     return await this.mailer.send({
       from: 'no-reply@uniflow.io',

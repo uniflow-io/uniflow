@@ -1,12 +1,39 @@
 import { Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, RemoveOptions, Repository } from 'typeorm';
 import { FolderEntity, UserEntity } from '../entity';
 import AbstractRepository from './abstract-repository';
+import ProgramRepository from './program-repository';
 
 @Service()
 export default class FolderRepository extends AbstractRepository<FolderEntity> {
+  constructor(
+    private programRepository: ProgramRepository,
+  ) {
+    super()
+  }
+
   getRepository<FolderEntity>(): Repository<FolderEntity> {
     return getRepository<FolderEntity>(FolderEntity)
+  }
+
+  public async safeRemove(entities: FolderEntity[], options?: RemoveOptions): Promise<FolderEntity[]>;
+  public async safeRemove(entity: FolderEntity, options?: RemoveOptions): Promise<FolderEntity>;
+  public async safeRemove(entityOrEntities: any, options?: RemoveOptions): Promise<FolderEntity | FolderEntity[]> {
+    if(entityOrEntities instanceof FolderEntity) {
+      const folderChildren = await this.find({parent: entityOrEntities})
+      for(const folderChild of folderChildren) {
+        await this.safeRemove(folderChild)
+      }
+
+      const programs = await this.programRepository.find({folder: entityOrEntities})
+      for(const program of programs) {
+        await this.programRepository.safeRemove(program)
+      }
+      
+      return await super.safeRemove(entityOrEntities, options);
+    }
+
+    return Promise.all(entityOrEntities.map((entity: FolderEntity) => this.safeRemove(entity)))
   }
 
   public async findOneByUserAndPath(user: UserEntity, paths: string[]): Promise<FolderEntity | undefined> {

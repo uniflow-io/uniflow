@@ -1,9 +1,6 @@
-import type { Global } from '@jest/types'
+import { beforeAll, afterAll } from '@jest/globals'
 import { default as Container } from "../src/container"
 import { default as App } from "../src/app";
-
-declare const beforeAll: Global.GlobalAdditions['beforeAll'];
-declare const afterAll: Global.GlobalAdditions['afterAll'];
 
 const app: App = Container.get(App)
 
@@ -12,5 +9,5 @@ beforeAll(async () => {
 });
   
 afterAll(async () => {
-    await app.close()
+    await app.stop()
 });
