@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { getRepository, RemoveOptions, Repository } from 'typeorm';
 import { UserEntity } from '../entity';
-import { TypeCheckerModel } from '../model';
+import { TypeModel } from '../model';
 import AbstractRepository from './abstract-repository';
 import FolderRepository from './folder-repository';
 import ProgramRepository from './program-repository';
@@ -39,7 +39,7 @@ export default class UserRepository extends AbstractRepository<UserEntity> {
   }
 
   public async findOneByUidOrUsername(uidOrUsername: string): Promise<UserEntity|undefined> {
-    if(TypeCheckerModel.isUuid(uidOrUsername)) {
+    if(TypeModel.isUuid(uidOrUsername)) {
       return await this.findOne({uid: uidOrUsername})
     }
 

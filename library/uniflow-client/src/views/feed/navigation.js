@@ -71,11 +71,7 @@ class Navigation extends Component {
         this.props.auth.token
       ))
       .then(item => {
-        return this.props
-          .dispatch(setSlugFeed({ type: item.type, id: item.id }))
-          .then(() => {
-            navigate(toFeedPath(item, this.props.user))
-          })
+        return navigate(toFeedPath(item, this.props.user))
       })
       .catch(log => {
         return this.props.dispatch(commitAddLog(log.message))

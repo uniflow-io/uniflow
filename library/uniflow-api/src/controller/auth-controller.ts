@@ -4,7 +4,7 @@ import { Service } from 'typedi';
 import { AuthService } from '../service';
 import { WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { ControllerInterface } from './interfaces';
-import { TypeCheckerModel } from '../model';
+import { TypeModel } from '../model';
 
 @Service()
 export default class AuthController implements ControllerInterface {
@@ -23,7 +23,7 @@ export default class AuthController implements ControllerInterface {
       '/login',
       celebrate({
         [Segments.BODY]: Joi.object().keys({
-          username: Joi.string().required().custom(TypeCheckerModel.joiEmailOrUsername),
+          username: Joi.string().required().custom(TypeModel.joiEmailOrUsername),
           password: Joi.string().required(),
         }),
       }),

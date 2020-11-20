@@ -1,1 +1,1 @@
-export { default as TypeCheckerModel } from './type-checker-model';
+export { default as TypeModel } from './type-model';

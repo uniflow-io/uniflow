@@ -6,7 +6,7 @@ import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } fr
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 import { ProgramRepository, TagRepository } from '../repository';
-import { TypeCheckerModel } from '../model';
+import { TypeModel } from '../model';
 
 @Service()
 export default class ProgramController implements ControllerInterface {
@@ -55,12 +55,12 @@ export default class ProgramController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
-          slug: Joi.string().custom(TypeCheckerModel.joiSlug),
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          slug: Joi.string(),
+          path: Joi.string().custom(TypeModel.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
           description: Joi.string().allow(null, ''),
@@ -99,7 +99,7 @@ export default class ProgramController implements ControllerInterface {
           if(req.body.description) {
             program.description = req.body.description
           }
-          if(req.body.public) {
+          if(req.body.public || req.body.public === false) {
             program.public = req.body.public
           }
 
@@ -124,7 +124,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         }),
       }),
       this.withToken.middleware(),
@@ -151,7 +151,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid/flows',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         }),
       }),
       this.withToken.middleware(),
@@ -184,7 +184,7 @@ export default class ProgramController implements ControllerInterface {
       '/:uid/flows',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
           data: Joi.string(),

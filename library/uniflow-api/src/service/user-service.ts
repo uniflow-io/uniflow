@@ -1,10 +1,10 @@
 import * as argon2 from 'argon2';
-import slugify from "slugify";
 import { Service } from 'typedi';
 import { UserEntity } from '../entity';
 import { randomBytes } from 'crypto';
 import { ApiException } from '../exception';
 import { UserRepository } from '../repository';
+import { TypeModel } from '../model';
 
 @Service()
 export default class UserService {
@@ -60,11 +60,7 @@ export default class UserService {
   }
   
   public async setUsername(user: UserEntity, username: string): Promise<UserEntity> {
-    username = slugify(username, {
-      replacement: '-',
-      lower: true,
-      strict: true,
-    })
+    username = TypeModel.generateSlug(username)
 
     const existUser = await this.userRepository.findOne({username})
     if(existUser) {

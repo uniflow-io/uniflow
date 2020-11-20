@@ -7,7 +7,7 @@ import { ConfigEntity, FolderEntity, ProgramEntity, UserEntity } from "../entity
 import { ControllerInterface } from './interfaces';
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
-import { TypeCheckerModel } from "../model";
+import { TypeModel } from "../model";
 import { IsNull } from "typeorm";
 
 @Service()
@@ -58,7 +58,7 @@ export default class UserController implements ControllerInterface {
       '/:uid/settings',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
       }),
       this.withToken.middleware(),
@@ -79,13 +79,13 @@ export default class UserController implements ControllerInterface {
       '/:uid/settings',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
         [Segments.BODY]: Joi.object().keys({
           firstname: Joi.string().allow(null, ''),
           lastname: Joi.string().allow(null, ''),
-          username: Joi.string().allow(null, '').custom(TypeCheckerModel.joiUsername),
-          apiKey: Joi.string().allow(null, '').custom(TypeCheckerModel.joiApiKey),
+          username: Joi.string().allow(null, '').custom(TypeModel.joiUsername),
+          apiKey: Joi.string().allow(null, '').custom(TypeModel.joiApiKey),
           facebookId: Joi.string().allow(null, ''),
           githubId: Joi.string().allow(null, ''),
         }),
@@ -130,7 +130,7 @@ export default class UserController implements ControllerInterface {
       '/:uid/admin-config',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
       }),
       this.withToken.middleware(),
@@ -156,7 +156,7 @@ export default class UserController implements ControllerInterface {
       '/:uid/admin-config',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
       }),
       this.withToken.middleware(),
@@ -190,10 +190,10 @@ export default class UserController implements ControllerInterface {
       '/:uid/folders',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
         [Segments.QUERY]: Joi.object().keys({
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          path: Joi.string().custom(TypeModel.joiPath),
         }),
       }),
       this.withToken.middleware(),
@@ -232,12 +232,12 @@ export default class UserController implements ControllerInterface {
       '/:uid/folders',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string().required(),
-          slug: Joi.string().custom(TypeCheckerModel.joiSlug),
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          slug: Joi.string(),
+          path: Joi.string().custom(TypeModel.joiPath),
         }),
       }),
       this.withToken.middleware(),
@@ -272,10 +272,10 @@ export default class UserController implements ControllerInterface {
       '/:uid/programs',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuidOrUsername)
+          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
         }),
         [Segments.QUERY]: Joi.object().keys({
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          path: Joi.string().custom(TypeModel.joiPath),
         }),
       }),
       this.withToken.middleware(),
@@ -288,7 +288,7 @@ export default class UserController implements ControllerInterface {
           }
 
           let where: any = {user}
-          const isPublicOnly = !req.user || !TypeCheckerModel.isSameUser(req.params.uid, req.user)
+          const isPublicOnly = !req.user || !TypeModel.isSameUser(req.params.uid, req.user)
           if(isPublicOnly) {
             where = {...where, public: true}
           }
@@ -319,8 +319,8 @@ export default class UserController implements ControllerInterface {
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string().required(),
-          slug: Joi.string().custom(TypeCheckerModel.joiSlug),
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          slug: Joi.string(),
+          path: Joi.string().custom(TypeModel.joiPath),
           clients: Joi.array(),
           tags: Joi.array(),
           description: Joi.string().allow(null, ''),

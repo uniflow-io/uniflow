@@ -15,6 +15,7 @@ import { Select } from '../../components'
 
 class Folder extends Component {
   state = {
+    slug: null,
     folderTreeEdit: false,
     folderTree: [],
   }
@@ -26,8 +27,9 @@ class Folder extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.folder.id !== prevProps.folder.id) {
+    if (this.props.folder.uid !== prevProps.folder.uid) {
       this.setState({
+        slug: null,
         folderTreeEdit: false,
         folderTree: [this.props.folder.path],
       })
@@ -48,16 +50,7 @@ class Folder extends Component {
   }
 
   onChangeSlug = event => {
-    this.props
-      .dispatch(
-        setParentFolderFeed({
-          ...this.props.folder,
-          ...{ slug: event.target.value },
-        })
-      )
-      .then(() => {
-        this.onUpdate()
-      })
+    this.setState({ slug: event.target.value }, this.onUpdate)
   }
 
   onChangePath = selected => {
@@ -74,10 +67,13 @@ class Folder extends Component {
   }
 
   onUpdate = debounce(() => {
+    const { folder } = this.props
+    folder.slug = this.state.slug ?? folder.slug
+
     this.props
-      .dispatch(updateParentFolder(this.props.folder, this.props.auth.token))
-      .then(() => {
-        const path = toFeedPath(this.props.folder, this.props.user)
+      .dispatch(updateParentFolder(folder, this.props.auth.token))
+      .then((folder) => {
+        const path = toFeedPath(folder, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -116,6 +112,7 @@ class Folder extends Component {
   render() {
     const { folderTreeEdit, folderTree } = this.state
     const { folder } = this.props
+    folder.slug = this.state.slug ?? folder.slug
 
     return (
       <section className="section col">

@@ -26,7 +26,6 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setSlugFeed,
   getFolderTree,
   toFeedPath,
   deserializeRailData,
@@ -40,6 +39,7 @@ class Program extends Component {
   state = {
     fetchedSlug: null,
     fetchedUid: null,
+    slug: null,
     folderTreeEdit: false,
     folderTree: [],
   }
@@ -60,8 +60,9 @@ class Program extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.program.id !== prevProps.program.id) {
+    if (this.props.program.uid !== prevProps.program.uid) {
       this.setState({
+        slug: null,
         folderTreeEdit: false,
         folderTree: [this.props.program.path],
       })
@@ -214,15 +215,7 @@ class Program extends Component {
   }
 
   onChangeSlug = event => {
-    this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ slug: event.target.value },
-        }
-      }))
-      .then(this.onUpdate)
+    this.setState({ slug: event.target.value }, this.onUpdate)
   }
 
   onChangePath = selected => {
@@ -286,10 +279,13 @@ class Program extends Component {
   }
 
   onUpdate = debounce(() => {
+    const { program } = this.props
+    program.slug = this.state.slug ?? program.slug
+
     this.props
-      .dispatch(updateProgram(this.props.program, this.props.auth.token))
-      .then(() => {
-        const path = toFeedPath(this.props.program, this.props.user)
+      .dispatch(updateProgram(program, this.props.auth.token))
+      .then((program) => {
+        const path = toFeedPath(program, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -306,14 +302,10 @@ class Program extends Component {
       .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
       .then(item => {
         Object.assign(program, item)
-        return this.props.dispatch(
-          setProgramData(program, this.props.auth.token)
-        )
+        return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(
-          setSlugFeed({ type: program.type, id: program.id })
-        )
+        return navigate(toFeedPath(program, this.props.user))
       })
       .catch(log => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -323,9 +315,11 @@ class Program extends Component {
   onDelete = event => {
     event.preventDefault()
 
-    return this.props.dispatch(
-      deleteProgram(this.props.program, this.props.auth.token)
-    )
+    return this.props
+      .dispatch(deleteProgram(this.props.program, this.props.auth.token))
+      .then(() => {
+        return navigate(toFeedPath(this.props.program, this.props.user, true))
+      })
   }
 
   onFolderEdit = event => {
@@ -414,6 +408,7 @@ class Program extends Component {
       chrome: 'Chrome',
       rust: 'Rust',
     }
+    program.slug = this.state.slug ?? program.slug
 
     return (
       <section className="section col">

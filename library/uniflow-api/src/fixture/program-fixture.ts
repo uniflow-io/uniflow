@@ -9,6 +9,7 @@ import ClientFixture from './client-fixture';
 import UserFixture from './user-fixture';
 import TagFixture from './tag-fixture';
 import FolderFixture from './folder-fixture';
+import { TypeModel } from '../model';
 
 @Service()
 export default class ProgramFixture implements FixtureInterface {
@@ -18,7 +19,7 @@ export default class ProgramFixture implements FixtureInterface {
     ) { }
 
     private async save(program: ProgramEntity): Promise<ProgramEntity> {
-        program.slug = faker.helpers.slugify(program.name).toLowerCase()
+        program.slug = TypeModel.generateSlug(program.name)
 
         return await this.programRepository.save(program)
     }

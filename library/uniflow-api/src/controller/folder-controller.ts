@@ -6,7 +6,7 @@ import { FolderService } from "../service";
 import { ApiException } from "../exception";
 import { ControllerInterface } from './interfaces';
 import { FolderRepository } from '../repository';
-import { TypeCheckerModel } from '../model';
+import { TypeModel } from '../model';
 
 @Service()
 export default class FolderController implements ControllerInterface {
@@ -27,12 +27,12 @@ export default class FolderController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         }),
         [Segments.BODY]: Joi.object().keys({
           name: Joi.string(),
-          slug: Joi.string().custom(TypeCheckerModel.joiSlug),
-          path: Joi.string().custom(TypeCheckerModel.joiPath),
+          slug: Joi.string(),
+          path: Joi.string().custom(TypeModel.joiPath),
         }),
       }),
       this.withToken.middleware(),
@@ -79,7 +79,7 @@ export default class FolderController implements ControllerInterface {
       '/:uid',
       celebrate({
         [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeCheckerModel.joiUuid)
+          uid: Joi.string().custom(TypeModel.joiUuid)
         })
       }),
       this.withToken.middleware(),

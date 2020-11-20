@@ -299,7 +299,6 @@ export const createProgram = (program, uid, token) => {
       clients: program.clients,
       tags: program.tags,
       description: program.description,
-      public: false,
     }
 
     return request
@@ -433,7 +432,10 @@ export const deleteProgram = (program, token) => {
         },
       })
       .then(response => {
-        dispatch(commitDeleteFeed(program))
+        dispatch(commitDeleteFeed({
+          type: 'program',
+          entity: program
+        }))
 
         return response.data
       })
@@ -553,7 +555,7 @@ export const deleteParentFolder = (folder, token) => {
         },
       })
       .then(response => {
-        // dispatch(commitSetParentFolderFeed(undefined))
+        dispatch(commitSetParentFolderFeed(undefined))
 
         return response.data
       })

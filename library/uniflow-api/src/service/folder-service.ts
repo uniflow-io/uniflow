@@ -1,9 +1,8 @@
-import slugify from 'slugify'
 import { Service } from 'typedi';
 import { IsNull } from 'typeorm';
 import { FolderEntity, ProgramEntity, UserEntity } from '../entity';
 import { ApiException } from '../exception';
-import { TypeCheckerModel } from '../model';
+import { TypeModel } from '../model';
 import { FolderRepository, ProgramRepository } from '../repository';
 
 @Service()
@@ -26,7 +25,7 @@ export default class FolderService {
   }
 
   public async fromPath(user: UserEntity, path: string): Promise<FolderEntity|undefined> {
-    if(!TypeCheckerModel.isPath(path)) {
+    if(!TypeModel.isPath(path)) {
       throw new ApiException('not a path')
     }
 
@@ -35,11 +34,7 @@ export default class FolderService {
   }
   
   public async setSlug(entity: FolderEntity | ProgramEntity, slug: string): Promise<FolderEntity | ProgramEntity> {
-    slug = slugify(slug, {
-      replacement: '-',
-      lower: true,
-      strict: true,
-    })
+    slug = TypeModel.generateSlug(slug)
     
     let parent = undefined
     if(entity instanceof FolderEntity) {
