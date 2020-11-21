@@ -1,11 +1,13 @@
 import { Service } from 'typedi';
 import { ClientEntity } from '../entity';
+import ClientFactory from '../factory/client-factory';
 import { ClientRepository } from '../repository';
 
 @Service()
 export default class ClientService {
   constructor(
     private clientRepository: ClientRepository,
+    private clientFactory: ClientFactory,
   ) {}
   
   public async findOrCreateByNames(names: string[]): Promise<ClientEntity[]> {
@@ -13,8 +15,7 @@ export default class ClientService {
     for(const name of names) {
       let client = await this.clientRepository.findOne({name})
       if(!client) {
-        client = new ClientEntity()
-        client.name = name
+        client = this.clientFactory.create({name})
         await this.clientRepository.save(client)
       }
     

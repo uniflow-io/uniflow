@@ -1,11 +1,13 @@
 import { Service } from 'typedi';
 import { TagEntity } from '../entity';
+import { TagFactory } from '../factory';
 import { TagRepository } from '../repository';
 
 @Service()
 export default class TagService {
   constructor(
     private tagRepository: TagRepository,
+    private tagFactory: TagFactory,
   ) {}
 
   public async findOrCreateByNames(names: string[]): Promise<TagEntity[]> {
@@ -13,8 +15,7 @@ export default class TagService {
     for(const name of names) {
       let tag = await this.tagRepository.findOne({name})
       if(!tag) {
-        tag = new TagEntity()
-        tag.name = name
+        tag = this.tagFactory.create({name})
         await this.tagRepository.save(tag)
       }
 

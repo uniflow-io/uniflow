@@ -1,5 +1,6 @@
 import { Service } from 'typedi';
 import { ProgramEntity, ProgramTagEntity } from '../entity';
+import { ProgramTagFactory } from '../factory';
 import { ProgramTagRepository } from '../repository';
 import TagService from "./tag-service";
 
@@ -7,7 +8,8 @@ import TagService from "./tag-service";
 export default class ProgramTagService {
   constructor(
     private programTagRepository: ProgramTagRepository,
-    private tagService: TagService
+    private tagService: TagService,
+    private programTagFactory: ProgramTagFactory
   ) {}
 
   public async manageByProgramAndTagNames(program: ProgramEntity, names: string[]): Promise<ProgramTagEntity[]> {
@@ -23,11 +25,7 @@ export default class ProgramTagService {
     const tags = await this.tagService.findOrCreateByNames(names)
 
     for(const tag of tags) {
-      const programTag = new ProgramTagEntity()
-      programTag.program = program
-      programTag.tag = tag
-
-      programTags.push(programTag);
+      programTags.push(this.programTagFactory.create({program, tag}));
     }
 
     return programTags

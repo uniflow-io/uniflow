@@ -5,35 +5,41 @@ import { FixtureInterface } from './interfaces';
 import { FolderRepository } from '../repository';
 import ReferencesFixture from './references-fixture';
 import UserFixture from './user-fixture';
+import { FakeFolderFactory } from '../factory';
 
 @Service()
 export default class FolderFixture implements FixtureInterface {
-    public static get FOLDERS():Array<string> {
-        return Array.from(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map(tag => `folder-${tag}`))
-    }
+    private folders: FolderEntity[]
 
     constructor(
         private refs: ReferencesFixture,
         private folderRepository: FolderRepository,
-    ) { }
+        private userFixture: UserFixture,
+        private folderFactory: FakeFolderFactory,
+    ) {
+        this.folders = []
+    }
+
+    public get FOLDER_KEYS():Array<string> {
+        return this.folders.map(folder => `folder-${folder.user.email}-${folder.slug}`)
+    }
 
     private async save(folder: FolderEntity): Promise<FolderEntity> {
-        folder.slug = folder.name
-        
-        this.refs.set(`folder-${folder.user.email}-${folder.name}`, folder);
+        this.refs.set(`folder-${folder.user.email}-${folder.slug}`, folder);
         return await this.folderRepository.save(folder)
     }
 
     public async load() {
-        for(const user of UserFixture.USERS) {
+        for(const userKey of this.userFixture.USER_KEYS) {
             const parents: Array<FolderEntity|undefined> = [undefined]
-            for(const folder of FolderFixture.FOLDERS) {
-                const folderEntity = await this.save({
-                    name: folder,
-                    user: this.refs.get(`user-${user}`),
+            for(let i = 0; i < 10; i++) {
+                const folder = this.folderFactory.create({
+                    user: this.refs.get(userKey),
                     parent: faker.random.arrayElement(parents),
-                } as FolderEntity)
-                parents.push(folderEntity)
+                })
+                this.folders.push(folder)
+                parents.push(folder)
+                await this.save(folder)
             }
         }
     }

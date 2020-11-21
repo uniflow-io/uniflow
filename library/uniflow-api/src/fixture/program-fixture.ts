@@ -1,7 +1,7 @@
 import * as faker from 'faker'
 import { Service } from 'typedi';
 import { ObjectLiteral } from 'typeorm';
-import { ProgramClientEntity, ProgramEntity, ProgramTagEntity } from '../entity';
+import { FolderEntity, ProgramClientEntity, ProgramEntity, ProgramTagEntity, UserEntity } from '../entity';
 import { FixtureInterface } from './interfaces';
 import { ProgramRepository } from '../repository';
 import ReferencesFixture from './references-fixture';
@@ -10,12 +10,18 @@ import UserFixture from './user-fixture';
 import TagFixture from './tag-fixture';
 import FolderFixture from './folder-fixture';
 import { TypeModel } from '../model';
+import { FakeProgramFactory } from '../factory';
 
 @Service()
 export default class ProgramFixture implements FixtureInterface {
     constructor(
         private refs: ReferencesFixture,
         private programRepository: ProgramRepository,
+        private userFixture: UserFixture,
+        private clientFixture: ClientFixture,
+        private tagFixture: TagFixture,
+        private folderFixture: FolderFixture,
+        private programFactory: FakeProgramFactory,
     ) { }
 
     private async save(program: ProgramEntity): Promise<ProgramEntity> {
@@ -25,11 +31,16 @@ export default class ProgramFixture implements FixtureInterface {
     }
 
     public async load() {
-        const users = UserFixture.USERS.map(user => this.refs.get(`user-${user}`))
-        const clients = ClientFixture.CLIENTS.map(client => this.refs.get(`client-${client}`))
-        const tags = TagFixture.TAGS.map(tag => this.refs.get(`tag-${tag}`))
-        const folders = UserFixture.USERS.reduce<Map<string,Array<ObjectLiteral|undefined>>>((folders, user) => {
-            return folders.set(user, [...[undefined], ...FolderFixture.FOLDERS.map(folder => this.refs.get(`folder-${user}-${folder}`))])
+        const users = this.userFixture.USER_KEYS.map(key => this.refs.get(key))
+        const clients = this.clientFixture.CLIENT_KEYS.map(key => this.refs.get(key))
+        const tags = this.tagFixture.TAG_KEYS.map(key => this.refs.get(key))
+        const folders = users.reduce<Map<string,Array<ObjectLiteral|undefined>>>((folders, user: UserEntity) => {
+            return folders.set(user.email, [
+                ...[undefined],
+                ...this.folderFixture.FOLDER_KEYS
+                    .map(key => this.refs.get(key))
+                    .filter((folder: FolderEntity) => folder.user.email === user.email)
+            ])
         }, new Map())
 
         for(let i = 0; i < 512; i++) {
@@ -37,9 +48,7 @@ export default class ProgramFixture implements FixtureInterface {
             const userFolders: Array<ObjectLiteral|undefined> = folders.get(user?.email) || []
             const folder = faker.random.arrayElement<ObjectLiteral | undefined>(userFolders)
 
-            await this.save({
-                name: faker.random.word(),
-                description: faker.random.words(),
+            await this.save(this.programFactory.create({
                 user: user,
                 folder: folder,
                 clients: faker.random.arrayElements(clients).map(client => ({
@@ -49,7 +58,7 @@ export default class ProgramFixture implements FixtureInterface {
                     tag: tag
                 } as ProgramTagEntity)),
                 public: faker.random.boolean(),
-            } as ProgramEntity)
+            }))
         }
     }
 }

@@ -70,4 +70,17 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
 
     return (await qb.getOne())?.parent
   }
+
+  public async isCircular(folder: FolderEntity): Promise<boolean> {
+    let parentFolder: FolderEntity|undefined = folder
+    do {
+      parentFolder = await this.findOneParent(parentFolder)
+      if(parentFolder && parentFolder.id !== folder.id) {
+        return true
+      }
+
+    } while(parentFolder)
+
+    return false
+  }
 }

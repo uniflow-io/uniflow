@@ -56,10 +56,8 @@ export default class FolderService {
   }
 
   public async isValid(folder: FolderEntity): Promise<boolean> {
-    let isValid = true
-    isValid &&= folder.name !== undefined
-    isValid &&= folder.name !== ''
-    return isValid
+    const isCircular = await this.folderRepository.isCircular(folder)
+    return !isCircular
   }
   
   public async getJson(folder: FolderEntity): Promise<Object> {

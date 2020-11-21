@@ -5,12 +5,14 @@ import { ContactService } from "../service";
 import { ContactEntity } from "../entity";
 import { ControllerInterface } from './interfaces';
 import { ContactRepository } from '../repository';
+import { ContactFactory } from '../factory';
 
 @Service()
 export default class ContactController implements ControllerInterface {
   constructor(
     private contactRepository: ContactRepository,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private contactFactory: ContactFactory
   ) {}
 
   routes(app: Router): Router {
@@ -28,7 +30,7 @@ export default class ContactController implements ControllerInterface {
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const contact = req.body as ContactEntity;
+          const contact = this.contactFactory.create(req.body)
     
           if(await this.contactService.isValid(contact)) {
             await this.contactRepository.save(contact)

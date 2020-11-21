@@ -5,11 +5,13 @@ import { randomBytes } from 'crypto';
 import { ApiException } from '../exception';
 import { UserRepository } from '../repository';
 import { TypeModel } from '../model';
+import { UserFactory } from '../factory';
 
 @Service()
 export default class UserService {
   constructor(
     private userRepository: UserRepository,
+    private userFactory: UserFactory,
   ) {}
 
   public isGranted(user: UserEntity, attributes: Array<string> | string): boolean {
@@ -40,12 +42,12 @@ export default class UserService {
     try {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(inputUser.password as string, { salt });
-      const user = await this.userRepository.save({
+      const user = await this.userRepository.save(this.userFactory.create({
         ...inputUser,
         password: hashedPassword,
         salt: salt.toString('hex'),
         role: 'ROLE_USER',
-      } as UserEntity);
+      }));
 
       if (!user) {
         throw new Error('User cannot be created');

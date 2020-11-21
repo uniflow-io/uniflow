@@ -1,5 +1,6 @@
 import { Service } from 'typedi';
 import { ProgramEntity, ProgramClientEntity} from '../entity';
+import { ProgramClientFactory } from '../factory';
 import { ProgramClientRepository } from '../repository';
 import ClientService from "./client-service";
 
@@ -7,7 +8,8 @@ import ClientService from "./client-service";
 export default class ProgramClientService {
   constructor(
     private programClientRepository: ProgramClientRepository,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private programClientFactory: ProgramClientFactory,
   ) {}
 
   public async manageByProgramAndClientNames(program: ProgramEntity, names: string[]): Promise<ProgramClientEntity[]> {
@@ -23,11 +25,7 @@ export default class ProgramClientService {
     const clients = await this.clientService.findOrCreateByNames(names)
     
     for(const client of clients) {
-      const programClient = new ProgramClientEntity()
-      programClient.program = program
-      programClient.client = client
-    
-      programClients.push(programClient);
+      programClients.push(this.programClientFactory.create({ program, client }));
     }
     
     return programClients

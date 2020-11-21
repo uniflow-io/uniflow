@@ -1,5 +1,6 @@
 import { Inject, Service } from 'typedi';
 import { LeadEntity } from '../entity';
+import { LeadFactory } from '../factory';
 import { LeadRepository } from '../repository';
 import { LeadSubscriberInterface, LeadSubscriberOptions } from './lead-subscriber/interfaces';
 
@@ -8,15 +9,12 @@ export default class LeadService {
   constructor(
     private leadRepository: LeadRepository,
     @Inject('LeadSubscriberInterface')
-    private leadSubscriber: LeadSubscriberInterface
+    private leadSubscriber: LeadSubscriberInterface,
+    private leadFactory: LeadFactory,
   ) {}
   
   public async create(email: string, options: LeadSubscriberOptions): Promise<LeadEntity> {
-    let lead = await this.leadRepository.findOne({email})
-    if(!lead) {
-      lead = new LeadEntity()
-      lead.email = email
-    }
+    const lead = this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
 
     if(options.type === 'newsletter' && !lead.optinNewsletter) {
       await this.leadSubscriber.subscribe(email, options)

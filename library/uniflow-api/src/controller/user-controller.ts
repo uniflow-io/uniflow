@@ -3,12 +3,13 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router} from 'express';
 import { RequireSameUserMiddleware, RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { UserService, ConfigService, FolderService, ProgramService, ProgramClientService, ProgramTagService } from "../service";
-import { ConfigEntity, FolderEntity, ProgramEntity, UserEntity } from "../entity";
+import { ProgramEntity, UserEntity } from "../entity";
 import { ControllerInterface } from './interfaces';
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
 import { TypeModel } from "../model";
 import { IsNull } from "typeorm";
+import { ConfigFactory, ProgramFactory, FolderFactory, UserFactory } from "../factory";
 
 @Service()
 export default class UserController implements ControllerInterface {
@@ -28,6 +29,10 @@ export default class UserController implements ControllerInterface {
     private withUser: WithUserMiddleware,
     private requireRoleUser: RequireRoleUserMiddleware,
     private requireSameUser: RequireSameUserMiddleware,
+    private configFactory: ConfigFactory,
+    private folderFactory: FolderFactory,
+    private programFactory: ProgramFactory,
+    private userFactory: UserFactory,
   ) {}
 
   routes(app: Router): Router {
@@ -45,7 +50,7 @@ export default class UserController implements ControllerInterface {
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const user = await this.userService.create(req.body as UserEntity);
+          const user = await this.userService.create(req.body);
           return res.status(201).json({ uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
@@ -96,7 +101,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let user = req.body as UserEntity;
+          let user = this.userFactory.create(req.body);
           user.firstname = user.firstname ? user.firstname : null
           user.lastname = user.lastname ? user.lastname : null
           user.username = user.username ? user.username : null
@@ -139,10 +144,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let config = await this.configRepository.findOne();
-          if(!config) {
-            config = new ConfigEntity()
-          }
+          const config = this.configFactory.create(await this.configRepository.findOne());
           
           return res.status(200).json(await this.configService.getJson(config));
         } catch (e) {
@@ -165,10 +167,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let config = await this.configRepository.findOne();
-          if(!config) {
-            config = new ConfigEntity()
-          }
+          const config = this.configFactory.create(await this.configRepository.findOne());
     
           if(await this.configService.isValid(config)) {
             await this.configRepository.save(config)
@@ -246,7 +245,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const folder = new FolderEntity();
+          const folder = this.folderFactory.create()
           folder.name = req.body.name
           folder.parent = await this.folderService.fromPath(req.user, req.body.path || '/')
           folder.user = req.user
@@ -333,7 +332,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = new ProgramEntity();
+          const program = this.programFactory.create()
           program.name = req.body.name
           program.user = req.user
           program.folder = await this.folderService.fromPath(req.user, req.body.path || '/')
