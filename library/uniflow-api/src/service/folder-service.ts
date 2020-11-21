@@ -56,8 +56,7 @@ export default class FolderService {
   }
 
   public async isValid(folder: FolderEntity): Promise<boolean> {
-    const isCircular = await this.folderRepository.isCircular(folder)
-    return !isCircular
+    return true
   }
   
   public async getJson(folder: FolderEntity): Promise<Object> {
@@ -65,7 +64,7 @@ export default class FolderService {
       'uid': folder.uid,
       'name': folder.name,
       'slug': folder.slug,
-      'path': await this.toPath(folder.parent),
+      'path': await this.toPath(folder.parent || undefined),
       'user': folder.user.username || folder.user.uid,
       'created': folder.created.toISOString(),
       'updated': folder.updated.toISOString(),

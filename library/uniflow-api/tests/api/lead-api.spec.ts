@@ -5,7 +5,7 @@ import { expectCreatedUri, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('lead', () => {
+describe('api-lead', () => {
     const app: App = Container.get(App)
 
     test.each([faker.internet.email()])('POST /api/leads success', async (email: string) => {

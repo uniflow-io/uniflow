@@ -85,7 +85,8 @@ export default class ProgramController implements ControllerInterface {
           }
           program.user = req.user
           if(req.body.path) {
-            program.folder = await this.folderService.fromPath(req.user, req.body.path)
+            program.folder = await this.folderService.fromPath(req.user, req.body.path) || null
+            //await this.folderService.setSlug(program, program.slug) // in case of slug conflict when moving program
           }
           if (req.body.slug && program.slug !== req.body.slug) {
             await this.folderService.setSlug(program, req.body.slug)

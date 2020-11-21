@@ -21,7 +21,7 @@ export default class ProgramService {
       'uid': program.uid,
       'name': program.name,
       'slug': program.slug,
-      'path': await this.folderService.toPath(program.folder),
+      'path': await this.folderService.toPath(program.folder || undefined),
       'clients': await this.programClientService.toClientNames(program),
       'tags': await this.programTagService.toTagNames(program),
       'description': program.description,

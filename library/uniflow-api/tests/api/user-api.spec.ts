@@ -1,11 +1,11 @@
 import { describe, test } from '@jest/globals'
 import { expect, assert } from 'chai';
 import * as faker from 'faker'
-import { expectCreatedUri, expectNotAuthorisedUri, expectOkUri, expectUid, expectUnprocessableEntityUri, loginApp, uriApp } from '../utils';
+import { expectCreatedUri, expectNotAuthorisedUri, expectOkUri, expectUid, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('user', () => {
+describe('api-user', () => {
     const app: App = Container.get(App)
 
     test.each([{

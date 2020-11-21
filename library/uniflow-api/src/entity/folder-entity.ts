@@ -38,7 +38,7 @@ export default class FolderEntity {
   user: UserEntity;
   
   @ManyToOne(type => FolderEntity, parent => parent.children)
-  parent: FolderEntity | undefined
+  parent: FolderEntity | null
 
   @OneToMany(type => FolderEntity, child => child.parent, {
     cascade: ['insert']

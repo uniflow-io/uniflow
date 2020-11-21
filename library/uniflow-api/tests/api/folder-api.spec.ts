@@ -5,7 +5,7 @@ import { expectOkUri, uriApp } from '../utils'
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('folder', () => {
+describe('api-folder', () => {
     const app: App = Container.get(App)
     let userFolder: any, userDeleteFolder: any
 

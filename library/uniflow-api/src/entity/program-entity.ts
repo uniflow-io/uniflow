@@ -38,7 +38,7 @@ export default class ProgramEntity {
   user: UserEntity
 
   @ManyToOne(type => FolderEntity, folder => folder.programs)
-  folder: FolderEntity | undefined
+  folder: FolderEntity | null
   
   @OneToMany(type => ProgramClientEntity, programClient => programClient.program, {
     cascade: ['insert']

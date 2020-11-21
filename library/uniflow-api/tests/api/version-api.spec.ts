@@ -4,7 +4,7 @@ import { expectVersion, expectOkUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('version', () => {
+describe('api-version', () => {
     const app: App = Container.get(App)
 
     test('GET /api/version success', async () => {

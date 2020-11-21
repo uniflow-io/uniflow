@@ -36,6 +36,11 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
     return Promise.all(entityOrEntities.map((entity: FolderEntity) => this.safeRemove(entity)))
   }
 
+  /**
+   * return the folder given paths (as concatenation of slugs) for the user
+   * @param user the user provided to find the folder
+   * @param paths slugs list viewed as path
+   */
   public async findOneByUserAndPath(user: UserEntity, paths: string[]): Promise<FolderEntity | undefined> {
     const level = paths.length
     if (level === 0) {
@@ -62,25 +67,34 @@ export default class FolderRepository extends AbstractRepository<FolderEntity> {
     return await qb.getOne()
   }
 
+  /**
+   * hydrate folder and return his parent folder
+   * @param folder folder to hydrate
+   */
   public async findOneParent(folder: FolderEntity): Promise<FolderEntity | undefined> {
-    const qb = this.getRepository<FolderEntity>().createQueryBuilder('f')
-      .select('f')
-      .leftJoinAndSelect('f.parent', 'parent')
-      .andWhere('f.id = :id').setParameter('id', folder.id)
+    const hydratedFolder = await this.findOne({
+      where: {id: folder.id},
+      relations: ['parent']
+    })
+    
+    if(hydratedFolder && hydratedFolder.parent) {
+      return hydratedFolder.parent
+    }
 
-    return (await qb.getOne())?.parent
+    return undefined
   }
 
-  public async isCircular(folder: FolderEntity): Promise<boolean> {
-    let parentFolder: FolderEntity|undefined = folder
-    do {
-      parentFolder = await this.findOneParent(parentFolder)
-      if(parentFolder && parentFolder.id !== folder.id) {
-        return true
-      }
+  /**
+   * check if folder has circular dependency with parent
+   * @param folder folder to check circular dependency
+   * @param parent parent folder to check circular dependency
+   */
+  public async isCircular(folder: FolderEntity, parent: FolderEntity): Promise<boolean> {
+    if(folder.id === parent.id) {
+      return true
+    }
 
-    } while(parentFolder)
-
-    return false
+    const nextParent = await this.findOneParent(parent)
+    return nextParent ? await this.isCircular(folder, nextParent) : false
   }
 }

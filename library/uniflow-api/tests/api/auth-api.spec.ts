@@ -1,11 +1,11 @@
 import { describe, test } from '@jest/globals'
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import * as faker from 'faker'
-import { expectUid, expectAllValidationKeys, expectNotAuthorisedUri, expectUnprocessableEntityUri, expectCreatedUri } from '../utils'
+import { expectUid, expectNotAuthorisedUri, expectUnprocessableEntityUri, expectCreatedUri } from '../utils'
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
-describe('auth', () => {
+describe('api-auth', () => {
     const app: App = Container.get(App)
 
     test('POST /api/login success', async () => {
@@ -32,7 +32,7 @@ describe('auth', () => {
         })
     });
 
-    test.each([null, '', faker.random.words()])('POST /api/login bad username format', async (username: string) => {
+    test.each([null, '', '$user#*', faker.random.words(3)])('POST /api/login bad username format', async (username: string) => {
         await expectUnprocessableEntityUri(app, {
             protocol: 'post',
             uri: '/api/login',

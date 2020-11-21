@@ -247,7 +247,7 @@ export default class UserController implements ControllerInterface {
         try {
           const folder = this.folderFactory.create()
           folder.name = req.body.name
-          folder.parent = await this.folderService.fromPath(req.user, req.body.path || '/')
+          folder.parent = await this.folderService.fromPath(req.user, req.body.path || '/') || null
           folder.user = req.user
           await this.folderService.setSlug(folder, req.body.slug || req.body.name)
     
@@ -335,7 +335,7 @@ export default class UserController implements ControllerInterface {
           const program = this.programFactory.create()
           program.name = req.body.name
           program.user = req.user
-          program.folder = await this.folderService.fromPath(req.user, req.body.path || '/')
+          program.folder = await this.folderService.fromPath(req.user, req.body.path || '/') || null
           await this.folderService.setSlug(program, req.body.slug || req.body.name)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients || [])
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags || [])

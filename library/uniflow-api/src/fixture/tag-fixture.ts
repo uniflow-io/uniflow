@@ -2,8 +2,8 @@ import { Service } from 'typedi';
 import { TagEntity } from '../entity';
 import { FixtureInterface } from './interfaces';
 import { TagRepository } from '../repository';
-import ReferencesFixture from './references-fixture';
 import { FakeTagFactory } from '../factory';
+import ReferencesFixture from './references-fixture';
 
 @Service()
 export default class TagFixture implements FixtureInterface {
@@ -16,7 +16,11 @@ export default class TagFixture implements FixtureInterface {
     ) {
         this.tags = []
         for(let i = 0; i < 10; i++) {
-            this.tags.push(this.tagFactory.create())
+            const tag = this.tagFactory.create()
+            const names = this.tags.map(tag => tag.name)
+            if(names.indexOf(tag.name) === -1) {
+                this.tags.push(tag)
+            }
         }
     }
 

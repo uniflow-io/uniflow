@@ -1,4 +1,4 @@
-import { celebrate, Joi, Segments } from 'celebrate';
+import { celebrate, CelebrateError, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
 import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
@@ -52,7 +52,14 @@ export default class FolderController implements ControllerInterface {
             folder.name = req.body.name
           }
           if(req.body.path) {
-            folder.parent = await this.folderService.fromPath(req.user, req.body.path)
+            const parentFolder = await this.folderService.fromPath(req.user, req.body.path) || null
+            if(parentFolder && await this.folderRepository.isCircular(folder, parentFolder)) {
+              const error = new CelebrateError(undefined, { celebrated: true })
+              error.details.set(Segments.BODY, new Joi.ValidationError('', [{path: ['path'], message: 'path provided is not accepted'}], ''))
+              throw error
+            }
+            folder.parent = parentFolder
+            //await this.folderService.setSlug(folder, folder.slug) // in case of slug conflict when moving folder
           }
           folder.user = req.user
           if (req.body.slug && folder.slug !== req.body.slug) {

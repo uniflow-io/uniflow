@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchSettings } from '../reducers/user/actions'
 import { matchRoute } from '../routes'
-import {
-  fetchFeed,
-} from '../reducers/feed/actions'
+import { fetchFeed, setSlugFeed } from '../reducers/feed/actions'
 
 class UserManager extends Component {
   state = {
@@ -71,7 +69,7 @@ class UserManager extends Component {
 
   onFetchItem = (uid, paths = []) => {
     const { fetching } = this.state
-    const { auth } = this.props
+    const { auth, feed } = this.props
 
     if (fetching) {
       return
@@ -86,51 +84,16 @@ class UserManager extends Component {
       .then(async () => {
         paths = paths.filter((path) => !!path)
 
-        const token = auth.isAuthenticated ? auth.token : null
-        return this.props.dispatch(fetchFeed(uid, paths, token))
-        /*if (feed.uid === uid && feed.path === path && feed.slug === slug) {
-          return Promise.resolve()
+        /*const isSameFolder = 
+          (paths.length == 0 && !feed.parentFolder) ||
+          (paths.length >= 2 && feed.parentFolder && `${feed.parentFolder.path}${feed.parentFolder.slug}` === `/${paths.slice(0, -1).join('/')}`)
+        if (feed.uid === uid && isSameFolder) {
+          const slug = paths.length > 0 ? paths[paths.length - 1] : null
+          return this.props.dispatch(setSlugFeed(slug))
         }*/
 
-        /*return Promise.resolve()
-          .then(() => {
-            const { auth, feed } = this.props
-
-            if (feed.uid === uid && feed.path === path) {
-              return Promise.resolve()
-            }
-
-            const token = auth.isAuthenticated ? auth.token : null
-            return this.props.dispatch(fetchFeed(uid, path, token))
-              .then(() => {
-                return this.props.dispatch(setUidFeed(uid))
-              })
-              .then(() => {
-                return this.props.dispatch(setPathFeed(path))
-              })
-          })
-          .then(() => {
-            return this.props.dispatch(setSlugFeed(slug))
-          })*/
-          /*.then(() => {
-            const { user, feed } = this.props
-            const isCurrentUser =
-              feed.uid && feed.uid === user.uid
-
-            let currentPath = getPathFeed(feed)
-
-            let item = getCurrentFeedItem(feed)
-            if (item) {
-              currentPath.push(item.slug)
-            }
-            const path = toFeedPath(
-              currentPath,
-              (item && item.public) || isCurrentUser ? feed.uid : null
-            )
-            if (typeof window !== `undefined` && window.location.pathname !== path) {
-              navigate(path)
-            }
-          })*/
+        const token = auth.isAuthenticated ? auth.token : null
+        return this.props.dispatch(fetchFeed(uid, paths, token))
       })
       .then(async () => {
         return new Promise(resolve => {

@@ -73,7 +73,6 @@ export default class ServerLoader implements LoaderInterface {
        */
       if (isCelebrateError(err)) {
         const validation: any = [];
-        // eslint-disable-next-line no-restricted-syntax
         for (const [segment, joiError] of err.details.entries()) {
           for (const joiErrorItem of joiError.details) {
             validation.push({
