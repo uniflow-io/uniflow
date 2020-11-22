@@ -29,11 +29,10 @@ export default class TagFixture implements FixtureInterface {
     public async load() {
         for(let i = 0; i < 10; i++) {
             const tag = await this.tagFactory.create()
-            const names = this.tags.map(tag => tag.name)
-            if(names.indexOf(tag.name) === -1) {
+            if(this.tags.filter(exitingTag => exitingTag.name === tag.name).length === 0) {
                 this.tags.push(tag)
+                await this.save(tag)
             }
-            await this.save(tag)
         }
     }
 }

@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   Generated,
   PrimaryGeneratedColumn
@@ -33,6 +34,6 @@ export default class ContactEntity {
   @CreateDateColumn()
   created: Date
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated: Date
 }

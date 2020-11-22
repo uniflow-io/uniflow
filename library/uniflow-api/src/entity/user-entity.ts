@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   Generated,
   OneToMany,
@@ -105,6 +106,6 @@ export default class UserEntity {
   @CreateDateColumn()
   created: Date
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated: Date
 }

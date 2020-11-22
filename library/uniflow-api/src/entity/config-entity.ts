@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   Generated,
   PrimaryGeneratedColumn
@@ -20,6 +21,6 @@ export default class ConfigEntity {
   @CreateDateColumn()
   created: Date
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated: Date
 }

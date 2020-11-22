@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   Generated,
   PrimaryGeneratedColumn,
@@ -53,6 +54,6 @@ export default class FolderEntity {
   @CreateDateColumn()
   created: Date
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated: Date
 }

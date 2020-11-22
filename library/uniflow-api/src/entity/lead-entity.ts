@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  UpdateDateColumn,
   Entity,
   Generated,
   PrimaryGeneratedColumn
@@ -35,6 +36,6 @@ export default class LeadEntity {
   @CreateDateColumn()
   created: Date
 
-  @CreateDateColumn()
+  @UpdateDateColumn()
   updated: Date
 }
