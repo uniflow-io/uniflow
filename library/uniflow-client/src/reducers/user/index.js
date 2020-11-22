@@ -1,4 +1,7 @@
-import { COMMIT_UPDATE_SETTINGS } from './actions-types'
+import {
+  COMMIT_UPDATE_SETTINGS,
+  COMMIT_LOGOUT_USER,
+} from './actions-types'
 
 const defaultState = {
   uid: null,
@@ -17,6 +20,10 @@ const user = (state = defaultState, action) => {
       return {
         ...state,
         ...action.user,
+      }
+    case COMMIT_LOGOUT_USER:
+      return {
+        ...defaultState,
       }
     default:
       return state

@@ -9,7 +9,7 @@ import {
   COMMIT_SET_SLUG_FEED,
   COMMIT_SET_UID_FEED,
 } from './actions-types'
-import { commitLogoutUser } from '../auth/actions'
+import { commitLogoutUser } from '../user/actions'
 import { pathTo } from '../../routes'
 import { Bus } from '../../models'
 

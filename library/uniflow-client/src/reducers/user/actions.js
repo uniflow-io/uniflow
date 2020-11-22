@@ -1,9 +1,32 @@
 import request from 'axios'
 import server from '../../utils/server'
 import uniq from 'lodash/uniq'
-import { COMMIT_UPDATE_SETTINGS } from './actions-types'
-import { commitLogoutUser } from '../auth/actions'
+import {
+  COMMIT_UPDATE_SETTINGS,
+  COMMIT_LOGOUT_USER
+} from './actions-types'
+import { commitLogoutUser as commitAuthLogoutUser } from '../auth/actions'
 import { commitAddLog } from '../logs/actions'
+
+export const commitUpdateSettings = user => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_UPDATE_SETTINGS,
+      user,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitLogoutUser = () => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_LOGOUT_USER,
+    })
+    dispatch(commitAuthLogoutUser())
+    return Promise.resolve()
+  }
+}
 
 export const fetchConfig = (token, uid) => {
   return async dispatch => {
@@ -23,6 +46,7 @@ export const fetchConfig = (token, uid) => {
     }
   }
 }
+
 export const updateConfig = (item, token, uid) => {
   return async dispatch => {
     const data = {
@@ -48,6 +72,7 @@ export const updateConfig = (item, token, uid) => {
     }
   }
 }
+
 export const fetchSettings = (uid, token) => {
   return async dispatch => {
     return request
@@ -68,6 +93,7 @@ export const fetchSettings = (uid, token) => {
       })
   }
 }
+
 export const updateSettings = (item, token) => {
   return async dispatch => {
     const data = {
@@ -98,15 +124,7 @@ export const updateSettings = (item, token) => {
     }
   }
 }
-export const commitUpdateSettings = user => {
-  return async dispatch => {
-    dispatch({
-      type: COMMIT_UPDATE_SETTINGS,
-      user,
-    })
-    return Promise.resolve()
-  }
-}
+
 export const isGranted = (user, attributes) => {
   if (!Array.isArray(attributes)) {
     attributes = [attributes]
