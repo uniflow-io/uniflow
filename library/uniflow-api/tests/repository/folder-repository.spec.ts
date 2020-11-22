@@ -60,6 +60,24 @@ describe('folder-repository', () => {
         assert.isDefined(matchedFolder)
         assert.isTrue(matchedFolder && matchedFolder.uid === targetFolder.uid)
     });
+
+    test.each([
+        ['A', undefined],
+        ['B', 'A'],
+        ['C', 'B'],
+        ['E', 'C'],
+        ['D', 'B'],
+    ])('findOneParent success', async (folder: string, parent: string|undefined) => {
+        const targetFolder = folders.get(folder) as FolderEntity
+        const parentFolder = parent === undefined ? undefined : folders.get(parent) as FolderEntity
+        const matchedFolder = await folderRepository.findOneParent(targetFolder)
+        if(parentFolder === undefined) {
+            assert.isUndefined(matchedFolder)
+        } else {
+            assert.isDefined(matchedFolder)
+            assert.isTrue(matchedFolder && matchedFolder.uid === parentFolder.uid)
+        }
+    });
  
     test.each([
         ['A', 'B'],
