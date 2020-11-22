@@ -2,12 +2,12 @@
 ##usage :
 ##-------
 
-LERNA        = node_modules/.bin/lerna
+LERNA        = ./node_modules/.bin/lerna
 
 clean: ## clean
 	$(LERNA) run clean;
 	$(LERNA) clean -y;
-	rm -rf node_modules
+	rm -rf ./node_modules
 
 install: ## install
 	npm install

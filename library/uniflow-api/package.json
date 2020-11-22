@@ -34,7 +34,7 @@
     "oclif.manifest.json"
   ],
   "oclif": {
-    "commands": "./src/command",
+    "commands": "./dist/command",
     "bin": "uniflow-api"
   },
   "bin": "./bin/uniflow-api",
