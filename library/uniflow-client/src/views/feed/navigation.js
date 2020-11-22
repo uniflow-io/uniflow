@@ -6,7 +6,7 @@ import {
   getOrderedFeed,
   createProgram,
   setSlugFeed,
-  getCurrentFeedItem,
+  getFeedItem,
   createFolder,
   toFeedPath,
 } from '../../reducers/feed/actions'
@@ -80,7 +80,7 @@ class Navigation extends Component {
 
   render() {
     const { user, feed } = this.props
-    const currentItem = getCurrentFeedItem(feed)
+    const currentItem = getFeedItem(feed)
     const isFolderActive = () => {
       return this.props.feed.parentFolder && this.props.feed.parentFolder.slug === this.props.feed.slug ? 'active' : null
     }

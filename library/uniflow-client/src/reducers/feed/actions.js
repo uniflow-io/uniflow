@@ -13,37 +13,6 @@ import { commitLogoutUser } from '../auth/actions'
 import { pathTo } from '../../routes'
 import { Bus } from '../../models'
 
-export const serializeRailData = (rail) => {
-  let data = []
-
-  for (let i = 0; i < rail.length; i++) {
-    data.push({
-      flow: rail[i].flow,
-      data: rail[i].data,
-      codes: rail[i].codes,
-    })
-  }
-
-  return JSON.stringify(data)
-}
-
-export const deserializeRailData = raw => {
-  let data = JSON.parse(raw)
-
-  let rail = []
-
-  for (let i = 0; i < data.length; i++) {
-    rail.push({
-      flow: data[i].flow,
-      data: data[i].data,
-      codes: data[i].codes,
-      bus: new Bus(),
-    })
-  }
-
-  return rail
-}
-
 export const commitClearFeed = () => {
   return async dispatch => {
     dispatch({
@@ -127,16 +96,23 @@ export const setUidFeed = uid => {
   }
 }
 
-export const getCurrentFeedItem = feed => {
-  if(!feed.slug) return null
+export const getFeedItem = (feed, slug = feed.slug) => {
+  if(slug === undefined) return undefined
+
+  if(slug === null && feed.parentFolder) {
+    return {
+      type: 'folder',
+      entity: feed.parentFolder,
+    }
+  }
 
   for(const item of Object.values(feed.items)) {
-    if(item.entity.slug === feed.slug) {
+    if(item.entity.slug === slug) {
       return item
     }
   }
 
-  return null
+  return undefined
 }
 
 export const toFeedPath = (entity, user, toParent = false) => {
@@ -234,6 +210,7 @@ export const fetchFeed = (uid, paths, token = null) => {
         parentFolderFound = false
         for (const folder of foldersResponse.data) {
           if(folder.path === parentPath && folder.slug === slug) {
+            dispatch(commitSetSlugFeed(null))
             dispatch(commitSetParentFolderFeed(folder))
             feedFolderPath = path
             feedProgramPath = path
@@ -288,6 +265,37 @@ export const fetchFeed = (uid, paths, token = null) => {
       }
     })
   }
+}
+
+export const serializeRailData = (rail) => {
+  let data = []
+
+  for (let i = 0; i < rail.length; i++) {
+    data.push({
+      flow: rail[i].flow,
+      data: rail[i].data,
+      codes: rail[i].codes,
+    })
+  }
+
+  return JSON.stringify(data)
+}
+
+export const deserializeRailData = raw => {
+  let data = JSON.parse(raw)
+
+  let rail = []
+
+  for (let i = 0; i < data.length; i++) {
+    rail.push({
+      flow: data[i].flow,
+      data: data[i].data,
+      codes: data[i].codes,
+      bus: new Bus(),
+    })
+  }
+
+  return rail
 }
 
 export const createProgram = (program, uid, token) => {
