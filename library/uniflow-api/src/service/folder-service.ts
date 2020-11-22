@@ -44,7 +44,15 @@ export default class FolderService {
     }
 
     const folder = await this.folderRepository.findOne({user: entity.user, parent: parent ? parent : IsNull(), slug})
+    if(folder && entity instanceof FolderEntity && folder.id === entity.id) {
+      return entity
+    }
+
     const program = await this.programRepository.findOne({user: entity.user, folder: parent ? parent : IsNull(), slug})
+    if(program && entity instanceof ProgramEntity && program.id === entity.id) {
+      return entity
+    }
+
     if(folder || program) {
       const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
       return await this.setSlug(entity, `${slug}-${suffix}`)

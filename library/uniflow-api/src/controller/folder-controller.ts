@@ -59,7 +59,7 @@ export default class FolderController implements ControllerInterface {
               throw error
             }
             folder.parent = parentFolder
-            //await this.folderService.setSlug(folder, folder.slug) // in case of slug conflict when moving folder
+            await this.folderService.setSlug(folder, folder.slug) // in case of slug conflict when moving folder
           }
           folder.user = req.user
           if (req.body.slug && folder.slug !== req.body.slug) {
