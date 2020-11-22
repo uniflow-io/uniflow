@@ -263,28 +263,13 @@ class Header extends Component {
                 </Link>
               </li>
               {auth.isAuthenticated &&
-                isGranted(user, 'ROLE_USER') &&
-                user.username === null && (
+                isGranted(user, 'ROLE_USER') && (
                   <li className="nav-item">
                     <Link
                       className={`nav-link${
                         active === 'dashboard' ? ' active' : ''
                       }`}
                       to={pathTo('feed')}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                )}
-              {auth.isAuthenticated &&
-                isGranted(user, 'ROLE_USER') &&
-                user.username !== null && (
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link${
-                        active === 'dashboard' ? ' active' : ''
-                      }`}
-                      to={pathTo('userFeed', { uid: user.username })}
                     >
                       Dashboard
                     </Link>
@@ -470,28 +455,13 @@ class Header extends Component {
             </Link>
           </li>
           {auth.isAuthenticated &&
-            isGranted(user, 'ROLE_USER') &&
-            user.username === null && (
+            isGranted(user, 'ROLE_USER') && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${
                     active === 'dashboard' ? ' active' : ''
                   }`}
                   to={pathTo('feed')}
-                >
-                  Dashboard
-                </Link>
-              </li>
-            )}
-          {auth.isAuthenticated &&
-            isGranted(user, 'ROLE_USER') &&
-            user.username !== null && (
-              <li className="nav-item">
-                <Link
-                  className={`nav-link${
-                    active === 'dashboard' ? ' active' : ''
-                  }`}
-                  to={pathTo('userFeed', { uid: user.username })}
                 >
                   Dashboard
                 </Link>
