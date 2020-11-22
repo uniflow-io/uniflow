@@ -25,7 +25,7 @@ export default class ProgramTagService {
     const tags = await this.tagService.findOrCreateByNames(names)
 
     for(const tag of tags) {
-      programTags.push(this.programTagFactory.create({program, tag}));
+      programTags.push(await this.programTagFactory.create({program, tag}));
     }
 
     return programTags

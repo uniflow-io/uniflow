@@ -5,8 +5,8 @@ import { ProgramEntity } from '../entity';
 
 @Service()
 export default class ProgramFactory extends AbstractFactory<ProgramEntity> implements ProgramFactoryInterface {
-    public create(entity?: ProgramEntity|Object): ProgramEntity {
-        const program = super.create(entity)
+    public async create(entity?: ProgramEntity|Object): Promise<ProgramEntity> {
+        const program = await super.create(entity)
         program.folder = program.folder ?? null
 
         return program;

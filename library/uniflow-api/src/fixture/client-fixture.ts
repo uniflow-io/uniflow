@@ -14,8 +14,7 @@ export default class ClientFixture implements FixtureInterface {
         private clientRepository: ClientRepository,
         private clientFactory: FakeClientFactory,
     ) {
-        this.clients = ['uniflow', 'node', 'chrome', 'jetbrains', 'rust']
-            .map(name => this.clientFactory.create({name}))
+        this.clients = []
     }
 
     public get CLIENT_KEYS():Array<string> {
@@ -28,7 +27,9 @@ export default class ClientFixture implements FixtureInterface {
     }
 
     public async load() {
-        for(const client of this.clients) {
+        for(const name of ['uniflow', 'node', 'chrome', 'jetbrains', 'rust']) {
+            const client = await this.clientFactory.create({name})
+            this.clients.push(client)
             await this.save(client)
         }
     }

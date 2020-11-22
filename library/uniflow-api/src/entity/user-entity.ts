@@ -41,6 +41,7 @@ export default class UserEntity {
     nullable: true,
   })
   password: string|null;
+  plainPassword?: string|null
 
   @Column({
     type: "varchar",

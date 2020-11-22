@@ -6,8 +6,8 @@ import FolderFactory from './folder-factory';
 
 @Service()
 export default class FakeFolderFactory extends FolderFactory {
-    public create(entity?: FolderEntity|Object): FolderEntity {
-        const folder = super.create(entity)
+    public async create(entity?: FolderEntity|Object): Promise<FolderEntity> {
+        const folder = await super.create(entity)
         folder.name = folder.name ?? faker.fake('Folder {{random.word}}')
         folder.slug = folder.slug ?? TypeModel.generateSlug(folder.name)
 

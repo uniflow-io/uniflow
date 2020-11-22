@@ -50,7 +50,10 @@ export default class UserController implements ControllerInterface {
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const user = await this.userService.create(req.body);
+          const user = await this.userService.create({
+            email: req.body.email,
+            plainPassword: req.body.password,
+          });
           return res.status(201).json({ uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
@@ -101,19 +104,21 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          let user = this.userFactory.create(req.body);
-          user.firstname = user.firstname ? user.firstname : null
-          user.lastname = user.lastname ? user.lastname : null
-          user.username = user.username ? user.username : null
-          user.apiKey = user.apiKey ? user.apiKey : null
-          user.facebookId = user.facebookId ? user.facebookId : null
-          user.githubId = user.githubId ? user.githubId : null
-          
-          if(user.username && user.username !== req.user.username) {
-            await this.userService.setUsername(user, user.username)
+          const user = await this.userRepository.findOne(req.token?.id);
+          if (!user) {
+            throw new ApiException('User not found', 404);
           }
 
-          user = Object.assign(req.user, user);
+          user.firstname = req.body.firstname ? req.body.firstname : null
+          user.lastname = req.body.lastname ? req.body.lastname : null
+          user.username = req.body.username ? user.username : null
+          user.apiKey = req.body.apiKey ? req.body.apiKey : null
+          user.facebookId = req.body.facebookId ? req.body.facebookId : null
+          user.githubId = req.body.githubId ? req.body.githubId : null
+          
+          if(req.body.username && req.body.username !== req.user.username) {
+            await this.userService.setUsername(user, req.body.username)
+          }
     
           if(await this.userService.isValid(user)) {
             await this.userRepository.save(user)
@@ -144,7 +149,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const config = this.configFactory.create(await this.configRepository.findOne());
+          const config = await this.configFactory.create(await this.configRepository.findOne());
           
           return res.status(200).json(await this.configService.getJson(config));
         } catch (e) {
@@ -167,7 +172,7 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const config = this.configFactory.create(await this.configRepository.findOne());
+          const config = await this.configFactory.create(await this.configRepository.findOne());
     
           if(await this.configService.isValid(config)) {
             await this.configRepository.save(config)
@@ -245,10 +250,11 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const folder = this.folderFactory.create()
-          folder.name = req.body.name
-          folder.parent = await this.folderService.fromPath(req.user, req.body.path || '/') || null
-          folder.user = req.user
+          const folder = await this.folderFactory.create({
+            name: req.body.name,
+            parent: await this.folderService.fromPath(req.user, req.body.path || '/') || null,
+            user: req.user,
+          })
           await this.folderService.setSlug(folder, req.body.slug || req.body.name)
     
           if(await this.folderService.isValid(folder)) {
@@ -332,15 +338,16 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = this.programFactory.create()
-          program.name = req.body.name
-          program.user = req.user
-          program.folder = await this.folderService.fromPath(req.user, req.body.path || '/') || null
+          const program = await this.programFactory.create({
+            name: req.body.name,
+            user: req.user,
+            folder: await this.folderService.fromPath(req.user, req.body.path || '/') || null,
+            description: req.body.description ? req.body.description : null,
+            public: req.body.public || false,
+          })
           await this.folderService.setSlug(program, req.body.slug || req.body.name)
           program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients || [])
           program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags || [])
-          program.description = req.body.description ? req.body.description : null
-          program.public = req.body.public || false
 
           if(await this.programService.isValid(program)) {
             await this.programRepository.save(program)

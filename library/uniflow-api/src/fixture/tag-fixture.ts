@@ -15,13 +15,6 @@ export default class TagFixture implements FixtureInterface {
         private tagFactory: FakeTagFactory,
     ) {
         this.tags = []
-        for(let i = 0; i < 10; i++) {
-            const tag = this.tagFactory.create()
-            const names = this.tags.map(tag => tag.name)
-            if(names.indexOf(tag.name) === -1) {
-                this.tags.push(tag)
-            }
-        }
     }
 
     public get TAG_KEYS():Array<string> {
@@ -34,7 +27,12 @@ export default class TagFixture implements FixtureInterface {
     }
 
     public async load() {
-        for(const tag of this.tags) {
+        for(let i = 0; i < 10; i++) {
+            const tag = await this.tagFactory.create()
+            const names = this.tags.map(tag => tag.name)
+            if(names.indexOf(tag.name) === -1) {
+                this.tags.push(tag)
+            }
             await this.save(tag)
         }
     }

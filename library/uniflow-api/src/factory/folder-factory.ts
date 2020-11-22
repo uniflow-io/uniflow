@@ -5,8 +5,8 @@ import AbstractFactory from './abstract-factory';
 
 @Service()
 export default class FolderFactory extends AbstractFactory<FolderEntity> implements FolderFactoryInterface {
-    public create(entity?: FolderEntity|Object): FolderEntity {
-        const folder = super.create(entity)
+    public async create(entity?: FolderEntity|Object): Promise<FolderEntity> {
+        const folder = await super.create(entity)
         folder.parent = folder.parent ?? null
 
         return folder;

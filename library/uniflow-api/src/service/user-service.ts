@@ -1,7 +1,5 @@
-import * as argon2 from 'argon2';
 import { Service } from 'typedi';
 import { UserEntity } from '../entity';
-import { randomBytes } from 'crypto';
 import { ApiException } from '../exception';
 import { UserRepository } from '../repository';
 import { TypeModel } from '../model';
@@ -38,24 +36,17 @@ export default class UserService {
     return false
   }
 
-  public async create(inputUser: UserEntity): Promise<UserEntity> {
+  public async create(user?: UserEntity|Object): Promise<UserEntity> {
     try {
-      const salt = randomBytes(32);
-      const hashedPassword = await argon2.hash(inputUser.password as string, { salt });
-      const user = await this.userRepository.save(this.userFactory.create({
-        ...inputUser,
-        password: hashedPassword,
-        salt: salt.toString('hex'),
-        role: 'ROLE_USER',
-      }));
-
-      if (!user) {
+      let newUser = await this.userFactory.create(user)
+      newUser = await this.userRepository.save(newUser)
+      if (!newUser) {
         throw new Error('User cannot be created');
       }
 
       // await this.mailer.sendWelcomeEmail(user);
 
-      return user;
+      return newUser;
     } catch (error) {
       throw new ApiException('Not authorized', 401);
     }

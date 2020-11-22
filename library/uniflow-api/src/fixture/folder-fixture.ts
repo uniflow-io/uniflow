@@ -33,7 +33,7 @@ export default class FolderFixture implements FixtureInterface {
         for(const userKey of this.userFixture.USER_KEYS) {
             const parents: Array<FolderEntity|undefined> = [undefined]
             for(let i = 0; i < 10; i++) {
-                const folder = this.folderFactory.create({
+                const folder = await this.folderFactory.create({
                     user: this.refs.get(userKey),
                     parent: faker.random.arrayElement(parents),
                 })

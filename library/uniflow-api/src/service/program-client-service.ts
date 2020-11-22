@@ -25,7 +25,7 @@ export default class ProgramClientService {
     const clients = await this.clientService.findOrCreateByNames(names)
     
     for(const client of clients) {
-      programClients.push(this.programClientFactory.create({ program, client }));
+      programClients.push(await this.programClientFactory.create({ program, client }));
     }
     
     return programClients

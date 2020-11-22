@@ -48,7 +48,7 @@ export default class ProgramFixture implements FixtureInterface {
             const userFolders: Array<ObjectLiteral|undefined> = folders.get(user?.email) || []
             const folder = faker.random.arrayElement<ObjectLiteral | undefined>(userFolders)
 
-            await this.save(this.programFactory.create({
+            await this.save(await this.programFactory.create({
                 user: user,
                 folder: folder,
                 clients: faker.random.arrayElements(clients).map(client => ({

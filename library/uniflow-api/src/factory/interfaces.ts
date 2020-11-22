@@ -1,7 +1,7 @@
 import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramClientEntity, ProgramEntity, ProgramTagEntity, TagEntity, UserEntity } from "../entity";
 
 export interface FactoryInterface<Entity> {
-  create(entity?: Entity|Object): Entity;
+  create(entity?: Entity|Object): Promise<Entity>;
 }
 
 export interface ClientFactoryInterface extends FactoryInterface<ClientEntity> {}

@@ -14,7 +14,7 @@ export default class LeadService {
   ) {}
   
   public async create(email: string, options: LeadSubscriberOptions): Promise<LeadEntity> {
-    const lead = this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
+    const lead = await this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
 
     if(options.type === 'newsletter' && !lead.optinNewsletter) {
       await this.leadSubscriber.subscribe(email, options)

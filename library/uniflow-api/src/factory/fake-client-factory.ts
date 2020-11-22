@@ -5,8 +5,8 @@ import ClientFactory from './client-factory';
 
 @Service()
 export default class FakeClientFactory extends ClientFactory {
-    public create(entity?: ClientEntity|Object): ClientEntity {
-        const client = super.create(entity)
+    public async create(entity?: ClientEntity|Object): Promise<ClientEntity> {
+        const client = await super.create(entity)
         client.name = client.name ?? faker.fake('Client {{random.word}}')
 
         return client;

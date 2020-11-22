@@ -15,7 +15,7 @@ export default class ClientService {
     for(const name of names) {
       let client = await this.clientRepository.findOne({name})
       if(!client) {
-        client = this.clientFactory.create({name})
+        client = await this.clientFactory.create({name})
         await this.clientRepository.save(client)
       }
     

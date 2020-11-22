@@ -1,12 +1,12 @@
 import * as argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
 import { Inject, Service } from 'typedi';
-import { getRepository, Repository } from 'typeorm';
 import { ParamsConfig } from '../config';
 import { ApiException } from '../exception';
 import { UserEntity } from '../entity';
 import { RequestInterface } from './request/interfaces';
 import UserService from './user-service';
+import { UserRepository } from '../repository';
 
 @Service()
 export default class AuthService {
@@ -15,15 +15,12 @@ export default class AuthService {
     @Inject('RequestInterface')
     private request: RequestInterface,
     private userService: UserService,
+    private userRepository: UserRepository,
   ) {}
 
-  private getUserRepository(): Repository<UserEntity> {
-    return getRepository(UserEntity)
-  }
-
   public async login(username: string, password: string): Promise<{ user: UserEntity; token: string }> {
-    const user = await this.getUserRepository().findOne({ username })
-              || await this.getUserRepository().findOne({ email: username });
+    const user = await this.userRepository.findOne({ username })
+              || await this.userRepository.findOne({ email: username });
 
     if (!user || !user.password) {
       throw new ApiException('Bad credentials', 401);
@@ -61,23 +58,21 @@ export default class AuthService {
     const facebookEmail = `${tokenResponse.data.id}@facebook.com`;
 
     if (!user) {
-      user = await this.getUserRepository().findOne({ facebookId });
+      user = await this.userRepository.findOne({ facebookId });
       if (!user) {
-        user = await this.getUserRepository().findOne({ email: facebookEmail });
+        user = await this.userRepository.findOne({ email: facebookEmail });
       }
     }
 
     if (!user) {
-      user = new UserEntity();
-      user.facebookId = facebookId;
-      user.email = facebookEmail;
-      user.password = this.generatePassword()
-
-      user = await this.userService.create(user)
+      user = await this.userService.create({
+        email: facebookEmail,
+        facebookId: facebookId,
+        plainPassword: null,
+      })
     } else if (!user.facebookId) {
       user.facebookId = facebookId;
-
-      await this.getUserRepository().save(user);
+      await this.userRepository.save(user);
     }
 
     const token = this.generateToken(user);
@@ -119,23 +114,21 @@ export default class AuthService {
     const githubEmail = `${tokenResponse.data.id}@github.com`;
 
     if (!user) {
-      user = await this.getUserRepository().findOne({ githubId });
+      user = await this.userRepository.findOne({ githubId });
       if (!user) {
-        user = await this.getUserRepository().findOne({ email: githubEmail });
+        user = await this.userRepository.findOne({ email: githubEmail });
       }
     }
 
     if (!user) {
-      user = new UserEntity();
+      user = await this.userService.create({
+        email: githubEmail,
+        githubId: githubId,
+        plainPassword: null,
+      })
+    } else if (!user.githubId) {
       user.githubId = githubId;
-      user.email = githubEmail;
-      user.password = this.generatePassword()
-
-      user = await this.userService.create(user)
-    } else if (!user.facebookId) {
-      user.githubId = githubId;
-
-      await this.getUserRepository().save(user);
+      await this.userRepository.save(user);
     }
 
     const token = this.generateToken(user);

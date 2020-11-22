@@ -15,7 +15,7 @@ export default class TagService {
     for(const name of names) {
       let tag = await this.tagRepository.findOne({name})
       if(!tag) {
-        tag = this.tagFactory.create({name})
+        tag = await this.tagFactory.create({name})
         await this.tagRepository.save(tag)
       }
 

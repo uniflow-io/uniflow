@@ -2,7 +2,6 @@ import { celebrate, Joi, Segments } from 'celebrate';
 import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
 import { ContactService } from "../service";
-import { ContactEntity } from "../entity";
 import { ControllerInterface } from './interfaces';
 import { ContactRepository } from '../repository';
 import { ContactFactory } from '../factory';
@@ -30,7 +29,7 @@ export default class ContactController implements ControllerInterface {
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const contact = this.contactFactory.create(req.body)
+          const contact = await this.contactFactory.create(req.body)
     
           if(await this.contactService.isValid(contact)) {
             await this.contactRepository.save(contact)
