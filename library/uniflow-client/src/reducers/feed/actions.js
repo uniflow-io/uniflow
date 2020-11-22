@@ -136,7 +136,7 @@ export const toFeedPath = (entity, user, toParent = false) => {
 
 export const getTags = state => {
   let tags = Object.keys(state.items).reduce(function(previous, key) {
-    return previous.concat(state.items[key].tags)
+    return previous.concat(state.items[key].entity.tags)
   }, [])
 
   // filter unique
