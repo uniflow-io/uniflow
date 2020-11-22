@@ -99,7 +99,7 @@ class Folder extends Component {
       .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
         folderTree = folderTree.filter(value => {
-          return value.startsWith(`${folder.path}/${folder.slug}`) === false
+          return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0
         })
 
         this.setState({
