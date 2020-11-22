@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/uniflow-api",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "Uniflow api",
   "author": {
     "name": "Mathieu Ledru",
@@ -112,6 +112,8 @@
       "/node_modules/",
       "/dist/"
     ],
-    "setupFilesAfterEnv": ["./tests/hooks.ts"]
+    "setupFilesAfterEnv": [
+      "./tests/hooks.ts"
+    ]
   }
 }
