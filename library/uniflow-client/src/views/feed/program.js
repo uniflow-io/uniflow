@@ -19,7 +19,6 @@ import {
   commitSetRail,
 } from '../../reducers/rail/actions'
 import {
-  getCurrentProgram,
   getTags,
   commitUpdateFeed,
   createProgram,
@@ -27,11 +26,8 @@ import {
   deleteProgram,
   getProgramData,
   setProgramData,
-  setCurrentFeed,
   getFolderTree,
-  pathToString,
-  stringToPath,
-  feedPathTo,
+  toFeedPath,
   deserializeRailData,
   serializeRailData,
 } from '../../reducers/feed/actions'
@@ -42,7 +38,8 @@ import { pathTo } from '../../routes'
 class Program extends Component {
   state = {
     fetchedSlug: null,
-    fetchedUsername: null,
+    fetchedUid: null,
+    slug: null,
     folderTreeEdit: false,
     folderTree: [],
   }
@@ -53,7 +50,7 @@ class Program extends Component {
     this._componentIsMounted = true
     this._componentShouldUpdate = true
 
-    this.setState({ folderTree: [pathToString(program.path)] })
+    this.setState({ folderTree: [program.path] })
 
     this.onFetchFlowData()
   }
@@ -63,10 +60,11 @@ class Program extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.program.id !== prevProps.program.id) {
+    if (this.props.program.uid !== prevProps.program.uid) {
       this.setState({
+        slug: null,
         folderTreeEdit: false,
-        folderTree: [pathToString(this.props.program.path)],
+        folderTree: [this.props.program.path],
       })
 
       this.onFetchFlowData()
@@ -187,7 +185,7 @@ class Program extends Component {
 
     let data = serializeRailData(rail)
     if (
-      (feed.username === 'me' || user.username === feed.username) &&
+      (feed.uid === 'me' || user.uid === feed.uid) &&
       program.data !== data
     ) {
       program.data = data
@@ -207,26 +205,27 @@ class Program extends Component {
   onChangeTitle = event => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ name: event.target.value },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ name: event.target.value },
+        }
       }))
       .then(this.onUpdate)
   }
 
   onChangeSlug = event => {
-    this.props
-      .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ slug: event.target.value },
-      }))
-      .then(this.onUpdate)
+    this.setState({ slug: event.target.value }, this.onUpdate)
   }
 
   onChangePath = selected => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ path: stringToPath(selected) },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ path: selected },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -234,8 +233,11 @@ class Program extends Component {
   onChangeClients = clients => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ clients: clients }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ clients: clients }
+        }
       }))
       .then(this.onUpdate)
   }
@@ -243,8 +245,11 @@ class Program extends Component {
   onChangeTags = tags => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ tags: tags }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ tags: tags }
+        }
       }))
       .then(this.onUpdate)
   }
@@ -252,8 +257,11 @@ class Program extends Component {
   onChangeDescription = description => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ description: description },
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ description: description },
+        }
       }))
       .then(this.onUpdate)
   }
@@ -261,17 +269,23 @@ class Program extends Component {
   onChangePublic = value => {
     this.props
       .dispatch(commitUpdateFeed({
-        ...this.props.program,
-        ...{ public: value }
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ public: value }
+        }
       }))
       .then(this.onUpdate)
   }
 
   onUpdate = debounce(() => {
+    const { program } = this.props
+    program.slug = this.state.slug ?? program.slug
+
     this.props
-      .dispatch(updateProgram(this.props.program, this.props.auth.token))
-      .then(() => {
-        const path = this.itemPathTo(this.props.program)
+      .dispatch(updateProgram(program, this.props.auth.token))
+      .then((program) => {
+        const path = toFeedPath(program, this.props.user)
         if (typeof window !== `undefined` && window.location.pathname !== path) {
           navigate(path)
         }
@@ -285,17 +299,13 @@ class Program extends Component {
     program.name += ' Copy'
 
     this.props
-      .dispatch(createProgram(program, this.props.auth.token))
+      .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
       .then(item => {
         Object.assign(program, item)
-        return this.props.dispatch(
-          setProgramData(program, this.props.auth.token)
-        )
+        return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
-        return this.props.dispatch(
-          setCurrentFeed({ type: program.type, id: program.id })
-        )
+        return navigate(toFeedPath(program, this.props.user))
       })
       .catch(log => {
         return this.props.dispatch(commitAddLog(log.message))
@@ -305,9 +315,11 @@ class Program extends Component {
   onDelete = event => {
     event.preventDefault()
 
-    return this.props.dispatch(
-      deleteProgram(this.props.program, this.props.auth.token)
-    )
+    return this.props
+      .dispatch(deleteProgram(this.props.program, this.props.auth.token))
+      .then(() => {
+        return navigate(toFeedPath(this.props.program, this.props.user, true))
+      })
   }
 
   onFolderEdit = event => {
@@ -316,12 +328,8 @@ class Program extends Component {
     const { feed } = this.props
 
     this.props
-      .dispatch(getFolderTree(feed.username, this.props.auth.token))
+      .dispatch(getFolderTree(feed.uid, this.props.auth.token))
       .then(folderTree => {
-        folderTree = folderTree.map(path => {
-          return pathToString(path)
-        })
-
         this.setState({
           folderTreeEdit: true,
           folderTree: folderTree,
@@ -355,16 +363,6 @@ class Program extends Component {
     })
 
     return flowLabels
-  }
-
-  itemPathTo = item => {
-    const isCurrentUser =
-      this.props.feed.username &&
-      this.props.feed.username === this.props.user.username
-
-    let path = item.path.slice()
-    path.push(item.slug)
-    return feedPathTo(path, isCurrentUser ? this.props.feed.username : null)
   }
 
   getNodeClipboard = () => {
@@ -410,6 +408,7 @@ class Program extends Component {
       chrome: 'Chrome',
       rust: 'Rust',
     }
+    program.slug = this.state.slug ?? program.slug
 
     return (
       <section className="section col">
@@ -490,7 +489,7 @@ class Program extends Component {
             <div className="col-sm-10">
               {(folderTreeEdit && (
                 <Select
-                  value={pathToString(program.path)}
+                  value={program.path}
                   onChange={this.onChangePath}
                   className="form-control"
                   id="info_path_{{ _uid }}"
@@ -507,7 +506,7 @@ class Program extends Component {
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </button>{' '}
-                  {pathToString(program.path)}
+                  {program.path}
                 </div>
               )}
             </div>
@@ -567,7 +566,7 @@ class Program extends Component {
               Public
             </label>
 
-            {user.username && (
+            {user.uid && (
               <div className="col-sm-10">
                 <Checkbox
                   className="form-control-plaintext"
@@ -577,9 +576,9 @@ class Program extends Component {
                 />
               </div>
             )}
-            {!user.username && (
+            {!user.uid && (
               <div className="col-sm-10 col-form-label">
-                <Link to={pathTo('settings')}>set your username</Link>
+                <Link to={pathTo('settings')}>set your uid</Link>
               </div>
             )}
           </div>
@@ -621,7 +620,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="form-group row">
                 <label
-                  htmlFor="settings_key"
+                  htmlFor="program_node_api_key"
                   className="col-sm-2 col-form-label"
                 >
                   Node usage
@@ -640,7 +639,7 @@ class Program extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="settings_key"
+                      id="program_node_api_key"
                       value={clipboard || ''}
                       readOnly
                       placeholder="api key"
@@ -655,7 +654,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="form-group row">
                 <label
-                  htmlFor="settings_key"
+                  htmlFor="program_node_api_rust"
                   className="col-sm-2 col-form-label"
                 >
                   Rust usage
@@ -674,7 +673,7 @@ class Program extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="settings_key"
+                      id="program_node_api_rust"
                       value={clipboard || ''}
                       readOnly
                       placeholder="api key"
@@ -709,7 +708,6 @@ export default connect(state => {
   return {
     auth: state.auth,
     user: state.user,
-    program: getCurrentProgram(state.feed),
     tags: getTags(state.feed),
     feed: state.feed,
     rail: state.rail,

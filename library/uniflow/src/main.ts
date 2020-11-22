@@ -1,3 +1,3 @@
-import { Start } from './commands/start'
+import { Start } from './command/start'
 
 Start.run()

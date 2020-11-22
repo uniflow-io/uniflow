@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import routes, { pathTo } from '../routes'
 import { UserManager } from '../components'
 import { getNewLogs, commitReadLog } from '../reducers/logs/actions'
-import { commitLogoutUser } from '../reducers/auth/actions'
+import { commitLogoutUser } from '../reducers/user/actions'
 import { isGranted } from '../reducers/user/actions'
 import { applyTheme, switchTheme } from '../reducers/app/actions'
 import { matchPath } from '../utils'
@@ -263,28 +263,13 @@ class Header extends Component {
                 </Link>
               </li>
               {auth.isAuthenticated &&
-                isGranted(user, 'ROLE_USER') &&
-                user.username === null && (
+                isGranted(user, 'ROLE_USER') && (
                   <li className="nav-item">
                     <Link
                       className={`nav-link${
                         active === 'dashboard' ? ' active' : ''
                       }`}
                       to={pathTo('feed')}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                )}
-              {auth.isAuthenticated &&
-                isGranted(user, 'ROLE_USER') &&
-                user.username !== null && (
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link${
-                        active === 'dashboard' ? ' active' : ''
-                      }`}
-                      to={pathTo('userFeed', { username: user.username })}
                     >
                       Dashboard
                     </Link>
@@ -470,28 +455,13 @@ class Header extends Component {
             </Link>
           </li>
           {auth.isAuthenticated &&
-            isGranted(user, 'ROLE_USER') &&
-            user.username === null && (
+            isGranted(user, 'ROLE_USER') && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${
                     active === 'dashboard' ? ' active' : ''
                   }`}
                   to={pathTo('feed')}
-                >
-                  Dashboard
-                </Link>
-              </li>
-            )}
-          {auth.isAuthenticated &&
-            isGranted(user, 'ROLE_USER') &&
-            user.username !== null && (
-              <li className="nav-item">
-                <Link
-                  className={`nav-link${
-                    active === 'dashboard' ? ' active' : ''
-                  }`}
-                  to={pathTo('userFeed', { username: user.username })}
                 >
                   Dashboard
                 </Link>

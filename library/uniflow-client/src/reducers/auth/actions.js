@@ -9,7 +9,7 @@ import {
 } from './actions-types'
 
 export const commitLoginUserRequest = () => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_REQUEST,
     })
@@ -17,15 +17,17 @@ export const commitLoginUserRequest = () => {
   }
 }
 
-export const commitLoginUserSuccess = token => {
+export const commitLoginUserSuccess = (token, uid) => {
   if (typeof window !== `undefined`) {
     window.localStorage.setItem('token', token)
+    window.localStorage.setItem('uid', uid)
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_SUCCESS,
       token,
+      uid,
     })
     return Promise.resolve()
   }
@@ -34,9 +36,10 @@ export const commitLoginUserSuccess = token => {
 export const commitLoginUserFailure = (error, message = null) => {
   if (typeof window !== `undefined`) {
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('uid')
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGIN_USER_FAILURE,
       status: error.response.status,
@@ -49,9 +52,10 @@ export const commitLoginUserFailure = (error, message = null) => {
 export const commitLogoutUser = () => {
   if (typeof window !== `undefined`) {
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('uid')
   }
 
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_LOGOUT_USER,
     })
@@ -60,17 +64,17 @@ export const commitLogoutUser = () => {
 }
 
 export const login = (username, password) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/auth/login`, {
+        .post(`${server.getBaseUrl()}/api/login`, {
           username: username,
           password: password,
         })
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -96,11 +100,11 @@ export const facebookLoginUrl = facebookAppId => {
 }
 
 export const facebookLogin = (access_token, token = null) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/auth/login_facebook`,
+          `${server.getBaseUrl()}/api/login-facebook`,
           {
             access_token: access_token,
           },
@@ -115,7 +119,7 @@ export const facebookLogin = (access_token, token = null) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -141,11 +145,11 @@ export const githubLoginUrl = githubAppId => {
 }
 
 export const githubLogin = (code, token = null) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
         .post(
-          `${server.getBaseUrl()}/api/auth/login_github`,
+          `${server.getBaseUrl()}/api/login-github`,
           {
             code: code,
           },
@@ -160,7 +164,7 @@ export const githubLogin = (code, token = null) => {
         .then(response => {
           try {
             jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
+            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid))
           } catch (e) {
             return dispatch(
               commitLoginUserFailure({
@@ -180,27 +184,15 @@ export const githubLogin = (code, token = null) => {
 }
 
 export const register = (email, password) => {
-  return dispatch => {
+  return async dispatch => {
     return dispatch(commitLoginUserRequest()).then(() => {
       return request
-        .post(`${server.getBaseUrl()}/api/auth/register`, {
+        .post(`${server.getBaseUrl()}/api/users`, {
           email: email,
           password: password,
         })
         .then(response => {
-          try {
-            jwtDecode(response.data.token)
-            return dispatch(commitLoginUserSuccess(response.data.token))
-          } catch (e) {
-            return dispatch(
-              commitLoginUserFailure({
-                response: {
-                  status: 403,
-                  statusText: 'Invalid token',
-                },
-              })
-            )
-          }
+          return login(email, password)(dispatch)
         })
         .catch(error => {
           dispatch(commitLoginUserFailure(error, error.response.data.message))

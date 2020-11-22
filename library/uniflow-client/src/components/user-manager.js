@@ -1,18 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { navigate } from 'gatsby'
-import moment from 'moment'
 import { fetchSettings } from '../reducers/user/actions'
 import { matchRoute } from '../routes'
-import {
-  fetchFeed,
-  getProgramBySlug,
-  setCurrentFeed,
-  setCurrentUsername,
-  getCurrentProgram,
-  getCurrentPath,
-  feedPathTo,
-} from '../reducers/feed/actions'
+import { fetchFeed, getFeedItem, commitSetSlugFeed } from '../reducers/feed/actions'
 
 class UserManager extends Component {
   state = {
@@ -23,7 +13,7 @@ class UserManager extends Component {
     const { auth, location } = this.props
 
     if (auth.isAuthenticated) {
-      this.onFetchUser(auth.token)
+      this.onFetchUser(auth.uid, auth.token)
     }
 
     this.onLocation(location)
@@ -32,8 +22,8 @@ class UserManager extends Component {
   componentDidUpdate(prevProps) {
     const { auth, location } = this.props
 
-    if (auth.token !== prevProps.auth.token && auth.isAuthenticated) {
-      this.onFetchUser(auth.token)
+    if (auth.isAuthenticated && auth.token !== prevProps.auth.token) {
+      this.onFetchUser(auth.uid, auth.token)
     }
 
     if (location.href !== prevProps.location.href) {
@@ -42,35 +32,23 @@ class UserManager extends Component {
   }
 
   onLocation = location => {
+    const { auth } = this.props
     const match = matchRoute(location.pathname)
 
     if (match) {
-      let params = match.match.params
-      if (match.route === 'feed') {
-        this.onFetchProgram(
-          'me',
-          params.slug1,
-          params.slug2,
-          params.slug3,
-          params.slug4,
-          params.slug5
-        )
+      const params = match.match.params
+      const paths = [params.slug1, params.slug2, params.slug3, params.slug4, params.slug5].filter((path) => !!path)
+      if (match.route === 'feed' && auth.isAuthenticated) {
+        this.onFetchItem(auth.uid, paths)
       } else if (match.route === 'userFeed') {
-        this.onFetchProgram(
-          params.username,
-          params.slug1,
-          params.slug2,
-          params.slug3,
-          params.slug4,
-          params.slug5
-        )
+        this.onFetchItem(params.uid, paths)
       }
     }
   }
 
-  onFetchUser = token => {
+  onFetchUser = (uid, token) => {
     Promise.all([
-      this.props.dispatch(fetchSettings(token)),
+      this.props.dispatch(fetchSettings(uid, token)),
     ]).then(() => {
       const { location } = this.props
 
@@ -78,133 +56,77 @@ class UserManager extends Component {
     })
   }
 
-  onFetchProgram = (
-    username = 'me',
-    slug1 = null,
-    slug2 = null,
-    slug3 = null,
-    slug4 = null,
-    slug5 = null
-  ) => {
-    const { fetching } = this.state
+  isCachedFeed = (uid, paths = []) => {
     const { feed } = this.props
+    if (feed.uid === undefined || feed.slug === undefined || feed.parentFolder === undefined || feed.uid !== uid) {
+      return false
+    }
+
+    const path = `/${paths.join('/')}`
+    const parentPath = `/${paths.slice(0, -1).join('/')}`
+    const slug = paths.length > 0 ? paths[paths.length - 1] : null
+    const item = getFeedItem(feed, slug)
+
+    if(paths.length === 0 && feed.parentFolder === null) {
+      return true
+    } else if (paths.length === 1 && feed.parentFolder === null) {
+      if(item.type === 'folder') {
+        return false
+      }
+
+      this.props.dispatch(commitSetSlugFeed(slug))
+      return true
+    } else if (paths.length === 1 && feed.parentFolder) {
+      const parentFolderRealPath = `${feed.parentFolder.path === '/' ? '':feed.parentFolder.path}/${feed.parentFolder.slug}`
+      if(parentFolderRealPath === path) {
+        this.props.dispatch(commitSetSlugFeed(null))
+        return true
+      }
+    } else if (paths.length > 1 && feed.parentFolder) {
+      const parentFolderRealPath = `${feed.parentFolder.path === '/' ? '':feed.parentFolder.path}/${feed.parentFolder.slug}`
+      if(parentFolderRealPath === path) {
+        this.props.dispatch(commitSetSlugFeed(null))
+        return true
+      } else if(parentFolderRealPath === parentPath) {
+        if(item.type === 'folder') {
+          return false
+        }
+
+        this.props.dispatch(commitSetSlugFeed(slug))
+
+        return true
+      }
+    }
+
+    return false
+  }
+
+  onFetchItem = (uid, paths = []) => {
+    const { fetching } = this.state
+    const { auth } = this.props
 
     if (fetching) {
       return
     }
 
     Promise.resolve()
-      .then(resolve => {
-        this.setState({ fetching: true }, resolve)
+      .then(async () => {
+        return new Promise(resolve => {
+          this.setState({ fetching: true }, resolve)
+        })
       })
-      .then(() => {
-        let path = [slug1, slug2, slug3, slug4, slug5].reduce((path, slug) => {
-          if (slug) {
-            path.push(slug)
-          }
-          return path
-        }, [])
-        let currentPath = getCurrentPath(feed)
-
-        let item = getCurrentProgram(feed)
-        if (item) {
-          currentPath.push(item.slug)
-        }
-        if (
-          feed.username === username &&
-          path.join('/') === currentPath.join('/')
-        ) {
-          return Promise.resolve()
+      .then(async () => {
+        if (this.isCachedFeed(uid, paths)) {
+          return
         }
 
-        return Promise.resolve()
-          .then(() => {
-            const { auth, feed } = this.props
-
-            let slug = path.length > 0 ? path[path.length - 1] : null
-            let sameDirectory =
-              path.slice(0, -1).join('/') === getCurrentPath(feed).join('/')
-            let isProgram =
-              sameDirectory &&
-              Object.keys(feed.items).filter(key => {
-                return (
-                  feed.items[key].type === 'program' &&
-                  feed.items[key].slug === slug
-                )
-              }).length > 0
-            if (feed.username === username && sameDirectory && isProgram) {
-              return path
-            }
-
-            return this.props
-              .dispatch(setCurrentUsername(username))
-              .then(() => {
-                const token = auth.isAuthenticated ? auth.token : null
-                return this.props.dispatch(fetchFeed(username, path, token))
-              })
-          })
-          .then(() => {
-            const { feed } = this.props
-
-            let slug = path.length > 0 ? path[path.length - 1] : null
-
-            let program = getProgramBySlug(feed, slug)
-            if (program) {
-              this.props.dispatch(
-                setCurrentFeed({ type: program.type, id: program.id })
-              )
-            } else if (feed.folder) {
-              this.props.dispatch(setCurrentFeed(null))
-            } else {
-              let items = Object.keys(feed.items)
-                .filter(key => {
-                  return feed.items[key].type === 'program'
-                })
-                .reduce((res, key) => {
-                  res[key] = feed.items[key]
-                  return res
-                }, {})
-              let keys = Object.keys(items)
-
-              keys.sort((keyA, keyB) => {
-                let itemA = items[keyA]
-                let itemB = items[keyB]
-
-                return moment(itemB.updated).diff(moment(itemA.updated))
-              })
-
-              if (keys.length > 0) {
-                let item = items[keys[0]]
-                this.props.dispatch(
-                  setCurrentFeed({ type: item.type, id: item.id })
-                )
-              } else {
-                this.props.dispatch(setCurrentFeed(null))
-              }
-            }
-          })
-          .then(() => {
-            const { user, feed } = this.props
-            const isCurrentUser =
-              feed.username && feed.username === user.username
-
-            let currentPath = getCurrentPath(feed)
-
-            let item = getCurrentProgram(feed)
-            if (item) {
-              currentPath.push(item.slug)
-            }
-            const path = feedPathTo(
-              currentPath,
-              (item && item.public) || isCurrentUser ? feed.username : null
-            )
-            if (typeof window !== `undefined` && window.location.pathname !== path) {
-              navigate(path)
-            }
-          })
+        const token = auth.isAuthenticated ? auth.token : null
+        return this.props.dispatch(fetchFeed(uid, paths, token))
       })
-      .then(resolve => {
-        this.setState({ fetching: false }, resolve)
+      .then(async () => {
+        return new Promise(resolve => {
+          this.setState({ fetching: false }, resolve)
+        })
       })
   }
 

@@ -14,7 +14,7 @@ if (!envFound) {
 const config = convict({
   port: {
     format: Number,
-    default: 8090,
+    default: 8016,
     arg: 'port',
     env: 'PORT',
     doc: 'HTTP port uniflow api can be reached'

@@ -2,16 +2,16 @@ import {
   COMMIT_CLEAR_FEED,
   COMMIT_UPDATE_FEED,
   COMMIT_DELETE_FEED,
-  COMMIT_SET_CURRENT_FEED,
-  COMMIT_SET_CURRENT_FOLDER,
-  COMMIT_SET_CURRENT_USERNAME,
+  COMMIT_SET_PARENT_FOLDER_FEED,
+  COMMIT_SET_SLUG_FEED,
+  COMMIT_SET_UID_FEED,
 } from './actions-types'
 
 const defaultState = {
   items: {},
-  current: null,
-  folder: null,
-  username: null,
+  parentFolder: undefined,
+  slug: undefined,
+  uid: undefined,
 }
 
 const feed = (state = defaultState, action) => {
@@ -22,30 +22,30 @@ const feed = (state = defaultState, action) => {
         items: {},
       }
     case COMMIT_UPDATE_FEED:
-      state.items[`${action.item.type}_${action.item.id}`] = action.item
+      state.items[`${action.item.type}-${action.item.entity.uid}`] = action.item
       return {
         ...state,
       }
     case COMMIT_DELETE_FEED:
-      delete state.items[`${action.item.type}_${action.item.id}`]
+      delete state.items[`${action.item.type}-${action.item.entity.uid}`]
       return {
         ...state,
       }
-    case COMMIT_SET_CURRENT_FEED:
+    case COMMIT_SET_PARENT_FOLDER_FEED:
       return {
         ...state,
-        current: action.current === null ? null : { ...action.current },
+        parentFolder: action.parentFolder,
       }
-    case COMMIT_SET_CURRENT_FOLDER:
+    case COMMIT_SET_SLUG_FEED:
       return {
         ...state,
-        folder: action.folder,
+        slug: action.slug,
       }
-    case COMMIT_SET_CURRENT_USERNAME:
-      return {
-        ...state,
-        username: action.username,
-      }
+    case COMMIT_SET_UID_FEED:
+    return {
+      ...state,
+      uid: action.uid,
+    }
     default:
       return state
   }

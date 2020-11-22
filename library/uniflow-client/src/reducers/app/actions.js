@@ -1,7 +1,7 @@
 import { COMMIT_SET_PAGE, COMMIT_SET_THEME } from './actions-types'
 
 export const commitSetPage = page => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_SET_PAGE,
       page,
@@ -11,7 +11,7 @@ export const commitSetPage = page => {
 }
 
 export const commitSetTheme = theme => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_SET_THEME,
       theme,
@@ -21,7 +21,7 @@ export const commitSetTheme = theme => {
 }
 
 export const switchTheme = oldTheme => {
-  return dispatch => {
+  return async dispatch => {
     let theme = 'light'
     if (oldTheme === 'light') {
       theme = 'dark'
@@ -38,7 +38,7 @@ export const switchTheme = oldTheme => {
 }
 
 export const applyTheme = () => {
-  return dispatch => {
+  return async dispatch => {
     const theme = JSON.parse(localStorage.getItem('theme')) || 'light'
 
     return dispatch(commitSetTheme(theme))

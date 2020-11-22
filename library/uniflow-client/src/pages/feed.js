@@ -1,9 +1,9 @@
 import React from 'react'
+import { graphql } from "gatsby";
 import { Feed } from '../views'
 import { requireAuthentication, withPage } from '../helpers'
 import routes from '../routes'
 import { matchPath } from '../../src/utils'
-import {graphql} from "gatsby";
 
 export default ({ location, data: { localFlows } }) => {
   let allFlows = {}
@@ -17,11 +17,11 @@ export default ({ location, data: { localFlows } }) => {
     description: 'Feed',
   })
   const AuthFeedPage = requireAuthentication(FeedPage)
+
   const match = matchPath(location.pathname, {
     path: routes.feed.path,
     exact: true,
   })
-
   if (match) {
     return <AuthFeedPage flows={allFlows} />
   }

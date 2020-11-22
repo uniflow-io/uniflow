@@ -7,6 +7,7 @@ import {
 
 const defaultState = {
   token: null,
+  uid: null,
   isAuthenticated: false,
   isAuthenticating: false,
   statusText: null,
@@ -24,6 +25,7 @@ const auth = (state = defaultState, action) => {
         isAuthenticating: false,
         isAuthenticated: true,
         token: action.token,
+        uid: action.uid,
         statusText: 'You have been successfully logged in.',
       })
     case COMMIT_LOGIN_USER_FAILURE:
@@ -31,12 +33,14 @@ const auth = (state = defaultState, action) => {
         isAuthenticating: false,
         isAuthenticated: false,
         token: null,
+        uid: null,
         statusText: `Authentication Error: ${action.status} ${action.statusText}`,
       })
     case COMMIT_LOGOUT_USER:
       return Object.assign({}, state, {
         isAuthenticated: false,
         token: null,
+        uid: null,
         statusText: 'You have been successfully logged out.',
       })
     default:

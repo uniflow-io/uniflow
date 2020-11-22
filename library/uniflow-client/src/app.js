@@ -28,8 +28,9 @@ store.dispatch(commitSetEnv(ENV))
 
 if (typeof window !== `undefined`) {
   let token = window.localStorage.getItem('token')
+  let uid = window.localStorage.getItem('uid')
   if (token !== null) {
-    store.dispatch(commitLoginUserSuccess(token))
+    store.dispatch(commitLoginUserSuccess(token, uid))
   }
 }
 

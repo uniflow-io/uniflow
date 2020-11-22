@@ -15,7 +15,7 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
     }
 
     checkAuth = (isAuthenticated, user) => {
-      if (!isAuthenticated || (user.username && !isGranted(user, role))) {
+      if (!isAuthenticated || (user.uid && !isGranted(user, role))) {
         if (typeof window !== `undefined`) {
           navigate(pathTo('login'))
         }

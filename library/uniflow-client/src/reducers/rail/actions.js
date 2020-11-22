@@ -6,7 +6,7 @@ import {
 } from './actions-types'
 
 export const commitPushFlow = (index, flow) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_PUSH_FLOW,
       index,
@@ -16,7 +16,7 @@ export const commitPushFlow = (index, flow) => {
   }
 }
 export const commitPopFlow = index => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_POP_FLOW,
       index,
@@ -25,7 +25,7 @@ export const commitPopFlow = index => {
   }
 }
 export const commitUpdateFlow = (index, data, codes) => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_UPDATE_FLOW,
       index,
@@ -36,7 +36,7 @@ export const commitUpdateFlow = (index, data, codes) => {
   }
 }
 export const commitSetRail = rail => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_SET_RAIL,
       rail,

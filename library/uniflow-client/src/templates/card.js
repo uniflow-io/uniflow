@@ -4,9 +4,9 @@ import { graphql } from 'gatsby'
 import { withPage } from '../helpers'
 
 export default ({ data, location }) => {
-  const { library, localLibrary, localCard, card, logo } = data
+  const { /*library, */localLibrary, /*card, */localCard, logo } = data
   let realCard = {
-    ...card,
+    //...card,
     official: false,
   }
   if (localCard) {
@@ -23,14 +23,43 @@ export default ({ data, location }) => {
   })
 
   let allLibrary = {}
-  library.nodes.forEach(card => {
+  /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
-  });
+  });*/
   localLibrary.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
   });
   return <CardPage library={Object.values(allLibrary)} card={realCard} logo={logo} />
 }
+
+/*
+    library: allNpmPackage(filter: {deprecated: {eq: "false"}}) {
+      nodes {
+        name
+        description
+        fields {
+          slug
+          catalogs
+        }
+      }
+    }
+    card: npmPackage(fields: { slug: { eq: $slug } }) {
+      name
+      description
+      fields {
+        slug
+        catalogs
+      }
+      readme {
+        childMdx {
+          body
+        }
+      }
+      repository {
+        url
+      }
+    }
+*/
 
 export const query = graphql`
   query($slug: String) {
@@ -51,32 +80,6 @@ export const query = graphql`
         directory
       }
     }
-    card: npmPackage(fields: { slug: { eq: $slug } }) {
-      name
-      description
-      fields {
-        slug
-        catalogs
-      }
-      readme {
-        childMdx {
-          body
-        }
-      }
-      repository {
-        url
-      }
-    }
-    library: allNpmPackage(filter: {deprecated: {eq: "false"}}) {
-      nodes {
-        name
-        description
-        fields {
-          slug
-          catalogs
-        }
-      }
-    },
     localLibrary: allNpmLocalPackage {
       nodes {
         name

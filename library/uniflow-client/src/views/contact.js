@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { ApiException } from '../exceptions'
 import { contact } from '../reducers/contact/actions'
 
 class Contact extends Component {
   state = {
-    email: null,
-    emailError: false,
-    message: null,
-    messageError: false,
-    sent: false,
+    email: '',
+    message: '',
+    errors: {},
+    state: 'form',
   }
 
   onChangeEmail = event => {
@@ -22,44 +22,34 @@ class Contact extends Component {
   onSubmit = e => {
     e.preventDefault()
 
-    let valid = true
-    if (!this.state.email) {
-      valid = false
-      this.setState({ emailError: true })
-    } else {
-      this.setState({ emailError: false })
-    }
-
-    if (!this.state.message) {
-      valid = false
-      this.setState({ messageError: true })
-    } else {
-      this.setState({ messageError: false })
-    }
-
-    if (valid) {
+    this.setState({ state: 'sending' }, () => {
       this.props
-        .dispatch(contact(this.state.email, this.state.message))
-        .then(data => {
-          if (data === true) {
-            this.setState({ sent: true })
-          }
-        })
-    }
+      .dispatch(contact(this.state.email, this.state.message))
+      .then(data => {
+        if (data === true) {
+          this.setState({ state: 'sent' })
+        }
+      })
+      .catch(error => {
+        if(error instanceof ApiException) {
+          this.setState({ state: 'form', errors: {...error.errors} })
+        }
+      })
+    })
   }
 
   render() {
-    const { email, emailError, message, messageError, sent } = this.state
+    const { email, message, errors, state } = this.state
 
     return (
       <section className="section container-fluid">
         <div className="row">
           <div className="col-md-12">
             <h3>Contact</h3>
-            {sent && (
+            {state === 'sent' && (
               <p className="text-center">Your message has been sent</p>
             )}
-            {!sent && [
+            {(state === 'form' || state === 'sending') && [
               <p className="text-center" key="say">
                 You got a question about Uniflow, write more here
                 <br />
@@ -69,7 +59,7 @@ class Contact extends Component {
                 <div className="form-group col-sm-12">
                   <input
                     className={`form-control${
-                      emailError ? ' is-invalid' : ''
+                      errors.email ? ' is-invalid' : ''
                     }`}
                     id="email{{ _uid }}"
                     type="text"
@@ -77,20 +67,19 @@ class Contact extends Component {
                     onChange={this.onChangeEmail}
                     placeholder="Email"
                   />
-                  {emailError && (
+                  {errors.email && errors.email.map((message, i) =>
                     <div
+                      key={`error-${i}`}
                       className="invalid-feedback"
                       htmlFor="email{{ _uid }}"
-                    >
-                      Enter your email
-                    </div>
+                    >{message}</div>
                   )}
                 </div>
 
                 <div className="form-group col-sm-12">
                   <textarea
                     className={`form-control${
-                      messageError ? ' is-invalid' : ''
+                      errors.message ? ' is-invalid' : ''
                     }`}
                     id="message{{ _uid }}"
                     type="message"
@@ -99,13 +88,12 @@ class Contact extends Component {
                     placeholder="Message"
                     rows="15"
                   />
-                  {messageError && (
+                  {errors.message && errors.message.map((message, i) =>
                     <div
+                      key={`error-${i}`}
                       className="invalid-feedback"
                       htmlFor="message{{ _uid }}"
-                    >
-                      Enter your message
-                    </div>
+                    >{message}</div>
                   )}
                 </div>
 
@@ -113,6 +101,7 @@ class Contact extends Component {
                   <button
                     type="submit"
                     className="btn btn-primary btn-block btn-flat"
+                    disabled={state === 'sending'}
                     onClick={this.onSubmit}
                   >
                     Send

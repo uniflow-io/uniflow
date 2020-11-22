@@ -1,25 +1,55 @@
-import 'reflect-metadata';
 import * as express from 'express';
-import config from './config';
-import { database, server } from './loaders';
+import * as convict from 'convict'
+import { Service } from 'typedi';
+import { ParamsConfig } from './config';
+import { DatabaseLoader, ServerLoader } from './loader';
+import { Server as HttpServer } from 'http';
+import { Connection } from 'typeorm';
+import { AppConfig } from './config/params-config';
 
-export default async function app(): Promise<express.Application> {
-  const PORT = config.get('port');
+@Service()
+export default class App {
+	private server: HttpServer;
 
-  await database();
-  
-  const app = express();
-  await server(app, express.static('./public'));
+	constructor(
+		private paramsConfig: ParamsConfig,
+		private databaseLoader: DatabaseLoader,
+		private serverLoader: ServerLoader
+	) {}
 
-  return new Promise<express.Application>((resolve => {
-    app.listen(PORT, (err: any) => {
-      if (err) {
-        console.log(err);
-        process.exit(1);
-        return;
-      }
+	public getParams(): convict.Config<AppConfig> {
+		return this.paramsConfig.getConfig();
+	}
 
-      resolve(app)
-    });
-  }))
+	public getApp(): express.Application {
+		return this.serverLoader.getApp();
+	}
+
+	public getConnection(): Connection {
+		return this.databaseLoader.getConnection();
+	}
+
+	public getServer(): HttpServer {
+		return this.server;
+	}
+
+	public async start(): Promise<void> {
+		await this.databaseLoader.load();
+		await this.serverLoader.load()
+		
+		return new Promise((resolve) => {
+			const PORT = this.paramsConfig.getConfig().get('port');
+			const app = this.serverLoader.getApp()
+			app.on('error', (err: any) => {
+				console.log(err);
+				process.exit(1);
+			})
+			this.server = app.listen(PORT, resolve);
+		})
+	}
+
+	public async stop(): Promise<void> {
+		this.server.close();
+		this.databaseLoader.getConnection().close();
+	}
 }

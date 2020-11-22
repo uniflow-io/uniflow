@@ -186,13 +186,13 @@ exports.createPages = async ({graphql, actions, reporter}) => {
           }
         }
       }
-      library: allNpmPackage(filter: {keywords: {in: ["uniflow-client", "uniflow-flow"]}, deprecated: {eq: "false"}}) {
+      ${/*library: allNpmPackage(filter: {keywords: {in: ["uniflow-client", "uniflow-flow"]}, deprecated: {eq: "false"}}) {
         nodes {
           fields {
             slug
           }
         }
-      }
+      }*/''}
       localLibrary: allNpmLocalPackage(filter: {keywords: {in: ["uniflow-client", "uniflow-flow"]}}) {
         nodes {
           fields {
@@ -211,7 +211,7 @@ exports.createPages = async ({graphql, actions, reporter}) => {
         articles,
         docNav,
         docs,
-        library,
+        //library,
         localLibrary,
     } = result.data
     const docsBySlug = docs.nodes.reduce((value, doc) => {
@@ -295,9 +295,9 @@ exports.createPages = async ({graphql, actions, reporter}) => {
     });
 
     let cardSlugs = new Set()
-    library.nodes.forEach(card => {
+    /*library.nodes.forEach(card => {
         cardSlugs.add(card.fields.slug);
-    });
+    });*/
     localLibrary.nodes.forEach(card => {
         cardSlugs.add(card.fields.slug);
     });

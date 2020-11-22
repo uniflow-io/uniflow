@@ -5,9 +5,11 @@
 /node_modules
 
 # dotenv
-/.env.*
+/.env.development
+/.env.preprod
+/.env.production
 
 # typescript
 /dist
-/database.sqlite
+/*.sqlite
 oclif.manifest.json

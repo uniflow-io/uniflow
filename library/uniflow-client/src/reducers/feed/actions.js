@@ -5,13 +5,267 @@ import {
   COMMIT_CLEAR_FEED,
   COMMIT_UPDATE_FEED,
   COMMIT_DELETE_FEED,
-  COMMIT_SET_CURRENT_FEED,
-  COMMIT_SET_CURRENT_FOLDER,
-  COMMIT_SET_CURRENT_USERNAME,
+  COMMIT_SET_PARENT_FOLDER_FEED,
+  COMMIT_SET_SLUG_FEED,
+  COMMIT_SET_UID_FEED,
 } from './actions-types'
-import { commitLogoutUser } from '../auth/actions'
+import { commitLogoutUser } from '../user/actions'
 import { pathTo } from '../../routes'
 import { Bus } from '../../models'
+
+export const commitClearFeed = () => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_CLEAR_FEED,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitUpdateFeed = item => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_UPDATE_FEED,
+      item,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitDeleteFeed = item => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_DELETE_FEED,
+      item,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitSetParentFolderFeed = parentFolder => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_SET_PARENT_FOLDER_FEED,
+      parentFolder,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitSetSlugFeed = slug => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_SET_SLUG_FEED,
+      slug,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const commitSetUidFeed = uid => {
+  return async dispatch => {
+    dispatch({
+      type: COMMIT_SET_UID_FEED,
+      uid,
+    })
+    return Promise.resolve()
+  }
+}
+
+export const setParentFolderFeed = parentFolder => {
+  return async dispatch => {
+    dispatch(commitSetParentFolderFeed(parentFolder))
+
+    return Promise.resolve(parentFolder)
+  }
+}
+
+export const setSlugFeed = slug => {
+  return async dispatch => {
+    dispatch(commitSetSlugFeed(slug))
+
+    return Promise.resolve(slug)
+  }
+}
+
+export const setUidFeed = uid => {
+  return async dispatch => {
+    dispatch(commitSetUidFeed(uid))
+
+    return Promise.resolve(uid)
+  }
+}
+
+export const getFeedItem = (feed, slug = feed.slug) => {
+  if(slug === undefined) return undefined
+
+  if(slug === null && feed.parentFolder) {
+    return {
+      type: 'folder',
+      entity: feed.parentFolder,
+    }
+  }
+
+  for(const item of Object.values(feed.items)) {
+    if(item.entity.slug === slug) {
+      return item
+    }
+  }
+
+  return undefined
+}
+
+export const toFeedPath = (entity, user, toParent = false) => {
+  let paths = entity.path === '/' ? [] : entity.path.split('/').slice(1)
+  if(!toParent) {
+    paths.push(entity.slug)
+  }
+  
+  let slugs = {}
+  for (let i = 0; i < paths.length; i++) {
+    slugs[`slug${i + 1}`] = paths[i]
+  }
+
+  const isCurrentUser = entity.user === user.uid || entity.user === user.username
+  if (isCurrentUser) {
+    return pathTo('feed', slugs)
+  }
+  
+  return pathTo('userFeed', Object.assign({ uid: entity.user }, slugs))
+}
+
+export const getTags = state => {
+  let tags = Object.keys(state.items).reduce(function(previous, key) {
+    return previous.concat(state.items[key].entity.tags)
+  }, [])
+
+  // filter unique
+  tags = tags.filter(function(value, index, self) {
+    return self.indexOf(value) === index
+  })
+
+  return tags
+}
+
+export const getOrderedFeed = (state, filter) => {
+  let keys = Object.keys(state.items)
+
+  if (filter !== undefined) {
+    keys = keys.filter(key => {
+      const item = state.items[key]
+      let words = []
+      if (item.type === 'program') {
+        words.push(item.entity.name)
+        for (let i = 0; i < item.entity.tags.length; i++) {
+          words.push(item.entity.tags[i])
+        }
+      } else if (item.type === 'folder') {
+        words.push(item.entity.name)
+      }
+      words = words.join(' ').toLowerCase()
+
+      return words.indexOf(filter) !== -1
+    })
+  }
+
+  keys.sort((keyA, keyB) => {
+    const itemA = state.items[keyA]
+    const itemB = state.items[keyB]
+
+    return moment(itemB.entity.updated).diff(moment(itemA.entity.updated))
+  })
+
+  return keys.map(key => {
+    return state.items[key]
+  })
+}
+
+export const fetchFeed = (uid, paths, token = null) => {
+  return async dispatch => {
+    let config = {}
+    if (token) {
+      config = {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
+        }
+      }
+    }
+
+    const path = `/${paths.join('/')}`
+    const parentPath = `/${paths.slice(0, -1).join('/')}`
+    const parentParentPath = `/${paths.slice(0, -2).join('/')}`
+    const slug = paths.length > 0 ? paths[paths.length - 1] : null
+    const parentSlug = paths.length > 1 ? paths[paths.length - 2] : null
+    let feedFolderPath = parentPath
+    let feedProgramPath = parentPath
+    let parentFolderFound = undefined
+
+    dispatch(commitSetUidFeed(uid))
+    dispatch(commitSetSlugFeed(slug))
+    dispatch(commitSetParentFolderFeed(null))
+    dispatch(commitClearFeed())
+    if(paths.length > 0) {
+      await request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${parentPath}`, config)
+      .then((foldersResponse) => {
+        parentFolderFound = false
+        for (const folder of foldersResponse.data) {
+          if(folder.path === parentPath && folder.slug === slug) {
+            dispatch(commitSetSlugFeed(null))
+            dispatch(commitSetParentFolderFeed(folder))
+            feedFolderPath = path
+            feedProgramPath = path
+            parentFolderFound = true
+          }
+        }
+
+        if(parentFolderFound === false) {
+          for (const folder of foldersResponse.data) {
+            dispatch(commitUpdateFeed({
+              type: 'folder',
+              entity: folder,
+            }))
+          }
+          feedFolderPath = parentParentPath
+        }
+      })
+    }
+
+    return Promise.all([
+      request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${feedFolderPath}`, config),
+      request.get(`${server.getBaseUrl()}/api/users/${uid}/programs?path=${feedProgramPath}`, config),
+    ])
+    .then(([foldersResponse, programsResponse]) => {
+      if(parentFolderFound === true || parentFolderFound === undefined) {
+        for (const folder of foldersResponse.data) {
+          dispatch(commitUpdateFeed({
+            type: 'folder',
+            entity: folder,
+          }))
+        }
+      } if(parentFolderFound === false) {
+        for (const folder of foldersResponse.data) {
+          if(folder.path === parentParentPath && folder.slug === parentSlug) {
+            dispatch(commitSetParentFolderFeed(folder))
+          }
+        }
+      }
+
+      for (const program of programsResponse.data) {
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program,
+        }))
+      }
+    })
+    .catch(error => {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser())
+      } else {
+        throw error
+      }
+    })
+  }
+}
 
 export const serializeRailData = (rail) => {
   let data = []
@@ -44,137 +298,83 @@ export const deserializeRailData = raw => {
   return rail
 }
 
-export const getCurrentProgram = state => {
-  return state.current
-    ? state.items[`${state.current.type}_${state.current.id}`]
-    : null
-}
-export const getCurrentPath = state => {
-  let path = []
-  if (state.folder) {
-    path = state.folder.path.slice()
-    path.push(state.folder.slug)
-  }
+export const createProgram = (program, uid, token) => {
+  return async dispatch => {
+    let data = {
+      name: program.name,
+      slug: program.name,
+      path: program.path,
+      clients: program.clients,
+      tags: program.tags,
+      description: program.description,
+    }
 
-  return path
-}
+    return request
+      .post(`${server.getBaseUrl()}/api/users/${uid}/programs`, data, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        program = response.data
 
-export const getOrderedFeed = (state, filter) => {
-  let keys = Object.keys(state.items)
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
 
-  if (filter !== undefined) {
-    keys = keys.filter(key => {
-      let item = state.items[key]
-      let words = ''
-      if (item.type === 'program') {
-        words = item.name
-        for (let i = 0; i < item.tags.length; i++) {
-          words += ' ' + item.tags[i]
+        return program
+      })
+      .catch(error => {
+        if (error.request.status === 401) {
+          dispatch(commitLogoutUser())
+        } else {
+          throw error
         }
-      } else if (item.type === 'folder') {
-        words = item.name
-      }
-      words = words.toLowerCase()
-
-      return words.indexOf(filter) !== -1
-    })
-  }
-
-  keys.sort((keyA, keyB) => {
-    let itemA = state.items[keyA]
-    let itemB = state.items[keyB]
-
-    return moment(itemB.updated).diff(moment(itemA.updated))
-  })
-
-  return keys.map(key => {
-    return state.items[key]
-  })
-}
-
-export const getProgramBySlug = (state, slug) => {
-  let keys = Object.keys(state.items)
-
-  let slugKeys = keys.filter(key => {
-    return state.items[key].type === 'program' && state.items[key].slug === slug
-  })
-
-  if (slugKeys.length > 0) {
-    return state.items[slugKeys[0]]
-  }
-
-  return null
-}
-
-export const getTags = state => {
-  let tags = Object.keys(state.items).reduce(function(previous, key) {
-    return previous.concat(state.items[key].tags)
-  }, [])
-
-  // filter unique
-  tags = tags.filter(function(value, index, self) {
-    return self.indexOf(value) === index
-  })
-
-  return tags
-}
-
-export const commitClearFeed = () => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_CLEAR_FEED,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitUpdateFeed = item => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_UPDATE_FEED,
-      item,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitDeleteFeed = item => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_DELETE_FEED,
-      item,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitSetCurrentFeed = current => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_SET_CURRENT_FEED,
-      current,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitSetCurrentFolder = folder => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_SET_CURRENT_FOLDER,
-      folder,
-    })
-    return Promise.resolve()
-  }
-}
-export const commitSetCurrentUsername = username => {
-  return dispatch => {
-    dispatch({
-      type: COMMIT_SET_CURRENT_USERNAME,
-      username,
-    })
-    return Promise.resolve()
+      })
   }
 }
 
-export const fetchFeed = (username, path, token = null) => {
-  return dispatch => {
+export const updateProgram = (program, token) => {
+  return async dispatch => {
+    let data = {
+      name: program.name,
+      slug: program.slug,
+      path: program.path,
+      clients: program.clients,
+      tags: program.tags,
+      description: program.description,
+      public: program.public,
+    }
+
+    return request
+      .put(`${server.getBaseUrl()}/api/programs/${program.uid}`, data, {
+        headers: {
+          'Uniflow-Authorization': `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        program = response.data
+
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
+
+        return program
+      })
+      .catch(error => {
+        if (error.request.status === 401) {
+          dispatch(commitLogoutUser())
+        } else {
+          throw error
+        }
+      })
+  }
+}
+
+export const getProgramData = (program, token = null) => {
+  return async dispatch => {
     let config = {}
     if (token) {
       config = {
@@ -185,122 +385,7 @@ export const fetchFeed = (username, path, token = null) => {
     }
 
     return request
-      .get(
-        `${server.getBaseUrl()}/api/program/${username}/tree${
-          path.length > 0 ? '/' + path.join('/') : ''
-        }`,
-        config
-      )
-      .then(response => {
-        dispatch(commitClearFeed())
-
-        for (let i = 0; i < response.data['children'].length; i++) {
-          let item = response.data['children'][i]
-
-          dispatch(commitUpdateFeed(item))
-        }
-
-        dispatch(
-          commitSetCurrentFolder(
-            response.data['folder'] ? response.data['folder'] : null
-          )
-        )
-      })
-      .catch(error => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser())
-        } else {
-          throw error
-        }
-      })
-  }
-}
-
-export const createProgram = (item, token) => {
-  return dispatch => {
-    let data = {
-      name: item.name,
-      slug: item.name,
-      path: item.path,
-      clients: item.clients,
-      tags: item.tags,
-      description: item.description,
-      public: false,
-    }
-
-    return request
-      .post(`${server.getBaseUrl()}/api/program/create`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        },
-      })
-      .then(response => {
-        let item = response.data
-        item.type = 'program'
-
-        dispatch(commitUpdateFeed(item))
-
-        return item
-      })
-      .catch(error => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser())
-        } else {
-          throw error
-        }
-      })
-  }
-}
-
-export const updateProgram = (item, token) => {
-  return dispatch => {
-    let data = {
-      name: item.name,
-      slug: item.slug,
-      path: item.path,
-      clients: item.clients,
-      tags: item.tags,
-      description: item.description,
-      public: item.public,
-    }
-
-    return request
-      .put(`${server.getBaseUrl()}/api/program/update/${item.id}`, data, {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        },
-      })
-      .then(response => {
-        let item = response.data
-        item.type = 'program'
-
-        dispatch(commitUpdateFeed(item))
-
-        return item
-      })
-      .catch(error => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser())
-        } else {
-          throw error
-        }
-      })
-  }
-}
-
-export const getProgramData = (item, token = null) => {
-  return dispatch => {
-    let config = {}
-    if (token) {
-      config = {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        }
-      }
-    }
-
-    return request
-      .get(`${server.getBaseUrl()}/api/program/get-data/${item.id}`, config)
+      .get(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, config)
       .then(response => {
         return response.data.data
       })
@@ -314,22 +399,25 @@ export const getProgramData = (item, token = null) => {
   }
 }
 
-export const setProgramData = (item, token) => {
-  return dispatch => {
+export const setProgramData = (program, token) => {
+  return async dispatch => {
     let data = {
-      data: item.data,
+      data: program.data,
     }
     
     return request
-      .put(`${server.getBaseUrl()}/api/program/set-data/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        item.updated = moment()
+        program.updated = moment()
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program
+        }))
 
         return response.data
       })
@@ -343,16 +431,19 @@ export const setProgramData = (item, token) => {
   }
 }
 
-export const deleteProgram = (item, token) => {
-  return dispatch => {
+export const deleteProgram = (program, token) => {
+  return async dispatch => {
     return request
-      .delete(`${server.getBaseUrl()}/api/program/delete/${item.id}`, {
+      .delete(`${server.getBaseUrl()}/api/programs/${program.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        dispatch(commitDeleteFeed(item))
+        dispatch(commitDeleteFeed({
+          type: 'program',
+          entity: program
+        }))
 
         return response.data
       })
@@ -366,67 +457,8 @@ export const deleteProgram = (item, token) => {
   }
 }
 
-export const setCurrentFeed = current => {
-  return dispatch => {
-    dispatch(commitSetCurrentFeed(current))
-
-    return Promise.resolve(current)
-  }
-}
-
-export const setCurrentUsername = username => {
-  return dispatch => {
-    dispatch(commitSetCurrentUsername(username))
-
-    return Promise.resolve(username)
-  }
-}
-
-export const getLastPublicPrograms = () => {
-  return dispatch => {
-    return request
-      .get(`${server.getBaseUrl()}/api/program/last-public`)
-      .then(response => {
-        return response.data.programs
-      })
-      .catch(error => {
-        return []
-      })
-  }
-}
-
-export const pathToSlugs = path => {
-  let slugs = {}
-  for (let i = 0; i < path.length; i++) {
-    slugs[`slug${i + 1}`] = path[i]
-  }
-
-  return slugs
-}
-
-export const feedPathTo = (path, username = null) => {
-  let slugs = pathToSlugs(path)
-
-  if (username) {
-    return pathTo('userFeed', Object.assign({ username: username }, slugs))
-  }
-
-  return pathTo('feed', slugs)
-}
-
-export const pathToString = path => {
-  return `/${path.join('/')}`
-}
-
-export const stringToPath = value => {
-  if (value === '/') {
-    return []
-  }
-  return value.slice(1).split('/')
-}
-
-export const getFolderTree = (username, token = null) => {
-  return dispatch => {
+export const getFolderTree = (uid, token = null) => {
+  return async dispatch => {
     let config = {}
     if (token) {
       config = {
@@ -437,9 +469,15 @@ export const getFolderTree = (username, token = null) => {
     }
 
     return request
-      .get(`${server.getBaseUrl()}/api/folder/${username}/tree`, config)
+      .get(`${server.getBaseUrl()}/api/users/${uid}/folders`, config)
       .then(response => {
-        return response.data
+        const folders = response.data
+        let tree = ['/']
+        for(const folder of folders) {
+          tree.push(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`)
+        }
+
+        return tree.sort()
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -451,27 +489,29 @@ export const getFolderTree = (username, token = null) => {
   }
 }
 
-export const createFolder = (item, token) => {
-  return dispatch => {
+export const createFolder = (folder, uid, token) => {
+  return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.name,
-      path: item.path,
+      name: folder.name,
+      slug: folder.name,
+      path: folder.path,
     }
 
     return request
-      .post(`${server.getBaseUrl()}/api/folder/create`, data, {
+      .post(`${server.getBaseUrl()}/api/users/${uid}/folders`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
-        item.type = 'folder'
+        folder = response.data
 
-        dispatch(commitUpdateFeed(item))
+        dispatch(commitUpdateFeed({
+          type: 'folder',
+          entity: folder,
+        }))
 
-        return item
+        return folder
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -483,26 +523,26 @@ export const createFolder = (item, token) => {
   }
 }
 
-export const updateCurrentFolder = (item, token) => {
-  return dispatch => {
+export const updateParentFolder = (folder, token) => {
+  return async dispatch => {
     let data = {
-      name: item.name,
-      slug: item.slug,
-      path: item.path,
+      name: folder.name,
+      slug: folder.slug,
+      path: folder.path,
     }
 
     return request
-      .put(`${server.getBaseUrl()}/api/folder/update/${item.id}`, data, {
+      .put(`${server.getBaseUrl()}/api/folders/${folder.uid}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        let item = response.data
+        folder = response.data
 
-        dispatch(commitSetCurrentFolder(item))
+        dispatch(commitSetParentFolderFeed(folder))
 
-        return item
+        return folder
       })
       .catch(error => {
         if (error.request.status === 401) {
@@ -514,16 +554,16 @@ export const updateCurrentFolder = (item, token) => {
   }
 }
 
-export const deleteCurrentFolder = (item, token) => {
-  return dispatch => {
+export const deleteParentFolder = (folder, token) => {
+  return async dispatch => {
     return request
-      .delete(`${server.getBaseUrl()}/api/folder/delete/${item.id}`, {
+      .delete(`${server.getBaseUrl()}/api/folders/${folder.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        // dispatch(commitSetCurrentFolder(null))
+        dispatch(commitSetParentFolderFeed(undefined))
 
         return response.data
       })

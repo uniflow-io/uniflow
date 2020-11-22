@@ -8,14 +8,10 @@ export default async function server() {
   app.use('/', express.static('./public'));
 
   return new Promise((resolve => {
-    app.listen(PORT, (err) => {
-      if (err) {
-        console.log(err);
-        process.exit(1);
-        return;
-      }
-
-      resolve(app)
-    });
+    app.on('error', (err: any) => {
+      console.log(err);
+      process.exit(1);
+    })
+    app.listen(PORT, resolve);
   }))
 }

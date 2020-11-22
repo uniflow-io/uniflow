@@ -1,7 +1,7 @@
 import { COMMIT_SET_ENV } from './actions-types'
 
 export const commitSetEnv = env => {
-  return dispatch => {
+  return async dispatch => {
     dispatch({
       type: COMMIT_SET_ENV,
       env,
