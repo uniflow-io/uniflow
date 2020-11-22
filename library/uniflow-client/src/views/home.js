@@ -96,7 +96,7 @@ class Home extends Component {
                 <div id="newsletter-optin" className="d-flex justify-content-center pt-5">
                 {state === 'sent' && (
                   <div className="alert alert-success text-center" role="alert">
-                    we succefully registered {email} to the newsletter
+                    {email} was succefully registered to the newsletter
                   </div>
                 )}
                 {(state === 'form' || state === 'sending') && (

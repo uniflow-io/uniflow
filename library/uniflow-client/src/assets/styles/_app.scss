@@ -24,6 +24,14 @@ body {
 
   #newsletter-optin .input-group {
     max-width: 500px;
+    @include media-breakpoint-down(md) {
+      flex-direction: column !important;
+
+      input, button {
+        border-radius: 0;
+        width: 100%;
+      }
+    }
   }
 }
 
