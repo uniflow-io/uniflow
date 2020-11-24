@@ -93,7 +93,7 @@ class Home extends Component {
                 <h1>Unified Workflow Automation Tool</h1>
                 <p>Take advantage of Flow Based Programming to automate your recurring tasks.</p>
 
-                <div id="newsletter-optin" className="d-flex justify-content-center pt-5">
+                <div id="newsletter-optin" className="d-flex justify-content-center pt-md-5">
                 {state === 'sent' && (
                   <div className="alert alert-success text-center" role="alert">
                     {email} was succefully registered to the newsletter
