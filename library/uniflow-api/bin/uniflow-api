@@ -28,6 +28,7 @@ var command = process.argv[2];
 var supportedCommands = [
 	'help',
 	'start',
+	'leads-sync',
 ];
 
 if (!supportedCommands.includes(command)) {

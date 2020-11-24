@@ -6,6 +6,7 @@
 
 # dotenv
 /.env.development
+/.env.local
 /.env.preprod
 /.env.production
 
