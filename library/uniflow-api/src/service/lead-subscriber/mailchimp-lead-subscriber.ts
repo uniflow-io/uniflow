@@ -482,6 +482,10 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       for(const email of emails) {
         //await this.mailchimp.automations.pauseWorkflowEmail(automation.id, email.id)
 
+        if(email.status !== 'sending') {
+          errorMessages.push(`${automation.settings.title} email.status !== sending`)
+        }
+
         if(index === 0) {
           if(email.delay.type !== 'now') {
             errorMessages.push(`${automation.settings.title} email.delay.type !== now`)
