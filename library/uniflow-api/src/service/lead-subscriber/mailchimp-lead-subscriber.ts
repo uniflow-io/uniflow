@@ -42,7 +42,10 @@ declare namespace Mailchimp {
       recipient_count: number
     }
     settings: {
+      subject_line: string
       title: string
+      from_name: string
+      reply_to: string
       use_conversation: boolean
       to_name: string
       folder_id: string
@@ -55,6 +58,18 @@ declare namespace Mailchimp {
       template_id: number
       drag_and_drop: boolean
     }
+    rss_opts: {
+      feed_url: string,
+      frequency: 'daily',
+      schedule: {
+        hour: number,
+        daily_send: Object,
+        weekly_send_day: string,
+        monthly_send_date: number
+      },
+      last_sent: string,
+      constrain_rss_img: boolean
+    },
     tracking: {
       opens: boolean
       html_clicks: boolean
@@ -256,11 +271,18 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
 
     const body: any = { tags: [] }
 
-    if (options.type === 'newsletter') {
-      body.tags.push({
-        name: "uniflow-newsletter",
-        status: "active",
-      })
+    for(const type of options.types) {
+      if (type === 'newsletter') {
+        body.tags.push({
+          name: "uniflow-newsletter",
+          status: "active",
+        })
+      } else if (type === 'blog') {
+        body.tags.push({
+          name: "uniflow-blog",
+          status: "active",
+        })
+      }
     }
 
     await this.mailchimp.lists.updateListMemberTags(this.listId, subscriberHash, { body })
@@ -366,7 +388,12 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     return items.emails
   }
 
-  public async sync(): Promise<any> {
+  /**
+   * this :
+   * - read markdowns newsletters and create associated templates
+   * - check automations associated to the newsletters and report config errors
+   */
+  private async syncNewsletters(): Promise<any> {
     // grab markdown newsletters headers and content
     const newsletters: any = await Promise.all(fs
       .readdirSync(newslettersPath).filter(file => {
@@ -469,11 +496,17 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       const template = templates[index]
       const automation = automations[index]
       const newletter = newsletters[index]
+      if(automation.status !== 'sending') {
+        errorMessages.push(`${automation.settings.title} status must be "sending"`)
+      }
       if(automation.settings.from_name !== 'Uniflow') {
         errorMessages.push(`${automation.settings.title} settings.from_name must be "Uniflow"`)
       }
-      if(this.env === 'production' && automation.settings.reply_to !== 'contact@uniflow.io') {
+      if(automation.settings.reply_to !== 'contact@uniflow.io' && this.env === 'production') {
         errorMessages.push(`${automation.settings.title} settings.reploy_to must be "contact@uniflow.io"`)
+      }
+      if(automation.recipients.list_id !== this.listId) {
+        errorMessages.push(`${automation.settings.title} recipients.list_id !== ${this.listId}`)
       }
 
       const emails = await this.getEmails(automation.id);
@@ -552,5 +585,135 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     if(errorMessages.length > 0) {
       throw new Error(errorMessages.join('\n'))
     }
+  }
+
+  /**
+   * this :
+   * - create blog template
+   * - check automation associated to the blog template and report config errors
+   */
+  public async syncBlog(): Promise<any> {
+    // grab markdown newsletters headers and content
+    const blog: any = await Promise.resolve({
+        headers: {
+          title: 'Uniflow Blog',
+          date: null,
+        },
+        content: 'New blog post on Uniflow'
+      }).then((data) => {
+      return new Promise(resolve => {
+        const content = [`# ${data.headers.title}`, '', data.content].join('\n')
+
+        const processor = unified().use(markdown).use(remark2rehype).use(html)
+        processor.process(content, function (error, htmlContent: VFile) {
+          if (error) throw error
+
+          data.content = htmlContent.contents.toString()
+          resolve(data)
+        })
+      })
+    })
+
+    // create "uniflow-newsletter" folder in templates if missing
+    const templateFolders: Array<Mailchimp.TemplateFolder> = await this.getTemplateFolders()
+    const templateFolder: Mailchimp.TemplateFolder = templateFolders.filter((folder:any) => {
+      return folder.name === 'uniflow-blog'
+    }).shift() || await this.mailchimp.templateFolders.create({ name: "uniflow-blog" })
+
+    // sync templates
+    const templateTitle = 'Uniflow Blog'
+    let template = (await this.getTemplates({folder_id: templateFolder.id}))
+      .filter((template) => {
+        return template.name === templateTitle
+      })
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name)
+      })
+      .shift()
+    
+    const templateData = {
+      name: `${templateTitle}`.slice(0, 50),
+      html: blog.content,
+      folder_id: templateFolder.id,
+    }
+    
+    template = template ?? await this.mailchimp.templates.create(templateData)
+    if(!template) {
+      throw new Error(`template ${templateTitle} was not created`)
+    }
+    template = await this.mailchimp.templates.updateTemplate(template.id, templateData)
+    if(!template) {
+      throw new Error(`template ${templateTitle} was not created`)
+    }
+
+    // create "uniflow-blog" folder in campaigns if missing
+    const campaignFolders: Array<Mailchimp.CampaignFolder> = await this.getCampaignFolders()
+    const campaignFolder: Mailchimp.CampaignFolder = campaignFolders.filter((folder:any) => {
+      return folder.name === 'uniflow-blog'
+    }).shift() || await this.mailchimp.campaignFolders.create({ name: "uniflow-blog" })
+    if(!campaignFolder) {
+      throw new Error('Campaign folder "uniflow-blog" was not created')
+    }
+
+    const errorMessages: Array<string> = []
+    const campaignTitle = 'Uniflow Automated Blog'
+    const campaign = (await this.getCampaigns())
+      .filter((campaign) => {
+        return campaign.settings.title === campaignTitle
+      })
+      .shift()
+    
+    if(!campaign) {
+      throw new Error(`You must create a new RSS Campaign titled "${campaignTitle}"`)
+    }
+
+    if(campaign.type !== 'rss') {
+      errorMessages.push(`${campaign.settings.title} type must be "rss"`)
+    }
+
+    if(campaign.status !== 'sending') {
+      errorMessages.push(`${campaign.settings.title} status must be "sending"`)
+    }
+
+    if(campaign.content_type !== 'template') {
+      errorMessages.push(`${campaign.settings.title} status must be "template"`)
+    }
+
+    if(campaign.recipients.list_id !== this.listId) {
+      errorMessages.push(`${campaign.settings.title} recipients.list_id !== ${this.listId}`)
+    }
+
+    if(campaign.settings.subject_line !== 'Posts from *|RSSFEED:TITLE|* for *|RSSFEED:DATE|*') {
+      errorMessages.push(`${campaign.settings.title} settings.subject_line !== "Posts from *|RSSFEED:TITLE|* for *|RSSFEED:DATE|*"`)
+    }
+
+    if(campaign.settings.from_name !== 'Uniflow') {
+      errorMessages.push(`${campaign.settings.title} settings.from_name !== "Uniflow"`)
+    }
+
+    if(campaign.settings.reply_to !== 'contact@uniflow.io' && this.env === 'production') {
+      errorMessages.push(`${campaign.settings.title} settings.reply_to !== "contact@uniflow.io"`)
+    }
+
+    if(campaign.settings.folder_id !== campaignFolder.id) {
+      errorMessages.push(`${campaign.settings.title} settings.folder_id !== "${campaignFolder.id}"`)
+    }
+
+    if(campaign.settings.template_id !== template.id) {
+      errorMessages.push(`${campaign.settings.title} settings.template_id !== "${template.id}"`)
+    }
+
+    if(campaign.rss_opts.feed_url !== 'https://feeds.feedburner.com/uniflow-io/blog') {
+      errorMessages.push(`${campaign.settings.title} settings.rss_opts.feed_url !== "https://feeds.feedburner.com/uniflow-io/blog"`)
+    }
+
+    if(errorMessages.length > 0) {
+      throw new Error(errorMessages.join('\n'))
+    }
+  }
+
+  public async sync(): Promise<any> {
+    await this.syncNewsletters()
+    await this.syncBlog()
   }
 }

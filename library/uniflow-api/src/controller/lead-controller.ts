@@ -24,8 +24,8 @@ export default class LeadController implements ControllerInterface {
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const lead = await this.leadService.create(req.body.email, {
-            type: 'newsletter'
+          const lead = await this.leadService.subscribe(req.body.email, {
+            types: ['newsletter','blog']
           })
 
           if(await this.leadService.isValid(req.body.email)) {    

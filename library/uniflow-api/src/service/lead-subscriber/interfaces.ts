@@ -1,5 +1,5 @@
 export interface LeadSubscriberOptions {
-  type: 'newsletter'
+  types: Array<'newsletter'|'blog'>
 }
 
 export interface LeadSubscriberInterface {

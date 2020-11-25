@@ -33,6 +33,13 @@ export default class LeadEntity {
   })
   optinNewsletter: boolean;
 
+  @Column({
+    type: "boolean",
+    default: false,
+    nullable: false,
+  })
+  optinBlog: boolean;
+
   @CreateDateColumn()
   created: Date
 
