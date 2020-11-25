@@ -394,8 +394,10 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         }
       }).map((data) => {
         return new Promise(resolve => {
+          const content = [`# ${data.headers.title}`, '', data.content].join('\n')
+
           const processor = unified().use(markdown).use(remark2rehype).use(html)
-          processor.process(data.content, function (error, htmlContent: VFile) {
+          processor.process(content, function (error, htmlContent: VFile) {
             if (error) throw error
 
             data.content = htmlContent.contents.toString()
@@ -415,7 +417,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     }
 
     // sync templates
-    const templatePrefixTitle = 'Uniflow Template Newsletter'
+    const templatePrefixTitle = 'Uniflow Newsletter'
     const templates = (await this.getTemplates({folder_id: templateFolder.id}))
       .filter((template) => {
         return template.name.indexOf(templatePrefixTitle) === 0
@@ -428,7 +430,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       const indexName = getIndexName(index)
       const newletter = newsletters[index]
       const templateData = {
-        name: `${templatePrefixTitle} ${indexName}`,
+        name: `${templatePrefixTitle} ${indexName} ${newletter.headers.title}`.slice(0, 50),
         html: newletter.content,
         folder_id: templateFolder.id,
       }
@@ -466,6 +468,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
 
       const template = templates[index]
       const automation = automations[index]
+      const newletter = newsletters[index]
       if(automation.settings.from_name !== 'Uniflow') {
         errorMessages.push(`${automation.settings.title} settings.from_name must be "Uniflow"`)
       }
@@ -515,7 +518,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
           errorMessages.push(`${automation.settings.title} email.recipients.segment_text not tagged "uniflow-newsletter"`)
         }
 
-        const title = template.name.slice(0, 150)
+        const title = newletter.headers.title.slice(0, 150)
         if(email.settings.subject_line !== title) {
           errorMessages.push(`${automation.settings.title} email.settings.subject_line !== "${title}"`)
         }
