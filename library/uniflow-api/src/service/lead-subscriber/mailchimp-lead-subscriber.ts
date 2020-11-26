@@ -611,13 +611,23 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         content: 'New blog post on Uniflow'
       }).then((data) => {
       return new Promise(resolve => {
-        const content = [`# ${data.headers.title}`, '', data.content].join('\n')
+        const content = [
+          `# RSSFEED:TITLE`,
+          '',
+          data.content,
+          '',
+          '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
+          '',
+          `[View this email in your browser](RSSFEED:URL)`
+        ].join('\n')
 
         const processor = unified().use(markdown).use(remark2rehype).use(html)
         processor.process(content, function (error, htmlContent: VFile) {
           if (error) throw error
 
           data.content = htmlContent.contents.toString()
+            .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
+            .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
           resolve(data)
         })
       })
