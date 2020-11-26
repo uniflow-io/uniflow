@@ -1,6 +1,7 @@
 ---
 title: Welcome to Uniflow 💧
 date: 2020-11-01
+index: 001
 ---
 
 Did you ever thing that some tasks you are doing are recurring on day to day.
@@ -12,4 +13,4 @@ Then, Uniflow can help you to write and reuse snipets as Flow that you own and c
 
 What next : you will receives some case study that will help you use Uniflow and adopt it's concept.
 
-Happy Flowing 🚀 [https://uniflow.io](https://uniflow.io)
+Happy Flowing 🚀

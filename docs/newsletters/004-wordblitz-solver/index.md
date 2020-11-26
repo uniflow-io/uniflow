@@ -1,6 +1,7 @@
 ---
 title: Wordblitz Solver
 date: 2020-11-04
+index: 004
 ---
 
 Did you ever face your friends on funny smart games ? Sometimes you just want show your victory over your friends.
@@ -16,4 +17,4 @@ You enter the board that you see when game start, then choose your dictionnary l
 
 If you are quick enought then you should easy win against anyone !
 
-Happy Flowing 🚀 [https://uniflow.io](https://uniflow.io)
+Happy Flowing 🚀

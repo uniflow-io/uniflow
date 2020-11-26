@@ -399,32 +399,41 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       .readdirSync(newslettersPath).filter(file => {
         return fs.existsSync(`${newslettersPath}/${file}/index.md`)
       }).map(file => {
-        return fs.readFileSync(`${newslettersPath}/${file}/index.md`, 'utf8')
-      }).map(markdownContent => {
+        return {file, content: fs.readFileSync(`${newslettersPath}/${file}/index.md`, 'utf8')}
+      }).map(({file, content}) => {
         // custom markdown where we get only the content of markdown
-        const extract = markdownContent.split('---')
+        const extract = content.split('---')
+        const extractField = (headers: Array<string>, name: string): string => {
+          return headers
+          .filter(header => header.indexOf(`${name}: `) === 0)
+          .map(header => header.slice(name.length + 2))
+          .join('')
+          .trim()
+        }
         const headers = extract.slice(-2, -1).join('').split('\n')
         return {
           headers: {
-            title: headers
-              .filter(header => header.indexOf('title: ') === 0)
-              .map(header => header.slice(7))
-              .join('')
-              .trim(),
-            date: headers
-              .filter(header => header.indexOf('date: ') === 0)
-              .map(header => header.slice(6))
-              .join('')
-              .trim(),
+            title: extractField(headers, 'title'),
+            date: extractField(headers, 'date'),
+            index: extractField(headers, 'index'),
+            file,
           },
           content: extract.slice(-1).join('').trim()
         }
       }).map((data) => {
         return new Promise(resolve => {
-          const content = [`# ${data.headers.title}`, '', data.content].join('\n')
+          const markdownContent = [
+            `# ${data.headers.title}`,
+            '',
+            data.content,
+            '',
+            '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
+            '',
+            `[View this email in your browser](https://uniflow.io/newsletters/${data.headers.file})`
+          ].join('\n')
 
           const processor = unified().use(markdown).use(remark2rehype).use(html)
-          processor.process(content, function (error, htmlContent: VFile) {
+          processor.process(markdownContent, function (error, htmlContent: VFile) {
             if (error) throw error
 
             data.content = htmlContent.contents.toString()

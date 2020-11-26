@@ -35,8 +35,7 @@ export default function withPage(Component, page, seo) {
               />
               {seo.type && <meta property="og:type" content={seo.type} />}
               {seo.title && <meta property="og:title" content={seo.title} />}
-              {seo.image &&
-                typeof seo.image === 'string' && [
+              {seo.image && typeof seo.image === 'string' && [
                   <meta
                     key="og:image"
                     property="og:image"
@@ -53,8 +52,7 @@ export default function withPage(Component, page, seo) {
                     content=""
                   />,
                 ]}
-              {seo.image &&
-                typeof seo.image !== 'string' && [
+              {seo.image && typeof seo.image !== 'string' && [
                   <meta
                     key="og:image"
                     property="og:image"
