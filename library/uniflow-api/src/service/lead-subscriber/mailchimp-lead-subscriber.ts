@@ -2,9 +2,12 @@ import * as mailchimpMarketing from '@mailchimp/mailchimp_marketing'
 import * as md5 from 'md5'
 import * as fs from 'fs'
 import * as unified from 'unified'
+import * as path from 'path'
 import * as markdown from 'remark-parse'
 import * as remark2rehype from 'remark-rehype'
 import * as html from 'rehype-stringify'
+import { Transformer } from "unified";
+import { Node, Parent } from "unist";
 import { VFile } from 'vfile'
 import { Service } from 'typedi'
 import { ParamsConfig } from '../../config'
@@ -388,6 +391,32 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     return items.emails
   }
 
+  private imagesInline(): Transformer {
+    const transformer = async (node: Node, file: VFile): Promise<Node> => {
+      if (!file.path) {
+        throw new Error("Cannot inline images because the path of the HTML file is unknown");
+      }
+
+      if (node.type === 'image' && node.url && /\.gif$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
+        var bitmap = fs.readFileSync(imagePath);
+        const base64 = Buffer.from(bitmap).toString('base64');
+        node.url = `data:image/gif;base64,${base64}`
+      }
+    
+      if (node.children) {
+        let parent = node as Parent;
+        for (let child of parent.children) {
+          transformer(child, file)
+        }
+      }
+    
+      return node;
+    }
+
+    return transformer
+  }
+
   /**
    * this :
    * - read markdowns newsletters and create associated templates
@@ -397,10 +426,13 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     // grab markdown newsletters headers and content
     const newsletters: any = await Promise.all(fs
       .readdirSync(newslettersPath).filter(file => {
-        return fs.existsSync(`${newslettersPath}/${file}/index.md`)
-      }).map(file => {
-        return {file, content: fs.readFileSync(`${newslettersPath}/${file}/index.md`, 'utf8')}
-      }).map(({file, content}) => {
+        const path = `${newslettersPath}/${file}/index.md`
+        return fs.existsSync(path)
+      }).map((file) => {
+        const dirname = `${newslettersPath}/${file}`
+        const path = `${dirname}/index.md`
+        return {file, dirname, path, content: fs.readFileSync(path, 'utf8')}
+      }).map(({file, dirname, path, content}) => {
         // custom markdown where we get only the content of markdown
         const extract = content.split('---')
         const extractField = (headers: Array<string>, name: string): string => {
@@ -417,6 +449,8 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             date: extractField(headers, 'date'),
             index: extractField(headers, 'index'),
             file,
+            dirname,
+            path,
           },
           content: extract.slice(-1).join('').trim()
         }
@@ -432,8 +466,12 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             `[View this email in your browser](https://uniflow.io/newsletters/${data.headers.file})`
           ].join('\n')
 
-          const processor = unified().use(markdown).use(remark2rehype).use(html)
-          processor.process(markdownContent, function (error, htmlContent: VFile) {
+          const processor = unified().use(markdown).use(this.imagesInline).use(remark2rehype).use(html)
+          processor.process({
+            path: data.headers.path,
+            dirname: data.headers.dirname,
+            contents: markdownContent,
+          }, function (error, htmlContent: VFile) {
             if (error) throw error
 
             data.content = htmlContent.contents.toString()
@@ -441,7 +479,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
           })
         })
       }))
-    
+      
     // create "uniflow-newsletter" folder in templates if missing
     const templateFolders: Array<Mailchimp.TemplateFolder> = await this.getTemplateFolders()
     const templateFolder: Mailchimp.TemplateFolder = templateFolders.filter((folder:any) => {

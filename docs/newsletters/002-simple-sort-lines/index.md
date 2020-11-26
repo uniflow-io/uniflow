@@ -21,4 +21,6 @@ Copy the result and report it to your text selection.
 
 You are done !
 
+![animated](images/animated.gif)
+
 Happy Flowing 🚀
