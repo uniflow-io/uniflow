@@ -13,7 +13,7 @@ Why does it have to be so time consuming. You are in front of a computer, it can
 
 There come Uniflow at your help.
 
-**[Look at the nice Flow we created](https://uniflow.io/public/feed/simple-sort-line)**
+[Look at the nice Flow we created](https://uniflow.io/public/feed/simple-sort-line)
 
 In this Flow, you just copy all you pupils names in any order, then you push "Play button".
 Tada 🍿 all names were sorted in alphabetical order at the end.

@@ -9,7 +9,7 @@ Think about your smart copy and paste task that you are duty to do. This small a
 
 This is where we meet. We can understand the issue you face and help you !
 
-**[Then fill the contact form https://uniflow.io/contact](https://uniflow.io/contact)**
+[Then fill the contact form https://uniflow.io/contact](https://uniflow.io/contact)
 
 We’d appreciate if you could share your thoughts with us. Our goal is to deliver more value for you.
 It will be a pleasure to work together to improve your day to day workflow.

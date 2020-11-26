@@ -11,7 +11,7 @@ I do not know all worlds in the word and I hate time limited games based on reac
 
 Here come Uniflow at help :
 
-**[look at flow we created](https://uniflow.io/public/feed/wordblitz-solver)**
+[look at flow we created](https://uniflow.io/public/feed/wordblitz-solver)
 
 You enter the board that you see when game start, then choose your dictionnary language. On "Play button" pressed, Uniflow will show you all the world that you can find sorted by points.
 
