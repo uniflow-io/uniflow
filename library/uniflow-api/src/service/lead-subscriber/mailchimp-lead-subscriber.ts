@@ -397,7 +397,17 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         throw new Error("Cannot inline images because the path of the HTML file is unknown");
       }
 
-      if (node.type === 'image' && node.url && /\.gif$/.test(node.url as string)) {
+      if (node.type === 'image' && node.url && /\.png$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
+        var bitmap = fs.readFileSync(imagePath);
+        const base64 = Buffer.from(bitmap).toString('base64');
+        node.url = `data:image/png;base64,${base64}`
+      } else if (node.type === 'image' && node.url && /\.jpg$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
+        var bitmap = fs.readFileSync(imagePath);
+        const base64 = Buffer.from(bitmap).toString('base64');
+        node.url = `data:image/jpg;base64,${base64}`
+      } else if (node.type === 'image' && node.url && /\.gif$/.test(node.url as string)) {
         let imagePath = path.resolve(file.dirname!, node.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
