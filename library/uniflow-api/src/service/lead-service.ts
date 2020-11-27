@@ -17,7 +17,7 @@ export default class LeadService {
     const lead = await this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
 
     const subscriberTypes: LeadSubscriberOptions = {types: []}
-    for(const type in options.types) {
+    for(const type of options.types) {
       if(type === 'newsletter' && !lead.optinNewsletter) {
         lead.optinNewsletter = true
         subscriberTypes.types.push(type)
@@ -39,6 +39,8 @@ export default class LeadService {
   public async getJson(lead: LeadEntity): Promise<Object> {
     return {
       'email': lead.email,
+      'optinNewsletter': lead.optinNewsletter,
+      'optinBlog': lead.optinBlog,
     }
   }
 }

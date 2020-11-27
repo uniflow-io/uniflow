@@ -1,5 +1,5 @@
 import { describe, test } from '@jest/globals'
-import { expect } from 'chai'
+import { expect, assert } from 'chai'
 import * as faker from 'faker'
 import { expectCreatedUri, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
@@ -16,7 +16,9 @@ describe('api-lead', () => {
                 email: email,
             }
         })
-        expect(body).to.have.all.keys('email')
+        expect(body).to.have.all.keys('email', 'optinNewsletter', 'optinBlog')
+        assert.isTrue(body.optinNewsletter)
+        assert.isTrue(body.optinBlog)
     });
 
     test.each([null, '', faker.random.word()])('POST /api/leads bad email format', async (email: any) => {
