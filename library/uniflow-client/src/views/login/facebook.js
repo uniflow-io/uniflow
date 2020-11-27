@@ -31,7 +31,7 @@ class FacebookLogin extends Component {
   }
 
   getAccessToken() {
-    let m = this.props.location.hash.match(/access_token=([^&]*)/)
+    let m = this.props.location.hash.match(/access_token=([^&]+)/)
     if (m) {
       return m[1]
     }

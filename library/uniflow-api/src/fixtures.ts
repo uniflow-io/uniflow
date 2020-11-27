@@ -1,11 +1,12 @@
 import { default as Container } from "./container";
 import { DatabaseLoader } from "./loader";
-import { ClientFixture, FolderFixture, TagFixture, UserFixture, ProgramFixture, MigrationFixture } from "./fixture";
+import { ClientFixture, FolderFixture, TagFixture, UserFixture, ProgramFixture, MigrationFixture, LeadFixture } from "./fixture";
 
 const loadFixtures = async () => {
     const databaseLoader = Container.get(DatabaseLoader)
     const migrationFixture = Container.get(MigrationFixture)
     const userFixture = Container.get(UserFixture)
+    const leadFixture = Container.get(LeadFixture)
     const folderFixture = Container.get(FolderFixture)
     const clientFixture = Container.get(ClientFixture)
     const tagFixture = Container.get(TagFixture)
@@ -15,6 +16,7 @@ const loadFixtures = async () => {
         await databaseLoader.load()
         await migrationFixture.load()
         await userFixture.load()
+        await leadFixture.load()
         await clientFixture.load()
         await tagFixture.load()
         await folderFixture.load()

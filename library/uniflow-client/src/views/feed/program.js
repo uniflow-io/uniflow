@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { navigate, Link } from 'gatsby'
+import { navigate } from 'gatsby'
 import debounce from 'lodash/debounce'
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -33,7 +33,6 @@ import {
 } from '../../reducers/feed/actions'
 import { commitAddLog } from '../../reducers/logs/actions'
 import { copyTextToClipboard } from '../../utils'
-import { pathTo } from '../../routes'
 
 class Program extends Component {
   state = {
@@ -566,21 +565,14 @@ class Program extends Component {
               Public
             </label>
 
-            {user.uid && (
-              <div className="col-sm-10">
-                <Checkbox
-                  className="form-control-plaintext"
-                  value={program.public}
-                  onChange={this.onChangePublic}
-                  id="info_public_{{ _uid }}"
-                />
-              </div>
-            )}
-            {!user.uid && (
-              <div className="col-sm-10 col-form-label">
-                <Link to={pathTo('settings')}>set your uid</Link>
-              </div>
-            )}
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={program.public}
+                onChange={this.onChangePublic}
+                id="info_public_{{ _uid }}"
+              />
+            </div>
           </div>
 
           <div className="form-group row">

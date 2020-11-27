@@ -4,7 +4,7 @@ import { LeadSubscriberInterface } from './interfaces';
 
 @Service()
 export default class MockedLeadSubscriber implements LeadSubscriberInterface {
-  public async subscribe(lead: LeadEntity): Promise<any> {
+  public async update(lead: LeadEntity): Promise<any> {
   }
 
   public async sync(): Promise<any> {

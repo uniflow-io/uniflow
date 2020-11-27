@@ -8,7 +8,7 @@ import * as remark2rehype from 'remark-rehype'
 import * as html from 'rehype-stringify'
 import { Transformer } from "unified";
 import { Node, Parent } from "unist";
-import { VFile } from 'vfile'
+import { VFile, VFileCompatible } from 'vfile'
 import { Service } from 'typedi'
 import { ParamsConfig } from '../../config'
 import { LeadSubscriberInterface } from './interfaces'
@@ -283,7 +283,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     this.env = this.paramsConfig.getConfig().get('env')
   }
 
-  public async subscribe(lead: LeadEntity): Promise<any> {
+  public async update(lead: LeadEntity): Promise<any> {
     const subscriberHash = md5(lead.email.toLowerCase())
 
     await this.mailchimp.lists.setListMember(this.listId, subscriberHash, {
@@ -294,22 +294,15 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       }
     })
 
-    const body: any = { tags: [] }
-
-    if (lead.optinNewsletter) {
-      body.tags.push({
+    await this.mailchimp.lists.updateListMemberTags(this.listId, subscriberHash, {
+      tags: [{
         name: "uniflow-newsletter",
-        status: "active",
-      })
-    }
-    if (lead.optinBlog) {
-      body.tags.push({
+        status: lead.optinNewsletter ? "active" : "inactive",
+      }, {
         name: "uniflow-blog",
-        status: "active",
-      })
-    }
-
-    await this.mailchimp.lists.updateListMemberTags(this.listId, subscriberHash, { body })
+        status: lead.optinBlog ? "active" : "inactive",
+      }]
+    })
   }
   
   private async getMergeFields(listId: string, options?: {count?: number, offset?: number}): Promise<Array<Mailchimp.MergeField>> {
@@ -434,7 +427,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
   private imagesInline(): Transformer {
     const transformer = async (node: Node, file: VFile): Promise<Node> => {
       if (!file.path) {
-        throw new Error("Cannot inline images because the path of the HTML file is unknown");
+        return node
       }
 
       if (node.type === 'image' && node.url && /\.png$/.test(node.url as string)) {
@@ -484,6 +477,23 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     await this.mailchimp.lists.updateListMergeField(this.listId, mergeField.merge_id, { name: "lead_id", type: "text", tag:"LEAD_ID" })
   }
 
+  private async processMailchimpMarkdown(vFile: VFileCompatible): Promise<string> {
+    return new Promise(resolve => {
+      const processor = unified().use(markdown).use(this.imagesInline).use(remark2rehype).use(html)
+      processor.process(vFile, function (error, htmlContent: VFile) {
+        if (error) throw error
+
+        htmlContent.contents = htmlContent.contents.toString()
+          .replace(/LEAD_ID/g, '*|LEAD_ID|*')
+          .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
+          .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
+          .replace(/RSSITEM\:CONTENT/g, '*|RSSITEM:CONTENT|*')
+        
+        resolve(htmlContent.contents)
+      })
+    })
+  }
+
   /**
    * this :
    * - read markdowns newsletters and create associated templates
@@ -521,30 +531,24 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
           },
           content: extract.slice(-1).join('').trim()
         }
-      }).map((data) => {
-        return new Promise(resolve => {
-          const markdownContent = [
+      }).map(async (data) => {
+        data.content = await this.processMailchimpMarkdown({
+          path: data.headers.path,
+          dirname: data.headers.dirname,
+          contents: [
             `# ${data.headers.title}`,
             '',
             data.content,
             '',
             '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
             '',
-            `[View this email in your browser](https://uniflow.io/newsletters/${data.headers.file})`
-          ].join('\n')
-
-          const processor = unified().use(markdown).use(this.imagesInline).use(remark2rehype).use(html)
-          processor.process({
-            path: data.headers.path,
-            dirname: data.headers.dirname,
-            contents: markdownContent,
-          }, function (error, htmlContent: VFile) {
-            if (error) throw error
-
-            data.content = htmlContent.contents.toString()
-            resolve(data)
-          })
+            `[View this email in your browser](https://uniflow.io/newsletters/${data.headers.file})`,
+            '',
+            `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
+          ].join('\n'),
         })
+
+        return data
       }))
       
     // create "uniflow-newsletter" folder in templates if missing
@@ -710,33 +714,28 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     // grab markdown newsletters headers and content
     const blog: any = await Promise.resolve({
         headers: {
-          title: 'Uniflow Blog',
+          title: 'RSSFEED:TITLE',
           date: null,
         },
-        content: 'New blog post on Uniflow'
-      }).then((data) => {
-      return new Promise(resolve => {
-        const content = [
-          `# RSSFEED:TITLE`,
-          '',
-          data.content,
-          '',
-          '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
-          '',
-          `[View this email in your browser](RSSFEED:URL)`
-        ].join('\n')
-
-        const processor = unified().use(markdown).use(remark2rehype).use(html)
-        processor.process(content, function (error, htmlContent: VFile) {
-          if (error) throw error
-
-          data.content = htmlContent.contents.toString()
-            .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
-            .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
-          resolve(data)
-        })
+        content: 'RSSITEM:CONTENT'
       })
-    })
+      .then(async (data) => {
+        data.content = await this.processMailchimpMarkdown({
+          contents: [
+            `# ${data.headers.title}`,
+            '',
+            data.content,
+            '',
+            '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
+            '',
+            `[View this email in your browser](RSSFEED:URL)`,
+            '',
+            `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
+          ].join('\n'),
+        })
+        
+        return data
+      })
 
     // create "uniflow-newsletter" folder in templates if missing
     const templateFolders: Array<Mailchimp.TemplateFolder> = await this.getTemplateFolders()

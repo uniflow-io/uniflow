@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
 import { ApiException } from '../exceptions'
-import { newsletter } from '../reducers/lead/actions'
+import { createLead } from '../reducers/lead/actions'
 import { pathTo } from '../routes'
-
 
 class Home extends Component {
   state = {
@@ -21,7 +20,7 @@ class Home extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
-      .dispatch(newsletter(this.state.email))
+      .dispatch(createLead(this.state.email))
       .then(data => {
         if (data) {
           this.setState({ state: 'sent' })
