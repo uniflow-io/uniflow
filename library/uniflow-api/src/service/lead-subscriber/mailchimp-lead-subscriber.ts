@@ -11,11 +11,29 @@ import { Node, Parent } from "unist";
 import { VFile } from 'vfile'
 import { Service } from 'typedi'
 import { ParamsConfig } from '../../config'
-import { LeadSubscriberOptions, LeadSubscriberInterface } from './interfaces'
+import { LeadSubscriberInterface } from './interfaces'
+import { LeadEntity } from '../../entity'
 
 const newslettersPath = `${__dirname}/../../../../../docs/newsletters`
 
 declare namespace Mailchimp {
+
+  interface MergeField {
+    merge_id: number,
+    tag: string,
+    name: string,
+    type: string,
+    required: boolean,
+    default_value: string,
+    public: boolean,
+    display_order: number,
+  }
+
+  interface MergeFields {
+    merge_fields: Array<MergeField>
+    total_items: number
+  }
+
   interface CampaignFolder {
     id: string
     name: string
@@ -88,6 +106,7 @@ declare namespace Mailchimp {
     campaigns: Array<Campaign>
     total_items: number
   }
+
   interface TemplateFolder {
     id: string
     name: string
@@ -264,31 +283,52 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     this.env = this.paramsConfig.getConfig().get('env')
   }
 
-  public async subscribe(email: string, options: LeadSubscriberOptions): Promise<any> {
-    const subscriberHash = md5(email.toLowerCase())
+  public async subscribe(lead: LeadEntity): Promise<any> {
+    const subscriberHash = md5(lead.email.toLowerCase())
 
     await this.mailchimp.lists.setListMember(this.listId, subscriberHash, {
-      email_address: email,
+      email_address: lead.email,
       status_if_new: "subscribed",
+      merge_fields: {
+        LEAD_ID: lead.uid,
+      }
     })
 
     const body: any = { tags: [] }
 
-    for(const type of options.types) {
-      if (type === 'newsletter') {
-        body.tags.push({
-          name: "uniflow-newsletter",
-          status: "active",
-        })
-      } else if (type === 'blog') {
-        body.tags.push({
-          name: "uniflow-blog",
-          status: "active",
-        })
-      }
+    if (lead.optinNewsletter) {
+      body.tags.push({
+        name: "uniflow-newsletter",
+        status: "active",
+      })
+    }
+    if (lead.optinBlog) {
+      body.tags.push({
+        name: "uniflow-blog",
+        status: "active",
+      })
     }
 
     await this.mailchimp.lists.updateListMemberTags(this.listId, subscriberHash, { body })
+  }
+  
+  private async getMergeFields(listId: string, options?: {count?: number, offset?: number}): Promise<Array<Mailchimp.MergeField>> {
+    const mergeFields: Array<Mailchimp.MergeField> = []
+    let items: Mailchimp.MergeFields
+
+    do {
+      options = options ?? {}
+      options.count = options.count ?? 10
+      options.offset = options.offset ?? 0
+
+      items = await this.mailchimp.lists.getListMergeFields(listId, options)
+      for(const item of items.merge_fields) {
+        mergeFields.push(item)
+      }
+      options.offset += 10
+    } while(items.total_items > mergeFields.length)
+
+    return mergeFields
   }
   
   private async getCampaignFolders(options?: {count?: number, offset?: number}): Promise<Array<Mailchimp.CampaignFolder>> {
@@ -425,6 +465,23 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     }
 
     return transformer
+  }
+
+  /**
+   * this :
+   * - add "lead_id" merge field if missing
+   */
+  private async syncMergeFields(): Promise<any> {
+    // create "lead_id" merge field in audience list if missing
+    const mergeFields: Array<Mailchimp.MergeField> = await this.getMergeFields(this.listId)
+    const mergeField: Mailchimp.MergeField = mergeFields.filter((mergeField:any) => {
+      return mergeField.name === 'lead_id'
+    }).shift() || await this.mailchimp.lists.addListMergeField(this.listId, { name: "lead_id", type: "text", tag:"LEAD_ID" })
+    if(!mergeField) {
+      throw new Error('MergeField "lead_id" was not created')
+    }
+
+    await this.mailchimp.lists.updateListMergeField(this.listId, mergeField.merge_id, { name: "lead_id", type: "text", tag:"LEAD_ID" })
   }
 
   /**
@@ -780,6 +837,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
   }
 
   public async sync(): Promise<any> {
+    await this.syncMergeFields()
     await this.syncNewsletters()
     await this.syncBlog()
   }

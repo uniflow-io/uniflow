@@ -14,22 +14,20 @@ export default class LeadService {
   ) {}
   
   public async subscribe(email: string, options: LeadSubscriberOptions): Promise<LeadEntity> {
-    const lead = await this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
+    let lead = await this.leadFactory.create(await this.leadRepository.findOne({email}) || {email})
 
-    const subscriberTypes: LeadSubscriberOptions = {types: []}
     for(const type of options.types) {
       if(type === 'newsletter' && !lead.optinNewsletter) {
         lead.optinNewsletter = true
-        subscriberTypes.types.push(type)
       }
       if(type === 'blog' && !lead.optinBlog) {
         lead.optinBlog = true
-        subscriberTypes.types.push(type)
       }
     }
-    
-    await this.leadSubscriber.subscribe(email, subscriberTypes)
-    return await this.leadRepository.save(lead);
+
+    lead = await this.leadRepository.save(lead)
+    await this.leadSubscriber.subscribe(lead)
+    return lead
   }
 
   public async isValid(email: string): Promise<boolean> {

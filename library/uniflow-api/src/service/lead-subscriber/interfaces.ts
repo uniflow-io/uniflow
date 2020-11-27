@@ -1,8 +1,10 @@
+import { LeadEntity } from "../../entity";
+
 export interface LeadSubscriberOptions {
   types: Array<'newsletter'|'blog'>
 }
 
 export interface LeadSubscriberInterface {
-  subscribe(email: string, options: LeadSubscriberOptions): Promise<any>;
+  subscribe(lead: LeadEntity): Promise<any>;
   sync(): Promise<any>;
 }
