@@ -15,7 +15,7 @@ export default function Header(props) {
             props.isRunning === false && (
               <button
                 type="button"
-                className="btn btn-success"
+                className="btn btn-primary"
                 onClick={props.onRun}
               >
                 <FontAwesomeIcon icon={faPlay}/>

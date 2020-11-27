@@ -608,7 +608,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="row">
                 <div className="col">
-                  <button className="btn btn-success" onClick={this.onRun}>
+                  <button className="btn btn-primary" onClick={this.onRun}>
                     <FontAwesomeIcon icon={faPlay} /> Play
                   </button>
                 </div>

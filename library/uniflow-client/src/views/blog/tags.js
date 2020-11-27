@@ -20,7 +20,7 @@ const Tags = ({ tags }) => {
               <Link
                 to={pathTo('tag', { tag: tag })}
                 key={tag}
-                className="btn btn-success mr-2"
+                className="btn btn-primary mr-2"
               >
                 <FontAwesomeIcon icon={faTag} /> {tag} ({tags[tag]})
               </Link>
