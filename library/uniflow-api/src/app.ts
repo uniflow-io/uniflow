@@ -37,7 +37,7 @@ export default class App {
 		await this.databaseLoader.load();
 		await this.serverLoader.load()
 		
-		return new Promise((resolve) => {
+		return new Promise((resolve: any) => {
 			const PORT = this.paramsConfig.getConfig().get('port');
 			const app = this.serverLoader.getApp()
 			app.on('error', (err: any) => {
