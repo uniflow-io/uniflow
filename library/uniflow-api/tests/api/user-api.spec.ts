@@ -56,7 +56,7 @@ describe('api-user', () => {
             uri: `/api/users/{{uid}}/settings`,
             email: 'user@uniflow.io',
         });
-        expect(body).to.have.all.keys('apiKey', 'facebookId', 'firstname', 'githubId', 'lastname', 'roles', 'uid', 'username')
+        expect(body).to.have.all.keys('apiKey', 'facebookId', 'firstname', 'githubId', 'lastname', 'roles', 'uid', 'username', 'email', 'links')
         assert.isArray(body.roles)
     });
 
@@ -67,7 +67,7 @@ describe('api-user', () => {
             email: 'user@uniflow.io',
             data: {}
         });
-        expect(body).to.have.all.keys('apiKey', 'facebookId', 'firstname', 'githubId', 'lastname', 'roles', 'uid', 'username')
+        expect(body).to.have.all.keys('apiKey', 'facebookId', 'firstname', 'githubId', 'lastname', 'roles', 'uid', 'username', 'email', 'links')
         assert.isArray(body.roles)
     })
 

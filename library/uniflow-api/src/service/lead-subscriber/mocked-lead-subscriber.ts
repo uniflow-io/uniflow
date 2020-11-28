@@ -1,9 +1,10 @@
 import { Service } from 'typedi';
-import { LeadSubscriberOptions, LeadSubscriberInterface } from './interfaces';
+import { LeadEntity } from '../../entity';
+import { LeadSubscriberInterface } from './interfaces';
 
 @Service()
 export default class MockedLeadSubscriber implements LeadSubscriberInterface {
-  public async subscribe(email: string, options: LeadSubscriberOptions): Promise<any> {
+  public async update(lead: LeadEntity): Promise<any> {
   }
 
   public async sync(): Promise<any> {

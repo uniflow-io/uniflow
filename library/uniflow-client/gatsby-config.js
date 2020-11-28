@@ -100,6 +100,7 @@ module.exports = {
                               nodes {
                                 id
                                 excerpt
+                                html
                                 fields {
                                   slug
                                 }
@@ -147,6 +148,7 @@ module.exports = {
                                     description: node.excerpt,
                                     url: `${siteMetadata.siteUrl}/blog/${node.fields.slug}`,
                                     guid: `${siteMetadata.siteUrl}/blog/${node.fields.slug}`,
+                                    custom_elements: [{ "content:encoded": node.html }],
                                     categories: node.frontmatter.tags,
                                     author: node.frontmatter.author.name,
                                     date: node.frontmatter.date,
@@ -169,8 +171,8 @@ module.exports = {
             resolve: `gatsby-plugin-mdx`,
             options: {
                 extensions: [`.mdx`, `.md`],
-                gatsbyRemarkPlugins: [`gatsby-remark-images`],
-                plugins: [`gatsby-remark-images`], // https://github.com/gatsbyjs/gatsby/issues/15486#issuecomment-510153237
+                gatsbyRemarkPlugins: [`gatsby-remark-images`, `gatsby-remark-static-images`],
+                plugins: [`gatsby-remark-images`, `gatsby-remark-static-images`], // https://github.com/gatsbyjs/gatsby/issues/15486#issuecomment-510153237
             },
         },
         {
@@ -213,6 +215,13 @@ module.exports = {
             options: {
                 path: `${docsPath}/blog`,
                 name: 'blog',
+            },
+        },
+        {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                path: `${docsPath}/newsletters`,
+                name: 'newsletters',
             },
         }
     ]

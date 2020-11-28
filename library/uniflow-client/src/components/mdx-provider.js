@@ -22,7 +22,7 @@ const components = {
       {props.children}
     </a>
   },
-  img: props => <span className="text-center">
+  img: props => <span className="d-flex">
     <img className="img-fluid mx-auto" alt={props.alt} {...props} />
   </span>,
   Link,

@@ -55,6 +55,11 @@ export const query = graphql`
         tags
         date(formatString: "MMMM Do YYYY")
       }
+      parent {
+        ... on File {
+          relativePath
+        }
+      }
     }
   }
 `

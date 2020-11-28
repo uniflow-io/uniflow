@@ -4,6 +4,8 @@
       link: /docs
     - title: Concepts
       link: /docs/concepts
+    - title: FAQ
+      link: /docs/faq
 - title: Getting Started
   items:
     - title: Quick Start

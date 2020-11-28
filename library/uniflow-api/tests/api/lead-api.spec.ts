@@ -1,32 +1,102 @@
-import { describe, test } from '@jest/globals'
-import { expect } from 'chai'
+import * as crypto from 'crypto'
 import * as faker from 'faker'
-import { expectCreatedUri, expectUnprocessableEntityUri } from '../utils';
+import { describe, test, beforeAll } from '@jest/globals'
+import { expect, assert } from 'chai'
+import { expectCreatedUri, expectOkUri, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
+import { LeadRepository } from '../../src/repository';
+import { LeadEntity } from '../../src/entity';
 
 describe('api-lead', () => {
     const app: App = Container.get(App)
+    let lead: LeadEntity
 
-    test.each([faker.internet.email()])('POST /api/leads success', async (email: string) => {
+    beforeAll(async () => {
+        const leadRepository = Container.get(LeadRepository)
+        const oneLead = await leadRepository.findOne()
+        if(!oneLead) {
+            throw new Error('Lead expected from fixtures')
+        }
+        lead = oneLead
+    })
+
+    test.each([{
+        email: faker.internet.email(),
+        optinNewsletter: true,
+        optinBlog: faker.random.boolean(),
+    }])('POST /api/leads success', async (data) => {
         const { body } = await expectCreatedUri(app, {
             protocol: 'post',
             uri: '/api/leads',
-            data: {
-                email: email,
-            }
+            data
         })
-        expect(body).to.have.all.keys('email')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
+        assert.strictEqual(body.email, data.email)
+        assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
+        assert.strictEqual(body.optinBlog, data.optinBlog)
     });
 
     test.each([null, '', faker.random.word()])('POST /api/leads bad email format', async (email: any) => {
         await expectUnprocessableEntityUri(app, {
             protocol: 'post',
-            uri: '/api/contacts',
+            uri: '/api/leads',
             data: {
                 email: email,
             },
             validationKeys: ['email']
         })
+    });
+
+    test('GET /api/leads/:uid success', async () => {
+        const { body } = await expectOkUri(app, {
+            protocol: 'get',
+            uri: `/api/leads/${lead.uid}`
+        });
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
+        assert.strictEqual(body.email, lead.email)
+        assert.strictEqual(body.optinNewsletter, lead.optinNewsletter)
+        assert.strictEqual(body.optinBlog, lead.optinBlog)
+    });
+
+    test.each([{
+        optinNewsletter: faker.random.boolean(),
+        optinBlog: faker.random.boolean(),
+    }])('PUT /api/leads/:uid success', async (data) => {
+        const { body } = await expectOkUri(app, {
+            protocol: 'put',
+            uri: `/api/leads/${lead.uid}`,
+            data,
+        });
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
+        assert.strictEqual(body.email, lead.email)
+        assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
+        assert.strictEqual(body.optinBlog, data.optinBlog)
+    });
+
+    test('POST /api/leads/github-webhook success', async () => {
+        const data = {
+            action: 'created',
+            sender: {
+                login: 'github_username'
+            }
+        }
+        const payload = JSON.stringify(data)
+        const hmac = crypto.createHmac('sha1', 'test_github_webhook_secret')
+        const digest = Buffer.from('sha1=' + hmac.update(payload).digest('hex'), 'utf8')
+        
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: `/api/leads/github-webhook`,
+            data,
+            headers: {
+                'X-Hub-Signature': digest
+            }
+        });
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
+        assert.strictEqual(body.email, 'github_username@gmail.com')
+        assert.strictEqual(body.optinNewsletter, false)
+        assert.strictEqual(body.optinBlog, false)
+        assert.strictEqual(body.optinGithub, true)
     });
 })

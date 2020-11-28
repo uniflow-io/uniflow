@@ -186,6 +186,19 @@ exports.createPages = async ({graphql, actions, reporter}) => {
           }
         }
       }
+      newsletters: allMdx(
+        filter: {fields: {sourceName: {eq: "newsletters"}}}
+      ) {
+        nodes {
+          id
+          fields {
+            slug
+          }
+          frontmatter {
+            title
+          }
+        }
+      }
       ${/*library: allNpmPackage(filter: {keywords: {in: ["uniflow-client", "uniflow-flow"]}, deprecated: {eq: "false"}}) {
         nodes {
           fields {
@@ -211,6 +224,7 @@ exports.createPages = async ({graphql, actions, reporter}) => {
         articles,
         docNav,
         docs,
+        newsletters,
         //library,
         localLibrary,
     } = result.data
@@ -240,6 +254,16 @@ exports.createPages = async ({graphql, actions, reporter}) => {
                 previous,
                 next,
             },
+        })
+    })
+
+    newsletters.nodes.forEach((newsletter) => {
+        createPage({
+          path: `/newsletters/${newsletter.fields.slug}`,
+          component: require.resolve("./src/templates/newsletter.js"),
+          context: {
+              ...newsletter,
+          },
         })
     })
 

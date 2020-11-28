@@ -33,6 +33,12 @@ test: ## test
 	NODE_ENV=test $(MAKE) fixtures
 	NODE_ENV=test $(NPM_BIN)/jest --maxWorkers=1
 
+uniflow-api-start: build ## uniflow-api-start
+	./bin/uniflow-api start
+
+uniflow-api-leads-sync: build ## uniflow-api-leads-sync
+	./bin/uniflow-api leads-sync
+
 # DEFAULT
 .DEFAULT_GOAL := help
 help:

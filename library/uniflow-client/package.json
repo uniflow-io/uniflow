@@ -67,6 +67,7 @@
     "gatsby-plugin-sharp": "^2.7.1",
     "gatsby-plugin-sitemap": "^2.5.1",
     "gatsby-remark-images": "^3.4.1",
+    "gatsby-remark-static-images": "^1.2.1",
     "gatsby-source-filesystem": "^2.4.2",
     "gatsby-source-npm-package-search": "^2.3.16",
     "gatsby-transformer-sharp": "^2.5.21",

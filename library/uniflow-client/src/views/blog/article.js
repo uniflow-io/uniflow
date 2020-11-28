@@ -4,6 +4,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import Img from 'gatsby-image'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit } from '@fortawesome/free-regular-svg-icons'
 import { pathTo } from '../../routes'
 import { MDXProvider } from '../../components'
 
@@ -67,6 +68,15 @@ class Article extends Component {
             <MDXProvider>
               <MDXRenderer>{article.body}</MDXRenderer>
             </MDXProvider>
+            <p>
+              <a
+                href={`https://github.com/uniflow-io/uniflow/blob/main/docs/blog/${article.parent.relativePath}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faEdit} /> Edit this page on GitHub
+              </a>
+            </p>
           </div>
         </div>
 

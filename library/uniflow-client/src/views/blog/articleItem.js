@@ -61,7 +61,7 @@ const ArticleItem = ({ article }) => (
             <Link
               to={pathTo('tag', { tag: tag })}
               key={k}
-              className="btn btn-sm btn-success"
+              className="btn btn-sm btn-primary"
             >
               <FontAwesomeIcon icon={faTag} /> {tag}
             </Link>

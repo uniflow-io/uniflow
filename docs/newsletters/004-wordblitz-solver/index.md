@@ -1,19 +1,26 @@
 ---
 title: Wordblitz Solver
 date: 2020-11-04
+index: 004
 ---
 
-Did you ever face your friends on funny smart games ? Sometimes you just want show your victory over your friends.
-Let me introduce Wordblitz, a Facebook crossword game, where the most world you found in a limited time, the more points you score. The winner is the one with the most points.
+Did you ever face your friends on funny smart games?  
+Sometimes you just want to show your victory over your friends.
 
-I do not know all worlds in the word and I hate time limited games based on reactivity. I ask myself : we already got dictionary, why do not let a computer search all the worlds for me.
+Let me introduce Wordblitz, a Facebook crossword game.  
+Rules are simple: the most world you found in a limited time, the more points you score.  
+The winner is the one with the most points.
 
-Here come Uniflow at help :
+I don't know all the words in the word and I hate time-limited games based on reactivity.  
+I ask myself: we already got a dictionary, why do not let a computer search all the worlds for me.
 
-**[look at flow we created](https://uniflow.io/public/feed/wordblitz-solver)**
+Here comes Uniflow to help :
 
-You enter the board that you see when game start, then choose your dictionnary language. On "Play button" pressed, Uniflow will show you all the world that you can find sorted by points.
+**[Look at the flow we created https://uniflow.io/public/feed/wordblitz-solver](https://uniflow.io/public/feed/wordblitz-solver)**
 
-If you are quick enought then you should easy win against anyone !
+You enter the board that you see when the game start, then choose your dictionary language.  
+On *"Play button"* pressed, Uniflow will show you all the world that you can find sorted by points.
 
-Happy Flowing 🚀 [https://uniflow.io](https://uniflow.io)
+If you are quick enough then you should easily win against anyone!
+
+Happy Flowing 🚀

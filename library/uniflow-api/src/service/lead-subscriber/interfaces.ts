@@ -1,8 +1,6 @@
-export interface LeadSubscriberOptions {
-  type: 'newsletter'
-}
+import { LeadEntity } from "../../entity";
 
 export interface LeadSubscriberInterface {
-  subscribe(email: string, options: LeadSubscriberOptions): Promise<any>;
+  update(lead: LeadEntity): Promise<any>;
   sync(): Promise<any>;
 }

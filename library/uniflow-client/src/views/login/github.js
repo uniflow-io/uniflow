@@ -29,7 +29,7 @@ class GithubLogin extends Component {
   }
 
   getCode() {
-    let m = this.props.location.search.match(/code=([^&]*)/)
+    let m = this.props.location.search.match(/code=([^&]+)/)
     if (m) {
       return m[1]
     }

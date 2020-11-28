@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { Link } from 'gatsby'
 import { ApiException } from '../exceptions'
-import { newsletter } from '../reducers/lead/actions'
+import { createLead } from '../reducers/lead/actions'
+import { pathTo } from '../routes'
 
 class Home extends Component {
   state = {
@@ -18,7 +20,11 @@ class Home extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
-      .dispatch(newsletter(this.state.email))
+      .dispatch(createLead({
+        email: this.state.email,
+        optinNewsletter: true,
+        optinBlog: true,
+      }))
       .then(data => {
         if (data) {
           this.setState({ state: 'sent' })
@@ -93,10 +99,11 @@ class Home extends Component {
                 <h1>Unified Workflow Automation Tool</h1>
                 <p>Take advantage of Flow Based Programming to automate your recurring tasks.</p>
 
-                <div id="newsletter-optin" className="d-flex justify-content-center pt-5">
+                <div id="newsletter-optin" className="d-flex justify-content-center pt-md-5">
                 {state === 'sent' && (
                   <div className="alert alert-success text-center" role="alert">
-                    {email} was succefully registered to the newsletter
+                    {email} was succefully registered to the newsletter.<br />
+                    Let's check <Link to={pathTo('tag', {tag: 'case-study'})}>some cases studies</Link> to get started.
                   </div>
                 )}
                 {(state === 'form' || state === 'sending') && (

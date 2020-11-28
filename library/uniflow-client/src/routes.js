@@ -18,6 +18,8 @@ import {
   Tag,
   Tags,
   Changelog,
+  Newsletter,
+  Notifications,
 } from './views'
 
 import { compile } from 'path-to-regexp'
@@ -61,6 +63,18 @@ const routes = {
   doc: {
     path: '/docs/:slug?',
     component: Doc,
+  },
+  newsletter: {
+    path: '/newsletters/:slug',
+    component: Newsletter,
+  },
+  notificationUnsubscribe: {
+    path: '/notifications/unsubscribe',
+    component: Notifications,
+  },
+  notificationManage: {
+    path: '/notifications/manage',
+    component: Notifications,
   },
   changelog: {
     path: '/changelog',
