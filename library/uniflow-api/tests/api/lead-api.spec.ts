@@ -1,6 +1,7 @@
+import * as crypto from 'crypto'
+import * as faker from 'faker'
 import { describe, test, beforeAll } from '@jest/globals'
 import { expect, assert } from 'chai'
-import * as faker from 'faker'
 import { expectCreatedUri, expectOkUri, expectUnprocessableEntityUri } from '../utils';
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
@@ -30,7 +31,7 @@ describe('api-lead', () => {
             uri: '/api/leads',
             data
         })
-        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
         assert.strictEqual(body.email, data.email)
         assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
         assert.strictEqual(body.optinBlog, data.optinBlog)
@@ -52,7 +53,7 @@ describe('api-lead', () => {
             protocol: 'get',
             uri: `/api/leads/${lead.uid}`
         });
-        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
         assert.strictEqual(body.email, lead.email)
         assert.strictEqual(body.optinNewsletter, lead.optinNewsletter)
         assert.strictEqual(body.optinBlog, lead.optinBlog)
@@ -67,9 +68,35 @@ describe('api-lead', () => {
             uri: `/api/leads/${lead.uid}`,
             data,
         });
-        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
         assert.strictEqual(body.email, lead.email)
         assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
         assert.strictEqual(body.optinBlog, data.optinBlog)
+    });
+
+    test('POST /api/leads/github-webhook success', async () => {
+        const data = {
+            action: 'created',
+            sender: {
+                login: 'github_username'
+            }
+        }
+        const payload = JSON.stringify(data)
+        const hmac = crypto.createHmac('sha1', 'test_github_webhook_secret')
+        const digest = Buffer.from('sha1=' + hmac.update(payload).digest('hex'), 'utf8')
+        
+        const { body } = await expectCreatedUri(app, {
+            protocol: 'post',
+            uri: `/api/leads/github-webhook`,
+            data,
+            headers: {
+                'X-Hub-Signature': digest
+            }
+        });
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
+        assert.strictEqual(body.email, 'github_username@gmail.com')
+        assert.strictEqual(body.optinNewsletter, false)
+        assert.strictEqual(body.optinBlog, false)
+        assert.strictEqual(body.optinGithub, true)
     });
 })

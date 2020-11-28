@@ -23,6 +23,11 @@ export default class MockedRequest implements RequestInterface {
       d = {
         id: 1
       }
+    } else if (url === 'https://api.github.com/users/github_username') {
+      d = {
+        login: 'github_username',
+        email: 'github_username@gmail.com'
+      }
     }
     
     return Promise.resolve({

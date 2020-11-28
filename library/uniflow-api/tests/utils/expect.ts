@@ -34,7 +34,8 @@ async function expectCode(
         uri: string,
         data?: string | object
         email?: string
-        code: number
+        code: number,
+        headers?: object,
     }
 ): Promise<request.Response>{
     let token = null
@@ -60,6 +61,11 @@ async function expectCode(
     if(token) {
         request = request.set({'Uniflow-Authorization': `Bearer ${token}`})
     }
+    if(data.headers) {
+        for(const [key, value] of Object.entries(data.headers)) {
+            request = request.set(key, value)
+        }
+    }
 
     return request.expect(data.code || 200)
 }
@@ -71,6 +77,7 @@ export async function expectOkUri(
         uri: string,
         data?: string | object
         email?: string
+        headers?: object,
     }
 ): Promise<request.Response>{
     return expectCode(app, {...data, code: 200})
@@ -83,6 +90,7 @@ export async function expectCreatedUri(
         uri: string,
         data?: string | object
         email?: string
+        headers?: object,
     }
 ): Promise<request.Response>{
     return expectCode(app, {...data, code: 201})
@@ -95,6 +103,7 @@ export async function expectNotAuthorisedUri(
         uri: string,
         data?: string | object
         email?: string
+        headers?: object,
     }
 ): Promise<request.Response>{
     return expectCode(app, {...data, code: 401})
@@ -107,6 +116,7 @@ export async function expectUnprocessableEntityUri(
         uri: string,
         data?: string | object
         email?: string
+        headers?: object,
         validationKeys: string[]
     }
 ): Promise<request.Response>{
