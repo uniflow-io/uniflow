@@ -20,7 +20,11 @@ class Home extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
-      .dispatch(createLead(this.state.email))
+      .dispatch(createLead({
+        email: this.state.email,
+        optinNewsletter: true,
+        optinBlog: true,
+      }))
       .then(data => {
         if (data) {
           this.setState({ state: 'sent' })

@@ -5,28 +5,64 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClipboard } from '@fortawesome/free-regular-svg-icons'
 import { facebookLoginUrl, githubLoginUrl } from '../reducers/auth/actions'
 import { updateSettings, commitUpdateSettings } from '../reducers/user/actions'
+import { getLead, createLead, updateLead } from '../reducers/lead/actions'
 import { copyTextToClipboard } from '../utils'
+import { Checkbox } from '../components'
 
 class Settings extends Component {
   state = {
     user: {
-      apiKey: null,
-      username: null,
-      firstname: null,
-      lastname: null,
-      facebookId: null,
-      githubId: null,
+      apiKey: undefined,
+      username: undefined,
+      email: undefined,
+      firstname: undefined,
+      lastname: undefined,
+      facebookId: undefined,
+      githubId: undefined,
+      links: {
+        lead: undefined,
+      }
+    },
+    lead: {
+      optinNewsletter: false,
+      optinBlog: false,
     },
     isSaving: false,
   }
 
   componentDidMount() {
     this.setState({ user: Object.assign({}, this.props.user) })
+
+    if(this.props.user.links.lead) {
+      this.props
+          .dispatch(getLead(this.props.user.links.lead))
+          .then(data => {
+            this.setState({
+              lead: {...this.state.lead, ...{
+                optinNewsletter: data.optinNewsletter,
+                optinBlog: data.optinBlog,
+              }},
+            })
+          })
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.user !== this.props.user) {
       this.setState({ user: Object.assign({}, this.props.user) })
+    
+      if(this.props.user.links.lead) {
+        this.props
+            .dispatch(getLead(this.props.user.links.lead))
+            .then(data => {
+              this.setState({
+                lead: {...this.state.lead, ...{
+                  optinNewsletter: data.optinNewsletter,
+                  optinBlog: data.optinBlog,
+                }},
+              })
+            })
+      }
     }
   }
 
@@ -70,17 +106,50 @@ class Settings extends Component {
     )
   }
 
+  onChangeOptinNewsletter = value => {
+    this.setState({
+      lead: { ...this.state.lead, ...{ optinNewsletter: value } },
+    })
+  }
+
+  onChangeOptinBlog = value => {
+    this.setState({
+      lead: { ...this.state.lead, ...{ optinBlog: value } },
+    })
+  }
+
   onUpdate = event => {
     if (event) {
       event.preventDefault()
     }
 
-    this.setState({ isSaving: true }, () => {
-      this.props
-        .dispatch(updateSettings(this.state.user, this.props.auth.token))
-        .then(() => {
-          this.setState({ isSaving: false })
-        })
+    const { user, lead } = this.state
+
+    new Promise(resolve => {
+      this.setState({ isSaving: true }, resolve)
+    })
+    .then(() => {
+      if(user.lead) {
+        return this.props.dispatch(updateLead(user.lead, {
+          optinNewsletter: lead.optinNewsletter,
+          optinBlog: lead.optinBlog,
+        }))
+      }
+
+      return this.props.dispatch(createLead({
+        email: user.email,
+        optinNewsletter: lead.optinNewsletter,
+        optinBlog: lead.optinBlog,
+      }))
+      .catch(e => {
+        
+      })
+    })
+    .then(() => {
+      return this.props.dispatch(updateSettings(user, this.props.auth.token))
+    })
+    .then(() => {
+      this.setState({ isSaving: false })
     })
   }
 
@@ -114,7 +183,7 @@ class Settings extends Component {
 
   render() {
     const { env } = this.props
-    const { user, isSaving } = this.state
+    const { user, lead, isSaving } = this.state
     const clipboard = this.getClipboard(user)
 
     return (
@@ -275,6 +344,40 @@ class Settings extends Component {
                   placeholder="api key"
                 />
               </div>
+            </div>
+          </div>
+          <div className="form-group row">
+            <label
+              htmlFor="notifications_optinNewsletter_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
+              Subscribe to the newsletter
+            </label>
+
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={lead.optinNewsletter}
+                onChange={this.onChangeOptinNewsletter}
+                id="notifications_optinNewsletter_{{ _uid }}"
+              />
+            </div>
+          </div>
+          <div className="form-group row">
+            <label
+              htmlFor="notifications_optinBlog_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
+              Subscribe to blog update
+            </label>
+
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={lead.optinBlog}
+                onChange={this.onChangeOptinBlog}
+                id="notifications_optinBlog_{{ _uid }}"
+              />
             </div>
           </div>
           <div className="form-group row">

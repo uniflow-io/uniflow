@@ -29,16 +29,24 @@ export default class LeadController implements ControllerInterface {
       celebrate({
         [Segments.BODY]: Joi.object().keys({
           email: Joi.string().required().email(),
+          optinNewsletter: Joi.boolean(),
+          optinBlog: Joi.boolean(),
         }),
       }),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const lead = await this.leadFactory.create(await this.leadRepository.findOne({email: req.body.email}) || {email: req.body.email})
-          lead.optinNewsletter = true
-          lead.optinBlog = true
 
-          if(await this.leadService.isValid(lead)) {    
-            await this.leadRepository.save(lead) //ensure lead uid is defined
+          if(req.body.optinNewsletter || req.body.optinNewsletter === false) {
+            lead.optinNewsletter = req.body.optinNewsletter
+          }
+
+          if(req.body.optinBlog || req.body.optinBlog === false) {
+            lead.optinBlog = req.body.optinBlog
+          }
+
+          if(await this.leadService.isValid(lead) && (lead.optinNewsletter || lead.optinBlog)) { // ensure lead creation only if one optin is true
+            await this.leadRepository.save(lead) //ensure lead uid is defined before subscribing
             await this.leadSubscriber.update(lead)
             await this.leadRepository.save(lead)
 
@@ -104,7 +112,7 @@ export default class LeadController implements ControllerInterface {
           }
 
           if(await this.leadService.isValid(lead)) {
-            await this.leadRepository.save(lead) //ensure lead uid is defined
+            await this.leadRepository.save(lead) //ensure lead uid is defined before subscribing
             await this.leadSubscriber.update(lead)
             await this.leadRepository.save(lead)
 

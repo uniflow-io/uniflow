@@ -7,9 +7,11 @@ import { matchRoute } from '../routes'
 
 class Notifications extends Component {
   state = {
-    uid: undefined,
-    optinNewsletter: false,
-    optinBlog: false,
+    lead: {
+      uid: undefined,
+      optinNewsletter: false,
+      optinBlog: false,
+    },
     errors: {},
     state: 'loading',
   }
@@ -29,7 +31,7 @@ class Notifications extends Component {
         }))
         .then(() => {
           this.setState({
-            uid,
+            lead: {...this.state.lead, ...{ uid }},
             state: 'sent-unsubscribe',
           })
         })
@@ -41,9 +43,11 @@ class Notifications extends Component {
           .dispatch(getLead(uid))
           .then(data => {
             this.setState({
-              uid,
-              optinNewsletter: data.optinNewsletter,
-              optinBlog: data.optinBlog,
+              lead: {...this.state.lead, ...{
+                uid,
+                optinNewsletter: data.optinNewsletter,
+                optinBlog: data.optinBlog,
+              }},
               state: 'form',
             })
           })
@@ -66,21 +70,23 @@ class Notifications extends Component {
   }
 
   onChangeOptinNewsletter = value => {
-    this.setState({optinNewsletter: value})
+    this.setState({lead: {...this.state.lead, ...{optinNewsletter: value}}})
   }
 
   onChangeOptinBlog = value => {
-    this.setState({optinBlog: value})
+    this.setState({lead: {...this.state.lead, ...{optinBlog: value}}})
   }
 
   onSubmit = e => {
     e.preventDefault()
 
+    const { lead } = this.state
+
     this.setState({ state: 'sending' }, () => {
       this.props
-      .dispatch(updateLead(this.state.uid, {
-        optinNewsletter: this.state.optinNewsletter,
-        optinBlog: this.state.optinBlog,
+      .dispatch(updateLead( lead.uid, {
+        optinNewsletter: lead.optinNewsletter,
+        optinBlog: lead.optinBlog,
       }))
       .then(() => {
         this.setState({ state: 'sent' })
@@ -94,7 +100,7 @@ class Notifications extends Component {
   }
 
   render() {
-    const { state, optinNewsletter, optinBlog } = this.state
+    const { state, lead } = this.state
     return (
       <section className="section container-fluid">
         <h3 className="box-title">Notifications</h3>
@@ -122,7 +128,7 @@ class Notifications extends Component {
             <div className="col-sm-10">
               <Checkbox
                 className="form-control-plaintext"
-                value={optinNewsletter}
+                value={lead.optinNewsletter}
                 onChange={this.onChangeOptinNewsletter}
                 id="notifications_optinNewsletter_{{ _uid }}"
               />
@@ -139,7 +145,7 @@ class Notifications extends Component {
             <div className="col-sm-10">
               <Checkbox
                 className="form-control-plaintext"
-                value={optinBlog}
+                value={lead.optinBlog}
                 onChange={this.onChangeOptinBlog}
                 id="notifications_optinBlog_{{ _uid }}"
               />

@@ -20,18 +20,20 @@ describe('api-lead', () => {
         lead = oneLead
     })
 
-    test.each([faker.internet.email()])('POST /api/leads success', async (email: string) => {
+    test.each([{
+        email: faker.internet.email(),
+        optinNewsletter: true,
+        optinBlog: faker.random.boolean(),
+    }])('POST /api/leads success', async (data) => {
         const { body } = await expectCreatedUri(app, {
             protocol: 'post',
             uri: '/api/leads',
-            data: {
-                email: email,
-            }
+            data
         })
-        expect(body).to.have.all.keys('email', 'optinNewsletter', 'optinBlog')
-        assert.strictEqual(body.email, email)
-        assert.strictEqual(body.optinNewsletter, true)
-        assert.strictEqual(body.optinBlog, true)
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
+        assert.strictEqual(body.email, data.email)
+        assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
+        assert.strictEqual(body.optinBlog, data.optinBlog)
     });
 
     test.each([null, '', faker.random.word()])('POST /api/leads bad email format', async (email: any) => {
@@ -50,7 +52,7 @@ describe('api-lead', () => {
             protocol: 'get',
             uri: `/api/leads/${lead.uid}`
         });
-        expect(body).to.have.all.keys('email', 'optinNewsletter', 'optinBlog')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
         assert.strictEqual(body.email, lead.email)
         assert.strictEqual(body.optinNewsletter, lead.optinNewsletter)
         assert.strictEqual(body.optinBlog, lead.optinBlog)
@@ -65,7 +67,7 @@ describe('api-lead', () => {
             uri: `/api/leads/${lead.uid}`,
             data,
         });
-        expect(body).to.have.all.keys('email', 'optinNewsletter', 'optinBlog')
+        expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog')
         assert.strictEqual(body.email, lead.email)
         assert.strictEqual(body.optinNewsletter, data.optinNewsletter)
         assert.strictEqual(body.optinBlog, data.optinBlog)

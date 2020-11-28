@@ -9,6 +9,7 @@ export default class LeadService {
   
   public async getJson(lead: LeadEntity): Promise<Object> {
     return {
+      uid: lead.uid,
       email: lead.email,
       optinNewsletter: lead.optinNewsletter,
       optinBlog: lead.optinBlog,

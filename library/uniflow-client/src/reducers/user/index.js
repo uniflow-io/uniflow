@@ -4,14 +4,18 @@ import {
 } from './actions-types'
 
 const defaultState = {
-  uid: null,
-  apiKey: null,
-  username: null,
-  firstname: null,
-  lastname: null,
-  facebookId: null,
-  githubId: null,
+  uid: undefined,
+  apiKey: undefined,
+  username: undefined,
+  email: undefined,
+  firstname: undefined,
+  lastname: undefined,
+  facebookId: undefined,
+  githubId: undefined,
   roles: [],
+  links: {
+    lead: undefined,
+  }
 }
 
 const user = (state = defaultState, action) => {

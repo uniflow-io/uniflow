@@ -2,11 +2,13 @@ import request from 'axios'
 import server from '../../utils/server'
 import { ApiException } from '../../exceptions'
 
-export const createLead = (email) => {
+export const createLead = ({email, optinNewsletter, optinBlog}) => {
   return async dispatch => {
     return request
       .post(`${server.getBaseUrl()}/api/leads`, {
-        email: email,
+        email,
+        optinNewsletter,
+        optinBlog,
       })
       .then(response => {
         return response.data

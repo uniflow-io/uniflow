@@ -295,13 +295,15 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     })
 
     await this.mailchimp.lists.updateListMemberTags(this.listId, subscriberHash, {
-      tags: [{
-        name: "uniflow-newsletter",
-        status: lead.optinNewsletter ? "active" : "inactive",
-      }, {
-        name: "uniflow-blog",
-        status: lead.optinBlog ? "active" : "inactive",
-      }]
+      body: {
+        tags: [{
+          name: "uniflow-newsletter",
+          status: lead.optinNewsletter ? "active" : "inactive",
+        }, {
+          name: "uniflow-blog",
+          status: lead.optinBlog ? "active" : "inactive",
+        }]
+      }
     })
   }
   
