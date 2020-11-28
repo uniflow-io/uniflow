@@ -29,10 +29,10 @@ export const getLead = (uid) => {
   }
 }
 
-export const updateLead = (uid, {optinNewsletter, optinBlog}) => {
+export const updateLead = (uid, {optinNewsletter, optinBlog, optinGithub}) => {
   return async dispatch => {
     return request
-      .put(`${server.getBaseUrl()}/api/leads/${uid}`, {optinNewsletter, optinBlog})
+      .put(`${server.getBaseUrl()}/api/leads/${uid}`, {optinNewsletter, optinBlog, optinGithub})
       .then(response => {
         return response.data
       })

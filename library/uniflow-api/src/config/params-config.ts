@@ -44,6 +44,8 @@ export type AppConfig = {
   facebookAppId: string,
   githubAppId: string,
   githubAppSecret: string,
+  githubWebhookSecret: string,
+  githubEmailToken: string,
   mailerUrl: string,
   mailchimp: MailChimpConfig,
 };
@@ -194,6 +196,18 @@ export default class ParamsConfig {
         default: '',
         env: 'GITHUB_APP_SECRET',
         doc: 'Github App Secret'
+      },
+      githubWebhookSecret: {
+        format: String,
+        default: '',
+        env: 'GITHUB_WEBHOOK_SECRET',
+        doc: 'Github Webhook Secret : https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/securing-your-webhooks',
+      },
+      githubEmailToken: {
+        format: String,
+        default: '',
+        env: 'GITHUB_EMAIL_TOKEN',
+        doc: 'Github Email Token : https://github.com/settings/tokens/new?description=github-email',
       },
       mailerUrl: {
         format: String,

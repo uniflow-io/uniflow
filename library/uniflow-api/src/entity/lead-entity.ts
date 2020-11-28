@@ -27,6 +27,13 @@ export default class LeadEntity {
   email: string;
 
   @Column({
+    type: "varchar",
+    length: 255,
+    nullable: true,
+  })
+  githubUsername: string|null;
+
+  @Column({
     type: "boolean",
     default: false,
     nullable: false,
@@ -39,6 +46,13 @@ export default class LeadEntity {
     nullable: false,
   })
   optinBlog: boolean;
+
+  @Column({
+    type: "boolean",
+    default: false,
+    nullable: false,
+  })
+  optinGithub: boolean;
 
   @CreateDateColumn()
   created: Date

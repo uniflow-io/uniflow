@@ -26,6 +26,8 @@ class Settings extends Component {
     lead: {
       optinNewsletter: false,
       optinBlog: false,
+      optinGithub: false,
+      githubUsername: null,
     },
     isSaving: false,
   }
@@ -41,6 +43,8 @@ class Settings extends Component {
               lead: {...this.state.lead, ...{
                 optinNewsletter: data.optinNewsletter,
                 optinBlog: data.optinBlog,
+                optinGithub: data.optinGithub,
+                githubUsername: data.githubUsername,
               }},
             })
           })
@@ -59,6 +63,8 @@ class Settings extends Component {
                 lead: {...this.state.lead, ...{
                   optinNewsletter: data.optinNewsletter,
                   optinBlog: data.optinBlog,
+                  optinGithub: data.optinGithub,
+                  githubUsername: data.githubUsername,
                 }},
               })
             })
@@ -118,6 +124,12 @@ class Settings extends Component {
     })
   }
 
+  onChangeOptinGithub = value => {
+    this.setState({
+      lead: { ...this.state.lead, ...{ optinGithub: value } },
+    })
+  }
+
   onUpdate = event => {
     if (event) {
       event.preventDefault()
@@ -129,10 +141,11 @@ class Settings extends Component {
       this.setState({ isSaving: true }, resolve)
     })
     .then(() => {
-      if(user.lead) {
-        return this.props.dispatch(updateLead(user.lead, {
+      if(user.links.lead) {
+        return this.props.dispatch(updateLead(user.links.lead, {
           optinNewsletter: lead.optinNewsletter,
           optinBlog: lead.optinBlog,
+          optinGithub: lead.optinGithub,
         }))
       }
 
@@ -368,7 +381,7 @@ class Settings extends Component {
               htmlFor="notifications_optinBlog_{{ _uid }}"
               className="col-sm-2 col-form-label"
             >
-              Subscribe to blog update
+              Subscribe to blog updates
             </label>
 
             <div className="col-sm-10">
@@ -380,6 +393,25 @@ class Settings extends Component {
               />
             </div>
           </div>
+          {lead.githubUsername && (
+          <div className="form-group row">
+            <label
+              htmlFor="notifications_optinGithub_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
+              Subscribe to github updates
+            </label>
+
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={lead.optinGithub}
+                onChange={this.onChangeOptinGithub}
+                id="notifications_optinGithub_{{ _uid }}"
+              />
+            </div>
+          </div>
+          )}
           <div className="form-group row">
             <div className="offset-sm-2 col-sm-10">
               <button

@@ -13,6 +13,8 @@ export default class LeadService {
       email: lead.email,
       optinNewsletter: lead.optinNewsletter,
       optinBlog: lead.optinBlog,
+      optinGithub: lead.optinGithub,
+      githubUsername: lead.githubUsername,
     }
   }
 }

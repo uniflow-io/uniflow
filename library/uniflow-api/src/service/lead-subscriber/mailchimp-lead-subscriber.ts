@@ -291,6 +291,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       status_if_new: "subscribed",
       merge_fields: {
         LEAD_ID: lead.uid,
+        GUSERNAME: lead.githubUsername,
       }
     })
 
@@ -302,6 +303,9 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         }, {
           name: "uniflow-blog",
           status: lead.optinBlog ? "active" : "inactive",
+        }, {
+          name: "uniflow-github",
+          status: lead.optinGithub ? "active" : "inactive",
         }]
       }
     })
@@ -469,14 +473,22 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
   private async syncMergeFields(): Promise<any> {
     // create "lead_id" merge field in audience list if missing
     const mergeFields: Array<Mailchimp.MergeField> = await this.getMergeFields(this.listId)
-    const mergeField: Mailchimp.MergeField = mergeFields.filter((mergeField:any) => {
+
+    const leadIdMergeField: Mailchimp.MergeField = mergeFields.filter((mergeField:any) => {
       return mergeField.name === 'lead_id'
     }).shift() || await this.mailchimp.lists.addListMergeField(this.listId, { name: "lead_id", type: "text", tag:"LEAD_ID" })
-    if(!mergeField) {
+    if(!leadIdMergeField) {
       throw new Error('MergeField "lead_id" was not created')
     }
+    await this.mailchimp.lists.updateListMergeField(this.listId, leadIdMergeField.merge_id, { name: "lead_id", type: "text", tag:"LEAD_ID" })
 
-    await this.mailchimp.lists.updateListMergeField(this.listId, mergeField.merge_id, { name: "lead_id", type: "text", tag:"LEAD_ID" })
+    const githubUsernameMergeField: Mailchimp.MergeField = mergeFields.filter((mergeField:any) => {
+      return mergeField.name === 'github_username'
+    }).shift() || await this.mailchimp.lists.addListMergeField(this.listId, { name: "github_username", type: "text", tag:"GUSERNAME" })
+    if(!githubUsernameMergeField) {
+      throw new Error('MergeField "github_username" was not created')
+    }
+    await this.mailchimp.lists.updateListMergeField(this.listId, githubUsernameMergeField.merge_id, { name: "github_username", type: "text", tag:"GUSERNAME" })
   }
 
   private async processMailchimpMarkdown(vFile: VFileCompatible): Promise<string> {
@@ -487,6 +499,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
 
         htmlContent.contents = htmlContent.contents.toString()
           .replace(/LEAD_ID/g, '*|LEAD_ID|*')
+          .replace(/GUSERNAME/g, '*|GUSERNAME|*')
           .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
           .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
           .replace(/RSSITEM\:CONTENT/g, '*|RSSITEM:CONTENT|*')
@@ -713,7 +726,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
    * - check automation associated to the blog template and report config errors
    */
   public async syncBlog(): Promise<any> {
-    // grab markdown newsletters headers and content
+    // grab blog headers and content
     const blog: any = await Promise.resolve({
         headers: {
           title: 'RSSFEED:TITLE',
@@ -739,7 +752,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         return data
       })
 
-    // create "uniflow-newsletter" folder in templates if missing
+    // create "uniflow-blog" folder in templates if missing
     const templateFolders: Array<Mailchimp.TemplateFolder> = await this.getTemplateFolders()
     const templateFolder: Mailchimp.TemplateFolder = templateFolders.filter((folder:any) => {
       return folder.name === 'uniflow-blog'
@@ -837,9 +850,183 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     }
   }
 
+  /**
+   * this :
+   * - create github template
+   * - check automation associated to the github template and report config errors
+   */
+  public async syncGithub(): Promise<any> {
+    // grab github headers and content
+    const github: any = await Promise.resolve({
+        headers: {
+          title: 'Thanks for adding a ⭐️ to Uniflow on GitHub',
+          date: null,
+        },
+        content: [
+          'Hello GUSERNAME,',
+          '',
+          `We just have seen that you've recently starred the [Uniflow](https://github.com/uniflow-io/uniflow) repository on GitHub.  `,
+          `Thanks a lot for that! Really appreciate it.  `,
+          `We've put a lot of effort into that project.`,
+          '',
+          `If there's anything you need,  `,
+          `**[Feel free to contact us https://uniflow.io/contact](https://uniflow.io/contact)**.`,
+          '',
+          `We’d appreciate if you could **share your thoughts about automation** with us.  `,
+          `Our goal is to deliver more value to you.`,
+          '',
+          'Happy flowing. 🎉',
+        ].join('\n')
+      })
+      .then(async (data) => {
+        data.content = await this.processMailchimpMarkdown({
+          contents: [
+            `# ${data.headers.title}`,
+            '',
+            data.content,
+            '',
+            '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
+            '',
+            `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
+          ].join('\n'),
+        })
+        
+        return data
+      })
+
+    // create "uniflow-gihub" folder in templates if missing
+    const templateFolders: Array<Mailchimp.TemplateFolder> = await this.getTemplateFolders()
+    const templateFolder: Mailchimp.TemplateFolder = templateFolders.filter((folder:any) => {
+      return folder.name === 'uniflow-github'
+    }).shift() || await this.mailchimp.templateFolders.create({ name: "uniflow-github" })
+
+    // sync templates
+    const templateTitle = 'Uniflow Github'
+    let template = (await this.getTemplates({folder_id: templateFolder.id}))
+      .filter((template) => {
+        return template.name === templateTitle
+      })
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name)
+      })
+      .shift()
+    
+    const templateData = {
+      name: `${templateTitle}`.slice(0, 50),
+      html: github.content,
+      folder_id: templateFolder.id,
+    }
+    
+    template = template ?? await this.mailchimp.templates.create(templateData)
+    if(!template) {
+      throw new Error(`template ${templateTitle} was not created`)
+    }
+    template = await this.mailchimp.templates.updateTemplate(template.id, templateData)
+    if(!template) {
+      throw new Error(`template ${templateTitle} was not created`)
+    }
+
+    // create "uniflow-github" folder in campaigns if missing
+    const campaignFolders: Array<Mailchimp.CampaignFolder> = await this.getCampaignFolders()
+    const campaignFolder: Mailchimp.CampaignFolder = campaignFolders.filter((folder:any) => {
+      return folder.name === 'uniflow-github'
+    }).shift() || await this.mailchimp.campaignFolders.create({ name: "uniflow-github" })
+    if(!campaignFolder) {
+      throw new Error('Campaign folder "uniflow-github" was not created')
+    }
+
+    const errorMessages: Array<string> = []
+    const automationTitle = 'Uniflow Automated Github'
+    const automation = (await this.getAutomations())
+      .filter((automation) => {
+        return automation.settings.title === automationTitle
+      }).sort((a, b) => {
+        return a.settings.title.localeCompare(b.settings.title)
+      })
+      .shift()
+    
+    if(!automation) {
+      throw new Error(`You must create a new Github Automation titled "${automationTitle}"`)
+    }
+
+    if(automation.status !== 'sending') {
+      errorMessages.push(`${automation.settings.title} status must be "sending"`)
+    }
+    if(automation.settings.from_name !== 'Uniflow') {
+      errorMessages.push(`${automation.settings.title} settings.from_name must be "Uniflow"`)
+    }
+    if(automation.settings.reply_to !== 'contact@uniflow.io' && this.env === 'production') {
+      errorMessages.push(`${automation.settings.title} settings.reploy_to must be "contact@uniflow.io"`)
+    }
+    if(automation.recipients.list_id !== this.listId) {
+      errorMessages.push(`${automation.settings.title} recipients.list_id !== ${this.listId}`)
+    }
+
+    const emails = await this.getEmails(automation.id);
+    if(emails.length !== 1) {
+      errorMessages.push(`${automation.settings.title} must contain only one email`)
+    }
+
+    //await this.mailchimp.automations.pauseAllEmails(automation.id)
+    for(const email of emails) {
+      //await this.mailchimp.automations.pauseWorkflowEmail(automation.id, email.id)
+
+      if(email.status !== 'sending') {
+        errorMessages.push(`${automation.settings.title} email.status !== sending`)
+      }
+
+      if(email.delay.type !== 'now') {
+        errorMessages.push(`${automation.settings.title} email.delay.type !== now`)
+      }
+      if(email.delay.action !== 'signup') {
+        errorMessages.push(`${automation.settings.title} email.delay.action !== signup`)
+      }
+
+      if(email.recipients.list_id !== this.listId) {
+        errorMessages.push(`${automation.settings.title} email.recipients.list_id !== ${this.listId}`)
+      }
+      if(email.recipients.segment_text.indexOf('Tags contact is tagged <strong>uniflow-github</strong>') === -1) {
+        errorMessages.push(`${automation.settings.title} email.recipients.segment_text not tagged "uniflow-github"`)
+      }
+
+      const title = github.headers.title.slice(0, 150)
+      if(email.settings.subject_line !== title) {
+        errorMessages.push(`${automation.settings.title} email.settings.subject_line !== "${title}"`)
+      }
+      if(email.settings.preview_text !== title) {
+        errorMessages.push(`${automation.settings.title} email.settings.preview_text !== "${title}"`)
+      }
+      if(email.settings.title !== title) {
+        errorMessages.push(`${automation.settings.title} email.settings.title !== "${title}"`)
+      }
+      if(email.settings.from_name !== "Uniflow") {
+        errorMessages.push(`${automation.settings.title} email.settings.from_name !== "Uniflow"`)
+      }
+      if(email.settings.reply_to !== 'contact@uniflow.io' && this.env === 'production') {
+        errorMessages.push(`${automation.settings.title} email.settings.reply_to !== "contact@uniflow.io"`)
+      }
+      if(email.settings.template_id !== template.id) {
+        errorMessages.push(`${automation.settings.title} email.settings.template_id !== ${template.id}`)
+      }
+      
+      /*await this.mailchimp.automations.updateWorkflowEmail(automation.id, email.id, {
+        settings: {
+          title: newletter.headers.title.slice(0, 150),
+        },
+      });*/
+
+      //await this.mailchimp.automations.startWorkflowEmail(automation.id, email.id)
+    }
+
+    if(errorMessages.length > 0) {
+      throw new Error(errorMessages.join('\n'))
+    }
+  }
+
   public async sync(): Promise<any> {
     await this.syncMergeFields()
     await this.syncNewsletters()
     await this.syncBlog()
+    await this.syncGithub()
   }
 }
