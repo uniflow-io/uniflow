@@ -149,14 +149,13 @@ class Settings extends Component {
         }))
       }
 
-      return this.props.dispatch(createLead({
-        email: user.email,
-        optinNewsletter: lead.optinNewsletter,
-        optinBlog: lead.optinBlog,
-      }))
-      .catch(e => {
-        
-      })
+      if(lead.optinNewsletter || lead.optinBlog) {
+        return this.props.dispatch(createLead({
+          email: user.email,
+          optinNewsletter: lead.optinNewsletter,
+          optinBlog: lead.optinBlog,
+        }))
+      }
     })
     .then(() => {
       return this.props.dispatch(updateSettings(user, this.props.auth.token))

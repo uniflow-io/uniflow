@@ -291,7 +291,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
       status_if_new: "subscribed",
       merge_fields: {
         LEAD_ID: lead.uid,
-        GUSERNAME: lead.githubUsername,
+        GUSERNAME: lead.githubUsername || '',
       }
     })
 
