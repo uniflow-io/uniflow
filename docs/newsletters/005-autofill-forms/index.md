@@ -4,8 +4,8 @@ date: 2020-11-05
 index: 005
 ---
 
-When browsing the web, you sometime have to fill forms.  
-Some forms can have lot of fields but you don't want to fill each one manually.
+When browsing the web, sometimes you have to fill forms.  
+Some forms can have a lot of fields but you don't want to fill each one manually.
 
 With Uniflow, you can download the [chrome extension](https://chrome.google.com/webstore/detail/uniflow-client/addfkelofconemofddhmmdgdiolnhppl).
 
