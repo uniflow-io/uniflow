@@ -7,8 +7,8 @@ index: 005
 When browsing the web, you sometime have to fill forms.  
 Some forms can have lot of fields but you don't want to fill each one manually.
 
-With Uniflow, you can download the chrome plugin.
+With Uniflow, you can download the chrome extension.
 
-**[This Flow can then help you to automate field filling https://uniflow.io/public/feed/auto-fill-forms](https://uniflow.io/public/feed/auto-fill-forms)**
+**[Then this Flow can then help you to automate field filling https://uniflow.io/public/feed/auto-fill-forms](https://uniflow.io/public/feed/auto-fill-forms)**
 
 Happy Flowing 🚀
