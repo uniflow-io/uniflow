@@ -1,4 +1,3 @@
-import * as crypto from 'crypto'
 import * as faker from 'faker'
 import { describe, test, beforeAll } from '@jest/globals'
 import { expect, assert } from 'chai'
@@ -75,22 +74,17 @@ describe('api-lead', () => {
     });
 
     test('POST /api/leads/github-webhook success', async () => {
-        const data = {
-            action: 'created',
-            sender: {
-                login: 'github_username'
-            }
-        }
-        const payload = JSON.stringify(data)
-        const hmac = crypto.createHmac('sha1', 'test_github_webhook_secret')
-        const digest = Buffer.from('sha1=' + hmac.update(payload).digest('hex'), 'utf8')
-        
         const { body } = await expectCreatedUri(app, {
             protocol: 'post',
             uri: `/api/leads/github-webhook`,
-            data,
+            data: {
+                action: 'created',
+                sender: {
+                    login: 'github_username'
+                }
+            },
             headers: {
-                'X-Hub-Signature': digest
+                'X-Hub-Signature': 'sha1=e717896263bb2650c3b1639813acc4e5deae7cd3' //generated digest from POST data
             }
         });
         expect(body).to.have.all.keys('uid', 'email', 'optinNewsletter', 'optinBlog', 'optinGithub', 'githubUsername')
