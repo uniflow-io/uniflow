@@ -12,7 +12,7 @@ tags: ["blog"]
 Did you know that, since [the latest release](https://uniflow.io/changelog), you can now subscribe to the newsletter? How to do that?  
 
 Nothing more simple as [going to the homepage](https://uniflow.io).  
-Then fill your email address, and click on *"Subscribe to the newsletter"* button.
+Then fill the form with your email address, and click on *"Subscribe to the newsletter"* button.
 
 That's it! ✅ You will receive smart recommendations update on Uniflow. 📧  
 It's the best way to stay tuned on important updates by email.  📨

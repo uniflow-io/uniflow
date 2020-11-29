@@ -559,6 +559,8 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             '',
             `[View this email in your browser](https://uniflow.io/newsletters/${data.headers.file})`,
             '',
+            `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
+            '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
           ].join('\n'),
         })
@@ -745,6 +747,8 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             '',
             `[View this email in your browser](RSSFEED:URL)`,
             '',
+            `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
+            '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
           ].join('\n'),
         })
@@ -886,6 +890,8 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             data.content,
             '',
             '[https://uniflow.io](https://uniflow.io) - [Github](https://github.com/uniflow-io/uniflow) - [Twitter](https://twitter.com/uniflow_io)',
+            '',
+            `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
             '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
           ].join('\n'),
