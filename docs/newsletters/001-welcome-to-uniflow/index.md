@@ -1,5 +1,5 @@
 ---
-title: Welcome to Uniflow 💧
+title: Welcome to Uniflow
 date: 2020-11-01
 index: 001
 ---
