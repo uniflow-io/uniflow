@@ -1,7 +1,7 @@
 UNIFLOW
 -------
 
-Uniflow is a free and open [fair-code](http://faircode.io) licensed Flow based Workflow Automation Tool.
+Uniflow is an open [fair-code](http://faircode.io) distributed Flow based Workflow Automation Tool.
 
 You have to :
 - Identify in your everyday life, you can think about tasks that are recurring.
@@ -19,7 +19,7 @@ And the runner is specificaly implemented to various way on : Browser, Node, You
 
 ## Documentation
 
-The official uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
+The official Uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
 
 Additional information and example workflows on the uniflow.io website: [https://uniflow.io/flows](https://uniflow.io/flows)
 
@@ -32,6 +32,6 @@ If you have problems or questions go to our contact page, we will then try to he
 
 ## License
 
-uniflow is [fair-code](http://faircode.io) licensed under [Apache 2.0 with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md)
+Uniflow is [fair-code](http://faircode.io) licensed under [Apache 2.0 with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md)
 
 Additional information about license can be found in the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use)
