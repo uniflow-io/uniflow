@@ -1,7 +1,9 @@
+import { Link } from 'gatsby'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ApiException } from '../exceptions'
 import { contact } from '../reducers/contact/actions'
+import { pathTo } from '../routes'
 
 class Contact extends Component {
   state = {
@@ -47,7 +49,10 @@ class Contact extends Component {
           <div className="col-md-12">
             <h3>Contact</h3>
             {state === 'sent' && (
-              <p className="text-center">Your message has been sent</p>
+              <div className="alert alert-success text-center" role="alert">
+                Your message has been sent, we will glad to ear from you !<br />
+                In case check <Link to={pathTo('doc', {'slug': 'faq'})}>FAQ</Link> page to see if your question has been answered already.
+              </div>
             )}
             {(state === 'form' || state === 'sending') && [
               <p className="text-center" key="say">
