@@ -26,6 +26,6 @@ Moreover, Uniflow depends on lot of other open source projects. We care about th
 That is why we have planned to contribute a certain percentage of revenue/profit every month to these projects.
 
 For any questions about Uniflow License, we cover more details into the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use).  
-If you have any questions about this, feel free to reach out to us at contact@uniflow.io.
+If you have any questions about this, feel free to reach out to us by [filling our contact form](https://uniflow.io/contact).
 
 Happy flowing. 🎉
