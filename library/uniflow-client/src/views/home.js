@@ -162,7 +162,7 @@ class Home extends Component {
               <p>Run your Flows on dedicated Clients.</p>
             </div>
             <div className="col-lg-4 py-md-5">
-              <h3>Free and Open</h3>
+              <h3>Open</h3>
               <p>Uniflow is fair-code licensed.</p>
             </div>
             <div className="col-lg-4 py-md-5">
