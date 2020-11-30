@@ -163,7 +163,7 @@ class Home extends Component {
             </div>
             <div className="col-lg-4 py-md-5">
               <h3>Free and Open</h3>
-              <p>Uniflow is MIT open sourced.</p>
+              <p>Uniflow is fair-code licensed.</p>
             </div>
             <div className="col-lg-4 py-md-5">
               <h3>Control your data</h3>
