@@ -26,4 +26,4 @@ If you have problems or questions go to our contact page, we will then try to he
 
 Uniflow is [fair-code](http://faircode.io) distributed under [Apache 2.0 with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
 
-Additional information about license can be found in the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use).
+Additional information about license can be found in the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use) page.
