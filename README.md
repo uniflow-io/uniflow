@@ -1,5 +1,13 @@
-UNIFLOW
+Uniflow
 -------
+
+<p align="center">
+  <a href="https://uniflow.io">
+    <img src="library/uniflow-client/src/assets/images/logo.svg" height="128" alt="Uniflow">
+  </a>
+</p>
+
+## Introduction
 
 Uniflow is an open [fair-code](http://faircode.io) distributed Flow based Workflow Automation Tool.
 
