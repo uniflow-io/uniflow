@@ -20,17 +20,11 @@ This project is a combinaison on [Flow Based Programming](https://jpaulm.github.
 Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface that include the philosophy of [nvAlt](http://brettterpstra.com/projects/nvalt).
 And the runner is specificaly implemented to various way on : Browser, Node, Your own software plugins...
 
-## Contents
-
-- [Documentation](#documentation)
-- [License](#license)
-
 ## Documentation
 
 The official Uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
 
 Additional information and example workflows on the uniflow.io website: [https://uniflow.io/flows](https://uniflow.io/flows)
-
 
 ## Support
 

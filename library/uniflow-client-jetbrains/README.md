@@ -10,17 +10,11 @@ ID                   | io.uniflow
 Changelog            | [CHANGELOG](CHANGELOG.md)
 Build and Deployment | [MAINTENANCE](MAINTENANCE.md)
 
-## Contents
-
-- [Documentation](#documentation)
-- [License](#license)
-
 ## Documentation
 
 The official Uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
 
 Additional information and example workflows on the uniflow.io website: [https://uniflow.io/flows](https://uniflow.io/flows)
-
 
 ## Support
 

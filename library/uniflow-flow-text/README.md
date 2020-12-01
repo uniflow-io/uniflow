@@ -3,17 +3,11 @@ uniflow-flow-text
 
 This is official Text Flow for Uniflow
 
-## Contents
-
-- [Documentation](#documentation)
-- [License](#license)
-
 ## Documentation
 
 The official Uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
 
 Additional information and example workflows on the uniflow.io website: [https://uniflow.io/flows](https://uniflow.io/flows)
-
 
 ## Support
 

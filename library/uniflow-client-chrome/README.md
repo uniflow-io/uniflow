@@ -3,12 +3,6 @@ uniflow-client-chrome
 
 This is official Google Chrome Client for Uniflow
 
-## Contents
-
-- [Installation](#installation)
-- [Documentation](#documentation)
-- [License](#license)
-
 ## Installation
 
 First, you have to install the chrome extension on [Google Chrome web store](https://chrome.google.com/webstore/detail/uniflow-client/addfkelofconemofddhmmdgdiolnhppl)
@@ -26,7 +20,6 @@ Then you setup your `ApiKey` that you can find on [Settings](https://uniflow.io/
 The official Uniflow documentation can be found under: [https://uniflow.io/docs](https://uniflow.io/docs)
 
 Additional information and example workflows on the uniflow.io website: [https://uniflow.io/flows](https://uniflow.io/flows)
-
 
 ## Support
 
