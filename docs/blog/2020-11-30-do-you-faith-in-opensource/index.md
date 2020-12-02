@@ -20,7 +20,7 @@ It's not only about code and gratitude. ❤️
 It's also about money. 💸   
 As people, we live, we aford houses, we pay taxes, we grow up familly, we just can't live from clean air and fresh water. 💧
 
-That's why Uniflow now join [fair-code license](https://faircode.io), this allow us to financially protect our work while beeing totally transparent to our community.  
+That's why Uniflow now join [fair-code](https://faircode.io) model, this allow us to financially protect our work while beeing totally transparent to our community.  
 
 Moreover, Uniflow depends on lot of other open source projects. We care about the work they contributed for us and is only fair that we support them back.  
 That is why we have planned to contribute a certain percentage of revenue/profit every month to these projects.
