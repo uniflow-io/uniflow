@@ -248,7 +248,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const next = index === docItems.length - 1 ? null : docItems[index + 1]
     createPage({
       path: `/docs${doc.fields.slug ? "/" + doc.fields.slug : ""}`,
-      component: require.resolve("./src/templates/doc.js"),
+      component: require.resolve("./src/templates/doc.tsx"),
       context: {
         ...doc,
         previous,
@@ -260,7 +260,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   newsletters.nodes.forEach((newsletter) => {
     createPage({
       path: `/newsletters/${newsletter.fields.slug}`,
-      component: require.resolve("./src/templates/newsletter.js"),
+      component: require.resolve("./src/templates/newsletter.tsx"),
       context: {
         ...newsletter,
       },
@@ -279,7 +279,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const next = index === 0 ? null : articles.nodes[index - 1]
     createPage({
       path: `/blog/${article.fields.slug}`,
-      component: require.resolve("./src/templates/article.js"),
+      component: require.resolve("./src/templates/article.tsx"),
       context: {
         ...article,
         previous,
@@ -290,7 +290,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   createPage({
     path: `/blog/tags`,
-    component: require.resolve("./src/templates/tags.js"),
+    component: require.resolve("./src/templates/tags.tsx"),
     context: {
       tags,
     },
@@ -300,7 +300,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   tagList.forEach((tag) => {
     createPage({
       path: `/blog/tags/${tag}`,
-      component: require.resolve("./src/templates/tag.js"),
+      component: require.resolve("./src/templates/tag.tsx"),
       context: {
         tag,
       },
@@ -311,7 +311,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   contributorList.forEach((contributor) => {
     createPage({
       path: `/blog/contributors/${contributor}`,
-      component: require.resolve("./src/templates/contributor.js"),
+      component: require.resolve("./src/templates/contributor.tsx"),
       context: {
         slug: contributor,
       },
@@ -328,7 +328,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   cardSlugs.forEach(function (cardSlug) {
     createPage({
       path: `/library/${cardSlug}`,
-      component: require.resolve("./src/templates/card.js"),
+      component: require.resolve("./src/templates/card.tsx"),
       context: {
         slug: cardSlug,
       },

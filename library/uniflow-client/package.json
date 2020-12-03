@@ -40,8 +40,8 @@
     "start:default": "cd bin && ./uniflow-client",
     "start:windows": "cd bin && uniflow-client",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js --fix",
-    "prettier": "prettier \"**/*.{md,css,scss,yaml,yml}\" -w"
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
+    "prettier": "prettier \"**/*.{md,css,scss,yaml,yml}\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
