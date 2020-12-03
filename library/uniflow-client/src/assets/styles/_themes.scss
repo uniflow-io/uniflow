@@ -1,8 +1,8 @@
 $app-themes: ();
 
-@import "themes/light";
-@import "themes/dark";
-@import "themes/sepia";
+@import 'themes/light';
+@import 'themes/dark';
+@import 'themes/sepia';
 
 @each $app-theme, $app-colors in $app-themes {
   body.theme-#{$app-theme} {
@@ -11,7 +11,7 @@ $app-themes: ();
     }
 
     --navbar-top-color: #{rgba(map-get($app-colors, 'bg'), 0.8)};
-    
+
     @each $color, $value in $theme-colors {
       --#{$color}-hover-color: #{darken(map-get($app-colors, $color), 15%)};
     }

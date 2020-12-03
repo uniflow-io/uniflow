@@ -16,6 +16,9 @@ install: ## install
 lint: ## lint
 	$(LERNA) lerna exec -- npm run lint
 
+prettier: ## prettier
+	$(LERNA) lerna exec -- npm run prettier
+
 # DEFAULT
 .DEFAULT_GOAL := help
 help:

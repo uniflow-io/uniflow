@@ -1,20 +1,19 @@
 $app-themes: () !default;
 $app-themes: map-merge(
   (
-    "sepia": (
-      "text": #433422,
-      "bg": #F1E7D0,
-      "input": #EADEC2,
-      "border": #DED0BF,
-
-      "primary": #0066CC,
-      "secondary": #876944,
-      "success": #00996B,
-      "danger": #99000F,
-      "warning": #997300,
-      "info": #008599,
-      "light": #EADEC2,
-      "dark": #1A1452,
+    'sepia': (
+      'text': #433422,
+      'bg': #f1e7d0,
+      'input': #eadec2,
+      'border': #ded0bf,
+      'primary': #0066cc,
+      'secondary': #876944,
+      'success': #00996b,
+      'danger': #99000f,
+      'warning': #997300,
+      'info': #008599,
+      'light': #eadec2,
+      'dark': #1a1452,
     ),
   ),
   $app-themes

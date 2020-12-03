@@ -9,7 +9,7 @@ body {
 
 #home {
   padding-top: 0px;
-  
+
   .navbar-top {
     border-bottom: 0;
   }
@@ -27,7 +27,8 @@ body {
     @include media-breakpoint-down(md) {
       flex-direction: column !important;
 
-      input, button {
+      input,
+      button {
         border-radius: 0;
         width: 100%;
       }
@@ -45,6 +46,6 @@ body {
   color: #0c5460;
   background-color: #d1ecf1;
   border-color: #bee5eb;
-  padding: .75rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   text-align: center;
 }

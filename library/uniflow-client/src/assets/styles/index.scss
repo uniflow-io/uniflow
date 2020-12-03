@@ -1,24 +1,24 @@
 // bootstrap
-@import "variables";
-@import "bootstrap/scss/bootstrap";
+@import 'variables';
+@import 'bootstrap/scss/bootstrap';
 
 // bootstrap override
-@import "reboot";
-@import "fonts";
-@import "images";
-@import "forms";
-@import "buttons";
-@import "custom-forms";
-@import "nav";
-@import "navbar";
-@import "card";
-@import "badge";
-@import "utilities";
+@import 'reboot';
+@import 'fonts';
+@import 'images';
+@import 'forms';
+@import 'buttons';
+@import 'custom-forms';
+@import 'nav';
+@import 'navbar';
+@import 'card';
+@import 'badge';
+@import 'utilities';
 
 // components
-@import "themes";
-@import "sidebar";
-@import "section";
-@import "timeline";
-@import "user";
-@import "app";
+@import 'themes';
+@import 'sidebar';
+@import 'section';
+@import 'timeline';
+@import 'user';
+@import 'app';

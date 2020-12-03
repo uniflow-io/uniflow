@@ -1,17 +1,25 @@
 module.exports = {
     parser: `@typescript-eslint/parser`,
     extends: [
-      "plugin:@typescript-eslint/recommended",
-      "plugin:prettier/recommended",
-      "prettier/@typescript-eslint",
+        "google",
+        "eslint:recommended",
+        "plugin:flowtype/recommended",
+        "plugin:react/recommended",
+        "prettier",
+        "prettier/flowtype",
+        "prettier/react",
     ],
-    plugins: ["@typescript-eslint", "prettier"],
+    plugins: ["flowtype", "prettier", "react", "filenames"],
     parserOptions: {
       ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
       sourceType: "module", // Allows for the use of imports
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
     env: {
       browser: true,
+      es6: true,
       node: true,
     },
     rules: {
