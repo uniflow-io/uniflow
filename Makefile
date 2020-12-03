@@ -13,6 +13,9 @@ install: ## install
 	npm install
 	$(LERNA) bootstrap --hoist --no-ci
 
+lint: ## lint
+	$(LERNA) lerna exec -- npm run lint
+
 # DEFAULT
 .DEFAULT_GOAL := help
 help:
