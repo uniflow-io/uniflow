@@ -29,19 +29,19 @@
     "dev": "webpack-dev-server --hot --inline -d --progress --colors --config webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "fs-extra": "^8.1.0",
-    "merge": "^1.2.1"
+    "axios": "^0.21.0",
+    "fs-extra": "^9.0.1",
+    "merge": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/plugin-transform-react-jsx": "^7.7.4",
-    "@babel/preset-env": "^7.7.6",
-    "@babel/preset-flow": "^7.7.4",
-    "@babel/preset-react": "^7.7.4",
-    "babel-loader": "^8.0.6",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "@babel/core": "^7.12.9",
+    "@babel/plugin-transform-react-jsx": "^7.12.7",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-flow": "^7.12.1",
+    "@babel/preset-react": "^7.12.7",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
   }
 }
