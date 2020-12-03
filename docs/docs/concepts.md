@@ -36,9 +36,3 @@ implement it's own Rail logic and link to Uniflow.
 
 A Bridge is a part of implementation of the environment that will be linked to
 the Flow bottom layer.
-
-## What is a Kernel ?
-
-A Kernel is the virtual machine that will run your code written on it's
-language. Each Client is shipped with multiple Kernel. When your Program run, it
-will instanciate you Flow and the Kernel associated to the Flow.
