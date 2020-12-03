@@ -1,15 +1,12 @@
-import request from 'axios'
-import server from '../../utils/server'
-import uniq from 'lodash/uniq'
-import {
-  COMMIT_UPDATE_SETTINGS,
-  COMMIT_LOGOUT_USER
-} from './actions-types'
-import { commitLogoutUser as commitAuthLogoutUser } from '../auth/actions'
-import { commitAddLog } from '../logs/actions'
+import request from "axios"
+import server from "../../utils/server"
+import uniq from "lodash/uniq"
+import { COMMIT_UPDATE_SETTINGS, COMMIT_LOGOUT_USER } from "./actions-types"
+import { commitLogoutUser as commitAuthLogoutUser } from "../auth/actions"
+import { commitAddLog } from "../logs/actions"
 
-export const commitUpdateSettings = user => {
-  return async dispatch => {
+export const commitUpdateSettings = (user) => {
+  return async (dispatch) => {
     dispatch({
       type: COMMIT_UPDATE_SETTINGS,
       user,
@@ -19,7 +16,7 @@ export const commitUpdateSettings = user => {
 }
 
 export const commitLogoutUser = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({
       type: COMMIT_LOGOUT_USER,
     })
@@ -29,14 +26,13 @@ export const commitLogoutUser = () => {
 }
 
 export const fetchConfig = (token, uid) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      return request
-        .get(`${server.getBaseUrl()}/api/users/${uid}/admin-config`, {
-          headers: {
-            'Uniflow-Authorization': `Bearer ${token}`,
-          },
-        })
+      return request.get(`${server.getBaseUrl()}/api/users/${uid}/admin-config`, {
+        headers: {
+          "Uniflow-Authorization": `Bearer ${token}`,
+        },
+      })
     } catch (error) {
       if (error.request.status === 401) {
         dispatch(commitLogoutUser())
@@ -48,18 +44,17 @@ export const fetchConfig = (token, uid) => {
 }
 
 export const updateConfig = (item, token, uid) => {
-  return async dispatch => {
+  return async (dispatch) => {
     const data = {
-      ...item
+      ...item,
     }
 
     try {
-      await request
-        .put(`${server.getBaseUrl()}/api/users/${uid}/admin-config`, data, {
-          headers: {
-            'Uniflow-Authorization': `Bearer ${token}`,
-          },
-        })
+      await request.put(`${server.getBaseUrl()}/api/users/${uid}/admin-config`, data, {
+        headers: {
+          "Uniflow-Authorization": `Bearer ${token}`,
+        },
+      })
       dispatch(data)
     } catch (error) {
       if (error.request.status === 400) {
@@ -74,17 +69,17 @@ export const updateConfig = (item, token, uid) => {
 }
 
 export const fetchSettings = (uid, token) => {
-  return async dispatch => {
+  return async (dispatch) => {
     return request
       .get(`${server.getBaseUrl()}/api/users/${uid}/settings`, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
+          "Uniflow-Authorization": `Bearer ${token}`,
         },
       })
-      .then(response => {
+      .then((response) => {
         dispatch(commitUpdateSettings(response.data))
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.request.status === 401) {
           dispatch(commitLogoutUser())
         } else {
@@ -95,7 +90,7 @@ export const fetchSettings = (uid, token) => {
 }
 
 export const updateSettings = (item, token) => {
-  return async dispatch => {
+  return async (dispatch) => {
     const data = {
       firstname: item.firstname,
       lastname: item.lastname,
@@ -108,7 +103,7 @@ export const updateSettings = (item, token) => {
     try {
       const response = await request.put(`${server.getBaseUrl()}/api/users/${item.uid}/settings`, data, {
         headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
+          "Uniflow-Authorization": `Bearer ${token}`,
         },
       })
       dispatch(commitUpdateSettings(response.data))
@@ -130,12 +125,12 @@ export const isGranted = (user, attributes) => {
     attributes = [attributes]
   }
 
-  let roles = ['ROLE_USER']
+  let roles = ["ROLE_USER"]
   for (let i = 0; i < user.roles.length; i++) {
     let role = user.roles[i]
-    if (role === 'ROLE_SUPER_ADMIN') {
-      roles.push('ROLE_USER')
-      roles.push('ROLE_SUPER_ADMIN')
+    if (role === "ROLE_SUPER_ADMIN") {
+      roles.push("ROLE_USER")
+      roles.push("ROLE_SUPER_ADMIN")
     } else {
       roles.push(role)
     }

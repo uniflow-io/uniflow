@@ -1,11 +1,11 @@
-import { pathToRegexp } from 'path-to-regexp'
+import { pathToRegexp } from "path-to-regexp"
 
 let patternCache = {}
 let cacheLimit = 10000
 let cacheCount = 0
 
 let compilePath = function compilePath(pattern, options) {
-  let cacheKey = '' + options.end + options.strict + options.sensitive
+  let cacheKey = "" + options.end + options.strict + options.sensitive
   let cache = patternCache[cacheKey] || (patternCache[cacheKey] = {})
 
   if (cache[pattern]) return cache[pattern]
@@ -26,11 +26,10 @@ let compilePath = function compilePath(pattern, options) {
  * Public API for matching a URL pathname to a path pattern.
  */
 let matchPath = function matchPath(pathname) {
-  let options =
-    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
+  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
   let parent = arguments[2]
 
-  if (typeof options === 'string') options = { path: options }
+  if (typeof options === "string") options = { path: options }
 
   let _options = options
 
@@ -74,9 +73,9 @@ let matchPath = function matchPath(pathname) {
 
   return {
     path: path, // the path pattern used to match
-    url: path === '/' && url === '' ? '/' : url, // the matched portion of the URL
+    url: path === "/" && url === "" ? "/" : url, // the matched portion of the URL
     isExact: isExact, // whether or not we matched exactly
-    params: keys.reduce(function(memo, key, index) {
+    params: keys.reduce(function (memo, key, index) {
       memo[key.name] = values[index]
       return memo
     }, {}),

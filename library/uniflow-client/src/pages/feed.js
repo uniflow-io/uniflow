@@ -1,20 +1,20 @@
-import React from 'react'
-import { graphql } from "gatsby";
-import { Feed } from '../views'
-import { requireAuthentication, withPage } from '../helpers'
-import routes from '../routes'
-import { matchPath } from '../../src/utils'
+import React from "react"
+import { graphql } from "gatsby"
+import { Feed } from "../views"
+import { requireAuthentication, withPage } from "../helpers"
+import routes from "../routes"
+import { matchPath } from "../../src/utils"
 
 export default ({ location, data: { localFlows } }) => {
   let allFlows = {}
-  localFlows.nodes.forEach(flow => {
-    allFlows[flow.name] = flow.uniflow;
-  });
+  localFlows.nodes.forEach((flow) => {
+    allFlows[flow.name] = flow.uniflow
+  })
 
-  const FeedPage = withPage(Feed, 'feed', {
+  const FeedPage = withPage(Feed, "feed", {
     location: location,
-    title: 'Feed',
-    description: 'Feed',
+    title: "Feed",
+    description: "Feed",
   })
   const AuthFeedPage = requireAuthentication(FeedPage)
 
@@ -31,7 +31,7 @@ export default ({ location, data: { localFlows } }) => {
 
 export const query = graphql`
   query {
-    localFlows: allNpmLocalPackage(filter: {fields: {catalogs: {in: "flow"}}}) {
+    localFlows: allNpmLocalPackage(filter: { fields: { catalogs: { in: "flow" } } }) {
       nodes {
         name
         uniflow {

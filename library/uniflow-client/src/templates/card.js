@@ -1,10 +1,10 @@
-import React from 'react'
-import { Card } from '../views'
-import { graphql } from 'gatsby'
-import { withPage } from '../helpers'
+import React from "react"
+import { Card } from "../views"
+import { graphql } from "gatsby"
+import { withPage } from "../helpers"
 
 export default ({ data, location }) => {
-  const { /*library, */localLibrary, /*card, */localCard, logo } = data
+  const { /*library, */ localLibrary, /*card, */ localCard, logo } = data
   let realCard = {
     //...card,
     official: false,
@@ -16,7 +16,7 @@ export default ({ data, location }) => {
     }
   }
 
-  const CardPage = withPage(Card, 'card', {
+  const CardPage = withPage(Card, "card", {
     location: location,
     title: realCard.name,
     description: realCard.description,
@@ -26,9 +26,9 @@ export default ({ data, location }) => {
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
   });*/
-  localLibrary.nodes.forEach(card => {
-    allLibrary[card.fields.slug] = card;
-  });
+  localLibrary.nodes.forEach((card) => {
+    allLibrary[card.fields.slug] = card
+  })
   return <CardPage library={Object.values(allLibrary)} card={realCard} logo={logo} />
 }
 
@@ -90,10 +90,7 @@ export const query = graphql`
         }
       }
     }
-    logo: file(
-      sourceInstanceName: { eq: "images" }
-      relativePath: { eq: "logo.png" }
-    ) {
+    logo: file(sourceInstanceName: { eq: "images" }, relativePath: { eq: "logo.png" }) {
       publicURL
       childImageSharp {
         fixed(width: 18, height: 18) {

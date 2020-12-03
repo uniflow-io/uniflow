@@ -40,8 +40,8 @@
     "start:default": "cd bin && ./uniflow-client",
     "start:windows": "cd bin && uniflow-client",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
-    "prettier": "prettier \"**/*.{md,css,scss,yaml,yml}\""
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js --fix",
+    "prettier": "prettier \"**/*.{md,css,scss,yaml,yml}\" -w"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
@@ -80,7 +80,7 @@
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "node-sass": "^5.0.0",
+    "node-sass": "^4.14.1",
     "open": "^7.3.0",
     "path-to-regexp": "^6.2.0",
     "promise-events": "^0.2.2",

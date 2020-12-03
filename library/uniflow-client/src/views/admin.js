@@ -1,25 +1,24 @@
-import React, { Component } from 'react'
-import { fetchConfig, updateConfig } from '../reducers/user/actions'
-import { connect } from 'react-redux'
+import React, { Component } from "react"
+import { fetchConfig, updateConfig } from "../reducers/user/actions"
+import { connect } from "react-redux"
 
 class Admin extends Component {
   state = {
-    config: {
-    },
+    config: {},
     isSaving: false,
   }
 
   componentDidMount() {
     const { auth } = this.props
 
-    this.props.dispatch(fetchConfig(auth.token, auth.uid)).then(response => {
+    this.props.dispatch(fetchConfig(auth.token, auth.uid)).then((response) => {
       this.setState({
         config: Object.assign({}, this.state.config, response.data),
       })
     })
   }
 
-  onUpdate = event => {
+  onUpdate = (event) => {
     const { auth } = this.props
 
     if (event) {
@@ -27,11 +26,9 @@ class Admin extends Component {
     }
 
     this.setState({ isSaving: true }, () => {
-      this.props
-        .dispatch(updateConfig(this.state.config, auth.token, auth.uid))
-        .then(() => {
-          this.setState({ isSaving: false })
-        })
+      this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid)).then(() => {
+        this.setState({ isSaving: false })
+      })
     })
   }
 
@@ -40,15 +37,14 @@ class Admin extends Component {
       <>
         <section className="section container-fluid">
           <h3 className="box-title">Admin</h3>
-          <form className="form-sm-horizontal">
-          </form>
+          <form className="form-sm-horizontal"></form>
         </section>
       </>
     )
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
     env: state.env,

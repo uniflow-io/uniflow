@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
-import Helmet from 'react-helmet'
-import { Link, graphql, StaticQuery } from 'gatsby'
-import { connect } from 'react-redux'
-import routes, { pathTo } from '../routes'
-import { UserManager } from '../components'
-import { getNewLogs, commitReadLog } from '../reducers/logs/actions'
-import { commitLogoutUser } from '../reducers/user/actions'
-import { isGranted } from '../reducers/user/actions'
-import { applyTheme, switchTheme } from '../reducers/app/actions'
-import { matchPath } from '../utils'
+import React, { Component } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPowerOff } from "@fortawesome/free-solid-svg-icons"
+import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import Helmet from "react-helmet"
+import { Link, graphql, StaticQuery } from "gatsby"
+import { connect } from "react-redux"
+import routes, { pathTo } from "../routes"
+import { UserManager } from "../components"
+import { getNewLogs, commitReadLog } from "../reducers/logs/actions"
+import { commitLogoutUser } from "../reducers/user/actions"
+import { isGranted } from "../reducers/user/actions"
+import { applyTheme, switchTheme } from "../reducers/app/actions"
+import { matchPath } from "../utils"
 
 class MessengerPlatform extends Component {
   render() {
@@ -43,11 +43,7 @@ class MessengerPlatform extends Component {
         <div id="fb-root" />
 
         {/* Your customer chat code */}
-        <div
-          className="fb-customerchat"
-          attribution="setup_tool"
-          page_id="1899593680350111"
-        />
+        <div className="fb-customerchat" attribution="setup_tool" page_id="1899593680350111" />
       </div>
     )
   }
@@ -72,17 +68,14 @@ class Alert extends Component {
     const { alert, logs } = this.props
 
     return (
-      <div
-        className="alert alert-danger alert-dismissible fade show"
-        role="alert"
-      >
+      <div className="alert alert-danger alert-dismissible fade show" role="alert">
         {logs[alert].message}
         <button
           type="button"
           className="close"
           data-dismiss="alert"
           aria-label="Close"
-          onClick={event => this.onClose(event, logs[alert].id)}
+          onClick={(event) => this.onClose(event, logs[alert].id)}
         >
           <span aria-hidden="true">&times;</span>
         </button>
@@ -91,7 +84,7 @@ class Alert extends Component {
   }
 }
 
-Alert = connect(state => ({
+Alert = connect((state) => ({
   logs: getNewLogs(state.logs),
 }))(Alert)
 
@@ -109,47 +102,47 @@ class Alerts extends Component {
   }
 }
 
-Alerts = connect(state => ({
+Alerts = connect((state) => ({
   logs: getNewLogs(state.logs),
 }))(Alerts)
 
 class Header extends Component {
-  onLocation = location => {
+  onLocation = (location) => {
     if (
       matchPath(location.pathname, {
         path: routes.home.path,
         exact: true,
       })
     ) {
-      return 'home'
+      return "home"
     } else if (
       matchPath(location.pathname, {
         path: routes.flows.path,
         exact: true,
       })
     ) {
-      return 'flows'
+      return "flows"
     } else if (
       matchPath(location.pathname, {
         path: routes.doc.path,
         exact: true,
       })
     ) {
-      return 'doc'
+      return "doc"
     } else if (
       matchPath(location.pathname, {
         path: routes.settings.path,
         exact: true,
       })
     ) {
-      return 'settings'
+      return "settings"
     } else if (
       matchPath(location.pathname, {
         path: routes.admin.path,
         exact: true,
       })
     ) {
-      return 'admin'
+      return "admin"
     } else if (
       matchPath(location.pathname, {
         path: routes.blog.path,
@@ -169,7 +162,7 @@ class Header extends Component {
         path: routes.tag.path,
       })
     ) {
-      return 'blog'
+      return "blog"
     } else if (
       matchPath(location.pathname, {
         path: routes.library.path,
@@ -179,21 +172,21 @@ class Header extends Component {
         path: routes.card.path,
       })
     ) {
-      return 'library'
+      return "library"
     } else if (
       matchPath(location.pathname, {
         path: routes.changelog.path,
         exact: true,
       })
     ) {
-      return 'changelog'
+      return "changelog"
     } else if (
       matchPath(location.pathname, {
         path: routes.contact.path,
         exact: true,
       })
     ) {
-      return 'contact'
+      return "contact"
     } else if (
       matchPath(location.pathname, {
         path: routes.login.path,
@@ -204,7 +197,7 @@ class Header extends Component {
         exact: true,
       })
     ) {
-      return 'login'
+      return "login"
     } else if (
       matchPath(location.pathname, {
         path: routes.feed.path,
@@ -213,19 +206,19 @@ class Header extends Component {
         path: routes.userFeed.path,
       })
     ) {
-      return 'dashboard'
+      return "dashboard"
     }
 
     return null
   }
 
-  onLogout = e => {
+  onLogout = (e) => {
     e.preventDefault()
 
     this.props.dispatch(commitLogoutUser())
   }
 
-  onChangeTheme = e => {
+  onChangeTheme = (e) => {
     e.preventDefault()
 
     this.props.dispatch(switchTheme(this.props.app.theme))
@@ -238,86 +231,50 @@ class Header extends Component {
     return (
       <>
         <header className="navbar navbar-top navbar-expand flex-row">
-          <Link
-            className="navbar-brand mr-0 mr-md-2"
-            aria-label="Uniflow"
-            to={pathTo('home')}
-          >
-            <img
-              src={logo.publicURL}
-              width="36"
-              height="36"
-              className="d-block"
-              alt="Uniflow"
-            />
+          <Link className="navbar-brand mr-0 mr-md-2" aria-label="Uniflow" to={pathTo("home")}>
+            <img src={logo.publicURL} width="36" height="36" className="d-block" alt="Uniflow" />
           </Link>
 
           <div className="navbar-nav-scroll d-none d-md-flex">
             <ul className="navbar-nav bd-navbar-nav flex-row">
               <li className="nav-item">
-                <Link
-                  className={`nav-link${active === 'flows' ? ' active' : ''}`}
-                  to={pathTo('flows')}
-                >
+                <Link className={`nav-link${active === "flows" ? " active" : ""}`} to={pathTo("flows")}>
                   Flows
                 </Link>
               </li>
-              {auth.isAuthenticated &&
-                isGranted(user, 'ROLE_USER') && (
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link${
-                        active === 'dashboard' ? ' active' : ''
-                      }`}
-                      to={pathTo('feed')}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                )}
+              {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+                <li className="nav-item">
+                  <Link className={`nav-link${active === "dashboard" ? " active" : ""}`} to={pathTo("feed")}>
+                    Dashboard
+                  </Link>
+                </li>
+              )}
               <li className="nav-item">
-                <Link
-                  className={`nav-link${active === 'library' ? ' active' : ''}`}
-                  to={pathTo('library')}
-                >
+                <Link className={`nav-link${active === "library" ? " active" : ""}`} to={pathTo("library")}>
                   Library
                 </Link>
               </li>
               <li className="nav-item">
-                <Link
-                  className={`nav-link${active === 'doc' ? ' active' : ''}`}
-                  to={pathTo('doc')}
-                >
+                <Link className={`nav-link${active === "doc" ? " active" : ""}`} to={pathTo("doc")}>
                   Docs
                 </Link>
               </li>
-              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+              {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
                 <li className="nav-item">
-                  <Link
-                    className={`nav-link${
-                      active === 'settings' ? ' active' : ''
-                    }`}
-                    to={pathTo('settings')}
-                  >
+                  <Link className={`nav-link${active === "settings" ? " active" : ""}`} to={pathTo("settings")}>
                     Settings
                   </Link>
                 </li>
               )}
-              {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+              {auth.isAuthenticated && isGranted(user, "ROLE_SUPER_ADMIN") && (
                 <li className="nav-item">
-                  <Link
-                    className={`nav-link${active === 'admin' ? ' active' : ''}`}
-                    to={pathTo('admin')}
-                  >
+                  <Link className={`nav-link${active === "admin" ? " active" : ""}`} to={pathTo("admin")}>
                     Admin
                   </Link>
                 </li>
               )}
               <li className="nav-item">
-                <Link
-                  className={`nav-link${active === 'blog' ? ' active' : ''}`}
-                  to={pathTo('blog')}
-                >
+                <Link className={`nav-link${active === "blog" ? " active" : ""}`} to={pathTo("blog")}>
                   Blog
                 </Link>
               </li>
@@ -326,12 +283,7 @@ class Header extends Component {
 
           <ul className="navbar-nav flex-row ml-auto">
             <li className="nav-item">
-              <Link
-                className={`nav-item nav-link ${
-                  active === 'changelog' ? ' active' : ''
-                }`}
-                to={pathTo('changelog')}
-              >
+              <Link className={`nav-item nav-link ${active === "changelog" ? " active" : ""}`} to={pathTo("changelog")}>
                 {changeLogTags.edges[0].node.tag}
               </Link>
             </li>
@@ -366,7 +318,7 @@ class Header extends Component {
                 aria-label="Theme"
                 onClick={this.onChangeTheme}
               >
-                {this.props.app.theme === 'light' && (
+                {this.props.app.theme === "light" && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -388,7 +340,7 @@ class Header extends Component {
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                   </svg>
                 )}
-                {this.props.app.theme === 'dark' && (
+                {this.props.app.theme === "dark" && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -402,7 +354,7 @@ class Header extends Component {
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                   </svg>
                 )}
-                {this.props.app.theme === 'sepia' && (
+                {this.props.app.theme === "sepia" && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -424,21 +376,14 @@ class Header extends Component {
             </li>
             {!auth.isAuthenticated && (
               <li className="nav-item">
-                <Link
-                  className={`nav-link${active === 'login' ? ' active' : ''}`}
-                  to={pathTo('login')}
-                >
+                <Link className={`nav-link${active === "login" ? " active" : ""}`} to={pathTo("login")}>
                   Login
                 </Link>
               </li>
             )}
-            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+            {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
               <li className="nav-item">
-                <a
-                  className={`nav-link${active === 'logout' ? ' active' : ''}`}
-                  href="/logout"
-                  onClick={this.onLogout}
-                >
+                <a className={`nav-link${active === "logout" ? " active" : ""}`} href="/logout" onClick={this.onLogout}>
                   <FontAwesomeIcon icon={faPowerOff} />
                 </a>
               </li>
@@ -447,67 +392,43 @@ class Header extends Component {
         </header>
         <ul className="nav nav-bar-bottom fixed-bottom justify-content-center d-flex d-md-none">
           <li className="nav-item">
-            <Link
-              className={`nav-link${active === 'flows' ? ' active' : ''}`}
-              to={pathTo('flows')}
-            >
+            <Link className={`nav-link${active === "flows" ? " active" : ""}`} to={pathTo("flows")}>
               Flows
             </Link>
           </li>
-          {auth.isAuthenticated &&
-            isGranted(user, 'ROLE_USER') && (
-              <li className="nav-item">
-                <Link
-                  className={`nav-link${
-                    active === 'dashboard' ? ' active' : ''
-                  }`}
-                  to={pathTo('feed')}
-                >
-                  Dashboard
-                </Link>
-              </li>
-            )}
+          {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+            <li className="nav-item">
+              <Link className={`nav-link${active === "dashboard" ? " active" : ""}`} to={pathTo("feed")}>
+                Dashboard
+              </Link>
+            </li>
+          )}
           <li className="nav-item">
-            <Link
-              className={`nav-link${active === 'library' ? ' active' : ''}`}
-              to={pathTo('library')}
-            >
+            <Link className={`nav-link${active === "library" ? " active" : ""}`} to={pathTo("library")}>
               Library
             </Link>
           </li>
           <li className="nav-item">
-            <Link
-              className={`nav-link${active === 'doc' ? ' active' : ''}`}
-              to={pathTo('doc')}
-            >
+            <Link className={`nav-link${active === "doc" ? " active" : ""}`} to={pathTo("doc")}>
               Docs
             </Link>
           </li>
-          {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+          {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
             <li className="nav-item">
-              <Link
-                className={`nav-link${active === 'settings' ? ' active' : ''}`}
-                to={pathTo('settings')}
-              >
+              <Link className={`nav-link${active === "settings" ? " active" : ""}`} to={pathTo("settings")}>
                 Settings
               </Link>
             </li>
           )}
-          {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+          {auth.isAuthenticated && isGranted(user, "ROLE_SUPER_ADMIN") && (
             <li className="nav-item">
-              <Link
-                className={`nav-link${active === 'admin' ? ' active' : ''}`}
-                to={pathTo('admin')}
-              >
+              <Link className={`nav-link${active === "admin" ? " active" : ""}`} to={pathTo("admin")}>
                 Admin
               </Link>
             </li>
           )}
           <li className="nav-item">
-            <Link
-              className={`nav-link${active === 'blog' ? ' active' : ''}`}
-              to={pathTo('blog')}
-            >
+            <Link className={`nav-link${active === "blog" ? " active" : ""}`} to={pathTo("blog")}>
               Blog
             </Link>
           </li>
@@ -517,7 +438,7 @@ class Header extends Component {
   }
 }
 
-Header = connect(state => ({
+Header = connect((state) => ({
   app: state.app,
   auth: state.auth,
   user: state.user,
@@ -530,7 +451,7 @@ class Footer extends Component {
         <div className="container-fluid">
           <ul className="nav nav-bottom justify-content-end">
             <li className="nav-item">
-              <Link className="nav-link" to={pathTo('contact')}>
+              <Link className="nav-link" to={pathTo("contact")}>
                 Contact
               </Link>
             </li>
@@ -559,16 +480,10 @@ class Layout extends Component {
                 description
               }
             }
-            logo: file(
-              sourceInstanceName: { eq: "images" }
-              relativePath: { eq: "logo.svg" }
-            ) {
+            logo: file(sourceInstanceName: { eq: "images" }, relativePath: { eq: "logo.svg" }) {
               publicURL
             }
-            logoSeo: file(
-              sourceInstanceName: { eq: "images" }
-              relativePath: { eq: "logo.png" }
-            ) {
+            logoSeo: file(sourceInstanceName: { eq: "images" }, relativePath: { eq: "logo.png" }) {
               publicURL
             }
             changeLogTags: allChangelogYaml(limit: 1) {
@@ -587,50 +502,31 @@ class Layout extends Component {
               <body id={app.page} className={`theme-${app.theme}`} />
 
               <meta charSet="utf-8" />
-              <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1, shrink-to-fit=no"
-              />
+              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
               <title>{siteMetadata.title}</title>
               <meta name="description" content={siteMetadata.description} />
 
               <meta property="og:title" content={siteMetadata.title} />
-              <meta
-                property="og:description"
-                content={siteMetadata.description}
-              />
+              <meta property="og:description" content={siteMetadata.description} />
               <meta property="og:url" content={env.url} />
               <meta property="og:type" content="website" />
               <meta property="og:locale" content="en" />
               <meta property="og:site_name" content={siteMetadata.title} />
-              <meta
-                property="og:image"
-                content={`${env.url}${logoSeo.publicURL}`}
-              />
+              <meta property="og:image" content={`${env.url}${logoSeo.publicURL}`} />
               <meta property="og:image:width" content="512" />
               <meta property="og:image:height" content="512" />
 
               <meta name="twitter:card" content="summary_large_image" />
               <meta name="twitter:site" content="uniflow_io" />
               <meta name="twitter:title" content={siteMetadata.title} />
-              <meta
-                name="twitter:description"
-                content={siteMetadata.description}
-              />
-              <meta
-                name="twitter:image"
-                content={`${env.url}${logo.publicURL}`}
-              />
+              <meta name="twitter:description" content={siteMetadata.description} />
+              <meta name="twitter:image" content={`${env.url}${logo.publicURL}`} />
             </Helmet>
             <UserManager location={this.props.location} />
             {[
               /*'production', 'preprod'*/
             ].indexOf(env.env) !== -1 && <MessengerPlatform />}
-            <Header
-              location={this.props.location}
-              logo={logo}
-              changeLogTags={changeLogTags}
-            />
+            <Header location={this.props.location} logo={logo} changeLogTags={changeLogTags} />
             <Alerts />
             {this.props.children}
             <Footer />
@@ -641,7 +537,7 @@ class Layout extends Component {
   }
 }
 
-Layout = connect(state => ({
+Layout = connect((state) => ({
   app: state.app,
   env: state.env,
 }))(Layout)

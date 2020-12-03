@@ -1,17 +1,17 @@
-import React from 'react'
-import { Article } from '../views'
-import { graphql } from 'gatsby'
-import { withPage } from '../helpers'
+import React from "react"
+import { Article } from "../views"
+import { graphql } from "gatsby"
+import { withPage } from "../helpers"
 
 export default ({ data, location, pageContext: { previous, next } }) => {
   const { article } = data
 
-  const ArticlePage = withPage(Article, 'article', {
+  const ArticlePage = withPage(Article, "article", {
     location: location,
     title: article.frontmatter.title,
     description: article.excerpt,
     image: article.frontmatter.coverSeo.publicURL,
-    type: 'article',
+    type: "article",
   })
 
   return <ArticlePage article={article} previous={previous} next={next} />

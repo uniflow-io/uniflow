@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { navigate } from 'gatsby'
-import debounce from 'lodash/debounce'
-import { connect } from 'react-redux'
-import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { Component } from "react"
+import { navigate } from "gatsby"
+import debounce from "lodash/debounce"
+import { connect } from "react-redux"
+import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   getFolderTree,
   updateParentFolder,
   deleteParentFolder,
   setParentFolderFeed,
   toFeedPath,
-} from '../../reducers/feed/actions'
-import { Select } from '../../components'
+} from "../../reducers/feed/actions"
+import { Select } from "../../components"
 
 class Folder extends Component {
   state = {
@@ -36,7 +36,7 @@ class Folder extends Component {
     }
   }
 
-  onChangeTitle = event => {
+  onChangeTitle = (event) => {
     this.props
       .dispatch(
         setParentFolderFeed({
@@ -49,11 +49,11 @@ class Folder extends Component {
       })
   }
 
-  onChangeSlug = event => {
+  onChangeSlug = (event) => {
     this.setState({ slug: event.target.value }, this.onUpdate)
   }
 
-  onChangePath = selected => {
+  onChangePath = (selected) => {
     this.props
       .dispatch(
         setParentFolderFeed({
@@ -70,43 +70,37 @@ class Folder extends Component {
     const { folder } = this.props
     folder.slug = this.state.slug ?? folder.slug
 
-    this.props
-      .dispatch(updateParentFolder(folder, this.props.auth.token))
-      .then((folder) => {
-        const path = toFeedPath(folder, this.props.user)
-        if (typeof window !== `undefined` && window.location.pathname !== path) {
-          navigate(path)
-        }
-      })
+    this.props.dispatch(updateParentFolder(folder, this.props.auth.token)).then((folder) => {
+      const path = toFeedPath(folder, this.props.user)
+      if (typeof window !== `undefined` && window.location.pathname !== path) {
+        navigate(path)
+      }
+    })
   }, 500)
 
-  onDelete = event => {
+  onDelete = (event) => {
     event.preventDefault()
 
-    return this.props
-      .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
-      .then(() => {
-        navigate(toFeedPath(this.props.folder, this.props.user, true))
-      })
+    return this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token)).then(() => {
+      navigate(toFeedPath(this.props.folder, this.props.user, true))
+    })
   }
 
-  onFolderEdit = event => {
+  onFolderEdit = (event) => {
     event.preventDefault()
 
     const { feed, folder } = this.props
 
-    this.props
-      .dispatch(getFolderTree(feed.uid, this.props.auth.token))
-      .then(folderTree => {
-        folderTree = folderTree.filter(value => {
-          return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0
-        })
-
-        this.setState({
-          folderTreeEdit: true,
-          folderTree: folderTree,
-        })
+    this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
+      folderTree = folderTree.filter((value) => {
+        return value.indexOf(`${folder.path === "/" ? "" : folder.path}/${folder.slug}`) !== 0
       })
+
+      this.setState({
+        folderTreeEdit: true,
+        folderTree: folderTree,
+      })
+    })
   }
 
   render() {
@@ -121,11 +115,7 @@ class Folder extends Component {
             <h3>Infos</h3>
           </div>
           <div className="d-block col-auto">
-            <div
-              className="btn-toolbar"
-              role="toolbar"
-              aria-label="folder actions"
-            >
+            <div className="btn-toolbar" role="toolbar" aria-label="folder actions">
               <div className="btn-group-sm" role="group">
                 <button type="button" className="btn" onClick={this.onDelete}>
                   <FontAwesomeIcon icon={faTimes} />
@@ -136,10 +126,7 @@ class Folder extends Component {
         </div>
         <form className="form-sm-horizontal">
           <div className="form-group row">
-            <label
-              htmlFor="info_name_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_name_{{ _uid }}" className="col-sm-2 col-form-label">
               Title
             </label>
 
@@ -156,10 +143,7 @@ class Folder extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_slug_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
               Slug
             </label>
 
@@ -176,10 +160,7 @@ class Folder extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_path_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
               Path
             </label>
 
@@ -190,19 +171,15 @@ class Folder extends Component {
                   onChange={this.onChangePath}
                   className="form-control"
                   id="info_path_{{ _uid }}"
-                  options={folderTree.map(value => {
+                  options={folderTree.map((value) => {
                     return { value: value, label: value }
                   })}
                 />
               )) || (
                 <div>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.onFolderEdit}
-                  >
+                  <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
                     <FontAwesomeIcon icon={faEdit} />
-                  </button>{' '}
+                  </button>{" "}
                   {folder.path}
                 </div>
               )}
@@ -214,7 +191,7 @@ class Folder extends Component {
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
     user: state.user,

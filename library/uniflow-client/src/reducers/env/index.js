@@ -1,4 +1,4 @@
-import { COMMIT_SET_ENV } from './actions-types'
+import { COMMIT_SET_ENV } from "./actions-types"
 
 const defaultState = {
   facebookAppId: null,

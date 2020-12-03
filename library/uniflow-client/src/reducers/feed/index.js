@@ -5,7 +5,7 @@ import {
   COMMIT_SET_PARENT_FOLDER_FEED,
   COMMIT_SET_SLUG_FEED,
   COMMIT_SET_UID_FEED,
-} from './actions-types'
+} from "./actions-types"
 
 const defaultState = {
   items: {},
@@ -42,10 +42,10 @@ const feed = (state = defaultState, action) => {
         slug: action.slug,
       }
     case COMMIT_SET_UID_FEED:
-    return {
-      ...state,
-      uid: action.uid,
-    }
+      return {
+        ...state,
+        uid: action.uid,
+      }
     default:
       return state
   }

@@ -3,7 +3,7 @@ import {
   COMMIT_LOGIN_USER_SUCCESS,
   COMMIT_LOGIN_USER_FAILURE,
   COMMIT_LOGOUT_USER,
-} from './actions-types'
+} from "./actions-types"
 
 const defaultState = {
   token: null,
@@ -26,7 +26,7 @@ const auth = (state = defaultState, action) => {
         isAuthenticated: true,
         token: action.token,
         uid: action.uid,
-        statusText: 'You have been successfully logged in.',
+        statusText: "You have been successfully logged in.",
       })
     case COMMIT_LOGIN_USER_FAILURE:
       return Object.assign({}, state, {
@@ -41,7 +41,7 @@ const auth = (state = defaultState, action) => {
         isAuthenticated: false,
         token: null,
         uid: null,
-        statusText: 'You have been successfully logged out.',
+        statusText: "You have been successfully logged out.",
       })
     default:
       return state

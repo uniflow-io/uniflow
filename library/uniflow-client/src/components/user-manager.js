@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { fetchSettings } from '../reducers/user/actions'
-import { matchRoute } from '../routes'
-import { fetchFeed, getFeedItem, commitSetSlugFeed } from '../reducers/feed/actions'
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import { fetchSettings } from "../reducers/user/actions"
+import { matchRoute } from "../routes"
+import { fetchFeed, getFeedItem, commitSetSlugFeed } from "../reducers/feed/actions"
 
 class UserManager extends Component {
   state = {
@@ -31,25 +31,23 @@ class UserManager extends Component {
     }
   }
 
-  onLocation = location => {
+  onLocation = (location) => {
     const { auth } = this.props
     const match = matchRoute(location.pathname)
 
     if (match) {
       const params = match.match.params
       const paths = [params.slug1, params.slug2, params.slug3, params.slug4, params.slug5].filter((path) => !!path)
-      if (match.route === 'feed' && auth.isAuthenticated) {
+      if (match.route === "feed" && auth.isAuthenticated) {
         this.onFetchItem(auth.uid, paths)
-      } else if (match.route === 'userFeed') {
+      } else if (match.route === "userFeed") {
         this.onFetchItem(params.uid, paths)
       }
     }
   }
 
   onFetchUser = (uid, token) => {
-    Promise.all([
-      this.props.dispatch(fetchSettings(uid, token)),
-    ]).then(() => {
+    Promise.all([this.props.dispatch(fetchSettings(uid, token))]).then(() => {
       const { location } = this.props
 
       this.onLocation(location)
@@ -62,33 +60,37 @@ class UserManager extends Component {
       return false
     }
 
-    const path = `/${paths.join('/')}`
-    const parentPath = `/${paths.slice(0, -1).join('/')}`
+    const path = `/${paths.join("/")}`
+    const parentPath = `/${paths.slice(0, -1).join("/")}`
     const slug = paths.length > 0 ? paths[paths.length - 1] : null
     const item = getFeedItem(feed, slug)
 
-    if(paths.length === 0 && feed.parentFolder === null) {
+    if (paths.length === 0 && feed.parentFolder === null) {
       return true
     } else if (paths.length === 1 && feed.parentFolder === null) {
-      if(item.type === 'folder') {
+      if (item.type === "folder") {
         return false
       }
 
       this.props.dispatch(commitSetSlugFeed(slug))
       return true
     } else if (paths.length === 1 && feed.parentFolder) {
-      const parentFolderRealPath = `${feed.parentFolder.path === '/' ? '':feed.parentFolder.path}/${feed.parentFolder.slug}`
-      if(parentFolderRealPath === path) {
+      const parentFolderRealPath = `${feed.parentFolder.path === "/" ? "" : feed.parentFolder.path}/${
+        feed.parentFolder.slug
+      }`
+      if (parentFolderRealPath === path) {
         this.props.dispatch(commitSetSlugFeed(null))
         return true
       }
     } else if (paths.length > 1 && feed.parentFolder) {
-      const parentFolderRealPath = `${feed.parentFolder.path === '/' ? '':feed.parentFolder.path}/${feed.parentFolder.slug}`
-      if(parentFolderRealPath === path) {
+      const parentFolderRealPath = `${feed.parentFolder.path === "/" ? "" : feed.parentFolder.path}/${
+        feed.parentFolder.slug
+      }`
+      if (parentFolderRealPath === path) {
         this.props.dispatch(commitSetSlugFeed(null))
         return true
-      } else if(parentFolderRealPath === parentPath) {
-        if(item.type === 'folder') {
+      } else if (parentFolderRealPath === parentPath) {
+        if (item.type === "folder") {
           return false
         }
 
@@ -111,7 +113,7 @@ class UserManager extends Component {
 
     Promise.resolve()
       .then(async () => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           this.setState({ fetching: true }, resolve)
         })
       })
@@ -124,7 +126,7 @@ class UserManager extends Component {
         return this.props.dispatch(fetchFeed(uid, paths, token))
       })
       .then(async () => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
           this.setState({ fetching: false }, resolve)
         })
       })
@@ -135,7 +137,7 @@ class UserManager extends Component {
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
     user: state.user,

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { MDXRenderer } from 'gatsby-plugin-mdx'
-import Img from 'gatsby-image'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faEdit } from '@fortawesome/free-regular-svg-icons'
-import Navigation from './navigation'
-import { MDXProvider } from '../../components'
+import React, { Component } from "react"
+import { MDXRenderer } from "gatsby-plugin-mdx"
+import Img from "gatsby-image"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGithub } from "@fortawesome/free-brands-svg-icons"
+import { faEdit } from "@fortawesome/free-regular-svg-icons"
+import Navigation from "./navigation"
+import { MDXProvider } from "../../components"
 
 class Card extends Component {
   render() {
@@ -27,21 +27,17 @@ class Card extends Component {
                 <div className="row text-secondary">
                   <div className="col-auto mr-auto">
                     <p>
-                      <a
-                        href={repository}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <a href={repository} target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faGithub} /> View on GitHub
                       </a>
                     </p>
                   </div>
                   <div className="col-auto">
-                  {card.fields.catalogs.map((catalog, j) => (
-                    <span key={j} className="badge badge-light mr-1">
-                      {catalog}
-                    </span>
-                  ))}
+                    {card.fields.catalogs.map((catalog, j) => (
+                      <span key={j} className="badge badge-light mr-1">
+                        {catalog}
+                      </span>
+                    ))}
                   </div>
                   {card.official && (
                     <div className="col-auto">
@@ -52,7 +48,7 @@ class Card extends Component {
                           height="18"
                           className="svg-inline--fa"
                           alt="Uniflow"
-                        />{' '}
+                        />{" "}
                         Official
                       </span>
                     </div>

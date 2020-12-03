@@ -1,23 +1,13 @@
-import React, { Component } from 'react'
-import { navigate } from 'gatsby'
-import debounce from 'lodash/debounce'
-import { connect } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faTimes,
-  faClone,
-  faEdit,
-  faPlay,
-} from '@fortawesome/free-solid-svg-icons'
-import { faClipboard } from '@fortawesome/free-regular-svg-icons'
-import { Ace, Rail, Checkbox, Select } from '../../components'
-import Runner from '../../models/runner'
-import {
-  commitPushFlow,
-  commitPopFlow,
-  commitUpdateFlow,
-  commitSetRail,
-} from '../../reducers/rail/actions'
+import React, { Component } from "react"
+import { navigate } from "gatsby"
+import debounce from "lodash/debounce"
+import { connect } from "react-redux"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTimes, faClone, faEdit, faPlay } from "@fortawesome/free-solid-svg-icons"
+import { faClipboard } from "@fortawesome/free-regular-svg-icons"
+import { Ace, Rail, Checkbox, Select } from "../../components"
+import Runner from "../../models/runner"
+import { commitPushFlow, commitPopFlow, commitUpdateFlow, commitSetRail } from "../../reducers/rail/actions"
 import {
   getTags,
   commitUpdateFeed,
@@ -30,9 +20,9 @@ import {
   toFeedPath,
   deserializeRailData,
   serializeRailData,
-} from '../../reducers/feed/actions'
-import { commitAddLog } from '../../reducers/logs/actions'
-import { copyTextToClipboard } from '../../utils'
+} from "../../reducers/feed/actions"
+import { commitAddLog } from "../../reducers/logs/actions"
+import { copyTextToClipboard } from "../../utils"
 
 class Program extends Component {
   state = {
@@ -94,8 +84,8 @@ class Program extends Component {
       })
       .then(() => {
         return Promise.all(
-          this.props.rail.map(item => {
-            return item.bus.emit('deserialize', item.data)
+          this.props.rail.map((item) => {
+            return item.bus.emit("deserialize", item.data)
           })
         )
       })
@@ -110,7 +100,7 @@ class Program extends Component {
       .then(this.onUpdateFlowData)
   }
 
-  onPopFlow = index => {
+  onPopFlow = (index) => {
     this.props
       .dispatch(commitPopFlow(index))
       .then(() => {
@@ -122,13 +112,14 @@ class Program extends Component {
   onUpdateFlow = (index, data) => {
     /** @todo find a way about code generation, for not storing code into the data rail */
     this._componentShouldUpdate = false
-    Promise
-      .all(this.props.program.clients.map(client => {
-        return this.props.rail[index].bus.emit('code', client)
-      }))
-      .then(clientsCodes => {
+    Promise.all(
+      this.props.program.clients.map((client) => {
+        return this.props.rail[index].bus.emit("code", client)
+      })
+    )
+      .then((clientsCodes) => {
         const codes = clientsCodes.reduce((data, codes, clientIndex) => {
-          data[this.props.program.clients[clientIndex]] = codes.join(';')
+          data[this.props.program.clients[clientIndex]] = codes.join(";")
           return data
         }, {})
 
@@ -152,11 +143,9 @@ class Program extends Component {
           return program.data
         }
 
-        return this.props.dispatch(
-          getProgramData(program, this.props.auth.token)
-        )
+        return this.props.dispatch(getProgramData(program, this.props.auth.token))
       })
-      .then(data => {
+      .then((data) => {
         if (!data) return
 
         program.data = data
@@ -183,10 +172,7 @@ class Program extends Component {
     if (program.slug !== this.state.fetchedSlug) return
 
     let data = serializeRailData(rail)
-    if (
-      (feed.uid === 'me' || user.uid === feed.uid) &&
-      program.data !== data
-    ) {
+    if ((feed.uid === "me" || user.uid === feed.uid) && program.data !== data) {
       program.data = data
 
       this._componentShouldUpdate = false
@@ -195,85 +181,97 @@ class Program extends Component {
         .then(() => {
           this._componentShouldUpdate = true
         })
-        .catch(log => {
+        .catch((log) => {
           return this.props.dispatch(commitAddLog(log.message))
         })
     }
   }, 500)
 
-  onChangeTitle = event => {
+  onChangeTitle = (event) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ name: event.target.value },
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ name: event.target.value },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
-  onChangeSlug = event => {
+  onChangeSlug = (event) => {
     this.setState({ slug: event.target.value }, this.onUpdate)
   }
 
-  onChangePath = selected => {
+  onChangePath = (selected) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ path: selected },
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ path: selected },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
-  onChangeClients = clients => {
+  onChangeClients = (clients) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ clients: clients }
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ clients: clients },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
-  onChangeTags = tags => {
+  onChangeTags = (tags) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ tags: tags }
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ tags: tags },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
-  onChangeDescription = description => {
+  onChangeDescription = (description) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ description: description },
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ description: description },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
-  onChangePublic = value => {
+  onChangePublic = (value) => {
     this.props
-      .dispatch(commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ public: value }
-        }
-      }))
+      .dispatch(
+        commitUpdateFeed({
+          type: "program",
+          entity: {
+            ...this.props.program,
+            ...{ public: value },
+          },
+        })
+      )
       .then(this.onUpdate)
   }
 
@@ -281,59 +279,53 @@ class Program extends Component {
     const { program } = this.props
     program.slug = this.state.slug ?? program.slug
 
-    this.props
-      .dispatch(updateProgram(program, this.props.auth.token))
-      .then((program) => {
-        const path = toFeedPath(program, this.props.user)
-        if (typeof window !== `undefined` && window.location.pathname !== path) {
-          navigate(path)
-        }
-      })
+    this.props.dispatch(updateProgram(program, this.props.auth.token)).then((program) => {
+      const path = toFeedPath(program, this.props.user)
+      if (typeof window !== `undefined` && window.location.pathname !== path) {
+        navigate(path)
+      }
+    })
   }, 500)
 
-  onDuplicate = event => {
+  onDuplicate = (event) => {
     event.preventDefault()
 
     let program = this.props.program
-    program.name += ' Copy'
+    program.name += " Copy"
 
     this.props
       .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
-      .then(item => {
+      .then((item) => {
         Object.assign(program, item)
         return this.props.dispatch(setProgramData(program, this.props.auth.token))
       })
       .then(() => {
         return navigate(toFeedPath(program, this.props.user))
       })
-      .catch(log => {
+      .catch((log) => {
         return this.props.dispatch(commitAddLog(log.message))
       })
   }
 
-  onDelete = event => {
+  onDelete = (event) => {
     event.preventDefault()
 
-    return this.props
-      .dispatch(deleteProgram(this.props.program, this.props.auth.token))
-      .then(() => {
-        return navigate(toFeedPath(this.props.program, this.props.user, true))
-      })
+    return this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token)).then(() => {
+      return navigate(toFeedPath(this.props.program, this.props.user, true))
+    })
   }
 
-  onFolderEdit = event => {
+  onFolderEdit = (event) => {
     event.preventDefault()
 
     const { feed } = this.props
 
-    this.props
-      .dispatch(getFolderTree(feed.uid, this.props.auth.token))
-      .then(folderTree => {
-        this.setState({
-          folderTreeEdit: true,
-          folderTree: folderTree,
-        })
+    this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
+      this.setState({
+        folderTreeEdit: true,
+        folderTree: folderTree,
       })
+    })
   }
 
   getFlows = (program) => {
@@ -350,12 +342,12 @@ class Program extends Component {
       if (canPushFlow) {
         flowLabels.push({
           key: key,
-          label: flows[key].tags.join(' - ') + ' : ' + flows[key].name,
+          label: flows[key].tags.join(" - ") + " : " + flows[key].name,
         })
       }
     }
 
-    flowLabels.sort(function(flow1, flow2) {
+    flowLabels.sort(function (flow1, flow2) {
       let x = flow1.label
       let y = flow2.label
       return x < y ? -1 : x > y ? 1 : 0
@@ -374,7 +366,7 @@ class Program extends Component {
     return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`
   }
 
-  onCopyNodeUsage = event => {
+  onCopyNodeUsage = (event) => {
     const clipboard = this.getNodeClipboard()
 
     copyTextToClipboard(clipboard)
@@ -390,7 +382,7 @@ class Program extends Component {
     return `V8_PATH=/path/to/v8 cargo run -- --api-key={your-api-key} ${program.slug}`
   }
 
-  onCopyRustUsage = event => {
+  onCopyRustUsage = (event) => {
     const clipboard = this.getRustClipboard()
 
     copyTextToClipboard(clipboard)
@@ -401,11 +393,11 @@ class Program extends Component {
     const { folderTreeEdit, folderTree } = this.state
     const userFlows = this.getFlows(program)
     const clients = {
-      uniflow: 'Uniflow',
-      node: 'Node',
-      jetbrains: 'Jetbrains',
-      chrome: 'Chrome',
-      rust: 'Rust',
+      uniflow: "Uniflow",
+      node: "Node",
+      jetbrains: "Jetbrains",
+      chrome: "Chrome",
+      rust: "Rust",
     }
     program.slug = this.state.slug ?? program.slug
 
@@ -416,17 +408,9 @@ class Program extends Component {
             <h3>Infos</h3>
           </div>
           <div className="d-block col-auto">
-            <div
-              className="btn-toolbar"
-              role="toolbar"
-              aria-label="flow actions"
-            >
+            <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
               <div className="btn-group-sm" role="group">
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={this.onDuplicate}
-                >
+                <button type="button" className="btn" onClick={this.onDuplicate}>
                   <FontAwesomeIcon icon={faClone} />
                 </button>
                 <button type="button" className="btn" onClick={this.onDelete}>
@@ -438,10 +422,7 @@ class Program extends Component {
         </div>
         <form className="form-sm-horizontal">
           <div className="form-group row">
-            <label
-              htmlFor="info_title_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 col-form-label">
               Title
             </label>
 
@@ -458,10 +439,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_slug_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
               Slug
             </label>
 
@@ -478,10 +456,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_path_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
               Path
             </label>
 
@@ -492,19 +467,15 @@ class Program extends Component {
                   onChange={this.onChangePath}
                   className="form-control"
                   id="info_path_{{ _uid }}"
-                  options={folderTree.map(value => {
+                  options={folderTree.map((value) => {
                     return { value: value, label: value }
                   })}
                 />
               )) || (
                 <div>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={this.onFolderEdit}
-                  >
+                  <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
                     <FontAwesomeIcon icon={faEdit} />
-                  </button>{' '}
+                  </button>{" "}
                   {program.path}
                 </div>
               )}
@@ -512,10 +483,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_client_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_client_{{ _uid }}" className="col-sm-2 col-form-label">
               Clients
             </label>
 
@@ -526,7 +494,7 @@ class Program extends Component {
                 className="form-control"
                 id="info_client_{{ _uid }}"
                 multiple={true}
-                options={Object.keys(clients).map(value => {
+                options={Object.keys(clients).map((value) => {
                   return { value: value, label: clients[value] }
                 })}
               />
@@ -534,10 +502,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_tags_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 col-form-label">
               Tags
             </label>
 
@@ -549,7 +514,7 @@ class Program extends Component {
                 id="info_tags_{{ _uid }}"
                 edit={true}
                 multiple={true}
-                options={tags.map(tag => {
+                options={tags.map((tag) => {
                   return { value: tag, label: tag }
                 })}
                 placeholder="Tags"
@@ -558,10 +523,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_public_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_public_{{ _uid }}" className="col-sm-2 col-form-label">
               Public
             </label>
 
@@ -576,10 +538,7 @@ class Program extends Component {
           </div>
 
           <div className="form-group row">
-            <label
-              htmlFor="info_description_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
+            <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 col-form-label">
               Description
             </label>
 
@@ -595,8 +554,8 @@ class Program extends Component {
             </div>
           </div>
         </form>
-        {program.clients.map(client => {
-          if (client === 'uniflow') {
+        {program.clients.map((client) => {
+          if (client === "uniflow") {
             return (
               <div key={`client-${client}`} className="row">
                 <div className="col">
@@ -606,25 +565,18 @@ class Program extends Component {
                 </div>
               </div>
             )
-          } else if (client === 'node') {
+          } else if (client === "node") {
             const clipboard = this.getNodeClipboard(user)
 
             return (
               <div key={`client-${client}`} className="form-group row">
-                <label
-                  htmlFor="program_node_api_key"
-                  className="col-sm-2 col-form-label"
-                >
+                <label htmlFor="program_node_api_key" className="col-sm-2 col-form-label">
                   Node usage
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
                     <div className="input-group-prepend">
-                      <button
-                        type="button"
-                        className="input-group-text"
-                        onClick={this.onCopyNodeUsage}
-                      >
+                      <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
                         <FontAwesomeIcon icon={faClipboard} />
                       </button>
                     </div>
@@ -632,7 +584,7 @@ class Program extends Component {
                       type="text"
                       className="form-control"
                       id="program_node_api_key"
-                      value={clipboard || ''}
+                      value={clipboard || ""}
                       readOnly
                       placeholder="api key"
                     />
@@ -640,25 +592,18 @@ class Program extends Component {
                 </div>
               </div>
             )
-          } else if (client === 'rust') {
+          } else if (client === "rust") {
             const clipboard = this.getRustClipboard(user)
 
             return (
               <div key={`client-${client}`} className="form-group row">
-                <label
-                  htmlFor="program_node_api_rust"
-                  className="col-sm-2 col-form-label"
-                >
+                <label htmlFor="program_node_api_rust" className="col-sm-2 col-form-label">
                   Rust usage
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
                     <div className="input-group-prepend">
-                      <button
-                        type="button"
-                        className="input-group-text"
-                        onClick={this.onCopyRustUsage}
-                      >
+                      <button type="button" className="input-group-text" onClick={this.onCopyRustUsage}>
                         <FontAwesomeIcon icon={faClipboard} />
                       </button>
                     </div>
@@ -666,7 +611,7 @@ class Program extends Component {
                       type="text"
                       className="form-control"
                       id="program_node_api_rust"
-                      value={clipboard || ''}
+                      value={clipboard || ""}
                       readOnly
                       placeholder="api key"
                     />
@@ -696,7 +641,7 @@ class Program extends Component {
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
     user: state.user,

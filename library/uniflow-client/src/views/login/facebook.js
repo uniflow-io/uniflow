@@ -1,33 +1,31 @@
-import React, { Component } from 'react'
-import { navigate } from 'gatsby'
-import { pathTo } from '../../routes'
-import { facebookLogin } from '../../reducers/auth/actions'
-import { commitAddLog } from '../../reducers/logs/actions'
-import { connect } from 'react-redux'
+import React, { Component } from "react"
+import { navigate } from "gatsby"
+import { pathTo } from "../../routes"
+import { facebookLogin } from "../../reducers/auth/actions"
+import { commitAddLog } from "../../reducers/logs/actions"
+import { connect } from "react-redux"
 
 class FacebookLogin extends Component {
   componentDidMount() {
     let accessToken = this.getAccessToken()
     if (accessToken === null) {
       if (typeof window !== `undefined`) {
-        return navigate(pathTo('login'))
+        return navigate(pathTo("login"))
       }
     }
 
-    this.props
-      .dispatch(facebookLogin(accessToken, this.props.auth.token))
-      .then(() => {
-        if (this.props.auth.isAuthenticated) {
-          if (typeof window !== `undefined`) {
-            return navigate(pathTo('feed'))
-          }
-        } else {
-          this.props.dispatch(commitAddLog(this.props.auth.statusText))
-          if (typeof window !== `undefined`) {
-            return navigate(pathTo('login'))
-          }
+    this.props.dispatch(facebookLogin(accessToken, this.props.auth.token)).then(() => {
+      if (this.props.auth.isAuthenticated) {
+        if (typeof window !== `undefined`) {
+          return navigate(pathTo("feed"))
         }
-      })
+      } else {
+        this.props.dispatch(commitAddLog(this.props.auth.statusText))
+        if (typeof window !== `undefined`) {
+          return navigate(pathTo("login"))
+        }
+      }
+    })
   }
 
   getAccessToken() {
@@ -43,15 +41,13 @@ class FacebookLogin extends Component {
     return (
       <section className="section container-fluid">
         <h3 className="box-title">Login Facebook</h3>
-        <p className="text-center">
-          Application is currently logging you from Facebook
-        </p>
+        <p className="text-center">Application is currently logging you from Facebook</p>
       </section>
     )
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
   }

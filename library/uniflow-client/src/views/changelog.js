@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { StaticQuery, graphql } from 'gatsby'
+import React, { Component } from "react"
+import { StaticQuery, graphql } from "gatsby"
 
 class Changelog extends Component {
   render() {
@@ -23,16 +23,16 @@ class Changelog extends Component {
                     }
                   }
                 `}
-                render={data => {
+                render={(data) => {
                   const items = data.allChangelogYaml.edges
                   return items.map((item, index) => (
                     <li key={index}>
                       <a
                         href={
                           items[index + 1]
-                            ? `https://github.com/uniflow-io/uniflow/compare/${
-                                items[index + 1].node.tag
-                              }...${items[index].node.tag}`
+                            ? `https://github.com/uniflow-io/uniflow/compare/${items[index + 1].node.tag}...${
+                                items[index].node.tag
+                              }`
                             : `https://github.com/uniflow-io/uniflow/releases/tag/${item.node.tag}`
                         }
                         target="_blank"
@@ -41,9 +41,16 @@ class Changelog extends Component {
                         {item.node.tag}
                       </a>
                       <span className="float-right">{item.node.date}</span>
-                      <p>{item.node.label.split('\n').map((item, key) => {
-                        return <span key={key}>{item}<br/></span>
-                      })}</p>
+                      <p>
+                        {item.node.label.split("\n").map((item, key) => {
+                          return (
+                            <span key={key}>
+                              {item}
+                              <br />
+                            </span>
+                          )
+                        })}
+                      </p>
                       <hr />
                     </li>
                   ))

@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import Navigation from './navigation'
-import MDXDocument from './index.mdx'
-import { MDXProvider } from '../../components'
+import React, { Component } from "react"
+import Navigation from "./navigation"
+import MDXDocument from "./index.mdx"
+import { MDXProvider } from "../../components"
 
 class Library extends Component {
   render() {

@@ -1,43 +1,37 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import {
-  login,
-  facebookLoginUrl,
-  githubLoginUrl,
-} from '../../reducers/auth/actions'
-import { pathTo } from '../../routes'
-import { commitAddLog } from '../../reducers/logs/actions'
-import { Link, navigate } from 'gatsby'
-import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons'
-import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { Component } from "react"
+import { connect } from "react-redux"
+import { login, facebookLoginUrl, githubLoginUrl } from "../../reducers/auth/actions"
+import { pathTo } from "../../routes"
+import { commitAddLog } from "../../reducers/logs/actions"
+import { Link, navigate } from "gatsby"
+import { faSignInAlt, faUser, faKey } from "@fortawesome/free-solid-svg-icons"
+import { faFacebookF, faGithub } from "@fortawesome/free-brands-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 class Login extends Component {
   state = {
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   }
 
-  onChangeUsername = event => {
+  onChangeUsername = (event) => {
     this.setState({ username: event.target.value })
   }
 
-  onChangePassword = event => {
+  onChangePassword = (event) => {
     this.setState({ password: event.target.value })
   }
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     e.preventDefault()
 
-    this.props
-      .dispatch(login(this.state.username, this.state.password))
-      .then(() => {
-        if (this.props.auth.isAuthenticated) {
-          return navigate(pathTo('feed'))
-        } else {
-          return this.props.dispatch(commitAddLog(this.props.auth.statusText))
-        }
-      })
+    this.props.dispatch(login(this.state.username, this.state.password)).then(() => {
+      if (this.props.auth.isAuthenticated) {
+        return navigate(pathTo("feed"))
+      } else {
+        return this.props.dispatch(commitAddLog(this.props.auth.statusText))
+      }
+    })
   }
 
   render() {
@@ -55,13 +49,15 @@ class Login extends Component {
                   <div className="form-group">
                     <div className="input-group">
                       <div className="input-group-prepend">
-                        <div className="input-group-text"><FontAwesomeIcon icon={faUser} /></div>
+                        <div className="input-group-text">
+                          <FontAwesomeIcon icon={faUser} />
+                        </div>
                       </div>
                       <input
                         className="form-control"
                         id="username{{ _uid }}"
                         type="text"
-                        value={username || ''}
+                        value={username || ""}
                         onChange={this.onChangeUsername}
                         placeholder="Email or Username"
                       />
@@ -70,13 +66,15 @@ class Login extends Component {
                   <div className="form-group">
                     <div className="input-group">
                       <div className="input-group-prepend">
-                        <div className="input-group-text"><FontAwesomeIcon icon={faKey} /></div>
+                        <div className="input-group-text">
+                          <FontAwesomeIcon icon={faKey} />
+                        </div>
                       </div>
                       <input
                         className="form-control"
                         id="password{{ _uid }}"
                         type="password"
-                        value={password || ''}
+                        value={password || ""}
                         onChange={this.onChangePassword}
                         placeholder="Password"
                       />
@@ -99,32 +97,23 @@ class Login extends Component {
                 </form>
                 {env.facebookAppId && (
                   <p>
-                    <a
-                      href={facebookLoginUrl(env.facebookAppId)}
-                      className="btn btn-block btn-social btn-facebook"
-                    >
+                    <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-block btn-social btn-facebook">
                       <FontAwesomeIcon icon={faFacebookF} /> Login with Facebook
                     </a>
                   </p>
                 )}
                 {env.githubAppId && (
-                <p>
-                  <a
-                    href={githubLoginUrl(env.githubAppId)}
-                    className="btn btn-block btn-social btn-github"
-                  >
-                    <FontAwesomeIcon icon={faGithub} /> Login with Github
-                  </a>
-                </p>
+                  <p>
+                    <a href={githubLoginUrl(env.githubAppId)} className="btn btn-block btn-social btn-github">
+                      <FontAwesomeIcon icon={faGithub} /> Login with Github
+                    </a>
+                  </p>
                 )}
               </article>
             </div>
             <p>
-              <Link to={pathTo('register')}>
-                <span
-                  className="glyphicon glyphicon-log-in register"
-                  aria-hidden="true"
-                />{' '}
+              <Link to={pathTo("register")}>
+                <span className="glyphicon glyphicon-log-in register" aria-hidden="true" />{" "}
                 <FontAwesomeIcon icon={faSignInAlt} /> Register
               </Link>
             </p>
@@ -135,7 +124,7 @@ class Login extends Component {
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     auth: state.auth,
     env: state.env,

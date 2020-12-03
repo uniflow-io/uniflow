@@ -1,10 +1,10 @@
-import React from 'react'
-import { combineReducers } from 'redux'
-import { Provider } from 'react-redux'
-import { app, auth, env, feed, logs, rail, user } from './reducers'
-import { createStore } from './utils'
-import { commitLoginUserSuccess } from './reducers/auth/actions'
-import { commitSetEnv } from './reducers/env/actions'
+import React from "react"
+import { combineReducers } from "redux"
+import { Provider } from "react-redux"
+import { app, auth, env, feed, logs, rail, user } from "./reducers"
+import { createStore } from "./utils"
+import { commitLoginUserSuccess } from "./reducers/auth/actions"
+import { commitSetEnv } from "./reducers/env/actions"
 
 let store = createStore(
   combineReducers({
@@ -27,8 +27,8 @@ const ENV = {
 store.dispatch(commitSetEnv(ENV))
 
 if (typeof window !== `undefined`) {
-  let token = window.localStorage.getItem('token')
-  let uid = window.localStorage.getItem('uid')
+  let token = window.localStorage.getItem("token")
+  let uid = window.localStorage.getItem("uid")
   if (token !== null) {
     store.dispatch(commitLoginUserSuccess(token, uid))
   }

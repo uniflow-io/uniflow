@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import Navigation from './navigation'
-import Program from './program'
-import Folder from './folder'
-import { getFeedItem } from '../../reducers/feed/actions'
-import { connect } from 'react-redux'
+import React, { Component } from "react"
+import Navigation from "./navigation"
+import Program from "./program"
+import Folder from "./folder"
+import { getFeedItem } from "../../reducers/feed/actions"
+import { connect } from "react-redux"
 
 class Feed extends Component {
   render() {
@@ -14,19 +14,15 @@ class Feed extends Component {
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
           <Navigation />
-          {currentItem && currentItem.type === 'program' &&
-            <Program program={currentItem.entity} flows={flows} />
-          }
-          {currentItem && currentItem.type === 'folder' &&
-            <Folder folder={currentItem.entity} />
-          }
+          {currentItem && currentItem.type === "program" && <Program program={currentItem.entity} flows={flows} />}
+          {currentItem && currentItem.type === "folder" && <Folder folder={currentItem.entity} />}
         </div>
       </div>
     )
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     feed: state.feed,
   }

@@ -1,35 +1,25 @@
-import React, { Component, Suspense, lazy } from 'react'
-import { Search } from '../components'
+import React, { Component, Suspense, lazy } from "react"
+import { Search } from "../components"
 
 class UiItem extends Component {
   render() {
-    const {
-      tag,
-      bus,
-      onPush,
-      onPop,
-      onUpdate,
-      onRun,
-      flows,
-      userFlows,
-      clients,
-    } = this.props
+    const { tag, bus, onPush, onPop, onUpdate, onRun, flows, userFlows, clients } = this.props
 
     let TagName = Search
-    if (tag !== 'search') {
+    if (tag !== "search") {
       // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
-        '@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
-        '@uniflow-io/uniflow-flow-bash': () => import('../../../uniflow-flow-bash/src'),
-        '@uniflow-io/uniflow-flow-canvas': () => import('../../../uniflow-flow-canvas/src'),
-        '@uniflow-io/uniflow-flow-if': () => import('../../../uniflow-flow-if/src'),
-        '@uniflow-io/uniflow-flow-object': () => import('../../../uniflow-flow-object/src'),
-        '@uniflow-io/uniflow-flow-javascript': () => import('../../../uniflow-flow-javascript/src'),
-        '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
-        '@uniflow-io/uniflow-flow-regex': () => import('../../../uniflow-flow-regex/src'),
-        '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
-        '@uniflow-io/uniflow-flow-text-list': () => import('../../../uniflow-flow-text-list/src'),
-        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),
+        "@uniflow-io/uniflow-flow-assets": () => import("../../../uniflow-flow-assets/src"),
+        "@uniflow-io/uniflow-flow-bash": () => import("../../../uniflow-flow-bash/src"),
+        "@uniflow-io/uniflow-flow-canvas": () => import("../../../uniflow-flow-canvas/src"),
+        "@uniflow-io/uniflow-flow-if": () => import("../../../uniflow-flow-if/src"),
+        "@uniflow-io/uniflow-flow-object": () => import("../../../uniflow-flow-object/src"),
+        "@uniflow-io/uniflow-flow-javascript": () => import("../../../uniflow-flow-javascript/src"),
+        "@uniflow-io/uniflow-flow-prompt": () => import("../../../uniflow-flow-prompt/src"),
+        "@uniflow-io/uniflow-flow-regex": () => import("../../../uniflow-flow-regex/src"),
+        "@uniflow-io/uniflow-flow-text": () => import("../../../uniflow-flow-text/src"),
+        "@uniflow-io/uniflow-flow-text-list": () => import("../../../uniflow-flow-text-list/src"),
+        "@uniflow-io/uniflow-flow-while": () => import("../../../uniflow-flow-while/src"),
       }
       TagName = lazy(lasyImports[tag])
     }
@@ -53,20 +43,11 @@ class UiItem extends Component {
 
 export default class Rail extends Component {
   render() {
-    const {
-      rail,
-      onPush,
-      onPop,
-      onUpdate,
-      onRun,
-      flows,
-      userFlows,
-      clients,
-    } = this.props
+    const { rail, onPush, onPop, onUpdate, onRun, flows, userFlows, clients } = this.props
     const uiStack = (() => {
       let uiStack = [
         {
-          component: 'search',
+          component: "search",
           index: 0,
         },
       ]
@@ -81,7 +62,7 @@ export default class Rail extends Component {
         })
 
         uiStack.push({
-          component: 'search',
+          component: "search",
           index: i + 1,
         })
       }
@@ -97,16 +78,16 @@ export default class Rail extends Component {
         flows={flows}
         userFlows={userFlows}
         clients={clients}
-        onPush={component => {
+        onPush={(component) => {
           onPush(item.index, component)
         }}
         onPop={() => {
           onPop(item.index)
         }}
-        onUpdate={data => {
+        onUpdate={(data) => {
           onUpdate(item.index, data)
         }}
-        onRun={event => {
+        onRun={(event) => {
           onRun(event, item.index)
         }}
       />

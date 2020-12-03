@@ -1,7 +1,4 @@
-import {
-  COMMIT_UPDATE_SETTINGS,
-  COMMIT_LOGOUT_USER,
-} from './actions-types'
+import { COMMIT_UPDATE_SETTINGS, COMMIT_LOGOUT_USER } from "./actions-types"
 
 const defaultState = {
   uid: undefined,
@@ -15,7 +12,7 @@ const defaultState = {
   roles: [],
   links: {
     lead: undefined,
-  }
+  },
 }
 
 const user = (state = defaultState, action) => {

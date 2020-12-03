@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import ace from 'brace'
-import 'brace/mode/javascript'
-import 'brace/mode/batchfile'
-import 'brace/mode/jsx'
-import 'brace/theme/solarized_dark'
-import 'brace/theme/solarized_light'
-import { connect } from 'react-redux'
+import React, { Component } from "react"
+import ace from "brace"
+import "brace/mode/javascript"
+import "brace/mode/batchfile"
+import "brace/mode/jsx"
+import "brace/theme/solarized_dark"
+import "brace/theme/solarized_light"
+import { connect } from "react-redux"
 
 /**
  * Component adapted from https://github.com/securingsincity/react-ace/blob/master/src/ace.tsx
@@ -16,13 +16,13 @@ class Ace extends Component {
 
     this.silent = false
 
-    ace.config.set('basePath', '/jspm_packages/github/ajaxorg/ace-builds@1.3.3')
+    ace.config.set("basePath", "/jspm_packages/github/ajaxorg/ace-builds@1.3.3")
     this.editor = ace.edit(this.container)
     this.editor.$blockScrolling = Infinity
     if (value) {
       this.editor.setValue(value, 1)
     }
-    this.editor.on('change', event => {
+    this.editor.on("change", (event) => {
       if (this.props.onChange && !this.silent) {
         const value = this.editor.getValue()
         this.props.onChange(value, event)
@@ -34,19 +34,19 @@ class Ace extends Component {
     session.setTabSize(2)
 
     if (mode) {
-      session.setMode('ace/mode/' + mode)
+      session.setMode("ace/mode/" + mode)
     }
 
-    if (app.theme === 'dark') {
-      this.editor.setTheme('ace/theme/solarized_dark')
-    } else if (app.theme === 'sepia') {
-      this.editor.setTheme('ace/theme/solarized_light')
+    if (app.theme === "dark") {
+      this.editor.setTheme("ace/theme/solarized_dark")
+    } else if (app.theme === "sepia") {
+      this.editor.setTheme("ace/theme/solarized_light")
     }
 
-    if(layout === 'text') {
+    if (layout === "text") {
       this.editor.setOptions({
-        maxLines: Infinity
-      });
+        maxLines: Infinity,
+      })
     }
   }
 
@@ -62,7 +62,7 @@ class Ace extends Component {
       // editor.setValue is a synchronous function call, change event is emitted before setValue return.
       this.silent = true
       const pos = this.editor.session.selection.toJSON()
-      this.editor.setValue(nextProps.value || '', 1)
+      this.editor.setValue(nextProps.value || "", 1)
       this.editor.session.selection.fromJSON(pos)
       this.silent = false
     }
@@ -73,16 +73,16 @@ class Ace extends Component {
 
     return (
       <div
-        ref={container => (this.container = container)}
+        ref={(container) => (this.container = container)}
         style={{
-          height:  height || layout !== 'text' ? height + 'px' : '100%',
-          width: width ? width + 'px' : '100%',
+          height: height || layout !== "text" ? height + "px" : "100%",
+          width: width ? width + "px" : "100%",
         }}
       />
     )
   }
 }
 
-export default connect(state => ({
+export default connect((state) => ({
   app: state.app,
 }))(Ace)

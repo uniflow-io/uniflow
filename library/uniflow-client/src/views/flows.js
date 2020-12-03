@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Link } from 'gatsby'
-import { connect } from 'react-redux'
-import { toFeedPath } from '../reducers/feed/actions'
-import { getFlows } from '../reducers/flows/actions'
+import React, { Component } from "react"
+import { Link } from "gatsby"
+import { connect } from "react-redux"
+import { toFeedPath } from "../reducers/feed/actions"
+import { getFlows } from "../reducers/flows/actions"
 
 class Flows extends Component {
   state = {
@@ -14,7 +14,7 @@ class Flows extends Component {
   }
 
   onFetchFlowData = () => {
-    this.props.dispatch(getFlows()).then(programs => {
+    this.props.dispatch(getFlows()).then((programs) => {
       this.setState({ programs })
     })
   }
@@ -45,7 +45,7 @@ class Flows extends Component {
   }
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     user: state.user,
   }

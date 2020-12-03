@@ -1,6 +1,6 @@
-import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
-import ArticleItem from './articleItem'
+import React from "react"
+import { StaticQuery, graphql } from "gatsby"
+import ArticleItem from "./articleItem"
 
 const Blog = () => (
   <>
@@ -21,7 +21,7 @@ const Blog = () => (
             }
           }
         `}
-        render={data =>
+        render={(data) =>
           data.allMdx.edges.map((item, i) => (
             <div className="row mb-3" key={i}>
               <div className="col-md-6 offset-md-3">

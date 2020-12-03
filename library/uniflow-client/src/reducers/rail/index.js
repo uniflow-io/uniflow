@@ -1,10 +1,5 @@
-import { Bus } from '../../models'
-import {
-  COMMIT_PUSH_FLOW,
-  COMMIT_POP_FLOW,
-  COMMIT_UPDATE_FLOW,
-  COMMIT_SET_RAIL,
-} from './actions-types'
+import { Bus } from "../../models"
+import { COMMIT_PUSH_FLOW, COMMIT_POP_FLOW, COMMIT_UPDATE_FLOW, COMMIT_SET_RAIL } from "./actions-types"
 
 const defaultState = []
 

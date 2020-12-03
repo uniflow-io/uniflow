@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { pathTo } from '../../routes'
-import { Link } from 'gatsby'
-import ArticleItem from './articleItem'
+import React, { Component } from "react"
+import { pathTo } from "../../routes"
+import { Link } from "gatsby"
+import ArticleItem from "./articleItem"
 
 class Tag extends Component {
   render() {
@@ -16,7 +16,7 @@ class Tag extends Component {
               {articles.edges.length} posts tagged with <strong>{tag}</strong>
             </p>
             <p>
-              <Link to={pathTo('tags')} className="btn btn-block btn-primary">
+              <Link to={pathTo("tags")} className="btn btn-block btn-primary">
                 View all tags
               </Link>
             </p>

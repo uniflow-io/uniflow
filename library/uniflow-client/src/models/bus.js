@@ -1,6 +1,6 @@
-import EventEmitter from 'promise-events'
+import EventEmitter from "promise-events"
 
-EventEmitter.prototype.getMaxListeners = function() {
+EventEmitter.prototype.getMaxListeners = function () {
   return this._maxListeners
 }
 

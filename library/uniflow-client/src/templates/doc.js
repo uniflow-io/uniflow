@@ -1,12 +1,12 @@
-import React from 'react'
-import { Doc } from '../views'
-import { graphql } from 'gatsby'
-import { withPage } from '../helpers'
+import React from "react"
+import { Doc } from "../views"
+import { graphql } from "gatsby"
+import { withPage } from "../helpers"
 
 export default ({ data, location, pageContext: { previous, next } }) => {
   const { doc, docNav } = data
 
-  const DocPage = withPage(Doc, 'doc', {
+  const DocPage = withPage(Doc, "doc", {
     location: location,
     title: doc.frontmatter.title,
     description: doc.excerpt,

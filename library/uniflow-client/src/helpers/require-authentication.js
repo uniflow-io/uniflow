@@ -1,10 +1,10 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { pathTo } from '../routes'
-import { isGranted } from '../reducers/user/actions'
-import { navigate } from 'gatsby'
+import React from "react"
+import { connect } from "react-redux"
+import { pathTo } from "../routes"
+import { isGranted } from "../reducers/user/actions"
+import { navigate } from "gatsby"
 
-export default function requireAuthentication(Component, role = 'ROLE_USER') {
+export default function requireAuthentication(Component, role = "ROLE_USER") {
   class requireAuthenticationHelper extends React.Component {
     componentDidMount() {
       this.checkAuth(this.props.isAuthenticated, this.props.user)
@@ -17,7 +17,7 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
     checkAuth = (isAuthenticated, user) => {
       if (!isAuthenticated || (user.uid && !isGranted(user, role))) {
         if (typeof window !== `undefined`) {
-          navigate(pathTo('login'))
+          navigate(pathTo("login"))
         }
       }
     }
@@ -31,7 +31,7 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
     }
   }
 
-  return connect(state => ({
+  return connect((state) => ({
     token: state.auth.token,
     user: state.user,
     isAuthenticated: state.auth.isAuthenticated,
