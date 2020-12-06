@@ -63,7 +63,7 @@ class Article extends Component {
             </MDXProvider>
             <p>
               <a
-                href={`https://github.com/uniflow-io/uniflow/blob/main/docs/blog/${article.parent.relativePath}`}
+                href={`https://github.com/uniflow-io/uniflow/blob/1.x/docs/blog/${article.parent.relativePath}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -21,7 +21,7 @@ class Newsletter extends Component {
                 </MDXProvider>
                 <p>
                   <a
-                    href={`https://github.com/uniflow-io/uniflow/blob/main/docs/newsletters/${newsletter.parent.relativePath}`}
+                    href={`https://github.com/uniflow-io/uniflow/blob/1.x/docs/newsletters/${newsletter.parent.relativePath}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
