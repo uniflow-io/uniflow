@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Runner {
-    public void run(JsonArray rail, AnActionEvent event) {
+    public void run(JsonArray flows, AnActionEvent event) {
         ArrayList<Bridge> bridges = new ArrayList<>() {{
             add(new Console());
             add(new Jetbrains(event));
@@ -47,8 +47,8 @@ public class Runner {
             bridge.register(vm);
         }
 
-        for (int i = 0; i < rail.size(); i++) {
-            JsonObject flow = rail.get(i).getAsJsonObject();
+        for (int i = 0; i < flows.size(); i++) {
+            JsonObject flow = flows.get(i).getAsJsonObject();
             String code = flow.get("codes").getAsJsonObject().get("jetbrains").getAsString();
             vm.executeScript(code);
         }

@@ -8,13 +8,13 @@ export default class Runner {
     this.background = background
   }
 
-  run(rail) {
+  run(flows) {
     const context = new vm.createContext({
       console: consoleBridge(this.background),
       chrome: chromeBridge(this.background),
     })
 
-    return rail.reduce((promise, flow) => {
+    return flows.reduce((promise, flow) => {
       return promise.then(() => {
         return vm.runInContext(flow.codes.chrome || '', context)
       })

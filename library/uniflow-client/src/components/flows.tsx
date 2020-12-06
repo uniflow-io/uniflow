@@ -1,9 +1,9 @@
 import React, { Component, Suspense, lazy } from "react"
-import { Search } from "../components"
+import { Search } from "."
 
-class UiItem extends Component {
+class UiFlow extends Component {
   render() {
-    const { tag, bus, onPush, onPop, onUpdate, onRun, flows, userFlows, clients } = this.props
+    const { tag, bus, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props
 
     let TagName = Search
     if (tag !== "search") {
@@ -28,8 +28,8 @@ class UiItem extends Component {
       <Suspense fallback={<div>Loading...</div>}>
         <TagName
           bus={bus}
-          userFlows={userFlows}
-          flows={flows}
+          programFlows={programFlows}
+          allFlows={allFlows}
           clients={clients}
           onPush={onPush}
           onPop={onPop}
@@ -41,42 +41,42 @@ class UiItem extends Component {
   }
 }
 
-export default class Rail extends Component {
+export default class Flows extends Component {
   render() {
-    const { rail, onPush, onPop, onUpdate, onRun, flows, userFlows, clients } = this.props
-    const uiStack = (() => {
-      let uiStack = [
+    const { flows, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props
+    const uiFlows = (() => {
+      let uiFlows = [
         {
           component: "search",
           index: 0,
         },
       ]
 
-      for (let i = 0; i < rail.length; i++) {
-        let item = rail[i]
+      for (let i = 0; i < flows.length; i++) {
+        let item = flows[i]
 
-        uiStack.push({
+        uiFlows.push({
           component: item.flow,
           bus: item.bus,
           index: i,
         })
 
-        uiStack.push({
+        uiFlows.push({
           component: "search",
           index: i + 1,
         })
       }
 
-      return uiStack
+      return uiFlows
     })()
 
-    return uiStack.map((item, i) => (
-      <UiItem
+    return uiFlows.map((item, i) => (
+      <UiFlow
         key={i}
         tag={item.component}
         bus={item.bus}
-        flows={flows}
-        userFlows={userFlows}
+        allFlows={allFlows}
+        programFlows={programFlows}
         clients={clients}
         onPush={(component) => {
           onPush(item.index, component)

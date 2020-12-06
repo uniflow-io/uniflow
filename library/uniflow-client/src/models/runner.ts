@@ -3,7 +3,7 @@ import axiosBridge from "../bridges/axios"
 import vm from "vm"
 
 export default class Runner {
-  run(rail) {
+  run(flows) {
     const context = new vm.createContext({
       console: consoleBridge,
       axios: axiosBridge,
@@ -18,7 +18,7 @@ export default class Runner {
       },
     }
 
-    return rail.reduce((promise, flow) => {
+    return flows.reduce((promise, flow) => {
       return promise.then(() => {
         return flow.bus.emit("execute", runner)
       })

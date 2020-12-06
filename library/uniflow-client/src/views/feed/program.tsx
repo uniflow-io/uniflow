@@ -5,9 +5,9 @@ import { connect } from "react-redux"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes, faClone, faEdit, faPlay } from "@fortawesome/free-solid-svg-icons"
 import { faClipboard } from "@fortawesome/free-regular-svg-icons"
-import { Ace, Rail, Checkbox, Select } from "../../components"
+import { Ace, Flows, Checkbox, Select } from "../../components"
 import Runner from "../../models/runner"
-import { commitPushFlow, commitPopFlow, commitUpdateFlow, commitSetRail } from "../../reducers/rail/actions"
+import { commitPushFlow, commitPopFlow, commitUpdateFlow, commitSetFlows } from "../../reducers/flows/actions"
 import {
   getTags,
   commitUpdateFeed,
@@ -18,8 +18,8 @@ import {
   setProgramData,
   getFolderTree,
   toFeedPath,
-  deserializeRailData,
-  serializeRailData,
+  deserializeFlowsData,
+  serializeFlowsData,
 } from "../../reducers/feed/actions"
 import { commitAddLog } from "../../reducers/logs/actions"
 import { copyTextToClipboard } from "../../utils"
@@ -67,15 +67,15 @@ class Program extends Component {
   onRun = (event, index) => {
     event.preventDefault()
 
-    const { rail } = this.props
+    const { flows } = this.props
 
     let runner = new Runner()
-    runner.run(rail.slice(0, index === undefined ? rail.length : index + 1))
+    runner.run(flows.slice(0, index === undefined ? flows.length : index + 1))
   }
 
-  setRail = (rail) => {
+  setFlows = (flows) => {
     return this.props
-      .dispatch(commitSetRail(rail))
+      .dispatch(commitSetFlows(flows))
       .then(() => {
         // hack fix to remove
         return new Promise((resolve) => {
@@ -84,7 +84,7 @@ class Program extends Component {
       })
       .then(() => {
         return Promise.all(
-          this.props.rail.map((item) => {
+          this.props.flows.map((item) => {
             return item.bus.emit("deserialize", item.data)
           })
         )
@@ -95,7 +95,7 @@ class Program extends Component {
     this.props
       .dispatch(commitPushFlow(index, flow))
       .then(() => {
-        return this.setRail(this.props.rail)
+        return this.setFlows(this.props.flows)
       })
       .then(this.onUpdateFlowData)
   }
@@ -104,17 +104,17 @@ class Program extends Component {
     this.props
       .dispatch(commitPopFlow(index))
       .then(() => {
-        return this.setRail(this.props.rail)
+        return this.setFlows(this.props.flows)
       })
       .then(this.onUpdateFlowData)
   }
 
   onUpdateFlow = (index, data) => {
-    /** @todo find a way about code generation, for not storing code into the data rail */
+    /** @todo find a way about code generation, for not storing code into the data flows */
     this._componentShouldUpdate = false
     Promise.all(
       this.props.program.clients.map((client) => {
-        return this.props.rail[index].bus.emit("code", client)
+        return this.props.flows[index].bus.emit("code", client)
       })
     )
       .then((clientsCodes) => {
@@ -136,7 +136,7 @@ class Program extends Component {
 
     Promise.resolve()
       .then(() => {
-        return this.props.dispatch(commitSetRail([]))
+        return this.props.dispatch(commitSetFlows([]))
       })
       .then(() => {
         if (program.data) {
@@ -152,7 +152,7 @@ class Program extends Component {
 
         if (program.slug !== this.props.program.slug) return
 
-        return this.setRail(deserializeRailData(data))
+        return this.setFlows(deserializeFlowsData(data))
       })
       .then(() => {
         this._componentShouldUpdate = false
@@ -168,10 +168,10 @@ class Program extends Component {
   }, 500)
 
   onUpdateFlowData = debounce(() => {
-    let { program, rail, user, feed } = this.props
+    let { program, flows, user, feed } = this.props
     if (program.slug !== this.state.fetchedSlug) return
 
-    let data = serializeRailData(rail)
+    let data = serializeFlowsData(flows)
     if ((feed.uid === "me" || user.uid === feed.uid) && program.data !== data) {
       program.data = data
 
@@ -329,20 +329,20 @@ class Program extends Component {
   }
 
   getFlows = (program) => {
-    const { flows } = this.props
+    const { allFlows } = this.props
     let flowLabels = []
-    let keys = Object.keys(flows)
+    let keys = Object.keys(allFlows)
 
     for (let i = 0; i < keys.length; i++) {
       let key = keys[i]
       const canPushFlow = program.clients.reduce((bool, client) => {
-        return bool && flows[key].clients.indexOf(client) !== -1
+        return bool && allFlows[key].clients.indexOf(client) !== -1
       }, program.clients.length > 0)
 
       if (canPushFlow) {
         flowLabels.push({
           key: key,
-          label: flows[key].tags.join(" - ") + " : " + flows[key].name,
+          label: allFlows[key].tags.join(" - ") + " : " + allFlows[key].name,
         })
       }
     }
@@ -389,9 +389,9 @@ class Program extends Component {
   }
 
   render() {
-    const { program, tags, rail, user, flows } = this.props
+    const { program, tags, flows, user, allFlows } = this.props
     const { folderTreeEdit, folderTree } = this.state
-    const userFlows = this.getFlows(program)
+    const programFlows = this.getFlows(program)
     const clients = {
       uniflow: "Uniflow",
       node: "Node",
@@ -626,10 +626,10 @@ class Program extends Component {
 
         <hr />
 
-        <Rail
-          rail={rail}
+        <Flows
           flows={flows}
-          userFlows={userFlows}
+          allFlows={allFlows}
+          programFlows={programFlows}
           clients={program.clients}
           onPush={this.onPushFlow}
           onPop={this.onPopFlow}
@@ -647,6 +647,6 @@ export default connect((state) => {
     user: state.user,
     tags: getTags(state.feed),
     feed: state.feed,
-    rail: state.rail,
+    flows: state.flows,
   }
 })(Program)

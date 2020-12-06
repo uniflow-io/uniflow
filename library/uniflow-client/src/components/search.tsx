@@ -21,7 +21,7 @@ export default class Search extends Component {
   }
 
   render() {
-    const { userFlows } = this.props
+    const { programFlows } = this.props
     const { search } = this.state
 
     return (
@@ -38,7 +38,7 @@ export default class Search extends Component {
                   onChange={this.onChange}
                   className="form-control pull-right"
                   id="search{{ _uid }}"
-                  options={userFlows.map((flow) => {
+                  options={programFlows.map((flow) => {
                     return { value: flow.key, label: flow.label }
                   })}
                 />

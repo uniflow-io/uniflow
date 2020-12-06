@@ -23,10 +23,10 @@ export default ({ location, data: { localFlows } }) => {
     exact: true,
   })
   if (match) {
-    return <AuthFeedPage flows={allFlows} />
+    return <AuthFeedPage allFlows={allFlows} />
   }
 
-  return <FeedPage flows={allFlows} />
+  return <FeedPage allFlows={allFlows} />
 }
 
 export const query = graphql`

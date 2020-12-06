@@ -3,7 +3,7 @@ import { COMMIT_PUSH_FLOW, COMMIT_POP_FLOW, COMMIT_UPDATE_FLOW, COMMIT_SET_RAIL 
 
 const defaultState = []
 
-const rail = (state = defaultState, action) => {
+const flows = (state = defaultState, action) => {
   switch (action.type) {
     case COMMIT_PUSH_FLOW:
       let newStatePush = state.slice()
@@ -31,10 +31,10 @@ const rail = (state = defaultState, action) => {
         }
       })
     case COMMIT_SET_RAIL:
-      return action.rail.slice()
+      return action.flows.slice()
     default:
       return state
   }
 }
 
-export default rail
+export default flows

@@ -1,8 +1,8 @@
 const onCode = function() {}
 
 const onExecute = function(runner) {
-  let railEval = function(rail) {
-    return rail
+  let flowsEval = function(flows) {
+    return flows
       .reduce((promise, item) => {
         return promise.then(() => {
           return item.bus.emit('execute', runner)
@@ -13,18 +13,18 @@ const onExecute = function(runner) {
       })
   }
 
-  return railEval(this.state.if.conditionRail).then(value => {
+  return flowsEval(this.state.if.conditionFlows).then(value => {
     if (value === true) {
-      return railEval(this.state.if.executeRail)
+      return flowsEval(this.state.if.executeFlows)
     }
 
     return this.state.elseIfs
       .reduce((promise, elseIf) => {
         return promise.then(isResolved => {
           if (!isResolved) {
-            return railEval(elseIf.conditionRail).then(value => {
+            return flowsEval(elseIf.conditionFlows).then(value => {
               if (value === true) {
-                return railEval(elseIf.executeRail).then(() => {
+                return flowsEval(elseIf.executeFlows).then(() => {
                   return true
                 })
               }
@@ -38,7 +38,7 @@ const onExecute = function(runner) {
       }, Promise.resolve(false))
       .then(isResolved => {
         if (!isResolved && this.state.else) {
-          return railEval(this.state.else.executeRail)
+          return flowsEval(this.state.else.executeFlows)
         }
       })
   })

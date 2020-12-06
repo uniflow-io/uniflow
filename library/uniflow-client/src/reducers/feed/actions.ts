@@ -275,27 +275,27 @@ export const fetchFeed = (uid, paths, token = null) => {
   }
 }
 
-export const serializeRailData = (rail) => {
+export const serializeFlowsData = (flows) => {
   let data = []
 
-  for (let i = 0; i < rail.length; i++) {
+  for (let i = 0; i < flows.length; i++) {
     data.push({
-      flow: rail[i].flow,
-      data: rail[i].data,
-      codes: rail[i].codes,
+      flow: flows[i].flow,
+      data: flows[i].data,
+      codes: flows[i].codes,
     })
   }
 
   return JSON.stringify(data)
 }
 
-export const deserializeRailData = (raw) => {
+export const deserializeFlowsData = (raw) => {
   let data = JSON.parse(raw)
 
-  let rail = []
+  let flows = []
 
   for (let i = 0; i < data.length; i++) {
-    rail.push({
+    flows.push({
       flow: data[i].flow,
       data: data[i].data,
       codes: data[i].codes,
@@ -303,7 +303,7 @@ export const deserializeRailData = (raw) => {
     })
   }
 
-  return rail
+  return flows
 }
 
 export const createProgram = (program, uid, token) => {

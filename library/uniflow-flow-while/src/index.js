@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { onCode, onExecute } from './runner'
-import { FlowHeader, Rail } from '@uniflow-io/uniflow-client/src/components'
+import { FlowHeader, Flows } from '@uniflow-io/uniflow-client/src/components'
 import createStore from '@uniflow-io/uniflow-client/src/utils/create-store'
-import rail from '@uniflow-io/uniflow-client/src/reducers/rail'
+import flows from '@uniflow-io/uniflow-client/src/reducers/flows'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
-} from '@uniflow-io/uniflow-client/src/reducers/rail/actions'
+} from '@uniflow-io/uniflow-client/src/reducers/flows/actions'
 import {
   setBusEvents,
   componentDidMount,
@@ -21,9 +21,9 @@ import {
 class WhileFlow extends Component {
   state = {
     isRunning: false,
-    conditionRail: [],
+    conditionFlows: [],
     conditionRunIndex: null,
-    executeRail: [],
+    executeFlows: [],
     executeRunIndex: null,
   }
 
@@ -31,8 +31,8 @@ class WhileFlow extends Component {
     super(props)
 
     this.store = {
-      conditionRail: [],
-      executeRail: [],
+      conditionFlows: [],
+      executeFlows: [],
     }
     setBusEvents(
       {
@@ -58,13 +58,13 @@ class WhileFlow extends Component {
 
   serialize = () => {
     return {
-      condition: this.state.conditionRail.map(item => {
+      condition: this.state.conditionFlows.map(item => {
         return {
           flow: item.flow,
           data: item.data,
         }
       }),
-      execute: this.state.executeRail.map(item => {
+      execute: this.state.executeFlows.map(item => {
         return {
           flow: item.flow,
           data: item.data,
@@ -74,8 +74,8 @@ class WhileFlow extends Component {
   }
 
   deserialize = data => {
-    let createStoreRail = function(railStore) {
-      return railStore.reduce((promise, item, index) => {
+    let createStoreFlows = function(flowsStore) {
+      return flowsStore.reduce((promise, item, index) => {
         return promise.then(store => {
           return store
             .dispatch(commitPushFlow(index, item.flow))
@@ -86,23 +86,23 @@ class WhileFlow extends Component {
               return store
             })
         })
-      }, Promise.resolve(createStore(rail)))
+      }, Promise.resolve(createStore(flows)))
     }
 
     Promise.all([
-      createStoreRail(data ? data.condition : []),
-      createStoreRail(data ? data.execute : []),
+      createStoreFlows(data ? data.condition : []),
+      createStoreFlows(data ? data.execute : []),
     ])
-      .then(([conditionRail, executeRail]) => {
+      .then(([conditionFlows, executeFlows]) => {
         this.store = {
-          conditionRail: conditionRail,
-          executeRail: executeRail,
+          conditionFlows: conditionFlows,
+          executeFlows: executeFlows,
         }
 
         let state = {
-          conditionRail: this.store.conditionRail.getState(),
+          conditionFlows: this.store.conditionFlows.getState(),
           conditionRunIndex: null,
-          executeRail: this.store.executeRail.getState(),
+          executeFlows: this.store.executeFlows.getState(),
           executeRunIndex: null,
         }
 
@@ -113,15 +113,15 @@ class WhileFlow extends Component {
         })
       })
       .then(state => {
-        let resetRail = rail => {
-          for (let i = 0; i < rail.length; i++) {
-            let item = rail[i]
+        let resetFlows = flows => {
+          for (let i = 0; i < flows.length; i++) {
+            let item = flows[i]
             item.bus.emit('deserialize', item.data)
           }
         }
 
-        resetRail(state.conditionRail)
-        resetRail(state.executeRail)
+        resetFlows(state.conditionFlows)
+        resetFlows(state.executeFlows)
       })
   }
 
@@ -172,19 +172,19 @@ class WhileFlow extends Component {
           onRun={onRun}
           onDelete={onDelete(this)}
         />
-        <Rail
-          rail={this.state.conditionRail}
+        <Flows
+          flows={this.state.conditionFlows}
           runIndex={this.state.conditionRunIndex}
-          flows={this.props.flows}
-          userFlows={this.props.userFlows}
+          allFlows={this.props.allFlows}
+          programFlows={this.props.programFlows}
           onPush={(index, flow) => {
-            this.onPushFlow(['conditionRail'], index, flow)
+            this.onPushFlow(['conditionFlows'], index, flow)
           }}
           onPop={index => {
-            this.onPopFlow(['conditionRail'], index)
+            this.onPopFlow(['conditionFlows'], index)
           }}
           onUpdate={(index, data) => {
-            this.onUpdateFlow(['conditionRail'], index, data)
+            this.onUpdateFlow(['conditionFlows'], index, data)
           }}
           onRun={null}
         />
@@ -193,19 +193,19 @@ class WhileFlow extends Component {
             <h4>Do</h4>
           </div>
         </div>
-        <Rail
-          rail={this.state.executeRail}
+        <Flows
+          flows={this.state.executeFlows}
           runIndex={this.state.executeRunIndex}
-          flows={this.props.flows}
-          userFlows={this.props.userFlows}
+          allFlows={this.props.allFlows}
+          programFlows={this.props.programFlows}
           onPush={(index, flow) => {
-            this.onPushFlow(['executeRail'], index, flow)
+            this.onPushFlow(['executeFlows'], index, flow)
           }}
           onPop={index => {
-            this.onPopFlow(['executeRail'], index)
+            this.onPopFlow(['executeFlows'], index)
           }}
           onUpdate={(index, data) => {
-            this.onUpdateFlow(['executeRail'], index, data)
+            this.onUpdateFlow(['executeFlows'], index, data)
           }}
           onRun={null}
         />

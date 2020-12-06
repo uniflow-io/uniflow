@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { onCode, onExecute } from './runner'
-import { FlowHeader, Rail } from '@uniflow-io/uniflow-client/src/components'
+import { FlowHeader, Flows } from '@uniflow-io/uniflow-client/src/components'
 import createStore from '@uniflow-io/uniflow-client/src/utils/create-store'
-import rail from '@uniflow-io/uniflow-client/src/reducers/rail'
+import flows from '@uniflow-io/uniflow-client/src/reducers/flows'
 import {
   commitPushFlow,
   commitPopFlow,
   commitUpdateFlow,
-} from '@uniflow-io/uniflow-client/src/reducers/rail/actions'
+} from '@uniflow-io/uniflow-client/src/reducers/flows/actions'
 import {
   setBusEvents,
   componentDidMount,
@@ -22,9 +22,9 @@ class IfFlow extends Component {
   state = {
     isRunning: false,
     if: {
-      conditionRail: [],
+      conditionFlows: [],
       conditionRunIndex: null,
-      executeRail: [],
+      executeFlows: [],
       executeRunIndex: null,
     },
     elseIfs: [],
@@ -36,8 +36,8 @@ class IfFlow extends Component {
 
     this.store = {
       if: {
-        conditionRail: [],
-        executeRail: [],
+        conditionFlows: [],
+        executeFlows: [],
       },
       elseIfs: [],
       else: null,
@@ -67,13 +67,13 @@ class IfFlow extends Component {
   serialize = () => {
     return {
       if: {
-        condition: this.state.if.conditionRail.map(item => {
+        condition: this.state.if.conditionFlows.map(item => {
           return {
             flow: item.flow,
             data: item.data,
           }
         }),
-        execute: this.state.if.executeRail.map(item => {
+        execute: this.state.if.executeFlows.map(item => {
           return {
             flow: item.flow,
             data: item.data,
@@ -82,13 +82,13 @@ class IfFlow extends Component {
       },
       elseIfs: this.state.elseIfs.map(elseIf => {
         return {
-          condition: elseIf.conditionRail.map(item => {
+          condition: elseIf.conditionFlows.map(item => {
             return {
               flow: item.flow,
               data: item.data,
             }
           }),
-          execute: elseIf.executeRail.map(item => {
+          execute: elseIf.executeFlows.map(item => {
             return {
               flow: item.flow,
               data: item.data,
@@ -97,7 +97,7 @@ class IfFlow extends Component {
         }
       }),
       else: this.state.else
-        ? this.state.else.executeRail.map(item => {
+        ? this.state.else.executeFlows.map(item => {
             return {
               flow: item.flow,
               data: item.data,
@@ -108,8 +108,8 @@ class IfFlow extends Component {
   }
 
   deserialize = data => {
-    let createStoreRail = function(railStore) {
-      return railStore.reduce((promise, item, index) => {
+    let createStoreFlows = function(flowsStore) {
+      return flowsStore.reduce((promise, item, index) => {
         return promise.then(store => {
           return store
             .dispatch(commitPushFlow(index, item.flow))
@@ -120,53 +120,53 @@ class IfFlow extends Component {
               return store
             })
         })
-      }, Promise.resolve(createStore(rail)))
+      }, Promise.resolve(createStore(flows)))
     }
 
     Promise.all([
-      createStoreRail(
+      createStoreFlows(
         data && data.if && data.if.condition ? data.if.condition : []
       ),
-      createStoreRail(
+      createStoreFlows(
         data && data.if && data.if.execute ? data.if.execute : []
       ),
       data && data.elseIfs
         ? data.elseIfs.reduce((promise, elseIf) => {
             return promise.then(elseIfs => {
               return Promise.all([
-                createStoreRail(elseIf.condition || []),
-                createStoreRail(elseIf.execute || []),
-              ]).then(([conditionRail, executeRail]) => {
+                createStoreFlows(elseIf.condition || []),
+                createStoreFlows(elseIf.execute || []),
+              ]).then(([conditionFlows, executeFlows]) => {
                 elseIfs.push({
-                  conditionRail: conditionRail,
-                  executeRail: executeRail,
+                  conditionFlows: conditionFlows,
+                  executeFlows: executeFlows,
                 })
                 return elseIfs
               })
             })
           }, Promise.resolve([]))
         : [],
-      data && data.else ? createStoreRail(data.else || []) : null,
+      data && data.else ? createStoreFlows(data.else || []) : null,
     ])
-      .then(([ifConditionRail, ifExecuteRail, elseIfsRail, elseRail]) => {
+      .then(([ifConditionFlows, ifExecuteFlows, elseIfsFlows, elseFlows]) => {
         this.store = {
           if: {
-            conditionRail: ifConditionRail,
-            executeRail: ifExecuteRail,
+            conditionFlows: ifConditionFlows,
+            executeFlows: ifExecuteFlows,
           },
-          elseIfs: elseIfsRail,
-          else: elseRail
+          elseIfs: elseIfsFlows,
+          else: elseFlows
             ? {
-                executeRail: elseRail,
+                executeFlows: elseFlows,
               }
             : null,
         }
 
         let state = {
           if: {
-            conditionRail: this.store.if.conditionRail.getState(),
+            conditionFlows: this.store.if.conditionFlows.getState(),
             conditionRunIndex: null,
-            executeRail: this.store.if.executeRail.getState(),
+            executeFlows: this.store.if.executeFlows.getState(),
             executeRunIndex: null,
           },
           elseIfs: [],
@@ -175,16 +175,16 @@ class IfFlow extends Component {
 
         this.store.elseIfs.forEach(elseIf => {
           state.elseIfs.push({
-            conditionRail: elseIf.conditionRail.getState(),
+            conditionFlows: elseIf.conditionFlows.getState(),
             conditionRunIndex: null,
-            executeRail: elseIf.executeRail.getState(),
+            executeFlows: elseIf.executeFlows.getState(),
             executeRunIndex: null,
           })
         })
 
         if (this.store.else) {
           state.else = {
-            executeRail: this.store.else.executeRail.getState(),
+            executeFlows: this.store.else.executeFlows.getState(),
             executeRunIndex: null,
           }
         }
@@ -196,21 +196,21 @@ class IfFlow extends Component {
         })
       })
       .then(state => {
-        let resetRail = rail => {
-          for (let i = 0; i < rail.length; i++) {
-            let item = rail[i]
+        let resetFlows = flows => {
+          for (let i = 0; i < flows.length; i++) {
+            let item = flows[i]
             item.bus.emit('deserialize', item.data)
           }
         }
 
-        resetRail(state.if.conditionRail)
-        resetRail(state.if.executeRail)
+        resetFlows(state.if.conditionFlows)
+        resetFlows(state.if.executeFlows)
         state.elseIfs.forEach(elseIf => {
-          resetRail(elseIf.conditionRail)
-          resetRail(elseIf.executeRail)
+          resetFlows(elseIf.conditionFlows)
+          resetFlows(elseIf.executeFlows)
         })
         if (state.else) {
-          resetRail(state.else.executeRail)
+          resetFlows(state.else.executeFlows)
         }
       })
   }
@@ -263,15 +263,15 @@ class IfFlow extends Component {
     event.preventDefault()
 
     this.store.elseIfs.push({
-      conditionRail: createStore(rail),
-      executeRail: createStore(rail),
+      conditionFlows: createStore(flows),
+      executeFlows: createStore(flows),
     })
 
     let elseIfs = this.state.elseIfs.slice()
     elseIfs.push({
-      conditionRail: [],
+      conditionFlows: [],
       conditionRunIndex: null,
-      executeRail: [],
+      executeFlows: [],
       executeRunIndex: null,
     })
     this.setState({ elseIfs: elseIfs }, onUpdate(this))
@@ -289,13 +289,13 @@ class IfFlow extends Component {
     event.preventDefault()
 
     this.store.else = {
-      executeRail: createStore(rail),
+      executeFlows: createStore(flows),
     }
 
     this.setState(
       {
         else: {
-          executeRail: [],
+          executeFlows: [],
           executeRunIndex: null,
         },
       },
@@ -316,19 +316,19 @@ class IfFlow extends Component {
           onRun={onRun}
           onDelete={onDelete(this)}
         />
-        <Rail
-          rail={this.state.if.conditionRail}
+        <Flows
+          flows={this.state.if.conditionFlows}
           runIndex={this.state.if.conditionRunIndex}
-          flows={this.props.flows}
-          userFlows={this.props.userFlows}
+          allFlows={this.props.allFlows}
+          programFlows={this.props.programFlows}
           onPush={(index, flow) => {
-            this.onPushFlow(['if', 'conditionRail'], index, flow)
+            this.onPushFlow(['if', 'conditionFlows'], index, flow)
           }}
           onPop={index => {
-            this.onPopFlow(['if', 'conditionRail'], index)
+            this.onPopFlow(['if', 'conditionFlows'], index)
           }}
           onUpdate={(index, data) => {
-            this.onUpdateFlow(['if', 'conditionRail'], index, data)
+            this.onUpdateFlow(['if', 'conditionFlows'], index, data)
           }}
           onRun={null}
         />
@@ -337,19 +337,19 @@ class IfFlow extends Component {
             <h4>Then</h4>
           </div>
         </div>
-        <Rail
-          rail={this.state.if.executeRail}
+        <Flows
+          flows={this.state.if.executeFlows}
           runIndex={this.state.if.executeRunIndex}
-          flows={this.props.flows}
-          userFlows={this.props.userFlows}
+          allFlows={this.props.allFlows}
+          programFlows={this.props.programFlows}
           onPush={(index, flow) => {
-            this.onPushFlow(['if', 'executeRail'], index, flow)
+            this.onPushFlow(['if', 'executeFlows'], index, flow)
           }}
           onPop={index => {
-            this.onPopFlow(['if', 'executeRail'], index)
+            this.onPopFlow(['if', 'executeFlows'], index)
           }}
           onUpdate={(index, data) => {
-            this.onUpdateFlow(['if', 'executeRail'], index, data)
+            this.onUpdateFlow(['if', 'executeFlows'], index, data)
           }}
           onRun={null}
         />
@@ -364,24 +364,24 @@ class IfFlow extends Component {
                 this.onRemoveElseIf(event, index)
               }}
             />
-            <Rail
-              rail={item.conditionRail}
+            <Flows
+              flows={item.conditionFlows}
               runIndex={item.conditionRunIndex}
-              flows={this.props.flows}
-              userFlows={this.props.userFlows}
+              allFlows={this.props.allFlows}
+              programFlows={this.props.programFlows}
               onPush={(index, flow) => {
                 this.onPushFlow(
-                  ['elseIfs', elseIfIndex, 'conditionRail'],
+                  ['elseIfs', elseIfIndex, 'conditionFlows'],
                   index,
                   flow
                 )
               }}
               onPop={index => {
-                this.onPopFlow(['elseIfs', elseIfIndex, 'conditionRail'], index)
+                this.onPopFlow(['elseIfs', elseIfIndex, 'conditionFlows'], index)
               }}
               onUpdate={(index, data) => {
                 this.onUpdateFlow(
-                  ['elseIfs', elseIfIndex, 'conditionRail'],
+                  ['elseIfs', elseIfIndex, 'conditionFlows'],
                   index,
                   data
                 )
@@ -393,24 +393,24 @@ class IfFlow extends Component {
                 <h4>Then</h4>
               </div>
             </div>
-            <Rail
-              rail={item.executeRail}
+            <Flows
+              flows={item.executeFlows}
               runIndex={item.executeRunIndex}
-              flows={this.props.flows}
-              userFlows={this.props.userFlows}
+              allFlows={this.props.allFlows}
+              programFlows={this.props.programFlows}
               onPush={(index, flow) => {
                 this.onPushFlow(
-                  ['elseIfs', elseIfIndex, 'executeRail'],
+                  ['elseIfs', elseIfIndex, 'executeFlows'],
                   index,
                   flow
                 )
               }}
               onPop={index => {
-                this.onPopFlow(['elseIfs', elseIfIndex, 'executeRail'], index)
+                this.onPopFlow(['elseIfs', elseIfIndex, 'executeFlows'], index)
               }}
               onUpdate={(index, data) => {
                 this.onUpdateFlow(
-                  ['elseIfs', elseIfIndex, 'executeRail'],
+                  ['elseIfs', elseIfIndex, 'executeFlows'],
                   index,
                   data
                 )
@@ -428,19 +428,19 @@ class IfFlow extends Component {
               onRun={onRun}
               onDelete={this.onRemoveElse}
             />
-            <Rail
-              rail={this.state.else.executeRail}
+            <Flows
+              flows={this.state.else.executeFlows}
               runIndex={this.state.else.executeRunIndex}
-              flows={this.props.flows}
-              userFlows={this.props.userFlows}
+              allFlows={this.props.allFlows}
+              programFlows={this.props.programFlows}
               onPush={(index, flow) => {
-                this.onPushFlow(['else', 'executeRail'], index, flow)
+                this.onPushFlow(['else', 'executeFlows'], index, flow)
               }}
               onPop={index => {
-                this.onPopFlow(['else', 'executeRail'], index)
+                this.onPopFlow(['else', 'executeFlows'], index)
               }}
               onUpdate={(index, data) => {
-                this.onUpdateFlow(['else', 'executeRail'], index, data)
+                this.onUpdateFlow(['else', 'executeFlows'], index, data)
               }}
               onRun={null}
             />

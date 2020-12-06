@@ -14,7 +14,7 @@ function Runner(commandArgs, api) {
   this.api = api
 }
 
-Runner.prototype.run = function(rail) {
+Runner.prototype.run = function(flows) {
   const context = new vm.createContext({
     Bash: bashBridge(this.commandArgs),
     console: consoleBridge,
@@ -27,7 +27,7 @@ Runner.prototype.run = function(rail) {
     child_process: child_processBridge,
   })
 
-  return rail.reduce((promise, flow) => {
+  return flows.reduce((promise, flow) => {
     return promise.then(() => {
       return vm.runInContext(flow.codes.node || '', context)
     })

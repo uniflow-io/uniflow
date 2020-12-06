@@ -32,7 +32,7 @@ public class Program {
         this.data = data;
     }
 
-    public JsonArray deserializeRailData()
+    public JsonArray deserializeFlowsData()
     {
         return new JsonParser().parse(this.data).getAsJsonArray();
    }

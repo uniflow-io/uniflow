@@ -7,14 +7,14 @@ import { connect } from "react-redux"
 
 class Feed extends Component {
   render() {
-    const { flows, feed } = this.props
+    const { allFlows, feed } = this.props
     const currentItem = getFeedItem(feed)
 
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
           <Navigation />
-          {currentItem && currentItem.type === "program" && <Program program={currentItem.entity} flows={flows} />}
+          {currentItem && currentItem.type === "program" && <Program program={currentItem.entity} allFlows={allFlows} />}
           {currentItem && currentItem.type === "folder" && <Folder folder={currentItem.entity} />}
         </div>
       </div>
