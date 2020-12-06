@@ -14,7 +14,7 @@ const components = {
   h4: (props) => <h5 {...props}>{props.children}</h5>,
   a: (props) => {
     if (props.href.indexOf("https://uniflow.io") === 0) {
-      const to = props.href.slice(18)
+      const to = props.href.slice("https://uniflow.io".length)
       return <Link to={to.length === 0 ? "/" : to}>{props.children}</Link>
     }
 

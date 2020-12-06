@@ -149,7 +149,7 @@ class Home extends Component {
         <section className="section container">
           <div className="row py-5">
             <div className="col-lg-12 text-center">
-              <h3>Features</h3>
+              <h2>Features</h2>
             </div>
           </div>
           <div className="row">
