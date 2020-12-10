@@ -2,12 +2,16 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
+import * as swaggerUi from 'swagger-ui-express';
+import { initialize } from 'express-openapi';
 import { Service } from 'typedi';
+import { OpenAPIFrameworkPathObject } from 'openapi-framework'
 import { AuthController, ContactController, FolderController, LeadController, ProgramController, UserController, VersionController } from '../controller';
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Response } from "express";
 import { isCelebrateError } from 'celebrate';
 import { ParamsConfig } from '../config';
 import { LoaderInterface } from './interfaces';
+import { ControllerInterface } from '../types';
 
 @Service()
 export default class ServerLoader implements LoaderInterface {
@@ -37,16 +41,48 @@ export default class ServerLoader implements LoaderInterface {
     this.app.use(helmet());
     this.app.use(bodyParser.json());
   
-    const router = Router();
-    this.authController.routes(router);
+    /*this.authController.routes(router);
     this.contactController.routes(router);
     this.folderController.routes(router);
     this.leadController.routes(router);
     this.programController.routes(router);
-    this.userController.routes(router);
-    this.versionController.routes(router);
-  
-    this.app.use('/api', router);
+    ;*/
+    const controllers: ControllerInterface[] = [
+      this.userController,
+      this.versionController
+    ]
+    const apiDoc = {
+      swagger: '2.0',
+      basePath: '/api',
+      info: {
+        title: 'Uniflow API.',
+        version: require('../../package.json').version
+      },
+      paths: {}
+    };
+    initialize({
+      app: this.app,
+      apiDoc, 
+      docsPath: '/docs',
+      errorMiddleware: function(err, req, res, next) { // only handles errors for /v3/*
+        //console.log(' error ', err);
+        return next(err);
+      },
+      paths: controllers.reduce((paths: OpenAPIFrameworkPathObject[], controller: ControllerInterface) => {
+        for(const [path, operation] of Object.entries(controller.operations())) {
+          paths.push({
+            path: `${controller.basePath() === '/' ? '' : controller.basePath()}${path}`,
+            module: operation
+          })
+        }
+        return paths
+      }, [])
+    })
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, {
+      swaggerOptions: {
+        url: '/api/docs'
+      }
+    }));
     this.app.use('/', express.static('./public'));
   
     /// catch 404 and forward to error handler

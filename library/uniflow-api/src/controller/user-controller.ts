@@ -1,15 +1,15 @@
 import { Service} from "typedi";
 import { celebrate, Joi, Segments } from 'celebrate';
+import { Operation } from "express-openapi";
 import { NextFunction, Request, Response, Router} from 'express';
 import { RequireSameUserMiddleware, RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { UserService, ConfigService, FolderService, ProgramService, ProgramClientService, ProgramTagService } from "../service";
-import { ProgramEntity, UserEntity } from "../entity";
-import { ControllerInterface } from './interfaces';
+import { ControllerInterface, ControllerOperations } from './interfaces';
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
 import { TypeModel } from "../model";
 import { IsNull } from "typeorm";
-import { ConfigFactory, ProgramFactory, FolderFactory, UserFactory } from "../factory";
+import { ConfigFactory, ProgramFactory, FolderFactory } from "../factory";
 
 @Service()
 export default class UserController implements ControllerInterface {
@@ -32,14 +32,42 @@ export default class UserController implements ControllerInterface {
     private configFactory: ConfigFactory,
     private folderFactory: FolderFactory,
     private programFactory: ProgramFactory,
-    private userFactory: UserFactory,
   ) {}
 
-  routes(app: Router): Router {
-    const route = Router();
+  basePath(): string {
+    return '/users'
+  }
 
-    app.use('/users', route);
-
+  operations(): ControllerOperations {
+    return {
+      '/': {
+        post: (() => {
+          const operation: Operation = async (req: Request, res: Response, next: NextFunction) => {
+            try {
+              const user = await this.userService.create({
+                email: req.body.email,
+                plainPassword: req.body.password,
+              });
+              return res.status(201).json({ uid: user.uid });
+            } catch (e) {
+              return next(e);
+            }
+          }
+      
+          operation.apiDoc = {
+            description: 'Create User.',
+            operationId: 'createUser',
+            responses: {
+              201: {
+                description: 'User Created.',
+              },
+            },
+          }
+          return operation
+        })()
+      }
+    }
+    /*
     route.post(
       '/',
       celebrate({
@@ -366,6 +394,6 @@ export default class UserController implements ControllerInterface {
       },
     );
 
-    return app
+    return app*/
   }
 }

@@ -1,24 +1,40 @@
-import {NextFunction, Request, Response, Router} from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Service } from 'typedi';
-import { ControllerInterface } from './interfaces';
+import { Operation } from "express-openapi";
+import { ControllerInterface, ControllerOperations } from './interfaces';
 
 @Service()
 export default class VersionController implements ControllerInterface {
-  routes(app: Router): Router {
-    app.get(
-      '/version',
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          return res.status(200).json({
-            version: `v${require('../../package.json').version}`
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      }
-    );
+  basePath(): string {
+    return '/'
+  }
 
-    return app
+  operations(): ControllerOperations {
+    return {
+      '/version': {
+        get: (() => {
+          const operation: Operation = async (req: Request, res: Response, next: NextFunction) => {
+            try {
+              return res.status(200).json({
+                version: `v${require('../../package.json').version}`
+              });
+            } catch (e) {
+              return next(e);
+            }
+          }
+      
+          operation.apiDoc = {
+            description: 'Get API Version.',
+            operationId: 'getVersion',
+            responses: {
+              200: {
+                description: 'Get API Version',
+              },
+            },
+          }
+          return operation
+        })()
+      }
+    }
   }
 };

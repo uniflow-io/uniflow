@@ -1,7 +1,10 @@
-import { Router } from 'express';
+export interface ControllerOperations {
+  [pattern: string]: any
+}
 
 export interface ControllerInterface {
-  routes(app: Router): Router;
+  basePath(): string
+  operations(): ControllerOperations
 }
 
 export interface GithubUser {
