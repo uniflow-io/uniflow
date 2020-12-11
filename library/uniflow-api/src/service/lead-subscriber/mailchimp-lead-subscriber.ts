@@ -562,7 +562,9 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
             '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
-          ].join('\n'),
+          ]
+          .concat(new Array(50).fill('', 0, 50))
+          .join('\n'),
         })
 
         return data
@@ -750,7 +752,9 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
             '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
-          ].join('\n'),
+          ]
+          .concat(new Array(50).fill('', 0, 50))
+          .join('\n'),
         })
         
         return data
@@ -894,7 +898,9 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
             `[Why did I get this?](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow)`,
             '',
             `[Unsubscribe](https://uniflow.io/notifications/unsubscribe?id=LEAD_ID) - [Manage your subscriptions](https://uniflow.io/notifications/manage?id=LEAD_ID)`,
-          ].join('\n'),
+          ]
+          .concat(new Array(50).fill('', 0, 50))
+          .join('\n'),
         })
         
         return data
