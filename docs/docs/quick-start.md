@@ -2,7 +2,7 @@
 title: Quick Start
 ---
 
-Have a look at [Simple order lines](https://uniflow.io/public/feed/simple-order-line).
+Have a look at [Simple sort lines](https://uniflow.io/public/feed/simple-sort-line).
 
 On `Infos` section, you can set :
 - Title of you program
