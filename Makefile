@@ -14,10 +14,10 @@ install: ## install
 	$(LERNA) bootstrap --hoist --no-ci
 
 lint: ## lint
-	$(LERNA) lerna exec -- npm run lint
+	$(LERNA) exec -- npm run lint
 
 prettier: ## prettier
-	$(LERNA) lerna exec -- npm run prettier
+	$(LERNA) exec -- npm run prettier
 
 # DEFAULT
 .DEFAULT_GOAL := help

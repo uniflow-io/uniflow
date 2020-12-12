@@ -1,10 +1,9 @@
-export interface ControllerOperations {
-  [pattern: string]: any
+export interface ErrorJSON {
+  messages: string[];
 }
 
-export interface ControllerInterface {
-  basePath(): string
-  operations(): ControllerOperations
+export interface ValidateErrorJSON extends ErrorJSON {
+  validation: {source: string, key: string, messages: string[]}[];
 }
 
 export interface GithubUser {

@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 import { ClientEntity } from '../entity';
-import ClientFactory from '../factory/client-factory';
+import { ClientFactory } from '../factory';
 import { ClientRepository } from '../repository';
 
 @Service()

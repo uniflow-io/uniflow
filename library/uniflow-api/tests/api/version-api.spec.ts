@@ -5,7 +5,7 @@ import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('api-version', () => {
-    const app: App = Container.get(App)
+    const app: App = new Container().get(App)
 
     test('GET /api/version success', async () => {
         const { body } = await expectOkUri(app, {

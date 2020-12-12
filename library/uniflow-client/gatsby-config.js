@@ -48,7 +48,7 @@ module.exports = {
         icon: `src/assets/images/logo.png`,
       },
     },
-    `gatsby-plugin-offline`,
+    //`gatsby-plugin-offline`, // @todo to need fix front cache html headers before adding it
     {
       resolve: `gatsby-plugin-sitemap`,
       options: {

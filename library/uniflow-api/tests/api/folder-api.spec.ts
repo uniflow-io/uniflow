@@ -6,7 +6,7 @@ import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('api-folder', () => {
-    const app: App = Container.get(App)
+    const app: App = new Container().get(App)
     let userFolder: any, userDeleteFolder: any
 
     beforeAll(async () => {

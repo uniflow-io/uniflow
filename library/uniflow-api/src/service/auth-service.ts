@@ -144,15 +144,11 @@ export default class AuthService {
     return jwt.sign(
       {
         id: user.id,
-        role: user.role,
+        roles: [user.role],
         name: user.email,
         exp: exp.getTime() / 1000,
       },
       this.paramsConfig.getConfig().get('jwtSecret'),
     );
-  }
-
-  private generatePassword(): string {
-    return `${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}${Math.random().toString(36).slice(-8)}`
   }
 }

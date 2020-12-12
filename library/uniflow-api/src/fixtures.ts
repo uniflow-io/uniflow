@@ -3,14 +3,15 @@ import { DatabaseLoader } from "./loader";
 import { ClientFixture, FolderFixture, TagFixture, UserFixture, ProgramFixture, MigrationFixture, LeadFixture } from "./fixture";
 
 const loadFixtures = async () => {
-    const databaseLoader = Container.get(DatabaseLoader)
-    const migrationFixture = Container.get(MigrationFixture)
-    const userFixture = Container.get(UserFixture)
-    const leadFixture = Container.get(LeadFixture)
-    const folderFixture = Container.get(FolderFixture)
-    const clientFixture = Container.get(ClientFixture)
-    const tagFixture = Container.get(TagFixture)
-    const programFixture = Container.get(ProgramFixture)
+    const container = new Container()
+    const databaseLoader = container.get(DatabaseLoader)
+    const migrationFixture = container.get(MigrationFixture)
+    const userFixture = container.get(UserFixture)
+    const leadFixture = container.get(LeadFixture)
+    const folderFixture = container.get(FolderFixture)
+    const clientFixture = container.get(ClientFixture)
+    const tagFixture = container.get(TagFixture)
+    const programFixture = container.get(ProgramFixture)
 
     try {
         await databaseLoader.load()

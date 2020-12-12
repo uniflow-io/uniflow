@@ -1,224 +1,152 @@
-import { celebrate, Joi, Segments } from 'celebrate';
-import { NextFunction, Request, Response, Router} from 'express';
+import * as express from "express";
 import { Service} from "typedi";
+import { Controller, Get, Response, SuccessResponse, BodyProp, Post, Route, Tags, Security, Put, Request, Path, Body, ValidateError, Delete } from "tsoa";
 import { ProgramService, ProgramClientService, ProgramTagService, FolderService } from "../service";
-import { RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
 import { ApiException } from "../exception";
-import { ControllerInterface } from './interfaces';
 import { ProgramRepository, TagRepository } from '../repository';
-import { TypeModel } from '../model';
+import { PartialType, ProgramApiType, UuidType } from "../model/interfaces";
+import { ErrorJSON, ValidateErrorJSON } from "./interfaces";
 
+@Route('programs')
+@Tags("program")
 @Service()
-export default class ProgramController implements ControllerInterface {
+class ProgramController extends Controller {
   constructor(
     private tagRepository: TagRepository,
     private programRepository: ProgramRepository,
     private folderService: FolderService,
     private programService: ProgramService,
     private programClientService: ProgramClientService,
-    private programTagService: ProgramTagService,
-    private withToken: WithTokenMiddleware,
-    private requireRoleUser: RequireRoleUserMiddleware,
-    private withUser: WithUserMiddleware
-  ) {}
+    private programTagService: ProgramTagService
+  ) {
+    super()
+  }
 
-  routes(app: Router): Router {
-    const route = Router();
+  @Get()
+  public async getPrograms(): Promise<ProgramApiType[]> {
+    const data = []
+    const programs = await this.programRepository.find({
+      where: { public: true },
+      relations: ['folder', 'user'],
+      order: { updated: "DESC" }
+    })
+    for (const program of programs) {
+      data.push(await this.programService.getJson(program))
+    }
 
-    app.use('/programs', route);
+    return data;
+  }
 
-    route.get(
-      '/',
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const data = []
-          const programs = await this.programRepository.find({
-            where: { public: true },
-            relations: ['folder', 'user'],
-            order: { updated: "DESC" }
-          })
-          for (const program of programs) {
-            data.push(await this.programService.getJson(program))
-          }
+  @Put('{uid}')
+  @Security('role', ['user'])
+  @SuccessResponse(201, "Updated")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(404, "Not found")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async updateProgram(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<ProgramApiType>): Promise<ProgramApiType> {
+    const program = await this.programRepository.findOne({
+      where: {user: req.user, uid},
+      relations: ['user', 'folder'],
+    })
+    if (!program) {
+      throw new ApiException('Program not found', 404);
+    }
+    
+    if(body.name) {
+      program.name = body.name
+    }
+    program.user = req.user
+    if(body.path) {
+      program.folder = await this.folderService.fromPath(req.user, body.path) || null
+      await this.folderService.setSlug(program, program.slug) // in case of slug conflict when moving program
+    }
+    if (body.slug && program.slug !== body.slug) {
+      await this.folderService.setSlug(program, body.slug)
+    }
+    if(body.clients) {
+      program.clients = await this.programClientService.manageByProgramAndClientNames(program, body.clients)
+    }
+    if(body.tags) {
+      program.tags = await this.programTagService.manageByProgramAndTagNames(program, body.tags)
+    }
+    if(body.description) {
+      program.description = body.description
+    }
+    if(body.public || body.public === false) {
+      program.public = body.public
+    }
 
-          return res.status(200).json(data);
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    if(await this.programService.isValid(program)) {
+      await this.programRepository.save(program)
+      await this.tagRepository.clear()
 
-    route.put(
-      '/:uid',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuid)
-        }),
-        [Segments.BODY]: Joi.object().keys({
-          name: Joi.string(),
-          slug: Joi.string(),
-          path: Joi.string().custom(TypeModel.joiPath),
-          clients: Joi.array(),
-          tags: Joi.array(),
-          description: Joi.string().allow(null, ''),
-          public: Joi.boolean(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const program = await this.programRepository.findOne({
-            where: {user: req.user, uid: req.params.uid},
-            relations: ['user', 'folder'],
-          })
-          if (!program) {
-            throw new ApiException('Program not found', 404);
-          }
-          
-          if(req.body.name) {
-            program.name = req.body.name
-          }
-          program.user = req.user
-          if(req.body.path) {
-            program.folder = await this.folderService.fromPath(req.user, req.body.path) || null
-            await this.folderService.setSlug(program, program.slug) // in case of slug conflict when moving program
-          }
-          if (req.body.slug && program.slug !== req.body.slug) {
-            await this.folderService.setSlug(program, req.body.slug)
-          }
-          if(req.body.clients) {
-            program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients)
-          }
-          if(req.body.tags) {
-            program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags)
-          }
-          if(req.body.description) {
-            program.description = req.body.description
-          }
-          if(req.body.public || req.body.public === false) {
-            program.public = req.body.public
-          }
+      return await this.programService.getJson(program);
+    }
 
-          if(await this.programService.isValid(program)) {
-            await this.programRepository.save(program)
-            await this.tagRepository.clear()
+    throw new ValidateError({}, 'Program not valid')
+  }
 
-            return res.status(200).json(await this.programService.getJson(program));
-          }
+  @Delete('{uid}')
+  @Security('role', ['user'])
+  @SuccessResponse(200, "Deleted")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(404, "Not found")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async deleteProgram(@Request() req: express.Request, @Path() uid: UuidType): Promise<boolean> {
+    const program = await this.programRepository.findOne({user: req.user, uid})
+    if (!program) {
+      throw new ApiException('Program not found', 404);
+    }
 
-          return res.status(400).json({
-            'messages': ['Program not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    await this.programRepository.safeRemove(program)
 
-    route.delete(
-      '/:uid',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuid)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
-          if (!program) {
-            throw new ApiException('Program not found', 404);
-          }
+    return true;
+  }
 
-          await this.programRepository.safeRemove(program)
+  @Get('{uid}/flows')
+  @Security('role')
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(404, "Not found")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async getProgramFlows(@Request() req: express.Request, @Path() uid: UuidType): Promise<{data: string|null}> {
+    const program = await this.programRepository.findOne({
+      where: {uid},
+      relations: ['user']
+    })
+    if (!program) {
+      throw new ApiException('Program not found', 404);
+    }
+    
+    if(!program.public) {
+      if(!req.user || program.user.id !== req.user.id) {
+        throw new ApiException('Not authorized', 401);
+      }
+    }
 
-          return res.status(200).json(true);
-        } catch (e) {
-          console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    return {data: program.data};
+  }
 
-    route.get(
-      '/:uid/flows',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuid)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const program = await this.programRepository.findOne({
-            where: {uid: req.params.uid},
-            relations: ['user']
-          })
-          if (!program) {
-            throw new ApiException('Program not found', 404);
-          }
-          
-          if(!program.public) {
-            if(!req.user || program.user.id !== req.user.id) {
-              throw new ApiException('Not authorized', 401);
-            }
-          }
+  @Put('{uid}/flows')
+  @Security('role', ['user'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(404, "Not found")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async updateProgramFlows(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: {data: string|null}): Promise<boolean> {
+    const program = await this.programRepository.findOne({user: req.user, uid})
+    if (!program) {
+      throw new ApiException('Program not found', 404);
+    }
 
-          return res.status(200).json({'data': program.data});
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    program.data = body.data
 
-    route.put(
-      '/:uid/flows',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuid)
-        }),
-        [Segments.BODY]: Joi.object().keys({
-          data: Joi.string(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
-          if (!program) {
-            throw new ApiException('Program not found', 404);
-          }
+    if(await this.programService.isValid(program)) {
+      await this.programRepository.save(program)
 
-          program.data = req.body.data
+      return true;
+    }
 
-          if(await this.programService.isValid(program)) {
-            await this.programRepository.save(program)
-
-            return res.status(200).json(true);
-          }
-
-          return res.status(400).json({
-            'messages': ['Program not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    return app;
+    throw new ValidateError({}, 'Program not valid')
   }
 };
+
+export { ProgramController }

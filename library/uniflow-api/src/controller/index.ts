@@ -1,7 +1,7 @@
-export { default as AuthController } from './auth-controller';
-export { default as ContactController } from './contact-controller';
-export { default as FolderController } from './folder-controller';
-export { default as LeadController } from './lead-controller';
-export { default as ProgramController } from './program-controller';
-export { default as UserController } from './user-controller';
-export { default as VersionController } from './version-controller';
+export * from './auth-controller';
+export * from './contact-controller';
+export * from './folder-controller';
+export * from './lead-controller';
+export * from './program-controller';
+export * from './user-controller';
+export * from './version-controller';

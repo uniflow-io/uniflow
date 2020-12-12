@@ -1,5 +1,6 @@
 import { Service } from 'typedi';
 import { ConfigEntity } from '../entity';
+import { ConfigApiType } from '../model/interfaces';
 
 @Service()
 export default class ConfigService {
@@ -7,7 +8,9 @@ export default class ConfigService {
     return true
   }
   
-  public async getJson(config: ConfigEntity): Promise<Object> {
-    return {}
+  public async getJson(config: ConfigEntity): Promise<ConfigApiType> {
+    return {
+      uid: config.uid
+    }
   }
 }

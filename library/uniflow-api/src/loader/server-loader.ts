@@ -3,28 +3,18 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import * as swaggerUi from 'swagger-ui-express';
-import { initialize } from 'express-openapi';
 import { Service } from 'typedi';
-import { OpenAPIFrameworkPathObject } from 'openapi-framework'
-import { AuthController, ContactController, FolderController, LeadController, ProgramController, UserController, VersionController } from '../controller';
 import { NextFunction, Request, Response } from "express";
-import { isCelebrateError } from 'celebrate';
+import { ValidateError } from '@tsoa/runtime';
 import { ParamsConfig } from '../config';
 import { LoaderInterface } from './interfaces';
-import { ControllerInterface } from '../types';
+import { RegisterRoutes } from '../routes';
 
 @Service()
 export default class ServerLoader implements LoaderInterface {
   private app: express.Application;
 
   constructor(
-    private authController: AuthController,
-    private contactController: ContactController,
-    private folderController: FolderController,
-    private leadController: LeadController,
-    private programController: ProgramController,
-    private userController: UserController,
-    private versionController: VersionController,
     private paramsConfig: ParamsConfig
   ) {}
 
@@ -41,53 +31,17 @@ export default class ServerLoader implements LoaderInterface {
     this.app.use(helmet());
     this.app.use(bodyParser.json());
   
-    /*this.authController.routes(router);
-    this.contactController.routes(router);
-    this.folderController.routes(router);
-    this.leadController.routes(router);
-    this.programController.routes(router);
-    ;*/
-    const controllers: ControllerInterface[] = [
-      this.userController,
-      this.versionController
-    ]
-    const apiDoc = {
-      swagger: '2.0',
-      basePath: '/api',
-      info: {
-        title: 'Uniflow API.',
-        version: require('../../package.json').version
-      },
-      paths: {}
-    };
-    initialize({
-      app: this.app,
-      apiDoc, 
-      docsPath: '/docs',
-      errorMiddleware: function(err, req, res, next) { // only handles errors for /v3/*
-        //console.log(' error ', err);
-        return next(err);
-      },
-      paths: controllers.reduce((paths: OpenAPIFrameworkPathObject[], controller: ControllerInterface) => {
-        for(const [path, operation] of Object.entries(controller.operations())) {
-          paths.push({
-            path: `${controller.basePath() === '/' ? '' : controller.basePath()}${path}`,
-            module: operation
-          })
-        }
-        return paths
-      }, [])
+    RegisterRoutes(this.app)
+    this.app.use('/docs', swaggerUi.serve, async (_req: express.Request, res: express.Response) => {
+      return res.send(
+        swaggerUi.generateHTML(await import(`${__dirname}/../../dist/swagger.json`))
+      );
     })
-    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, {
-      swaggerOptions: {
-        url: '/api/docs'
-      }
-    }));
-    this.app.use('/', express.static('./public'));
+    this.app.use('/', express.static('./public'))
   
     /// catch 404 and forward to error handler
     this.app.use((req: Request, re: Response, next: NextFunction) => {
-      const error: any = new Error('Not Found');
+      const error: any = new Error('Not found');
       error['status'] = 404;
       next(error);
     });
@@ -95,28 +49,16 @@ export default class ServerLoader implements LoaderInterface {
     /// error handlers
     this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
       /**
-       * Handle 401 thrown by express-jwt library
+       * Handle validation error thrown by tsoa
        */
-      if (err.name === 'UnauthorizedError') {
-        return res
-          .status(err.status)
-          .send({ messages: [err.message] })
-          .end();
-      }
-  
-      /**
-       * Handle validation error thrown by Celebrate + Joi
-       */
-      if (isCelebrateError(err)) {
+      if (err instanceof ValidateError) {
         const validation: any = [];
-        for (const [segment, joiError] of err.details.entries()) {
-          for (const joiErrorItem of joiError.details) {
-            validation.push({
-              source: segment,
-              key: joiErrorItem.path.join('.'),
-              messages: [joiErrorItem.message],
-            })
-          }
+        for (const [path, error] of Object.entries(err.fields)) {
+          validation.push({
+            source: path.split('.').slice(0, -1).join('.'),
+            key: path.split('.').slice(-1).join('.'),
+            messages: [error.message],
+          })
         }
 
         return res
@@ -131,9 +73,16 @@ export default class ServerLoader implements LoaderInterface {
     });
   
     this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+      let message = err.message
+      const status = err.status || 500
+      // console.log(err)
+      if(status >= 500 && this.paramsConfig.getConfig().get('env') !== 'development') {
+        message = "Internal Server Error"
+      }
+      
       res
-        .status(err.status || 500)
-        .json({ messages: [err.message] })
+        .status(status)
+        .json({ messages: [message] })
         .end();
     });
   }

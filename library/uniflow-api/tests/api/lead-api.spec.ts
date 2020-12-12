@@ -8,11 +8,12 @@ import { LeadRepository } from '../../src/repository';
 import { LeadEntity } from '../../src/entity';
 
 describe('api-lead', () => {
-    const app: App = Container.get(App)
+    const container = new Container()
+    const app: App = container.get(App)
     let lead: LeadEntity
 
     beforeAll(async () => {
-        const leadRepository = Container.get(LeadRepository)
+        const leadRepository = container.get(LeadRepository)
         const oneLead = await leadRepository.findOne()
         if(!oneLead) {
             throw new Error('Lead expected from fixtures')

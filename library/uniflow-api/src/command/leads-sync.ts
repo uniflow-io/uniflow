@@ -20,7 +20,7 @@ export default class LeadsSyncCommand extends Command {
 	constructor(argv: string[], config: Config.IConfig) {
 		super(argv, config)
 
-		this.leadSubscriber = Container.get('LeadSubscriberInterface')
+		this.leadSubscriber = new Container().get('LeadSubscriberInterface')
 	}
 
 	async run() {

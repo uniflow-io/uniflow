@@ -1,7 +1,8 @@
 -
   tag: "v1.1.14"
   label: |-
-    Uniflow Client use Typescript
+    OpenApi
+    Typescript
     Fair-code Licensed
     Allow user subscriptions management
   date: "2020-11-22"
