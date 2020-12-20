@@ -5,12 +5,14 @@ export type PartialType<T> = {
 
 /**
  * @isInt
+ * @default 1
  * @minimum 1
  */
 export type PageType = number
 
 /**
  * @isInt
+ * @default 10
  * @minimum 1
  * @maximum 100
  */
