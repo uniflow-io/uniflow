@@ -14,7 +14,7 @@ You also can update your subscriptions directly in your [Settings](https://unifl
 
 ## [#](https://uniflow.io/docs/faq#which-license-does-uniflow-use) Which license does Uniflow use?
 
-Uniflow is [fair-code](http://faircode.io) distributed under [Apache 2.0 with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
+Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
 
 ## [#](https://uniflow.io/docs/faq#is-uniflow-open-source) Is Uniflow open-source?
 
