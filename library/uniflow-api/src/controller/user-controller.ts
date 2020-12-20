@@ -4,10 +4,9 @@ import { Controller, Get, Request, Response, SuccessResponse, BodyProp, Post, Ro
 import { UserService, ConfigService, FolderService, ProgramService, ProgramClientService, ProgramTagService } from "../service";
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
-import { TypeModel } from "../model";
 import { IsNull } from "typeorm";
 import { ConfigFactory, ProgramFactory, FolderFactory } from "../factory";
-import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PartialType, PathType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
+import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageType, PartialType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
 import { ErrorJSON, ValidateErrorJSON } from './interfaces'
 
 @Route("users")
@@ -111,7 +110,7 @@ class UserController extends Controller {
   @Security('role')
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async getUserFolders(@Path('uid') uid: UuidOrUsernameType, @Query() path?: PathType): Promise<FolderApiType[]> {
+  public async getUserFolders(@Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:FolderApiType[], total: number}> {
     const user = await this.userRepository.findOneByUidOrUsername(uid)
     if (!user) {
       throw new ApiException('User not found', 404);
@@ -122,9 +121,11 @@ class UserController extends Controller {
       const parent = await this.folderService.fromPath(user, path as string)
       where = {...where, parent: parent ? parent : IsNull()}
     }
-    const folders = await this.folderRepository.find({
+    const [folders, total] = await this.folderRepository.findAndCount({
       where,
       relations: ['parent', 'user'],
+      skip: (page - 1) * perPage,
+      take: perPage,
     })
     
     const data = []
@@ -132,7 +133,7 @@ class UserController extends Controller {
       data.push(await this.folderService.getJson(folder))
     }
 
-    return data;
+    return {data, total};
   }
 
   @Post('{uid}/folders')
@@ -160,7 +161,7 @@ class UserController extends Controller {
   @Security('role')
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async getUserPrograms(@Request() req: express.Request, @Path('uid') uid: UuidOrUsernameType, @Query() path?: PathType): Promise<ProgramApiType[]> {
+  public async getUserPrograms(@Request() req: express.Request, @Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:ProgramApiType[], total:number}> {
     const user = await this.userRepository.findOneByUidOrUsername(uid)
     if (!user) {
       throw new ApiException('User not found', 404);
@@ -175,9 +176,11 @@ class UserController extends Controller {
       const folder = await this.folderService.fromPath(user, path as string)
       where = {...where, folder: folder ? folder : IsNull()}
     }
-    const programs = await this.programRepository.find({
+    const [programs, total] = await this.programRepository.findAndCount({
       where,
       relations: ['folder', 'user'],
+      skip: (page - 1) * perPage,
+      take: perPage,
     })
     
     const data = []
@@ -185,7 +188,7 @@ class UserController extends Controller {
       data.push(await this.programService.getJson(program))
     }
 
-    return data;
+    return {data, total};
   }
 
   @Post('{uid}/programs')

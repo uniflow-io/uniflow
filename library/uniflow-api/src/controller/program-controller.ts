@@ -1,10 +1,10 @@
 import * as express from "express";
 import { Service} from "typedi";
-import { Controller, Get, Response, SuccessResponse, BodyProp, Post, Route, Tags, Security, Put, Request, Path, Body, ValidateError, Delete } from "tsoa";
+import { Controller, Get, Response, SuccessResponse, Route, Tags, Security, Put, Request, Path, Body, ValidateError, Delete, Query } from "tsoa";
 import { ProgramService, ProgramClientService, ProgramTagService, FolderService } from "../service";
 import { ApiException } from "../exception";
 import { ProgramRepository, TagRepository } from '../repository';
-import { PartialType, ProgramApiType, UuidType } from "../model/interfaces";
+import { PageType, PartialType, PerPageType, ProgramApiType, UuidType } from "../model/interfaces";
 import { ErrorJSON, ValidateErrorJSON } from "./interfaces";
 
 @Route('programs')
@@ -23,18 +23,20 @@ class ProgramController extends Controller {
   }
 
   @Get()
-  public async getPrograms(): Promise<ProgramApiType[]> {
+  public async getPrograms(@Query() page: PageType = 1, @Query() perPage: PerPageType = 10): Promise<{data:ProgramApiType[], total: number}> {
     const data = []
-    const programs = await this.programRepository.find({
+    const [programs, total] = await this.programRepository.findAndCount({
       where: { public: true },
       relations: ['folder', 'user'],
-      order: { updated: "DESC" }
+      order: { updated: "DESC" },
+      skip: (page - 1) * perPage,
+      take: perPage
     })
     for (const program of programs) {
       data.push(await this.programService.getJson(program))
     }
 
-    return data;
+    return {data,total};
   }
 
   @Put('{uid}')

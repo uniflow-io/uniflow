@@ -141,6 +141,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PageType": {
+        "dataType": "refAlias",
+        "type": {"dataType":"integer","validators":{"minimum":{"value":1}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PerPageType": {
+        "dataType": "refAlias",
+        "type": {"dataType":"integer","validators":{"minimum":{"value":1},"maximum":{"value":100}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PartialType_ProgramApiType_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"name":{"ref":"NotEmptyStringType"},"slug":{"ref":"SlugType"},"path":{"ref":"PathType"},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"public":{"dataType":"boolean"},"user":{"ref":"UuidOrUsernameType"},"created":{"dataType":"datetime"},"updated":{"dataType":"datetime"}},"validators":{}},
@@ -476,6 +486,8 @@ export function RegisterRoutes(app: express.Router) {
         app.get('/api/programs',
             function (request: any, response: any, next: any) {
             const args = {
+                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -765,6 +777,8 @@ export function RegisterRoutes(app: express.Router) {
             function (request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
+                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
                     path: {"in":"query","name":"path","ref":"PathType"},
             };
 
@@ -825,6 +839,8 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
+                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
                     path: {"in":"query","name":"path","ref":"PathType"},
             };
 

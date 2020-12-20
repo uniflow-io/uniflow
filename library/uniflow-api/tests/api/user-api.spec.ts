@@ -136,7 +136,8 @@ describe('api-user', () => {
             uri: `/api/users/{{uid}}/folders`,
             email: 'user@uniflow.io'
         });
-        assert.isArray(body)
+        expect(body).to.have.all.keys('data', 'total')
+        assert.isArray(body.data)
     });
 
     test.each([faker.random.word()])('POST /api/users/:uid/folders success', async (name: string) => {
@@ -155,7 +156,8 @@ describe('api-user', () => {
             uri: `/api/users/{{uid}}/programs`,
             email: 'user@uniflow.io'
         });
-        assert.isArray(body)
+        expect(body).to.have.all.keys('data', 'total')
+        assert.isArray(body.data)
     });
 
     test.each([faker.random.word()])('POST /api/users/:uid/programs success', async (name: string) => {

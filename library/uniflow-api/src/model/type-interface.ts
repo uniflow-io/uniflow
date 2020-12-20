@@ -4,6 +4,19 @@ export type PartialType<T> = {
 };
 
 /**
+ * @isInt
+ * @minimum 1
+ */
+export type PageType = number
+
+/**
+ * @isInt
+ * @minimum 1
+ * @maximum 100
+ */
+export type PerPageType = number
+
+/**
  * @format email
  * @pattern `^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`
  */

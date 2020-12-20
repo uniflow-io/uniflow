@@ -15,8 +15,8 @@ describe('api-folder', () => {
             uri: `/api/users/{{uid}}/folders`,
             email: 'user@uniflow.io'
         })
-        userFolder = body[0]
-        userDeleteFolder = body[1]
+        userFolder = body.data[0]
+        userDeleteFolder = body.data[1]
     })
 
     test.each([faker.random.word()])('PUT /api/folders/:uid success', async (name: string) => {

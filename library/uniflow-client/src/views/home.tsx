@@ -179,52 +179,6 @@ class Home extends Component {
             </div>
           </div>
         </section>
-        {/*<section className="section container py-md-5">
-          <div className="row">
-            <div className="col-lg-12">
-              <h3>Get started</h3>
-            </div>
-          </div>
-          <div className="row pt-md-3">
-            <div className="col-lg-6">
-              <h3 className="headline">CLI</h3>
-              <div className="execution-code cli-npx">
-                <div className="click-to-copy clickable">
-                  Click to copy
-                </div>
-                <pre className="clickable  language-bash">
-                  <code className=" language-bash">
-                    <span className="token comment"># Take uniflow for a spin without installing it</span> npx uniflow-io
-                  </code>
-                </pre>
-              </div>
-              <div className="execution-code cli-npm-install">
-                <div className="click-to-copy clickable">
-                  Click to copy
-                </div>
-                <pre className="clickable  language-bash"><code className=" language-bash">
-  <span className="token comment"># or install it globally and then start</span>
-  <span className="token function">npm</span> <span className="token function">install</span> -g uniflow-io</code></pre>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <h3 className="headline">Docker</h3>
-              <div className="execution-code docker">
-                <div className="click-to-copy clickable">
-                  Click to copy
-                </div>
-                <pre className="clickable language-bash"><code className=" language-bash">
-  <span className="token comment"># Spin up a basic container</span>
-  docker run -it --rm <span className="token punctuation">\</span>
-  --name n8n <span className="token punctuation">\</span>
-  -p <span className="token number">5678</span>:5678 <span className="token punctuation">\</span>
-  -v ~/.n8n:/root/.n8n <span className="token punctuation">\</span>
-  n8nio/n8n
-                </code></pre>
-              </div>
-            </div>
-          </div>
-        </section>*/}
       </>
     )
   }
