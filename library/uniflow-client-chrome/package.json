@@ -29,7 +29,7 @@
     "dev": "webpack --mode development --watch -p --progress --colors --config webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "babel-standalone": "^6.26.0",
     "vm-browserify": "^1.1.2"
   },
