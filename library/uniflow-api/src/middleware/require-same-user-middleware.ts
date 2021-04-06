@@ -9,11 +9,11 @@ export default class RequireSameUserMiddleware implements MiddlewareInterface {
   middleware(): any {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (!req.user || !req.params.uid) {
+        if (!req.appUser || !req.params.uid) {
           throw new ApiException('Not authorized', 401);
         }
 
-        if(TypeModel.isSameUser(req.params.uid, req.user)) {
+        if(TypeModel.isSameUser(req.params.uid, req.appUser)) {
           return next();
         }
         

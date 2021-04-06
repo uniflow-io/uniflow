@@ -51,7 +51,7 @@ export default class AuthController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const { access_token } = req.body;
-          const { token, user } = await this.authService.facebookLogin(access_token, req.user);
+          const { token, user } = await this.authService.facebookLogin(access_token, req.appUser);
           return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);
@@ -72,7 +72,7 @@ export default class AuthController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const { code } = req.body;
-          const { token, user } = await this.authService.githubLogin(code, req.user);
+          const { token, user } = await this.authService.githubLogin(code, req.appUser);
           return res.status(201).json({ token, uid: user.uid });
         } catch (e) {
           //console.log(' error ', e);

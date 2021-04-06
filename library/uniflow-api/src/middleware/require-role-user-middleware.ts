@@ -13,7 +13,7 @@ export default class RequireRoleUserMiddleware implements MiddlewareInterface {
   middleware(role: string = 'ROLE_USER'): any {
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if(!req.user || !this.userService.isGranted(req.user, role)) {
+        if(!req.appUser || !this.userService.isGranted(req.appUser, role)) {
           throw new ApiException('Not authorized', 401);
         }
 

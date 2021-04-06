@@ -73,7 +73,7 @@ export default class ProgramController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const program = await this.programRepository.findOne({
-            where: {user: req.user, uid: req.params.uid},
+            where: {user: req.appUser, uid: req.params.uid},
             relations: ['user', 'folder'],
           })
           if (!program) {
@@ -83,9 +83,11 @@ export default class ProgramController implements ControllerInterface {
           if(req.body.name) {
             program.name = req.body.name
           }
-          program.user = req.user
-          if(req.body.path) {
-            program.folder = await this.folderService.fromPath(req.user, req.body.path) || null
+          if(req.appUser) {
+            program.user = req.appUser
+          }
+          if(req.appUser && req.body.path) {
+            program.folder = await this.folderService.fromPath(req.appUser, req.body.path) || null
             await this.folderService.setSlug(program, program.slug) // in case of slug conflict when moving program
           }
           if (req.body.slug && program.slug !== req.body.slug) {
@@ -133,7 +135,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
+          const program = await this.programRepository.findOne({user: req.appUser, uid: req.params.uid})
           if (!program) {
             throw new ApiException('Program not found', 404);
           }
@@ -168,7 +170,7 @@ export default class ProgramController implements ControllerInterface {
           }
           
           if(!program.public) {
-            if(!req.user || program.user.id !== req.user.id) {
+            if(!req.appUser || program.user.id !== req.appUser.id) {
               throw new ApiException('Not authorized', 401);
             }
           }
@@ -196,7 +198,7 @@ export default class ProgramController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const program = await this.programRepository.findOne({user: req.user, uid: req.params.uid})
+          const program = await this.programRepository.findOne({user: req.appUser, uid: req.params.uid})
           if (!program) {
             throw new ApiException('Program not found', 404);
           }

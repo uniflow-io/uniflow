@@ -23,7 +23,7 @@ export default class WithUserMiddleware implements MiddlewareInterface {
         
         Reflect.deleteProperty(user, 'password');
         Reflect.deleteProperty(user, 'salt');
-        req.user = user;
+        req.appUser = user;
         return next();
       } catch (e) {
         //console.log(e);

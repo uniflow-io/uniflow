@@ -75,7 +75,11 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          return res.status(200).json(await this.userService.getJson(req.user));
+          if (!req.appUser) {
+            throw new ApiException('User not found', 404);
+          }
+          
+          return res.status(200).json(await this.userService.getJson(req.appUser));
         } catch (e) {
           //console.log(' error ', e);
           return next(e);
@@ -116,7 +120,7 @@ export default class UserController implements ControllerInterface {
           user.facebookId = req.body.facebookId ? req.body.facebookId : null
           user.githubId = req.body.githubId ? req.body.githubId : null
           
-          if(req.body.username && req.body.username !== req.user.username) {
+          if(req.appUser && req.body.username && req.body.username !== req.appUser.username) {
             await this.userService.setUsername(user, req.body.username)
           }
     
@@ -250,10 +254,14 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
+          if (!req.appUser) {
+            throw new ApiException('User not found', 404);
+          }
+          
           const folder = await this.folderFactory.create({
             name: req.body.name,
-            parent: await this.folderService.fromPath(req.user, req.body.path || '/') || null,
-            user: req.user,
+            parent: await this.folderService.fromPath(req.appUser, req.body.path || '/') || null,
+            user: req.appUser,
           })
           await this.folderService.setSlug(folder, req.body.slug || req.body.name)
     
@@ -293,7 +301,7 @@ export default class UserController implements ControllerInterface {
           }
 
           let where: any = {user}
-          const isPublicOnly = !req.user || !TypeModel.isSameUser(req.params.uid, req.user)
+          const isPublicOnly = !req.appUser || !TypeModel.isSameUser(req.params.uid, req.appUser)
           if(isPublicOnly) {
             where = {...where, public: true}
           }
@@ -338,10 +346,14 @@ export default class UserController implements ControllerInterface {
       this.requireSameUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
+          if (!req.appUser) {
+            throw new ApiException('User not found', 404);
+          }
+          
           const program = await this.programFactory.create({
             name: req.body.name,
-            user: req.user,
-            folder: await this.folderService.fromPath(req.user, req.body.path || '/') || null,
+            user: req.appUser,
+            folder: await this.folderService.fromPath(req.appUser, req.body.path || '/') || null,
             description: req.body.description ? req.body.description : null,
             public: req.body.public || false,
           })

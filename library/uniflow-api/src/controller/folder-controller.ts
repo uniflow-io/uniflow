@@ -41,7 +41,7 @@ export default class FolderController implements ControllerInterface {
       async (req: Request, res: Response, next: NextFunction) => {
         try {
           const folder = await this.folderRepository.findOne({
-            where: {user: req.user, uid: req.params.uid},
+            where: {user: req.appUser, uid: req.params.uid},
             relations: ['user', 'parent']
           })
           if (!folder) {
@@ -51,8 +51,8 @@ export default class FolderController implements ControllerInterface {
           if(req.body.name) {
             folder.name = req.body.name
           }
-          if(req.body.path) {
-            const parentFolder = await this.folderService.fromPath(req.user, req.body.path) || null
+          if(req.appUser && req.body.path) {
+            const parentFolder = await this.folderService.fromPath(req.appUser, req.body.path) || null
             if(parentFolder && await this.folderRepository.isCircular(folder, parentFolder)) {
               const error = new CelebrateError(undefined, { celebrated: true })
               error.details.set(Segments.BODY, new Joi.ValidationError('', [{path: ['path'], message: 'path provided is not accepted'}], ''))
@@ -61,7 +61,9 @@ export default class FolderController implements ControllerInterface {
             folder.parent = parentFolder
             await this.folderService.setSlug(folder, folder.slug) // in case of slug conflict when moving folder
           }
-          folder.user = req.user
+          if(req.appUser) {
+            folder.user = req.appUser
+          }
           if (req.body.slug && folder.slug !== req.body.slug) {
             await this.folderService.setSlug(folder, req.body.slug)
           }
@@ -94,7 +96,7 @@ export default class FolderController implements ControllerInterface {
       this.requireRoleUser.middleware(),
       async (req: Request, res: Response, next: NextFunction) => {
         try {
-          const folder = await this.folderRepository.findOne({user: req.user, uid: req.params.uid})
+          const folder = await this.folderRepository.findOne({user: req.appUser, uid: req.params.uid})
           if (!folder) {
             throw new ApiException('Folder not found', 404);
           }
