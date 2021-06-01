@@ -1,5 +1,5 @@
-import { Service, Container } from 'typedi';
-import { Connection, createConnection, useContainer } from 'typeorm';
+import { Service } from 'typedi';
+import { Connection, createConnection } from 'typeorm';
 import { ConnectionConfig } from '../config';
 import { LoaderInterface } from './interfaces';
 
@@ -16,9 +16,6 @@ export default class DatabaseLoader implements LoaderInterface {
   }
 
   public async load() {
-    // typedi + typeorm@
-    useContainer(Container);
-
     // create a connection using modified connection options
     this.connection = await createConnection(await this.connectionConfig.getConfig());
   }

@@ -29,22 +29,22 @@
     "dev": "webpack --mode development --watch -p --progress --colors --config webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "babel-standalone": "^6.26.0",
     "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/plugin-transform-react-jsx": "^7.12.7",
-    "@babel/preset-env": "^7.12.7",
-    "@babel/preset-flow": "^7.12.1",
-    "@babel/preset-react": "^7.12.7",
+    "@babel/core": "^7.13.14",
+    "@babel/plugin-transform-react-jsx": "^7.13.12",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-flow": "^7.13.13",
+    "@babel/preset-react": "^7.13.13",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.3.2",
-    "imports-loader": "^1.2.0",
+    "copy-webpack-plugin": "^8.1.1",
+    "imports-loader": "^2.0.0",
     "webextension-polyfill": "^0.7.0",
     "webpack": "^5.38.1",
-    "webpack-cli": "^4.2.0"
+    "webpack-cli": "^4.6.0"
   }
 }

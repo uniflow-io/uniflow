@@ -24,6 +24,11 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
         ]
         : [],
     },
+    resolve: {
+      fallback: {
+        "vm": require.resolve("vm-browserify")
+      }
+    }
   }
 
   if (activeEnv === "production") {
