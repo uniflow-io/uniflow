@@ -37,7 +37,7 @@ function parseArgv(argv) {
   return { args: args, values: values }
 }
 
-;(function main() {
+(function main() {
   let args = parseArgv(process.argv),
     apiKey = args['args']['api-key'],
     env = args['args']['e'] || args['args']['env']

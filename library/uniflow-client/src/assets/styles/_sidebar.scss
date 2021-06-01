@@ -53,7 +53,7 @@
     padding: 0;
     position: relative;
 
-    @include hover-focus {
+    &:focus {
       span {
         color: var(--text-color) !important;
 
@@ -93,7 +93,7 @@
       display: block;
       color: var(--secondary-color);
 
-      @include hover-focus {
+      &:focus {
         color: var(--secondary-color);
       }
 
@@ -102,7 +102,7 @@
         padding: 0.25em 0;
         text-decoration: none;
 
-        @include hover-focus {
+        &:focus {
           color: var(--primary-color);
         }
       }

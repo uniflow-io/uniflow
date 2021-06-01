@@ -1,13 +1,15 @@
-function Program(data) {
-  Object.assign(this, data)
-}
+class Program
+{
+  constructor(private data) {
+  }
 
-Program.prototype.serializeFlowsData = function(data) {
-  this.data = JSON.stringify(data)
-}
+  serializeFlowsData(data) {
+    this.data = JSON.stringify(data)
+  }
 
-Program.prototype.deserializeFlowsData = function() {
-  return JSON.parse(this.data)
+  deserializeFlowsData() {
+    return JSON.parse(this.data)
+  }
 }
 
 module.exports = Program

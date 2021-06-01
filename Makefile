@@ -11,7 +11,7 @@ clean: ## clean
 
 install: ## install
 	npm install
-	$(LERNA) bootstrap --hoist --no-ci
+	$(LERNA) bootstrap
 
 lint: ## lint
 	$(LERNA) exec -- npm run lint

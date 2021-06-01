@@ -202,7 +202,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.post('/api/login',
-            function (request: any, response: any, next: any) {
+            function AuthController_login(request: any, response: any, next: any) {
             const args = {
                     username: {"in":"body-prop","name":"username","required":true,"ref":"EmailOrUsernameType"},
                     password: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
@@ -226,12 +226,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.login.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/login-facebook',
             authenticateMiddleware([{"role":[]}]),
-            function (request: any, response: any, next: any) {
+            function AuthController_loginFacebook(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     access_token: {"in":"body-prop","name":"access_token","required":true,"dataType":"string"},
@@ -255,12 +255,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.loginFacebook.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/login-github',
             authenticateMiddleware([{"role":[]}]),
-            function (request: any, response: any, next: any) {
+            function AuthController_loginGithub(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     code: {"in":"body-prop","name":"code","required":true,"dataType":"string"},
@@ -284,11 +284,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.loginGithub.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/contacts',
-            function (request: any, response: any, next: any) {
+            function ContactController_createContact(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"Pick_ContactApiType.email-or-message_"},
             };
@@ -311,12 +311,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.createContact.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/folders/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-            function (request: any, response: any, next: any) {
+            function FolderController_updateFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -341,12 +341,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateFolder.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/api/folders/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-            function (request: any, response: any, next: any) {
+            function FolderController_deleteFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -370,11 +370,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.deleteFolder.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/leads',
-            function (request: any, response: any, next: any) {
+            function LeadController_createLead(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"PartialType_LeadApiType_"},
             };
@@ -397,11 +397,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.createLead.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/leads/:uid',
-            function (request: any, response: any, next: any) {
+            function LeadController_getLead(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
             };
@@ -424,11 +424,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getLead.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/leads/:uid',
-            function (request: any, response: any, next: any) {
+            function LeadController_updateLead(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
                     body: {"in":"body","name":"body","required":true,"ref":"PartialType_LeadApiType_"},
@@ -452,12 +452,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateLead.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/leads/github-webhook',
             authenticateMiddleware([{"github_token":[]}]),
-            function (request: any, response: any, next: any) {
+            function LeadController_githubWebhook(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"sender":{"dataType":"nestedObjectLiteral","nestedProperties":{"login":{"dataType":"string","required":true}},"required":true},"action":{"dataType":"string","required":true}}},
             };
@@ -480,11 +480,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.githubWebhook.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/programs',
-            function (request: any, response: any, next: any) {
+            function ProgramController_getPrograms(request: any, response: any, next: any) {
             const args = {
                     page: {"default":1,"in":"query","name":"page","ref":"PageType"},
                     perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
@@ -508,12 +508,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getPrograms.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/programs/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-            function (request: any, response: any, next: any) {
+            function ProgramController_updateProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -538,12 +538,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateProgram.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/api/programs/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-            function (request: any, response: any, next: any) {
+            function ProgramController_deleteProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -567,12 +567,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.deleteProgram.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/programs/:uid/flows',
             authenticateMiddleware([{"role":[]}]),
-            function (request: any, response: any, next: any) {
+            function ProgramController_getProgramFlows(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -596,12 +596,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getProgramFlows.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/programs/:uid/flows',
             authenticateMiddleware([{"role":["user"]}]),
-            function (request: any, response: any, next: any) {
+            function ProgramController_updateProgramFlows(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -626,11 +626,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateProgramFlows.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users',
-            function (request: any, response: any, next: any) {
+            function UserController_createUser(request: any, response: any, next: any) {
             const args = {
                     email: {"in":"body-prop","name":"email","required":true,"ref":"EmailType"},
                     plainPassword: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
@@ -654,12 +654,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.createUser.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/settings',
             authenticateMiddleware([{"role":["same-user"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_getUserSettings(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -683,12 +683,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getUserSettings.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/users/:uid/settings',
             authenticateMiddleware([{"role":["same-user"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_updateUserSettings(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -713,12 +713,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateUserSettings.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/admin-config',
             authenticateMiddleware([{"role":["same-user","admin"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_getAdminConfig(request: any, response: any, next: any) {
             const args = {
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
             };
@@ -741,12 +741,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getAdminConfig.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/users/:uid/admin-config',
             authenticateMiddleware([{"role":["same-user","admin"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_updateAdminConfig(request: any, response: any, next: any) {
             const args = {
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
             };
@@ -769,12 +769,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.updateAdminConfig.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/folders',
             authenticateMiddleware([{"role":[]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_getUserFolders(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
                     page: {"default":1,"in":"query","name":"page","ref":"PageType"},
@@ -800,12 +800,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getUserFolders.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users/:uid/folders',
             authenticateMiddleware([{"role":["same-user"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_createUserFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -830,12 +830,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.createUserFolder.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/programs',
             authenticateMiddleware([{"role":[]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_getUserPrograms(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -862,12 +862,12 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getUserPrograms.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users/:uid/programs',
             authenticateMiddleware([{"role":["same-user"]}]),
-            function (request: any, response: any, next: any) {
+            function UserController_createUserProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -892,11 +892,11 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.createUserProgram.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/version',
-            function (request: any, response: any, next: any) {
+            function VersionController_getVersion(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -918,14 +918,14 @@ export function RegisterRoutes(app: express.Router) {
 
 
             const promise = controller.getVersion.apply(controller, validatedArgs as any);
-            promiseHandler(controller, promise, response, next);
+            promiseHandler(controller, promise, response, undefined, next);
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
-        return (request: any, _response: any, next: any) => {
+        return function runAuthenticationMiddleware(request: any, _response: any, next: any) {
             let responded = 0;
             let success = false;
 
@@ -978,14 +978,14 @@ export function RegisterRoutes(app: express.Router) {
         return 'getHeaders' in object && 'getStatus' in object && 'setStatus' in object;
     }
 
-    function promiseHandler(controllerObj: any, promise: any, response: any, next: any) {
+    function promiseHandler(controllerObj: any, promise: any, response: any, successStatus: any, next: any) {
         return Promise.resolve(promise)
             .then((data: any) => {
-                let statusCode;
+                let statusCode = successStatus;
                 let headers;
                 if (isController(controllerObj)) {
                     headers = controllerObj.getHeaders();
-                    statusCode = controllerObj.getStatus();
+                    statusCode = controllerObj.getStatus() || statusCode;
                 }
 
                 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -998,18 +998,21 @@ export function RegisterRoutes(app: express.Router) {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     function returnHandler(response: any, statusCode?: number, data?: any, headers: any = {}) {
+        if (response.headersSent) {
+            return;
+        }
         Object.keys(headers).forEach((name: string) => {
             response.set(name, headers[name]);
         });
         if (data && typeof data.pipe === 'function' && data.readable && typeof data._read === 'function') {
             data.pipe(response);
-        } else if (data || data === false) { // === false allows boolean result
+        } else if (data !== null && data !== undefined) {
             response.status(statusCode || 200).json(data);
         } else {
             response.status(statusCode || 204).end();
         }
     }
-    
+
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
     function responder(response: any): TsoaResponse<HttpStatusCodeLiteral, unknown>  {
@@ -1037,6 +1040,14 @@ export function RegisterRoutes(app: express.Router) {
                     return validationService.ValidateParam(args[key], request.body, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"throw-on-extras"});
                 case 'body-prop':
                     return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, 'body.', {"noImplicitAdditionalProperties":"throw-on-extras"});
+                case 'formData':
+                    if (args[key].dataType === 'file') {
+                        return validationService.ValidateParam(args[key], request.file, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"throw-on-extras"});
+                    } else if (args[key].dataType === 'array' && args[key].array.dataType === 'file') {
+                        return validationService.ValidateParam(args[key], request.files, name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"throw-on-extras"});
+                    } else {
+                        return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, undefined, {"noImplicitAdditionalProperties":"throw-on-extras"});
+                    }
                 case 'res':
                     return responder(response);
             }

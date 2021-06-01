@@ -3,7 +3,7 @@
     background-color: var(--#{$color}-color);
     border-color: var(--#{$color}-color);
 
-    @include hover {
+    &:hover {
       background-color: var(--#{$color}-hover-color);
       border-color: var(--#{$color}-hover-color);
     }
