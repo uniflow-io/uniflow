@@ -22,7 +22,6 @@ export default class Container implements IocContainer {
             DIContainer.set('env', env)
 
             // typedi + typeorm
-            useContainer(Container);
             DIContainer.set({ id: ConnectionManager, type: ConnectionManager });
           
             if(env === 'test') {
@@ -36,16 +35,6 @@ export default class Container implements IocContainer {
             }
             
             this.init = true
-        }
-
-        /**
-         * https://github.com/typeorm/typeorm-typedi-extensions/blob/master/src/container-provider.class.ts
-         * 
-         * TypeDI only resolves values for registered types, so we need to register
-         * them before to requesting them from the default container.
-         */
-        if (!DIContainer.has(id as Constructable<T>)) {
-            DIContainer.set({ id: id, type: id as Constructable<T> });
         }
 
         return DIContainer.get(id)
