@@ -6,10 +6,11 @@ import { FolderEntity, UserEntity } from '../../src/entity';
 import { assert } from 'chai';
 
 describe('folder-repository', () => {
-    const userRepository = Container.get(UserRepository)
-    const folderRepository = Container.get(FolderRepository)
-    const userFactory = Container.get(FakeUserFactory)
-    const folderFactory = Container.get(FakeFolderFactory)
+    const container = new Container()
+    const userRepository = container.get(UserRepository)
+    const folderRepository = container.get(FolderRepository)
+    const userFactory = container.get(FakeUserFactory)
+    const folderFactory = container.get(FakeFolderFactory)
     let user: UserEntity
     const folders = new Map<string, FolderEntity>()
 

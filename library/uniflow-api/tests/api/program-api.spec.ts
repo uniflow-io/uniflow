@@ -1,12 +1,12 @@
 import { describe, test, beforeAll } from '@jest/globals'
-import { assert } from 'chai';
+import { assert, expect } from 'chai';
 import * as faker from 'faker'
 import { expectOkUri, uriApp } from '../utils'
 import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('api-program', () => {
-    const app: App = Container.get(App)
+    const app: App = new Container().get(App)
     let userProgram: any, userDeleteProgram: any
 
     beforeAll(async () => {
@@ -15,8 +15,8 @@ describe('api-program', () => {
             uri: `/api/users/{{uid}}/programs`,
             email: 'user@uniflow.io'
         })
-        userProgram = body[0]
-        userDeleteProgram = body[1]
+        userProgram = body.data[0]
+        userDeleteProgram = body.data[1]
     })
 
     test('GET /api/programs success', async () => {
@@ -24,7 +24,8 @@ describe('api-program', () => {
             protocol: 'get',
             uri: '/api/programs',
         })
-        assert.isArray(body)
+        expect(body).to.have.all.keys('data', 'total')
+        assert.isArray(body.data)
     });
 
     test.each([faker.random.word()])('PUT /api/programs/:uid success', async (name: string) => {

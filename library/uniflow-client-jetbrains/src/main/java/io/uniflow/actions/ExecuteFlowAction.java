@@ -26,10 +26,10 @@ public class ExecuteFlowAction extends AnAction {
         try {
             String data = api.getProgramData(this.program.getId());
             this.program.setData(data);
-            JsonArray rail = this.program.deserializeRailData();
+            JsonArray flows = this.program.deserializeFlowsData();
 
             Runner runner = new Runner();
-            runner.run(rail, e);
+            runner.run(flows, e);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

@@ -2,7 +2,7 @@
   .nav-link {
     color: var(--secondary-color);
 
-    @include hover-focus {
+    &:focus {
       color: var(--secondary-hover-color);
     }
   }
@@ -18,7 +18,7 @@
     padding-bottom: $spacer;
     color: var(--secondary-color);
 
-    @include hover-focus {
+    &:focus {
       color: var(--secondary-hover-color);
     }
 
@@ -26,10 +26,9 @@
       color: var(--primary-color);
       border-top: $border-width solid var(--primary-color) !important;
 
-      @include hover-focus {
+      &:focus {
         color: var(--primary-hover-color) !important;
       }
     }
   }
 }
-

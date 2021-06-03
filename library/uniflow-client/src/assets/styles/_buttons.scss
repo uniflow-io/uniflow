@@ -3,7 +3,7 @@
     background-color: var(--#{$color}-color);
     border-color: var(--#{$color}-color);
 
-    @include hover {
+    &:hover {
       background-color: var(--#{$color}-hover-color);
       border-color: var(--#{$color}-hover-color);
     }
@@ -22,7 +22,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  &>:first-child {
+  & > :first-child {
     position: absolute;
     left: 8px;
     width: 32px;
@@ -30,42 +30,42 @@
     line-height: 34px;
     font-size: 1.6em;
     text-align: center;
-    border-right: 1px solid rgba(0,0,0,.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
   }
 }
 
 .btn-facebook {
   color: #fff;
   background-color: #3b5998;
-  border-color: rgba(0,0,0,.2);
+  border-color: rgba(0, 0, 0, 0.2);
 
   &:hover {
     color: #fff;
     background-color: #2d4373;
-    border-color: rgba(0,0,0,.2);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 }
 
 .btn-twitter {
   color: #fff;
   background-color: rgb(29, 161, 242);
-  border-color: rgba(0,0,0,.1);
+  border-color: rgba(0, 0, 0, 0.1);
 
   &:hover {
     color: #fff;
     background-color: rgb(26, 145, 218);
-    border-color: rgba(0,0,0,.1);
+    border-color: rgba(0, 0, 0, 0.1);
   }
 }
 
 .btn-github {
   color: #fff;
   background-color: #444;
-  border-color: rgba(0,0,0,.2);
+  border-color: rgba(0, 0, 0, 0.2);
 
   &:hover {
     color: #fff;
     background-color: #2b2b2b;
-    border-color: rgba(0,0,0,.2);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 }

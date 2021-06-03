@@ -14,7 +14,7 @@ You also can update your subscriptions directly in your [Settings](https://unifl
 
 ## [#](https://uniflow.io/docs/faq#which-license-does-uniflow-use) Which license does Uniflow use?
 
-Uniflow is [fair-code](http://faircode.io) distributed under [Apache 2.0 with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
+Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
 
 ## [#](https://uniflow.io/docs/faq#is-uniflow-open-source) Is Uniflow open-source?
 
@@ -22,7 +22,7 @@ No. The [Commons Clause](https://commonsclause.com) that is attached to the Apac
 
 For instance, one cannot charge others to host or support Uniflow. However, to make things simpler, we grant everyone (individuals and companies) the right to offer consulting or support without prior permission as long as it is less than 30,000 USD ($30k) per annum. If your revenue from services based on Uniflow is greater than $30k per annum, we'd invite you to become a partner and apply for a license. If you have any questions about this, feel free to reach out to us by [filling our contact form](https://uniflow.io/contact).
 
-## [#](https://uniflow.io/docs/faq#why-is-uniflow-not-open-source-but-fair-code-licensed-instead) Why is Uniflow not open-source but [fair-code](http://faircode.io) licensed distributed?
+## [#](https://uniflow.io/docs/faq#why-is-uniflow-not-open-source-but-fair-code-distributed-instead) Why is Uniflow not open-source but [fair-code](http://faircode.io) distributed instead?
 
 We love open-source and the idea that everybody can freely use and extend what we wrote. Our community is at the heart of everything that we do and we understand that people who contribute to a project are the main drivers that push a project forward. So to make sure that the project continues to evolve and stay alive in the longer run, we decided to attach the Commons Clause. This ensures that no other person or company can make money directly with Uniflow. Especially if it competes with how we plan to finance our further development. For the greater majority of the people, it will not make any difference at all. At the same time, it protects the project.
 

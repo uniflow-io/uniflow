@@ -1,24 +1,19 @@
-import {NextFunction, Request, Response, Router} from 'express';
 import { Service } from 'typedi';
-import { ControllerInterface } from './interfaces';
+import {
+  Controller,
+  Get,
+  Route,
+} from "tsoa";
 
+@Route("version")
 @Service()
-export default class VersionController implements ControllerInterface {
-  routes(app: Router): Router {
-    app.get(
-      '/version',
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          return res.status(200).json({
-            version: `v${require('../../package.json').version}`
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      }
-    );
-
-    return app
+class VersionController extends Controller {
+  @Get()
+  public async getVersion(): Promise<{version: string}> {
+    return {
+      version: `v${require('../../package.json').version}`
+    }
   }
-};
+}
+
+export { VersionController }

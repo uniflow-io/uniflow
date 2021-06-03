@@ -63,11 +63,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         panic!("Not such process [{}]", identifier);
     }
 
-    let rail_string_data = program.get_data().to_string();
-    let rail_string: String = serde_json::from_str(&rail_string_data)?;
-    let rail: Vec<Value> = serde_json::from_str(&rail_string)?;
+    let flows_string_data = program.get_data().to_string();
+    let flows_string: String = serde_json::from_str(&flows_string_data)?;
+    let flows: Vec<Value> = serde_json::from_str(&flows_string)?;
     let runner = Runner::new(/*command_args*/);
-    runner.run(rail);
+    runner.run(flows);
 
     Ok(())
 }

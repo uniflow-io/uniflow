@@ -8,6 +8,7 @@ NPM_BIN = ./node_modules/.bin
 
 build: clean ## build
 	if [ ! -f .env.$(NODE_ENV) ]; then cp .env .env.$(NODE_ENV); fi
+	$(NPM_BIN)/tsoa spec-and-routes
 	$(NPM_BIN)/tsc -b
 	$(NPM_BIN)/oclif-dev manifest
 

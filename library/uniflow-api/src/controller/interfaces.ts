@@ -1,7 +1,9 @@
-import { Router } from 'express';
+export interface ErrorJSON {
+  messages: string[];
+}
 
-export interface ControllerInterface {
-  routes(app: Router): Router;
+export interface ValidateErrorJSON extends ErrorJSON {
+  validation: {source: string, key: string, messages: string[]}[];
 }
 
 export interface GithubUser {

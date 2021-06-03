@@ -13,11 +13,11 @@ impl Runner {
     Runner { /*command_args*/ }
   }
 
-  pub fn run(self, rail: Vec<Value>) {
+  pub fn run(self, flows: Vec<Value>) {
     let mv8 = MiniV8::new();
     mv8.global().set("console", console_bridge(&mv8)).unwrap();
 
-    for flow in rail.iter() {
+    for flow in flows.iter() {
       let code_data: String = flow["codes"]["rust"].to_string();
       let code: String = serde_json::from_str(&code_data).unwrap();
       let _value: String = mv8.eval(&*code).unwrap();

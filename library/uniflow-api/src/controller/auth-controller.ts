@@ -1,86 +1,51 @@
-import { celebrate, Joi, Segments } from 'celebrate';
-import { NextFunction, Request, Response, Router } from 'express';
+import * as express from "express";
 import { Service } from 'typedi';
+import { Controller, Response, SuccessResponse, BodyProp, Post, Route, Tags, Security, Request } from "tsoa";
 import { AuthService } from '../service';
-import { WithTokenMiddleware, WithUserMiddleware } from "../middleware";
-import { ControllerInterface } from './interfaces';
-import { TypeModel } from '../model';
+import { EmailOrUsernameType } from '../model/interfaces';
+import { ErrorJSON, ValidateErrorJSON } from './interfaces';
 
+@Route()
+@Tags("auth")
 @Service()
-export default class AuthController implements ControllerInterface {
+class AuthController extends Controller {
   constructor(
-    private authService: AuthService,
-    private withToken: WithTokenMiddleware,
-    private withUser: WithUserMiddleware
-  ) {}
+    private authService: AuthService
+  ) {
+    super()
+  }
 
-  routes(app: Router): Router {
-    const route = Router();
+  @Post('login')
+  @SuccessResponse(201, "Valid credentials")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Bad credentials")
+  public async login(@BodyProp() username: EmailOrUsernameType, @BodyProp() password: string): Promise<{token: string, uid: string}> {
+    this.setStatus(201)
+    const { token, user } = await this.authService.login(username, password);
+    return { token, uid: user.uid };
+  }
 
-    app.use('/', route);
+  @Post('login-facebook')
+  @SuccessResponse(201, "Valid credentials")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Bad credentials")
+  @Security('role')
+  public async loginFacebook(@Request() req: express.Request, @BodyProp() access_token: string): Promise<{token: string, uid: string}> {
+    this.setStatus(201)
+    const { token, user } = await this.authService.facebookLogin(access_token, req.user);
+    return { token, uid: user.uid };
+  }
 
-    route.post(
-      '/login',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          username: Joi.string().required().custom(TypeModel.joiEmailOrUsername),
-          password: Joi.string().required(),
-        }),
-      }),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const { username, password } = req.body;
-          const { token, user } = await this.authService.login(username, password);
-          return res.status(201).json({ token, uid: user.uid });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    route.post(
-      '/login-facebook',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          access_token: Joi.string().required(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const { access_token } = req.body;
-          const { token, user } = await this.authService.facebookLogin(access_token, req.appUser);
-          return res.status(201).json({ token, uid: user.uid });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    route.post(
-      '/login-github',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          code: Joi.string().required(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const { code } = req.body;
-          const { token, user } = await this.authService.githubLogin(code, req.appUser);
-          return res.status(201).json({ token, uid: user.uid });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    return app
+  @Post('login-github')
+  @SuccessResponse(201, "Valid credentials")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Bad credentials")
+  @Security('role')
+  public async loginGithub(@Request() req: express.Request, @BodyProp() code: string): Promise<{token: string, uid: string}> {
+    this.setStatus(201)
+    const { token, user } = await this.authService.githubLogin(code, req.user);
+    return { token, uid: user.uid };
   }
 }
+
+export { AuthController }

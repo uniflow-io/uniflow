@@ -1,5 +1,6 @@
 import { Service } from 'typedi';
 import { LeadEntity } from '../entity';
+import { LeadApiType } from '../model/interfaces';
 
 @Service()
 export default class LeadService {
@@ -7,7 +8,7 @@ export default class LeadService {
     return true
   }
   
-  public async getJson(lead: LeadEntity): Promise<Object> {
+  public async getJson(lead: LeadEntity): Promise<LeadApiType> {
     return {
       uid: lead.uid,
       email: lead.email,

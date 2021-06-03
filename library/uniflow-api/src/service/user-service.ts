@@ -4,6 +4,7 @@ import { ApiException } from '../exception';
 import { LeadRepository, UserRepository } from '../repository';
 import { TypeModel } from '../model';
 import { UserFactory } from '../factory';
+import { UserApiType } from '../model/interfaces';
 
 @Service()
 export default class UserService {
@@ -71,21 +72,21 @@ export default class UserService {
     return true
   }
   
-  public async getJson(user: UserEntity): Promise<Object> {
+  public async getJson(user: UserEntity): Promise<UserApiType> {
     const lead = await this.leadRepository.findOne({email: user.email})
 
     return {
-      'uid': user.uid,
-      'firstname': user.firstname,
-      'lastname': user.lastname,
-      'username': user.username,
-      'email': user.email,
-      'facebookId': user.facebookId,
-      'githubId': user.githubId,
-      'apiKey': user.apiKey,
-      'roles': [user.role],
-      "links": {
-        "lead": lead?.uid
+      uid: user.uid,
+      username: user.username,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      facebookId: user.facebookId,
+      githubId: user.githubId,
+      apiKey: user.apiKey,
+      roles: [user.role],
+      links: {
+        lead: lead?.uid
       }
     }
   }

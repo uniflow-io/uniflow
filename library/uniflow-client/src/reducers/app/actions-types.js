@@ -1,2 +1,0 @@
-export const COMMIT_SET_PAGE = 'COMMIT_SET_PAGE'
-export const COMMIT_SET_THEME = 'COMMIT_SET_THEME'

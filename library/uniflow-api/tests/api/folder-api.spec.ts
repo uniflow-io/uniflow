@@ -6,7 +6,7 @@ import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('api-folder', () => {
-    const app: App = Container.get(App)
+    const app: App = new Container().get(App)
     let userFolder: any, userDeleteFolder: any
 
     beforeAll(async () => {
@@ -15,8 +15,8 @@ describe('api-folder', () => {
             uri: `/api/users/{{uid}}/folders`,
             email: 'user@uniflow.io'
         })
-        userFolder = body[0]
-        userDeleteFolder = body[1]
+        userFolder = body.data[0]
+        userDeleteFolder = body.data[1]
     })
 
     test.each([faker.random.word()])('PUT /api/folders/:uid success', async (name: string) => {

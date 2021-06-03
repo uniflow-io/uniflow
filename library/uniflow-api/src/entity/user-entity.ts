@@ -91,7 +91,8 @@ export default class UserEntity {
     length: 255,
     nullable: false,
   })
-  role: string;
+  role: 'ROLE_USER'|'ROLE_SUPER_ADMIN';
+  roles: ('ROLE_USER'|'ROLE_SUPER_ADMIN')[];
 
   @OneToMany(type => ProgramEntity, program => program.user, {
     cascade: ['insert']

@@ -28,7 +28,7 @@ export default class StartCommand extends Command {
 	constructor(argv: string[], config: Config.IConfig) {
 		super(argv, config)
 
-		this.app = Container.get(App)
+		this.app = new Container().get(App)
 	}
 
 	/**

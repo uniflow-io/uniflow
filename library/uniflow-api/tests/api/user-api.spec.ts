@@ -6,7 +6,7 @@ import { default as Container } from "../../src/container";
 import { default as App } from "../../src/app";
 
 describe('api-user', () => {
-    const app: App = Container.get(App)
+    const app: App = new Container().get(App)
 
     test.each([{
         email: faker.internet.email(),
@@ -17,7 +17,7 @@ describe('api-user', () => {
             uri: '/api/users',
             data
         })
-        expect(body).to.have.all.keys('uid')
+        expect(body).to.have.all.keys('apiKey', 'facebookId', 'firstname', 'githubId', 'lastname', 'roles', 'uid', 'username', 'email', 'links')
         expectUid(body.uid)
     });
 
@@ -136,7 +136,8 @@ describe('api-user', () => {
             uri: `/api/users/{{uid}}/folders`,
             email: 'user@uniflow.io'
         });
-        assert.isArray(body)
+        expect(body).to.have.all.keys('data', 'total')
+        assert.isArray(body.data)
     });
 
     test.each([faker.random.word()])('POST /api/users/:uid/folders success', async (name: string) => {
@@ -155,7 +156,8 @@ describe('api-user', () => {
             uri: `/api/users/{{uid}}/programs`,
             email: 'user@uniflow.io'
         });
-        assert.isArray(body)
+        expect(body).to.have.all.keys('data', 'total')
+        assert.isArray(body.data)
     });
 
     test.each([faker.random.word()])('POST /api/users/:uid/programs success', async (name: string) => {

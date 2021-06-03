@@ -53,7 +53,7 @@
     padding: 0;
     position: relative;
 
-    @include hover-focus {
+    &:focus {
       span {
         color: var(--text-color) !important;
 
@@ -75,34 +75,34 @@
         color: var(--primary-color);
 
         &:before {
-          content: " ";
+          content: ' ';
           width: 8px;
           height: 8px;
           border-radius: 10px;
           position: absolute;
-          left: -.8rem;
+          left: -0.8rem;
           top: 55%;
           margin-top: -5px;
           background-color: var(--primary-color);
-          animation: scaleIn .7s forwards;
+          animation: scaleIn 0.7s forwards;
         }
       }
     }
 
-    &>span {
+    & > span {
       display: block;
       color: var(--secondary-color);
 
-      @include hover-focus {
+      &:focus {
         color: var(--secondary-color);
       }
 
       &.link {
         display: block;
-        padding: .25em 0;
+        padding: 0.25em 0;
         text-decoration: none;
 
-        @include hover-focus {
+        &:focus {
           color: var(--primary-color);
         }
       }

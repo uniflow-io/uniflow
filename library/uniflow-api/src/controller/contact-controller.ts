@@ -1,53 +1,39 @@
-import { celebrate, Joi, Segments } from 'celebrate';
-import { NextFunction, Request, Response, Router } from 'express';
 import { Service } from "typedi";
+import { Controller, Response, SuccessResponse, Post, Route, Tags, Body, ValidateError } from "tsoa";
 import { ContactService } from "../service";
-import { ControllerInterface } from './interfaces';
 import { ContactRepository } from '../repository';
 import { ContactFactory } from '../factory';
+import { ContactApiType } from "../model/interfaces";
+import { ValidateErrorJSON } from "./interfaces";
 
+@Route('contacts')
+@Tags("contact")
 @Service()
-export default class ContactController implements ControllerInterface {
+class ContactController extends Controller {
   constructor(
     private contactRepository: ContactRepository,
     private contactService: ContactService,
     private contactFactory: ContactFactory
-  ) {}
+  ) {
+    super()
+  }
 
-  routes(app: Router): Router {
-    const route = Router();
-
-    app.use('/contacts', route);
-
-    route.post(
-      '/',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          email: Joi.string().required().email(),
-          message: Joi.string().required(),
-        }),
-      }),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const contact = await this.contactFactory.create(req.body)
+  @Post()
+  @SuccessResponse(201, "Created")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  public async createContact(@Body() body: Pick<ContactApiType, 'email'|'message'>): Promise<boolean> {
+    const contact = await this.contactFactory.create(body)
     
-          if(await this.contactService.isValid(contact)) {
-            await this.contactRepository.save(contact)
-            await this.contactService.send(contact)
-    
-            return res.status(201).json(true);
-          }
-    
-          return res.status(400).json({
-            'messages': ['Contact not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    if(await this.contactService.isValid(contact)) {
+      await this.contactRepository.save(contact)
+      await this.contactService.send(contact)
+      
+      this.setStatus(201)
+      return true;
+    }
 
-    return app
+    throw new ValidateError({}, 'Contact not valid')
   }
 }
+
+export { ContactController }

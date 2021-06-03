@@ -1,18 +1,18 @@
+import * as express from "express";
 import { Service} from "typedi";
-import { celebrate, Joi, Segments } from 'celebrate';
-import { NextFunction, Request, Response, Router} from 'express';
-import { RequireSameUserMiddleware, RequireRoleUserMiddleware, WithTokenMiddleware, WithUserMiddleware } from "../middleware";
+import { Controller, Get, Request, Response, SuccessResponse, BodyProp, Post, Route, Path, Tags, Security, Put, ValidateError, Body, Query } from "tsoa";
 import { UserService, ConfigService, FolderService, ProgramService, ProgramClientService, ProgramTagService } from "../service";
-import { ProgramEntity, UserEntity } from "../entity";
-import { ControllerInterface } from './interfaces';
 import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, UserRepository } from "../repository";
 import { ApiException } from "../exception";
-import { TypeModel } from "../model";
 import { IsNull } from "typeorm";
-import { ConfigFactory, ProgramFactory, FolderFactory, UserFactory } from "../factory";
+import { ConfigFactory, ProgramFactory, FolderFactory } from "../factory";
+import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageType, PartialType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
+import { ErrorJSON, ValidateErrorJSON } from './interfaces'
 
+@Route("users")
+@Tags("user")
 @Service()
-export default class UserController implements ControllerInterface {
+class UserController extends Controller {
   constructor(
     private tagRepository: TagRepository,
     private programRepository: ProgramRepository,
@@ -25,359 +25,205 @@ export default class UserController implements ControllerInterface {
     private programService: ProgramService,
     private programClientService: ProgramClientService,
     private programTagService: ProgramTagService,
-    private withToken: WithTokenMiddleware,
-    private withUser: WithUserMiddleware,
-    private requireRoleUser: RequireRoleUserMiddleware,
-    private requireSameUser: RequireSameUserMiddleware,
     private configFactory: ConfigFactory,
     private folderFactory: FolderFactory,
     private programFactory: ProgramFactory,
-    private userFactory: UserFactory,
-  ) {}
+  ) {
+    super()
+  }
 
-  routes(app: Router): Router {
-    const route = Router();
+  @Post()
+  @SuccessResponse(201, "Created")
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async createUser(@BodyProp() email: EmailType, @BodyProp('password') plainPassword: string): Promise<UserApiType> {
+    this.setStatus(201)
+    const user = await this.userService.create({email, plainPassword});
+    return this.userService.getJson(user);
+  }
 
-    app.use('/users', route);
+  @Get('{uid}/settings')
+  @Security('role', ['same-user'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async getUserSettings(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType): Promise<UserApiType> {
+    return await this.userService.getJson(req.user);
+  }
 
-    route.post(
-      '/',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          email: Joi.string().required().email(),
-          password: Joi.string().required(),
-        }),
-      }),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const user = await this.userService.create({
-            email: req.body.email,
-            plainPassword: req.body.password,
-          });
-          return res.status(201).json({ uid: user.uid });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+  @Put('{uid}/settings')
+  @Security('role', ['same-user'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async updateUserSettings(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType, @Body() body: PartialType<UserApiType>): Promise<UserApiType> {
+    const user = await this.userRepository.findOne(req.user.id);
+    if (!user) {
+      throw new ApiException('User not found', 404);
+    }
 
-    route.get(
-      '/:uid/settings',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          if (!req.appUser) {
-            throw new ApiException('User not found', 404);
-          }
-          
-          return res.status(200).json(await this.userService.getJson(req.appUser));
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    user.firstname = body.firstname ? body.firstname : null
+    user.lastname = body.lastname ? body.lastname : null
+    user.username = body.username ? user.username : null
+    user.apiKey = body.apiKey ? body.apiKey : null
+    user.facebookId = body.facebookId ? body.facebookId : null
+    user.githubId = body.githubId ? body.githubId : null
+    
+    if(body.username && body.username !== req.user.username) {
+      await this.userService.setUsername(user, body.username)
+    }
+
+    if(await this.userService.isValid(user)) {
+      await this.userRepository.save(user)
+
+      return await this.userService.getJson(user);
+    }
+
+    throw new ValidateError({}, 'User not valid')
+  }
+
+  @Get('{uid}/admin-config')
+  @Security('role', ['same-user', 'admin'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async getAdminConfig(@Path('uid') _uid: UuidOrUsernameType): Promise<ConfigApiType> {
+    const config = await this.configFactory.create(await this.configRepository.findOne());
+    
+    return await this.configService.getJson(config);
+  }
+
+  @Put('{uid}/admin-config')
+  @Security('role', ['same-user', 'admin'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async updateAdminConfig(@Path('uid') _uid: UuidOrUsernameType): Promise<ConfigApiType> {
+    const config = await this.configFactory.create(await this.configRepository.findOne());
   
-    route.put(
-      '/:uid/settings',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-        [Segments.BODY]: Joi.object().keys({
-          firstname: Joi.string().allow(null, ''),
-          lastname: Joi.string().allow(null, ''),
-          username: Joi.string().allow(null, '').custom(TypeModel.joiUsername),
-          apiKey: Joi.string().allow(null, '').custom(TypeModel.joiApiKey),
-          facebookId: Joi.string().allow(null, ''),
-          githubId: Joi.string().allow(null, ''),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const user = await this.userRepository.findOne(req.token?.id);
-          if (!user) {
-            throw new ApiException('User not found', 404);
-          }
+    if(await this.configService.isValid(config)) {
+      await this.configRepository.save(config)
 
-          user.firstname = req.body.firstname ? req.body.firstname : null
-          user.lastname = req.body.lastname ? req.body.lastname : null
-          user.username = req.body.username ? user.username : null
-          user.apiKey = req.body.apiKey ? req.body.apiKey : null
-          user.facebookId = req.body.facebookId ? req.body.facebookId : null
-          user.githubId = req.body.githubId ? req.body.githubId : null
-          
-          if(req.appUser && req.body.username && req.body.username !== req.appUser.username) {
-            await this.userService.setUsername(user, req.body.username)
-          }
+      return await this.configService.getJson(config);
+    }
+
+    throw new ValidateError({}, 'Config not valid')
+  }
+
+  @Get('{uid}/folders')
+  @Security('role')
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async getUserFolders(@Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:FolderApiType[], total: number}> {
+    const user = await this.userRepository.findOneByUidOrUsername(uid)
+    if (!user) {
+      throw new ApiException('User not found', 404);
+    }
+
+    let where: any = {user}
+    if(path) {
+      const parent = await this.folderService.fromPath(user, path as string)
+      where = {...where, parent: parent ? parent : IsNull()}
+    }
+    const [folders, total] = await this.folderRepository.findAndCount({
+      where,
+      relations: ['parent', 'user'],
+      skip: (page - 1) * perPage,
+      take: perPage,
+    })
     
-          if(await this.userService.isValid(user)) {
-            await this.userRepository.save(user)
+    const data = []
+    for (const folder of folders) {
+      data.push(await this.folderService.getJson(folder))
+    }
+
+    return {data, total};
+  }
+
+  @Post('{uid}/folders')
+  @Security('role', ['same-user'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async createUserFolder(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType, @Body() body: {name: NotEmptyStringType, slug?: SlugType, path?: PathType}): Promise<FolderApiType> {
+    const folder = await this.folderFactory.create({
+      name: body.name,
+      parent: await this.folderService.fromPath(req.user, body.path || '/') || null,
+      user: req.user,
+    })
+    await this.folderService.setSlug(folder, body.slug || body.name)
+
+    if(await this.folderService.isValid(folder)) {
+      await this.folderRepository.save(folder)
+
+      return await this.folderService.getJson(folder);
+    }
+
+    throw new ValidateError({}, 'Folder not valid')
+  }
+
+  @Get('{uid}/programs')
+  @Security('role')
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async getUserPrograms(@Request() req: express.Request, @Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:ProgramApiType[], total:number}> {
+    const user = await this.userRepository.findOneByUidOrUsername(uid)
+    if (!user) {
+      throw new ApiException('User not found', 404);
+    }
+
+    let where: any = {user}
+    const isPublicOnly = !req.user || !(uid === req.user.uid || uid === req.user.username)
+    if(isPublicOnly) {
+      where = {...where, public: true}
+    }
+    if(path) {
+      const folder = await this.folderService.fromPath(user, path as string)
+      where = {...where, folder: folder ? folder : IsNull()}
+    }
+    const [programs, total] = await this.programRepository.findAndCount({
+      where,
+      relations: ['folder', 'user'],
+      skip: (page - 1) * perPage,
+      take: perPage,
+    })
     
-            return res.status(200).json(await this.userService.getJson(user));
-          }
-    
-          return res.status(400).json({
-            'messages': ['User not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-  
-    route.get(
-      '/:uid/admin-config',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware('ROLE_SUPER_ADMIN'),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const config = await this.configFactory.create(await this.configRepository.findOne());
-          
-          return res.status(200).json(await this.configService.getJson(config));
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-  
-    route.put(
-      '/:uid/admin-config',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware('ROLE_SUPER_ADMIN'),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const config = await this.configFactory.create(await this.configRepository.findOne());
-    
-          if(await this.configService.isValid(config)) {
-            await this.configRepository.save(config)
-    
-            return res.status(200).json(await this.configService.getJson(config));
-          }
-    
-          return res.status(400).json({
-            'messages': ['Config not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    const data = []
+    for (const program of programs) {
+      data.push(await this.programService.getJson(program))
+    }
 
-    route.get(
-      '/:uid/folders',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-        [Segments.QUERY]: Joi.object().keys({
-          path: Joi.string().custom(TypeModel.joiPath),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const user = await this.userRepository.findOneByUidOrUsername(req.params.uid)
-          if (!user) {
-            throw new ApiException('User not found', 404);
-          }
+    return {data, total};
+  }
 
-          let where: any = {user}
-          if(req.query.path) {
-            const parent = await this.folderService.fromPath(user, req.query.path as string)
-            where = {...where, parent: parent ? parent : IsNull()}
-          }
-          const folders = await this.folderRepository.find({
-            where,
-            relations: ['parent', 'user'],
-          })
-          
-          const data = []
-          for (const folder of folders) {
-            data.push(await this.folderService.getJson(folder))
-          }
+  @Post('{uid}/programs')
+  @Security('role', ['same-user'])
+  @Response<ValidateErrorJSON>(422, "Validation failed")
+  @Response<ErrorJSON>(401, "Not authorized")
+  public async createUserProgram(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType, @Body() body: {
+    name: NotEmptyStringType
+    slug?: SlugType
+    path?: PathType
+    clients?: NotEmptyStringType[]
+    tags?: NotEmptyStringType[]
+    description?: NotEmptyStringType | null
+    public?: boolean
+  }): Promise<ProgramApiType> {
+    const program = await this.programFactory.create({
+      name: body.name,
+      user: req.user,
+      folder: await this.folderService.fromPath(req.user, body.path || '/') || null,
+      description: body.description ? body.description : null,
+      public: body.public || false,
+    })
+    await this.folderService.setSlug(program, body.slug || body.name)
+    program.clients = await this.programClientService.manageByProgramAndClientNames(program, body.clients || [])
+    program.tags = await this.programTagService.manageByProgramAndTagNames(program, body.tags || [])
 
-          return res.status(200).json(data);
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+    if(await this.programService.isValid(program)) {
+      await this.programRepository.save(program)
+      await this.tagRepository.clear()
 
-    route.post(
-      '/:uid/folders',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-        [Segments.BODY]: Joi.object().keys({
-          name: Joi.string().required(),
-          slug: Joi.string(),
-          path: Joi.string().custom(TypeModel.joiPath),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          if (!req.appUser) {
-            throw new ApiException('User not found', 404);
-          }
-          
-          const folder = await this.folderFactory.create({
-            name: req.body.name,
-            parent: await this.folderService.fromPath(req.appUser, req.body.path || '/') || null,
-            user: req.appUser,
-          })
-          await this.folderService.setSlug(folder, req.body.slug || req.body.name)
-    
-          if(await this.folderService.isValid(folder)) {
-            await this.folderRepository.save(folder)
-    
-            return res.status(200).json(await this.folderService.getJson(folder));
-          }
-    
-          return res.status(400).json({
-            'messages': ['Folder not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
+      return await this.programService.getJson(program);
+    }
 
-    route.get(
-      '/:uid/programs',
-      celebrate({
-        [Segments.PARAMS]: Joi.object().keys({
-          uid: Joi.string().custom(TypeModel.joiUuidOrUsername)
-        }),
-        [Segments.QUERY]: Joi.object().keys({
-          path: Joi.string().custom(TypeModel.joiPath),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          const user = await this.userRepository.findOneByUidOrUsername(req.params.uid)
-          if (!user) {
-            throw new ApiException('User not found', 404);
-          }
-
-          let where: any = {user}
-          const isPublicOnly = !req.appUser || !TypeModel.isSameUser(req.params.uid, req.appUser)
-          if(isPublicOnly) {
-            where = {...where, public: true}
-          }
-          if(req.query.path) {
-            const folder = await this.folderService.fromPath(user, req.query.path as string)
-            where = {...where, folder: folder ? folder : IsNull()}
-          }
-          const programs = await this.programRepository.find({
-            where,
-            relations: ['folder', 'user'],
-          })
-          
-          const data = []
-          for (const program of programs) {
-            data.push(await this.programService.getJson(program))
-          }
-
-          return res.status(200).json(data);
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    route.post(
-      '/:uid/programs',
-      celebrate({
-        [Segments.BODY]: Joi.object().keys({
-          name: Joi.string().required(),
-          slug: Joi.string(),
-          path: Joi.string().custom(TypeModel.joiPath),
-          clients: Joi.array(),
-          tags: Joi.array(),
-          description: Joi.string().allow(null, ''),
-          public: Joi.boolean(),
-        }),
-      }),
-      this.withToken.middleware(),
-      this.withUser.middleware(),
-      this.requireRoleUser.middleware(),
-      this.requireSameUser.middleware(),
-      async (req: Request, res: Response, next: NextFunction) => {
-        try {
-          if (!req.appUser) {
-            throw new ApiException('User not found', 404);
-          }
-          
-          const program = await this.programFactory.create({
-            name: req.body.name,
-            user: req.appUser,
-            folder: await this.folderService.fromPath(req.appUser, req.body.path || '/') || null,
-            description: req.body.description ? req.body.description : null,
-            public: req.body.public || false,
-          })
-          await this.folderService.setSlug(program, req.body.slug || req.body.name)
-          program.clients = await this.programClientService.manageByProgramAndClientNames(program, req.body.clients || [])
-          program.tags = await this.programTagService.manageByProgramAndTagNames(program, req.body.tags || [])
-
-          if(await this.programService.isValid(program)) {
-            await this.programRepository.save(program)
-            await this.tagRepository.clear()
-
-            return res.status(200).json(await this.programService.getJson(program));
-          }
-
-          return res.status(400).json({
-            'messages': ['Program not valid'],
-          });
-        } catch (e) {
-          //console.log(' error ', e);
-          return next(e);
-        }
-      },
-    );
-
-    return app
+    throw new ValidateError({}, 'Program not valid')
   }
 }
+
+export { UserController }

@@ -3,6 +3,7 @@ import { IsNull } from 'typeorm';
 import { FolderEntity, ProgramEntity, UserEntity } from '../entity';
 import { ApiException } from '../exception';
 import { TypeModel } from '../model';
+import { FolderApiType } from '../model/interfaces';
 import { FolderRepository, ProgramRepository } from '../repository';
 
 @Service()
@@ -67,15 +68,15 @@ export default class FolderService {
     return true
   }
   
-  public async getJson(folder: FolderEntity): Promise<Object> {
+  public async getJson(folder: FolderEntity): Promise<FolderApiType> {
     return {
-      'uid': folder.uid,
-      'name': folder.name,
-      'slug': folder.slug,
-      'path': await this.toPath(folder.parent || undefined),
-      'user': folder.user.username || folder.user.uid,
-      'created': folder.created.toISOString(),
-      'updated': folder.updated.toISOString(),
+      uid: folder.uid,
+      name: folder.name,
+      slug: folder.slug,
+      path: await this.toPath(folder.parent || undefined),
+      user: folder.user.username || folder.user.uid,
+      created: folder.created,
+      updated: folder.updated,
     }
   }
 }
