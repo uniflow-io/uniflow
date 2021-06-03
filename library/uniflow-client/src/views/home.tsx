@@ -102,7 +102,7 @@ class Home extends Component {
             <div className="row h-100 align-items-center">
               <div className="col-md-12 text-center">
                 <h1>Unified Workflow Automation Tool</h1>
-                <p>Take advantage of Flow Based Programming to automate your recurring tasks.</p>
+                <p>Automate your recurring tasks on any client.</p>
 
                 <div id="newsletter-optin" className="d-flex justify-content-center pt-md-5">
                   {state === "sent" && (
