@@ -1,9 +1,7 @@
-uniflow-client-vscode
----------------------
+uniflow-wasi-reverse-word
+-------------------------
 
-This is official VSCode Client for Uniflow
-
-It allows executing Uniflow Programs on [Visual Studio Code](https://code.visualstudio.com/)
+This is official Reverse Word Wasi for Uniflow
 
 ## Documentation
 
