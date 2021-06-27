@@ -1,4 +1,4 @@
-uniflow-wasi-reverse-word
+uniflow-wasm-reverse-word
 -------------------------
 
 This is official Reverse Word Wasi for Uniflow
