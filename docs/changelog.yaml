@@ -1,12 +1,18 @@
 -
+  tag: "v1.1.15"
+  label: |-
+    Allow user subscriptions management
+    Bootstrap 5
+    Gatsby 3
+    VSCode Client
+    MacOs Client
+  date: "2021-09-01"
+-
   tag: "v1.1.14"
   label: |-
     OpenApi
     Typescript
     Fair-code Licensed
-    Allow user subscriptions management
-    Bootstrap 5
-    Gatsby 3
   date: "2020-11-22"
 -
   tag: "v1.1.13"
