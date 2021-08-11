@@ -1,0 +1,27 @@
+{
+  "name": "@darkwood-fr/uniflow-client-macos",
+  "version": "1.0.0",
+  "description": "uniflow macos client",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo91@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/darkwood-fr/uniflow/issues"
+  },
+  "homepage": "https://github.com/darkwood-fr/uniflow/tree/master/library/uniflow-client-macos#readme",
+  "keywords": [
+    "uniflow",
+    "uniflow-client"
+  ],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darkwood-fr/uniflow.git",
+    "directory": "library/uniflow-client-macos"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

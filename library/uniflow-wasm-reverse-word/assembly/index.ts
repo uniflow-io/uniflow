@@ -1,3 +1,6 @@
+declare function prompt(defaultValue: string): string
+
 export function reverseWord(word: string): string {
-  return word.split('').reverse().join('')
+  let a = prompt('toto');
+  return word.split('').reverse().join('') + a
 }

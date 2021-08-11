@@ -19,9 +19,18 @@ export function activate(context: vscode.ExtensionContext) {
 				const buf = new Uint8Array(data);
 				resolve(WebAssembly.instantiate(buf, {
 					env: {
-						abort: (_msg:any, _file: any, line: any, column: any) =>
-						  console.error(`Error at ${line}:${column}`)
-					  } 
+						abort: (_msg:any, _file: any, line: any, column: any) => {
+							console.error(`Error at ${line}:${column}`)
+						}
+					},
+					index: {
+						prompt: async (defaultValue: string) => {
+							return await vscode.window.showInputBox({
+								value: defaultValue,
+								placeHolder: 'For example: fedcba. But not: 123'
+							})
+						}
+					}
 				})
 					.then((result: any) => (result.instance))
 				);
@@ -86,6 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (editor) {
 			const document = editor.document;
 			const selection = editor.selection;
+			
 
 			// Get the word within the selection
 			const word = document.getText(selection);
