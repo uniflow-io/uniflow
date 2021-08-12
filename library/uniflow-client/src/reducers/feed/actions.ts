@@ -13,6 +13,21 @@ import { commitLogoutUser } from "../user/actions"
 import { pathTo } from "../../routes"
 import { Bus } from "../../models"
 
+const fetchCollection = (uid, type, path, page, config) => {
+  return request
+    .get(`${server.getBaseUrl()}/api/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`, config)
+    .then((response) => {
+      const { data, total } = response.data
+      if(data < total) {
+        return fetchCollection(uid, type, path, page + 1, config).then((nextData) => {
+          return data.concat(nextData)
+        })
+      }
+
+      return data
+    })
+}
+
 export const commitClearFeed = () => {
   return async (dispatch) => {
     dispatch({
@@ -204,12 +219,13 @@ export const fetchFeed = (uid, paths, token = null) => {
     dispatch(commitSetSlugFeed(slug))
     dispatch(commitSetParentFolderFeed(null))
     dispatch(commitClearFeed())
+  
     if (paths.length > 0) {
-      await request
-        .get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${parentPath}`, config)
-        .then((foldersResponse) => {
+
+      await fetchCollection(uid, 'folders', parentPath, 1, config)
+        .then((folders) => {
           parentFolderFound = false
-          for (const folder of foldersResponse.data) {
+          for (const folder of folders) {
             if (folder.path === parentPath && folder.slug === slug) {
               dispatch(commitSetSlugFeed(null))
               dispatch(commitSetParentFolderFeed(folder))
@@ -220,7 +236,7 @@ export const fetchFeed = (uid, paths, token = null) => {
           }
 
           if (parentFolderFound === false) {
-            for (const folder of foldersResponse.data) {
+            for (const folder of folders) {
               dispatch(
                 commitUpdateFeed({
                   type: "folder",
@@ -234,12 +250,12 @@ export const fetchFeed = (uid, paths, token = null) => {
     }
 
     return Promise.all([
-      request.get(`${server.getBaseUrl()}/api/users/${uid}/folders?path=${feedFolderPath}`, config),
-      request.get(`${server.getBaseUrl()}/api/users/${uid}/programs?path=${feedProgramPath}`, config),
+      fetchCollection(uid, 'folders', feedFolderPath, 1, config),
+      fetchCollection(uid, 'programs', feedProgramPath, 1, config),
     ])
-      .then(([foldersResponse, programsResponse]) => {
+      .then(([folders, programs]) => {
         if (parentFolderFound === true || parentFolderFound === undefined) {
-          for (const folder of foldersResponse.data) {
+          for (const folder of folders) {
             dispatch(
               commitUpdateFeed({
                 type: "folder",
@@ -249,14 +265,14 @@ export const fetchFeed = (uid, paths, token = null) => {
           }
         }
         if (parentFolderFound === false) {
-          for (const folder of foldersResponse.data) {
+          for (const folder of folders) {
             if (folder.path === parentParentPath && folder.slug === parentSlug) {
               dispatch(commitSetParentFolderFeed(folder))
             }
           }
         }
 
-        for (const program of programsResponse.data) {
+        for (const program of programs) {
           dispatch(
             commitUpdateFeed({
               type: "program",
@@ -331,7 +347,7 @@ export const createProgram = (program, uid, token) => {
             type: "program",
             entity: program,
           })
-        )
+        ) 
 
         return program
       })
@@ -484,10 +500,8 @@ export const getFolderTree = (uid, token = null) => {
       }
     }
 
-    return request
-      .get(`${server.getBaseUrl()}/api/users/${uid}/folders`, config)
-      .then((response) => {
-        const folders = response.data
+    return fetchCollection(uid, 'folders', null, 1, config)
+      .then((folders) => {
         let tree = ["/"]
         for (const folder of folders) {
           tree.push(`${folder.path === "/" ? "" : folder.path}/${folder.slug}`)

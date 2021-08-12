@@ -42,10 +42,10 @@ export const commitSetFlows = (flows) => {
   }
 }
 
-export const getFlows = () => {
+export const getFlows = (page: number) => {
   return async (dispatch) => {
     return request
-      .get(`${server.getBaseUrl()}/api/programs`)
+      .get(`${server.getBaseUrl()}/api/programs?page=${page}`)
       .then((response) => {
         return response.data
       })

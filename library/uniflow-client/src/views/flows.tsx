@@ -6,21 +6,25 @@ import { getFlows } from "../reducers/flows/actions"
 
 class Flows extends Component {
   state = {
+    page: 1,
     programs: [],
+    loadMore: false,
   }
 
   componentDidMount() {
-    this.onFetchFlowData()
+    this.onFetchFlowsData()
   }
 
-  onFetchFlowData = () => {
-    this.props.dispatch(getFlows()).then((programs) => {
-      this.setState({ programs })
+  onFetchFlowsData = () => {
+    const { page } = this.state
+    this.props.dispatch(getFlows(page)).then((data) => {
+      const programs = this.state.programs.slice().concat(data.data)
+      this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 })
     })
   }
 
   render() {
-    const { programs } = this.state
+    const { programs, loadMore } = this.state
     const { user } = this.props
 
     return (
@@ -38,6 +42,13 @@ class Flows extends Component {
                 </dd>,
               ])}
             </dl>
+            {loadMore && (
+              <div className="row">
+                <div className="col-md-2">
+                  <button className="btn btn-primary btn-block" onClick={this.onFetchFlowsData}>Load more</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
