@@ -15,7 +15,7 @@ You have to :
 - Identify in your everyday life, you can think about tasks that are recurring.
 - Figure about if a task will take less time to automate than doing it straight.
 
-This project is a combinaison on [Flow Based Programming](https://flow-based.org/) to create a network of connected process and [Webassembly](https://webassembly.org/) that allow execute code at native speed on wide range of platforms.
+This project is a combinaison on [Flow Based Programming](https://flow-based.org/) to create a network of connected process and [Webassembly](https://webassembly.org/) that allow execute alike behaviour at native speed on wide range of platforms.
 
 Here, you can customise your own task and create your own specific modules into one normalised [SAAS](https://en.wikipedia.org/wiki/Software_as_a_service) interface that include the philosophy of [nvAlt](http://brettterpstra.com/projects/nvalt).
 And the runner is specificaly implemented to various way on : Browser, Node, Your own software plugins...
