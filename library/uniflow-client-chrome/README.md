@@ -9,11 +9,11 @@ First, you have to install the chrome extension on [Google Chrome web store](htt
 
 When the extension is installed, you will need to configure `ApiKey` that you will find on the preferences of the extension.
 
-![Setup parameters](https://github.com/uniflow-io/uniflow/raw/master/library/uniflow-client-chrome/images/install_setup_parameters.png)
+![Setup parameters](https://github.com/uniflow-io/uniflow/raw/1.x/library/uniflow-client-chrome/images/install_setup_parameters.png)
 
 Then you setup your `ApiKey` that you can find on [Settings](https://uniflow.io/settings)
 
-![Setup ApiKey](https://github.com/uniflow-io/uniflow/raw/master/library/uniflow-client-chrome/images/install_setup_api_key.png)
+![Setup ApiKey](https://github.com/uniflow-io/uniflow/raw/1.x/library/uniflow-client-chrome/images/install_setup_api_key.png)
 
 ## Documentation
 
@@ -29,6 +29,6 @@ If you have problems or questions go to our contact page, we will then try to he
 
 ## License
 
-Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/main/LICENSE.md) license.
+Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/1.x/LICENSE.md) license.
 
 Additional information about license can be found in the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use) page.

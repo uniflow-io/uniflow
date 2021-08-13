@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-flow-canvas#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-flow-canvas#readme",
   "keywords": [
     "uniflow",
     "uniflow-flow"

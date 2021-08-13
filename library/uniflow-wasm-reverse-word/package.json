@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-wasm-reverse-word#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-wasm-reverse-word#readme",
   "keywords": [
     "uniflow",
     "uniflow-wasm"

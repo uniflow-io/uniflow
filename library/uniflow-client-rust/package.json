@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/master/library/uniflow-client-rust#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-client-rust#readme",
   "keywords": [
     "uniflow",
     "uniflow-client"
