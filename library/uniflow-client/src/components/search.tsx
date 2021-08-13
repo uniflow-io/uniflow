@@ -26,7 +26,7 @@ export default class Search extends Component {
 
     return (
       <form className="form-sm-horizontal" onSubmit={this.onSubmit}>
-        <div className="form-group row">
+        <div className="row mb-3">
           <label htmlFor="search{{ _uid }}" className="col-sm-2 col-form-label">
             Flow
           </label>

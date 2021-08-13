@@ -133,7 +133,7 @@ class Notifications extends Component {
         )}
         {["form", "sending"].indexOf(state) !== -1 && (
           <form className="form-sm-horizontal">
-            <div className="form-group row">
+            <div className="row mb-3">
               <label htmlFor="notifications_optinNewsletter_{{ _uid }}" className="col-sm-2 col-form-label">
                 Subscribe to the newsletter
               </label>
@@ -147,7 +147,7 @@ class Notifications extends Component {
                 />
               </div>
             </div>
-            <div className="form-group row">
+            <div className="row mb-3">
               <label htmlFor="notifications_optinBlog_{{ _uid }}" className="col-sm-2 col-form-label">
                 Subscribe to blog updates
               </label>
@@ -162,7 +162,7 @@ class Notifications extends Component {
               </div>
             </div>
             {lead.githubUsername && (
-              <div className="form-group row">
+              <div className="row mb-3">
                 <label htmlFor="notifications_optinGithub_{{ _uid }}" className="col-sm-2 col-form-label">
                   Subscribe to github updates
                 </label>
@@ -177,16 +177,18 @@ class Notifications extends Component {
                 </div>
               </div>
             )}
-            <div className="form-group row">
+            <div className="row mb-3">
               <div className="offset-sm-2 col-sm-10">
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block btn-flat"
-                  disabled={state === "sending"}
-                  onClick={this.onSubmit}
-                >
-                  Save
-                </button>
+                <div className="d-grid">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={state === "sending"}
+                    onClick={this.onSubmit}
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </div>
           </form>

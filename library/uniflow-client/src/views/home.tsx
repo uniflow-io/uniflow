@@ -123,16 +123,14 @@ class Home extends Component {
                         onChange={this.onChangeEmail}
                         placeholder="Email"
                       />
-                      <div className="input-group-append">
-                        <button
-                          type="submit"
-                          className="btn btn-primary btn-block btn-flat"
-                          disabled={state === "sending"}
-                          onClick={this.onSubmit}
-                        >
-                          Subscribe to the newsletter
-                        </button>
-                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-primary input-group-text"
+                        disabled={state === "sending"}
+                        onClick={this.onSubmit}
+                      >
+                        Subscribe to the newsletter
+                      </button>
                       {errors.email &&
                         errors.email.map((message, i) => (
                           <div key={`error-${i}`} className="invalid-feedback" htmlFor="email{{ _uid }}">

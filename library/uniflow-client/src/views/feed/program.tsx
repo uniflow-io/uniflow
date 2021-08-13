@@ -421,7 +421,7 @@ class Program extends Component {
           </div>
         </div>
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 col-form-label">
               Title
             </label>
@@ -438,7 +438,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
               Slug
             </label>
@@ -455,7 +455,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
               Path
             </label>
@@ -482,7 +482,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_client_{{ _uid }}" className="col-sm-2 col-form-label">
               Clients
             </label>
@@ -501,7 +501,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 col-form-label">
               Tags
             </label>
@@ -522,7 +522,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_public_{{ _uid }}" className="col-sm-2 col-form-label">
               Public
             </label>
@@ -537,7 +537,7 @@ class Program extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 col-form-label">
               Description
             </label>
@@ -569,17 +569,15 @@ class Program extends Component {
             const clipboard = this.getNodeClipboard(user)
 
             return (
-              <div key={`client-${client}`} className="form-group row">
+              <div key={`client-${client}`} className="row mb-3">
                 <label htmlFor="program_node_api_key" className="col-sm-2 col-form-label">
                   Node usage
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
-                    <div className="input-group-prepend">
-                      <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
-                        <FontAwesomeIcon icon={faClipboard} />
-                      </button>
-                    </div>
+                    <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
+                      <FontAwesomeIcon icon={faClipboard} />
+                    </button>
                     <input
                       type="text"
                       className="form-control"
@@ -596,17 +594,15 @@ class Program extends Component {
             const clipboard = this.getRustClipboard(user)
 
             return (
-              <div key={`client-${client}`} className="form-group row">
+              <div key={`client-${client}`} className="row mb-3">
                 <label htmlFor="program_node_api_rust" className="col-sm-2 col-form-label">
                   Rust usage
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
-                    <div className="input-group-prepend">
-                      <button type="button" className="input-group-text" onClick={this.onCopyRustUsage}>
-                        <FontAwesomeIcon icon={faClipboard} />
-                      </button>
-                    </div>
+                    <button type="button" className="input-group-text" onClick={this.onCopyRustUsage}>
+                      <FontAwesomeIcon icon={faClipboard} />
+                    </button>
                     <input
                       type="text"
                       className="form-control"

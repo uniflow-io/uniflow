@@ -16,9 +16,11 @@ class Tag extends Component {
               {articles.edges.length} posts tagged with <strong>{tag}</strong>
             </p>
             <p>
-              <Link to={pathTo("tags")} className="btn btn-block btn-primary">
-                View all tags
-              </Link>
+              <div className="d-grid">
+                <Link to={pathTo("tags")} className="btn btn-primary">
+                  View all tags
+                </Link>
+              </div>
             </p>
           </div>
         </div>

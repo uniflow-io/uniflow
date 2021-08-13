@@ -125,7 +125,7 @@ class Folder extends Component {
           </div>
         </div>
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_name_{{ _uid }}" className="col-sm-2 col-form-label">
               Title
             </label>
@@ -142,7 +142,7 @@ class Folder extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
               Slug
             </label>
@@ -159,7 +159,7 @@ class Folder extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
               Path
             </label>

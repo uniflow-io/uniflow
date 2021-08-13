@@ -46,12 +46,10 @@ class Register extends Component {
             <div className="card">
               <article className="card-body">
                 <form>
-                  <div className="form-group">
+                  <div className="row mb-3">
                     <div className="input-group">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">
-                          <FontAwesomeIcon icon={faUser} />
-                        </div>
+                      <div className="input-group-text">
+                        <FontAwesomeIcon icon={faUser} />
                       </div>
                       <input
                         className="form-control"
@@ -63,12 +61,10 @@ class Register extends Component {
                       />
                     </div>
                   </div>
-                  <div className="form-group">
+                  <div className="row mb-3">
                     <div className="input-group">
-                      <div className="input-group-prepend">
-                        <div className="input-group-text">
-                          <FontAwesomeIcon icon={faKey} />
-                        </div>
+                      <div className="input-group-text">
+                        <FontAwesomeIcon icon={faKey} />
                       </div>
                       <input
                         className="form-control"
@@ -80,12 +76,12 @@ class Register extends Component {
                       />
                     </div>
                   </div>
-                  <div className="row">
+                  <div className="row mb-3">
                     <div className="col-md-12">
-                      <div className="form-group">
+                      <div className="d-grid">
                         <button
                           type="submit"
-                          className="btn btn-primary btn-block"
+                          className="btn btn-primary"
                           disabled={auth.isAuthenticating}
                           onClick={this.onSubmit}
                         >
@@ -97,16 +93,20 @@ class Register extends Component {
                 </form>
                 {env.facebookAppId && (
                   <p>
-                    <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-block btn-social btn-facebook">
-                      <FontAwesomeIcon icon={faFacebookF} /> Register with Facebook
-                    </a>
+                    <div className="d-grid">
+                      <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
+                        <FontAwesomeIcon icon={faFacebookF} /> Register with Facebook
+                      </a>
+                    </div>
                   </p>
                 )}
                 {env.githubAppId && (
                   <p>
-                    <a href={githubLoginUrl(env.githubAppId)} className="btn btn-block btn-social btn-github">
-                      <FontAwesomeIcon icon={faGithub} /> Register with Github
-                    </a>
+                    <div className="d-grid">
+                      <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
+                        <FontAwesomeIcon icon={faGithub} /> Register with Github
+                      </a>
+                    </div>
                   </p>
                 )}
               </article>

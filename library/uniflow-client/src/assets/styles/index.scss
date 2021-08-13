@@ -4,11 +4,10 @@
 
 // bootstrap override
 @import 'fonts';
+@import 'reboot';
 @import 'images';
 @import 'forms';
 // @import 'buttons';
-// @import 'reboot';
-// @import 'custom-forms';
 // @import 'nav';
 // @import 'navbar';
 // @import 'card';
@@ -16,7 +15,7 @@
 // @import 'utilities';
 
 // components
-// @import 'themes';
+@import 'themes';
 // @import 'sidebar';
 // @import 'section';
 // @import 'timeline';

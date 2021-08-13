@@ -44,8 +44,10 @@ class Flows extends Component {
             </dl>
             {loadMore && (
               <div className="row">
-                <div className="col-md-2">
-                  <button className="btn btn-primary btn-block" onClick={this.onFetchFlowsData}>Load more</button>
+                <div className="col-md-12">
+                  <div className="d-grid">
+                    <button className="btn btn-primary" onClick={this.onFetchFlowsData}>Load more</button>
+                  </div>
                 </div>
               </div>
             )}

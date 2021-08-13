@@ -200,7 +200,7 @@ class Settings extends Component {
       <section className="section container-fluid">
         <h3 className="box-title">Settings</h3>
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_firstname" className="col-sm-2 col-form-label">
               Firstname
             </label>
@@ -215,7 +215,7 @@ class Settings extends Component {
               />
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_lastname" className="col-sm-2 col-form-label">
               Lastname
             </label>
@@ -230,7 +230,7 @@ class Settings extends Component {
               />
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_username" className="col-sm-2 col-form-label">
               Username
             </label>
@@ -245,49 +245,51 @@ class Settings extends Component {
               />
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_username" className="col-sm-2 col-form-label">
               Facebook
             </label>
             <div className="col-sm-10">
-              {(user.facebookId && (
-                <button onClick={this.onRevokeFacebook} className="btn btn-info">
-                  <FontAwesomeIcon icon={faFacebookF} /> Revoke Facebook
-                </button>
-              )) || (
-                <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-block btn-social btn-facebook">
-                  <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
-                </a>
-              )}
+              <div className="d-grid">
+                {(user.facebookId && (
+                  <button onClick={this.onRevokeFacebook} className="btn btn-info">
+                    <FontAwesomeIcon icon={faFacebookF} /> Revoke Facebook
+                  </button>
+                )) || (
+                  <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
+                    <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_username" className="col-sm-2 col-form-label">
               Github
             </label>
             <div className="col-sm-10">
-              {(user.githubId && (
-                <button onClick={this.onRevokeGithub} className="btn btn-info">
-                  <FontAwesomeIcon icon={faGithub} /> Revoke Github
-                </button>
-              )) || (
-                <a href={githubLoginUrl(env.githubAppId)} className="btn btn-block btn-social btn-github">
-                  <FontAwesomeIcon icon={faGithub} /> Connect with Github
-                </a>
-              )}
+              <div className="d-grid">
+                {(user.githubId && (
+                  <button onClick={this.onRevokeGithub} className="btn btn-info">
+                    <FontAwesomeIcon icon={faGithub} /> Revoke Github
+                  </button>
+                )) || (
+                  <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
+                    <FontAwesomeIcon icon={faGithub} /> Connect with Github
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_apiKey" className="col-sm-2 col-form-label">
               Api key
             </label>
             <div className="col-sm-10">
               <div className="input-group">
-                <div className="input-group-prepend">
-                  <button type="button" className="input-group-text" onClick={this.generateKey}>
-                    Generate
-                  </button>
-                </div>
+                <button type="button" className="input-group-text" onClick={this.generateKey}>
+                  Generate
+                </button>
                 <input
                   type="text"
                   className="form-control"
@@ -299,17 +301,15 @@ class Settings extends Component {
               </div>
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="settings_key" className="col-sm-2 col-form-label">
               Api usage
             </label>
             <div className="col-sm-10">
               <div className="input-group">
-                <div className="input-group-prepend">
-                  <button type="button" className="input-group-text" onClick={this.onCopyApiUsage}>
-                    <FontAwesomeIcon icon={faClipboard} />
-                  </button>
-                </div>
+                <button type="button" className="input-group-text" onClick={this.onCopyApiUsage}>
+                  <FontAwesomeIcon icon={faClipboard} />
+                </button>
                 <input
                   type="text"
                   className="form-control"
@@ -321,7 +321,7 @@ class Settings extends Component {
               </div>
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="notifications_optinNewsletter_{{ _uid }}" className="col-sm-2 col-form-label">
               Subscribe to the newsletter
             </label>
@@ -335,7 +335,7 @@ class Settings extends Component {
               />
             </div>
           </div>
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="notifications_optinBlog_{{ _uid }}" className="col-sm-2 col-form-label">
               Subscribe to blog updates
             </label>
@@ -350,7 +350,7 @@ class Settings extends Component {
             </div>
           </div>
           {lead.githubUsername && (
-            <div className="form-group row">
+            <div className="row mb-3">
               <label htmlFor="notifications_optinGithub_{{ _uid }}" className="col-sm-2 col-form-label">
                 Subscribe to github updates
               </label>
@@ -365,16 +365,18 @@ class Settings extends Component {
               </div>
             </div>
           )}
-          <div className="form-group row">
+          <div className="row mb-3">
             <div className="offset-sm-2 col-sm-10">
-              <button
-                type="submit"
-                className="btn btn-primary btn-block btn-flat"
-                disabled={isSaving}
-                onClick={this.onUpdate}
-              >
-                Save
-              </button>
+              <div className="d-grid">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSaving}
+                  onClick={this.onUpdate}
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </form>

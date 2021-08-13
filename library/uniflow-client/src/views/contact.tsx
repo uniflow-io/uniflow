@@ -62,50 +62,58 @@ class Contact extends Component {
                 It will be a pleasure to respond
               </p>,
               <form key="contactForm">
-                <div className="form-group col-sm-12">
-                  <input
-                    className={`form-control${errors.email ? " is-invalid" : ""}`}
-                    id="email{{ _uid }}"
-                    type="text"
-                    value={email || ""}
-                    onChange={this.onChangeEmail}
-                    placeholder="Email"
-                  />
-                  {errors.email &&
-                    errors.email.map((message, i) => (
-                      <div key={`error-${i}`} className="invalid-feedback" htmlFor="email{{ _uid }}">
-                        {message}
-                      </div>
-                    ))}
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <input
+                      className={`form-control${errors.email ? " is-invalid" : ""}`}
+                      id="email{{ _uid }}"
+                      type="text"
+                      value={email || ""}
+                      onChange={this.onChangeEmail}
+                      placeholder="Email"
+                    />
+                    {errors.email &&
+                      errors.email.map((message, i) => (
+                        <div key={`error-${i}`} className="invalid-feedback" htmlFor="email{{ _uid }}">
+                          {message}
+                        </div>
+                      ))}
+                  </div>
                 </div>
 
-                <div className="form-group col-sm-12">
-                  <textarea
-                    className={`form-control${errors.message ? " is-invalid" : ""}`}
-                    id="message{{ _uid }}"
-                    type="message"
-                    value={message || ""}
-                    onChange={this.onChangeMessage}
-                    placeholder="Message"
-                    rows="15"
-                  />
-                  {errors.message &&
-                    errors.message.map((message, i) => (
-                      <div key={`error-${i}`} className="invalid-feedback" htmlFor="message{{ _uid }}">
-                        {message}
-                      </div>
-                    ))}
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <textarea
+                      className={`form-control${errors.message ? " is-invalid" : ""}`}
+                      id="message{{ _uid }}"
+                      type="message"
+                      value={message || ""}
+                      onChange={this.onChangeMessage}
+                      placeholder="Message"
+                      rows="15"
+                    />
+                    {errors.message &&
+                      errors.message.map((message, i) => (
+                        <div key={`error-${i}`} className="invalid-feedback" htmlFor="message{{ _uid }}">
+                          {message}
+                        </div>
+                      ))}
+                  </div>
                 </div>
 
-                <div className="form-group col-sm-12">
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block btn-flat"
-                    disabled={state === "sending"}
-                    onClick={this.onSubmit}
-                  >
-                    Send
-                  </button>
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <div className="d-grid">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={state === "sending"}
+                        onClick={this.onSubmit}
+                      >
+                        Send
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </form>,
             ]}
