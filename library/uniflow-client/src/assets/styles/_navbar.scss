@@ -24,6 +24,7 @@
 
     color: var(--secondary-color);
 
+    &:hover,
     &:focus {
       color: var(--secondary-hover-color);
     }
@@ -32,6 +33,7 @@
       color: var(--primary-color);
       border-bottom: $border-width solid var(--primary-color) !important;
 
+      &:hover,
       &:focus {
         color: var(--primary-hover-color);
         border-bottom-color: var(--primary-hover-color) !important;

@@ -281,7 +281,7 @@ class Header extends Component {
             </ul>
           </div>
 
-          <ul className="navbar-nav flex-row ml-auto">
+          <ul className="navbar-nav flex-row ms-auto">
             <li className="nav-item">
               <Link className={`nav-item nav-link ${active === "changelog" ? " active" : ""}`} to={pathTo("changelog")}>
                 {changeLogTags.edges[0].node.tag}

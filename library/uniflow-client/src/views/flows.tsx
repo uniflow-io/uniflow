@@ -34,7 +34,7 @@ class Flows extends Component {
             <h3>Flows</h3>
             <dl className="row">
               {programs.map((program, i) => [
-                <dt className="col-md-2 text-md-right font-weight-normal" key={i * 2}>
+                <dt className="col-md-2 text-md-end fw-normal" key={i * 2}>
                   <Link to={toFeedPath(program, user)}>{program.name}</Link>
                 </dt>,
                 <dd className="col-md-10" key={i * 2 + 1}>

@@ -2,6 +2,7 @@
   .nav-link {
     color: var(--secondary-color);
 
+    &:hover,
     &:focus {
       color: var(--secondary-hover-color);
     }
@@ -18,6 +19,7 @@
     padding-bottom: $spacer;
     color: var(--secondary-color);
 
+    &:hover,
     &:focus {
       color: var(--secondary-hover-color);
     }
@@ -26,6 +28,7 @@
       color: var(--primary-color);
       border-top: $border-width solid var(--primary-color) !important;
 
+      &:hover,
       &:focus {
         color: var(--primary-hover-color) !important;
       }

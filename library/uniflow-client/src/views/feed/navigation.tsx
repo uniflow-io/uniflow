@@ -105,11 +105,9 @@ class Navigation extends Component {
               onChange={this.onSearch}
             />
             {this.state.search && (
-              <div className="input-group-append">
-                <button className="input-group-text" type="button" onClick={this.onCreateFolder}>
-                  <FontAwesomeIcon icon={faFolder} />
-                </button>
-              </div>
+              <button className="input-group-text" type="button" onClick={this.onCreateFolder}>
+                <FontAwesomeIcon icon={faFolder} />
+              </button>
             )}
           </div>
           <button className="btn d-sm-none p-0 ml-3 collapsed" type="button" onClick={this.onToggle}>

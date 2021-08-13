@@ -18,6 +18,11 @@ ul.timeline > li {
   padding-left: 20px;
 }
 
+ul.timeline > li hr {
+  background-color: var(--border-color);
+  opacity: 1;
+}
+
 ul.timeline > li:before {
   content: ' ';
   background: var(--bg-color);

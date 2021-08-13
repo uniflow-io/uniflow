@@ -13,6 +13,7 @@ $app-themes: ();
     --navbar-top-color: #{rgba(map-get($app-colors, 'bg'), 0.8)};
 
     @each $color, $value in $theme-colors {
+      --#{$color}-input-color: #{color-contrast(darken(map-get($app-colors, $color), 15%))};
       --#{$color}-hover-color: #{darken(map-get($app-colors, $color), 15%)};
     }
   }

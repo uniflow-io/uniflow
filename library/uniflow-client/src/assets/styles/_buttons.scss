@@ -2,10 +2,12 @@
   .btn-#{$color} {
     background-color: var(--#{$color}-color);
     border-color: var(--#{$color}-color);
+    color: var(--#{$color}-input-color);
 
     &:hover {
       background-color: var(--#{$color}-hover-color);
       border-color: var(--#{$color}-hover-color);
+      color: var(--#{$color}-input-color);
     }
   }
 }

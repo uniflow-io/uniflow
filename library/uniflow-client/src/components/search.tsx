@@ -43,11 +43,9 @@ export default class Search extends Component {
                   })}
                 />
               </div>
-              <div className="input-group-append">
-                <button type="submit" className="input-group-text">
-                  <FontAwesomeIcon icon={faDotCircle} />
-                </button>
-              </div>
+              <button type="submit" className="input-group-text">
+                <FontAwesomeIcon icon={faDotCircle} />
+              </button>
             </div>
           </div>
         </div>

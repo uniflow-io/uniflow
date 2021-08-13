@@ -40,7 +40,7 @@ class Changelog extends Component {
                       >
                         {item.node.tag}
                       </a>
-                      <span className="float-right">{item.node.date}</span>
+                      <span className="float-end">{item.node.date}</span>
                       <p>
                         {item.node.label.split("\n").map((item, key) => {
                           return (
