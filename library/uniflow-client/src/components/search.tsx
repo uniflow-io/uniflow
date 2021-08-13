@@ -32,7 +32,7 @@ export default class Search extends Component {
           </label>
           <div className="col-sm-10">
             <div className="input-group">
-              <div className="custom-select">
+              <div className="form-select">
                 <Select
                   value={search}
                   onChange={this.onChange}

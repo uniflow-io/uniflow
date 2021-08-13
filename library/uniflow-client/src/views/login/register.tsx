@@ -92,22 +92,26 @@ class Register extends Component {
                   </div>
                 </form>
                 {env.facebookAppId && (
-                  <p>
-                    <div className="d-grid">
-                      <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
-                        <FontAwesomeIcon icon={faFacebookF} /> Register with Facebook
-                      </a>
+                  <div className="row mb-3">
+                    <div className="col-md-12">
+                      <div className="d-grid">
+                        <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
+                          <FontAwesomeIcon icon={faFacebookF} /> Register with Facebook
+                        </a>
+                      </div>
                     </div>
-                  </p>
+                  </div>
                 )}
                 {env.githubAppId && (
-                  <p>
-                    <div className="d-grid">
-                      <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
-                        <FontAwesomeIcon icon={faGithub} /> Register with Github
-                      </a>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="d-grid">
+                        <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
+                          <FontAwesomeIcon icon={faGithub} /> Register with Github
+                        </a>
+                      </div>
                     </div>
-                  </p>
+                  </div>
                 )}
               </article>
             </div>

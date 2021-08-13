@@ -10,24 +10,24 @@
 
 .form-sm-horizontal {
   @include media-breakpoint-up(sm) {
-    .form-group .col-form-label:first-child {
+    .col-form-label:first-child {
       text-align: right;
     }
   }
 }
 
-.custom-select {
+.form-select {
   background-color: var(--bg-color);
   padding: 0;
   border: none;
 }
 
-.custom-control-label::before {
+.form-check-input {
   background-color: var(--secondary-color);
   border-color: var(--border-color);
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+.form-check-input:checked {
   background-color: var(--primary-color);
   border-color: var(--border-color);
 }

@@ -21,21 +21,21 @@ export default class Checkbox extends Component {
     const uid = gen()
     return (
       <>
-        <div className={`custom-control custom-switch d-sm-none${className ? " " + className : ""}`}>
-          <input type="checkbox" className="custom-control-input" checked={value} onChange={this.onChange} id={uid} />
-          <label className="custom-control-label" htmlFor={uid}>
+        <div className={`form-check form-switch d-sm-none${className ? " " + className : ""}`}>
+          <input type="checkbox" className="form-check-input" checked={value} onChange={this.onChange} id={uid} />
+          <label className="form-check-label" htmlFor={uid}>
             {label ? label : ""}
           </label>
         </div>
-        <div className={`custom-control d-none d-sm-block custom-checkbox${className ? " " + className : ""}`}>
+        <div className={`form-check d-none d-sm-block${className ? " " + className : ""}`}>
           <input
             type="checkbox"
-            className="custom-control-input"
+            className="form-check-input"
             checked={value}
             onChange={this.onChange}
             id={uid + 1}
           />
-          <label className="custom-control-label" htmlFor={uid + 1}>
+          <label className="form-check-label" htmlFor={uid + 1}>
             {label ? label : ""}
           </label>
         </div>
