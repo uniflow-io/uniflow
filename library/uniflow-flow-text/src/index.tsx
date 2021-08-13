@@ -75,7 +75,7 @@ class TextFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -94,7 +94,7 @@ class TextFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="text{{ _uid }}" className="col-sm-2 col-form-label">
               Text
             </label>

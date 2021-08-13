@@ -68,7 +68,7 @@ class JavascriptFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="javascript{{ _uid }}"
               className="col-sm-2 col-form-label"

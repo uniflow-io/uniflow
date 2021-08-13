@@ -172,7 +172,7 @@ class ObjectFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -192,7 +192,7 @@ class ObjectFlow extends Component {
           </div>
 
           {keyValueList.map((item, index) => (
-            <div className="form-group row" key={index}>
+            <div className="row" key={index}>
               <div className="col-sm-4 offset-sm-2">
                 <input
                   type="text"

@@ -102,7 +102,7 @@ class TextListFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -122,7 +122,7 @@ class TextListFlow extends Component {
           </div>
 
           {textList.map((value, index) => (
-            <div key={index} className="form-group row">
+            <div key={index} className="row">
               <div className="col-sm-10 offset-sm-2">
                 <div className="input-group">
                   <input

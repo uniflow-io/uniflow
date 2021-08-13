@@ -144,7 +144,7 @@ class AssetsFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -164,7 +164,7 @@ class AssetsFlow extends Component {
           </div>
 
           {assets.map((asset, index) => (
-            <div key={index} className="form-group row">
+            <div key={index} className="row">
               <div className="col-sm-10 offset-sm-2">
                 <div className="input-group">
                   <div className="input-group-prepend">
@@ -202,7 +202,7 @@ class AssetsFlow extends Component {
             </div>
           ))}
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="assets{{ _uid }}"
               className="col-sm-2 col-form-label"

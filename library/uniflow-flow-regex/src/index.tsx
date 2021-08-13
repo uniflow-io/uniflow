@@ -109,7 +109,7 @@ class RegexFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -128,7 +128,7 @@ class RegexFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <div className="offset-md-2 col-sm-10">
               <a
                 href="https://simple-regex.com/"
@@ -140,7 +140,7 @@ class RegexFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="expression{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -160,7 +160,7 @@ class RegexFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="generated{{ _uid }}"
               className="col-sm-2 col-form-label"

@@ -18,7 +18,7 @@ Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License w
 
 ## [#](https://uniflow.io/docs/faq#is-uniflow-open-source) Is Uniflow open-source?
 
-No. The [Commons Clause](https://commonsclause.com) that is attached to the Apache 2.0 license takes away some rights. Hence, according to the definition of the [Open Source Initiative (OSI)](https://opensource.org/osd), Uniflow is not open-source. Nonetheless, the source code is open and everyone (individuals and companies) can use it for free. However, it is not allowed to make money directly with Uniflow.
+No. The [Commons Clause](https://commonsclause.com) that is attached to the AGPL-3.0 license takes away some rights. Hence, according to the definition of the [Open Source Initiative (OSI)](https://opensource.org/osd), Uniflow is not open-source. Nonetheless, the source code is open and everyone (individuals and companies) can use it for free. However, it is not allowed to make money directly with Uniflow.
 
 For instance, one cannot charge others to host or support Uniflow. However, to make things simpler, we grant everyone (individuals and companies) the right to offer consulting or support without prior permission as long as it is less than 30,000 USD ($30k) per annum. If your revenue from services based on Uniflow is greater than $30k per annum, we'd invite you to become a partner and apply for a license. If you have any questions about this, feel free to reach out to us by [filling our contact form](https://uniflow.io/contact).
 

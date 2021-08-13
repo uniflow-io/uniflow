@@ -153,7 +153,7 @@ class PromptFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -172,7 +172,7 @@ class PromptFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label
               htmlFor="variable{{ _uid }}"
               className="col-sm-2 col-form-label"
@@ -191,7 +191,7 @@ class PromptFlow extends Component {
             </div>
           </div>
 
-          <div className="form-group row">
+          <div className="row mb-3">
             <label htmlFor="type{{ _uid }}" className="col-sm-2 col-form-label">
               Type
             </label>
@@ -210,13 +210,13 @@ class PromptFlow extends Component {
           </div>
 
           {promptDisplay && message && (
-            <div className="form-group row">
+            <div className="row mb-3">
               <div className="offset-md-2 col-sm-10">{message}</div>
             </div>
           )}
 
           {promptDisplay && type === 'string' && (
-            <div className="form-group row">
+            <div className="row mb-3">
               <label
                 htmlFor="input_string{{ _uid }}"
                 className="col-sm-2 col-form-label"
@@ -237,7 +237,7 @@ class PromptFlow extends Component {
           )}
 
           {promptDisplay && type === 'text' && (
-            <div className="form-group row">
+            <div className="row mb-3">
               <label
                 htmlFor="input_text{{ _uid }}"
                 className="col-sm-2 col-form-label"
@@ -259,7 +259,7 @@ class PromptFlow extends Component {
           )}
 
           {promptDisplay && type === 'file' && (
-            <div className="form-group row">
+            <div className="row mb-3">
               <label
                 htmlFor="input_file{{ _uid }}"
                 className="col-sm-2 col-form-label"
