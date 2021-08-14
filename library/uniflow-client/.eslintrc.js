@@ -1,45 +1,39 @@
 module.exports = {
-    parser: `@typescript-eslint/parser`,
-    extends: [
-        "google",
-        "eslint:recommended",
-        "plugin:flowtype/recommended",
-        "plugin:react/recommended",
-        "prettier",
-        "prettier/flowtype",
-        "prettier/react",
-    ],
-    plugins: ["flowtype", "prettier", "react", "filenames"],
-    parserOptions: {
-      ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-      sourceType: "module", // Allows for the use of imports
-      ecmaFeatures: {
-        jsx: true,
-      },
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended'
+  ],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true
+  },
+  plugins: ['@typescript-eslint', 'react'],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true
     },
-    env: {
-      browser: true,
-      es6: true,
-      node: true,
-    },
-    rules: {
-      quotes: "off",
-      "@typescript-eslint/quotes": [
-        2,
-        "backtick",
-        {
-          avoidEscape: true,
-        },
-      ],
-      indent: ["error", 2, { SwitchCase: 1 }],
-      "prettier/prettier": [
-        "error",
-        {
-          trailingComma: "es5",
-          semi: false,
-          singleQuote: false,
-          printWidth: 120,
-        },
-      ],
-    },
-  }
+    ecmaVersion: 2020,
+    sourceType: 'module'
+  },
+  rules: {
+    'react/prop-types': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off'
+  },
+  overrides: [
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    }
+  ]
+};
