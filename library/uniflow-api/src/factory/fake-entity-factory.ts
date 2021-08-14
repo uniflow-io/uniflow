@@ -39,8 +39,8 @@ export class FakeLeadFactory extends LeadFactory {
     public async create(entity?: LeadEntity|Object): Promise<LeadEntity> {
         const lead = await super.create(entity)
         lead.email = lead.email ?? faker.internet.email()
-        lead.optinNewsletter = lead.optinNewsletter ?? faker.random.boolean()
-        lead.optinBlog = lead.optinBlog ?? faker.random.boolean()
+        lead.optinNewsletter = lead.optinNewsletter ?? faker.datatype.boolean()
+        lead.optinBlog = lead.optinBlog ?? faker.datatype.boolean()
 
         return lead;
     }

@@ -24,7 +24,7 @@ describe('api-lead', () => {
     test.each([{
         email: faker.internet.email(),
         optinNewsletter: true,
-        optinBlog: faker.random.boolean(),
+        optinBlog: faker.datatype.boolean(),
     }])('POST /api/leads success', async (data) => {
         const { body } = await expectCreatedUri(app, {
             protocol: 'post',
@@ -60,8 +60,8 @@ describe('api-lead', () => {
     });
 
     test.each([{
-        optinNewsletter: faker.random.boolean(),
-        optinBlog: faker.random.boolean(),
+        optinNewsletter: faker.datatype.boolean(),
+        optinBlog: faker.datatype.boolean(),
     }])('PUT /api/leads/:uid success', async (data) => {
         const { body } = await expectOkUri(app, {
             protocol: 'put',

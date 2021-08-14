@@ -121,7 +121,7 @@ describe('api-user', () => {
         suffixUri: 'admin-config',
         email: 'admin@uniflow.io',
     }]) {
-        test.each([faker.random.uuid()])(`GET /api/users/:uid/${suffixUri} not authorised :uid`, async (uid: string) => {
+        test.each([faker.datatype.uuid()])(`GET /api/users/:uid/${suffixUri} not authorised :uid`, async (uid: string) => {
             await expectNotAuthorisedUri(app, {
                 protocol: protocol as 'get'|'put'|'post',
                 uri: `/api/users/${uid}/${suffixUri}`,

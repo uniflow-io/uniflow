@@ -46,6 +46,10 @@ class ProgramController extends Controller {
   @Response<ErrorJSON>(404, "Not found")
   @Response<ErrorJSON>(401, "Not authorized")
   public async updateProgram(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<ProgramApiType>): Promise<ProgramApiType> {
+    if (!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     const program = await this.programRepository.findOne({
       where: {user: req.user, uid},
       relations: ['user', 'folder'],

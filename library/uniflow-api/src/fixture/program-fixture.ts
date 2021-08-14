@@ -57,7 +57,7 @@ export default class ProgramFixture implements FixtureInterface {
                 tags: faker.random.arrayElements(tags).map(tag => ({
                     tag: tag
                 } as ProgramTagEntity)),
-                public: faker.random.boolean(),
+                public: faker.datatype.boolean(),
             }))
         }
     }

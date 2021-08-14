@@ -47,6 +47,10 @@ class UserController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
   public async getUserSettings(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType): Promise<UserApiType> {
+    if (!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     return await this.userService.getJson(req.user);
   }
 
@@ -55,6 +59,10 @@ class UserController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
   public async updateUserSettings(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType, @Body() body: PartialType<UserApiType>): Promise<UserApiType> {
+    if(!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     const user = await this.userRepository.findOne(req.user.id);
     if (!user) {
       throw new ApiException('User not found', 404);
@@ -141,6 +149,10 @@ class UserController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
   public async createUserFolder(@Request() req: express.Request, @Path('uid') _uid: UuidOrUsernameType, @Body() body: {name: NotEmptyStringType, slug?: SlugType, path?: PathType}): Promise<FolderApiType> {
+    if(!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     const folder = await this.folderFactory.create({
       name: body.name,
       parent: await this.folderService.fromPath(req.user, body.path || '/') || null,
@@ -204,6 +216,10 @@ class UserController extends Controller {
     description?: NotEmptyStringType | null
     public?: boolean
   }): Promise<ProgramApiType> {
+    if(!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     const program = await this.programFactory.create({
       name: body.name,
       user: req.user,

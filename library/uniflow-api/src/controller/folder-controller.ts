@@ -25,6 +25,10 @@ class FolderController extends Controller {
   @Response<ErrorJSON>(404, "Not found")
   @Response<ErrorJSON>(401, "Not authorized")
   public async updateFolder(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<FolderApiType>): Promise<FolderApiType> {
+    if (!req.user) {
+      throw new ApiException('Not authorized', 401);
+    }
+
     const folder = await this.folderRepository.findOne({
       where: {user: req.user, uid},
       relations: ['user', 'parent']
