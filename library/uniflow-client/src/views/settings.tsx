@@ -1,13 +1,13 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { faFacebookF, faGithub } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClipboard } from "@fortawesome/free-regular-svg-icons"
-import { facebookLoginUrl, githubLoginUrl } from "../reducers/auth/actions"
-import { updateSettings, commitUpdateSettings } from "../reducers/user/actions"
-import { getLead, createLead, updateLead } from "../reducers/lead/actions"
-import { copyTextToClipboard } from "../utils"
-import { Checkbox } from "../components"
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClipboard } from '@fortawesome/free-regular-svg-icons';
+import { facebookLoginUrl, githubLoginUrl } from '../reducers/auth/actions';
+import { updateSettings, commitUpdateSettings } from '../reducers/user/actions';
+import { getLead, createLead, updateLead } from '../reducers/lead/actions';
+import { copyTextToClipboard } from '../utils';
+import { Checkbox } from '../components';
 
 class Settings extends Component {
   state = {
@@ -30,10 +30,10 @@ class Settings extends Component {
       githubUsername: null,
     },
     isSaving: false,
-  }
+  };
 
   componentDidMount() {
-    this.setState({ user: Object.assign({}, this.props.user) })
+    this.setState({ user: Object.assign({}, this.props.user) });
 
     if (this.props.user.links.lead) {
       this.props.dispatch(getLead(this.props.user.links.lead)).then((data) => {
@@ -47,14 +47,14 @@ class Settings extends Component {
               githubUsername: data.githubUsername,
             },
           },
-        })
-      })
+        });
+      });
     }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.user !== this.props.user) {
-      this.setState({ user: Object.assign({}, this.props.user) })
+      this.setState({ user: Object.assign({}, this.props.user) });
 
       if (this.props.user.links.lead) {
         this.props.dispatch(getLead(this.props.user.links.lead)).then((data) => {
@@ -68,8 +68,8 @@ class Settings extends Component {
                 githubUsername: data.githubUsername,
               },
             },
-          })
-        })
+          });
+        });
       }
     }
   }
@@ -77,64 +77,64 @@ class Settings extends Component {
   onUpdateFirstname = (event) => {
     this.setState({
       user: { ...this.state.user, ...{ firstname: event.target.value } },
-    })
-  }
+    });
+  };
 
   onUpdateLastname = (event) => {
     this.setState({
       user: { ...this.state.user, ...{ lastname: event.target.value } },
-    })
-  }
+    });
+  };
 
   onUpdateUsername = (event) => {
     this.setState({
       user: { ...this.state.user, ...{ username: event.target.value } },
-    })
-  }
+    });
+  };
 
   onUpdateApiKey = (event) => {
     this.setState({
       user: { ...this.state.user, ...{ apiKey: event.target.value } },
-    })
-  }
+    });
+  };
 
   onRevokeFacebook = (event) => {
-    event.preventDefault()
-    this.setState({ user: { ...this.state.user, ...{ facebookId: null } } }, this.onUpdate)
-  }
+    event.preventDefault();
+    this.setState({ user: { ...this.state.user, ...{ facebookId: null } } }, this.onUpdate);
+  };
 
   onRevokeGithub = (event) => {
-    event.preventDefault()
-    this.setState({ user: { ...this.state.user, ...{ githubId: null } } }, this.onUpdate)
-  }
+    event.preventDefault();
+    this.setState({ user: { ...this.state.user, ...{ githubId: null } } }, this.onUpdate);
+  };
 
   onChangeOptinNewsletter = (value) => {
     this.setState({
       lead: { ...this.state.lead, ...{ optinNewsletter: value } },
-    })
-  }
+    });
+  };
 
   onChangeOptinBlog = (value) => {
     this.setState({
       lead: { ...this.state.lead, ...{ optinBlog: value } },
-    })
-  }
+    });
+  };
 
   onChangeOptinGithub = (value) => {
     this.setState({
       lead: { ...this.state.lead, ...{ optinGithub: value } },
-    })
-  }
+    });
+  };
 
   onUpdate = (event) => {
     if (event) {
-      event.preventDefault()
+      event.preventDefault();
     }
 
-    const { user, lead } = this.state
+    const { user, lead } = this.state;
 
     new Promise((resolve) => {
-      this.setState({ isSaving: true }, resolve)
+      this.setState({ isSaving: true }, resolve);
     })
       .then(() => {
         if (user.links.lead) {
@@ -144,7 +144,7 @@ class Settings extends Component {
               optinBlog: lead.optinBlog,
               optinGithub: lead.optinGithub,
             })
-          )
+          );
         }
 
         if (lead.optinNewsletter || lead.optinBlog) {
@@ -154,47 +154,47 @@ class Settings extends Component {
               optinNewsletter: lead.optinNewsletter,
               optinBlog: lead.optinBlog,
             })
-          )
+          );
         }
       })
       .then(() => {
-        return this.props.dispatch(updateSettings(user, this.props.auth.token))
+        return this.props.dispatch(updateSettings(user, this.props.auth.token));
       })
       .then(() => {
-        this.setState({ isSaving: false })
-      })
-  }
+        this.setState({ isSaving: false });
+      });
+  };
 
   generateKey = () => {
-    let chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-    let apiKey = ""
+    let apiKey = '';
     for (let i = 0; i < 32; i++) {
-      apiKey += chars.charAt(Math.floor(Math.random() * chars.length))
+      apiKey += chars.charAt(Math.floor(Math.random() * chars.length));
     }
 
-    this.props.dispatch(commitUpdateSettings({ ...this.props.user, ...{ apiKey: apiKey } }))
-  }
+    this.props.dispatch(commitUpdateSettings({ ...this.props.user, ...{ apiKey: apiKey } }));
+  };
 
   getClipboard = (user) => {
     if (user.apiKey) {
-      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey}`
+      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey}`;
     }
 
-    return null
-  }
+    return null;
+  };
 
   onCopyApiUsage = (event) => {
-    const { user } = this.state
-    const clipboard = this.getClipboard(user)
+    const { user } = this.state;
+    const clipboard = this.getClipboard(user);
 
-    copyTextToClipboard(clipboard)
-  }
+    copyTextToClipboard(clipboard);
+  };
 
   render() {
-    const { env } = this.props
-    const { user, lead, isSaving } = this.state
-    const clipboard = this.getClipboard(user)
+    const { env } = this.props;
+    const { user, lead, isSaving } = this.state;
+    const clipboard = this.getClipboard(user);
 
     return (
       <section className="section container-fluid">
@@ -209,7 +209,7 @@ class Settings extends Component {
                 type="text"
                 className="form-control"
                 id="settings_firstname"
-                value={user.firstname || ""}
+                value={user.firstname || ''}
                 onChange={this.onUpdateFirstname}
                 placeholder="Firstname"
               />
@@ -224,7 +224,7 @@ class Settings extends Component {
                 type="text"
                 className="form-control"
                 id="settings_lastname"
-                value={user.lastname || ""}
+                value={user.lastname || ''}
                 onChange={this.onUpdateLastname}
                 placeholder="Lastname"
               />
@@ -239,7 +239,7 @@ class Settings extends Component {
                 type="text"
                 className="form-control"
                 id="settings_username"
-                value={user.username || ""}
+                value={user.username || ''}
                 onChange={this.onUpdateUsername}
                 placeholder="Username"
               />
@@ -256,7 +256,10 @@ class Settings extends Component {
                     <FontAwesomeIcon icon={faFacebookF} /> Revoke Facebook
                   </button>
                 )) || (
-                  <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
+                  <a
+                    href={facebookLoginUrl(env.facebookAppId)}
+                    className="btn btn-social btn-facebook"
+                  >
                     <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
                   </a>
                 )}
@@ -294,7 +297,7 @@ class Settings extends Component {
                   type="text"
                   className="form-control"
                   id="settings_apiKey"
-                  value={user.apiKey || ""}
+                  value={user.apiKey || ''}
                   onChange={this.onUpdateApiKey}
                   placeholder="api key"
                 />
@@ -314,7 +317,7 @@ class Settings extends Component {
                   type="text"
                   className="form-control"
                   id="settings_key"
-                  value={clipboard || ""}
+                  value={clipboard || ''}
                   readOnly
                   placeholder="api key"
                 />
@@ -322,7 +325,10 @@ class Settings extends Component {
             </div>
           </div>
           <div className="row mb-3">
-            <label htmlFor="notifications_optinNewsletter_{{ _uid }}" className="col-sm-2 col-form-label">
+            <label
+              htmlFor="notifications_optinNewsletter_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
               Subscribe to the newsletter
             </label>
 
@@ -351,7 +357,10 @@ class Settings extends Component {
           </div>
           {lead.githubUsername && (
             <div className="row mb-3">
-              <label htmlFor="notifications_optinGithub_{{ _uid }}" className="col-sm-2 col-form-label">
+              <label
+                htmlFor="notifications_optinGithub_{{ _uid }}"
+                className="col-sm-2 col-form-label"
+              >
                 Subscribe to github updates
               </label>
 
@@ -381,7 +390,7 @@ class Settings extends Component {
           </div>
         </form>
       </section>
-    )
+    );
   }
 }
 
@@ -390,5 +399,5 @@ export default connect((state) => {
     auth: state.auth,
     env: state.env,
     user: state.user,
-  }
-})(Settings)
+  };
+})(Settings);

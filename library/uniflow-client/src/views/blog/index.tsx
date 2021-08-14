@@ -1,6 +1,6 @@
-import React from "react"
-import { StaticQuery, graphql } from "gatsby"
-import ArticleItem from "./articleItem"
+import React from 'react';
+import { StaticQuery, graphql } from 'gatsby';
+import ArticleItem from './articleItem';
 
 const Blog = () => (
   <>
@@ -33,6 +33,6 @@ const Blog = () => (
       />
     </section>
   </>
-)
+);
 
-export default Blog
+export default Blog;

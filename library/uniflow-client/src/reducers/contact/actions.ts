@@ -1,8 +1,8 @@
-import request from "axios"
-import server from "../../utils/server"
-import { ApiException } from "../../exceptions"
+import request from 'axios';
+import server from '../../utils/server';
+import { ApiException } from '../../exceptions';
 
-export const contact = (email, message) => {
+export const contact = (email: string, message: string) => {
   return async (dispatch) => {
     return request
       .post(`${server.getBaseUrl()}/api/contacts`, {
@@ -10,10 +10,10 @@ export const contact = (email, message) => {
         message: message,
       })
       .then((response) => {
-        return response.data
+        return response.data;
       })
       .catch((error) => {
-        throw new ApiException(server.handleErrors(error.response))
-      })
-  }
-}
+        throw new ApiException(server.handleErrors(error.response));
+      });
+  };
+};

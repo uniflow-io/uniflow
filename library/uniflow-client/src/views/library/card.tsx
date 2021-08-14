@@ -1,20 +1,20 @@
-import React, { Component } from "react"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import Img from "gatsby-image"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGithub } from "@fortawesome/free-brands-svg-icons"
-import { faEdit } from "@fortawesome/free-regular-svg-icons"
-import Navigation from "./navigation"
-import { MDXProvider } from "../../components"
+import React, { Component } from 'react';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
+import Img from 'gatsby-image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import Navigation from './navigation';
+import { MDXProvider } from '../../components';
 
 class Card extends Component {
   render() {
-    const { library, card, logo } = this.props
-    let repository = card.repository.url
-    let editUrl = null
+    const { library, card, logo } = this.props;
+    let repository = card.repository.url;
+    let editUrl = null;
     if (card.official) {
-      repository = `https://github.com/uniflow-io/uniflow/tree/1.x/${card.repository.directory}`
-      editUrl = `https://github.com/uniflow-io/uniflow/blob/1.x/${card.repository.directory}/README.md`
+      repository = `https://github.com/uniflow-io/uniflow/tree/1.x/${card.repository.directory}`;
+      editUrl = `https://github.com/uniflow-io/uniflow/blob/1.x/${card.repository.directory}/README.md`;
     }
 
     return (
@@ -48,7 +48,7 @@ class Card extends Component {
                           height="18"
                           className="svg-inline--fa"
                           alt="Uniflow"
-                        />{" "}
+                        />{' '}
                         Official
                       </span>
                     </div>
@@ -69,8 +69,8 @@ class Card extends Component {
           </section>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Card
+export default Card;

@@ -1,12 +1,12 @@
-import React, { Component } from "react"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit } from "@fortawesome/free-regular-svg-icons"
-import { MDXProvider } from "../components"
+import React, { Component } from 'react';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import { MDXProvider } from '../components';
 
 class Newsletter extends Component {
   render() {
-    const { newsletter } = this.props
+    const { newsletter } = this.props;
 
     return (
       <div className="container-fluid">
@@ -33,8 +33,8 @@ class Newsletter extends Component {
           </section>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Newsletter
+export default Newsletter;

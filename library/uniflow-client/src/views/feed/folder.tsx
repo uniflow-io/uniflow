@@ -1,29 +1,29 @@
-import React, { Component } from "react"
-import { navigate } from "gatsby"
-import debounce from "lodash/debounce"
-import { connect } from "react-redux"
-import { faEdit, faTimes } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { Component } from 'react';
+import { navigate } from 'gatsby';
+import debounce from 'lodash/debounce';
+import { connect } from 'react-redux';
+import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   getFolderTree,
   updateParentFolder,
   deleteParentFolder,
   setParentFolderFeed,
   toFeedPath,
-} from "../../reducers/feed/actions"
-import { Select } from "../../components"
+} from '../../reducers/feed/actions';
+import { Select } from '../../components';
 
 class Folder extends Component {
   state = {
     slug: null,
     folderTreeEdit: false,
     folderTree: [],
-  }
+  };
 
   componentDidMount() {
-    const { folder } = this.props
+    const { folder } = this.props;
 
-    this.setState({ folderTree: [folder.path] })
+    this.setState({ folderTree: [folder.path] });
   }
 
   componentDidUpdate(prevProps) {
@@ -32,7 +32,7 @@ class Folder extends Component {
         slug: null,
         folderTreeEdit: false,
         folderTree: [this.props.folder.path],
-      })
+      });
     }
   }
 
@@ -45,13 +45,13 @@ class Folder extends Component {
         })
       )
       .then(() => {
-        this.onUpdate()
-      })
-  }
+        this.onUpdate();
+      });
+  };
 
   onChangeSlug = (event) => {
-    this.setState({ slug: event.target.value }, this.onUpdate)
-  }
+    this.setState({ slug: event.target.value }, this.onUpdate);
+  };
 
   onChangePath = (selected) => {
     this.props
@@ -62,51 +62,53 @@ class Folder extends Component {
         })
       )
       .then(() => {
-        this.onUpdate()
-      })
-  }
+        this.onUpdate();
+      });
+  };
 
   onUpdate = debounce(() => {
-    const { folder } = this.props
-    folder.slug = this.state.slug ?? folder.slug
+    const { folder } = this.props;
+    folder.slug = this.state.slug ?? folder.slug;
 
     this.props.dispatch(updateParentFolder(folder, this.props.auth.token)).then((folder) => {
-      const path = toFeedPath(folder, this.props.user)
+      const path = toFeedPath(folder, this.props.user);
       if (typeof window !== `undefined` && window.location.pathname !== path) {
-        navigate(path)
+        navigate(path);
       }
-    })
-  }, 500)
+    });
+  }, 500);
 
   onDelete = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    return this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token)).then(() => {
-      navigate(toFeedPath(this.props.folder, this.props.user, true))
-    })
-  }
+    return this.props
+      .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
+      .then(() => {
+        navigate(toFeedPath(this.props.folder, this.props.user, true));
+      });
+  };
 
   onFolderEdit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const { feed, folder } = this.props
+    const { feed, folder } = this.props;
 
     this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
       folderTree = folderTree.filter((value) => {
-        return value.indexOf(`${folder.path === "/" ? "" : folder.path}/${folder.slug}`) !== 0
-      })
+        return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
+      });
 
       this.setState({
         folderTreeEdit: true,
         folderTree: folderTree,
-      })
-    })
-  }
+      });
+    });
+  };
 
   render() {
-    const { folderTreeEdit, folderTree } = this.state
-    const { folder } = this.props
-    folder.slug = this.state.slug ?? folder.slug
+    const { folderTreeEdit, folderTree } = this.state;
+    const { folder } = this.props;
+    folder.slug = this.state.slug ?? folder.slug;
 
     return (
       <section className="section col">
@@ -172,14 +174,14 @@ class Folder extends Component {
                   className="form-control"
                   id="info_path_{{ _uid }}"
                   options={folderTree.map((value) => {
-                    return { value: value, label: value }
+                    return { value: value, label: value };
                   })}
                 />
               )) || (
                 <div>
                   <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
                     <FontAwesomeIcon icon={faEdit} />
-                  </button>{" "}
+                  </button>{' '}
                   {folder.path}
                 </div>
               )}
@@ -187,7 +189,7 @@ class Folder extends Component {
           </div>
         </form>
       </section>
-    )
+    );
   }
 }
 
@@ -196,5 +198,5 @@ export default connect((state) => {
     auth: state.auth,
     user: state.user,
     feed: state.feed,
-  }
-})(Folder)
+  };
+})(Folder);

@@ -1,31 +1,31 @@
-import React, { Component } from "react"
-import { Link } from "gatsby"
-import { connect } from "react-redux"
-import { toFeedPath } from "../reducers/feed/actions"
-import { getFlows } from "../reducers/flows/actions"
+import React, { Component } from 'react';
+import { Link } from 'gatsby';
+import { connect } from 'react-redux';
+import { toFeedPath } from '../reducers/feed/actions';
+import { getFlows } from '../reducers/flows/actions';
 
 class Flows extends Component {
   state = {
     page: 1,
     programs: [],
     loadMore: false,
-  }
+  };
 
   componentDidMount() {
-    this.onFetchFlowsData()
+    this.onFetchFlowsData();
   }
 
   onFetchFlowsData = () => {
-    const { page } = this.state
+    const { page } = this.state;
     this.props.dispatch(getFlows(page)).then((data) => {
-      const programs = this.state.programs.slice().concat(data.data)
-      this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 })
-    })
-  }
+      const programs = this.state.programs.slice().concat(data.data);
+      this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 });
+    });
+  };
 
   render() {
-    const { programs, loadMore } = this.state
-    const { user } = this.props
+    const { programs, loadMore } = this.state;
+    const { user } = this.props;
 
     return (
       <section className="section container-fluid">
@@ -46,7 +46,9 @@ class Flows extends Component {
               <div className="row">
                 <div className="col-md-12">
                   <div className="d-grid">
-                    <button className="btn btn-primary" onClick={this.onFetchFlowsData}>Load more</button>
+                    <button className="btn btn-primary" onClick={this.onFetchFlowsData}>
+                      Load more
+                    </button>
                   </div>
                 </div>
               </div>
@@ -54,12 +56,12 @@ class Flows extends Component {
           </div>
         </div>
       </section>
-    )
+    );
   }
 }
 
 export default connect((state) => {
   return {
     user: state.user,
-  }
-})(Flows)
+  };
+})(Flows);

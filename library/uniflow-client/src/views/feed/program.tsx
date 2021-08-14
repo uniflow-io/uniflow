@@ -1,13 +1,18 @@
-import React, { Component } from "react"
-import { navigate } from "gatsby"
-import debounce from "lodash/debounce"
-import { connect } from "react-redux"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTimes, faClone, faEdit, faPlay } from "@fortawesome/free-solid-svg-icons"
-import { faClipboard } from "@fortawesome/free-regular-svg-icons"
-import { Ace, Flows, Checkbox, Select } from "../../components"
-import Runner from "../../models/runner"
-import { commitPushFlow, commitPopFlow, commitUpdateFlow, commitSetFlows } from "../../reducers/flows/actions"
+import React, { Component } from 'react';
+import { navigate } from 'gatsby';
+import debounce from 'lodash/debounce';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faClipboard } from '@fortawesome/free-regular-svg-icons';
+import { Ace, Flows, Checkbox, Select } from '../../components';
+import Runner from '../../models/runner';
+import {
+  commitPushFlow,
+  commitPopFlow,
+  commitUpdateFlow,
+  commitSetFlows,
+} from '../../reducers/flows/actions';
 import {
   getTags,
   commitUpdateFeed,
@@ -20,9 +25,9 @@ import {
   toFeedPath,
   deserializeFlowsData,
   serializeFlowsData,
-} from "../../reducers/feed/actions"
-import { commitAddLog } from "../../reducers/logs/actions"
-import { copyTextToClipboard } from "../../utils"
+} from '../../reducers/feed/actions';
+import { commitAddLog } from '../../reducers/logs/actions';
+import { copyTextToClipboard } from '../../utils';
 
 class Program extends Component {
   state = {
@@ -31,21 +36,21 @@ class Program extends Component {
     slug: null,
     folderTreeEdit: false,
     folderTree: [],
-  }
+  };
 
   componentDidMount() {
-    const { program } = this.props
+    const { program } = this.props;
 
-    this._componentIsMounted = true
-    this._componentShouldUpdate = true
+    this._componentIsMounted = true;
+    this._componentShouldUpdate = true;
 
-    this.setState({ folderTree: [program.path] })
+    this.setState({ folderTree: [program.path] });
 
-    this.onFetchFlowData()
+    this.onFetchFlowData();
   }
 
   componentWillUnmount() {
-    this._componentIsMounted = false
+    this._componentIsMounted = false;
   }
 
   componentDidUpdate(prevProps) {
@@ -54,24 +59,24 @@ class Program extends Component {
         slug: null,
         folderTreeEdit: false,
         folderTree: [this.props.program.path],
-      })
+      });
 
-      this.onFetchFlowData()
+      this.onFetchFlowData();
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this._componentShouldUpdate
+    return this._componentShouldUpdate;
   }
 
   onRun = (event, index) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const { flows } = this.props
+    const { flows } = this.props;
 
-    let runner = new Runner()
-    runner.run(flows.slice(0, index === undefined ? flows.length : index + 1))
-  }
+    const runner = new Runner();
+    runner.run(flows.slice(0, index === undefined ? flows.length : index + 1));
+  };
 
   setFlows = (flows) => {
     return this.props
@@ -79,327 +84,329 @@ class Program extends Component {
       .then(() => {
         // hack fix to remove
         return new Promise((resolve) => {
-          setTimeout(resolve, 500)
-        })
+          setTimeout(resolve, 500);
+        });
       })
       .then(() => {
         return Promise.all(
           this.props.flows.map((item) => {
-            return item.bus.emit("deserialize", item.data)
+            return item.bus.emit('deserialize', item.data);
           })
-        )
-      })
-  }
+        );
+      });
+  };
 
   onPushFlow = (index, flow) => {
     this.props
       .dispatch(commitPushFlow(index, flow))
       .then(() => {
-        return this.setFlows(this.props.flows)
+        return this.setFlows(this.props.flows);
       })
-      .then(this.onUpdateFlowData)
-  }
+      .then(this.onUpdateFlowData);
+  };
 
   onPopFlow = (index) => {
     this.props
       .dispatch(commitPopFlow(index))
       .then(() => {
-        return this.setFlows(this.props.flows)
+        return this.setFlows(this.props.flows);
       })
-      .then(this.onUpdateFlowData)
-  }
+      .then(this.onUpdateFlowData);
+  };
 
   onUpdateFlow = (index, data) => {
     /** @todo find a way about code generation, for not storing code into the data flows */
-    this._componentShouldUpdate = false
+    this._componentShouldUpdate = false;
     Promise.all(
       this.props.program.clients.map((client) => {
-        return this.props.flows[index].bus.emit("code", client)
+        return this.props.flows[index].bus.emit('code', client);
       })
     )
       .then((clientsCodes) => {
         const codes = clientsCodes.reduce((data, codes, clientIndex) => {
-          data[this.props.program.clients[clientIndex]] = codes.join(";")
-          return data
-        }, {})
+          data[this.props.program.clients[clientIndex]] = codes.join(';');
+          return data;
+        }, {});
 
-        return this.props.dispatch(commitUpdateFlow(index, data, codes))
+        return this.props.dispatch(commitUpdateFlow(index, data, codes));
       })
       .then(() => {
-        this._componentShouldUpdate = true
+        this._componentShouldUpdate = true;
       })
-      .then(this.onUpdateFlowData)
-  }
+      .then(this.onUpdateFlowData);
+  };
 
   onFetchFlowData = debounce(() => {
-    let { program } = this.props
+    const { program } = this.props;
 
     Promise.resolve()
       .then(() => {
-        return this.props.dispatch(commitSetFlows([]))
+        return this.props.dispatch(commitSetFlows([]));
       })
       .then(() => {
         if (program.data) {
-          return program.data
+          return program.data;
         }
 
-        return this.props.dispatch(getProgramData(program, this.props.auth.token))
+        return this.props.dispatch(getProgramData(program, this.props.auth.token));
       })
       .then((data) => {
-        if (!data) return
+        if (!data) return;
 
-        program.data = data
+        program.data = data;
 
-        if (program.slug !== this.props.program.slug) return
+        if (program.slug !== this.props.program.slug) return;
 
-        return this.setFlows(deserializeFlowsData(data))
+        return this.setFlows(deserializeFlowsData(data));
       })
       .then(() => {
-        this._componentShouldUpdate = false
+        this._componentShouldUpdate = false;
       })
       .then(() => {
         if (this._componentIsMounted) {
-          this.setState({ fetchedSlug: program.slug })
+          this.setState({ fetchedSlug: program.slug });
         }
       })
       .then(() => {
-        this._componentShouldUpdate = true
-      })
-  }, 500)
+        this._componentShouldUpdate = true;
+      });
+  }, 500);
 
   onUpdateFlowData = debounce(() => {
-    let { program, flows, user, feed } = this.props
-    if (program.slug !== this.state.fetchedSlug) return
+    const { program, flows, user, feed } = this.props;
+    if (program.slug !== this.state.fetchedSlug) return;
 
-    let data = serializeFlowsData(flows)
-    if ((feed.uid === "me" || user.uid === feed.uid) && program.data !== data) {
-      program.data = data
+    const data = serializeFlowsData(flows);
+    if ((feed.uid === 'me' || user.uid === feed.uid) && program.data !== data) {
+      program.data = data;
 
-      this._componentShouldUpdate = false
+      this._componentShouldUpdate = false;
       this.props
         .dispatch(setProgramData(program, this.props.auth.token))
         .then(() => {
-          this._componentShouldUpdate = true
+          this._componentShouldUpdate = true;
         })
         .catch((log) => {
-          return this.props.dispatch(commitAddLog(log.message))
-        })
+          return this.props.dispatch(commitAddLog(log.message));
+        });
     }
-  }, 500)
+  }, 500);
 
   onChangeTitle = (event) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ name: event.target.value },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onChangeSlug = (event) => {
-    this.setState({ slug: event.target.value }, this.onUpdate)
-  }
+    this.setState({ slug: event.target.value }, this.onUpdate);
+  };
 
   onChangePath = (selected) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ path: selected },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onChangeClients = (clients) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ clients: clients },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onChangeTags = (tags) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ tags: tags },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onChangeDescription = (description) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ description: description },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onChangePublic = (value) => {
     this.props
       .dispatch(
         commitUpdateFeed({
-          type: "program",
+          type: 'program',
           entity: {
             ...this.props.program,
             ...{ public: value },
           },
         })
       )
-      .then(this.onUpdate)
-  }
+      .then(this.onUpdate);
+  };
 
   onUpdate = debounce(() => {
-    const { program } = this.props
-    program.slug = this.state.slug ?? program.slug
+    const { program } = this.props;
+    program.slug = this.state.slug ?? program.slug;
 
     this.props.dispatch(updateProgram(program, this.props.auth.token)).then((program) => {
-      const path = toFeedPath(program, this.props.user)
+      const path = toFeedPath(program, this.props.user);
       if (typeof window !== `undefined` && window.location.pathname !== path) {
-        navigate(path)
+        navigate(path);
       }
-    })
-  }, 500)
+    });
+  }, 500);
 
   onDuplicate = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    let program = this.props.program
-    program.name += " Copy"
+    const program = this.props.program;
+    program.name += ' Copy';
 
     this.props
       .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
       .then((item) => {
-        Object.assign(program, item)
-        return this.props.dispatch(setProgramData(program, this.props.auth.token))
+        Object.assign(program, item);
+        return this.props.dispatch(setProgramData(program, this.props.auth.token));
       })
       .then(() => {
-        return navigate(toFeedPath(program, this.props.user))
+        return navigate(toFeedPath(program, this.props.user));
       })
       .catch((log) => {
-        return this.props.dispatch(commitAddLog(log.message))
-      })
-  }
+        return this.props.dispatch(commitAddLog(log.message));
+      });
+  };
 
   onDelete = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    return this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token)).then(() => {
-      return navigate(toFeedPath(this.props.program, this.props.user, true))
-    })
-  }
+    return this.props
+      .dispatch(deleteProgram(this.props.program, this.props.auth.token))
+      .then(() => {
+        return navigate(toFeedPath(this.props.program, this.props.user, true));
+      });
+  };
 
   onFolderEdit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const { feed } = this.props
+    const { feed } = this.props;
 
     this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
       this.setState({
         folderTreeEdit: true,
         folderTree: folderTree,
-      })
-    })
-  }
+      });
+    });
+  };
 
   getFlows = (program) => {
-    const { allFlows } = this.props
-    let flowLabels = []
-    let keys = Object.keys(allFlows)
+    const { allFlows } = this.props;
+    const flowLabels = [];
+    const keys = Object.keys(allFlows);
 
     for (let i = 0; i < keys.length; i++) {
-      let key = keys[i]
+      const key = keys[i];
       const canPushFlow = program.clients.reduce((bool, client) => {
-        return bool && allFlows[key].clients.indexOf(client) !== -1
-      }, program.clients.length > 0)
+        return bool && allFlows[key].clients.indexOf(client) !== -1;
+      }, program.clients.length > 0);
 
       if (canPushFlow) {
         flowLabels.push({
           key: key,
-          label: allFlows[key].tags.join(" - ") + " : " + allFlows[key].name,
-        })
+          label: allFlows[key].tags.join(' - ') + ' : ' + allFlows[key].name,
+        });
       }
     }
 
     flowLabels.sort(function (flow1, flow2) {
-      let x = flow1.label
-      let y = flow2.label
-      return x < y ? -1 : x > y ? 1 : 0
-    })
+      const x = flow1.label;
+      const y = flow2.label;
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
 
-    return flowLabels
-  }
+    return flowLabels;
+  };
 
   getNodeClipboard = () => {
-    let { program, user } = this.props
+    const { program, user } = this.props;
 
     if (user.apiKey) {
-      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`
+      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
     }
 
-    return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`
-  }
+    return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`;
+  };
 
   onCopyNodeUsage = (event) => {
-    const clipboard = this.getNodeClipboard()
+    const clipboard = this.getNodeClipboard();
 
-    copyTextToClipboard(clipboard)
-  }
+    copyTextToClipboard(clipboard);
+  };
 
   getRustClipboard = () => {
-    let { program, user } = this.props
+    const { program, user } = this.props;
 
     if (user.apiKey) {
-      return `V8_PATH=/path/to/v8 cargo run -- --api-key=${user.apiKey} ${program.slug}`
+      return `V8_PATH=/path/to/v8 cargo run -- --api-key=${user.apiKey} ${program.slug}`;
     }
 
-    return `V8_PATH=/path/to/v8 cargo run -- --api-key={your-api-key} ${program.slug}`
-  }
+    return `V8_PATH=/path/to/v8 cargo run -- --api-key={your-api-key} ${program.slug}`;
+  };
 
   onCopyRustUsage = (event) => {
-    const clipboard = this.getRustClipboard()
+    const clipboard = this.getRustClipboard();
 
-    copyTextToClipboard(clipboard)
-  }
+    copyTextToClipboard(clipboard);
+  };
 
   render() {
-    const { program, tags, flows, user, allFlows } = this.props
-    const { folderTreeEdit, folderTree } = this.state
-    const programFlows = this.getFlows(program)
+    const { program, tags, flows, user, allFlows } = this.props;
+    const { folderTreeEdit, folderTree } = this.state;
+    const programFlows = this.getFlows(program);
     const clients = {
-      uniflow: "Uniflow",
-      node: "Node",
-      jetbrains: "Jetbrains",
-      chrome: "Chrome",
-      rust: "Rust",
-    }
-    program.slug = this.state.slug ?? program.slug
+      uniflow: 'Uniflow',
+      node: 'Node',
+      jetbrains: 'Jetbrains',
+      chrome: 'Chrome',
+      rust: 'Rust',
+    };
+    program.slug = this.state.slug ?? program.slug;
 
     return (
       <section className="section col">
@@ -468,14 +475,14 @@ class Program extends Component {
                   className="form-control"
                   id="info_path_{{ _uid }}"
                   options={folderTree.map((value) => {
-                    return { value: value, label: value }
+                    return { value: value, label: value };
                   })}
                 />
               )) || (
                 <div>
                   <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
                     <FontAwesomeIcon icon={faEdit} />
-                  </button>{" "}
+                  </button>{' '}
                   {program.path}
                 </div>
               )}
@@ -495,7 +502,7 @@ class Program extends Component {
                 id="info_client_{{ _uid }}"
                 multiple={true}
                 options={Object.keys(clients).map((value) => {
-                  return { value: value, label: clients[value] }
+                  return { value: value, label: clients[value] };
                 })}
               />
             </div>
@@ -515,7 +522,7 @@ class Program extends Component {
                 edit={true}
                 multiple={true}
                 options={tags.map((tag) => {
-                  return { value: tag, label: tag }
+                  return { value: tag, label: tag };
                 })}
                 placeholder="Tags"
               />
@@ -555,7 +562,7 @@ class Program extends Component {
           </div>
         </form>
         {program.clients.map((client) => {
-          if (client === "uniflow") {
+          if (client === 'uniflow') {
             return (
               <div key={`client-${client}`} className="row">
                 <div className="col">
@@ -564,9 +571,9 @@ class Program extends Component {
                   </button>
                 </div>
               </div>
-            )
-          } else if (client === "node") {
-            const clipboard = this.getNodeClipboard(user)
+            );
+          } else if (client === 'node') {
+            const clipboard = this.getNodeClipboard(user);
 
             return (
               <div key={`client-${client}`} className="row mb-3">
@@ -575,23 +582,27 @@ class Program extends Component {
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
-                    <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
+                    <button
+                      type="button"
+                      className="input-group-text"
+                      onClick={this.onCopyNodeUsage}
+                    >
                       <FontAwesomeIcon icon={faClipboard} />
                     </button>
                     <input
                       type="text"
                       className="form-control"
                       id="program_node_api_key"
-                      value={clipboard || ""}
+                      value={clipboard || ''}
                       readOnly
                       placeholder="api key"
                     />
                   </div>
                 </div>
               </div>
-            )
-          } else if (client === "rust") {
-            const clipboard = this.getRustClipboard(user)
+            );
+          } else if (client === 'rust') {
+            const clipboard = this.getRustClipboard(user);
 
             return (
               <div key={`client-${client}`} className="row mb-3">
@@ -600,24 +611,28 @@ class Program extends Component {
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group">
-                    <button type="button" className="input-group-text" onClick={this.onCopyRustUsage}>
+                    <button
+                      type="button"
+                      className="input-group-text"
+                      onClick={this.onCopyRustUsage}
+                    >
                       <FontAwesomeIcon icon={faClipboard} />
                     </button>
                     <input
                       type="text"
                       className="form-control"
                       id="program_node_api_rust"
-                      value={clipboard || ""}
+                      value={clipboard || ''}
                       readOnly
                       placeholder="api key"
                     />
                   </div>
                 </div>
               </div>
-            )
+            );
           }
 
-          return null
+          return null;
         })}
 
         <hr />
@@ -633,7 +648,7 @@ class Program extends Component {
           onRun={this.onRun}
         />
       </section>
-    )
+    );
   }
 }
 
@@ -644,5 +659,5 @@ export default connect((state) => {
     tags: getTags(state.feed),
     feed: state.feed,
     flows: state.flows,
-  }
-})(Program)
+  };
+})(Program);

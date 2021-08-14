@@ -1,25 +1,25 @@
-import React from "react"
-import { Library } from "../views"
-import { withPage } from "../helpers"
-import { graphql } from "gatsby"
+import React from 'react';
+import { Library } from '../views';
+import { withPage } from '../helpers';
+import { graphql } from 'gatsby';
 
 export default ({ location, data: { /*library, */ localLibrary } }) => {
-  let allLibrary = {}
+  const allLibrary = {};
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
   });*/
   localLibrary.nodes.forEach((card) => {
-    allLibrary[card.fields.slug] = card
-  })
+    allLibrary[card.fields.slug] = card;
+  });
 
-  const LibraryPage = withPage(Library, "library", {
+  const LibraryPage = withPage(Library, 'library', {
     location: location,
-    title: "Library",
-    description: "Library",
-  })
+    title: 'Library',
+    description: 'Library',
+  });
 
-  return <LibraryPage library={Object.values(allLibrary)} />
-}
+  return <LibraryPage library={Object.values(allLibrary)} />;
+};
 
 /*
     library: allNpmPackage(filter: {deprecated: {eq: "false"}}) {
@@ -47,4 +47,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;

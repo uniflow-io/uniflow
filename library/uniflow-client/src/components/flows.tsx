@@ -1,27 +1,28 @@
-import React, { Component, Suspense, lazy } from "react"
-import { Search } from "."
+import React, { Component, Suspense, lazy } from 'react';
+import { Search } from '.';
 
 class UiFlow extends Component {
   render() {
-    const { tag, bus, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props
+    const { tag, bus, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } =
+      this.props;
 
-    let TagName = Search
-    if (tag !== "search") {
+    let TagName = Search;
+    if (tag !== 'search') {
       // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
-        "@uniflow-io/uniflow-flow-assets": () => import("../../../uniflow-flow-assets/src"),
-        "@uniflow-io/uniflow-flow-bash": () => import("../../../uniflow-flow-bash/src"),
-        "@uniflow-io/uniflow-flow-canvas": () => import("../../../uniflow-flow-canvas/src"),
-        "@uniflow-io/uniflow-flow-if": () => import("../../../uniflow-flow-if/src"),
-        "@uniflow-io/uniflow-flow-object": () => import("../../../uniflow-flow-object/src"),
-        "@uniflow-io/uniflow-flow-javascript": () => import("../../../uniflow-flow-javascript/src"),
-        "@uniflow-io/uniflow-flow-prompt": () => import("../../../uniflow-flow-prompt/src"),
-        "@uniflow-io/uniflow-flow-regex": () => import("../../../uniflow-flow-regex/src"),
-        "@uniflow-io/uniflow-flow-text": () => import("../../../uniflow-flow-text/src"),
-        "@uniflow-io/uniflow-flow-text-list": () => import("../../../uniflow-flow-text-list/src"),
-        "@uniflow-io/uniflow-flow-while": () => import("../../../uniflow-flow-while/src"),
-      }
-      TagName = lazy(lasyImports[tag])
+        '@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
+        '@uniflow-io/uniflow-flow-bash': () => import('../../../uniflow-flow-bash/src'),
+        '@uniflow-io/uniflow-flow-canvas': () => import('../../../uniflow-flow-canvas/src'),
+        '@uniflow-io/uniflow-flow-if': () => import('../../../uniflow-flow-if/src'),
+        '@uniflow-io/uniflow-flow-object': () => import('../../../uniflow-flow-object/src'),
+        '@uniflow-io/uniflow-flow-javascript': () => import('../../../uniflow-flow-javascript/src'),
+        '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
+        '@uniflow-io/uniflow-flow-regex': () => import('../../../uniflow-flow-regex/src'),
+        '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
+        '@uniflow-io/uniflow-flow-text-list': () => import('../../../uniflow-flow-text-list/src'),
+        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),
+      };
+      TagName = lazy(lasyImports[tag]);
     }
 
     return (
@@ -37,38 +38,38 @@ class UiFlow extends Component {
           onRun={onRun}
         />
       </Suspense>
-    )
+    );
   }
 }
 
 export default class Flows extends Component {
   render() {
-    const { flows, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props
+    const { flows, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
     const uiFlows = (() => {
-      let uiFlows = [
+      const uiFlows = [
         {
-          component: "search",
+          component: 'search',
           index: 0,
         },
-      ]
+      ];
 
       for (let i = 0; i < flows.length; i++) {
-        let item = flows[i]
+        const item = flows[i];
 
         uiFlows.push({
           component: item.flow,
           bus: item.bus,
           index: i,
-        })
+        });
 
         uiFlows.push({
-          component: "search",
+          component: 'search',
           index: i + 1,
-        })
+        });
       }
 
-      return uiFlows
-    })()
+      return uiFlows;
+    })();
 
     return uiFlows.map((item, i) => (
       <UiFlow
@@ -79,18 +80,18 @@ export default class Flows extends Component {
         programFlows={programFlows}
         clients={clients}
         onPush={(component) => {
-          onPush(item.index, component)
+          onPush(item.index, component);
         }}
         onPop={() => {
-          onPop(item.index)
+          onPop(item.index);
         }}
         onUpdate={(data) => {
-          onUpdate(item.index, data)
+          onUpdate(item.index, data);
         }}
         onRun={(event) => {
-          onRun(event, item.index)
+          onRun(event, item.index);
         }}
       />
-    ))
+    ));
   }
 }

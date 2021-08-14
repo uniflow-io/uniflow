@@ -1,36 +1,36 @@
-import React from "react"
-import { Card } from "../views"
-import { graphql } from "gatsby"
-import { withPage } from "../helpers"
+import React from 'react';
+import { Card } from '../views';
+import { graphql } from 'gatsby';
+import { withPage } from '../helpers';
 
 export default ({ data, location }) => {
-  const { /*library, */ localLibrary, /*card, */ localCard, logo } = data
+  const { /*library, */ localLibrary, /*card, */ localCard, logo } = data;
   let realCard = {
     //...card,
     official: false,
-  }
+  };
   if (localCard) {
     realCard = {
       ...localCard,
       official: true,
-    }
+    };
   }
 
-  const CardPage = withPage(Card, "card", {
+  const CardPage = withPage(Card, 'card', {
     location: location,
     title: realCard.name,
     description: realCard.description,
-  })
+  });
 
-  let allLibrary = {}
+  const allLibrary = {};
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
   });*/
   localLibrary.nodes.forEach((card) => {
-    allLibrary[card.fields.slug] = card
-  })
-  return <CardPage library={Object.values(allLibrary)} card={realCard} logo={logo} />
-}
+    allLibrary[card.fields.slug] = card;
+  });
+  return <CardPage library={Object.values(allLibrary)} card={realCard} logo={logo} />;
+};
 
 /*
     library: allNpmPackage(filter: {deprecated: {eq: "false"}}) {
@@ -62,7 +62,7 @@ export default ({ data, location }) => {
 */
 
 export const query = graphql`
-  query($slug: String) {
+  query ($slug: String) {
     localCard: npmLocalPackage(fields: { slug: { eq: $slug } }) {
       name
       description
@@ -99,4 +99,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;

@@ -1,13 +1,13 @@
-import React from "react"
-import { pathTo } from "../../routes"
-import { Link } from "gatsby"
-import { faTag } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React from 'react';
+import { pathTo } from '../../routes';
+import { Link } from 'gatsby';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Tags = ({ tags }) => {
   const orderedTags = Object.keys(tags).sort((tag1, tag2) => {
-    return tags[tag1] > tags[tag2]
-  })
+    return tags[tag1] > tags[tag2];
+  });
 
   return (
     <section className="section container-fluid">
@@ -17,7 +17,7 @@ const Tags = ({ tags }) => {
           <p>{orderedTags.length} tags</p>
           <p>
             {orderedTags.map((tag) => (
-              <Link to={pathTo("tag", { tag: tag })} key={tag} className="btn btn-primary mr-2">
+              <Link to={pathTo('tag', { tag: tag })} key={tag} className="btn btn-primary mr-2">
                 <FontAwesomeIcon icon={faTag} /> {tag} ({tags[tag]})
               </Link>
             ))}
@@ -25,7 +25,7 @@ const Tags = ({ tags }) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Tags
+export default Tags;

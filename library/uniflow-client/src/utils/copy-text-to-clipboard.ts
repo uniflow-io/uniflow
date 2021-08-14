@@ -1,13 +1,13 @@
-export default (text) => {
-  let textArea = document.createElement("textarea")
-  textArea.value = text
-  document.body.appendChild(textArea)
-  textArea.focus()
-  textArea.select()
+export default (text: string) => {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
 
   try {
-    document.execCommand("copy")
+    document.execCommand('copy');
   } catch (err) {}
 
-  document.body.removeChild(textArea)
-}
+  document.body.removeChild(textArea);
+};

@@ -1,9 +1,9 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { Checkbox } from "../components"
-import { ApiException } from "../exceptions"
-import { getLead, updateLead } from "../reducers/lead/actions"
-import { matchRoute } from "../routes"
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Checkbox } from '../components';
+import { ApiException } from '../exceptions';
+import { getLead, updateLead } from '../reducers/lead/actions';
+import { matchRoute } from '../routes';
 
 class Notifications extends Component {
   state = {
@@ -15,17 +15,17 @@ class Notifications extends Component {
       githubUsername: null,
     },
     errors: {},
-    state: "loading",
-  }
+    state: 'loading',
+  };
 
   componentDidMount() {
-    const { location } = this.props
+    const { location } = this.props;
 
-    let uid = this.getId()
+    const uid = this.getId();
 
-    const match = matchRoute(location.pathname)
+    const match = matchRoute(location.pathname);
     if (uid !== null && match) {
-      if (match.route === "notificationUnsubscribe") {
+      if (match.route === 'notificationUnsubscribe') {
         this.props
           .dispatch(
             updateLead(uid, {
@@ -37,13 +37,13 @@ class Notifications extends Component {
           .then(() => {
             this.setState({
               lead: { ...this.state.lead, ...{ uid } },
-              state: "sent-unsubscribe",
-            })
+              state: 'sent-unsubscribe',
+            });
           })
           .catch(() => {
-            this.setState({ state: "not-found" })
-          })
-      } else if (match.route === "notificationManage") {
+            this.setState({ state: 'not-found' });
+          });
+      } else if (match.route === 'notificationManage') {
         this.props
           .dispatch(getLead(uid))
           .then((data) => {
@@ -58,47 +58,47 @@ class Notifications extends Component {
                   githubUsername: data.githubUsername,
                 },
               },
-              state: "form",
-            })
+              state: 'form',
+            });
           })
           .catch(() => {
-            this.setState({ state: "not-found" })
-          })
+            this.setState({ state: 'not-found' });
+          });
       } else {
-        this.setState({ state: "not-found" })
+        this.setState({ state: 'not-found' });
       }
     } else {
-      this.setState({ state: "not-found" })
+      this.setState({ state: 'not-found' });
     }
   }
 
   getId() {
-    let m = this.props.location.search.match(/id=([^&]+)/)
+    const m = this.props.location.search.match(/id=([^&]+)/);
     if (m) {
-      return m[1]
+      return m[1];
     }
 
-    return null
+    return null;
   }
 
   onChangeOptinNewsletter = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinNewsletter: value } } })
-  }
+    this.setState({ lead: { ...this.state.lead, ...{ optinNewsletter: value } } });
+  };
 
   onChangeOptinBlog = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinBlog: value } } })
-  }
+    this.setState({ lead: { ...this.state.lead, ...{ optinBlog: value } } });
+  };
 
   onChangeOptinGithub = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinGithub: value } } })
-  }
+    this.setState({ lead: { ...this.state.lead, ...{ optinGithub: value } } });
+  };
 
   onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { lead } = this.state
+    const { lead } = this.state;
 
-    this.setState({ state: "sending" }, () => {
+    this.setState({ state: 'sending' }, () => {
       this.props
         .dispatch(
           updateLead(lead.uid, {
@@ -108,33 +108,36 @@ class Notifications extends Component {
           })
         )
         .then(() => {
-          this.setState({ state: "sent" })
+          this.setState({ state: 'sent' });
         })
         .catch((error) => {
           if (error instanceof ApiException) {
-            this.setState({ state: "form", errors: { ...error.errors } })
+            this.setState({ state: 'form', errors: { ...error.errors } });
           }
-        })
-    })
-  }
+        });
+    });
+  };
 
   render() {
-    const { state, lead } = this.state
+    const { state, lead } = this.state;
     return (
       <section className="section container-fluid">
         <h3 className="box-title">Notifications</h3>
-        {state === "loading" && <p className="text-center">Loading notifications</p>}
-        {state === "not-found" && (
+        {state === 'loading' && <p className="text-center">Loading notifications</p>}
+        {state === 'not-found' && (
           <div className="alert alert-danger text-center" role="alert">
             Notifications coudn't be restored.
             <br />
             You may check your notification link.
           </div>
         )}
-        {["form", "sending"].indexOf(state) !== -1 && (
+        {['form', 'sending'].indexOf(state) !== -1 && (
           <form className="form-sm-horizontal">
             <div className="row mb-3">
-              <label htmlFor="notifications_optinNewsletter_{{ _uid }}" className="col-sm-2 col-form-label">
+              <label
+                htmlFor="notifications_optinNewsletter_{{ _uid }}"
+                className="col-sm-2 col-form-label"
+              >
                 Subscribe to the newsletter
               </label>
 
@@ -148,7 +151,10 @@ class Notifications extends Component {
               </div>
             </div>
             <div className="row mb-3">
-              <label htmlFor="notifications_optinBlog_{{ _uid }}" className="col-sm-2 col-form-label">
+              <label
+                htmlFor="notifications_optinBlog_{{ _uid }}"
+                className="col-sm-2 col-form-label"
+              >
                 Subscribe to blog updates
               </label>
 
@@ -163,7 +169,10 @@ class Notifications extends Component {
             </div>
             {lead.githubUsername && (
               <div className="row mb-3">
-                <label htmlFor="notifications_optinGithub_{{ _uid }}" className="col-sm-2 col-form-label">
+                <label
+                  htmlFor="notifications_optinGithub_{{ _uid }}"
+                  className="col-sm-2 col-form-label"
+                >
                   Subscribe to github updates
                 </label>
 
@@ -183,7 +192,7 @@ class Notifications extends Component {
                   <button
                     type="submit"
                     className="btn btn-primary"
-                    disabled={state === "sending"}
+                    disabled={state === 'sending'}
                     onClick={this.onSubmit}
                   >
                     Save
@@ -193,23 +202,23 @@ class Notifications extends Component {
             </div>
           </form>
         )}
-        {state === "sent" && (
+        {state === 'sent' && (
           <div className="alert alert-success text-center" role="alert">
             Your notifications settings were saved.
           </div>
         )}
-        {state === "sent-unsubscribe" && (
+        {state === 'sent-unsubscribe' && (
           <div className="alert alert-success text-center" role="alert">
             Your were succefully unsubscribed from our emails.
           </div>
         )}
       </section>
-    )
+    );
   }
 }
 
 export default connect((state) => {
   return {
     auth: state.auth,
-  }
-})(Notifications)
+  };
+})(Notifications);

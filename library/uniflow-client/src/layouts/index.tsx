@@ -1,17 +1,17 @@
-import React, { Component } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPowerOff } from "@fortawesome/free-solid-svg-icons"
-import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons"
-import Helmet from "react-helmet"
-import { Link, graphql, StaticQuery } from "gatsby"
-import { connect } from "react-redux"
-import routes, { pathTo } from "../routes"
-import { UserManager } from "../components"
-import { getNewLogs, commitReadLog } from "../reducers/logs/actions"
-import { commitLogoutUser } from "../reducers/user/actions"
-import { isGranted } from "../reducers/user/actions"
-import { applyTheme, switchTheme } from "../reducers/app/actions"
-import { matchPath } from "../utils"
+import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import Helmet from 'react-helmet';
+import { Link, graphql, StaticQuery } from 'gatsby';
+import { connect } from 'react-redux';
+import routes, { pathTo } from '../routes';
+import { UserManager } from '../components';
+import { getNewLogs, commitReadLog } from '../reducers/logs/actions';
+import { commitLogoutUser } from '../reducers/user/actions';
+import { isGranted } from '../reducers/user/actions';
+import { applyTheme, switchTheme } from '../reducers/app/actions';
+import { matchPath } from '../utils';
 
 class MessengerPlatform extends Component {
   render() {
@@ -20,7 +20,7 @@ class MessengerPlatform extends Component {
         <Helmet>
           <script
             type="text/javascript"
-            innerHTML={`
+            src={`
             window.fbAsyncInit = function() {
                 FB.init({
                   xfbml            : true,
@@ -45,27 +45,27 @@ class MessengerPlatform extends Component {
         {/* Your customer chat code */}
         <div className="fb-customerchat" attribution="setup_tool" page_id="1899593680350111" />
       </div>
-    )
+    );
   }
 }
 
 class Alert extends Component {
   componentDidMount() {
-    const { alert, logs } = this.props
+    const { alert, logs } = this.props;
 
     setTimeout(() => {
-      this.props.dispatch(commitReadLog(logs[alert].id))
-    }, 5000)
+      this.props.dispatch(commitReadLog(logs[alert].id));
+    }, 5000);
   }
 
   onClose = (event, id) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    this.props.dispatch(commitReadLog(id))
-  }
+    this.props.dispatch(commitReadLog(id));
+  };
 
   render() {
-    const { alert, logs } = this.props
+    const { alert, logs } = this.props;
 
     return (
       <div className="alert alert-danger alert-dismissible fade show" role="alert">
@@ -80,17 +80,17 @@ class Alert extends Component {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    )
+    );
   }
 }
 
 Alert = connect((state) => ({
   logs: getNewLogs(state.logs),
-}))(Alert)
+}))(Alert);
 
 class Alerts extends Component {
   render() {
-    const { logs } = this.props
+    const { logs } = this.props;
 
     return (
       <>
@@ -98,13 +98,13 @@ class Alerts extends Component {
           <Alert key={key} alert={key} />
         ))}
       </>
-    )
+    );
   }
 }
 
 Alerts = connect((state) => ({
   logs: getNewLogs(state.logs),
-}))(Alerts)
+}))(Alerts);
 
 class Header extends Component {
   onLocation = (location) => {
@@ -114,35 +114,35 @@ class Header extends Component {
         exact: true,
       })
     ) {
-      return "home"
+      return 'home';
     } else if (
       matchPath(location.pathname, {
         path: routes.flows.path,
         exact: true,
       })
     ) {
-      return "flows"
+      return 'flows';
     } else if (
       matchPath(location.pathname, {
         path: routes.doc.path,
         exact: true,
       })
     ) {
-      return "doc"
+      return 'doc';
     } else if (
       matchPath(location.pathname, {
         path: routes.settings.path,
         exact: true,
       })
     ) {
-      return "settings"
+      return 'settings';
     } else if (
       matchPath(location.pathname, {
         path: routes.admin.path,
         exact: true,
       })
     ) {
-      return "admin"
+      return 'admin';
     } else if (
       matchPath(location.pathname, {
         path: routes.blog.path,
@@ -162,7 +162,7 @@ class Header extends Component {
         path: routes.tag.path,
       })
     ) {
-      return "blog"
+      return 'blog';
     } else if (
       matchPath(location.pathname, {
         path: routes.library.path,
@@ -172,21 +172,21 @@ class Header extends Component {
         path: routes.card.path,
       })
     ) {
-      return "library"
+      return 'library';
     } else if (
       matchPath(location.pathname, {
         path: routes.changelog.path,
         exact: true,
       })
     ) {
-      return "changelog"
+      return 'changelog';
     } else if (
       matchPath(location.pathname, {
         path: routes.contact.path,
         exact: true,
       })
     ) {
-      return "contact"
+      return 'contact';
     } else if (
       matchPath(location.pathname, {
         path: routes.login.path,
@@ -197,7 +197,7 @@ class Header extends Component {
         exact: true,
       })
     ) {
-      return "login"
+      return 'login';
     } else if (
       matchPath(location.pathname, {
         path: routes.feed.path,
@@ -206,75 +206,93 @@ class Header extends Component {
         path: routes.userFeed.path,
       })
     ) {
-      return "dashboard"
+      return 'dashboard';
     }
 
-    return null
-  }
+    return null;
+  };
 
   onLogout = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    this.props.dispatch(commitLogoutUser())
-  }
+    this.props.dispatch(commitLogoutUser());
+  };
 
   onChangeTheme = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    this.props.dispatch(switchTheme(this.props.app.theme))
-  }
+    this.props.dispatch(switchTheme(this.props.app.theme));
+  };
 
   render() {
-    const { auth, user, logo, changeLogTags } = this.props
-    const active = this.onLocation(this.props.location)
+    const { auth, user, logo, changeLogTags } = this.props;
+    const active = this.onLocation(this.props.location);
 
     return (
       <>
         <header className="navbar navbar-top navbar-expand flex-row">
-          <Link className="navbar-brand mr-0 mr-md-2" aria-label="Uniflow" to={pathTo("home")}>
+          <Link className="navbar-brand mr-0 mr-md-2" aria-label="Uniflow" to={pathTo('home')}>
             <img src={logo.publicURL} width="36" height="36" className="d-block" alt="Uniflow" />
           </Link>
 
           <div className="navbar-nav-scroll d-none d-md-flex">
             <ul className="navbar-nav bd-navbar-nav flex-row">
               <li className="nav-item">
-                <Link className={`nav-link${active === "flows" ? " active" : ""}`} to={pathTo("flows")}>
+                <Link
+                  className={`nav-link${active === 'flows' ? ' active' : ''}`}
+                  to={pathTo('flows')}
+                >
                   Flows
                 </Link>
               </li>
-              {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
                 <li className="nav-item">
-                  <Link className={`nav-link${active === "dashboard" ? " active" : ""}`} to={pathTo("feed")}>
+                  <Link
+                    className={`nav-link${active === 'dashboard' ? ' active' : ''}`}
+                    to={pathTo('feed')}
+                  >
                     Dashboard
                   </Link>
                 </li>
               )}
               <li className="nav-item">
-                <Link className={`nav-link${active === "library" ? " active" : ""}`} to={pathTo("library")}>
+                <Link
+                  className={`nav-link${active === 'library' ? ' active' : ''}`}
+                  to={pathTo('library')}
+                >
                   Library
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link${active === "doc" ? " active" : ""}`} to={pathTo("doc")}>
+                <Link className={`nav-link${active === 'doc' ? ' active' : ''}`} to={pathTo('doc')}>
                   Docs
                 </Link>
               </li>
-              {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+              {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
                 <li className="nav-item">
-                  <Link className={`nav-link${active === "settings" ? " active" : ""}`} to={pathTo("settings")}>
+                  <Link
+                    className={`nav-link${active === 'settings' ? ' active' : ''}`}
+                    to={pathTo('settings')}
+                  >
                     Settings
                   </Link>
                 </li>
               )}
-              {auth.isAuthenticated && isGranted(user, "ROLE_SUPER_ADMIN") && (
+              {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
                 <li className="nav-item">
-                  <Link className={`nav-link${active === "admin" ? " active" : ""}`} to={pathTo("admin")}>
+                  <Link
+                    className={`nav-link${active === 'admin' ? ' active' : ''}`}
+                    to={pathTo('admin')}
+                  >
                     Admin
                   </Link>
                 </li>
               )}
               <li className="nav-item">
-                <Link className={`nav-link${active === "blog" ? " active" : ""}`} to={pathTo("blog")}>
+                <Link
+                  className={`nav-link${active === 'blog' ? ' active' : ''}`}
+                  to={pathTo('blog')}
+                >
                   Blog
                 </Link>
               </li>
@@ -283,7 +301,10 @@ class Header extends Component {
 
           <ul className="navbar-nav flex-row ms-auto">
             <li className="nav-item">
-              <Link className={`nav-item nav-link ${active === "changelog" ? " active" : ""}`} to={pathTo("changelog")}>
+              <Link
+                className={`nav-item nav-link ${active === 'changelog' ? ' active' : ''}`}
+                to={pathTo('changelog')}
+              >
                 {changeLogTags.edges[0].node.tag}
               </Link>
             </li>
@@ -318,7 +339,7 @@ class Header extends Component {
                 aria-label="Theme"
                 onClick={this.onChangeTheme}
               >
-                {this.props.app.theme === "light" && (
+                {this.props.app.theme === 'light' && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -340,7 +361,7 @@ class Header extends Component {
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                   </svg>
                 )}
-                {this.props.app.theme === "dark" && (
+                {this.props.app.theme === 'dark' && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -354,7 +375,7 @@ class Header extends Component {
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                   </svg>
                 )}
-                {this.props.app.theme === "sepia" && (
+                {this.props.app.theme === 'sepia' && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -376,14 +397,21 @@ class Header extends Component {
             </li>
             {!auth.isAuthenticated && (
               <li className="nav-item">
-                <Link className={`nav-link${active === "login" ? " active" : ""}`} to={pathTo("login")}>
+                <Link
+                  className={`nav-link${active === 'login' ? ' active' : ''}`}
+                  to={pathTo('login')}
+                >
                   Login
                 </Link>
               </li>
             )}
-            {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
               <li className="nav-item">
-                <a className={`nav-link${active === "logout" ? " active" : ""}`} href="/logout" onClick={this.onLogout}>
+                <a
+                  className={`nav-link${active === 'logout' ? ' active' : ''}`}
+                  href="/logout"
+                  onClick={this.onLogout}
+                >
                   <FontAwesomeIcon icon={faPowerOff} />
                 </a>
               </li>
@@ -392,49 +420,61 @@ class Header extends Component {
         </header>
         <ul className="nav nav-bar-bottom fixed-bottom justify-content-center d-flex d-md-none">
           <li className="nav-item">
-            <Link className={`nav-link${active === "flows" ? " active" : ""}`} to={pathTo("flows")}>
+            <Link className={`nav-link${active === 'flows' ? ' active' : ''}`} to={pathTo('flows')}>
               Flows
             </Link>
           </li>
-          {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+          {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
             <li className="nav-item">
-              <Link className={`nav-link${active === "dashboard" ? " active" : ""}`} to={pathTo("feed")}>
+              <Link
+                className={`nav-link${active === 'dashboard' ? ' active' : ''}`}
+                to={pathTo('feed')}
+              >
                 Dashboard
               </Link>
             </li>
           )}
           <li className="nav-item">
-            <Link className={`nav-link${active === "library" ? " active" : ""}`} to={pathTo("library")}>
+            <Link
+              className={`nav-link${active === 'library' ? ' active' : ''}`}
+              to={pathTo('library')}
+            >
               Library
             </Link>
           </li>
           <li className="nav-item">
-            <Link className={`nav-link${active === "doc" ? " active" : ""}`} to={pathTo("doc")}>
+            <Link className={`nav-link${active === 'doc' ? ' active' : ''}`} to={pathTo('doc')}>
               Docs
             </Link>
           </li>
-          {auth.isAuthenticated && isGranted(user, "ROLE_USER") && (
+          {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
             <li className="nav-item">
-              <Link className={`nav-link${active === "settings" ? " active" : ""}`} to={pathTo("settings")}>
+              <Link
+                className={`nav-link${active === 'settings' ? ' active' : ''}`}
+                to={pathTo('settings')}
+              >
                 Settings
               </Link>
             </li>
           )}
-          {auth.isAuthenticated && isGranted(user, "ROLE_SUPER_ADMIN") && (
+          {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
             <li className="nav-item">
-              <Link className={`nav-link${active === "admin" ? " active" : ""}`} to={pathTo("admin")}>
+              <Link
+                className={`nav-link${active === 'admin' ? ' active' : ''}`}
+                to={pathTo('admin')}
+              >
                 Admin
               </Link>
             </li>
           )}
           <li className="nav-item">
-            <Link className={`nav-link${active === "blog" ? " active" : ""}`} to={pathTo("blog")}>
+            <Link className={`nav-link${active === 'blog' ? ' active' : ''}`} to={pathTo('blog')}>
               Blog
             </Link>
           </li>
         </ul>
       </>
-    )
+    );
   }
 }
 
@@ -442,7 +482,7 @@ Header = connect((state) => ({
   app: state.app,
   auth: state.auth,
   user: state.user,
-}))(Header)
+}))(Header);
 
 class Footer extends Component {
   render() {
@@ -451,24 +491,24 @@ class Footer extends Component {
         <div className="container-fluid">
           <ul className="nav nav-bottom justify-content-end">
             <li className="nav-item">
-              <Link className="nav-link" to={pathTo("contact")}>
+              <Link className="nav-link" to={pathTo('contact')}>
                 Contact
               </Link>
             </li>
           </ul>
         </div>
       </footer>
-    )
+    );
   }
 }
 
 class Layout extends Component {
   componentDidMount() {
-    this.props.dispatch(applyTheme())
+    this.props.dispatch(applyTheme());
   }
 
   render() {
-    const { app, env } = this.props
+    const { app, env } = this.props;
 
     return (
       <StaticQuery
@@ -502,7 +542,10 @@ class Layout extends Component {
               <body id={app.page} className={`theme-${app.theme}`} />
 
               <meta charSet="utf-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1, shrink-to-fit=no"
+              />
               <title>{siteMetadata.title}</title>
               <meta name="description" content={siteMetadata.description} />
 
@@ -533,13 +576,13 @@ class Layout extends Component {
           </>
         )}
       />
-    )
+    );
   }
 }
 
 Layout = connect((state) => ({
   app: state.app,
   env: state.env,
-}))(Layout)
+}))(Layout);
 
-export default Layout
+export default Layout;

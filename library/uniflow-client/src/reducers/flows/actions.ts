@@ -1,6 +1,11 @@
-import { COMMIT_PUSH_FLOW, COMMIT_POP_FLOW, COMMIT_UPDATE_FLOW, COMMIT_SET_RAIL } from "./actions-types"
-import request from "axios"
-import server from "../../utils/server"
+import {
+  COMMIT_PUSH_FLOW,
+  COMMIT_POP_FLOW,
+  COMMIT_UPDATE_FLOW,
+  COMMIT_SET_RAIL,
+} from './actions-types';
+import request from 'axios';
+import server from '../../utils/server';
 
 export const commitPushFlow = (index, flow) => {
   return async (dispatch) => {
@@ -8,19 +13,19 @@ export const commitPushFlow = (index, flow) => {
       type: COMMIT_PUSH_FLOW,
       index,
       flow,
-    })
-    return Promise.resolve()
-  }
-}
+    });
+    return Promise.resolve();
+  };
+};
 export const commitPopFlow = (index) => {
   return async (dispatch) => {
     dispatch({
       type: COMMIT_POP_FLOW,
       index,
-    })
-    return Promise.resolve()
-  }
-}
+    });
+    return Promise.resolve();
+  };
+};
 export const commitUpdateFlow = (index, data, codes) => {
   return async (dispatch) => {
     dispatch({
@@ -28,29 +33,29 @@ export const commitUpdateFlow = (index, data, codes) => {
       index,
       data,
       codes,
-    })
-    return Promise.resolve()
-  }
-}
+    });
+    return Promise.resolve();
+  };
+};
 export const commitSetFlows = (flows) => {
   return async (dispatch) => {
     dispatch({
       type: COMMIT_SET_RAIL,
       flows,
-    })
-    return Promise.resolve()
-  }
-}
+    });
+    return Promise.resolve();
+  };
+};
 
 export const getFlows = (page: number) => {
   return async (dispatch) => {
     return request
       .get(`${server.getBaseUrl()}/api/programs?page=${page}`)
       .then((response) => {
-        return response.data
+        return response.data;
       })
       .catch(() => {
-        return []
-      })
-  }
-}
+        return [];
+      });
+  };
+};

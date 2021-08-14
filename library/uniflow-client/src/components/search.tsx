@@ -1,28 +1,28 @@
-import React, { Component } from "react"
-import { Select } from "../components"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faDotCircle } from "@fortawesome/free-regular-svg-icons"
+import React, { Component } from 'react';
+import { Select } from '../components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDotCircle } from '@fortawesome/free-regular-svg-icons';
 
 export default class Search extends Component {
   state = {
-    search: "@uniflow-io/uniflow-flow-javascript",
-  }
+    search: '@uniflow-io/uniflow-flow-javascript',
+  };
 
   onSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (this.props.onPush) {
-      this.props.onPush(this.state.search)
+      this.props.onPush(this.state.search);
     }
-  }
+  };
 
   onChange = (value) => {
-    this.setState({ search: value })
-  }
+    this.setState({ search: value });
+  };
 
   render() {
-    const { programFlows } = this.props
-    const { search } = this.state
+    const { programFlows } = this.props;
+    const { search } = this.state;
 
     return (
       <form className="form-sm-horizontal" onSubmit={this.onSubmit}>
@@ -39,7 +39,7 @@ export default class Search extends Component {
                   className="form-control pull-right"
                   id="search{{ _uid }}"
                   options={programFlows.map((flow) => {
-                    return { value: flow.key, label: flow.label }
+                    return { value: flow.key, label: flow.label };
                   })}
                 />
               </div>
@@ -50,6 +50,6 @@ export default class Search extends Component {
           </div>
         </div>
       </form>
-    )
+    );
   }
 }

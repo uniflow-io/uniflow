@@ -1,22 +1,22 @@
-import React from "react"
-import { Newsletter } from "../views"
-import { graphql } from "gatsby"
-import { withPage } from "../helpers"
+import React from 'react';
+import { Newsletter } from '../views';
+import { graphql } from 'gatsby';
+import { withPage } from '../helpers';
 
 export default ({ data, location }) => {
-  const { newsletter } = data
+  const { newsletter } = data;
 
-  const NewsletterPage = withPage(Newsletter, "newsletter", {
+  const NewsletterPage = withPage(Newsletter, 'newsletter', {
     location: location,
     title: newsletter.frontmatter.title,
     description: newsletter.excerpt,
-  })
+  });
 
-  return <NewsletterPage newsletter={newsletter} />
-}
+  return <NewsletterPage newsletter={newsletter} />;
+};
 
 export const query = graphql`
-  query($id: String) {
+  query ($id: String) {
     newsletter: mdx(id: { eq: $id }) {
       body
       excerpt
@@ -30,4 +30,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;

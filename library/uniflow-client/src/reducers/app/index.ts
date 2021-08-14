@@ -1,9 +1,9 @@
-import { COMMIT_SET_PAGE, COMMIT_SET_THEME } from "./actions-types"
+import { COMMIT_SET_PAGE, COMMIT_SET_THEME } from './actions-types';
 
 const defaultState = {
-  page: "home",
-  theme: "light",
-}
+  page: 'home',
+  theme: 'light',
+};
 
 const app = (state = defaultState, action) => {
   switch (action.type) {
@@ -11,15 +11,15 @@ const app = (state = defaultState, action) => {
       return {
         ...state,
         page: action.page,
-      }
+      };
     case COMMIT_SET_THEME:
       return {
         ...state,
         theme: action.theme,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default app
+export default app;

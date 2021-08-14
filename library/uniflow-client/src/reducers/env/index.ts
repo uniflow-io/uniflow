@@ -1,9 +1,9 @@
-import { COMMIT_SET_ENV } from "./actions-types"
+import { COMMIT_SET_ENV } from './actions-types';
 
 const defaultState = {
   facebookAppId: null,
   githubAppId: null,
-}
+};
 
 const env = (state = defaultState, action) => {
   switch (action.type) {
@@ -11,10 +11,10 @@ const env = (state = defaultState, action) => {
       return {
         ...state,
         ...action.env,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default env
+export default env;

@@ -1,29 +1,29 @@
-import React from "react"
-import { pathTo } from "../../routes"
-import { Link, graphql } from "gatsby"
-import Img from "gatsby-image"
-import { faTag } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React from 'react';
+import { pathTo } from '../../routes';
+import { Link, graphql } from 'gatsby';
+import Img from 'gatsby-image';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ArticleItem = ({ article }) => (
   <div className="card card-link">
-    <Link className="btn btn-default" to={pathTo("article", { slug: article.fields.slug })}>
+    <Link className="btn btn-default" to={pathTo('article', { slug: article.fields.slug })}>
       Read More
     </Link>
     {(article.frontmatter.cover.childImageSharp && (
       <Img
         className="card-img-top"
         fluid={article.frontmatter.cover.childImageSharp.fluid}
-        style={{ maxHeight: "50vh" }}
+        style={{ maxHeight: '50vh' }}
         alt="Cover"
         width="100%"
       />
     )) ||
-      (article.frontmatter.cover.extension === "svg" && (
+      (article.frontmatter.cover.extension === 'svg' && (
         <img
           className="card-img-top"
           src={article.frontmatter.cover.publicURL}
-          style={{ maxHeight: "50vh" }}
+          style={{ maxHeight: '50vh' }}
           alt="Cover"
         />
       ))}
@@ -40,10 +40,10 @@ const ArticleItem = ({ article }) => (
               height="36"
               alt={article.frontmatter.author.name}
               className="rounded-circle mx-2"
-              style={{ verticalAlign: "middle" }}
+              style={{ verticalAlign: 'middle' }}
             />
             <Link
-              to={pathTo("contributor", {
+              to={pathTo('contributor', {
                 slug: article.frontmatter.author.fields.slug,
               })}
             >
@@ -55,7 +55,7 @@ const ArticleItem = ({ article }) => (
         </div>
         <div className="col-auto">
           {article.frontmatter.tags.map((tag, k) => (
-            <Link to={pathTo("tag", { tag: tag })} key={k} className="btn btn-sm btn-primary">
+            <Link to={pathTo('tag', { tag: tag })} key={k} className="btn btn-sm btn-primary">
               <FontAwesomeIcon icon={faTag} /> {tag}
             </Link>
           ))}
@@ -63,7 +63,7 @@ const ArticleItem = ({ article }) => (
       </div>
     </div>
   </div>
-)
+);
 
 export const query = graphql`
   fragment ArticleItemFragment on Mdx {
@@ -100,6 +100,6 @@ export const query = graphql`
     }
     timeToRead
   }
-`
+`;
 
-export default ArticleItem
+export default ArticleItem;

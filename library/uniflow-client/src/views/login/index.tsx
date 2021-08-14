@@ -1,42 +1,42 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
-import { login, facebookLoginUrl, githubLoginUrl } from "../../reducers/auth/actions"
-import { pathTo } from "../../routes"
-import { commitAddLog } from "../../reducers/logs/actions"
-import { Link, navigate } from "gatsby"
-import { faSignInAlt, faUser, faKey } from "@fortawesome/free-solid-svg-icons"
-import { faFacebookF, faGithub } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { login, facebookLoginUrl, githubLoginUrl } from '../../reducers/auth/actions';
+import { pathTo } from '../../routes';
+import { commitAddLog } from '../../reducers/logs/actions';
+import { Link, navigate } from 'gatsby';
+import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
+import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Login extends Component {
   state = {
-    username: "",
-    password: "",
-  }
+    username: '',
+    password: '',
+  };
 
   onChangeUsername = (event) => {
-    this.setState({ username: event.target.value })
-  }
+    this.setState({ username: event.target.value });
+  };
 
   onChangePassword = (event) => {
-    this.setState({ password: event.target.value })
-  }
+    this.setState({ password: event.target.value });
+  };
 
   onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     this.props.dispatch(login(this.state.username, this.state.password)).then(() => {
       if (this.props.auth.isAuthenticated) {
-        return navigate(pathTo("feed"))
+        return navigate(pathTo('feed'));
       } else {
-        return this.props.dispatch(commitAddLog(this.props.auth.statusText))
+        return this.props.dispatch(commitAddLog(this.props.auth.statusText));
       }
-    })
-  }
+    });
+  };
 
   render() {
-    const { auth, env } = this.props
-    const { username, password } = this.state
+    const { auth, env } = this.props;
+    const { username, password } = this.state;
 
     return (
       <section className="section container-fluid">
@@ -55,7 +55,7 @@ class Login extends Component {
                         className="form-control"
                         id="username{{ _uid }}"
                         type="text"
-                        value={username || ""}
+                        value={username || ''}
                         onChange={this.onChangeUsername}
                         placeholder="Email or Username"
                       />
@@ -70,7 +70,7 @@ class Login extends Component {
                         className="form-control"
                         id="password{{ _uid }}"
                         type="password"
-                        value={password || ""}
+                        value={password || ''}
                         onChange={this.onChangePassword}
                         placeholder="Password"
                       />
@@ -95,7 +95,10 @@ class Login extends Component {
                   <div className="row mb-3">
                     <div className="col-md-12">
                       <div className="d-grid">
-                        <a href={facebookLoginUrl(env.facebookAppId)} className="btn btn-social btn-facebook">
+                        <a
+                          href={facebookLoginUrl(env.facebookAppId)}
+                          className="btn btn-social btn-facebook"
+                        >
                           <FontAwesomeIcon icon={faFacebookF} /> Login with Facebook
                         </a>
                       </div>
@@ -106,7 +109,10 @@ class Login extends Component {
                   <div className="row">
                     <div className="col-md-12">
                       <div className="d-grid">
-                        <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
+                        <a
+                          href={githubLoginUrl(env.githubAppId)}
+                          className="btn btn-social btn-github"
+                        >
                           <FontAwesomeIcon icon={faGithub} /> Login with Github
                         </a>
                       </div>
@@ -116,15 +122,15 @@ class Login extends Component {
               </article>
             </div>
             <p>
-              <Link to={pathTo("register")}>
-                <span className="glyphicon glyphicon-log-in register" aria-hidden="true" />{" "}
+              <Link to={pathTo('register')}>
+                <span className="glyphicon glyphicon-log-in register" aria-hidden="true" />{' '}
                 <FontAwesomeIcon icon={faSignInAlt} /> Register
               </Link>
             </p>
           </div>
         </div>
       </section>
-    )
+    );
   }
 }
 
@@ -132,5 +138,5 @@ export default connect((state) => {
   return {
     auth: state.auth,
     env: state.env,
-  }
-})(Login)
+  };
+})(Login);

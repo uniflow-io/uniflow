@@ -1,38 +1,38 @@
-import { Log } from "../../models"
-import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from "./actions-types"
+import { Log } from '../../models';
+import { COMMIT_ADD_LOG, COMMIT_READ_LOG } from './actions-types';
 
-let id = 1
-const defaultState = {}
+let id = 1;
+const defaultState = {};
 
 const logs = (state = defaultState, action) => {
   switch (action.type) {
     case COMMIT_ADD_LOG:
-      let item = new Log({
+      const item = new Log({
         id: id,
         message: action.message,
-        status: "new",
-      })
-      id++
+        status: 'new',
+      });
+      id++;
 
-      state[item.id] = item
+      state[item.id] = item;
       return {
         ...state,
-      }
+      };
     case COMMIT_READ_LOG:
       return Object.keys(state).map((key) => {
-        let item = state[key]
+        const item = state[key];
         if (item.id !== action.id) {
-          return item
+          return item;
         }
 
         return {
           ...item,
-          ...{ status: "read" },
-        }
-      })
+          ...{ status: 'read' },
+        };
+      });
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default logs
+export default logs;

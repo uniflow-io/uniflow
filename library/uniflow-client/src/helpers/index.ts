@@ -1,2 +1,2 @@
-export { default as requireAuthentication } from "./require-authentication"
-export { default as withPage } from "./with-page"
+export { default as requireAuthentication } from './require-authentication';
+export { default as withPage } from './with-page';

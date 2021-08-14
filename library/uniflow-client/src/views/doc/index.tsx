@@ -1,16 +1,16 @@
-import React, { Component } from "react"
-import { Link } from "gatsby"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Navigation from "./navigation"
-import { faEdit } from "@fortawesome/free-regular-svg-icons"
-import { pathTo } from "../../routes"
-import { MDXProvider } from "../../components"
+import React, { Component } from 'react';
+import { Link } from 'gatsby';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Navigation from './navigation';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+import { pathTo } from '../../routes';
+import { MDXProvider } from '../../components';
 
 class Index extends Component {
   render() {
-    const { doc, docNav, previous, next } = this.props
+    const { doc, docNav, previous, next } = this.props;
 
     return (
       <div className="container-fluid">
@@ -40,7 +40,7 @@ class Index extends Component {
               <div className="col-auto mr-auto">
                 {previous && (
                   <Link
-                    to={pathTo("doc", previous.fields.slug ? { slug: previous.fields.slug } : {})}
+                    to={pathTo('doc', previous.fields.slug ? { slug: previous.fields.slug } : {})}
                     className="pull-left"
                   >
                     <FontAwesomeIcon icon={faArrowLeft} /> {previous.frontmatter.title}
@@ -49,7 +49,10 @@ class Index extends Component {
               </div>
               <div className="col-auto">
                 {next && (
-                  <Link to={pathTo("doc", next.fields.slug ? { slug: next.fields.slug } : {})} className="pull-right">
+                  <Link
+                    to={pathTo('doc', next.fields.slug ? { slug: next.fields.slug } : {})}
+                    className="pull-right"
+                  >
                     {next.frontmatter.title} <FontAwesomeIcon icon={faArrowRight} />
                   </Link>
                 )}
@@ -58,8 +61,8 @@ class Index extends Component {
           </section>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Index
+export default Index;

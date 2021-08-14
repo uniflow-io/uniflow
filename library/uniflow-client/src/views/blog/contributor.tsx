@@ -1,12 +1,12 @@
-import React, { Component } from "react"
-import ArticleItem from "./articleItem"
-import Img from "gatsby-image"
-import { faTwitter } from "@fortawesome/free-brands-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { Component } from 'react';
+import ArticleItem from './articleItem';
+import Img from 'gatsby-image';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Contributor extends Component {
   render() {
-    const { contributor, articles } = this.props
+    const { contributor, articles } = this.props;
 
     return (
       <section className="section container-fluid">
@@ -54,8 +54,8 @@ class Contributor extends Component {
           </div>
         </div>
       </section>
-    )
+    );
   }
 }
 
-export default Contributor
+export default Contributor;

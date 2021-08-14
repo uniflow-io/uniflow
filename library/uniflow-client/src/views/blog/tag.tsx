@@ -1,11 +1,11 @@
-import React, { Component } from "react"
-import { pathTo } from "../../routes"
-import { Link } from "gatsby"
-import ArticleItem from "./articleItem"
+import React, { Component } from 'react';
+import { pathTo } from '../../routes';
+import { Link } from 'gatsby';
+import ArticleItem from './articleItem';
 
 class Tag extends Component {
   render() {
-    const { tag, articles } = this.props
+    const { tag, articles } = this.props;
 
     return (
       <section className="section container-fluid">
@@ -17,7 +17,7 @@ class Tag extends Component {
             </p>
             <p>
               <div className="d-grid">
-                <Link to={pathTo("tags")} className="btn btn-primary">
+                <Link to={pathTo('tags')} className="btn btn-primary">
                   View all tags
                 </Link>
               </div>
@@ -36,8 +36,8 @@ class Tag extends Component {
           </div>
         </div>
       </section>
-    )
+    );
   }
 }
 
-export default Tag
+export default Tag;
