@@ -14,14 +14,6 @@ A Flow here is viewed as :
   layer.
 - an isolated implemented process for business-logic at bottom layer.
 
-## What is a Rail ?
-
-[Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/) pattern
-in functional programming presents a program, or its part, as a pipeline of
-functions : output of one function is an input for another.
-
-A Rail is then a representation of the Flows that will be executed.
-
 ## What is a Program ?
 
 A Program is globally use for naming and identifying a Rail and it's Flows. As a

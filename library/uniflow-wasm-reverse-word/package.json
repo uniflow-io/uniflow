@@ -35,9 +35,9 @@
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
   },
   "dependencies": {
-    "@assemblyscript/loader": "^0.19.4"
+    "@assemblyscript/loader": "^0.19.11"
   },
   "devDependencies": {
-    "assemblyscript": "^0.19.4"
+    "assemblyscript": "^0.19.11"
   }
 }
