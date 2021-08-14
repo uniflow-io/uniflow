@@ -4,6 +4,7 @@ import config from './config';
 export default async function server() {
   const PORT = config.get('port');
 
+  // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
   const app = express();
   app.use('/', express.static('./public'));
 

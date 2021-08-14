@@ -5,6 +5,7 @@ import ArticleItem from './articleItem';
 
 class Tag extends Component {
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'tag' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
     const { tag, articles } = this.props;
 
     return (

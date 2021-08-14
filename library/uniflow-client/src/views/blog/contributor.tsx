@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Contributor extends Component {
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'contributor' does not exist on type 'Rea... Remove this comment to see the full error message
     const { contributor, articles } = this.props;
 
     return (

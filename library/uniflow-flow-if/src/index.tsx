@@ -34,6 +34,7 @@ class IfFlow extends Component {
   constructor(props) {
     super(props)
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     this.store = {
       if: {
         conditionFlows: [],
@@ -114,12 +115,14 @@ class IfFlow extends Component {
           return store
             .dispatch(commitPushFlow(index, item.flow))
             .then(() => {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
               return store.dispatch(commitUpdateFlow(index, item.data))
             })
             .then(() => {
               return store
             })
         })
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       }, Promise.resolve(createStore(flows)))
     }
 
@@ -149,6 +152,7 @@ class IfFlow extends Component {
       data && data.else ? createStoreFlows(data.else || []) : null,
     ])
       .then(([ifConditionFlows, ifExecuteFlows, elseIfsFlows, elseFlows]) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
         this.store = {
           if: {
             conditionFlows: ifConditionFlows,
@@ -164,8 +168,10 @@ class IfFlow extends Component {
 
         let state = {
           if: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
             conditionFlows: this.store.if.conditionFlows.getState(),
             conditionRunIndex: null,
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
             executeFlows: this.store.if.executeFlows.getState(),
             executeRunIndex: null,
           },
@@ -173,6 +179,7 @@ class IfFlow extends Component {
           else: null,
         }
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
         this.store.elseIfs.forEach(elseIf => {
           state.elseIfs.push({
             conditionFlows: elseIf.conditionFlows.getState(),
@@ -182,14 +189,17 @@ class IfFlow extends Component {
           })
         })
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
         if (this.store.else) {
           state.else = {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
             executeFlows: this.store.else.executeFlows.getState(),
             executeRunIndex: null,
           }
         }
 
         return new Promise(resolve => {
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState(state, resolve)
         }).then(() => {
           return state
@@ -216,6 +226,7 @@ class IfFlow extends Component {
   }
 
   dispatchFlow = (propertyPath, action) => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     let store = this.store
     propertyPath.forEach(key => {
       store = store[key]
@@ -231,9 +242,11 @@ class IfFlow extends Component {
             el = el[key]
           })
           el[propertyPath[propertyPath.length - 1]] = store.getState()
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState(state, resolve)
         })
       })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'onUpdate' does not exist on type 'IfFlow... Remove this comment to see the full error message
       .then(this.onUpdate)
   }
 
@@ -246,12 +259,14 @@ class IfFlow extends Component {
   }
 
   onUpdateFlow = (propertyPath, index, data) => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     this.dispatchFlow(propertyPath, commitUpdateFlow(index, data))
   }
 
   onRemoveElseIf = (event, index) => {
     event.preventDefault()
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     this.store.elseIfs.splice(index, 1)
 
     let elseIfs = this.state.elseIfs.slice()
@@ -262,8 +277,11 @@ class IfFlow extends Component {
   onAddElseIf = event => {
     event.preventDefault()
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     this.store.elseIfs.push({
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       conditionFlows: createStore(flows),
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       executeFlows: createStore(flows),
     })
 
@@ -280,6 +298,7 @@ class IfFlow extends Component {
   onRemoveElse = event => {
     event.preventDefault()
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     this.store.else = null
 
     this.setState({ else: null }, onUpdate(this))
@@ -288,7 +307,9 @@ class IfFlow extends Component {
   onAddElse = event => {
     event.preventDefault()
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'IfFlow'.
     this.store.else = {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       executeFlows: createStore(flows),
     }
 
@@ -304,6 +325,7 @@ class IfFlow extends Component {
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning } = this.state
 
@@ -317,9 +339,12 @@ class IfFlow extends Component {
           onDelete={onDelete(this)}
         />
         <Flows
+          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           flows={this.state.if.conditionFlows}
           runIndex={this.state.if.conditionRunIndex}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
           allFlows={this.props.allFlows}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
           programFlows={this.props.programFlows}
           onPush={(index, flow) => {
             this.onPushFlow(['if', 'conditionFlows'], index, flow)
@@ -338,9 +363,12 @@ class IfFlow extends Component {
           </div>
         </div>
         <Flows
+          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           flows={this.state.if.executeFlows}
           runIndex={this.state.if.executeRunIndex}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
           allFlows={this.props.allFlows}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
           programFlows={this.props.programFlows}
           onPush={(index, flow) => {
             this.onPushFlow(['if', 'executeFlows'], index, flow)
@@ -365,9 +393,12 @@ class IfFlow extends Component {
               }}
             />
             <Flows
+              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               flows={item.conditionFlows}
               runIndex={item.conditionRunIndex}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
               allFlows={this.props.allFlows}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
               programFlows={this.props.programFlows}
               onPush={(index, flow) => {
                 this.onPushFlow(
@@ -394,9 +425,12 @@ class IfFlow extends Component {
               </div>
             </div>
             <Flows
+              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               flows={item.executeFlows}
               runIndex={item.executeRunIndex}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
               allFlows={this.props.allFlows}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
               programFlows={this.props.programFlows}
               onPush={(index, flow) => {
                 this.onPushFlow(
@@ -429,9 +463,12 @@ class IfFlow extends Component {
               onDelete={this.onRemoveElse}
             />
             <Flows
+              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               flows={this.state.else.executeFlows}
               runIndex={this.state.else.executeRunIndex}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
               allFlows={this.props.allFlows}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
               programFlows={this.props.programFlows}
               onPush={(index, flow) => {
                 this.onPushFlow(['else', 'executeFlows'], index, flow)

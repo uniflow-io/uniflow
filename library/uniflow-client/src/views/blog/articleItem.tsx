@@ -16,6 +16,7 @@ const ArticleItem = ({ article }) => (
         fluid={article.frontmatter.cover.childImageSharp.fluid}
         style={{ maxHeight: '50vh' }}
         alt="Cover"
+        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
         width="100%"
       />
     )) ||
@@ -36,6 +37,7 @@ const ArticleItem = ({ article }) => (
             Posted {article.frontmatter.date} by
             <Img
               fixed={article.frontmatter.author.image.childImageSharp.fixed}
+              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               width="36"
               height="36"
               alt={article.frontmatter.author.name}

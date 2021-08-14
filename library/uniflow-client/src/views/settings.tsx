@@ -33,9 +33,12 @@ class Settings extends Component {
   };
 
   componentDidMount() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     this.setState({ user: Object.assign({}, this.props.user) });
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     if (this.props.user.links.lead) {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       this.props.dispatch(getLead(this.props.user.links.lead)).then((data) => {
         this.setState({
           lead: {
@@ -53,10 +56,14 @@ class Settings extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     if (prevProps.user !== this.props.user) {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       this.setState({ user: Object.assign({}, this.props.user) });
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       if (this.props.user.links.lead) {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         this.props.dispatch(getLead(this.props.user.links.lead)).then((data) => {
           this.setState({
             lead: {
@@ -100,11 +107,13 @@ class Settings extends Component {
 
   onRevokeFacebook = (event) => {
     event.preventDefault();
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(event: any) => void' is not ass... Remove this comment to see the full error message
     this.setState({ user: { ...this.state.user, ...{ facebookId: null } } }, this.onUpdate);
   };
 
   onRevokeGithub = (event) => {
     event.preventDefault();
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(event: any) => void' is not ass... Remove this comment to see the full error message
     this.setState({ user: { ...this.state.user, ...{ githubId: null } } }, this.onUpdate);
   };
 
@@ -134,10 +143,12 @@ class Settings extends Component {
     const { user, lead } = this.state;
 
     new Promise((resolve) => {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
       this.setState({ isSaving: true }, resolve);
     })
       .then(() => {
         if (user.links.lead) {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
           return this.props.dispatch(
             updateLead(user.links.lead, {
               optinNewsletter: lead.optinNewsletter,
@@ -148,6 +159,7 @@ class Settings extends Component {
         }
 
         if (lead.optinNewsletter || lead.optinBlog) {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
           return this.props.dispatch(
             createLead({
               email: user.email,
@@ -158,6 +170,7 @@ class Settings extends Component {
         }
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(updateSettings(user, this.props.auth.token));
       })
       .then(() => {
@@ -173,6 +186,7 @@ class Settings extends Component {
       apiKey += chars.charAt(Math.floor(Math.random() * chars.length));
     }
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(commitUpdateSettings({ ...this.props.user, ...{ apiKey: apiKey } }));
   };
 
@@ -192,6 +206,7 @@ class Settings extends Component {
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
     const { env } = this.props;
     const { user, lead, isSaving } = this.state;
     const clipboard = this.getClipboard(user);
@@ -334,6 +349,7 @@ class Settings extends Component {
 
             <div className="col-sm-10">
               <Checkbox
+                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                 className="form-control-plaintext"
                 value={lead.optinNewsletter}
                 onChange={this.onChangeOptinNewsletter}
@@ -348,6 +364,7 @@ class Settings extends Component {
 
             <div className="col-sm-10">
               <Checkbox
+                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                 className="form-control-plaintext"
                 value={lead.optinBlog}
                 onChange={this.onChangeOptinBlog}
@@ -366,6 +383,7 @@ class Settings extends Component {
 
               <div className="col-sm-10">
                 <Checkbox
+                  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                   className="form-control-plaintext"
                   value={lead.optinGithub}
                   onChange={this.onChangeOptinGithub}
@@ -396,8 +414,11 @@ class Settings extends Component {
 
 export default connect((state) => {
   return {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
     env: state.env,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     user: state.user,
   };
 })(Settings);

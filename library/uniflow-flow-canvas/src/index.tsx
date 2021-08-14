@@ -67,6 +67,7 @@ class CanvasFlow extends Component {
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning, variable, width, height } = this.state
 
@@ -147,6 +148,7 @@ class CanvasFlow extends Component {
 
             <div className="col-sm-10">
               <canvas
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'canvas' does not exist on type 'CanvasFl... Remove this comment to see the full error message
                 ref={canvas => (this.canvas = canvas)}
                 id="canvas{{ _uid }}"
                 width={width}

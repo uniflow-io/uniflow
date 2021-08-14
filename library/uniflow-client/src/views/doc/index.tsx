@@ -10,11 +10,13 @@ import { MDXProvider } from '../../components';
 
 class Index extends Component {
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'doc' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
     const { doc, docNav, previous, next } = this.props;
 
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Navigation docNav={docNav} slug={doc.fields.slug} />
           <section className="section col">
             <h3 className="mb-3">{doc.frontmatter.title}</h3>

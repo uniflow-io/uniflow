@@ -39,9 +39,12 @@ class Program extends Component {
   };
 
   componentDidMount() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program } = this.props;
 
+    // @ts-expect-error ts-migrate(2551) FIXME: Property '_componentIsMounted' does not exist on t... Remove this comment to see the full error message
     this._componentIsMounted = true;
+    // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
     this._componentShouldUpdate = true;
 
     this.setState({ folderTree: [program.path] });
@@ -50,14 +53,17 @@ class Program extends Component {
   }
 
   componentWillUnmount() {
+    // @ts-expect-error ts-migrate(2551) FIXME: Property '_componentIsMounted' does not exist on t... Remove this comment to see the full error message
     this._componentIsMounted = false;
   }
 
   componentDidUpdate(prevProps) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     if (this.props.program.uid !== prevProps.program.uid) {
       this.setState({
         slug: null,
         folderTreeEdit: false,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
         folderTree: [this.props.program.path],
       });
 
@@ -66,12 +72,14 @@ class Program extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
     return this._componentShouldUpdate;
   }
 
   onRun = (event, index) => {
     event.preventDefault();
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'Readonly<... Remove this comment to see the full error message
     const { flows } = this.props;
 
     const runner = new Runner();
@@ -79,27 +87,33 @@ class Program extends Component {
   };
 
   setFlows = (flows) => {
-    return this.props
-      .dispatch(commitSetFlows(flows))
-      .then(() => {
-        // hack fix to remove
-        return new Promise((resolve) => {
-          setTimeout(resolve, 500);
-        });
-      })
-      .then(() => {
-        return Promise.all(
-          this.props.flows.map((item) => {
-            return item.bus.emit('deserialize', item.data);
-          })
-        );
-      });
+    return (
+      this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
+        .dispatch(commitSetFlows(flows))
+        .then(() => {
+          // hack fix to remove
+          return new Promise((resolve) => {
+            setTimeout(resolve, 500);
+          });
+        })
+        .then(() => {
+          return Promise.all(
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'Readonly<... Remove this comment to see the full error message
+            this.props.flows.map((item) => {
+              return item.bus.emit('deserialize', item.data);
+            })
+          );
+        })
+    );
   };
 
   onPushFlow = (index, flow) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(commitPushFlow(index, flow))
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'Readonly<... Remove this comment to see the full error message
         return this.setFlows(this.props.flows);
       })
       .then(this.onUpdateFlowData);
@@ -107,8 +121,10 @@ class Program extends Component {
 
   onPopFlow = (index) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(commitPopFlow(index))
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'Readonly<... Remove this comment to see the full error message
         return this.setFlows(this.props.flows);
       })
       .then(this.onUpdateFlowData);
@@ -116,31 +132,39 @@ class Program extends Component {
 
   onUpdateFlow = (index, data) => {
     /** @todo find a way about code generation, for not storing code into the data flows */
+    // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
     this._componentShouldUpdate = false;
     Promise.all(
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
       this.props.program.clients.map((client) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'Readonly<... Remove this comment to see the full error message
         return this.props.flows[index].bus.emit('code', client);
       })
     )
       .then((clientsCodes) => {
         const codes = clientsCodes.reduce((data, codes, clientIndex) => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
           data[this.props.program.clients[clientIndex]] = codes.join(';');
           return data;
         }, {});
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitUpdateFlow(index, data, codes));
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
         this._componentShouldUpdate = true;
       })
       .then(this.onUpdateFlowData);
   };
 
   onFetchFlowData = debounce(() => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program } = this.props;
 
     Promise.resolve()
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitSetFlows([]));
       })
       .then(() => {
@@ -148,6 +172,7 @@ class Program extends Component {
           return program.data;
         }
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(getProgramData(program, this.props.auth.token));
       })
       .then((data) => {
@@ -155,24 +180,29 @@ class Program extends Component {
 
         program.data = data;
 
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
         if (program.slug !== this.props.program.slug) return;
 
         return this.setFlows(deserializeFlowsData(data));
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
         this._componentShouldUpdate = false;
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2551) FIXME: Property '_componentIsMounted' does not exist on t... Remove this comment to see the full error message
         if (this._componentIsMounted) {
           this.setState({ fetchedSlug: program.slug });
         }
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
         this._componentShouldUpdate = true;
       });
   }, 500);
 
   onUpdateFlowData = debounce(() => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program, flows, user, feed } = this.props;
     if (program.slug !== this.state.fetchedSlug) return;
 
@@ -180,13 +210,17 @@ class Program extends Component {
     if ((feed.uid === 'me' || user.uid === feed.uid) && program.data !== data) {
       program.data = data;
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
       this._componentShouldUpdate = false;
       this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         .dispatch(setProgramData(program, this.props.auth.token))
         .then(() => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property '_componentShouldUpdate' does not exist o... Remove this comment to see the full error message
           this._componentShouldUpdate = true;
         })
         .catch((log) => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
           return this.props.dispatch(commitAddLog(log.message));
         });
     }
@@ -194,10 +228,12 @@ class Program extends Component {
 
   onChangeTitle = (event) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ name: event.target.value },
           },
@@ -212,10 +248,12 @@ class Program extends Component {
 
   onChangePath = (selected) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ path: selected },
           },
@@ -226,10 +264,12 @@ class Program extends Component {
 
   onChangeClients = (clients) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ clients: clients },
           },
@@ -240,10 +280,12 @@ class Program extends Component {
 
   onChangeTags = (tags) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ tags: tags },
           },
@@ -254,10 +296,12 @@ class Program extends Component {
 
   onChangeDescription = (description) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ description: description },
           },
@@ -268,10 +312,12 @@ class Program extends Component {
 
   onChangePublic = (value) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         commitUpdateFeed({
           type: 'program',
           entity: {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
             ...this.props.program,
             ...{ public: value },
           },
@@ -281,10 +327,13 @@ class Program extends Component {
   };
 
   onUpdate = debounce(() => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program } = this.props;
     program.slug = this.state.slug ?? program.slug;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(updateProgram(program, this.props.auth.token)).then((program) => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       const path = toFeedPath(program, this.props.user);
       if (typeof window !== `undefined` && window.location.pathname !== path) {
         navigate(path);
@@ -295,19 +344,24 @@ class Program extends Component {
   onDuplicate = (event) => {
     event.preventDefault();
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const program = this.props.program;
     program.name += ' Copy';
 
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
       .then((item) => {
         Object.assign(program, item);
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(setProgramData(program, this.props.auth.token));
       })
       .then(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
         return navigate(toFeedPath(program, this.props.user));
       })
       .catch((log) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitAddLog(log.message));
       });
   };
@@ -315,18 +369,24 @@ class Program extends Component {
   onDelete = (event) => {
     event.preventDefault();
 
-    return this.props
-      .dispatch(deleteProgram(this.props.program, this.props.auth.token))
-      .then(() => {
-        return navigate(toFeedPath(this.props.program, this.props.user, true));
-      });
+    return (
+      this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
+        .dispatch(deleteProgram(this.props.program, this.props.auth.token))
+        .then(() => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
+          return navigate(toFeedPath(this.props.program, this.props.user, true));
+        })
+    );
   };
 
   onFolderEdit = (event) => {
     event.preventDefault();
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { feed } = this.props;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
       this.setState({
         folderTreeEdit: true,
@@ -336,6 +396,7 @@ class Program extends Component {
   };
 
   getFlows = (program) => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
     const { allFlows } = this.props;
     const flowLabels = [];
     const keys = Object.keys(allFlows);
@@ -364,6 +425,7 @@ class Program extends Component {
   };
 
   getNodeClipboard = () => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program, user } = this.props;
 
     if (user.apiKey) {
@@ -380,6 +442,7 @@ class Program extends Component {
   };
 
   getRustClipboard = () => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program, user } = this.props;
 
     if (user.apiKey) {
@@ -396,6 +459,7 @@ class Program extends Component {
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'program' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { program, tags, flows, user, allFlows } = this.props;
     const { folderTreeEdit, folderTree } = this.state;
     const programFlows = this.getFlows(program);
@@ -470,6 +534,7 @@ class Program extends Component {
             <div className="col-sm-10">
               {(folderTreeEdit && (
                 <Select
+                  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; onChange: (selected: any) => v... Remove this comment to see the full error message
                   value={program.path}
                   onChange={this.onChangePath}
                   className="form-control"
@@ -496,6 +561,7 @@ class Program extends Component {
 
             <div className="col-sm-10">
               <Select
+                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; onChange: (clients: any) => vo... Remove this comment to see the full error message
                 value={program.clients}
                 onChange={this.onChangeClients}
                 className="form-control"
@@ -515,6 +581,7 @@ class Program extends Component {
 
             <div className="col-sm-10">
               <Select
+                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; onChange: (tags: any) => void;... Remove this comment to see the full error message
                 value={program.tags}
                 onChange={this.onChangeTags}
                 className="form-control"
@@ -536,6 +603,7 @@ class Program extends Component {
 
             <div className="col-sm-10">
               <Checkbox
+                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                 className="form-control-plaintext"
                 value={program.public}
                 onChange={this.onChangePublic}
@@ -551,6 +619,7 @@ class Program extends Component {
 
             <div className="col-sm-10">
               <Ace
+                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ className: string; id: string; value: any;... Remove this comment to see the full error message
                 className="form-control"
                 id="info_description_{{ _uid }}"
                 value={program.description}
@@ -566,6 +635,7 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="row">
                 <div className="col">
+                  {/* @ts-expect-error ts-migrate(2322) FIXME: Type '(event: any, index: any) => void' is not ass... Remove this comment to see the full error message */}
                   <button className="btn btn-primary" onClick={this.onRun}>
                     <FontAwesomeIcon icon={faPlay} /> Play
                   </button>
@@ -573,6 +643,7 @@ class Program extends Component {
               </div>
             );
           } else if (client === 'node') {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
             const clipboard = this.getNodeClipboard(user);
 
             return (
@@ -602,6 +673,7 @@ class Program extends Component {
               </div>
             );
           } else if (client === 'rust') {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
             const clipboard = this.getRustClipboard(user);
 
             return (
@@ -638,6 +710,7 @@ class Program extends Component {
         <hr />
 
         <Flows
+          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           flows={flows}
           allFlows={allFlows}
           programFlows={programFlows}
@@ -654,10 +727,15 @@ class Program extends Component {
 
 export default connect((state) => {
   return {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     user: state.user,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     tags: getTags(state.feed),
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     feed: state.feed,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flows' does not exist on type 'DefaultRo... Remove this comment to see the full error message
     flows: state.flows,
   };
 })(Program);

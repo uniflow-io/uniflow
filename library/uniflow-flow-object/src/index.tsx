@@ -159,6 +159,7 @@ class ObjectFlow extends Component {
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning, variable, keyValueList } = this.state
 

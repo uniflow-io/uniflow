@@ -48,6 +48,7 @@ class Navigation extends Component {
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'library' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { library, slug } = this.props;
 
     return (

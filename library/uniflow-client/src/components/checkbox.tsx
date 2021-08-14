@@ -9,14 +9,18 @@ const gen = () => {
 
 export default class Checkbox extends Component {
   onChange = (event) => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
     const { value } = this.props;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'onChange' does not exist on type 'Readon... Remove this comment to see the full error message
     if (this.props.onChange) {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'onChange' does not exist on type 'Readon... Remove this comment to see the full error message
       this.props.onChange(!value);
     }
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
     const { value, label, className } = this.props;
     const uid = gen();
     return (

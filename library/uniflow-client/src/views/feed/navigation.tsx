@@ -30,40 +30,49 @@ class Navigation extends Component {
 
   onCreateFolder = (event) => {
     event.preventDefault();
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { feed } = this.props;
     const folderPath = feed.parentFolder
       ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`
       : '/';
 
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         createFolder(
           {
             name: this.state.search,
             path: folderPath,
           },
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
           this.props.auth.uid,
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
           this.props.auth.token
         )
       )
       .then((item) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(setSlugFeed(null)).then(() => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
           navigate(toFeedPath(item, this.props.user));
         });
       })
       .catch((log) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitAddLog(log.message));
       });
   };
 
   onSubmit = (event) => {
     event.preventDefault();
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { feed } = this.props;
     const folderPath = feed.parentFolder
       ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`
       : '/';
 
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         createProgram(
           {
@@ -72,28 +81,36 @@ class Navigation extends Component {
             tags: [],
             path: folderPath,
           },
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
           this.props.auth.uid,
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
           this.props.auth.token
         )
       )
       .then((item) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
         return navigate(toFeedPath(item, this.props.user));
       })
       .catch((log) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitAddLog(log.message));
       });
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { user, feed } = this.props;
     const currentItem = getFeedItem(feed);
     const isFolderActive = () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       return this.props.feed.parentFolder &&
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
         this.props.feed.parentFolder.slug === this.props.feed.slug
         ? 'active'
         : null;
     };
     const isActive = (item) => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'entity' does not exist on type 'unknown'... Remove this comment to see the full error message
       return currentItem && currentItem.entity.slug === item.entity.slug ? 'active' : null;
     };
 
@@ -130,20 +147,24 @@ class Navigation extends Component {
         <nav className={`sidebar-nav${this.state.collapse ? ' d-none d-sm-block' : ''}`}>
           <div className="sidebar-section">
             <ul className="sidebar-items">
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
               {this.props.feed.parentFolder && [
                 <li key={'back'}>
                   <span className="link">
                     <FontAwesomeIcon icon={faArrowLeft} /> Back
                   </span>
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
                   <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user, true)}>
                     Back
                   </Link>
                 </li>,
                 <li className={isFolderActive()} key={'folder'}>
                   <span className="link">.</span>
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
                   <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user)}>.</Link>
                 </li>,
               ]}
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
               {getOrderedFeed(this.props.feed, this.state.search).map((item, i) => (
                 <li className={isActive(item)} key={i}>
                   <span className="link">
@@ -172,7 +193,10 @@ class Navigation extends Component {
 }
 
 export default connect((state) => ({
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
   auth: state.auth,
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
   user: state.user,
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
   feed: state.feed,
 }))(Navigation);

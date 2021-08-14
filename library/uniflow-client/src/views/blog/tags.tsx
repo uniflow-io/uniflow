@@ -5,6 +5,7 @@ import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Tags = ({ tags }) => {
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(tag1: string, tag2: string) => ... Remove this comment to see the full error message
   const orderedTags = Object.keys(tags).sort((tag1, tag2) => {
     return tags[tag1] > tags[tag2];
   });

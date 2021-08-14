@@ -143,6 +143,7 @@ export const matchRoute = (pathname) => {
 
   for (let i = 0; i < keys.length; i++) {
     route = keys[i];
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
     match = matchPath(pathname, {
       path: routes[route].path,
       exact: routes[route].exact,

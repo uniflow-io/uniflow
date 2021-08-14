@@ -30,6 +30,7 @@ class WhileFlow extends Component {
   constructor(props) {
     super(props)
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'WhileFlow... Remove this comment to see the full error message
     this.store = {
       conditionFlows: [],
       executeFlows: [],
@@ -80,12 +81,14 @@ class WhileFlow extends Component {
           return store
             .dispatch(commitPushFlow(index, item.flow))
             .then(() => {
+              // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
               return store.dispatch(commitUpdateFlow(index, item.data))
             })
             .then(() => {
               return store
             })
         })
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       }, Promise.resolve(createStore(flows)))
     }
 
@@ -94,19 +97,23 @@ class WhileFlow extends Component {
       createStoreFlows(data ? data.execute : []),
     ])
       .then(([conditionFlows, executeFlows]) => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'WhileFlow... Remove this comment to see the full error message
         this.store = {
           conditionFlows: conditionFlows,
           executeFlows: executeFlows,
         }
 
         let state = {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'WhileFlow... Remove this comment to see the full error message
           conditionFlows: this.store.conditionFlows.getState(),
           conditionRunIndex: null,
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'WhileFlow... Remove this comment to see the full error message
           executeFlows: this.store.executeFlows.getState(),
           executeRunIndex: null,
         }
 
         return new Promise(resolve => {
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState(state, resolve)
         }).then(() => {
           return state
@@ -126,6 +133,7 @@ class WhileFlow extends Component {
   }
 
   dispatchFlow = (propertyPath, action) => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'store' does not exist on type 'WhileFlow... Remove this comment to see the full error message
     let store = this.store
     propertyPath.forEach(key => {
       store = store[key]
@@ -141,6 +149,7 @@ class WhileFlow extends Component {
             el = el[key]
           })
           el[propertyPath[propertyPath.length - 1]] = store.getState()
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState(state, resolve)
         })
       })
@@ -156,10 +165,12 @@ class WhileFlow extends Component {
   }
 
   onUpdateFlow = (propertyPath, index, data) => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     this.dispatchFlow(propertyPath, commitUpdateFlow(index, data))
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning } = this.state
 
@@ -173,9 +184,12 @@ class WhileFlow extends Component {
           onDelete={onDelete(this)}
         />
         <Flows
+          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           flows={this.state.conditionFlows}
           runIndex={this.state.conditionRunIndex}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
           allFlows={this.props.allFlows}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
           programFlows={this.props.programFlows}
           onPush={(index, flow) => {
             this.onPushFlow(['conditionFlows'], index, flow)
@@ -194,9 +208,12 @@ class WhileFlow extends Component {
           </div>
         </div>
         <Flows
+          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           flows={this.state.executeFlows}
           runIndex={this.state.executeRunIndex}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'allFlows' does not exist on type 'Readon... Remove this comment to see the full error message
           allFlows={this.props.allFlows}
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
           programFlows={this.props.programFlows}
           onPush={(index, flow) => {
             this.onPushFlow(['executeFlows'], index, flow)

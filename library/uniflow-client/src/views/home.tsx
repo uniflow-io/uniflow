@@ -20,6 +20,7 @@ class Home extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         .dispatch(
           createLead({
             email: this.state.email,
@@ -34,6 +35,7 @@ class Home extends Component {
         })
         .catch((error) => {
           if (error instanceof ApiException) {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type 'ApiExcep... Remove this comment to see the full error message
             this.setState({ state: 'form', errors: { ...error.errors } });
           }
         });
@@ -116,9 +118,11 @@ class Home extends Component {
                   )}
                   {(state === 'form' || state === 'sending') && (
                     <div
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'.
                       className={`input-group input-group-lg${errors.email ? ' is-invalid' : ''}`}
                     >
                       <input
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'.
                         className={`form-control${errors.email ? ' is-invalid' : ''}`}
                         id="email{{ _uid }}"
                         type="text"
@@ -134,11 +138,14 @@ class Home extends Component {
                       >
                         Subscribe to the newsletter
                       </button>
+                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'. */}
                       {errors.email &&
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'.
                         errors.email.map((message, i) => (
                           <div
                             key={`error-${i}`}
                             className="invalid-feedback"
+                            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: any; key: string; className: str... Remove this comment to see the full error message
                             htmlFor="email{{ _uid }}"
                           >
                             {message}

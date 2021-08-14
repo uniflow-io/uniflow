@@ -26,6 +26,7 @@ class Contact extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         .dispatch(contact(this.state.email, this.state.message))
         .then((data) => {
           if (data === true) {
@@ -34,6 +35,7 @@ class Contact extends Component {
         })
         .catch((error) => {
           if (error instanceof ApiException) {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type 'ApiExcep... Remove this comment to see the full error message
             this.setState({ state: 'form', errors: { ...error.errors } });
           }
         });
@@ -65,6 +67,7 @@ class Contact extends Component {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <input
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'.
                       className={`form-control${errors.email ? ' is-invalid' : ''}`}
                       id="email{{ _uid }}"
                       type="text"
@@ -72,11 +75,14 @@ class Contact extends Component {
                       onChange={this.onChangeEmail}
                       placeholder="Email"
                     />
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'. */}
                     {errors.email &&
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'.
                       errors.email.map((message, i) => (
                         <div
                           key={`error-${i}`}
                           className="invalid-feedback"
+                          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: any; key: string; className: str... Remove this comment to see the full error message
                           htmlFor="email{{ _uid }}"
                         >
                           {message}
@@ -88,19 +94,24 @@ class Contact extends Component {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <textarea
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'message' does not exist on type '{}'.
                       className={`form-control${errors.message ? ' is-invalid' : ''}`}
                       id="message{{ _uid }}"
                       type="message"
                       value={message || ''}
                       onChange={this.onChangeMessage}
                       placeholder="Message"
+                      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
                       rows="15"
                     />
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'message' does not exist on type '{}'. */}
                     {errors.message &&
+                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'message' does not exist on type '{}'.
                       errors.message.map((message, i) => (
                         <div
                           key={`error-${i}`}
                           className="invalid-feedback"
+                          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: any; key: string; className: str... Remove this comment to see the full error message
                           htmlFor="message{{ _uid }}"
                         >
                           {message}
@@ -134,6 +145,7 @@ class Contact extends Component {
 
 export default connect((state) => {
   return {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
     env: state.env,
   };
 })(Contact);

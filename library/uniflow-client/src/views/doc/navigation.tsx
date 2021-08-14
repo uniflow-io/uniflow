@@ -52,6 +52,7 @@ class Navigation extends Component {
   };
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'docNav' does not exist on type 'Readonly... Remove this comment to see the full error message
     const { docNav, slug } = this.props;
 
     return (

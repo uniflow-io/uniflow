@@ -16,6 +16,7 @@ export default class Log {
   constructor(data) {
     Object.assign(this, data);
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Log'.
     this.created = moment(this.created);
   }
 }

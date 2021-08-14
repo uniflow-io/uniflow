@@ -6,6 +6,7 @@ import { MDXProvider } from '../components';
 
 class Newsletter extends Component {
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'newsletter' does not exist on type 'Read... Remove this comment to see the full error message
     const { newsletter } = this.props;
 
     return (

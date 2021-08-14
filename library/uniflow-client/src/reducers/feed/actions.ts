@@ -124,6 +124,7 @@ export const getFeedItem = (feed, slug = feed.slug) => {
   }
 
   for (const item of Object.values(feed.items)) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'entity' does not exist on type 'unknown'... Remove this comment to see the full error message
     if (item.entity.slug === slug) {
       return item;
     }
@@ -179,6 +180,7 @@ export const getOrderedFeed = (state, filter) => {
       } else if (item.type === 'folder') {
         words.push(item.entity.name);
       }
+      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'any[]'.
       words = words.join(' ').toLowerCase();
 
       return words.indexOf(filter) !== -1;

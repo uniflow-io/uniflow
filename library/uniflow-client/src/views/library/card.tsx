@@ -9,6 +9,7 @@ import { MDXProvider } from '../../components';
 
 class Card extends Component {
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'library' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { library, card, logo } = this.props;
     let repository = card.repository.url;
     let editUrl = null;
@@ -20,6 +21,7 @@ class Card extends Component {
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Navigation library={library} slug={card.fields.slug} />
           <section className="section col">
             <div className="row mb-3">
@@ -44,6 +46,7 @@ class Card extends Component {
                       <span>
                         <Img
                           fixed={logo.childImageSharp.fixed}
+                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                           width="18"
                           height="18"
                           className="svg-inline--fa"

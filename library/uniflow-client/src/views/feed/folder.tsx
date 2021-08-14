@@ -21,16 +21,19 @@ class Folder extends Component {
   };
 
   componentDidMount() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
     const { folder } = this.props;
 
     this.setState({ folderTree: [folder.path] });
   }
 
   componentDidUpdate(prevProps) {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
     if (this.props.folder.uid !== prevProps.folder.uid) {
       this.setState({
         slug: null,
         folderTreeEdit: false,
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
         folderTree: [this.props.folder.path],
       });
     }
@@ -38,8 +41,10 @@ class Folder extends Component {
 
   onChangeTitle = (event) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         setParentFolderFeed({
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
           ...this.props.folder,
           ...{ name: event.target.value },
         })
@@ -55,8 +60,10 @@ class Folder extends Component {
 
   onChangePath = (selected) => {
     this.props
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       .dispatch(
         setParentFolderFeed({
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
           ...this.props.folder,
           ...{ path: selected },
         })
@@ -67,10 +74,13 @@ class Folder extends Component {
   };
 
   onUpdate = debounce(() => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
     const { folder } = this.props;
     folder.slug = this.state.slug ?? folder.slug;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(updateParentFolder(folder, this.props.auth.token)).then((folder) => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       const path = toFeedPath(folder, this.props.user);
       if (typeof window !== `undefined` && window.location.pathname !== path) {
         navigate(path);
@@ -81,18 +91,24 @@ class Folder extends Component {
   onDelete = (event) => {
     event.preventDefault();
 
-    return this.props
-      .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
-      .then(() => {
-        navigate(toFeedPath(this.props.folder, this.props.user, true));
-      });
+    return (
+      this.props
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
+        .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
+        .then(() => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
+          navigate(toFeedPath(this.props.folder, this.props.user, true));
+        })
+    );
   };
 
   onFolderEdit = (event) => {
     event.preventDefault();
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { feed, folder } = this.props;
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
       folderTree = folderTree.filter((value) => {
         return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
@@ -107,6 +123,7 @@ class Folder extends Component {
 
   render() {
     const { folderTreeEdit, folderTree } = this.state;
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'folder' does not exist on type 'Readonly... Remove this comment to see the full error message
     const { folder } = this.props;
     folder.slug = this.state.slug ?? folder.slug;
 
@@ -169,6 +186,7 @@ class Folder extends Component {
             <div className="col-sm-10">
               {(folderTreeEdit && (
                 <Select
+                  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; onChange: (selected: any) => v... Remove this comment to see the full error message
                   value={folder.path}
                   onChange={this.onChangePath}
                   className="form-control"
@@ -195,8 +213,11 @@ class Folder extends Component {
 
 export default connect((state) => {
   return {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     user: state.user,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     feed: state.feed,
   };
 })(Folder);

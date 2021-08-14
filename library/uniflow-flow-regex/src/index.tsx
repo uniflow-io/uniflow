@@ -96,6 +96,7 @@ class RegexFlow extends Component {
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning, variable, expression } = this.state
 
@@ -150,6 +151,7 @@ class RegexFlow extends Component {
 
             <div className="col-sm-10">
               <Ace
+                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ className: string; id: string; value: any;... Remove this comment to see the full error message
                 className="form-control"
                 id="expression{{ _uid }}"
                 value={expression}

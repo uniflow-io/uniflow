@@ -82,6 +82,7 @@ class AssetsFlow extends Component {
             reader.onload = e => {
               let newStateAssets = this.state.assets.slice()
               newStateAssets.push([file.name, e.target.result])
+              // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
               this.setState({ assets: newStateAssets }, resolve)
             }
             reader.readAsText(file)
@@ -102,6 +103,7 @@ class AssetsFlow extends Component {
     let url = window.URL.createObjectURL(blob)
     a.href = url
     a.download = this.state.assets[index][0]
+    // @ts-expect-error ts-migrate(2540) FIXME: Cannot assign to 'style' because it is a read-only... Remove this comment to see the full error message
     a.style = 'display: none'
     document.body.appendChild(a)
     a.click()
@@ -131,6 +133,7 @@ class AssetsFlow extends Component {
   }
 
   render() {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const { isRunning, variable, assets } = this.state
 

@@ -11,6 +11,7 @@ if (!envFound) {
   throw new Error(`Couldn't find .env.${activeEnv} file`);
 }
 
+// @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
 const config = convict({
   port: {
     format: Number,
