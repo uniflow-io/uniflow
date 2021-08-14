@@ -13,18 +13,17 @@ import { commitLogoutUser } from "../user/actions"
 import { pathTo } from "../../routes"
 import { Bus } from "../../models"
 
-const fetchCollection = (uid, type, path, page, config) => {
+const fetchCollection = (uid, type, path, page, config, items = []) => {
   return request
     .get(`${server.getBaseUrl()}/api/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`, config)
     .then((response) => {
       const { data, total } = response.data
-      if(data < total) {
-        return fetchCollection(uid, type, path, page + 1, config).then((nextData) => {
-          return data.concat(nextData)
-        })
+      items = items.concat(data)
+      if(items.length < total) {
+        return fetchCollection(uid, type, path, page + 1, config, items)
       }
 
-      return data
+      return items
     })
 }
 
