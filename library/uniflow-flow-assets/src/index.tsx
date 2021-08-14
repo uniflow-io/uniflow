@@ -167,17 +167,15 @@ class AssetsFlow extends Component {
             <div key={index} className="row">
               <div className="col-sm-10 offset-sm-2">
                 <div className="input-group">
-                  <div className="input-group-prepend">
-                    <button
-                      type="button"
-                      className="input-group-text"
-                      onClick={event => {
-                        this.onDownloadFile(event, index)
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faDownload} />
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="input-group-text"
+                    onClick={event => {
+                      this.onDownloadFile(event, index)
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faDownload} />
+                  </button>
                   <input
                     type="text"
                     value={asset[0]}

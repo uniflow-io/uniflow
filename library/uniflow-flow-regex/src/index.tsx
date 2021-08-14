@@ -169,15 +169,13 @@ class RegexFlow extends Component {
             </label>
             <div className="col-sm-10">
               <div className="input-group">
-                <div className="input-group-prepend">
-                  <button
-                    type="button"
-                    className="input-group-text"
-                    onClick={this.onCopyGenerated}
-                  >
-                    <FontAwesomeIcon icon={faClipboard} />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="input-group-text"
+                  onClick={this.onCopyGenerated}
+                >
+                  <FontAwesomeIcon icon={faClipboard} />
+                </button>
                 <input
                   type="text"
                   className="form-control"
