@@ -1,13 +1,14 @@
 import { Command, flags } from '@oclif/command';
 import * as open from 'open';
+import { StartCommand } from '.';
 
 import config from '../config';
 import app from '../server';
 
 let processExistCode = 0;
 
-export class Start extends Command {
-  static description = 'Starts uniflow client.';
+export default class StartCommandCommand extends Command {
+  static description = 'StartCommands uniflow client.';
 
   static examples = [`$ uniflow-client start`, `$ uniflow-client start -o`];
 
@@ -50,10 +51,10 @@ export class Start extends Command {
 
   async run() {
     // Make sure that uniflow shuts down gracefully if possible
-    process.on('SIGTERM', Start.stopProcess);
-    process.on('SIGINT', Start.stopProcess);
+    process.on('SIGTERM', StartCommand.stopProcess);
+    process.on('SIGINT', StartCommand.stopProcess);
 
-    const { flags } = this.parse(Start);
+    const { flags } = this.parse(StartCommand);
 
     // Wrap that the process does not close but we can still use async
     (async () => {
@@ -71,16 +72,16 @@ export class Start extends Command {
           let inputText = '';
 
           if (flags.open) {
-            Start.openBrowser();
+            StartCommand.openBrowser();
           }
           this.log(`\nPress "o" to open in Browser.`);
           process.stdin.on('data', (key: string) => {
             if (key === 'o') {
-              Start.openBrowser();
+              StartCommand.openBrowser();
               inputText = '';
             } else if (key.charCodeAt(0) === 3) {
               // Ctrl + c got pressed
-              Start.stopProcess();
+              StartCommand.stopProcess();
             } else {
               // When anything else got pressed, record it and send it on enter into the child process
               if (key.charCodeAt(0) === 13) {

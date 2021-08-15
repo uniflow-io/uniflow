@@ -1,3 +1,5 @@
+const { exit } = require('@oclif/errors');
+
 const projectPath = './';
 const docsPath = '../../docs';
 const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development';
@@ -52,22 +54,23 @@ module.exports = {
     {
       resolve: `gatsby-plugin-sitemap`,
       options: {
-        serialize: ({ site, allSitePage }) =>
-          allSitePage.edges.map((edge) => {
-            if (edge.node.path === '/') {
-              return {
-                url: site.siteMetadata.siteUrl,
-                changefreq: `daily`,
-                priority: 1,
-              };
-            }
-
+        serialize: (page, { resolvePagePath }) => {
+          const path = resolvePagePath(page)
+          
+          if(path === '/') {
             return {
-              url: site.siteMetadata.siteUrl + edge.node.path,
-              changefreq: `monthly`,
-              priority: 0.7,
-            };
-          }),
+              url: `${path}`,
+              changefreq: `daily`,
+              priority: 1,
+            }
+          }
+
+          return {
+            url: `${path}`,
+            changefreq: `monthly`,
+            priority: 0.7,
+          }
+        },
       },
     },
     {
