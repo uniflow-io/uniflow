@@ -479,10 +479,10 @@ class Program extends Component {
           <div className="d-block col-auto">
             <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
               <div className="btn-group-sm" role="group">
-                <button type="button" className="btn" onClick={this.onDuplicate}>
+                <button type="button" className="btn text-secondary" onClick={this.onDuplicate}>
                   <FontAwesomeIcon icon={faClone} />
                 </button>
-                <button type="button" className="btn" onClick={this.onDelete}>
+                <button type="button" className="btn text-secondary" onClick={this.onDelete}>
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
               </div>

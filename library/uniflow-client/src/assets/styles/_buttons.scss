@@ -14,6 +14,10 @@
 
 .btn-social {
   color: var(--text-color);
+
+  &:hover {
+    color: var(--text-hover-color);
+  }
 }
 
 .btn-social {

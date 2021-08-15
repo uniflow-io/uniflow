@@ -6,10 +6,11 @@ $app-themes: ();
 
 @each $app-theme, $app-colors in $app-themes {
   body.theme-#{$app-theme} {
-    @each $color, $value in $app-colors {
-      --#{$color}-color: #{$value};
+    @each $name, $value in $app-colors {
+      --#{$name}-color: #{$value};
     }
 
+    --text-hover-color: #{darken(map-get($app-colors, 'text'), 15%)};
     --navbar-top-color: #{rgba(map-get($app-colors, 'bg'), 0.8)};
 
     @each $color, $value in $theme-colors {
