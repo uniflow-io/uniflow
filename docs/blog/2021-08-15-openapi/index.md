@@ -5,11 +5,11 @@ author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
 coverAuthor: Swagger IO
-coverOriginalUrl: https://swagger.io/
+coverOriginalUrl: https://swagger.io
 tags: ["blog"]
 ---
 
-Uniflow migrate it's [api](https://api.uniflow.io/api/docs) to OpenApi. 🔨
+Uniflow migrate it's [api](https://api.uniflow.io/docs) to OpenApi. 🔨
 This allows better control and standardisation for fetching, querying and validating data.
 
 As well as internal upgradre to [Gatsby 3](https://www.gatsbyjs.com), [Bootstrap 5](https://getbootstrap.com) and [Typescript](https://www.typescriptlang.org). ⚙️
