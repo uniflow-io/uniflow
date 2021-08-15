@@ -431,29 +431,29 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
   }
 
   private imagesInline(): Transformer {
-    const transformer = async (node: Node, file: VFile): Promise<Node> => {
+    const transformer = async (node: any, file: VFile): Promise<Node> => {
       if (!file.path) {
         return node
       }
 
-      if (node.type === 'image' && node.data!.url && /\.png$/.test(node.data!.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
+      if (node.type === 'image' && node.url && /\.png$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.data!.url = `data:image/png;base64,${base64}`
-      } else if (node.type === 'image' && node.data!.url && /\.jpg$/.test(node.data!.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
+        node.url = `data:image/png;base64,${base64}`
+      } else if (node.type === 'image' && node.url && /\.jpg$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.data!.url = `data:image/jpg;base64,${base64}`
-      } else if (node.type === 'image' && node.data!.url && /\.gif$/.test(node.data!.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
+        node.url = `data:image/jpg;base64,${base64}`
+      } else if (node.type === 'image' && node.url && /\.gif$/.test(node.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.data!.url = `data:image/gif;base64,${base64}`
+        node.url = `data:image/gif;base64,${base64}`
       }
     
-      if ((node as Parent).children) {
+      if (node.children) {
         let parent = node as Parent;
         for (let child of parent.children) {
           transformer(child, file)

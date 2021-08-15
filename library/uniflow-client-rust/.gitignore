@@ -1,9 +1,0 @@
-# logs
-/*.log
-
-# npm
-/node_modules
-
-# rust
-/target
-/**/*.rs.bk
