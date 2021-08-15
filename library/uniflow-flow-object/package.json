@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/uniflow-flow-object",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "description": "Uniflow object flow",
   "author": {
     "name": "Mathieu Ledru",
@@ -43,7 +43,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
-    "@uniflow-io/uniflow-client": "^1.1.13",
+    "@uniflow-io/uniflow-client": "^1.1.14",
     "property-accessor": "^1.0.0",
     "react": "^17.0.2"
   }
