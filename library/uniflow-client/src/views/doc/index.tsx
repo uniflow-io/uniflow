@@ -39,7 +39,7 @@ class Index extends Component {
             </div>
 
             <div className="row">
-              <div className="col-auto mr-auto">
+              <div className="col-auto me-auto">
                 {previous && (
                   <Link
                     to={pathTo('doc', previous.fields.slug ? { slug: previous.fields.slug } : {})}

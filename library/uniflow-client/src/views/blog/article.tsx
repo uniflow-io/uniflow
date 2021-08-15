@@ -54,7 +54,7 @@ class Article extends Component {
                 height="36"
                 alt={article.frontmatter.author.name}
                 className="rounded-circle mx-2"
-                style={{ verticalAlign: 'middle' }} />
+                style={{ verticalAlign: 'middle', display: 'inline-block' }} />
               <Link
                 to={pathTo('contributor', {
                   slug: article.frontmatter.author.fields.slug,
@@ -86,7 +86,7 @@ class Article extends Component {
         </div>
 
         <div className="row">
-          <div className="col-auto mr-auto">
+          <div className="col-auto me-auto">
             {previous && (
               <Link to={pathTo('article', { slug: previous.fields.slug })} className="pull-left">
                 <FontAwesomeIcon icon={faArrowLeft} /> {previous.frontmatter.title}

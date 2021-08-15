@@ -31,7 +31,7 @@ const ArticleItem = ({ article }) => (
       <h4 className="card-title text-center">{article.frontmatter.title}</h4>
       <p className="card-text text-center">{article.excerpt}</p>
       <div className="row pt-1">
-        <div className="col-auto mr-auto">
+        <div className="col-auto me-auto">
           <small>
             Posted {article.frontmatter.date} by
             <GatsbyImage
@@ -41,7 +41,7 @@ const ArticleItem = ({ article }) => (
               height="36"
               alt={article.frontmatter.author.name}
               className="rounded-circle mx-2"
-              style={{ verticalAlign: 'middle' }} />
+              style={{ verticalAlign: 'middle', display: 'inline-block' }} />
             <Link
               to={pathTo('contributor', {
                 slug: article.frontmatter.author.fields.slug,

@@ -27,7 +27,7 @@ class Card extends Component {
             <div className="row mb-3">
               <div className="col-sm-12">
                 <div className="row text-secondary">
-                  <div className="col-auto mr-auto">
+                  <div className="col-auto me-auto">
                     <p>
                       <a href={repository} target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faGithub} /> View on GitHub
