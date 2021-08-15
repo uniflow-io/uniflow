@@ -10,7 +10,6 @@ import { MDXProvider } from '../../components';
 
 class Article extends Component {
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'article' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { article, previous, next } = this.props;
 
     return (
@@ -49,7 +48,6 @@ class Article extends Component {
               Posted {article.frontmatter.date} by
               <GatsbyImage
                 image={article.frontmatter.author.image.childImageSharp.gatsbyImageData}
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                 width="36"
                 height="36"
                 alt={article.frontmatter.author.name}

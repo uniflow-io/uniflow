@@ -14,7 +14,6 @@ const logs = (state = defaultState, action) => {
       });
       id++;
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Log'.
       state[item.id] = item;
       return {
         ...state,

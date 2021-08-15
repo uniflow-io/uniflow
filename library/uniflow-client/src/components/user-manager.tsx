@@ -10,7 +10,6 @@ class UserManager extends Component {
   };
 
   componentDidMount() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { auth, location } = this.props;
 
     if (auth.isAuthenticated) {
@@ -21,7 +20,6 @@ class UserManager extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { auth, location } = this.props;
 
     if (auth.isAuthenticated && auth.token !== prevProps.auth.token) {
@@ -34,7 +32,6 @@ class UserManager extends Component {
   }
 
   onLocation = (location) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { auth } = this.props;
     const match = matchRoute(location.pathname);
 
@@ -52,9 +49,7 @@ class UserManager extends Component {
   };
 
   onFetchUser = (uid, token) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     Promise.all([this.props.dispatch(fetchSettings(uid, token))]).then(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Readon... Remove this comment to see the full error message
       const { location } = this.props;
 
       this.onLocation(location);
@@ -62,7 +57,6 @@ class UserManager extends Component {
   };
 
   isCachedFeed = (uid, paths = []) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { feed } = this.props;
     if (
       feed.uid === undefined ||
@@ -81,12 +75,10 @@ class UserManager extends Component {
     if (paths.length === 0 && feed.parentFolder === null) {
       return true;
     } else if (paths.length === 1 && feed.parentFolder === null) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'unknown'.
       if (item.type === 'folder') {
         return false;
       }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       this.props.dispatch(commitSetSlugFeed(slug));
       return true;
     } else if (paths.length === 1 && feed.parentFolder) {
@@ -94,7 +86,6 @@ class UserManager extends Component {
         feed.parentFolder.path === '/' ? '' : feed.parentFolder.path
       }/${feed.parentFolder.slug}`;
       if (parentFolderRealPath === path) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         this.props.dispatch(commitSetSlugFeed(null));
         return true;
       }
@@ -103,16 +94,13 @@ class UserManager extends Component {
         feed.parentFolder.path === '/' ? '' : feed.parentFolder.path
       }/${feed.parentFolder.slug}`;
       if (parentFolderRealPath === path) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         this.props.dispatch(commitSetSlugFeed(null));
         return true;
       } else if (parentFolderRealPath === parentPath) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'unknown'.
         if (item.type === 'folder') {
           return false;
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         this.props.dispatch(commitSetSlugFeed(slug));
 
         return true;
@@ -124,7 +112,6 @@ class UserManager extends Component {
 
   onFetchItem = (uid, paths = []) => {
     const { fetching } = this.state;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { auth } = this.props;
 
     if (fetching) {
@@ -134,7 +121,6 @@ class UserManager extends Component {
     Promise.resolve()
       .then(async () => {
         return new Promise((resolve) => {
-          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState({ fetching: true }, resolve);
         });
       })
@@ -144,12 +130,10 @@ class UserManager extends Component {
         }
 
         const token = auth.isAuthenticated ? auth.token : null;
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(fetchFeed(uid, paths, token));
       })
       .then(async () => {
         return new Promise((resolve) => {
-          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
           this.setState({ fetching: false }, resolve);
         });
       });
@@ -162,11 +146,8 @@ class UserManager extends Component {
 
 export default connect((state) => {
   return {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     user: state.user,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     feed: state.feed,
   };
 })(UserManager);

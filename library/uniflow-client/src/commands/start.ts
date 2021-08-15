@@ -26,7 +26,6 @@ export default class StartCommandCommand extends Command {
   static openBrowser() {
     const url = `http://localhost:${config.get('port')}`;
 
-    // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
     open(url, { wait: true }).catch((error: Error) => {
       console.log(
         `\nWas not able to open URL in browser. Please open manually by visiting:\n${url}\n`
@@ -100,7 +99,6 @@ export default class StartCommandCommand extends Command {
         this.error(`There was an error: ${error.message}`);
 
         processExistCode = 1;
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"SIGINT"' is not assignable to p... Remove this comment to see the full error message
         process.emit('SIGINT');
       }
     })();

@@ -9,7 +9,6 @@ import { MDXProvider } from '../../components';
 
 class Card extends Component {
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'library' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { library, card, logo } = this.props;
     let repository = card.repository.url;
     let editUrl = null;
@@ -46,7 +45,6 @@ class Card extends Component {
                       <span>
                         <GatsbyImage
                           image={logo.childImageSharp.gatsbyImageData}
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                           width="18"
                           height="18"
                           className="svg-inline--fa"

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 class Select extends Component {
   onChange = (data) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'onChange' does not exist on type 'Readon... Remove this comment to see the full error message
     const { onChange, multiple } = this.props;
     if (onChange) {
       if (multiple === true) {
@@ -21,7 +20,6 @@ class Select extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
     const { value, options, edit, multiple, app } = this.props;
     const customStyles = {
       light: {
@@ -131,6 +129,5 @@ class Select extends Component {
 }
 
 export default connect((state) => ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'app' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
   app: state.app,
 }))(Select);

@@ -26,7 +26,6 @@ class PromptFlow extends Component {
   constructor(props) {
     super(props)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'inputResolve' does not exist on type 'Pr... Remove this comment to see the full error message
     this.inputResolve = null
     setBusEvents(
       {
@@ -94,7 +93,6 @@ class PromptFlow extends Component {
       let reader = new FileReader()
       reader.onerror = error
       reader.onload = e => {
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '(value: unknown) => void' is not... Remove this comment to see the full error message
         this.setState({ input: e.target.result }, resolve)
       }
       reader.readAsText(file)
@@ -104,15 +102,12 @@ class PromptFlow extends Component {
   onInputSave = event => {
     event.preventDefault()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'inputResolve' does not exist on type 'Pr... Remove this comment to see the full error message
     if (this.inputResolve) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'inputResolve' does not exist on type 'Pr... Remove this comment to see the full error message
       this.inputResolve()
     }
   }
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'clients' does not exist on type 'Readonl... Remove this comment to see the full error message
     const { clients, onRun } = this.props
     const {
       isRunning,
@@ -203,7 +198,6 @@ class PromptFlow extends Component {
 
             <div className="col-sm-10">
               <Select
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; onChange: (type: any) => void;... Remove this comment to see the full error message
                 value={type}
                 onChange={this.onChangeType}
                 className="form-control"
@@ -253,7 +247,6 @@ class PromptFlow extends Component {
 
               <div className="col-sm-10">
                 <Ace
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ className: string; id: string; value: any;... Remove this comment to see the full error message
                   className="form-control"
                   id="input_text{{ _uid }}"
                   value={input || ''}

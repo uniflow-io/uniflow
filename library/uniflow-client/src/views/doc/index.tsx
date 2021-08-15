@@ -10,7 +10,6 @@ import { MDXProvider } from '../../components';
 
 class Index extends Component {
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'doc' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
     const { doc, docNav, previous, next } = this.props;
 
     return (

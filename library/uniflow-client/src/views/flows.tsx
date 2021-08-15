@@ -17,7 +17,6 @@ class Flows extends Component {
 
   onFetchFlowsData = () => {
     const { page } = this.state;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(getFlows(page)).then((data) => {
       const programs = this.state.programs.slice().concat(data.data);
       this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 });
@@ -26,7 +25,6 @@ class Flows extends Component {
 
   render() {
     const { programs, loadMore } = this.state;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { user } = this.props;
 
     return (
@@ -64,7 +62,6 @@ class Flows extends Component {
 
 export default connect((state) => {
   return {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'user' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     user: state.user,
   };
 })(Flows);

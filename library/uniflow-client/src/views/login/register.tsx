@@ -25,20 +25,16 @@ class Register extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.dispatch(register(this.state.email, this.state.password)).then(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       if (this.props.auth.isAuthenticated) {
         return navigate(pathTo('feed'));
       } else {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         return this.props.dispatch(commitAddLog(this.props.auth.statusText));
       }
     });
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const { auth, env } = this.props;
     const { email, password } = this.state;
 
@@ -134,9 +130,7 @@ class Register extends Component {
 
 export default connect((state) => {
   return {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
     env: state.env,
   };
 })(Register);

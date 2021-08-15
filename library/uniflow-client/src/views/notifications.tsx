@@ -19,7 +19,6 @@ class Notifications extends Component {
   };
 
   componentDidMount() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Readon... Remove this comment to see the full error message
     const { location } = this.props;
 
     const uid = this.getId();
@@ -28,7 +27,6 @@ class Notifications extends Component {
     if (uid !== null && match) {
       if (match.route === 'notificationUnsubscribe') {
         this.props
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
           .dispatch(
             updateLead(uid, {
               optinNewsletter: false,
@@ -47,7 +45,6 @@ class Notifications extends Component {
           });
       } else if (match.route === 'notificationManage') {
         this.props
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
           .dispatch(getLead(uid))
           .then((data) => {
             this.setState({
@@ -76,7 +73,6 @@ class Notifications extends Component {
   }
 
   getId() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Readon... Remove this comment to see the full error message
     const m = this.props.location.search.match(/id=([^&]+)/);
     if (m) {
       return m[1];
@@ -104,7 +100,6 @@ class Notifications extends Component {
 
     this.setState({ state: 'sending' }, () => {
       this.props
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
         .dispatch(
           updateLead(lead.uid, {
             optinNewsletter: lead.optinNewsletter,
@@ -117,7 +112,6 @@ class Notifications extends Component {
         })
         .catch((error) => {
           if (error instanceof ApiException) {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type 'ApiExcep... Remove this comment to see the full error message
             this.setState({ state: 'form', errors: { ...error.errors } });
           }
         });
@@ -149,7 +143,6 @@ class Notifications extends Component {
 
               <div className="col-sm-10">
                 <Checkbox
-                  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                   className="form-control-plaintext"
                   value={lead.optinNewsletter}
                   onChange={this.onChangeOptinNewsletter}
@@ -167,7 +160,6 @@ class Notifications extends Component {
 
               <div className="col-sm-10">
                 <Checkbox
-                  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                   className="form-control-plaintext"
                   value={lead.optinBlog}
                   onChange={this.onChangeOptinBlog}
@@ -186,7 +178,6 @@ class Notifications extends Component {
 
                 <div className="col-sm-10">
                   <Checkbox
-                    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                     className="form-control-plaintext"
                     value={lead.optinGithub}
                     onChange={this.onChangeOptinGithub}
@@ -228,7 +219,6 @@ class Notifications extends Component {
 
 export default connect((state) => {
   return {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'auth' does not exist on type 'DefaultRoo... Remove this comment to see the full error message
     auth: state.auth,
   };
 })(Notifications);

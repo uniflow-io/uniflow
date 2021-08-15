@@ -11,9 +11,7 @@ export default class Search extends Component {
   onSubmit = (event) => {
     event.preventDefault();
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'onPush' does not exist on type 'Readonly... Remove this comment to see the full error message
     if (this.props.onPush) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'onPush' does not exist on type 'Readonly... Remove this comment to see the full error message
       this.props.onPush(this.state.search);
     }
   };
@@ -23,7 +21,6 @@ export default class Search extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'programFlows' does not exist on type 'Re... Remove this comment to see the full error message
     const { programFlows } = this.props;
     const { search } = this.state;
 
@@ -37,7 +34,6 @@ export default class Search extends Component {
             <div className="input-group">
               <div className="form-select">
                 <Select
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: string; onChange: (value: any) => v... Remove this comment to see the full error message
                   value={search}
                   onChange={this.onChange}
                   className="form-control pull-right"

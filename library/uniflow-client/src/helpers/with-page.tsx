@@ -6,12 +6,10 @@ import Helmet from 'react-helmet';
 export default function withPage(Component, page, seo) {
   class PageHelper extends React.Component {
     componentDidMount() {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Readon... Remove this comment to see the full error message
       this.props.dispatch(commitSetPage(page));
     }
 
     render() {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
       const { env } = this.props;
 
       return (
@@ -65,9 +63,7 @@ export default function withPage(Component, page, seo) {
   }
 
   return connect((state) => ({
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'env' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
     env: state.env,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'app' does not exist on type 'DefaultRoot... Remove this comment to see the full error message
     app: state.app,
   }))(PageHelper);
 }

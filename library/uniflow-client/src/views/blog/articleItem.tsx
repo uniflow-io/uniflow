@@ -16,7 +16,6 @@ const ArticleItem = ({ article }) => (
         className="card-img-top"
         style={{ maxHeight: '50vh' }}
         alt="Cover"
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
         width="100%" />
     )) ||
       (article.frontmatter.cover.extension === 'svg' && (
@@ -36,7 +35,6 @@ const ArticleItem = ({ article }) => (
             Posted {article.frontmatter.date} by
             <GatsbyImage
               image={article.frontmatter.author.image.childImageSharp.gatsbyImageData}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               width="36"
               height="36"
               alt={article.frontmatter.author.name}
