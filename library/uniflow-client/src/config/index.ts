@@ -1,4 +1,4 @@
-import * as convict from 'convict';
+import { default as convict } from 'convict';
 import * as dotenv from 'dotenv';
 
 const activeEnv = process.env.NODE_ENV || 'development';
@@ -11,7 +11,6 @@ if (!envFound) {
   throw new Error(`Couldn't find .env.${activeEnv} file`);
 }
 
-// @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
 const config = convict({
   port: {
     format: Number,

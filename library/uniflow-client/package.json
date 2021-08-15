@@ -30,7 +30,7 @@
     "public"
   ],
   "oclif": {
-    "commands": "./dist/commands",
+    "commands": "./dist/uniflow-client/src/commands",
     "bin": "uniflow-client"
   },
   "bin": "./bin/uniflow-client",

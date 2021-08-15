@@ -436,24 +436,24 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
         return node
       }
 
-      if (node.type === 'image' && node.url && /\.png$/.test(node.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.url as string);
+      if (node.type === 'image' && node.data!.url && /\.png$/.test(node.data!.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.url = `data:image/png;base64,${base64}`
-      } else if (node.type === 'image' && node.url && /\.jpg$/.test(node.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.url as string);
+        node.data!.url = `data:image/png;base64,${base64}`
+      } else if (node.type === 'image' && node.data!.url && /\.jpg$/.test(node.data!.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.url = `data:image/jpg;base64,${base64}`
-      } else if (node.type === 'image' && node.url && /\.gif$/.test(node.url as string)) {
-        let imagePath = path.resolve(file.dirname!, node.url as string);
+        node.data!.url = `data:image/jpg;base64,${base64}`
+      } else if (node.type === 'image' && node.data!.url && /\.gif$/.test(node.data!.url as string)) {
+        let imagePath = path.resolve(file.dirname!, node.data!.url as string);
         var bitmap = fs.readFileSync(imagePath);
         const base64 = Buffer.from(bitmap).toString('base64');
-        node.url = `data:image/gif;base64,${base64}`
+        node.data!.url = `data:image/gif;base64,${base64}`
       }
     
-      if (node.children) {
+      if ((node as Parent).children) {
         let parent = node as Parent;
         for (let child of parent.children) {
           transformer(child, file)
