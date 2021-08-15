@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ArticleItem from './articleItem';
-import Img from 'gatsby-image';
+import { GatsbyImage } from "gatsby-plugin-image";
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -16,7 +16,9 @@ class Contributor extends Component {
             <div className="user">
               <div className="user-header">
                 <div className="profile_pic">
-                  <Img fluid={contributor.image.childImageSharp.fluid} alt={contributor.name} />
+                  <GatsbyImage
+                    image={contributor.image.childImageSharp.gatsbyImageData}
+                    alt={contributor.name} />
                 </div>
               </div>
               <div className="user-body">

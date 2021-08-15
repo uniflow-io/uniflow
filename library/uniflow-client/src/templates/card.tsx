@@ -61,42 +61,39 @@ export default ({ data, location }) => {
     }
 */
 
-export const query = graphql`
-  query ($slug: String) {
-    localCard: npmLocalPackage(fields: { slug: { eq: $slug } }) {
+export const query = graphql`query ($slug: String) {
+  localCard: npmLocalPackage(fields: {slug: {eq: $slug}}) {
+    name
+    description
+    fields {
+      slug
+      catalogs
+    }
+    readme {
+      childMdx {
+        body
+      }
+    }
+    repository {
+      url
+      directory
+    }
+  }
+  localLibrary: allNpmLocalPackage {
+    nodes {
       name
       description
       fields {
         slug
         catalogs
       }
-      readme {
-        childMdx {
-          body
-        }
-      }
-      repository {
-        url
-        directory
-      }
-    }
-    localLibrary: allNpmLocalPackage {
-      nodes {
-        name
-        description
-        fields {
-          slug
-          catalogs
-        }
-      }
-    }
-    logo: file(sourceInstanceName: { eq: "images" }, relativePath: { eq: "logo.png" }) {
-      publicURL
-      childImageSharp {
-        fixed(width: 18, height: 18) {
-          ...GatsbyImageSharpFixed
-        }
-      }
     }
   }
+  logo: file(sourceInstanceName: {eq: "images"}, relativePath: {eq: "logo.png"}) {
+    publicURL
+    childImageSharp {
+      gatsbyImageData(width: 18, height: 18, layout: FIXED)
+    }
+  }
+}
 `;

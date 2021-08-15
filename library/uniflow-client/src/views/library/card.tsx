@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-import Img from 'gatsby-image';
+import { GatsbyImage } from "gatsby-plugin-image";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
@@ -44,14 +44,13 @@ class Card extends Component {
                   {card.official && (
                     <div className="col-auto">
                       <span>
-                        <Img
-                          fixed={logo.childImageSharp.fixed}
+                        <GatsbyImage
+                          image={logo.childImageSharp.gatsbyImageData}
                           // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
                           width="18"
                           height="18"
                           className="svg-inline--fa"
-                          alt="Uniflow"
-                        />{' '}
+                          alt="Uniflow" />{' '}
                         Official
                       </span>
                     </div>

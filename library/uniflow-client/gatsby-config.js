@@ -171,9 +171,15 @@ module.exports = {
         ],
       },
     },
-    `gatsby-transformer-yaml`,
-    `gatsby-transformer-sharp`,
+    `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
+    `gatsby-transformer-yaml`,
+    {
+      resolve: `gatsby-transformer-sharp`,
+      options: {
+        checkSupportedExtensions: false,
+      },
+    },
     {
       resolve: `gatsby-plugin-mdx`,
       options: {

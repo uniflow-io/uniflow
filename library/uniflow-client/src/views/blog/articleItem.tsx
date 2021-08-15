@@ -1,7 +1,7 @@
 import React from 'react';
 import { pathTo } from '../../routes';
 import { Link, graphql } from 'gatsby';
-import Img from 'gatsby-image';
+import { GatsbyImage } from "gatsby-plugin-image";
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -11,14 +11,13 @@ const ArticleItem = ({ article }) => (
       Read More
     </Link>
     {(article.frontmatter.cover.childImageSharp && (
-      <Img
+      <GatsbyImage
+        image={article.frontmatter.cover.childImageSharp.gatsbyImageData}
         className="card-img-top"
-        fluid={article.frontmatter.cover.childImageSharp.fluid}
         style={{ maxHeight: '50vh' }}
         alt="Cover"
         // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-        width="100%"
-      />
+        width="100%" />
     )) ||
       (article.frontmatter.cover.extension === 'svg' && (
         <img
@@ -35,15 +34,14 @@ const ArticleItem = ({ article }) => (
         <div className="col-auto mr-auto">
           <small>
             Posted {article.frontmatter.date} by
-            <Img
-              fixed={article.frontmatter.author.image.childImageSharp.fixed}
+            <GatsbyImage
+              image={article.frontmatter.author.image.childImageSharp.gatsbyImageData}
               // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
               width="36"
               height="36"
               alt={article.frontmatter.author.name}
               className="rounded-circle mx-2"
-              style={{ verticalAlign: 'middle' }}
-            />
+              style={{ verticalAlign: 'middle' }} />
             <Link
               to={pathTo('contributor', {
                 slug: article.frontmatter.author.fields.slug,
@@ -67,41 +65,36 @@ const ArticleItem = ({ article }) => (
   </div>
 );
 
-export const query = graphql`
-  fragment ArticleItemFragment on Mdx {
-    fields {
-      slug
-    }
-    excerpt
-    frontmatter {
-      title
-      author {
-        fields {
-          slug
-        }
-        name
-        image {
-          childImageSharp {
-            fixed(width: 36, height: 36) {
-              ...GatsbyImageSharpFixed
-            }
-          }
-        }
-      }
-      cover {
-        childImageSharp {
-          fluid {
-            ...GatsbyImageSharpFluid
-          }
-        }
-        extension
-        publicURL
-      }
-      tags
-      date(formatString: "MMMM Do YYYY")
-    }
-    timeToRead
+export const query = graphql`fragment ArticleItemFragment on Mdx {
+  fields {
+    slug
   }
+  excerpt
+  frontmatter {
+    title
+    author {
+      fields {
+        slug
+      }
+      name
+      image {
+        childImageSharp {
+          gatsbyImageData(width: 36, height: 36, layout: FIXED)
+        }
+      }
+    }
+    cover {
+      childImageSharp {
+        gatsbyImageData(layout: FULL_WIDTH)
+      }
+      extension
+      publicURL
+    }
+    tags
+    date(formatString: "MMMM Do YYYY")
+  }
+  timeToRead
+}
 `;
 
 export default ArticleItem;
