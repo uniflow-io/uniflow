@@ -31,9 +31,8 @@
     ],
     "clients": [
       "uniflow",
-      "jetbrains",
-      "chrome",
-      "node"
+      "node",
+      "vscode"
     ]
   },
   "dependencies": {

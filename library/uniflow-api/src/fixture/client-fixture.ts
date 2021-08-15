@@ -27,7 +27,7 @@ export default class ClientFixture implements FixtureInterface {
     }
 
     public async load() {
-        for(const name of ['uniflow', 'node', 'chrome', 'jetbrains', 'rust']) {
+        for(const name of ['uniflow', 'node', 'vscode']) {
             const client = await this.clientFactory.create({name})
             this.clients.push(client)
             await this.save(client)

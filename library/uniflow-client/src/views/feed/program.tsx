@@ -466,9 +466,7 @@ class Program extends Component {
     const clients = {
       uniflow: 'Uniflow',
       node: 'Node',
-      jetbrains: 'Jetbrains',
-      chrome: 'Chrome',
-      rust: 'Rust',
+      vscode: 'VSCode',
     };
     program.slug = this.state.slug ?? program.slug;
 
@@ -664,36 +662,6 @@ class Program extends Component {
                       type="text"
                       className="form-control"
                       id="program_node_api_key"
-                      value={clipboard || ''}
-                      readOnly
-                      placeholder="api key"
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          } else if (client === 'rust') {
-            // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-            const clipboard = this.getRustClipboard(user);
-
-            return (
-              <div key={`client-${client}`} className="row mb-3">
-                <label htmlFor="program_node_api_rust" className="col-sm-2 col-form-label">
-                  Rust usage
-                </label>
-                <div className="col-sm-10">
-                  <div className="input-group">
-                    <button
-                      type="button"
-                      className="input-group-text"
-                      onClick={this.onCopyRustUsage}
-                    >
-                      <FontAwesomeIcon icon={faClipboard} />
-                    </button>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="program_node_api_rust"
                       value={clipboard || ''}
                       readOnly
                       placeholder="api key"

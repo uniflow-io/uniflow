@@ -11,7 +11,7 @@ import {
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
 
-class JavascriptFlow extends Component {
+class CodeFlow extends Component {
   state = {
     isRunning: false,
     code: null,
@@ -50,7 +50,7 @@ class JavascriptFlow extends Component {
     this.setState({ code: data })
   }
 
-  onChangeJavascript = code => {
+  onChangeCode = code => {
     this.setState({ code: code }, onUpdate(this))
   }
 
@@ -62,7 +62,7 @@ class JavascriptFlow extends Component {
     return (
       <>
         <FlowHeader
-          title="Javascript"
+          title="Code"
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
@@ -74,7 +74,7 @@ class JavascriptFlow extends Component {
               htmlFor="code{{ _uid }}"
               className="col-sm-2 col-form-label"
             >
-              Javascript
+              Code
             </label>
 
             <div className="col-sm-10">
@@ -83,8 +83,8 @@ class JavascriptFlow extends Component {
                 className="form-control"
                 id="code{{ _uid }}"
                 value={code}
-                onChange={this.onChangeJavascript}
-                placeholder="Javascript"
+                onChange={this.onChangeCode}
+                placeholder="Code"
                 height="200"
                 mode="code"
               />
@@ -96,4 +96,4 @@ class JavascriptFlow extends Component {
   }
 }
 
-export default JavascriptFlow
+export default CodeFlow

@@ -1,7 +1,7 @@
 uniflow-flow-code
 -----------------------
 
-This is official Javascript Flow for Uniflow
+This is official Code Flow for Uniflow
 
 ## Documentation
 

@@ -343,8 +343,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   });
 };
 
-const replacePath = (_path) => (_path === `/` ? _path : _path.replace(/\/$/, ``));
-
 exports.onCreatePage = ({ page, actions }) => {
   const { createPage, deletePage } = actions;
 
@@ -353,6 +351,8 @@ exports.onCreatePage = ({ page, actions }) => {
     createPage(page);
   }
 
+  // https://www.gatsbyjs.com/docs/creating-and-modifying-pages/#removing-trailing-slashes
+  /*const replacePath = (_path) => (_path === `/` ? _path : _path.replace(/\/$/, ``));
   return new Promise((resolve) => {
     const oldPage = Object.assign({}, page);
     page.path = replacePath(page.path);
@@ -361,5 +361,5 @@ exports.onCreatePage = ({ page, actions }) => {
       createPage(page);
     }
     resolve();
-  });
+  });*/
 };

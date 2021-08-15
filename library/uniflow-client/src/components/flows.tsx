@@ -11,17 +11,9 @@ class UiFlow extends Component {
     if (tag !== 'search') {
       // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
-        '@uniflow-io/uniflow-flow-assets': () => import('../../../uniflow-flow-assets/src'),
-        '@uniflow-io/uniflow-flow-bash': () => import('../../../uniflow-flow-bash/src'),
-        '@uniflow-io/uniflow-flow-canvas': () => import('../../../uniflow-flow-canvas/src'),
-        '@uniflow-io/uniflow-flow-if': () => import('../../../uniflow-flow-if/src'),
-        '@uniflow-io/uniflow-flow-object': () => import('../../../uniflow-flow-object/src'),
-        '@uniflow-io/uniflow-flow-javascript': () => import('../../../uniflow-flow-javascript/src'),
+        '@uniflow-io/uniflow-flow-code': () => import('../../../uniflow-flow-code/src'),
         '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
-        '@uniflow-io/uniflow-flow-regex': () => import('../../../uniflow-flow-regex/src'),
         '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
-        '@uniflow-io/uniflow-flow-text-list': () => import('../../../uniflow-flow-text-list/src'),
-        '@uniflow-io/uniflow-flow-while': () => import('../../../uniflow-flow-while/src'),
       };
       // @ts-expect-error ts-migrate(2322) FIXME: Type 'LazyExoticComponent<ComponentType<any>>' is ... Remove this comment to see the full error message
       TagName = lazy(lasyImports[tag]);
