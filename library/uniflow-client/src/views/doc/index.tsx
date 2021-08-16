@@ -15,7 +15,6 @@ class Index extends Component {
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Navigation docNav={docNav} slug={doc.fields.slug} />
           <section className="section col">
             <h3 className="mb-3">{doc.frontmatter.title}</h3>

@@ -70,7 +70,6 @@ class Contact extends Component {
                       onChange={this.onChangeEmail}
                       placeholder="Email"
                     />
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'. */}
                     {errors.email &&
                       errors.email.map((message, i) => (
                         <div
@@ -95,7 +94,6 @@ class Contact extends Component {
                       placeholder="Message"
                       rows="15"
                     />
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'message' does not exist on type '{}'. */}
                     {errors.message &&
                       errors.message.map((message, i) => (
                         <div

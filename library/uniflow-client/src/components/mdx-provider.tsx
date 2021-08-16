@@ -44,7 +44,6 @@ const components = {
 
     return (
       <code {...props}>
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ layout: string; value: any; mode: string; ... Remove this comment to see the full error message */}
         <Ace layout="text" value={props.children} mode={mode} />
       </code>
     );

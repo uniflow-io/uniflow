@@ -123,24 +123,20 @@ class Navigation extends Component {
         <nav className={`sidebar-nav${this.state.collapse ? ' d-none d-sm-block' : ''}`}>
           <div className="sidebar-section">
             <ul className="sidebar-items">
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
               {this.props.feed.parentFolder && [
                 <li key={'back'}>
                   <span className="link">
                     <FontAwesomeIcon icon={faArrowLeft} /> Back
                   </span>
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
                   <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user, true)}>
                     Back
                   </Link>
                 </li>,
                 <li className={isFolderActive()} key={'folder'}>
                   <span className="link">.</span>
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
                   <Link to={toFeedPath(this.props.feed.parentFolder, this.props.user)}>.</Link>
                 </li>,
               ]}
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'feed' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
               {getOrderedFeed(this.props.feed, this.state.search).map((item, i) => (
                 <li className={isActive(item)} key={i}>
                   <span className="link">

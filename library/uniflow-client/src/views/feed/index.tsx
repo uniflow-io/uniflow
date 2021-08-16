@@ -14,11 +14,9 @@ class Feed extends Component {
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
           <Navigation />
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'unknown'. */}
           {currentItem && currentItem.type === 'program' && (
             <Program program={currentItem.entity} allFlows={allFlows} />
           )}
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'unknown'. */}
           {currentItem && currentItem.type === 'folder' && <Folder folder={currentItem.entity} />}
         </div>
       </div>

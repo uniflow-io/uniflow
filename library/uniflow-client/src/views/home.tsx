@@ -132,7 +132,6 @@ class Home extends Component {
                       >
                         Subscribe to the newsletter
                       </button>
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'email' does not exist on type '{}'. */}
                       {errors.email &&
                         errors.email.map((message, i) => (
                           <div

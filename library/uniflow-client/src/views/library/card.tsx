@@ -20,7 +20,6 @@ class Card extends Component {
     return (
       <div className="container-fluid">
         <div className="row flex-xl-nowrap">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Navigation library={library} slug={card.fields.slug} />
           <section className="section col">
             <div className="row mb-3">

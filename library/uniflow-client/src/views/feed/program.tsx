@@ -474,7 +474,6 @@ class Program extends Component {
             return (
               <div key={`client-${client}`} className="row">
                 <div className="col">
-                  {/* @ts-expect-error ts-migrate(2322) FIXME: Type '(event: any, index: any) => void' is not ass... Remove this comment to see the full error message */}
                   <button className="btn btn-primary" onClick={this.onRun}>
                     <FontAwesomeIcon icon={faPlay} /> Play
                   </button>
