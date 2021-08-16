@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StaticQuery, graphql } from 'gatsby';
 
-class Changelog extends Component {
+export interface ChangelogProps {}
+
+class Changelog extends Component<ChangelogProps> {
   render() {
     return (
       <section className="section container-fluid">

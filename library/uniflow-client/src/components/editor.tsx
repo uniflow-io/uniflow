@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 import ReactPrismEditor from 'react-prism-editor';
 import { connect } from 'react-redux';
 
-class Editor extends Component {
+export interface EditorProps {
+  value: string;
+  language: string;
+  readonly: boolean;
+  width: number;
+  height: number;
+}
+
+class Editor extends Component<EditorProps> {
   render() {
     const { value, language, app, readonly, width, height } = this.props;
 

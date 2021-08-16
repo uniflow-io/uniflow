@@ -5,7 +5,9 @@ import { ApiException } from '../exceptions';
 import { getLead, updateLead } from '../reducers/lead/actions';
 import { matchRoute } from '../routes';
 
-class Notifications extends Component {
+export interface NotificationsProps {}
+
+class Notifications extends Component<NotificationsProps> {
   state = {
     lead: {
       uid: undefined,

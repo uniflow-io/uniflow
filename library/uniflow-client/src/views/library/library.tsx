@@ -3,7 +3,9 @@ import Navigation from './navigation';
 import MDXDocument from './index.mdx';
 import { MDXProvider } from '../../components';
 
-class Library extends Component {
+export interface LibraryProps {}
+
+class Library extends Component<LibraryProps> {
   render() {
     const { library } = this.props;
 

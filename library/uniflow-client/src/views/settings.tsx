@@ -10,7 +10,9 @@ import { copyTextToClipboard } from '../utils';
 import { Checkbox } from '../components';
 import { env } from '../utils';
 
-class Settings extends Component {
+export interface SettingsProps {}
+
+class Settings extends Component<SettingsProps> {
   state = {
     user: {
       apiKey: undefined,

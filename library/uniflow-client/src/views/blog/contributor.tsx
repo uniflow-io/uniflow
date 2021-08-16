@@ -4,7 +4,9 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class Contributor extends Component {
+export interface ContributorProps {}
+
+class Contributor extends Component<ContributorProps> {
   render() {
     const { contributor, articles } = this.props;
 

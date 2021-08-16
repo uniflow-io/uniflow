@@ -3,7 +3,17 @@ import { default as ReactSelect } from 'react-select';
 import { default as ReactCreatableSelect } from 'react-select/creatable';
 import { connect } from 'react-redux';
 
-class Select extends Component {
+export interface SelectProps {
+  value: string;
+  onChange: CallableFunction;
+  className: string;
+  id: string;
+  multiple: boolean;
+  options: string[];
+  edit?: boolean;
+}
+
+class Select extends Component<SelectProps> {
   onChange = (data) => {
     const { onChange, multiple } = this.props;
     if (onChange) {

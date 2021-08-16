@@ -29,7 +29,9 @@ import {
 import { commitAddLog } from '../../reducers/logs/actions';
 import { copyTextToClipboard } from '../../utils';
 
-class Program extends Component {
+export interface ProgramProps {}
+
+class Program extends Component<ProgramProps> {
   state = {
     fetchedSlug: null,
     fetchedUid: null,

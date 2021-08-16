@@ -8,7 +8,9 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { pathTo } from '../../routes';
 import { MDXProvider } from '../../components';
 
-class Article extends Component {
+export interface ArticleProps {}
+
+class Article extends Component<ArticleProps> {
   render() {
     const { article, previous, next } = this.props;
 

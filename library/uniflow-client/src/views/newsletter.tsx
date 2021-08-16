@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { MDXProvider } from '../components';
 
-class Newsletter extends Component {
+export interface NewsletterProps {}
+
+class Newsletter extends Component<NewsletterProps> {
   render() {
     const { newsletter } = this.props;
 

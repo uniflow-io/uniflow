@@ -4,7 +4,9 @@ import { fetchSettings } from '../reducers/user/actions';
 import { matchRoute } from '../routes';
 import { fetchFeed, getFeedItem, commitSetSlugFeed } from '../reducers/feed/actions';
 
-class UserManager extends Component {
+export interface UserManagerProps {}
+
+class UserManager extends Component<UserManagerProps> {
   state = {
     fetching: false,
   };

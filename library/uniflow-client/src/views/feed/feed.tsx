@@ -5,7 +5,9 @@ import Folder from './folder';
 import { getFeedItem } from '../../reducers/feed/actions';
 import { connect } from 'react-redux';
 
-class Feed extends Component {
+export interface FeedProps {}
+
+class Feed extends Component<FeedProps> {
   render() {
     const { allFlows, feed } = this.props;
     const currentItem = getFeedItem(feed);

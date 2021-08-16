@@ -7,8 +7,15 @@ const gen = () => {
   return `checkbox_${id}`;
 };
 
-export default class Checkbox extends Component {
-  onChange = (event) => {
+export interface CheckboxProps {
+  label?: string;
+  value: boolean;
+  className?: string;
+  onChange?: CallableFunction;
+}
+
+export default class Checkbox extends Component<CheckboxProps> {
+  onChange = () => {
     const { value } = this.props;
 
     if (this.props.onChange) {

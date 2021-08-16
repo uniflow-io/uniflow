@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-export default class NotFound extends Component {
+export interface NotFoundProps {}
+
+export default class NotFound extends Component<NotFoundProps> {
   render() {
     return (
       <section className="section container-fluid">

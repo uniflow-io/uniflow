@@ -5,7 +5,9 @@ import { Remarkable } from 'remarkable';
 import { toFeedPath } from '../reducers/feed/actions';
 import { getFlows } from '../reducers/flows/actions';
 
-class Flows extends Component {
+export interface FlowsProps {}
+
+class Flows extends Component<FlowsProps> {
   state = {
     page: 1,
     programs: [],

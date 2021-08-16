@@ -7,7 +7,9 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import Navigation from './navigation';
 import { MDXProvider } from '../../components';
 
-class Card extends Component {
+export interface CardProps {}
+
+class Card extends Component<CardProps> {
   render() {
     const { library, card, logo } = this.props;
     let repository = card.repository.url;

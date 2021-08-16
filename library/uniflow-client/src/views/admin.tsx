@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { fetchConfig, updateConfig } from '../reducers/user/actions';
 import { connect } from 'react-redux';
 
-class Admin extends Component {
+export interface AdminProps {}
+
+class Admin extends Component<AdminProps> {
   state = {
     config: {},
     isSaving: false,

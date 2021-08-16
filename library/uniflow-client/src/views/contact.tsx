@@ -5,7 +5,9 @@ import { ApiException } from '../exceptions';
 import { contact } from '../reducers/contact/actions';
 import { pathTo } from '../routes';
 
-class Contact extends Component {
+export interface ContactProps {}
+
+class Contact extends Component<ContactProps> {
   state = {
     email: '',
     message: '',

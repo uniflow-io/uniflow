@@ -5,7 +5,9 @@ import { facebookLogin } from '../../reducers/auth/actions';
 import { commitAddLog } from '../../reducers/logs/actions';
 import { connect } from 'react-redux';
 
-class FacebookLogin extends Component {
+export interface FacebookLoginProps {}
+
+class FacebookLogin extends Component<FacebookLoginProps> {
   async componentDidMount() {
     const accessToken = this.getAccessToken();
     if (accessToken === null) {

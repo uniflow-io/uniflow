@@ -14,7 +14,9 @@ import { commitAddLog } from '../../reducers/logs/actions';
 import { faBars, faFolder, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-class Navigation extends Component {
+export interface NavigationProps {}
+
+class Navigation extends Component<NavigationProps> {
   state = {
     search: '',
     collapse: true,

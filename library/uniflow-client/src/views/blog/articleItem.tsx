@@ -5,7 +5,9 @@ import { GatsbyImage } from 'gatsby-plugin-image';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ArticleItem = ({ article }) => (
+export interface ArticleItemProps {}
+
+const ArticleItem = ({ article }: ArticleItemProps) => (
   <div className="card card-link">
     <Link className="btn btn-default" to={pathTo('article', { slug: article.fields.slug })}>
       Read More

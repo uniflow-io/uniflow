@@ -13,7 +13,9 @@ import {
 } from '../../reducers/feed/actions';
 import { Select } from '../../components';
 
-class Folder extends Component {
+export interface FolderProps {}
+
+class Folder extends Component<FolderProps> {
   state = {
     slug: null,
     folderTreeEdit: false,

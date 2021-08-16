@@ -5,7 +5,9 @@ import { githubLogin } from '../../reducers/auth/actions';
 import { commitAddLog } from '../../reducers/logs/actions';
 import { connect } from 'react-redux';
 
-class GithubLogin extends Component {
+export interface GithubLoginProps {}
+
+class GithubLogin extends Component<GithubLoginProps> {
   async componentDidMount() {
     const code = this.getCode();
     if (code === null) {

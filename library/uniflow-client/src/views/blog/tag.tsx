@@ -3,7 +3,9 @@ import { pathTo } from '../../routes';
 import { Link } from 'gatsby';
 import ArticleItem from './articleItem';
 
-class Tag extends Component {
+export interface TagProps {}
+
+class Tag extends Component<TagProps> {
   render() {
     const { tag, articles } = this.props;
 

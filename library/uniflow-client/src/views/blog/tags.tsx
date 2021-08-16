@@ -4,7 +4,9 @@ import { Link } from 'gatsby';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Tags = ({ tags }) => {
+export interface TagsProps {}
+
+const Tags = ({ tags }: TagsProps) => {
   const orderedTags = Object.keys(tags).sort((tag1, tag2) => {
     return tags[tag1] > tags[tag2];
   });

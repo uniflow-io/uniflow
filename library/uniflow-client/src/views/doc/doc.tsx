@@ -8,7 +8,9 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { pathTo } from '../../routes';
 import { MDXProvider } from '../../components';
 
-class Index extends Component {
+export interface DocProps {}
+
+class Doc extends Component<DocProps> {
   render() {
     const { doc, docNav, previous, next } = this.props;
 
@@ -65,4 +67,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default Doc;

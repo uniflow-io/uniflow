@@ -4,7 +4,9 @@ import { ApiException } from '../exceptions';
 import { createLead } from '../reducers/lead/actions';
 import { pathTo } from '../routes';
 
-class Home extends Component {
+export interface HomeProps {}
+
+class Home extends Component<HomeProps> {
   state = {
     email: '',
     errors: {},

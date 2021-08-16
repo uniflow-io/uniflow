@@ -4,7 +4,9 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { pathTo } from '../../routes';
 
-class Navigation extends Component {
+export interface NavigationProps {}
+
+class Navigation extends Component<NavigationProps> {
   state = {
     search: '',
     collapse: true,

@@ -9,7 +9,9 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { env } from '../../utils';
 
-class Login extends Component {
+export interface LoginProps {}
+
+class Login extends Component<LoginProps> {
   state = {
     username: '',
     password: '',

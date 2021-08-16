@@ -1,7 +1,11 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { Search } from '.';
 
-class UiFlow extends Component {
+export interface UiFlowProps {
+
+}
+
+class UiFlow extends Component<UiFlowProps> {
   render() {
     const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
 
@@ -32,7 +36,11 @@ class UiFlow extends Component {
   }
 }
 
-export default class Flows extends Component {
+export interface FlowsProps {
+
+}
+
+export default class Flows extends Component<FlowsProps> {
   render() {
     const { flows, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
     const uiFlows = (() => {

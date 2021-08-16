@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, SyntheticEvent } from 'react';
 import { Select } from '../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons';
 
-export default class Search extends Component {
+export interface SearchProps {
+  onPush?: CallableFunction;
+}
+
+export default class Search extends Component<SearchProps> {
   state = {
     search: '@uniflow-io/uniflow-flow-javascript',
   };
 
-  onSubmit = (event) => {
+  onSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
 
     if (this.props.onPush) {
@@ -16,7 +20,7 @@ export default class Search extends Component {
     }
   };
 
-  onChange = (value) => {
+  onChange = (value: string) => {
     this.setState({ search: value });
   };
 

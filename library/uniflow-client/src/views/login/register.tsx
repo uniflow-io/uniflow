@@ -9,7 +9,9 @@ import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { env } from '../../utils';
 
-class Register extends Component {
+export interface RegisterProps {}
+
+class Register extends Component<RegisterProps> {
   state = {
     email: '',
     password: '',
