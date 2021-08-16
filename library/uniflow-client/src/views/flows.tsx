@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'gatsby';
 import { connect } from 'react-redux';
+import { Remarkable } from 'remarkable';
 import { toFeedPath } from '../reducers/feed/actions';
 import { getFlows } from '../reducers/flows/actions';
 
@@ -10,6 +11,12 @@ class Flows extends Component {
     programs: [],
     loadMore: false,
   };
+  md: Remarkable;
+
+  constructor(props) {
+    super(props)
+    this.md = new Remarkable()
+  }
 
   componentDidMount() {
     this.onFetchFlowsData();
@@ -36,8 +43,10 @@ class Flows extends Component {
                 <dt className="col-md-2 text-md-end fw-normal" key={i * 2}>
                   <Link to={toFeedPath(program, user)}>{program.name}</Link>
                 </dt>,
-                <dd className="col-md-10" key={i * 2 + 1}>
-                  {program.description}
+                <dd
+                  className="col-md-10"
+                  key={i * 2 + 1}
+                  dangerouslySetInnerHTML={{__html: this.md.render(program.description)}}>
                 </dd>,
               ])}
             </dl>

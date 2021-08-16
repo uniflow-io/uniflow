@@ -37,6 +37,8 @@ class Program extends Component {
     folderTreeEdit: false,
     folderTree: [],
   };
+  private _componentIsMounted: boolean = false;
+  private _componentShouldUpdate: boolean = false;
 
   componentDidMount() {
     const { program } = this.props;

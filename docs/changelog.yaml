@@ -1,4 +1,8 @@
 -
+  tag: "v1.1.15"
+  label: |-
+    Allow use Markdown for description
+-
   tag: "v1.1.14"
   label: |-
     OpenApi

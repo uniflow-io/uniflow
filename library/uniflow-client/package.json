@@ -92,6 +92,7 @@
     "react-select": "^4.3.1",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
+    "remarkable": "^2.0.1",
     "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
@@ -100,6 +101,8 @@
     "@types/dotenv": "8.2.0",
     "@types/express": "4.17.13",
     "@types/node": "16.6.1",
+    "@types/react": "^17.0.18",
+    "@types/remarkable": "^2.0.3",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
     "eslint": "^7.32.0",
