@@ -11,7 +11,7 @@ require('dotenv').config({
 });
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-  let config = {}
+  let config = {};
   if (activeEnv === 'production') {
     config.devtool = false;
   }

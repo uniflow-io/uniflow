@@ -49,9 +49,9 @@ export const commitSetFlows = (flows) => {
 export const getFlows = (page: number) => {
   return async (dispatch) => {
     try {
-      const response = await request.get(`${server.getBaseUrl()}/api/programs?page=${page}`)
+      const response = await request.get(`${server.getBaseUrl()}/api/programs?page=${page}`);
       return response.data;
-    } catch(error) {
+    } catch (error) {
       return [];
     }
   };

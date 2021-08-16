@@ -2,13 +2,13 @@ import { default as convict } from 'convict';
 import * as dotenv from 'dotenv';
 
 type AppConfigData = {
-  env: 'development' | 'preprod' | 'production' | 'test',
-  port: number,
-  clientUrl: string,
-  apiUrl: string,
-  facebookAppId: string,
-  githubAppId: string,
-  trackingId: string,
+  env: 'development' | 'preprod' | 'production' | 'test';
+  port: number;
+  clientUrl: string;
+  apiUrl: string;
+  facebookAppId: string;
+  githubAppId: string;
+  trackingId: string;
 };
 
 const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development';
@@ -24,9 +24,9 @@ if (!envFound) {
 const appConfig = convict<AppConfigData>({
   env: {
     doc: 'Running environment',
-    format: ['development' , 'preprod' , 'production' , 'test'],
+    format: ['development', 'preprod', 'production', 'test'],
     default: 'development',
-    env: 'NODE_ENV'
+    env: 'NODE_ENV',
   },
   port: {
     format: Number,
@@ -39,31 +39,31 @@ const appConfig = convict<AppConfigData>({
     format: String,
     default: '',
     env: 'GATSBY_CLIENT_URL',
-    doc: 'Client'
+    doc: 'Client',
   },
   apiUrl: {
     format: String,
     default: '',
     env: 'GATSBY_API_URL',
-    doc: 'Api Url'
+    doc: 'Api Url',
   },
   facebookAppId: {
     format: String,
     default: '',
     env: 'GATSBY_FACEBOOK_APP_ID',
-    doc: 'Facebook App Id'
+    doc: 'Facebook App Id',
   },
   githubAppId: {
     format: String,
     default: '',
     env: 'GATSBY_GITHUB_APP_ID',
-    doc: 'Github App Id'
+    doc: 'Github App Id',
   },
   trackingId: {
     format: String,
     default: '',
     env: 'GATSBY_TRACKING_ID',
-    doc: 'Tracking Id'
+    doc: 'Tracking Id',
   },
 });
 

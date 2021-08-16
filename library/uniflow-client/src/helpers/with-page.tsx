@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { commitSetPage } from '../reducers/app/actions';
-import { env } from '../utils'
+import { env } from '../utils';
 
 export default function withPage(Component, page, seo) {
   class PageHelper extends React.Component {
@@ -26,7 +26,11 @@ export default function withPage(Component, page, seo) {
               {seo.title && <meta property="og:title" content={seo.title} />}
               {seo.image &&
                 typeof seo.image === 'string' && [
-                  <meta key="og:image" property="og:image" content={`${env.get('clientUrl')}${seo.image}`} />,
+                  <meta
+                    key="og:image"
+                    property="og:image"
+                    content={`${env.get('clientUrl')}${seo.image}`}
+                  />,
                   <meta key="og:image:width" property="og:image:width" content="" />,
                   <meta key="og:image:height" property="og:image:height" content="" />,
                 ]}
@@ -51,7 +55,10 @@ export default function withPage(Component, page, seo) {
                 <meta name="twitter:image" content={`${env.get('clientUrl')}${seo.image}`} />
               )}
               {seo.image && typeof seo.image !== 'string' && (
-                <meta property="twitter:image" content={`${env.get('clientUrl')}${seo.image.url}`} />
+                <meta
+                  property="twitter:image"
+                  content={`${env.get('clientUrl')}${seo.image.url}`}
+                />
               )}
             </Helmet>
           )}

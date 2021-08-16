@@ -53,21 +53,21 @@ module.exports = {
       resolve: `gatsby-plugin-sitemap`,
       options: {
         serialize: (page, { resolvePagePath }) => {
-          const path = resolvePagePath(page)
-          
-          if(path === '/') {
+          const path = resolvePagePath(page);
+
+          if (path === '/') {
             return {
               url: `${path}`,
               changefreq: `daily`,
               priority: 1,
-            }
+            };
           }
 
           return {
             url: `${path}`,
             changefreq: `monthly`,
             priority: 0.7,
-          }
+          };
         },
       },
     },

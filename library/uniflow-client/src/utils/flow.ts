@@ -12,7 +12,4 @@ const onDelete = (self) => {
   };
 };
 
-export {
-  onUpdate,
-  onDelete,
-};
+export { onUpdate, onDelete };

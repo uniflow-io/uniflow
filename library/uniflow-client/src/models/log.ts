@@ -14,10 +14,10 @@ export default class Log {
   }
 
   public created: moment.Moment;
-  public id: number = 0;
-  public message: string = '';
-  public status: string = '';
-  constructor(data: {id: number; message: string; status: string}) {
+  public id = 0;
+  public message = '';
+  public status = '';
+  constructor(data: { id: number; message: string; status: string }) {
     Object.assign(this, data);
     this.created = moment();
   }

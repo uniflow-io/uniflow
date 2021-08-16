@@ -9,9 +9,9 @@ export const createLead = ({ email, optinNewsletter, optinBlog }) => {
         email,
         optinNewsletter,
         optinBlog,
-      })
+      });
       return response.data;
-    } catch(error) {
+    } catch (error) {
       throw new ApiException(server.handleErrors(error.response));
     }
   };
@@ -19,7 +19,7 @@ export const createLead = ({ email, optinNewsletter, optinBlog }) => {
 
 export const getLead = (uid) => {
   return async (dispatch) => {
-    const response = await request.get(`${server.getBaseUrl()}/api/leads/${uid}`)
+    const response = await request.get(`${server.getBaseUrl()}/api/leads/${uid}`);
     return response.data;
   };
 };
@@ -27,9 +27,13 @@ export const getLead = (uid) => {
 export const updateLead = (uid, { optinNewsletter, optinBlog, optinGithub }) => {
   return async (dispatch) => {
     try {
-      const response = await request.put(`${server.getBaseUrl()}/api/leads/${uid}`, { optinNewsletter, optinBlog, optinGithub })
+      const response = await request.put(`${server.getBaseUrl()}/api/leads/${uid}`, {
+        optinNewsletter,
+        optinBlog,
+        optinGithub,
+      });
       return response.data;
-    } catch(error) {
+    } catch (error) {
       throw new ApiException(server.handleErrors(error.response));
     }
   };

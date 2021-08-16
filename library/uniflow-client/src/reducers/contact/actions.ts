@@ -8,10 +8,10 @@ export const contact = (email: string, message: string) => {
       const response = await request.post(`${server.getBaseUrl()}/api/contacts`, {
         email: email,
         message: message,
-      })
+      });
       return response.data;
-    } catch(error) {
-        throw new ApiException(server.handleErrors(error.response));
+    } catch (error) {
+      throw new ApiException(server.handleErrors(error.response));
     }
   };
 };

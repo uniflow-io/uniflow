@@ -14,7 +14,7 @@ class FacebookLogin extends Component {
       }
     }
 
-    await this.props.dispatch(facebookLogin(accessToken, this.props.auth.token))
+    await this.props.dispatch(facebookLogin(accessToken, this.props.auth.token));
     if (this.props.auth.isAuthenticated) {
       if (typeof window !== `undefined`) {
         return navigate(pathTo('feed'));

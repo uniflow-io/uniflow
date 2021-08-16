@@ -12,7 +12,7 @@ import { commitLogoutUser } from '../reducers/user/actions';
 import { isGranted } from '../reducers/user/actions';
 import { applyTheme, switchTheme } from '../reducers/app/actions';
 import { matchPath } from '../utils';
-import { env } from '../utils'
+import { env } from '../utils';
 
 class MessengerPlatform extends Component {
   render() {

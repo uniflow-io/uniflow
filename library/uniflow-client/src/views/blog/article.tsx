@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'gatsby';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
@@ -19,7 +19,8 @@ class Article extends Component {
             <GatsbyImage
               image={article.frontmatter.cover.childImageSharp.gatsbyImageData}
               className="figure-img img-fluid"
-              alt="Cover" />
+              alt="Cover"
+            />
           )}
           {article.frontmatter.cover.extension === 'svg' && (
             <img
@@ -52,7 +53,8 @@ class Article extends Component {
                 height="36"
                 alt={article.frontmatter.author.name}
                 className="rounded-circle mx-2"
-                style={{ verticalAlign: 'middle', display: 'inline-block' }} />
+                style={{ verticalAlign: 'middle', display: 'inline-block' }}
+              />
               <Link
                 to={pathTo('contributor', {
                   slug: article.frontmatter.author.fields.slug,

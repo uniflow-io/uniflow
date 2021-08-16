@@ -36,7 +36,8 @@ class Navigation extends Component {
       : '/';
 
     try {
-      const item = await this.props.dispatch(createFolder(
+      const item = await this.props.dispatch(
+        createFolder(
           {
             name: this.state.search,
             path: folderPath,
@@ -44,10 +45,10 @@ class Navigation extends Component {
           this.props.auth.uid,
           this.props.auth.token
         )
-      )
-      await this.props.dispatch(setSlugFeed(null))
+      );
+      await this.props.dispatch(setSlugFeed(null));
       navigate(toFeedPath(item, this.props.user));
-    } catch(error) {
+    } catch (error) {
       return this.props.dispatch(commitAddLog(error.message));
     }
   };
@@ -60,7 +61,8 @@ class Navigation extends Component {
       : '/';
 
     try {
-      const item = await this.props.dispatch(createProgram(
+      const item = await this.props.dispatch(
+        createProgram(
           {
             name: this.state.search,
             clients: ['uniflow'],
@@ -70,9 +72,9 @@ class Navigation extends Component {
           this.props.auth.uid,
           this.props.auth.token
         )
-      )
+      );
       navigate(toFeedPath(item, this.props.user));
-    } catch(error) {
+    } catch (error) {
       return this.props.dispatch(commitAddLog(log.message));
     }
   };

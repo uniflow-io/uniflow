@@ -11,7 +11,7 @@ class Admin extends Component {
   async componentDidMount() {
     const { auth } = this.props;
 
-    const response = await this.props.dispatch(fetchConfig(auth.token, auth.uid))
+    const response = await this.props.dispatch(fetchConfig(auth.token, auth.uid));
     this.setState({
       config: Object.assign({}, this.state.config, response.data),
     });
@@ -25,7 +25,7 @@ class Admin extends Component {
     }
 
     this.setState({ isSaving: true }, async () => {
-      await this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid))
+      await this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid));
       this.setState({ isSaving: false });
     });
   };

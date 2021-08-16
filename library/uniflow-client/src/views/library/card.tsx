@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
@@ -47,7 +47,8 @@ class Card extends Component {
                           width="18"
                           height="18"
                           className="svg-inline--fa"
-                          alt="Uniflow" />{' '}
+                          alt="Uniflow"
+                        />{' '}
                         Official
                       </span>
                     </div>

@@ -16,27 +16,31 @@ export default ({ data, location }) => {
   return <ContributorPage contributor={contributor} articles={data.articles} />;
 };
 
-export const query = graphql`query ($slug: String) {
-  contributor: contributorsYaml(fields: {slug: {eq: $slug}}) {
-    name
-    description
-    twitter
-    image {
-      childImageSharp {
-        gatsbyImageData(layout: FULL_WIDTH)
-      }
-      publicURL
-    }
-  }
-  articles: allMdx(
-    filter: {fields: {sourceName: {eq: "blog"}}, frontmatter: {author: {fields: {slug: {eq: $slug}}}}}
-    sort: {fields: frontmatter___date, order: DESC}
-  ) {
-    edges {
-      node {
-        ...ArticleItemFragment
+export const query = graphql`
+  query ($slug: String) {
+    contributor: contributorsYaml(fields: { slug: { eq: $slug } }) {
+      name
+      description
+      twitter
+      image {
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
+        }
+        publicURL
       }
     }
+    articles: allMdx(
+      filter: {
+        fields: { sourceName: { eq: "blog" } }
+        frontmatter: { author: { fields: { slug: { eq: $slug } } } }
+      }
+      sort: { fields: frontmatter___date, order: DESC }
+    ) {
+      edges {
+        node {
+          ...ArticleItemFragment
+        }
+      }
+    }
   }
-}
 `;

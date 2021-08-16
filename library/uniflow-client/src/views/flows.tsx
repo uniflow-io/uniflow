@@ -14,8 +14,8 @@ class Flows extends Component {
   md: Remarkable;
 
   constructor(props) {
-    super(props)
-    this.md = new Remarkable()
+    super(props);
+    this.md = new Remarkable();
   }
 
   componentDidMount() {
@@ -24,7 +24,7 @@ class Flows extends Component {
 
   onFetchFlowsData = async () => {
     const { page } = this.state;
-    const data = await this.props.dispatch(getFlows(page))
+    const data = await this.props.dispatch(getFlows(page));
     const programs = this.state.programs.slice().concat(data.data);
     this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 });
   };
@@ -46,8 +46,8 @@ class Flows extends Component {
                 <dd
                   className="col-md-10"
                   key={i * 2 + 1}
-                  dangerouslySetInnerHTML={{__html: this.md.render(program.description)}}>
-                </dd>,
+                  dangerouslySetInnerHTML={{ __html: this.md.render(program.description) }}
+                ></dd>,
               ])}
             </dl>
             {loadMore && (

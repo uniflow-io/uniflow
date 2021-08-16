@@ -17,44 +17,45 @@ export default ({ data, location, pageContext: { previous, next } }) => {
   return <ArticlePage article={article} previous={previous} next={next} />;
 };
 
-export const query = graphql`query ($id: String) {
-  article: mdx(id: {eq: $id}) {
-    body
-    timeToRead
-    excerpt
-    frontmatter {
-      title
-      author {
-        fields {
-          slug
-        }
-        name
-        image {
-          childImageSharp {
-            gatsbyImageData(width: 36, height: 36, layout: FIXED)
+export const query = graphql`
+  query ($id: String) {
+    article: mdx(id: { eq: $id }) {
+      body
+      timeToRead
+      excerpt
+      frontmatter {
+        title
+        author {
+          fields {
+            slug
+          }
+          name
+          image {
+            childImageSharp {
+              gatsbyImageData(width: 36, height: 36, layout: FIXED)
+            }
           }
         }
-      }
-      cover {
-        childImageSharp {
-          gatsbyImageData(layout: FULL_WIDTH)
+        cover {
+          childImageSharp {
+            gatsbyImageData(layout: FULL_WIDTH)
+          }
+          extension
+          publicURL
         }
-        extension
-        publicURL
+        coverSeo {
+          publicURL
+        }
+        coverAuthor
+        coverOriginalUrl
+        tags
+        date(formatString: "MMMM Do YYYY")
       }
-      coverSeo {
-        publicURL
-      }
-      coverAuthor
-      coverOriginalUrl
-      tags
-      date(formatString: "MMMM Do YYYY")
-    }
-    parent {
-      ... on File {
-        relativePath
+      parent {
+        ... on File {
+          relativePath
+        }
       }
     }
   }
-}
 `;

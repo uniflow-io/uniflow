@@ -1,7 +1,7 @@
 import React from 'react';
 import { pathTo } from '../../routes';
 import { Link, graphql } from 'gatsby';
-import { GatsbyImage } from "gatsby-plugin-image";
+import { GatsbyImage } from 'gatsby-plugin-image';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -16,7 +16,8 @@ const ArticleItem = ({ article }) => (
         className="card-img-top"
         style={{ maxHeight: '50vh' }}
         alt="Cover"
-        width="100%" />
+        width="100%"
+      />
     )) ||
       (article.frontmatter.cover.extension === 'svg' && (
         <img
@@ -39,7 +40,8 @@ const ArticleItem = ({ article }) => (
               height="36"
               alt={article.frontmatter.author.name}
               className="rounded-circle mx-2"
-              style={{ verticalAlign: 'middle', display: 'inline-block' }} />
+              style={{ verticalAlign: 'middle', display: 'inline-block' }}
+            />
             <Link
               to={pathTo('contributor', {
                 slug: article.frontmatter.author.fields.slug,
@@ -63,36 +65,37 @@ const ArticleItem = ({ article }) => (
   </div>
 );
 
-export const query = graphql`fragment ArticleItemFragment on Mdx {
-  fields {
-    slug
-  }
-  excerpt
-  frontmatter {
-    title
-    author {
-      fields {
-        slug
-      }
-      name
-      image {
-        childImageSharp {
-          gatsbyImageData(width: 36, height: 36, layout: FIXED)
+export const query = graphql`
+  fragment ArticleItemFragment on Mdx {
+    fields {
+      slug
+    }
+    excerpt
+    frontmatter {
+      title
+      author {
+        fields {
+          slug
+        }
+        name
+        image {
+          childImageSharp {
+            gatsbyImageData(width: 36, height: 36, layout: FIXED)
+          }
         }
       }
-    }
-    cover {
-      childImageSharp {
-        gatsbyImageData(layout: FULL_WIDTH)
+      cover {
+        childImageSharp {
+          gatsbyImageData(layout: FULL_WIDTH)
+        }
+        extension
+        publicURL
       }
-      extension
-      publicURL
+      tags
+      date(formatString: "MMMM Do YYYY")
     }
-    tags
-    date(formatString: "MMMM Do YYYY")
+    timeToRead
   }
-  timeToRead
-}
 `;
 
 export default ArticleItem;

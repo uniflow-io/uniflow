@@ -42,7 +42,7 @@ class Folder extends Component {
         ...this.props.folder,
         ...{ name: event.target.value },
       })
-    )
+    );
     this.onUpdate();
   };
 
@@ -56,7 +56,7 @@ class Folder extends Component {
         ...this.props.folder,
         ...{ path: selected },
       })
-    )
+    );
     this.onUpdate();
   };
 
@@ -64,7 +64,7 @@ class Folder extends Component {
     let { folder } = this.props;
     folder.slug = this.state.slug ?? folder.slug;
 
-    folder = await this.props.dispatch(updateParentFolder(folder, this.props.auth.token))
+    folder = await this.props.dispatch(updateParentFolder(folder, this.props.auth.token));
     const path = toFeedPath(folder, this.props.user);
     if (typeof window !== `undefined` && window.location.pathname !== path) {
       navigate(path);
@@ -74,7 +74,7 @@ class Folder extends Component {
   onDelete = async (event) => {
     event.preventDefault();
 
-    await this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
+    await this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token));
     navigate(toFeedPath(this.props.folder, this.props.user, true));
   };
 
@@ -83,7 +83,7 @@ class Folder extends Component {
 
     const { feed, folder } = this.props;
 
-    let folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token))
+    let folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token));
     folderTree = folderTree.filter((value) => {
       return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
     });

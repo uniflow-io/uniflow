@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import ReactPrismEditor from "react-prism-editor";
+import ReactPrismEditor from 'react-prism-editor';
 import { connect } from 'react-redux';
 
 class Editor extends Component {
   render() {
     const { value, language, app, readonly, width, height } = this.props;
 
-    let theme = 'default'
+    let theme = 'default';
     if (app.theme === 'dark') {
-      theme = 'tomorrow'
+      theme = 'tomorrow';
     } else if (app.theme === 'sepia') {
-      theme = 'solarizedlight'
+      theme = 'solarizedlight';
     }
 
     return (
@@ -26,13 +26,13 @@ class Editor extends Component {
         lineNumber={readonly !== true && language && language !== 'html'}
         readOnly={readonly === true}
         clipboard={false}
-        changeCode={value => {
+        changeCode={(value) => {
           if (this.props.onChange) {
             this.props.onChange(value);
           }
         }}
       />
-    )
+    );
   }
 }
 

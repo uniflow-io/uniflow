@@ -7,7 +7,7 @@ import { navigate } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { env } from '../../utils'
+import { env } from '../../utils';
 
 class Register extends Component {
   state = {
@@ -26,7 +26,7 @@ class Register extends Component {
   onSubmit = async (e) => {
     e.preventDefault();
 
-    await this.props.dispatch(register(this.state.email, this.state.password))
+    await this.props.dispatch(register(this.state.email, this.state.password));
     if (this.props.auth.isAuthenticated) {
       return navigate(pathTo('feed'));
     } else {

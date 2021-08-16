@@ -75,7 +75,7 @@ export const fetchSettings = (uid, token) => {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
-      })
+      });
       await dispatch(commitUpdateSettings(response.data));
     } catch (error) {
       if (error.request.status === 401) {

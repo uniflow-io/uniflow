@@ -26,11 +26,11 @@ class Home extends Component {
             optinNewsletter: true,
             optinBlog: true,
           })
-        )
+        );
         if (data) {
           this.setState({ state: 'sent' });
         }
-      } catch(error) {
+      } catch (error) {
         if (error instanceof ApiException) {
           this.setState({ state: 'form', errors: { ...error.errors } });
         }

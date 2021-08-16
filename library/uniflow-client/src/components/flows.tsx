@@ -3,8 +3,7 @@ import { Search } from '.';
 
 class UiFlow extends Component {
   render() {
-    const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } =
-      this.props;
+    const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
 
     let TagName = Search;
     if (tag !== 'search') {

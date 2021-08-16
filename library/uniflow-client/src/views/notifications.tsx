@@ -33,17 +33,17 @@ class Notifications extends Component {
               optinBlog: false,
               optinGithub: false,
             })
-          )
+          );
           this.setState({
             lead: { ...this.state.lead, ...{ uid } },
             state: 'sent-unsubscribe',
           });
-        } catch(error) {
+        } catch (error) {
           this.setState({ state: 'not-found' });
         }
       } else if (match.route === 'notificationManage') {
         try {
-          const data = await this.props.dispatch(getLead(uid))
+          const data = await this.props.dispatch(getLead(uid));
           this.setState({
             lead: {
               ...this.state.lead,
@@ -57,7 +57,7 @@ class Notifications extends Component {
             },
             state: 'form',
           });
-        } catch(error) {
+        } catch (error) {
           this.setState({ state: 'not-found' });
         }
       } else {
@@ -102,9 +102,9 @@ class Notifications extends Component {
             optinBlog: lead.optinBlog,
             optinGithub: lead.optinGithub,
           })
-        )
+        );
         this.setState({ state: 'sent' });
-      } catch(error) {
+      } catch (error) {
         if (error instanceof ApiException) {
           this.setState({ state: 'form', errors: { ...error.errors } });
         }

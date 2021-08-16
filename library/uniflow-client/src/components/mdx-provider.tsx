@@ -39,9 +39,7 @@ const components = {
       language = 'jsx';
     }
 
-    return (
-      <Editor language={language} readonly={true} value={props.children} />
-    );
+    return <Editor language={language} readonly={true} value={props.children} />;
   },
 };
 

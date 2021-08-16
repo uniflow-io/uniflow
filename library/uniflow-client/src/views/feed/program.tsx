@@ -37,8 +37,8 @@ class Program extends Component {
     folderTreeEdit: false,
     folderTree: [],
   };
-  private _componentIsMounted: boolean = false;
-  private _componentShouldUpdate: boolean = false;
+  private _componentIsMounted = false;
+  private _componentShouldUpdate = false;
 
   componentDidMount() {
     const { program } = this.props;
@@ -81,13 +81,13 @@ class Program extends Component {
   };
 
   onPushFlow = async (index, flow) => {
-    await this.props.dispatch(commitPushFlow(index, flow))
+    await this.props.dispatch(commitPushFlow(index, flow));
 
     this.onUpdateFlowData();
   };
 
   onPopFlow = async (index) => {
-    await this.props.dispatch(commitPopFlow(index))
+    await this.props.dispatch(commitPopFlow(index));
 
     this.onUpdateFlowData();
   };
@@ -96,22 +96,22 @@ class Program extends Component {
     this._componentShouldUpdate = false;
     await this.props.dispatch(commitUpdateFlow(index, data));
     this._componentShouldUpdate = true;
-    this.onUpdateFlowData()
+    this.onUpdateFlowData();
   };
 
   onFetchFlowData = debounce(async () => {
     const { program } = this.props;
 
     await this.props.dispatch(commitSetFlows([]));
-    let data = program.data
+    let data = program.data;
     if (!data) {
       data = await this.props.dispatch(getProgramData(program, this.props.auth.token));
     }
-    if(data) {
+    if (data) {
       program.data = data;
 
       if (program.slug === this.props.program.slug) {
-        await this.props.dispatch(commitSetFlows(deserializeFlowsData(data)))
+        await this.props.dispatch(commitSetFlows(deserializeFlowsData(data)));
       }
     }
     if (this._componentIsMounted) {
@@ -132,22 +132,24 @@ class Program extends Component {
 
       this._componentShouldUpdate = false;
       try {
-        await this.props.dispatch(setProgramData(program, this.props.auth.token))
+        await this.props.dispatch(setProgramData(program, this.props.auth.token));
         this._componentShouldUpdate = true;
-      } catch(error) {
+      } catch (error) {
         await this.props.dispatch(commitAddLog(error.message));
       }
     }
   }, 1000);
 
   onChangeTitle = async (event) => {
-    await this.props.dispatch(commitUpdateFeed({
-      type: 'program',
-      entity: {
-        ...this.props.program,
-        ...{ name: event.target.value },
-      },
-    }))
+    await this.props.dispatch(
+      commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ name: event.target.value },
+        },
+      })
+    );
     this.onUpdate();
   };
 
@@ -156,70 +158,75 @@ class Program extends Component {
   };
 
   onChangePath = async (selected) => {
-    await this.props.dispatch(commitUpdateFeed({
+    await this.props.dispatch(
+      commitUpdateFeed({
         type: 'program',
         entity: {
           ...this.props.program,
           ...{ path: selected },
         },
       })
-    )
-    this.onUpdate()
+    );
+    this.onUpdate();
   };
 
   onChangeClients = async (clients) => {
-    await this.props.dispatch(commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ clients: clients },
-          },
-        })
-      )
+    await this.props.dispatch(
+      commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ clients: clients },
+        },
+      })
+    );
     this.onUpdate();
   };
 
   onChangeTags = async (tags) => {
-    await this.props.dispatch(commitUpdateFeed({
+    await this.props.dispatch(
+      commitUpdateFeed({
         type: 'program',
         entity: {
           ...this.props.program,
           ...{ tags: tags },
         },
       })
-    )
+    );
     this.onUpdate();
   };
 
   onChangeDescription = async (description) => {
-    await this.props.dispatch(commitUpdateFeed({
+    await this.props.dispatch(
+      commitUpdateFeed({
         type: 'program',
         entity: {
           ...this.props.program,
           ...{ description: description },
         },
       })
-    )
+    );
     this.onUpdate();
   };
 
   onChangePublic = async (value) => {
-    await this.props.dispatch(commitUpdateFeed({
+    await this.props.dispatch(
+      commitUpdateFeed({
         type: 'program',
         entity: {
           ...this.props.program,
           ...{ public: value },
         },
       })
-    )
+    );
     this.onUpdate();
   };
 
-  onUpdate = debounce(async() => {
+  onUpdate = debounce(async () => {
     let { program } = this.props;
     program.slug = this.state.slug ?? program.slug;
 
-    program = await this.props.dispatch(updateProgram(program, this.props.auth.token))
+    program = await this.props.dispatch(updateProgram(program, this.props.auth.token));
     const path = toFeedPath(program, this.props.user);
     if (typeof window !== `undefined` && window.location.pathname !== path) {
       navigate(path);
@@ -233,11 +240,13 @@ class Program extends Component {
     program.name += ' Copy';
 
     try {
-      const item = await this.props.dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
+      const item = await this.props.dispatch(
+        createProgram(program, this.props.auth.uid, this.props.auth.token)
+      );
       Object.assign(program, item);
       await this.props.dispatch(setProgramData(program, this.props.auth.token));
       navigate(toFeedPath(program, this.props.user));
-    } catch(error) {
+    } catch (error) {
       return this.props.dispatch(commitAddLog(error.message));
     }
   };
@@ -245,7 +254,7 @@ class Program extends Component {
   onDelete = async (event) => {
     event.preventDefault();
 
-    await this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token))
+    await this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token));
     navigate(toFeedPath(this.props.program, this.props.user, true));
   };
 
@@ -254,7 +263,7 @@ class Program extends Component {
 
     const { feed } = this.props;
 
-    const folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token))
+    const folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token));
     this.setState({
       folderTreeEdit: true,
       folderTree: folderTree,

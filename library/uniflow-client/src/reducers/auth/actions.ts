@@ -65,12 +65,12 @@ export const commitLogoutUser = () => {
 
 export const login = (username, password) => {
   return async (dispatch) => {
-    await dispatch(commitLoginUserRequest())
+    await dispatch(commitLoginUserRequest());
     try {
       const response = await request.post(`${server.getBaseUrl()}/api/login`, {
         username: username,
         password: password,
-      })
+      });
 
       try {
         jwtDecode(response.data.token);
@@ -85,7 +85,7 @@ export const login = (username, password) => {
           })
         );
       }
-    } catch(error) {
+    } catch (error) {
       await dispatch(commitLoginUserFailure(error));
     }
   };
@@ -98,7 +98,7 @@ export const facebookLoginUrl = (facebookAppId) => {
 
 export const facebookLogin = (access_token, token = null) => {
   return async (dispatch) => {
-    await dispatch(commitLoginUserRequest())
+    await dispatch(commitLoginUserRequest());
     try {
       const response = await request.post(
         `${server.getBaseUrl()}/api/login-facebook`,
@@ -112,7 +112,7 @@ export const facebookLogin = (access_token, token = null) => {
                 'Uniflow-Authorization': `Bearer ${token}`,
               },
             }
-      )
+      );
 
       try {
         jwtDecode(response.data.token);
@@ -127,7 +127,7 @@ export const facebookLogin = (access_token, token = null) => {
           })
         );
       }
-    } catch(error) {
+    } catch (error) {
       await dispatch(commitLoginUserFailure(error));
     }
   };
@@ -140,9 +140,11 @@ export const githubLoginUrl = (githubAppId) => {
 
 export const githubLogin = (code, token = null) => {
   return async (dispatch) => {
-    await dispatch(commitLoginUserRequest())
+    await dispatch(commitLoginUserRequest());
     try {
-      const response = await request.post(`${server.getBaseUrl()}/api/login-github`, {
+      const response = await request.post(
+        `${server.getBaseUrl()}/api/login-github`,
+        {
           code: code,
         },
         token === null
@@ -152,7 +154,7 @@ export const githubLogin = (code, token = null) => {
                 'Uniflow-Authorization': `Bearer ${token}`,
               },
             }
-      )
+      );
 
       try {
         jwtDecode(response.data.token);
@@ -167,7 +169,7 @@ export const githubLogin = (code, token = null) => {
           })
         );
       }
-    } catch(error) {
+    } catch (error) {
       await dispatch(commitLoginUserFailure(error));
     }
   };
@@ -175,15 +177,15 @@ export const githubLogin = (code, token = null) => {
 
 export const register = (email, password) => {
   return async (dispatch) => {
-    await dispatch(commitLoginUserRequest())
+    await dispatch(commitLoginUserRequest());
     try {
       const response = await request.post(`${server.getBaseUrl()}/api/users`, {
         email: email,
         password: password,
-      })
+      });
 
       await login(email, password)(dispatch);
-    } catch(error) {
+    } catch (error) {
       await dispatch(commitLoginUserFailure(error, error.response.data.message));
     }
   };

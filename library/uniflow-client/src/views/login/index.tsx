@@ -7,7 +7,7 @@ import { Link, navigate } from 'gatsby';
 import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { env } from '../../utils'
+import { env } from '../../utils';
 
 class Login extends Component {
   state = {
@@ -26,7 +26,7 @@ class Login extends Component {
   onSubmit = async (e) => {
     e.preventDefault();
 
-    await this.props.dispatch(login(this.state.username, this.state.password))
+    await this.props.dispatch(login(this.state.username, this.state.password));
     if (this.props.auth.isAuthenticated) {
       return navigate(pathTo('feed'));
     } else {

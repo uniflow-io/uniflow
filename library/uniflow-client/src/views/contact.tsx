@@ -26,11 +26,11 @@ class Contact extends Component {
 
     this.setState({ state: 'sending' }, async () => {
       try {
-        const data = await this.props.dispatch(contact(this.state.email, this.state.message))
+        const data = await this.props.dispatch(contact(this.state.email, this.state.message));
         if (data === true) {
           this.setState({ state: 'sent' });
         }
-      } catch(error) {
+      } catch (error) {
         if (error instanceof ApiException) {
           this.setState({ state: 'form', errors: { ...error.errors } });
         }
@@ -131,6 +131,5 @@ class Contact extends Component {
 }
 
 export default connect((state) => {
-  return {
-  };
+  return {};
 })(Contact);

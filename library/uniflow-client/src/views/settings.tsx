@@ -8,7 +8,7 @@ import { updateSettings, commitUpdateSettings } from '../reducers/user/actions';
 import { getLead, createLead, updateLead } from '../reducers/lead/actions';
 import { copyTextToClipboard } from '../utils';
 import { Checkbox } from '../components';
-import { env } from '../utils'
+import { env } from '../utils';
 
 class Settings extends Component {
   state = {
@@ -37,7 +37,7 @@ class Settings extends Component {
     this.setState({ user: Object.assign({}, this.props.user) });
 
     if (this.props.user.links.lead) {
-      const data = await this.props.dispatch(getLead(this.props.user.links.lead))
+      const data = await this.props.dispatch(getLead(this.props.user.links.lead));
       this.setState({
         lead: {
           ...this.state.lead,
@@ -276,7 +276,10 @@ class Settings extends Component {
                     <FontAwesomeIcon icon={faGithub} /> Revoke Github
                   </button>
                 )) || (
-                  <a href={githubLoginUrl(env.get('githubAppId'))} className="btn btn-social btn-github">
+                  <a
+                    href={githubLoginUrl(env.get('githubAppId'))}
+                    className="btn btn-social btn-github"
+                  >
                     <FontAwesomeIcon icon={faGithub} /> Connect with Github
                   </a>
                 )}

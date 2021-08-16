@@ -49,8 +49,8 @@ class UserManager extends Component {
   };
 
   onFetchUser = async (uid, token) => {
-    await Promise.all([this.props.dispatch(fetchSettings(uid, token))])
-    
+    await Promise.all([this.props.dispatch(fetchSettings(uid, token))]);
+
     const { location } = this.props;
     this.onLocation(location);
   };
@@ -127,7 +127,7 @@ class UserManager extends Component {
 
     const token = auth.isAuthenticated ? auth.token : null;
     await this.props.dispatch(fetchFeed(uid, paths, token));
-    
+
     await new Promise((resolve) => {
       this.setState({ fetching: false }, resolve);
     });

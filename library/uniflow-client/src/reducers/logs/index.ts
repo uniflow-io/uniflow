@@ -10,7 +10,7 @@ const logs = (state = defaultState, action) => {
       const item = new Log({
         id,
         message: action.message,
-        status: 'new'
+        status: 'new',
       });
       id++;
 
