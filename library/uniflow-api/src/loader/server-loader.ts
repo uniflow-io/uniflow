@@ -6,7 +6,7 @@ import * as swaggerUi from 'swagger-ui-express';
 import { Service } from 'typedi';
 import { NextFunction, Request, Response } from "express";
 import { ValidateError } from '@tsoa/runtime';
-import { ParamsConfig } from '../config';
+import { AppConfig } from '../config';
 import { LoaderInterface } from './interfaces';
 import { RegisterRoutes } from '../routes';
 
@@ -15,7 +15,7 @@ export default class ServerLoader implements LoaderInterface {
   private app: express.Application;
 
   constructor(
-    private paramsConfig: ParamsConfig
+    private appConfig: AppConfig
   ) {}
 
 	public getApp(): express.Application {
@@ -26,7 +26,7 @@ export default class ServerLoader implements LoaderInterface {
     this.app = express()
     this.app.enable('trust proxy');
     this.app.use(cors({
-      "origin": this.paramsConfig.getConfig().get('corsAllowOrigin')
+      "origin": this.appConfig.getConfig().get('corsAllowOrigin')
     }));
     this.app.use(helmet());
     this.app.use(bodyParser.json());
@@ -76,7 +76,7 @@ export default class ServerLoader implements LoaderInterface {
       let message = err.message
       const status = err.status || 500
       // console.log(err)
-      if(status >= 500 && this.paramsConfig.getConfig().get('env') !== 'development') {
+      if(status >= 500 && this.appConfig.getConfig().get('env') !== 'development') {
         message = "Internal Server Error"
       }
       

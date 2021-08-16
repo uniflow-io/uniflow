@@ -12,6 +12,7 @@ import { commitLogoutUser } from '../reducers/user/actions';
 import { isGranted } from '../reducers/user/actions';
 import { applyTheme, switchTheme } from '../reducers/app/actions';
 import { matchPath } from '../utils';
+import { env } from '../utils'
 
 class MessengerPlatform extends Component {
   render() {
@@ -508,7 +509,7 @@ class Layout extends Component {
   }
 
   render() {
-    const { app, env } = this.props;
+    const { app } = this.props;
 
     return (
       <StaticQuery
@@ -551,11 +552,11 @@ class Layout extends Component {
 
               <meta property="og:title" content={siteMetadata.title} />
               <meta property="og:description" content={siteMetadata.description} />
-              <meta property="og:url" content={env.url} />
+              <meta property="og:url" content={env.get('clientUrl')} />
               <meta property="og:type" content="website" />
               <meta property="og:locale" content="en" />
               <meta property="og:site_name" content={siteMetadata.title} />
-              <meta property="og:image" content={`${env.url}${logoSeo.publicURL}`} />
+              <meta property="og:image" content={`${env.get('clientUrl')}${logoSeo.publicURL}`} />
               <meta property="og:image:width" content="512" />
               <meta property="og:image:height" content="512" />
 
@@ -563,12 +564,12 @@ class Layout extends Component {
               <meta name="twitter:site" content="uniflow_io" />
               <meta name="twitter:title" content={siteMetadata.title} />
               <meta name="twitter:description" content={siteMetadata.description} />
-              <meta name="twitter:image" content={`${env.url}${logo.publicURL}`} />
+              <meta name="twitter:image" content={`${env.get('clientUrl')}${logo.publicURL}`} />
             </Helmet>
             <UserManager location={this.props.location} />
             {[
               /*'production', 'preprod'*/
-            ].indexOf(env.env) !== -1 && <MessengerPlatform />}
+            ].indexOf(env.get('env')) !== -1 && <MessengerPlatform />}
             <Header location={this.props.location} logo={logo} changeLogTags={changeLogTags} />
             <Alerts />
             {this.props.children}
@@ -582,7 +583,6 @@ class Layout extends Component {
 
 Layout = connect((state) => ({
   app: state.app,
-  env: state.env,
 }))(Layout);
 
 export default Layout;

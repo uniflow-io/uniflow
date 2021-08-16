@@ -1,5 +1,3 @@
-const { exit } = require('@oclif/errors');
-
 const projectPath = './';
 const docsPath = '../../docs';
 const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development';
@@ -33,7 +31,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-gtag`,
       options: {
-        trackingId: process.env.GATSBY_TRACKING_ID,
+        trackingId: process.env.TRACKING_ID,
         head: true,
         anonymize: false,
       },

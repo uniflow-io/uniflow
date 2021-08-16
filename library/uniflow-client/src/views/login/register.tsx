@@ -7,6 +7,7 @@ import { navigate } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { env } from '../../utils'
 
 class Register extends Component {
   state = {
@@ -34,7 +35,7 @@ class Register extends Component {
   };
 
   render() {
-    const { auth, env } = this.props;
+    const { auth } = this.props;
     const { email, password } = this.state;
 
     return (
@@ -90,12 +91,12 @@ class Register extends Component {
                     </div>
                   </div>
                 </form>
-                {env.facebookAppId && (
+                {env.get('facebookAppId') && (
                   <div className="row mb-3">
                     <div className="col-md-12">
                       <div className="d-grid">
                         <a
-                          href={facebookLoginUrl(env.facebookAppId)}
+                          href={facebookLoginUrl(env.get('facebookAppId'))}
                           className="btn btn-social btn-facebook"
                         >
                           <FontAwesomeIcon icon={faFacebookF} /> Register with Facebook
@@ -104,12 +105,12 @@ class Register extends Component {
                     </div>
                   </div>
                 )}
-                {env.githubAppId && (
+                {env.get('githubAppId') && (
                   <div className="row">
                     <div className="col-md-12">
                       <div className="d-grid">
                         <a
-                          href={githubLoginUrl(env.githubAppId)}
+                          href={githubLoginUrl(env.get('githubAppId'))}
                           className="btn btn-social btn-github"
                         >
                           <FontAwesomeIcon icon={faGithub} /> Register with Github
@@ -130,6 +131,5 @@ class Register extends Component {
 export default connect((state) => {
   return {
     auth: state.auth,
-    env: state.env,
   };
 })(Register);

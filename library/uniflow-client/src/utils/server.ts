@@ -1,6 +1,8 @@
+import env from './env'
+
 export default {
   getBaseUrl: () => {
-    return process.env.GATSBY_API_URL;
+    return env.get('apiUrl');
   },
   handleErrors: (response) => {
     const errors = {};

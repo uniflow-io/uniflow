@@ -1,24 +1,24 @@
 import * as express from 'express';
 import * as convict from 'convict'
 import { Service } from 'typedi';
-import { ParamsConfig } from './config';
+import { AppConfig } from './config';
 import { DatabaseLoader, ServerLoader } from './loader';
 import { Server as HttpServer } from 'http';
 import { Connection } from 'typeorm';
-import { AppConfig } from './config/params-config';
+import { AppConfigData } from './config/app-config';
 
 @Service()
 export default class App {
 	private server: HttpServer;
 
 	constructor(
-		private paramsConfig: ParamsConfig,
+		private appConfig: AppConfig,
 		private databaseLoader: DatabaseLoader,
 		private serverLoader: ServerLoader
 	) {}
 
-	public getParams(): convict.Config<AppConfig> {
-		return this.paramsConfig.getConfig();
+	public getConfig(): convict.Config<AppConfigData> {
+		return this.appConfig.getConfig();
 	}
 
 	public getApp(): express.Application {
@@ -38,7 +38,7 @@ export default class App {
 		await this.serverLoader.load()
 		
 		return new Promise((resolve: any) => {
-			const PORT = this.paramsConfig.getConfig().get('port');
+			const PORT = this.appConfig.getConfig().get('port');
 			const app = this.serverLoader.getApp()
 			app.on('error', (err: any) => {
 				console.log(err);

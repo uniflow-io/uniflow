@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command';
 import * as open from 'open';
 import { StartCommand } from '.';
 
-import config from '../config';
+import { appConfig } from '../config';
 import app from '../server';
 
 let processExistCode = 0;
@@ -24,7 +24,7 @@ export default class StartCommandCommand extends Command {
    * Opens the UI in browser
    */
   static openBrowser() {
-    const url = `http://localhost:${config.get('port')}`;
+    const url = `http://localhost:${appConfig.get('port')}`;
 
     open(url, { wait: true }).catch((error: Error) => {
       console.log(
@@ -60,7 +60,7 @@ export default class StartCommandCommand extends Command {
       try {
         await app();
 
-        const url = `http://localhost:${config.get('port')}`;
+        const url = `http://localhost:${appConfig.get('port')}`;
         this.log(`\nUniflow client v${require('../../package.json').version} is ready on:\n${url}`);
 
         // Allow to open uniflow editor by pressing "o"

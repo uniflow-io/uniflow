@@ -134,6 +134,5 @@ class Contact extends Component {
 
 export default connect((state) => {
   return {
-    env: state.env,
   };
 })(Contact);

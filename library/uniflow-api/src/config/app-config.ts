@@ -3,9 +3,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { Inject, Service } from 'typedi';
 
-// typescript sample code : https://github.com/bright/brightwallet/blob/master/backend/src/database/database.config.ts
-
-interface DatabaseConfig {
+interface DatabaseConfigData {
   type: 'sqlite' | 'mongodb' | 'mysql' |'postgres'
   sqlite: {
     database: string
@@ -29,15 +27,15 @@ interface DatabaseConfig {
   },
 }
 
-interface MailChimpConfig {
+interface MailChimpConfigData {
   apiKey: string,
   serverPrefix: string,
   listId: string,
 }
 
-export type AppConfig = {
+export type AppConfigData = {
   env: 'development' | 'preprod' | 'production' | 'test',
-  database: DatabaseConfig,
+  database: DatabaseConfigData,
   port: number,
   corsAllowOrigin: string,
   jwtSecret: string,
@@ -47,17 +45,17 @@ export type AppConfig = {
   githubWebhookSecret: string,
   githubEmailToken: string,
   mailerUrl: string,
-  mailchimp: MailChimpConfig,
+  mailchimp: MailChimpConfigData,
 };
 
 @Service()
-export default class ParamsConfig {
+export default class AppConfig {
   constructor(
     @Inject('env')
     private env: string
   ) {}
 
-  public getConfig(): convict.Config<AppConfig> {
+  public getConfig(): convict.Config<AppConfigData> {
     const envConfig = dotenv.parse(fs.readFileSync(`.env.${this.env}`))
     if (!envConfig) {
       // Throw generic error
@@ -65,9 +63,9 @@ export default class ParamsConfig {
     }
     envConfig['NODE_ENV'] = this.env
     
-    const config = convict<AppConfig>({
+    const config = convict<AppConfigData>({
       env: {
-        doc: 'Type of database to use',
+        doc: 'Running environment',
         format: ['development' , 'preprod' , 'production' , 'test'],
         default: 'development',
         env: 'NODE_ENV'

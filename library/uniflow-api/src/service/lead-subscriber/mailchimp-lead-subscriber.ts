@@ -10,7 +10,7 @@ import { Transformer } from "unified";
 import { Node, Parent } from "unist";
 import { VFile, VFileCompatible } from 'vfile'
 import { Service } from 'typedi'
-import { ParamsConfig } from '../../config'
+import { AppConfig } from '../../config'
 import { LeadSubscriberInterface } from './interfaces'
 import { LeadEntity } from '../../entity'
 
@@ -272,15 +272,15 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
   private env: 'development'|'preprod'|'production'|'test'
 
   constructor(
-    private paramsConfig: ParamsConfig,
+    private appConfig: AppConfig,
   ) {
     mailchimpMarketing.setConfig({
-      apiKey: paramsConfig.getConfig().get('mailchimp.apiKey'),
-      server: paramsConfig.getConfig().get('mailchimp.serverPrefix'),
+      apiKey: appConfig.getConfig().get('mailchimp.apiKey'),
+      server: appConfig.getConfig().get('mailchimp.serverPrefix'),
     })
     this.mailchimp = mailchimpMarketing
-    this.listId = this.paramsConfig.getConfig().get('mailchimp.listId')
-    this.env = this.paramsConfig.getConfig().get('env')
+    this.listId = this.appConfig.getConfig().get('mailchimp.listId')
+    this.env = this.appConfig.getConfig().get('env')
   }
 
   public async update(lead: LeadEntity): Promise<any> {

@@ -1,7 +1,7 @@
 import * as argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
 import { Inject, Service } from 'typedi';
-import { ParamsConfig } from '../config';
+import { AppConfig } from '../config';
 import { ApiException } from '../exception';
 import { UserEntity } from '../entity';
 import { RequestInterface } from './request/interfaces';
@@ -11,7 +11,7 @@ import { UserRepository } from '../repository';
 @Service()
 export default class AuthService {
   constructor(
-    private paramsConfig: ParamsConfig,
+    private appConfig: AppConfig,
     @Inject('RequestInterface')
     private request: RequestInterface,
     private userService: UserService,
@@ -43,7 +43,7 @@ export default class AuthService {
     const appResponse = await this.request.get(`https://graph.facebook.com/app/?access_token=${access_token}`)
 
     // Make sure it's the correct app.
-    if (!appResponse.data.id || appResponse.data.id !== this.paramsConfig.getConfig().get('facebookAppId')) {
+    if (!appResponse.data.id || appResponse.data.id !== this.appConfig.getConfig().get('facebookAppId')) {
       throw new ApiException('Bad credentials', 401);
     }
 
@@ -83,8 +83,8 @@ export default class AuthService {
   public async githubLogin(code: string, user?: UserEntity): Promise<{ user: UserEntity; token: string }> {
     // Get the token's Github app.
     const appResponse = await this.request.post(`https://github.com/login/oauth/access_token`, {
-      'client_id': this.paramsConfig.getConfig().get('githubAppId'),
-      'client_secret': this.paramsConfig.getConfig().get('githubAppSecret'),
+      'client_id': this.appConfig.getConfig().get('githubAppId'),
+      'client_secret': this.appConfig.getConfig().get('githubAppSecret'),
       'code': code
     }, {
       headers: {
@@ -148,7 +148,7 @@ export default class AuthService {
         name: user.email,
         exp: exp.getTime() / 1000,
       },
-      this.paramsConfig.getConfig().get('jwtSecret'),
+      this.appConfig.getConfig().get('jwtSecret'),
     );
   }
 }

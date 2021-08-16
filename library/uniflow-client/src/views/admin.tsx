@@ -45,7 +45,6 @@ class Admin extends Component {
 export default connect((state) => {
   return {
     auth: state.auth,
-    env: state.env,
     user: state.user,
   };
 })(Admin);

@@ -35,7 +35,7 @@ export default class StartCommand extends Command {
 	 * Opens the UI in browser
 	 */
 	private openBrowser() {
-    	const url = `http://localhost:${this.app.getParams().get('port')}`
+    	const url = `http://localhost:${this.app.getConfig().get('port')}`
 
 		open(url, { wait: true })
 			.catch((error: Error) => {
@@ -70,7 +70,7 @@ export default class StartCommand extends Command {
 			try {
 				await this.app.start()
 
-				const url = `http://localhost:${this.app.getParams().get('port')}`
+				const url = `http://localhost:${this.app.getConfig().get('port')}`
 				this.log(`\nUniflow api v${require('../../package.json').version} is ready on:\n${url}`)
 
 				// Allow to open uniflow editor by pressing "o"

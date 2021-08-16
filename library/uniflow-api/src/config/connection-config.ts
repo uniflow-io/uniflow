@@ -1,12 +1,12 @@
 import { Service } from 'typedi';
 import { ConnectionOptions } from 'typeorm';
 import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramEntity, ProgramClientEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
-import ParamsConfig from './params-config';
+import AppConfig from './app-config';
 
 @Service()
 export default class ConnectionConfig {
   constructor(
-    private params: ParamsConfig
+    private params: AppConfig
   ) {}
 
   public async getConfig(): Promise<ConnectionOptions> {

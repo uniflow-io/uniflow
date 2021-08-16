@@ -3,7 +3,7 @@ import * as crypto from 'crypto'
 import * as jwt from 'jsonwebtoken';
 import Container from "../container";
 import { ApiException } from "../exception";
-import { ParamsConfig } from '../config';
+import { AppConfig } from '../config';
 import { UserRepository } from '../repository';
 import { UserService } from '../service';
 import { UserEntity } from "../entity";
@@ -14,7 +14,7 @@ export async function expressAuthentication(
     scopes?: string[]
   ): Promise<any> {
     const container = new Container()
-    const params = container.get(ParamsConfig)
+    const params = container.get(AppConfig)
     const userRepository = container.get(UserRepository)
     const userService = container.get(UserService)
     

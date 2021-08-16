@@ -8,6 +8,7 @@ import { updateSettings, commitUpdateSettings } from '../reducers/user/actions';
 import { getLead, createLead, updateLead } from '../reducers/lead/actions';
 import { copyTextToClipboard } from '../utils';
 import { Checkbox } from '../components';
+import { env } from '../utils'
 
 class Settings extends Component {
   state = {
@@ -191,7 +192,6 @@ class Settings extends Component {
   };
 
   render() {
-    const { env } = this.props;
     const { user, lead, isSaving } = this.state;
     const clipboard = this.getClipboard(user);
 
@@ -256,7 +256,7 @@ class Settings extends Component {
                   </button>
                 )) || (
                   <a
-                    href={facebookLoginUrl(env.facebookAppId)}
+                    href={facebookLoginUrl(env.get('facebookAppId'))}
                     className="btn btn-social btn-facebook"
                   >
                     <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
@@ -276,7 +276,7 @@ class Settings extends Component {
                     <FontAwesomeIcon icon={faGithub} /> Revoke Github
                   </button>
                 )) || (
-                  <a href={githubLoginUrl(env.githubAppId)} className="btn btn-social btn-github">
+                  <a href={githubLoginUrl(env.get('githubAppId'))} className="btn btn-social btn-github">
                     <FontAwesomeIcon icon={faGithub} /> Connect with Github
                   </a>
                 )}
@@ -396,7 +396,6 @@ class Settings extends Component {
 export default connect((state) => {
   return {
     auth: state.auth,
-    env: state.env,
     user: state.user,
   };
 })(Settings);

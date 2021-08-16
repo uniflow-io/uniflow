@@ -25,8 +25,10 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
         : [],
     },
     resolve: {
-      fallback: {
+      alias: {
         vm: require.resolve('vm-browserify'),
+      },
+      fallback: {
       },
     },
   };

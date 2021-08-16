@@ -1,6 +1,6 @@
 import { Inject, Service } from "typedi";
 import { Controller, Get, Response, SuccessResponse, Post, Route, Tags, ValidateError, Body, Path, Put, Security } from "tsoa";
-import { ParamsConfig } from '../config';
+import { AppConfig } from '../config';
 import { ApiException } from '../exception';
 import { LeadFactory } from '../factory';
 import { LeadRepository } from '../repository';
@@ -20,7 +20,7 @@ class LeadController extends Controller {
     private leadFactory: LeadFactory,
     @Inject('LeadSubscriberInterface')
     private leadSubscriber: LeadSubscriberInterface,
-    private paramsConfig: ParamsConfig,
+    private appConfig: AppConfig,
     @Inject('RequestInterface')
     private request: RequestInterface,
   ) {
@@ -103,7 +103,7 @@ class LeadController extends Controller {
   @Response<ErrorJSON>(404, "Not found")
   public async githubWebhook(@Body() body: {action: string, sender: {login: string}}): Promise<LeadApiType|boolean> {
     //create a new lead if receive github star from github webhook !
-    const githubEmailToken = this.paramsConfig.getConfig().get('githubEmailToken')
+    const githubEmailToken = this.appConfig.getConfig().get('githubEmailToken')
     if(body.action === 'created' && body.sender.login && githubEmailToken) {
       // retrive github user email with a personal github access token
       const githubResponse = await this.request.get(`https://api.github.com/users/${body.sender.login}`, {

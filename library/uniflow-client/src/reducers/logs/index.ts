@@ -8,9 +8,9 @@ const logs = (state = defaultState, action) => {
   switch (action.type) {
     case COMMIT_ADD_LOG:
       const item = new Log({
-        id: id,
+        id,
         message: action.message,
-        status: 'new',
+        status: 'new'
       });
       id++;
 

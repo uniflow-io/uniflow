@@ -2,6 +2,7 @@
   tag: "v1.1.15"
   label: |-
     Allow use Markdown for description
+    Uniformize environment vars
 -
   tag: "v1.1.14"
   label: |-

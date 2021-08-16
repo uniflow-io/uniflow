@@ -7,6 +7,7 @@ import { Link, navigate } from 'gatsby';
 import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { env } from '../../utils'
 
 class Login extends Component {
   state = {
@@ -34,7 +35,7 @@ class Login extends Component {
   };
 
   render() {
-    const { auth, env } = this.props;
+    const { auth } = this.props;
     const { username, password } = this.state;
 
     return (
@@ -90,12 +91,12 @@ class Login extends Component {
                     </div>
                   </div>
                 </form>
-                {env.facebookAppId && (
+                {env.get('facebookAppId') && (
                   <div className="row mb-3">
                     <div className="col-md-12">
                       <div className="d-grid">
                         <a
-                          href={facebookLoginUrl(env.facebookAppId)}
+                          href={facebookLoginUrl(env.get('facebookAppId'))}
                           className="btn btn-social btn-facebook"
                         >
                           <FontAwesomeIcon icon={faFacebookF} /> Login with Facebook
@@ -104,12 +105,12 @@ class Login extends Component {
                     </div>
                   </div>
                 )}
-                {env.githubAppId && (
+                {env.get('githubAppId') && (
                   <div className="row">
                     <div className="col-md-12">
                       <div className="d-grid">
                         <a
-                          href={githubLoginUrl(env.githubAppId)}
+                          href={githubLoginUrl(env.get('githubAppId'))}
                           className="btn btn-social btn-github"
                         >
                           <FontAwesomeIcon icon={faGithub} /> Login with Github
@@ -136,6 +137,5 @@ class Login extends Component {
 export default connect((state) => {
   return {
     auth: state.auth,
-    env: state.env,
   };
 })(Login);
