@@ -34,12 +34,15 @@ export default class ProgramFixture implements FixtureInterface {
         const users = this.userFixture.USER_KEYS.map(key => this.refs.get(key))
         const clients = this.clientFixture.CLIENT_KEYS.map(key => this.refs.get(key))
         const tags = this.tagFixture.TAG_KEYS.map(key => this.refs.get(key))
-        const folders = users.reduce<Map<string,Array<ObjectLiteral|undefined>>>((folders, user: UserEntity) => {
-            return folders.set(user.email, [
+        const folders = users.reduce<Map<string,Array<ObjectLiteral|undefined>>>((folders, user) => {
+            const email = (user as UserEntity).email
+            return folders.set(email, [
                 ...[undefined],
                 ...this.folderFixture.FOLDER_KEYS
                     .map(key => this.refs.get(key))
-                    .filter((folder: FolderEntity) => folder.user.email === user.email)
+                    .filter((folder) => {
+                        (folder as FolderEntity).user.email === email
+                    })
             ])
         }, new Map())
 

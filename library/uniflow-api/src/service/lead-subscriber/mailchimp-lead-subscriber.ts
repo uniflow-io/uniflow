@@ -10,9 +10,9 @@ import { Transformer } from "unified";
 import { Node, Parent } from "unist";
 import { VFile, VFileCompatible } from 'vfile'
 import { Service } from 'typedi'
-import { AppConfig } from '../../config'
 import { LeadSubscriberInterface } from './interfaces'
 import { LeadEntity } from '../../entity'
+import { AppConfig } from '../../config'
 
 const newslettersPath = `${__dirname}/../../../../../docs/newsletters`
 

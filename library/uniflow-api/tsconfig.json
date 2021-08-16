@@ -1,32 +1,31 @@
 {
   "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
     "lib": [
-      "es2017"
+      "esnext"
     ],
+    "outDir": "./dist",
+
+    "strict": true,
+    "strictPropertyInitialization": false,
+
     "types": [
       "node",
       "jest"
     ],
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "removeComments": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "preserveConstEnums": true,
-    "declaration": true,
-    "outDir": "./dist",
-    "target": "es2017",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "typeRoots": [
       "./src/types",
       "./node_modules/@types"
-    ]
+    ],
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "forceConsistentCasingInFileNames": true,
   },
   "include": [
-    "./src/**/*"
+    "./src/**/*.ts"
   ],
   "exclude": [
     "./dist/**/*",
