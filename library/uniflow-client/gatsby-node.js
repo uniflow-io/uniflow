@@ -11,21 +11,7 @@ require('dotenv').config({
 });
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-  const isSSR = stage.includes(`html`);
-
-  let config = {
-    module: {
-      rules: isSSR
-        ? [
-            {
-              test: /brace/,
-              use: loaders.null(),
-            },
-          ]
-        : [],
-    },
-  };
-
+  let config = {}
   if (activeEnv === 'production') {
     config.devtool = false;
   }

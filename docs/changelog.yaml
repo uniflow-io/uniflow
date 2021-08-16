@@ -3,6 +3,7 @@
   label: |-
     Allow use Markdown for description
     Uniformize environment vars
+    Change Ace to Prism editor
 -
   tag: "v1.1.14"
   label: |-

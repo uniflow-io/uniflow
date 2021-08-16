@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
-import { Ace, Flows, Checkbox, Select } from '../../components';
+import { Editor, Flows, Checkbox, Select } from '../../components';
 import Runner from '../../models/runner';
 import {
   commitPushFlow,
@@ -458,7 +458,7 @@ class Program extends Component {
             </label>
 
             <div className="col-sm-10">
-              <Ace
+              <Editor
                 className="form-control"
                 id="info_description_{{ _uid }}"
                 value={program.description}

@@ -1,4 +1,4 @@
-export { default as Ace } from './ace';
+export { default as Editor } from './editor';
 export { default as Checkbox } from './checkbox';
 export { default as FlowHeader } from './flow/header';
 export { default as Flows } from './flows';

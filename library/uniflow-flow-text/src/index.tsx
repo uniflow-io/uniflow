@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import { Editor, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import {
   onUpdate,
   onDelete,
@@ -45,7 +45,7 @@ class TextFlow extends Component {
             </label>
 
             <div className="col-sm-10">
-              <Ace
+              <Editor
                 className="form-control"
                 id="text{{ _uid }}"
                 value={text}
