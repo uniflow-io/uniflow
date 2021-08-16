@@ -318,7 +318,7 @@ export const createProgram = (program, uid, token) => {
   return async (dispatch) => {
     const data = {
       name: program.name,
-      slug: program.name,
+      ...(program.slug && {slug: program.slug}),
       path: program.path,
       clients: program.clients,
       tags: program.tags,
