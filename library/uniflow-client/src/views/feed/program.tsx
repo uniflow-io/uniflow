@@ -120,7 +120,7 @@ class Program extends Component {
         this._componentShouldUpdate = true;
       });
     }
-  }, 500);
+  }, 1000);
 
   onUpdateFlowData = debounce(async () => {
     const { program, flows, user, feed } = this.props;
@@ -138,7 +138,7 @@ class Program extends Component {
         await this.props.dispatch(commitAddLog(error.message));
       }
     }
-  }, 500);
+  }, 1000);
 
   onChangeTitle = async (event) => {
     await this.props.dispatch(commitUpdateFeed({
@@ -224,7 +224,7 @@ class Program extends Component {
     if (typeof window !== `undefined` && window.location.pathname !== path) {
       navigate(path);
     }
-  }, 500);
+  }, 1000);
 
   onDuplicate = async (event) => {
     event.preventDefault();

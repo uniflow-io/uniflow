@@ -69,7 +69,7 @@ class Folder extends Component {
     if (typeof window !== `undefined` && window.location.pathname !== path) {
       navigate(path);
     }
-  }, 500);
+  }, 1000);
 
   onDelete = async (event) => {
     event.preventDefault();
