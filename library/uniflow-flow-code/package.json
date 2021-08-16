@@ -30,6 +30,7 @@
       "core"
     ],
     "clients": [
+      "uniflow"
     ]
   },
   "dependencies": {

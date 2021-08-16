@@ -84,7 +84,7 @@ class CodeFlow extends Component {
                 onChange={this.onChangeCode}
                 placeholder="Code"
                 height="200"
-                mode="code"
+                mode="javascript"
               />
             </div>
           </div>
