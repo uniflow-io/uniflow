@@ -36,74 +36,61 @@ class Folder extends Component {
     }
   }
 
-  onChangeTitle = (event) => {
-    this.props
-      .dispatch(
-        setParentFolderFeed({
-          ...this.props.folder,
-          ...{ name: event.target.value },
-        })
-      )
-      .then(() => {
-        this.onUpdate();
-      });
+  onChangeTitle = async (event) => {
+    await this.props.dispatch(
+      setParentFolderFeed({
+        ...this.props.folder,
+        ...{ name: event.target.value },
+      })
+    )
+    this.onUpdate();
   };
 
   onChangeSlug = (event) => {
     this.setState({ slug: event.target.value }, this.onUpdate);
   };
 
-  onChangePath = (selected) => {
-    this.props
-      .dispatch(
-        setParentFolderFeed({
-          ...this.props.folder,
-          ...{ path: selected },
-        })
-      )
-      .then(() => {
-        this.onUpdate();
-      });
+  onChangePath = async (selected) => {
+    await this.props.dispatch(
+      setParentFolderFeed({
+        ...this.props.folder,
+        ...{ path: selected },
+      })
+    )
+    this.onUpdate();
   };
 
-  onUpdate = debounce(() => {
-    const { folder } = this.props;
+  onUpdate = debounce(async () => {
+    let { folder } = this.props;
     folder.slug = this.state.slug ?? folder.slug;
 
-    this.props.dispatch(updateParentFolder(folder, this.props.auth.token)).then((folder) => {
-      const path = toFeedPath(folder, this.props.user);
-      if (typeof window !== `undefined` && window.location.pathname !== path) {
-        navigate(path);
-      }
-    });
+    folder = await this.props.dispatch(updateParentFolder(folder, this.props.auth.token))
+    const path = toFeedPath(folder, this.props.user);
+    if (typeof window !== `undefined` && window.location.pathname !== path) {
+      navigate(path);
+    }
   }, 500);
 
-  onDelete = (event) => {
+  onDelete = async (event) => {
     event.preventDefault();
 
-    return (
-      this.props
-        .dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
-        .then(() => {
-          navigate(toFeedPath(this.props.folder, this.props.user, true));
-        })
-    );
+    await this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token))
+    navigate(toFeedPath(this.props.folder, this.props.user, true));
   };
 
-  onFolderEdit = (event) => {
+  onFolderEdit = async (event) => {
     event.preventDefault();
 
     const { feed, folder } = this.props;
 
-    this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
-      folderTree = folderTree.filter((value) => {
-        return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
-      });
+    let folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token))
+    folderTree = folderTree.filter((value) => {
+      return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
+    });
 
-      this.setState({
-        folderTreeEdit: true,
-        folderTree: folderTree,
-      });
+    this.setState({
+      folderTreeEdit: true,
+      folderTree: folderTree,
     });
   };
 

@@ -18,7 +18,7 @@ class Notifications extends Component {
     state: 'loading',
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { location } = this.props;
 
     const uid = this.getId();
@@ -26,44 +26,40 @@ class Notifications extends Component {
     const match = matchRoute(location.pathname);
     if (uid !== null && match) {
       if (match.route === 'notificationUnsubscribe') {
-        this.props
-          .dispatch(
+        try {
+          await this.props.dispatch(
             updateLead(uid, {
               optinNewsletter: false,
               optinBlog: false,
               optinGithub: false,
             })
           )
-          .then(() => {
-            this.setState({
-              lead: { ...this.state.lead, ...{ uid } },
-              state: 'sent-unsubscribe',
-            });
-          })
-          .catch(() => {
-            this.setState({ state: 'not-found' });
+          this.setState({
+            lead: { ...this.state.lead, ...{ uid } },
+            state: 'sent-unsubscribe',
           });
+        } catch(error) {
+          this.setState({ state: 'not-found' });
+        }
       } else if (match.route === 'notificationManage') {
-        this.props
-          .dispatch(getLead(uid))
-          .then((data) => {
-            this.setState({
-              lead: {
-                ...this.state.lead,
-                ...{
-                  uid,
-                  optinNewsletter: data.optinNewsletter,
-                  optinBlog: data.optinBlog,
-                  optinGithub: data.optinGithub,
-                  githubUsername: data.githubUsername,
-                },
+        try {
+          const data = await this.props.dispatch(getLead(uid))
+          this.setState({
+            lead: {
+              ...this.state.lead,
+              ...{
+                uid,
+                optinNewsletter: data.optinNewsletter,
+                optinBlog: data.optinBlog,
+                optinGithub: data.optinGithub,
+                githubUsername: data.githubUsername,
               },
-              state: 'form',
-            });
-          })
-          .catch(() => {
-            this.setState({ state: 'not-found' });
+            },
+            state: 'form',
           });
+        } catch(error) {
+          this.setState({ state: 'not-found' });
+        }
       } else {
         this.setState({ state: 'not-found' });
       }
@@ -98,23 +94,21 @@ class Notifications extends Component {
 
     const { lead } = this.state;
 
-    this.setState({ state: 'sending' }, () => {
-      this.props
-        .dispatch(
+    this.setState({ state: 'sending' }, async () => {
+      try {
+        await this.props.dispatch(
           updateLead(lead.uid, {
             optinNewsletter: lead.optinNewsletter,
             optinBlog: lead.optinBlog,
             optinGithub: lead.optinGithub,
           })
         )
-        .then(() => {
-          this.setState({ state: 'sent' });
-        })
-        .catch((error) => {
-          if (error instanceof ApiException) {
-            this.setState({ state: 'form', errors: { ...error.errors } });
-          }
-        });
+        this.setState({ state: 'sent' });
+      } catch(error) {
+        if (error instanceof ApiException) {
+          this.setState({ state: 'form', errors: { ...error.errors } });
+        }
+      }
     });
   };
 

@@ -6,7 +6,7 @@ import { commitAddLog } from '../../reducers/logs/actions';
 import { connect } from 'react-redux';
 
 class FacebookLogin extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const accessToken = this.getAccessToken();
     if (accessToken === null) {
       if (typeof window !== `undefined`) {
@@ -14,18 +14,17 @@ class FacebookLogin extends Component {
       }
     }
 
-    this.props.dispatch(facebookLogin(accessToken, this.props.auth.token)).then(() => {
-      if (this.props.auth.isAuthenticated) {
-        if (typeof window !== `undefined`) {
-          return navigate(pathTo('feed'));
-        }
-      } else {
-        this.props.dispatch(commitAddLog(this.props.auth.statusText));
-        if (typeof window !== `undefined`) {
-          return navigate(pathTo('login'));
-        }
+    await this.props.dispatch(facebookLogin(accessToken, this.props.auth.token))
+    if (this.props.auth.isAuthenticated) {
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('feed'));
       }
-    });
+    } else {
+      this.props.dispatch(commitAddLog(this.props.auth.statusText));
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('login'));
+      }
+    }
   }
 
   getAccessToken() {

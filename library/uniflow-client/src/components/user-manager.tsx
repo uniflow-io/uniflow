@@ -48,12 +48,11 @@ class UserManager extends Component {
     }
   };
 
-  onFetchUser = (uid, token) => {
-    Promise.all([this.props.dispatch(fetchSettings(uid, token))]).then(() => {
-      const { location } = this.props;
-
-      this.onLocation(location);
-    });
+  onFetchUser = async (uid, token) => {
+    await Promise.all([this.props.dispatch(fetchSettings(uid, token))])
+    
+    const { location } = this.props;
+    this.onLocation(location);
   };
 
   isCachedFeed = (uid, paths = []) => {
@@ -110,7 +109,7 @@ class UserManager extends Component {
     return false;
   };
 
-  onFetchItem = (uid, paths = []) => {
+  onFetchItem = async (uid, paths = []) => {
     const { fetching } = this.state;
     const { auth } = this.props;
 
@@ -118,25 +117,20 @@ class UserManager extends Component {
       return;
     }
 
-    Promise.resolve()
-      .then(async () => {
-        return new Promise((resolve) => {
-          this.setState({ fetching: true }, resolve);
-        });
-      })
-      .then(async () => {
-        if (this.isCachedFeed(uid, paths)) {
-          return;
-        }
+    await new Promise((resolve) => {
+      this.setState({ fetching: true }, resolve);
+    });
 
-        const token = auth.isAuthenticated ? auth.token : null;
-        return this.props.dispatch(fetchFeed(uid, paths, token));
-      })
-      .then(async () => {
-        return new Promise((resolve) => {
-          this.setState({ fetching: false }, resolve);
-        });
-      });
+    if (this.isCachedFeed(uid, paths)) {
+      return;
+    }
+
+    const token = auth.isAuthenticated ? auth.token : null;
+    await this.props.dispatch(fetchFeed(uid, paths, token));
+    
+    await new Promise((resolve) => {
+      this.setState({ fetching: false }, resolve);
+    });
   };
 
   render() {

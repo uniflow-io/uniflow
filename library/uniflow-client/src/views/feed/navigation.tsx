@@ -28,16 +28,15 @@ class Navigation extends Component {
     this.setState({ collapse: !this.state.collapse });
   };
 
-  onCreateFolder = (event) => {
+  onCreateFolder = async (event) => {
     event.preventDefault();
     const { feed } = this.props;
     const folderPath = feed.parentFolder
       ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`
       : '/';
 
-    this.props
-      .dispatch(
-        createFolder(
+    try {
+      const item = await this.props.dispatch(createFolder(
           {
             name: this.state.search,
             path: folderPath,
@@ -46,26 +45,22 @@ class Navigation extends Component {
           this.props.auth.token
         )
       )
-      .then((item) => {
-        return this.props.dispatch(setSlugFeed(null)).then(() => {
-          navigate(toFeedPath(item, this.props.user));
-        });
-      })
-      .catch((log) => {
-        return this.props.dispatch(commitAddLog(log.message));
-      });
+      await this.props.dispatch(setSlugFeed(null))
+      navigate(toFeedPath(item, this.props.user));
+    } catch(error) {
+      return this.props.dispatch(commitAddLog(error.message));
+    }
   };
 
-  onSubmit = (event) => {
+  onSubmit = async (event) => {
     event.preventDefault();
     const { feed } = this.props;
     const folderPath = feed.parentFolder
       ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`
       : '/';
 
-    this.props
-      .dispatch(
-        createProgram(
+    try {
+      const item = await this.props.dispatch(createProgram(
           {
             name: this.state.search,
             clients: ['uniflow'],
@@ -76,12 +71,10 @@ class Navigation extends Component {
           this.props.auth.token
         )
       )
-      .then((item) => {
-        return navigate(toFeedPath(item, this.props.user));
-      })
-      .catch((log) => {
-        return this.props.dispatch(commitAddLog(log.message));
-      });
+      navigate(toFeedPath(item, this.props.user));
+    } catch(error) {
+      return this.props.dispatch(commitAddLog(log.message));
+    }
   };
 
   render() {

@@ -31,9 +31,9 @@ const onCode = function() {
   }
 }
 
-const onExecute = function(runner) {
+const onExecute = async function(runner) {
   let returnValue = null
-  return new Promise(resolve => {
+  await new Promise(resolve => {
     let context = runner.getContext()
     if (this.state.messageVariable && context[this.state.messageVariable]) {
       this.setState({ message: context[this.state.messageVariable] }, resolve)
@@ -41,31 +41,21 @@ const onExecute = function(runner) {
       this.setState({ message: null }, resolve)
     }
   })
-    .then(() => {
-      return new Promise(resolve => {
-        this.setState({ promptDisplay: true, input: null }, resolve)
-      })
-    })
-    .then(() => {
-      return new Promise(resolve => {
-        this.inputResolve = resolve
-      })
-    })
-    .then(() => {
-      if (this.state.variable) {
-        returnValue = runner.run(
-          this.state.variable + ' = ' + JSON.stringify(this.state.input || '')
-        )
-      }
-    })
-    .then(() => {
-      return new Promise(resolve => {
-        this.setState({ promptDisplay: false }, resolve)
-      })
-    })
-    .then(() => {
-      return returnValue
-    })
+  await new Promise(resolve => {
+    this.setState({ promptDisplay: true, input: null }, resolve)
+  })
+  await new Promise(resolve => {
+    this.inputResolve = resolve
+  })
+  if (this.state.variable) {
+    returnValue = runner.run(
+      this.state.variable + ' = ' + JSON.stringify(this.state.input || '')
+    )
+  }
+  await new Promise(resolve => {
+    this.setState({ promptDisplay: false }, resolve)
+  })
+  return returnValue
 }
 
 export { onCode, onExecute }

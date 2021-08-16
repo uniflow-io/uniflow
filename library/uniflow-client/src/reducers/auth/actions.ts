@@ -65,31 +65,29 @@ export const commitLogoutUser = () => {
 
 export const login = (username, password) => {
   return async (dispatch) => {
-    return dispatch(commitLoginUserRequest()).then(() => {
-      return request
-        .post(`${server.getBaseUrl()}/api/login`, {
-          username: username,
-          password: password,
-        })
-        .then((response) => {
-          try {
-            jwtDecode(response.data.token);
-            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
-          } catch (e) {
-            return dispatch(
-              commitLoginUserFailure({
-                response: {
-                  status: 403,
-                  statusText: 'Invalid token',
-                },
-              })
-            );
-          }
-        })
-        .catch((error) => {
-          dispatch(commitLoginUserFailure(error));
-        });
-    });
+    await dispatch(commitLoginUserRequest())
+    try {
+      const response = await request.post(`${server.getBaseUrl()}/api/login`, {
+        username: username,
+        password: password,
+      })
+
+      try {
+        jwtDecode(response.data.token);
+        return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
+      } catch (e) {
+        return dispatch(
+          commitLoginUserFailure({
+            response: {
+              status: 403,
+              statusText: 'Invalid token',
+            },
+          })
+        );
+      }
+    } catch(error) {
+      await dispatch(commitLoginUserFailure(error));
+    }
   };
 };
 
@@ -100,40 +98,38 @@ export const facebookLoginUrl = (facebookAppId) => {
 
 export const facebookLogin = (access_token, token = null) => {
   return async (dispatch) => {
-    return dispatch(commitLoginUserRequest()).then(() => {
-      return request
-        .post(
-          `${server.getBaseUrl()}/api/login-facebook`,
-          {
-            access_token: access_token,
-          },
-          token === null
-            ? {}
-            : {
-                headers: {
-                  'Uniflow-Authorization': `Bearer ${token}`,
-                },
-              }
-        )
-        .then((response) => {
-          try {
-            jwtDecode(response.data.token);
-            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
-          } catch (e) {
-            return dispatch(
-              commitLoginUserFailure({
-                response: {
-                  status: 403,
-                  statusText: 'Invalid token',
-                },
-              })
-            );
-          }
-        })
-        .catch((error) => {
-          dispatch(commitLoginUserFailure(error));
-        });
-    });
+    await dispatch(commitLoginUserRequest())
+    try {
+      const response = await request.post(
+        `${server.getBaseUrl()}/api/login-facebook`,
+        {
+          access_token: access_token,
+        },
+        token === null
+          ? {}
+          : {
+              headers: {
+                'Uniflow-Authorization': `Bearer ${token}`,
+              },
+            }
+      )
+
+      try {
+        jwtDecode(response.data.token);
+        return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
+      } catch (e) {
+        return dispatch(
+          commitLoginUserFailure({
+            response: {
+              status: 403,
+              statusText: 'Invalid token',
+            },
+          })
+        );
+      }
+    } catch(error) {
+      await dispatch(commitLoginUserFailure(error));
+    }
   };
 };
 
@@ -144,57 +140,51 @@ export const githubLoginUrl = (githubAppId) => {
 
 export const githubLogin = (code, token = null) => {
   return async (dispatch) => {
-    return dispatch(commitLoginUserRequest()).then(() => {
-      return request
-        .post(
-          `${server.getBaseUrl()}/api/login-github`,
-          {
-            code: code,
-          },
-          token === null
-            ? {}
-            : {
-                headers: {
-                  'Uniflow-Authorization': `Bearer ${token}`,
-                },
-              }
-        )
-        .then((response) => {
-          try {
-            jwtDecode(response.data.token);
-            return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
-          } catch (e) {
-            return dispatch(
-              commitLoginUserFailure({
-                response: {
-                  status: 403,
-                  statusText: 'Invalid token',
-                },
-              })
-            );
-          }
-        })
-        .catch((error) => {
-          dispatch(commitLoginUserFailure(error));
-        });
-    });
+    await dispatch(commitLoginUserRequest())
+    try {
+      const response = await request.post(`${server.getBaseUrl()}/api/login-github`, {
+          code: code,
+        },
+        token === null
+          ? {}
+          : {
+              headers: {
+                'Uniflow-Authorization': `Bearer ${token}`,
+              },
+            }
+      )
+
+      try {
+        jwtDecode(response.data.token);
+        return dispatch(commitLoginUserSuccess(response.data.token, response.data.uid));
+      } catch (e) {
+        return dispatch(
+          commitLoginUserFailure({
+            response: {
+              status: 403,
+              statusText: 'Invalid token',
+            },
+          })
+        );
+      }
+    } catch(error) {
+      await dispatch(commitLoginUserFailure(error));
+    }
   };
 };
 
 export const register = (email, password) => {
   return async (dispatch) => {
-    return dispatch(commitLoginUserRequest()).then(() => {
-      return request
-        .post(`${server.getBaseUrl()}/api/users`, {
-          email: email,
-          password: password,
-        })
-        .then((response) => {
-          return login(email, password)(dispatch);
-        })
-        .catch((error) => {
-          dispatch(commitLoginUserFailure(error, error.response.data.message));
-        });
-    });
+    await dispatch(commitLoginUserRequest())
+    try {
+      const response = await request.post(`${server.getBaseUrl()}/api/users`, {
+        email: email,
+        password: password,
+      })
+
+      await login(email, password)(dispatch);
+    } catch(error) {
+      await dispatch(commitLoginUserFailure(error, error.response.data.message));
+    }
   };
 };

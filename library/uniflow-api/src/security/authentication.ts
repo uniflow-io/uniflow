@@ -35,7 +35,7 @@ export async function expressAuthentication(
 
       return Promise.resolve(undefined)
     } else if (securityName === "role") {
-      return new Promise((resolve, reject) => {
+      const user: UserEntity|undefined = await new Promise((resolve, reject) => {
         if (request.headers['uniflow-authorization']) {
           const authorization = request.headers['uniflow-authorization'] as string
           if(authorization.split(' ')[0] === 'Bearer') {
@@ -55,29 +55,29 @@ export async function expressAuthentication(
         } else {
           resolve(undefined)
         }
-      }).then((user: UserEntity|undefined) => {
-        for(const scope of scopes ?? []) {
-          if(scope === 'user') {
-            if(!user || !userService.isGranted(user, 'ROLE_USER')) {
-              return Promise.reject(new ApiException('Not authorized', 401))
-            }
-          } else if(scope === 'same-user') {
-            if(!user || !userService.isGranted(user, 'ROLE_USER') || !request.params.uid) {
-              return Promise.reject(new ApiException('Not authorized', 401))
-            }
-    
-            const isSameUser = request.params.uid === user.uid || request.params.uid === user.username
-            if(!isSameUser) {
-              return Promise.reject(new ApiException('Not authorized', 401))
-            }
-          } else if(scope === 'admin') {
-            if(!user || !userService.isGranted(user, 'ROLE_SUPER_ADMIN')) {
-              return Promise.reject(new ApiException('Not authorized', 401))
-            }
+      })
+      
+      for(const scope of scopes ?? []) {
+        if(scope === 'user') {
+          if(!user || !userService.isGranted(user, 'ROLE_USER')) {
+            return Promise.reject(new ApiException('Not authorized', 401))
+          }
+        } else if(scope === 'same-user') {
+          if(!user || !userService.isGranted(user, 'ROLE_USER') || !request.params.uid) {
+            return Promise.reject(new ApiException('Not authorized', 401))
+          }
+  
+          const isSameUser = request.params.uid === user.uid || request.params.uid === user.username
+          if(!isSameUser) {
+            return Promise.reject(new ApiException('Not authorized', 401))
+          }
+        } else if(scope === 'admin') {
+          if(!user || !userService.isGranted(user, 'ROLE_SUPER_ADMIN')) {
+            return Promise.reject(new ApiException('Not authorized', 401))
           }
         }
+      }
 
-        return user
-      });
+      return user
     }
   }

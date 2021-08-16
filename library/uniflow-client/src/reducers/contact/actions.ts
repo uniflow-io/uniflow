@@ -4,16 +4,14 @@ import { ApiException } from '../../exceptions';
 
 export const contact = (email: string, message: string) => {
   return async (dispatch) => {
-    return request
-      .post(`${server.getBaseUrl()}/api/contacts`, {
+    try {
+      const response = await request.post(`${server.getBaseUrl()}/api/contacts`, {
         email: email,
         message: message,
       })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
+      return response.data;
+    } catch(error) {
         throw new ApiException(server.handleErrors(error.response));
-      });
+    }
   };
 };

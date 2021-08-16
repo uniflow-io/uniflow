@@ -22,16 +22,15 @@ class Register extends Component {
     this.setState({ password: event.target.value });
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
 
-    this.props.dispatch(register(this.state.email, this.state.password)).then(() => {
-      if (this.props.auth.isAuthenticated) {
-        return navigate(pathTo('feed'));
-      } else {
-        return this.props.dispatch(commitAddLog(this.props.auth.statusText));
-      }
-    });
+    await this.props.dispatch(register(this.state.email, this.state.password))
+    if (this.props.auth.isAuthenticated) {
+      return navigate(pathTo('feed'));
+    } else {
+      return this.props.dispatch(commitAddLog(this.props.auth.statusText));
+    }
   };
 
   render() {

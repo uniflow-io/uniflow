@@ -13,21 +13,18 @@ import { commitLogoutUser } from '../user/actions';
 import { pathTo } from '../../routes';
 import { Bus } from '../../models';
 
-const fetchCollection = (uid, type, path, page, config, items = []) => {
-  return request
-    .get(
-      `${server.getBaseUrl()}/api/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`,
-      config
-    )
-    .then((response) => {
-      const { data, total } = response.data;
-      items = items.concat(data);
-      if (items.length < total) {
-        return fetchCollection(uid, type, path, page + 1, config, items);
-      }
+const fetchCollection = async (uid, type, path, page, config, items = []) => {
+  const response = await request.get(
+    `${server.getBaseUrl()}/api/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`,
+    config
+  )
+  const { data, total } = response.data;
+  items = items.concat(data);
+  if (items.length < total) {
+    return await fetchCollection(uid, type, path, page + 1, config, items);
+  }
 
-      return items;
-    });
+  return items;
 };
 
 export const commitClearFeed = () => {
@@ -215,7 +212,7 @@ export const fetchFeed = (uid, paths, token = null) => {
     const parentSlug = paths.length > 1 ? paths[paths.length - 2] : null;
     let feedFolderPath = parentPath;
     let feedProgramPath = parentPath;
-    let parentFolderFound = undefined;
+    let parentFolderFound: boolean|undefined = undefined;
 
     dispatch(commitSetUidFeed(uid));
     dispatch(commitSetSlugFeed(slug));
@@ -223,71 +220,65 @@ export const fetchFeed = (uid, paths, token = null) => {
     dispatch(commitClearFeed());
 
     if (paths.length > 0) {
-      await fetchCollection(uid, 'folders', parentPath, 1, config).then((folders) => {
-        parentFolderFound = false;
+      const folders = await fetchCollection(uid, 'folders', parentPath, 1, config)
+      parentFolderFound = false;
+      for (const folder of folders) {
+        if (folder.path === parentPath && folder.slug === slug) {
+          dispatch(commitSetSlugFeed(null));
+          dispatch(commitSetParentFolderFeed(folder));
+          feedFolderPath = path;
+          feedProgramPath = path;
+          parentFolderFound = true;
+        }
+      }
+
+      if (parentFolderFound === false) {
         for (const folder of folders) {
-          if (folder.path === parentPath && folder.slug === slug) {
-            dispatch(commitSetSlugFeed(null));
-            dispatch(commitSetParentFolderFeed(folder));
-            feedFolderPath = path;
-            feedProgramPath = path;
-            parentFolderFound = true;
-          }
-        }
-
-        if (parentFolderFound === false) {
-          for (const folder of folders) {
-            dispatch(
-              commitUpdateFeed({
-                type: 'folder',
-                entity: folder,
-              })
-            );
-          }
-          feedFolderPath = parentParentPath;
-        }
-      });
-    }
-
-    return Promise.all([
-      fetchCollection(uid, 'folders', feedFolderPath, 1, config),
-      fetchCollection(uid, 'programs', feedProgramPath, 1, config),
-    ])
-      .then(([folders, programs]) => {
-        if (parentFolderFound === true || parentFolderFound === undefined) {
-          for (const folder of folders) {
-            dispatch(
-              commitUpdateFeed({
-                type: 'folder',
-                entity: folder,
-              })
-            );
-          }
-        }
-        if (parentFolderFound === false) {
-          for (const folder of folders) {
-            if (folder.path === parentParentPath && folder.slug === parentSlug) {
-              dispatch(commitSetParentFolderFeed(folder));
-            }
-          }
-        }
-
-        for (const program of programs) {
           dispatch(
             commitUpdateFeed({
-              type: 'program',
-              entity: program,
+              type: 'folder',
+              entity: folder,
             })
           );
         }
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
+        feedFolderPath = parentParentPath;
+      }
+    }
+
+    try {
+      const [folders, programs] = await Promise.all([
+        fetchCollection(uid, 'folders', feedFolderPath, 1, config),
+        fetchCollection(uid, 'programs', feedProgramPath, 1, config),
+      ])
+      if (parentFolderFound === true || parentFolderFound === undefined) {
+        for (const folder of folders) {
+          await dispatch(commitUpdateFeed({
+            type: 'folder',
+            entity: folder,
+          }));
         }
-      });
+      }
+      if (parentFolderFound === false) {
+        for (const folder of folders) {
+          if (folder.path === parentParentPath && folder.slug === parentSlug) {
+            await dispatch(commitSetParentFolderFeed(folder));
+          }
+        }
+      }
+
+      for (const program of programs) {
+        await dispatch(commitUpdateFeed({
+          type: 'program',
+          entity: program,
+        }));
+      }
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 
@@ -333,31 +324,27 @@ export const createProgram = (program, uid, token) => {
       description: program.description,
     };
 
-    return request
-      .post(`${server.getBaseUrl()}/api/users/${uid}/programs`, data, {
+    try {
+      const response = await request.post(`${server.getBaseUrl()}/api/users/${uid}/programs`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        program = response.data;
+      program = response.data;
 
-        dispatch(
-          commitUpdateFeed({
-            type: 'program',
-            entity: program,
-          })
-        );
+      await dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: program,
+      }));
 
-        return program;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+      return program;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 
@@ -373,31 +360,27 @@ export const updateProgram = (program, token) => {
       public: program.public,
     };
 
-    return request
-      .put(`${server.getBaseUrl()}/api/programs/${program.uid}`, data, {
+    try {
+      const response = await request.put(`${server.getBaseUrl()}/api/programs/${program.uid}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        program = response.data;
+      program = response.data;
 
-        dispatch(
-          commitUpdateFeed({
-            type: 'program',
-            entity: program,
-          })
-        );
+      await dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: program,
+      }));
 
-        return program;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+      return program;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 
@@ -412,18 +395,16 @@ export const getProgramData = (program, token = null) => {
       };
     }
 
-    return request
-      .get(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, config)
-      .then((response) => {
-        return response.data.data;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+    try {
+      const response = await request.get(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, config)
+      return response.data.data;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 
@@ -433,60 +414,54 @@ export const setProgramData = (program, token) => {
       data: program.data,
     };
 
-    return request
-      .put(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, data, {
+    try {
+      const response = await request.put(`${server.getBaseUrl()}/api/programs/${program.uid}/flows`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        program.updated = moment();
+      program.updated = moment();
 
-        dispatch(
-          commitUpdateFeed({
-            type: 'program',
-            entity: program,
-          })
-        );
+      await dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: program,
+      }));
 
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
-  };
+      return response.data;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
+  }
 };
 
 export const deleteProgram = (program, token) => {
   return async (dispatch) => {
-    return request
-      .delete(`${server.getBaseUrl()}/api/programs/${program.uid}`, {
+    try {
+      const response = await request.delete(`${server.getBaseUrl()}/api/programs/${program.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        dispatch(
-          commitDeleteFeed({
-            type: 'program',
-            entity: program,
-          })
-        );
+      dispatch(
+        commitDeleteFeed({
+          type: 'program',
+          entity: program,
+        })
+      );
 
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
-  };
+      return response.data;
+    } catch(error) {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
+  }
 };
 
 export const getFolderTree = (uid, token = null) => {
@@ -500,23 +475,22 @@ export const getFolderTree = (uid, token = null) => {
       };
     }
 
-    return fetchCollection(uid, 'folders', null, 1, config)
-      .then((folders) => {
-        const tree = ['/'];
-        for (const folder of folders) {
-          tree.push(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`);
-        }
-
-        return tree.sort();
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
-  };
+    try {
+      const folders = await fetchCollection(uid, 'folders', null, 1, config)
+      const tree = ['/'];
+      for (const folder of folders) {
+        tree.push(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`);
+      }
+  
+      return tree.sort();
+    } catch(error) {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
+  }
 };
 
 export const createFolder = (folder, uid, token) => {
@@ -527,32 +501,28 @@ export const createFolder = (folder, uid, token) => {
       path: folder.path,
     };
 
-    return request
-      .post(`${server.getBaseUrl()}/api/users/${uid}/folders`, data, {
+    try {
+      const reponse = await request.post(`${server.getBaseUrl()}/api/users/${uid}/folders`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        folder = response.data;
+      folder = response.data;
 
-        dispatch(
-          commitUpdateFeed({
-            type: 'folder',
-            entity: folder,
-          })
-        );
+      await dispatch(commitUpdateFeed({
+        type: 'folder',
+        entity: folder,
+      }));
 
-        return folder;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
-  };
+      return folder;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
+  }
 };
 
 export const updateParentFolder = (folder, token) => {
@@ -563,48 +533,45 @@ export const updateParentFolder = (folder, token) => {
       path: folder.path,
     };
 
-    return request
-      .put(`${server.getBaseUrl()}/api/folders/${folder.uid}`, data, {
+    try {
+      const response = await request.put(`${server.getBaseUrl()}/api/folders/${folder.uid}`, data, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        folder = response.data;
+      folder = response.data;
 
-        dispatch(commitSetParentFolderFeed(folder));
+      await dispatch(commitSetParentFolderFeed(folder));
 
-        return folder;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+      return folder;
+    } catch(error) {
+      if (error.request.status === 401) {
+        await dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 
 export const deleteParentFolder = (folder, token) => {
   return async (dispatch) => {
-    return request
-      .delete(`${server.getBaseUrl()}/api/folders/${folder.uid}`, {
+    try {
+      const response = await request.delete(`${server.getBaseUrl()}/api/folders/${folder.uid}`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        dispatch(commitSetParentFolderFeed(undefined));
+      
+      await dispatch(commitSetParentFolderFeed(undefined));
 
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+      return response.data;
+    } catch(error) {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };

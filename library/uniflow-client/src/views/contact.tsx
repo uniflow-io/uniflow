@@ -24,19 +24,17 @@ class Contact extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    this.setState({ state: 'sending' }, () => {
-      this.props
-        .dispatch(contact(this.state.email, this.state.message))
-        .then((data) => {
-          if (data === true) {
-            this.setState({ state: 'sent' });
-          }
-        })
-        .catch((error) => {
-          if (error instanceof ApiException) {
-            this.setState({ state: 'form', errors: { ...error.errors } });
-          }
-        });
+    this.setState({ state: 'sending' }, async () => {
+      try {
+        const data = await this.props.dispatch(contact(this.state.email, this.state.message))
+        if (data === true) {
+          this.setState({ state: 'sent' });
+        }
+      } catch(error) {
+        if (error instanceof ApiException) {
+          this.setState({ state: 'form', errors: { ...error.errors } });
+        }
+      }
     });
   };
 

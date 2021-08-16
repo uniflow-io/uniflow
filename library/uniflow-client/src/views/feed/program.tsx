@@ -107,65 +107,47 @@ class Program extends Component {
     this.onUpdateFlowData();
   };
 
-  onUpdateFlow = (index, data) => {
+  onUpdateFlow = async (index, data) => {
     /** @todo find a way about code generation, for not storing code into the data flows */
     this._componentShouldUpdate = false;
-    Promise.all(
+    const clientsCodes = await Promise.all(
       this.props.program.clients.map((client) => {
         return this.props.flows[index].bus.emit('code', client);
       })
     )
-      .then((clientsCodes) => {
-        const codes = clientsCodes.reduce((data, codes, clientIndex) => {
-          data[this.props.program.clients[clientIndex]] = codes.join(';');
-          return data;
-        }, {});
+    const codes = clientsCodes.reduce((data, codes, clientIndex) => {
+      data[this.props.program.clients[clientIndex]] = codes.join(';');
+      return data;
+    }, {});
 
-        return this.props.dispatch(commitUpdateFlow(index, data, codes));
-      })
-      .then(() => {
-        this._componentShouldUpdate = true;
-      })
-      .then(this.onUpdateFlowData);
+    await this.props.dispatch(commitUpdateFlow(index, data, codes));
+    this._componentShouldUpdate = true;
+    this.onUpdateFlowData()
   };
 
-  onFetchFlowData = debounce(() => {
+  onFetchFlowData = debounce(async () => {
     const { program } = this.props;
 
-    Promise.resolve()
-      .then(() => {
-        return this.props.dispatch(commitSetFlows([]));
-      })
-      .then(() => {
-        if (program.data) {
-          return program.data;
-        }
+    await this.props.dispatch(commitSetFlows([]));
+    let data = program.data
+    if (!data) {
+      data = await this.props.dispatch(getProgramData(program, this.props.auth.token));
+    }
+    if(data) {
+      program.data = data;
 
-        return this.props.dispatch(getProgramData(program, this.props.auth.token));
-      })
-      .then((data) => {
-        if (!data) return;
-
-        program.data = data;
-
-        if (program.slug !== this.props.program.slug) return;
-
-        return this.setFlows(deserializeFlowsData(data));
-      })
-      .then(() => {
-        this._componentShouldUpdate = false;
-      })
-      .then(() => {
-        if (this._componentIsMounted) {
-          this.setState({ fetchedSlug: program.slug });
-        }
-      })
-      .then(() => {
-        this._componentShouldUpdate = true;
-      });
+      if (program.slug === this.props.program.slug) {
+        await this.setFlows(deserializeFlowsData(data));
+      }
+    }
+    this._componentShouldUpdate = false;
+    if (this._componentIsMounted) {
+      this.setState({ fetchedSlug: program.slug });
+    }
+    this._componentShouldUpdate = true;
   }, 500);
 
-  onUpdateFlowData = debounce(() => {
+  onUpdateFlowData = debounce(async () => {
     const { program, flows, user, feed } = this.props;
     if (program.slug !== this.state.fetchedSlug) return;
 
@@ -174,53 +156,44 @@ class Program extends Component {
       program.data = data;
 
       this._componentShouldUpdate = false;
-      this.props
-        .dispatch(setProgramData(program, this.props.auth.token))
-        .then(() => {
-          this._componentShouldUpdate = true;
-        })
-        .catch((log) => {
-          return this.props.dispatch(commitAddLog(log.message));
-        });
+      try {
+        await this.props.dispatch(setProgramData(program, this.props.auth.token))
+        this._componentShouldUpdate = true;
+      } catch(error) {
+        await this.props.dispatch(commitAddLog(error.message));
+      }
     }
   }, 500);
 
-  onChangeTitle = (event) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ name: event.target.value },
-          },
-        })
-      )
-      .then(this.onUpdate);
+  onChangeTitle = async (event) => {
+    await this.props.dispatch(commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...this.props.program,
+        ...{ name: event.target.value },
+      },
+    }))
+    this.onUpdate();
   };
 
   onChangeSlug = (event) => {
     this.setState({ slug: event.target.value }, this.onUpdate);
   };
 
-  onChangePath = (selected) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ path: selected },
-          },
-        })
-      )
-      .then(this.onUpdate);
+  onChangePath = async (selected) => {
+    await this.props.dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ path: selected },
+        },
+      })
+    )
+    this.onUpdate()
   };
 
-  onChangeClients = (clients) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
+  onChangeClients = async (clients) => {
+    await this.props.dispatch(commitUpdateFeed({
           type: 'program',
           entity: {
             ...this.props.program,
@@ -228,105 +201,88 @@ class Program extends Component {
           },
         })
       )
-      .then(this.onUpdate);
+    this.onUpdate();
   };
 
-  onChangeTags = (tags) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ tags: tags },
-          },
-        })
-      )
-      .then(this.onUpdate);
+  onChangeTags = async (tags) => {
+    await this.props.dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ tags: tags },
+        },
+      })
+    )
+    this.onUpdate();
   };
 
-  onChangeDescription = (description) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ description: description },
-          },
-        })
-      )
-      .then(this.onUpdate);
+  onChangeDescription = async (description) => {
+    await this.props.dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ description: description },
+        },
+      })
+    )
+    this.onUpdate();
   };
 
-  onChangePublic = (value) => {
-    this.props
-      .dispatch(
-        commitUpdateFeed({
-          type: 'program',
-          entity: {
-            ...this.props.program,
-            ...{ public: value },
-          },
-        })
-      )
-      .then(this.onUpdate);
+  onChangePublic = async (value) => {
+    await this.props.dispatch(commitUpdateFeed({
+        type: 'program',
+        entity: {
+          ...this.props.program,
+          ...{ public: value },
+        },
+      })
+    )
+    this.onUpdate();
   };
 
-  onUpdate = debounce(() => {
-    const { program } = this.props;
+  onUpdate = debounce(async() => {
+    let { program } = this.props;
     program.slug = this.state.slug ?? program.slug;
 
-    this.props.dispatch(updateProgram(program, this.props.auth.token)).then((program) => {
-      const path = toFeedPath(program, this.props.user);
-      if (typeof window !== `undefined` && window.location.pathname !== path) {
-        navigate(path);
-      }
-    });
+    program = await this.props.dispatch(updateProgram(program, this.props.auth.token))
+    const path = toFeedPath(program, this.props.user);
+    if (typeof window !== `undefined` && window.location.pathname !== path) {
+      navigate(path);
+    }
   }, 500);
 
-  onDuplicate = (event) => {
+  onDuplicate = async (event) => {
     event.preventDefault();
 
     const program = this.props.program;
     program.name += ' Copy';
 
-    this.props
-      .dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
-      .then((item) => {
-        Object.assign(program, item);
-        return this.props.dispatch(setProgramData(program, this.props.auth.token));
-      })
-      .then(() => {
-        return navigate(toFeedPath(program, this.props.user));
-      })
-      .catch((log) => {
-        return this.props.dispatch(commitAddLog(log.message));
-      });
+    try {
+      const item = await this.props.dispatch(createProgram(program, this.props.auth.uid, this.props.auth.token))
+      Object.assign(program, item);
+      await this.props.dispatch(setProgramData(program, this.props.auth.token));
+      navigate(toFeedPath(program, this.props.user));
+    } catch(error) {
+      return this.props.dispatch(commitAddLog(error.message));
+    }
   };
 
-  onDelete = (event) => {
+  onDelete = async (event) => {
     event.preventDefault();
 
-    return (
-      this.props
-        .dispatch(deleteProgram(this.props.program, this.props.auth.token))
-        .then(() => {
-          return navigate(toFeedPath(this.props.program, this.props.user, true));
-        })
-    );
+    await this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token))
+    navigate(toFeedPath(this.props.program, this.props.user, true));
   };
 
-  onFolderEdit = (event) => {
+  onFolderEdit = async (event) => {
     event.preventDefault();
 
     const { feed } = this.props;
 
-    this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token)).then((folderTree) => {
-      this.setState({
-        folderTreeEdit: true,
-        folderTree: folderTree,
-      });
+    const folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token))
+    this.setState({
+      folderTreeEdit: true,
+      folderTree: folderTree,
     });
   };
 
@@ -370,22 +326,6 @@ class Program extends Component {
 
   onCopyNodeUsage = (event) => {
     const clipboard = this.getNodeClipboard();
-
-    copyTextToClipboard(clipboard);
-  };
-
-  getRustClipboard = () => {
-    const { program, user } = this.props;
-
-    if (user.apiKey) {
-      return `V8_PATH=/path/to/v8 cargo run -- --api-key=${user.apiKey} ${program.slug}`;
-    }
-
-    return `V8_PATH=/path/to/v8 cargo run -- --api-key={your-api-key} ${program.slug}`;
-  };
-
-  onCopyRustUsage = (event) => {
-    const clipboard = this.getRustClipboard();
 
     copyTextToClipboard(clipboard);
   };

@@ -8,13 +8,12 @@ class Admin extends Component {
     isSaving: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { auth } = this.props;
 
-    this.props.dispatch(fetchConfig(auth.token, auth.uid)).then((response) => {
-      this.setState({
-        config: Object.assign({}, this.state.config, response.data),
-      });
+    const response = await this.props.dispatch(fetchConfig(auth.token, auth.uid))
+    this.setState({
+      config: Object.assign({}, this.state.config, response.data),
     });
   }
 
@@ -25,10 +24,9 @@ class Admin extends Component {
       event.preventDefault();
     }
 
-    this.setState({ isSaving: true }, () => {
-      this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid)).then(() => {
-        this.setState({ isSaving: false });
-      });
+    this.setState({ isSaving: true }, async () => {
+      await this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid))
+      this.setState({ isSaving: false });
     });
   };
 

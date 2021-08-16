@@ -37,7 +37,7 @@ function parseArgv(argv) {
   return { args: args, values: values }
 }
 
-(function main() {
+(async function main() {
   let args = parseArgv(process.argv),
     apiKey = args['args']['api-key'],
     env = args['args']['e'] || args['args']['env']
@@ -56,23 +56,18 @@ function parseArgv(argv) {
   let api = new Api(env, apiKey),
     identifier = args['values'][0],
     commandArgs = args['values'].slice(1)
-  api
-    .endpoint('program')
-    .then(response => {
-      for (let i = 0; i < response.data.length; i++) {
-        if (response.data[i].slug === identifier) {
-          return api.endpoint('program_data', { id: response.data[i].id })
-        }
-      }
+  let response = await api.endpoint('program')
+  const programId = response.data.filter((program) => {
+    return program.slug === identifier
+  }).shift()
+  if(!programId) {
+    console.log('Not such process [' + identifier + ']')
+    return
+  }
 
-      console.log('Not such process [' + identifier + ']')
-      process.exit(0)
-    })
-    .then(response => {
-      let program = new Program(response.data),
-        flows = program.deserializeFlowsData(),
-        runner = new Runner(commandArgs, api)
-
-      runner.run(flows)
-    })
+  response = await api.endpoint('program_data', { id: response.data[i].id })
+  let program = new Program(response.data),
+  flows = program.deserializeFlowsData(),
+  runner = new Runner(commandArgs, api)
+  runner.run(flows)
 })()

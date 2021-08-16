@@ -70,22 +70,20 @@ export const updateConfig = (item, token, uid) => {
 
 export const fetchSettings = (uid, token) => {
   return async (dispatch) => {
-    return request
-      .get(`${server.getBaseUrl()}/api/users/${uid}/settings`, {
+    try {
+      const response = await request.get(`${server.getBaseUrl()}/api/users/${uid}/settings`, {
         headers: {
           'Uniflow-Authorization': `Bearer ${token}`,
         },
       })
-      .then((response) => {
-        dispatch(commitUpdateSettings(response.data));
-      })
-      .catch((error) => {
-        if (error.request.status === 401) {
-          dispatch(commitLogoutUser());
-        } else {
-          throw error;
-        }
-      });
+      await dispatch(commitUpdateSettings(response.data));
+    } catch (error) {
+      if (error.request.status === 401) {
+        dispatch(commitLogoutUser());
+      } else {
+        throw error;
+      }
+    }
   };
 };
 

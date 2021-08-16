@@ -32,22 +32,21 @@ class Settings extends Component {
     isSaving: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({ user: Object.assign({}, this.props.user) });
 
     if (this.props.user.links.lead) {
-      this.props.dispatch(getLead(this.props.user.links.lead)).then((data) => {
-        this.setState({
-          lead: {
-            ...this.state.lead,
-            ...{
-              optinNewsletter: data.optinNewsletter,
-              optinBlog: data.optinBlog,
-              optinGithub: data.optinGithub,
-              githubUsername: data.githubUsername,
-            },
+      const data = await this.props.dispatch(getLead(this.props.user.links.lead))
+      this.setState({
+        lead: {
+          ...this.state.lead,
+          ...{
+            optinNewsletter: data.optinNewsletter,
+            optinBlog: data.optinBlog,
+            optinGithub: data.optinGithub,
+            githubUsername: data.githubUsername,
           },
-        });
+        },
       });
     }
   }

@@ -18,25 +18,23 @@ class Home extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    this.setState({ state: 'sending' }, () => {
-      this.props
-        .dispatch(
+    this.setState({ state: 'sending' }, async () => {
+      try {
+        const data = await this.props.dispatch(
           createLead({
             email: this.state.email,
             optinNewsletter: true,
             optinBlog: true,
           })
         )
-        .then((data) => {
-          if (data) {
-            this.setState({ state: 'sent' });
-          }
-        })
-        .catch((error) => {
-          if (error instanceof ApiException) {
-            this.setState({ state: 'form', errors: { ...error.errors } });
-          }
-        });
+        if (data) {
+          this.setState({ state: 'sent' });
+        }
+      } catch(error) {
+        if (error instanceof ApiException) {
+          this.setState({ state: 'form', errors: { ...error.errors } });
+        }
+      }
     });
   };
 

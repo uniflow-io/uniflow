@@ -15,12 +15,11 @@ class Flows extends Component {
     this.onFetchFlowsData();
   }
 
-  onFetchFlowsData = () => {
+  onFetchFlowsData = async () => {
     const { page } = this.state;
-    this.props.dispatch(getFlows(page)).then((data) => {
-      const programs = this.state.programs.slice().concat(data.data);
-      this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 });
-    });
+    const data = await this.props.dispatch(getFlows(page))
+    const programs = this.state.programs.slice().concat(data.data);
+    this.setState({ programs, loadMore: programs.length < data.total, page: page + 1 });
   };
 
   render() {

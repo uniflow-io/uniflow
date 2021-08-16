@@ -6,7 +6,7 @@ import { commitAddLog } from '../../reducers/logs/actions';
 import { connect } from 'react-redux';
 
 class GithubLogin extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const code = this.getCode();
     if (code === null) {
       if (typeof window !== `undefined`) {
@@ -14,18 +14,17 @@ class GithubLogin extends Component {
       }
     }
 
-    this.props.dispatch(githubLogin(code, this.props.auth.token)).then(() => {
-      if (this.props.auth.isAuthenticated) {
-        if (typeof window !== `undefined`) {
-          return navigate(pathTo('feed'));
-        }
-      } else {
-        this.props.dispatch(commitAddLog(this.props.auth.statusText));
-        if (typeof window !== `undefined`) {
-          return navigate(pathTo('login'));
-        }
+    await this.props.dispatch(githubLogin(code, this.props.auth.token))
+    if (this.props.auth.isAuthenticated) {
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('feed'));
       }
-    });
+    } else {
+      this.props.dispatch(commitAddLog(this.props.auth.statusText));
+      if (typeof window !== `undefined`) {
+        return navigate(pathTo('login'));
+      }
+    }
   }
 
   getCode() {

@@ -30,8 +30,6 @@
       "ui"
     ],
     "clients": [
-      "uniflow",
-      "node"
     ]
   },
   "dependencies": {

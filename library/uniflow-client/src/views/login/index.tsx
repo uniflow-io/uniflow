@@ -22,16 +22,15 @@ class Login extends Component {
     this.setState({ password: event.target.value });
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
 
-    this.props.dispatch(login(this.state.username, this.state.password)).then(() => {
-      if (this.props.auth.isAuthenticated) {
-        return navigate(pathTo('feed'));
-      } else {
-        return this.props.dispatch(commitAddLog(this.props.auth.statusText));
-      }
-    });
+    await this.props.dispatch(login(this.state.username, this.state.password))
+    if (this.props.auth.isAuthenticated) {
+      return navigate(pathTo('feed'));
+    } else {
+      return this.props.dispatch(commitAddLog(this.props.auth.statusText));
+    }
   };
 
   render() {

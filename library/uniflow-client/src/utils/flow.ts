@@ -30,31 +30,19 @@ const componentDidUpdate = (prevProps, self) => {
 };
 
 const onExecuteHelper = (onExecute, self) => {
-  return (runner) => {
+  return async (runner) => {
     let returnValue = undefined;
-    return Promise.resolve()
-      .then(() => {
-        return new Promise((resolve) => {
-          self.setState({ isRunning: true }, resolve);
-        });
-      })
-      .then(() => {
-        returnValue = onExecute(runner);
-        return returnValue;
-      })
-      .then(() => {
-        return new Promise((resolve) => {
-          setTimeout(resolve, 500);
-        });
-      })
-      .then(() => {
-        return new Promise((resolve) => {
-          self.setState({ isRunning: false }, resolve);
-        });
-      })
-      .then(() => {
-        return returnValue;
-      });
+    await new Promise((resolve) => {
+      self.setState({ isRunning: true }, resolve);
+    });
+    returnValue = await onExecute(runner);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
+    await new Promise((resolve) => {
+      self.setState({ isRunning: false }, resolve);
+    });
+    return returnValue;
   };
 };
 
