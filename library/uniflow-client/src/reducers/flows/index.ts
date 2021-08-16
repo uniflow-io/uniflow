@@ -1,4 +1,3 @@
-import { Bus } from '../../models';
 import {
   COMMIT_PUSH_FLOW,
   COMMIT_POP_FLOW,
@@ -13,8 +12,7 @@ const flows = (state = defaultState, action) => {
     case COMMIT_PUSH_FLOW:
       const newStatePush = state.slice();
       newStatePush.splice(action.index, 0, {
-        flow: action.flow,
-        bus: new Bus(),
+        flow: action.flow
       });
       return newStatePush;
     case COMMIT_POP_FLOW:
@@ -31,7 +29,6 @@ const flows = (state = defaultState, action) => {
           ...item,
           ...{
             data: action.data,
-            codes: action.codes,
           },
         };
       });

@@ -17,11 +17,5 @@ export default class Runner {
         return context;
       },
     };
-
-    return flows.reduce((promise, flow) => {
-      return promise.then(() => {
-        return flow.bus.emit('execute', runner);
-      });
-    }, Promise.resolve());
   }
 }

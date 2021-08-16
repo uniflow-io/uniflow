@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import { onCode, onExecute } from './runner'
 import {
-  setBusEvents,
-  componentDidMount,
-  componentWillUnmount,
-  componentDidUpdate,
-  onExecuteHelper,
   onUpdate,
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
@@ -14,47 +8,17 @@ import {
 class TextFlow extends Component {
   state = {
     isRunning: false,
-    variable: null,
     text: null,
   }
 
-  constructor(props) {
-    super(props)
-
-    setBusEvents(
-      {
-        deserialize: this.deserialize,
-        code: onCode.bind(this),
-        execute: onExecuteHelper(onExecute.bind(this), this),
-      },
-      this
-    )
-  }
-
-  componentDidMount() {
-    componentDidMount(this)
-  }
-
-  componentWillUnmount() {
-    componentWillUnmount(this)
-  }
-
-  componentDidUpdate(prevProps) {
-    componentDidUpdate(prevProps, this)
-  }
-
   serialize = () => {
-    return [this.state.variable, this.state.text]
+    return [this.state.text]
   }
 
   deserialize = data => {
-    let [variable, text] = data || [null, null]
+    let [text] = data || [null]
 
-    this.setState({ variable: variable, text: text })
-  }
-
-  onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, onUpdate(this))
+    this.setState({ text: text })
   }
 
   onChangeText = text => {
@@ -63,7 +27,7 @@ class TextFlow extends Component {
 
   render() {
     const { clients, onRun } = this.props
-    const { isRunning, variable, text } = this.state
+    const { isRunning, text } = this.state
 
     return (
       <>
@@ -75,25 +39,6 @@ class TextFlow extends Component {
           onDelete={onDelete(this)}
         />
         <form className="form-sm-horizontal">
-          <div className="row mb-3">
-            <label
-              htmlFor="variable{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
-              Variable
-            </label>
-
-            <div className="col-sm-10">
-              <input
-                id="variable{{ _uid }}"
-                type="text"
-                value={variable || ''}
-                onChange={this.onChangeVariable}
-                className="form-control"
-              />
-            </div>
-          </div>
-
           <div className="row mb-3">
             <label htmlFor="text{{ _uid }}" className="col-sm-2 col-form-label">
               Text

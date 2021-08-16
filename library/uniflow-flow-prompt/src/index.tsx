@@ -1,13 +1,7 @@
 import React, { Component } from 'react'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import { Select } from '@uniflow-io/uniflow-client/src/components'
-import { onCode, onExecute } from './runner'
 import {
-  setBusEvents,
-  componentDidMount,
-  componentWillUnmount,
-  componentDidUpdate,
-  onExecuteHelper,
   onUpdate,
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
@@ -21,32 +15,6 @@ class PromptFlow extends Component {
     promptDisplay: false,
     message: null,
     input: null,
-  }
-
-  constructor(props) {
-    super(props)
-
-    this.inputResolve = null
-    setBusEvents(
-      {
-        deserialize: this.deserialize,
-        code: onCode.bind(this),
-        execute: onExecuteHelper(onExecute.bind(this), this),
-      },
-      this
-    )
-  }
-
-  componentDidMount() {
-    componentDidMount(this)
-  }
-
-  componentWillUnmount() {
-    componentWillUnmount(this)
-  }
-
-  componentDidUpdate(prevProps) {
-    componentDidUpdate(prevProps, this)
   }
 
   serialize = () => {

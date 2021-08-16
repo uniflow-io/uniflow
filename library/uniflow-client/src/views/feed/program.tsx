@@ -80,49 +80,21 @@ class Program extends Component {
     runner.run(flows.slice(0, index === undefined ? flows.length : index + 1));
   };
 
-  setFlows = async (flows) => {
-    await this.props.dispatch(commitSetFlows(flows))
-
-    // hack fix to remove
-    await new Promise((resolve) => {
-      setTimeout(resolve, 500);
-    });
-
-    return await Promise.all(
-      this.props.flows.map((item) => {
-        return item.bus.emit('deserialize', item.data);
-      })
-    );
-  };
-
   onPushFlow = async (index, flow) => {
     await this.props.dispatch(commitPushFlow(index, flow))
-    await this.setFlows(this.props.flows)
 
     this.onUpdateFlowData();
   };
 
   onPopFlow = async (index) => {
     await this.props.dispatch(commitPopFlow(index))
-    await this.setFlows(this.props.flows)
 
     this.onUpdateFlowData();
   };
 
   onUpdateFlow = async (index, data) => {
-    /** @todo find a way about code generation, for not storing code into the data flows */
     this._componentShouldUpdate = false;
-    const clientsCodes = await Promise.all(
-      this.props.program.clients.map((client) => {
-        return this.props.flows[index].bus.emit('code', client);
-      })
-    )
-    const codes = clientsCodes.reduce((data, codes, clientIndex) => {
-      data[this.props.program.clients[clientIndex]] = codes.join(';');
-      return data;
-    }, {});
-
-    await this.props.dispatch(commitUpdateFlow(index, data, codes));
+    await this.props.dispatch(commitUpdateFlow(index, data));
     this._componentShouldUpdate = true;
     this.onUpdateFlowData()
   };
@@ -139,14 +111,15 @@ class Program extends Component {
       program.data = data;
 
       if (program.slug === this.props.program.slug) {
-        await this.setFlows(deserializeFlowsData(data));
+        await this.props.dispatch(commitSetFlows(deserializeFlowsData(data)))
       }
     }
-    this._componentShouldUpdate = false;
     if (this._componentIsMounted) {
-      this.setState({ fetchedSlug: program.slug });
+      this._componentShouldUpdate = false;
+      this.setState({ fetchedSlug: program.slug }, () => {
+        this._componentShouldUpdate = true;
+      });
     }
-    this._componentShouldUpdate = true;
   }, 500);
 
   onUpdateFlowData = debounce(async () => {

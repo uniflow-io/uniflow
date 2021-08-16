@@ -26,13 +26,12 @@ export const commitPopFlow = (index) => {
     return Promise.resolve();
   };
 };
-export const commitUpdateFlow = (index, data, codes) => {
+export const commitUpdateFlow = (index, data) => {
   return async (dispatch) => {
     dispatch({
       type: COMMIT_UPDATE_FLOW,
       index,
       data,
-      codes,
     });
     return Promise.resolve();
   };

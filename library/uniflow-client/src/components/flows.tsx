@@ -3,7 +3,7 @@ import { Search } from '.';
 
 class UiFlow extends Component {
   render() {
-    const { tag, bus, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } =
+    const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } =
       this.props;
 
     let TagName = Search;
@@ -20,7 +20,6 @@ class UiFlow extends Component {
     return (
       <Suspense fallback={<div>Loading...</div>}>
         <TagName
-          bus={bus}
           programFlows={programFlows}
           allFlows={allFlows}
           clients={clients}
@@ -50,7 +49,6 @@ export default class Flows extends Component {
 
         uiFlows.push({
           component: item.flow,
-          bus: item.bus,
           index: i,
         });
 
@@ -67,7 +65,6 @@ export default class Flows extends Component {
       <UiFlow
         key={i}
         tag={item.component}
-        bus={item.bus}
         allFlows={allFlows}
         programFlows={programFlows}
         clients={clients}

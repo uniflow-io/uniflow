@@ -11,7 +11,6 @@ import {
 } from './actions-types';
 import { commitLogoutUser } from '../user/actions';
 import { pathTo } from '../../routes';
-import { Bus } from '../../models';
 
 const fetchCollection = async (uid, type, path, page, config, items = []) => {
   const response = await request.get(
@@ -305,8 +304,6 @@ export const deserializeFlowsData = (raw) => {
     flows.push({
       flow: data[i].flow,
       data: data[i].data,
-      codes: data[i].codes,
-      bus: new Bus(),
     });
   }
 

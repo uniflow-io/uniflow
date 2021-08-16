@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
-import { onCode, onExecute } from './runner'
 import { Ace, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import {
-  setBusEvents,
-  componentDidMount,
-  componentWillUnmount,
-  componentDidUpdate,
-  onExecuteHelper,
   onUpdate,
   onDelete,
 } from '@uniflow-io/uniflow-client/src/utils/flow'
@@ -15,31 +9,6 @@ class CodeFlow extends Component {
   state = {
     isRunning: false,
     code: null,
-  }
-
-  constructor(props) {
-    super(props)
-
-    setBusEvents(
-      {
-        deserialize: this.deserialize,
-        code: onCode.bind(this),
-        execute: onExecuteHelper(onExecute.bind(this), this),
-      },
-      this
-    )
-  }
-
-  componentDidMount() {
-    componentDidMount(this)
-  }
-
-  componentWillUnmount() {
-    componentWillUnmount(this)
-  }
-
-  componentDidUpdate(prevProps) {
-    componentDidUpdate(prevProps, this)
   }
 
   serialize = () => {
