@@ -2,7 +2,7 @@ import {
   COMMIT_PUSH_FLOW,
   COMMIT_POP_FLOW,
   COMMIT_UPDATE_FLOW,
-  COMMIT_SET_RAIL,
+  COMMIT_SET_FLOWS,
 } from './actions-types';
 import request from 'axios';
 import server from '../../utils/server';
@@ -39,7 +39,7 @@ export const commitUpdateFlow = (index, data) => {
 export const commitSetFlows = (flows) => {
   return async (dispatch) => {
     dispatch({
-      type: COMMIT_SET_RAIL,
+      type: COMMIT_SET_FLOWS,
       flows,
     });
     return Promise.resolve();

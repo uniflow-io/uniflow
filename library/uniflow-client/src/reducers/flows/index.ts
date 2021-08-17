@@ -2,7 +2,7 @@ import {
   COMMIT_PUSH_FLOW,
   COMMIT_POP_FLOW,
   COMMIT_UPDATE_FLOW,
-  COMMIT_SET_RAIL,
+  COMMIT_SET_FLOWS,
 } from './actions-types';
 
 const defaultState = [];
@@ -32,7 +32,7 @@ const flows = (state = defaultState, action) => {
           },
         };
       });
-    case COMMIT_SET_RAIL:
+    case COMMIT_SET_FLOWS:
       return action.flows.slice();
     default:
       return state;
