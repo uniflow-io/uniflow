@@ -17,8 +17,6 @@ import { UserController } from './controller/user-controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { VersionController } from './controller/version-controller';
 import { expressAuthentication } from './security/authentication';
-// @ts-ignore - no great way to install types from subpackage
-const promiseAny = require('promise.any');
 import { iocContainer } from './container';
 import { IocContainer, IocContainerFactory } from '@tsoa/runtime';
 import * as express from 'express';
@@ -45,12 +43,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "EmailType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"}}},
+        "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Email format is not valid","value":"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UsernameType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"^[0-9a-z-]+$"}}},
+        "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Username format is not valid","value":"^[0-9a-z-]+$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "EmailOrUsernameType": {
@@ -60,7 +58,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "NotEmptyStringType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"minLength":{"value":1}}},
+        "type": {"dataType":"string","validators":{"minLength":{"errorMsg":"Text should contain at least one character","value":1}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_ContactApiType.email-or-message_": {
@@ -70,12 +68,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UuidType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$"}}},
+        "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Uuid format is not valid","value":"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SlugType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"^[a-z0-9-]+$"}}},
+        "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Slug format is not valid","value":"^[a-z0-9-]+$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PathType": {
@@ -102,9 +100,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PartialType_FolderApiType_": {
+    "PartialType_Pick_FolderApiType.name-or-path-or-slug__": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"name":{"ref":"NotEmptyStringType"},"slug":{"ref":"SlugType"},"path":{"ref":"PathType"},"user":{"ref":"UuidOrUsernameType"},"created":{"dataType":"datetime"},"updated":{"dataType":"datetime"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"ref":"NotEmptyStringType"},"path":{"ref":"PathType"},"slug":{"ref":"SlugType"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "LeadApiType": {
@@ -160,7 +158,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiKeyType": {
         "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"^[0-9a-z]{32}$"}}},
+        "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Api key format is not valid","value":"^[0-9a-z]{32}$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserApiType": {
@@ -204,8 +202,7 @@ export function RegisterRoutes(app: express.Router) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
         app.post('/api/login',
-
-            async function AuthController_login(request: any, response: any, next: any) {
+            function AuthController_login(request: any, response: any, next: any) {
             const args = {
                     username: {"in":"body-prop","name":"username","required":true,"ref":"EmailOrUsernameType"},
                     password: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
@@ -222,7 +219,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<AuthController>(AuthController);
+            const controller: any = container.get<AuthController>(AuthController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -234,8 +231,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/login-facebook',
             authenticateMiddleware([{"role":[]}]),
-
-            async function AuthController_loginFacebook(request: any, response: any, next: any) {
+            function AuthController_loginFacebook(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     access_token: {"in":"body-prop","name":"access_token","required":true,"dataType":"string"},
@@ -252,7 +248,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<AuthController>(AuthController);
+            const controller: any = container.get<AuthController>(AuthController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -264,8 +260,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/login-github',
             authenticateMiddleware([{"role":[]}]),
-
-            async function AuthController_loginGithub(request: any, response: any, next: any) {
+            function AuthController_loginGithub(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     code: {"in":"body-prop","name":"code","required":true,"dataType":"string"},
@@ -282,7 +277,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<AuthController>(AuthController);
+            const controller: any = container.get<AuthController>(AuthController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -293,8 +288,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/contacts',
-
-            async function ContactController_createContact(request: any, response: any, next: any) {
+            function ContactController_createContact(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"Pick_ContactApiType.email-or-message_"},
             };
@@ -310,7 +304,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ContactController>(ContactController);
+            const controller: any = container.get<ContactController>(ContactController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -322,12 +316,11 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/folders/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-
-            async function FolderController_updateFolder(request: any, response: any, next: any) {
+            function FolderController_updateFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
-                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_FolderApiType_"},
+                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_Pick_FolderApiType.name-or-path-or-slug__"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -341,7 +334,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<FolderController>(FolderController);
+            const controller: any = container.get<FolderController>(FolderController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -353,8 +346,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/api/folders/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-
-            async function FolderController_deleteFolder(request: any, response: any, next: any) {
+            function FolderController_deleteFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -371,7 +363,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<FolderController>(FolderController);
+            const controller: any = container.get<FolderController>(FolderController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -382,8 +374,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/leads',
-
-            async function LeadController_createLead(request: any, response: any, next: any) {
+            function LeadController_createLead(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"PartialType_LeadApiType_"},
             };
@@ -399,7 +390,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<LeadController>(LeadController);
+            const controller: any = container.get<LeadController>(LeadController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -410,8 +401,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/leads/:uid',
-
-            async function LeadController_getLead(request: any, response: any, next: any) {
+            function LeadController_getLead(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
             };
@@ -427,7 +417,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<LeadController>(LeadController);
+            const controller: any = container.get<LeadController>(LeadController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -438,8 +428,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/leads/:uid',
-
-            async function LeadController_updateLead(request: any, response: any, next: any) {
+            function LeadController_updateLead(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
                     body: {"in":"body","name":"body","required":true,"ref":"PartialType_LeadApiType_"},
@@ -456,7 +445,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<LeadController>(LeadController);
+            const controller: any = container.get<LeadController>(LeadController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -468,8 +457,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/leads/github-webhook',
             authenticateMiddleware([{"github_token":[]}]),
-
-            async function LeadController_githubWebhook(request: any, response: any, next: any) {
+            function LeadController_githubWebhook(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"sender":{"dataType":"nestedObjectLiteral","nestedProperties":{"login":{"dataType":"string","required":true}},"required":true},"action":{"dataType":"string","required":true}}},
             };
@@ -485,7 +473,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<LeadController>(LeadController);
+            const controller: any = container.get<LeadController>(LeadController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -496,8 +484,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/programs',
-
-            async function ProgramController_getPrograms(request: any, response: any, next: any) {
+            function ProgramController_getPrograms(request: any, response: any, next: any) {
             const args = {
                     page: {"default":1,"in":"query","name":"page","ref":"PageType"},
                     perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
@@ -514,7 +501,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ProgramController>(ProgramController);
+            const controller: any = container.get<ProgramController>(ProgramController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -526,8 +513,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/programs/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-
-            async function ProgramController_updateProgram(request: any, response: any, next: any) {
+            function ProgramController_updateProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -545,7 +531,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ProgramController>(ProgramController);
+            const controller: any = container.get<ProgramController>(ProgramController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -557,8 +543,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/api/programs/:uid',
             authenticateMiddleware([{"role":["user"]}]),
-
-            async function ProgramController_deleteProgram(request: any, response: any, next: any) {
+            function ProgramController_deleteProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -575,7 +560,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ProgramController>(ProgramController);
+            const controller: any = container.get<ProgramController>(ProgramController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -587,8 +572,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/programs/:uid/flows',
             authenticateMiddleware([{"role":[]}]),
-
-            async function ProgramController_getProgramFlows(request: any, response: any, next: any) {
+            function ProgramController_getProgramFlows(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -605,7 +589,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ProgramController>(ProgramController);
+            const controller: any = container.get<ProgramController>(ProgramController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -617,8 +601,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/programs/:uid/flows',
             authenticateMiddleware([{"role":["user"]}]),
-
-            async function ProgramController_updateProgramFlows(request: any, response: any, next: any) {
+            function ProgramController_updateProgramFlows(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
@@ -636,7 +619,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<ProgramController>(ProgramController);
+            const controller: any = container.get<ProgramController>(ProgramController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -647,8 +630,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users',
-
-            async function UserController_createUser(request: any, response: any, next: any) {
+            function UserController_createUser(request: any, response: any, next: any) {
             const args = {
                     email: {"in":"body-prop","name":"email","required":true,"ref":"EmailType"},
                     plainPassword: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
@@ -665,7 +647,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -677,8 +659,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/settings',
             authenticateMiddleware([{"role":["same-user"]}]),
-
-            async function UserController_getUserSettings(request: any, response: any, next: any) {
+            function UserController_getUserSettings(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -695,7 +676,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -707,8 +688,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/users/:uid/settings',
             authenticateMiddleware([{"role":["same-user"]}]),
-
-            async function UserController_updateUserSettings(request: any, response: any, next: any) {
+            function UserController_updateUserSettings(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -726,7 +706,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -738,8 +718,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/admin-config',
             authenticateMiddleware([{"role":["same-user","admin"]}]),
-
-            async function UserController_getAdminConfig(request: any, response: any, next: any) {
+            function UserController_getAdminConfig(request: any, response: any, next: any) {
             const args = {
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
             };
@@ -755,7 +734,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -767,8 +746,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/users/:uid/admin-config',
             authenticateMiddleware([{"role":["same-user","admin"]}]),
-
-            async function UserController_updateAdminConfig(request: any, response: any, next: any) {
+            function UserController_updateAdminConfig(request: any, response: any, next: any) {
             const args = {
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
             };
@@ -784,7 +762,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -796,8 +774,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/folders',
             authenticateMiddleware([{"role":[]}]),
-
-            async function UserController_getUserFolders(request: any, response: any, next: any) {
+            function UserController_getUserFolders(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
                     page: {"default":1,"in":"query","name":"page","ref":"PageType"},
@@ -816,7 +793,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -828,8 +805,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users/:uid/folders',
             authenticateMiddleware([{"role":["same-user"]}]),
-
-            async function UserController_createUserFolder(request: any, response: any, next: any) {
+            function UserController_createUserFolder(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -847,7 +823,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -859,8 +835,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/users/:uid/programs',
             authenticateMiddleware([{"role":[]}]),
-
-            async function UserController_getUserPrograms(request: any, response: any, next: any) {
+            function UserController_getUserPrograms(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -880,7 +855,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -892,8 +867,7 @@ export function RegisterRoutes(app: express.Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/users/:uid/programs',
             authenticateMiddleware([{"role":["same-user"]}]),
-
-            async function UserController_createUserProgram(request: any, response: any, next: any) {
+            function UserController_createUserProgram(request: any, response: any, next: any) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
@@ -911,7 +885,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<UserController>(UserController);
+            const controller: any = container.get<UserController>(UserController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -922,8 +896,7 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/version',
-
-            async function VersionController_getVersion(request: any, response: any, next: any) {
+            function VersionController_getVersion(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -938,7 +911,7 @@ export function RegisterRoutes(app: express.Router) {
 
             const container: IocContainer = typeof iocContainer === 'function' ? (iocContainer as IocContainerFactory)(request) : iocContainer;
 
-            const controller: any = await container.get<VersionController>(VersionController);
+            const controller: any = container.get<VersionController>(VersionController);
             if (typeof controller['setStatus'] === 'function') {
                 controller.setStatus(undefined);
             }
@@ -951,63 +924,51 @@ export function RegisterRoutes(app: express.Router) {
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
     function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
-        return async function runAuthenticationMiddleware(request: any, _response: any, next: any) {
+        return function runAuthenticationMiddleware(request: any, _response: any, next: any) {
+            let responded = 0;
+            let success = false;
 
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            // keep track of failed auth attempts so we can hand back the most
-            // recent one.  This behavior was previously existing so preserving it
-            // here
-            const failedAttempts: any[] = [];
-            const pushAndRethrow = (error: any) => {
-                failedAttempts.push(error);
-                throw error;
-            };
-
-            const secMethodOrPromises: Promise<any>[] = [];
-            for (const secMethod of security) {
-                if (Object.keys(secMethod).length > 1) {
-                    const secMethodAndPromises: Promise<any>[] = [];
-
-                    for (const name in secMethod) {
-                        secMethodAndPromises.push(
-                            expressAuthentication(request, name, secMethod[name])
-                                .catch(pushAndRethrow)
-                        );
-                    }
-
-                    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-                    secMethodOrPromises.push(Promise.all(secMethodAndPromises)
-                        .then(users => { return users[0]; }));
-                } else {
-                    for (const name in secMethod) {
-                        secMethodOrPromises.push(
-                            expressAuthentication(request, name, secMethod[name])
-                                .catch(pushAndRethrow)
-                        );
-                    }
+            const succeed = function(user: any) {
+                if (!success) {
+                    success = true;
+                    responded++;
+                    request['user'] = user;
+                    next();
                 }
             }
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-            try {
-                request['user'] = await promiseAny(secMethodOrPromises);
-                next();
-            }
-            catch(err) {
-                // Show most recent error as response
-                const error = failedAttempts.pop();
-                error.status = error.status || 401;
-                next(error);
+            const fail = function(error: any) {
+                responded++;
+                if (responded == security.length && !success) {
+                    error.status = error.status || 401;
+                    next(error)
+                }
             }
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    let promises: Promise<any>[] = [];
+
+                    for (const name in secMethod) {
+                        promises.push(expressAuthentication(request, name, secMethod[name]));
+                    }
+
+                    Promise.all(promises)
+                        .then((users) => { succeed(users[0]); })
+                        .catch(fail);
+                } else {
+                    for (const name in secMethod) {
+                        expressAuthentication(request, name, secMethod[name])
+                            .then(succeed)
+                            .catch(fail);
+                    }
+                }
+            }
         }
     }
 

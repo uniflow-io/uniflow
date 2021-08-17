@@ -1,10 +1,11 @@
 import React from 'react';
-import { Login } from '../views';
+import Login, { LoginProps } from '../views/login/login';
 import { withPage } from '../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const LoginPage = withPage(Login, 'login', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const LoginPage = withPage<LoginProps>(Login, 'login', {
+    location,
     title: 'Login',
     description: 'Login',
   });

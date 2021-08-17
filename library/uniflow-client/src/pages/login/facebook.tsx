@@ -1,10 +1,11 @@
 import React from 'react';
-import { FacebookLogin } from '../../views';
+import FacebookLogin, { FacebookLoginProps } from '../../views/login/facebook';
 import { withPage } from '../../helpers';
+import { PageProps } from 'gatsby'
 
-export default ({ location }) => {
-  const FacebookLoginPage = withPage(FacebookLogin, 'facebook-login', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const FacebookLoginPage = withPage<FacebookLoginProps>(FacebookLogin, 'facebook-login', {
+    location,
     title: 'Login Facebook',
     description: 'Login Facebook',
   });

@@ -1,14 +1,15 @@
 import React from 'react';
-import { Settings } from '../views';
+import Settings, { SettingsProps } from '../views/settings';
 import { requireAuthentication, withPage } from '../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const AuthSettings = withPage(Settings, 'settings', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const AuthSettings = withPage<SettingsProps>(Settings, 'settings', {
+    location,
     title: 'Settings',
     description: 'Settings',
   });
-  const AuthSettingsPage = requireAuthentication(AuthSettings);
+  const AuthSettingsPage = requireAuthentication<SettingsProps>(AuthSettings);
 
   return <AuthSettingsPage />;
 };

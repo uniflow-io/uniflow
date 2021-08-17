@@ -1,36 +1,34 @@
-import {
-  Admin,
-  Article,
-  Blog,
-  Contact,
-  Contributor,
-  Card,
-  Library,
-  Doc,
-  Feed,
-  Home,
-  Flows,
-  Login,
-  FacebookLogin,
-  GithubLogin,
-  Register,
-  Settings,
-  Tag,
-  Tags,
-  Changelog,
-  Newsletter,
-  Notifications,
-} from './views';
-
+import Home from './views/home'
+import Login from './views/login/login'
+import FacebookLogin from './views/login/facebook'
+import GithubLogin from './views/login/github'
+import Register from './views/login/register'
+import Flows from './views/flows'
+import Contact from './views/contact'
+import Doc from './views/doc/doc'
+import Newsletter from './views/newsletter'
+import Notifications from './views/notifications'
+import Changelog from './views/changelog'
+import Contributor from './views/blog/contributor'
+import Tag from './views/blog/tag'
+import Tags from './views/blog/tags'
+import Article from './views/blog/article'
+import Blog from './views/blog/blog'
+import Card from './views/library/card'
+import Library from './views/library/library'
+import Settings from './views/settings'
+import Admin from './views/admin'
+import Feed from './views/feed/feed'
 import { compile } from 'path-to-regexp';
 import { requireAuthentication } from './helpers';
-import { Path } from './services'
+import { Path } from './services';
 import Container from './container';
+import { ComponentType } from 'react';
 
-const container = new Container()
-const path = container.get(Path)
+const container = new Container();
+const path = container.get(Path);
 
-const routes = {
+const routes: {[key: string]: {path: string, exact?: boolean, component: ComponentType<any>}} = {
   home: {
     path: '/',
     exact: true,
@@ -130,7 +128,7 @@ const routes = {
   },
 };
 
-export const pathTo = (route, params = {}) => {
+export const pathTo = (route: string, params = {}) => {
   if (!(route in routes)) {
     throw new Error(`There is no such view as ${route}`);
   }
@@ -138,7 +136,7 @@ export const pathTo = (route, params = {}) => {
   return compile(routes[route].path)(params);
 };
 
-export const matchRoute = (pathname) => {
+export const matchRoute = (pathname: string) => {
   const keys = Object.keys(routes);
 
   let match = null;

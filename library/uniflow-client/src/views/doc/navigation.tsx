@@ -1,41 +1,54 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'gatsby';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { pathTo } from '../../routes';
 
-export interface NavigationProps {}
+interface NavigationItem {
+  link: string
+  title: string
+}
 
-class Navigation extends Component<NavigationProps> {
-  state = {
-    search: '',
-    collapse: true,
+interface NavigationItemGroup {
+  title: string
+  items: NavigationItem[]
+}
+
+export interface NavigationProps {
+  docNav: {
+    nodes: NavigationItemGroup[]
+  }
+  slug: string
+}
+
+function Navigation(props: NavigationProps) {
+  const [search, setSearch] = useState<string>('')
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
+
+  const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setSearch( event.target.value );
   };
 
-  onSearch = (event) => {
-    this.setState({ search: event.target.value });
+  const onToggle: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    setIsCollapsed(!isCollapsed);
   };
 
-  onToggle = (event) => {
-    this.setState({ collapse: !this.state.collapse });
-  };
-
-  onSubmit = (event) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
   };
 
-  itemPathTo = (item) => {
+  const itemPathTo = (item: NavigationItem) => {
     const slug = item.link.slice(6);
     return pathTo('doc', { slug: slug ? slug : null });
   };
 
-  isActive = (item, slug) => {
-    return item.link === `/docs${slug ? '/' + slug : ''}` ? 'active' : null;
+  const isActive = (item: NavigationItem, slug: string) => {
+    return item.link === `/docs${slug ? '/' + slug : ''}` ? 'active' : undefined;
   };
 
-  filterNav = (nav, search) => {
-    return nav.reduce((value, section) => {
-      const items = section.items.filter((item) => {
+  const filterNav = (nav: NavigationItemGroup[], search: string) => {
+    return nav.reduce((value: NavigationItemGroup[], group) => {
+      const items = group.items.filter((item) => {
         let words = item.title;
         words = words.toLowerCase();
 
@@ -44,7 +57,7 @@ class Navigation extends Component<NavigationProps> {
 
       if (items.length > 0) {
         value.push({
-          ...section,
+          ...group,
           items: items,
         });
       }
@@ -53,57 +66,55 @@ class Navigation extends Component<NavigationProps> {
     }, []);
   };
 
-  render() {
-    const { docNav, slug } = this.props;
+  const { docNav, slug } = props;
 
-    return (
-      <div className="sidebar">
-        <form
-          className="sidebar-search d-flex align-items-center"
-          role="search"
-          onSubmit={this.onSubmit}
+  return (
+    <div className="sidebar">
+      <form
+        className="sidebar-search d-flex align-items-center"
+        role="search"
+        onSubmit={onSubmit}
+      >
+        <div className="input-group">
+          <input
+            type="search"
+            className="form-control ds-input"
+            placeholder="Search..."
+            aria-label="Search for..."
+            value={search}
+            onChange={onSearch}
+          />
+        </div>
+        <button
+          className="btn d-sm-none p-0 ml-3 isCollapsedd"
+          type="button"
+          onClick={onToggle}
         >
-          <div className="input-group">
-            <input
-              type="search"
-              className="form-control ds-input"
-              placeholder="Search..."
-              aria-label="Search for..."
-              value={this.state.search}
-              onChange={this.onSearch}
-            />
-          </div>
-          <button
-            className="btn d-sm-none p-0 ml-3 collapsed"
-            type="button"
-            onClick={this.onToggle}
-          >
-            <FontAwesomeIcon icon={faBars} />
-          </button>
-        </form>
-        <nav className={`sidebar-nav${this.state.collapse ? ' d-none d-sm-block' : ''}`}>
-          <div className="sidebar-section">
-            {this.filterNav(docNav.nodes, this.state.search).map((section, sectionIndex) => (
-              <React.Fragment key={`section-${sectionIndex}`}>
-                <h4>{section.title}</h4>
-                <ul className="sidebar-items">
-                  {section.items.map((item, itemIndex) => (
-                    <li
-                      className={this.isActive(item, slug)}
-                      key={`item-${sectionIndex}-${itemIndex}`}
-                    >
-                      <span className="link">{item.title}</span>
-                      <Link to={this.itemPathTo(item)}>{item.title}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </React.Fragment>
-            ))}
-          </div>
-        </nav>
-      </div>
-    );
-  }
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+      </form>
+      <nav className={`sidebar-nav${isCollapsed ? ' d-none d-sm-block' : ''}`}>
+        <div className="sidebar-section">
+          {filterNav(docNav.nodes, search).map((section, sectionIndex) => (
+            <React.Fragment key={`section-${sectionIndex}`}>
+              <h4>{section.title}</h4>
+              <ul className="sidebar-items">
+                {section.items.map((item, itemIndex) => (
+                  <li
+                    className={isActive(item, slug)}
+                    key={`item-${sectionIndex}-${itemIndex}`}
+                  >
+                    <span className="link">{item.title}</span>
+                    <Link to={itemPathTo(item)}>{item.title}</Link>
+                  </li>
+                ))}
+              </ul>
+            </React.Fragment>
+          ))}
+        </div>
+      </nav>
+    </div>
+  );
 }
 
 export default Navigation;

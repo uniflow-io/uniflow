@@ -1,26 +1,36 @@
 import React from 'react';
-import { graphql } from 'gatsby';
-import { Feed } from '../views';
+import { graphql, PageProps } from 'gatsby';
+import Feed, { FeedProps } from '../views/feed/feed';
 import { requireAuthentication, withPage } from '../helpers';
 import routes from '../routes';
-import { Path } from '../services'
+import { Path } from '../services';
 import Container from '../container';
+import { Flow } from '../views/feed/program';
 
-const container = new Container()
-const path = container.get(Path)
+const container = new Container();
+const path = container.get(Path);
 
-export default ({ location, data: { localFlows } }) => {
+export interface FeedPageData {
+  localFlows: {
+    nodes: {
+      name: string
+      uniflow: Flow
+    }[]
+  }
+}
+
+export default ({ location, data: { localFlows } }: PageProps<FeedPageData>) => {
   const allFlows = {};
   localFlows.nodes.forEach((flow) => {
     allFlows[flow.name] = flow.uniflow;
   });
 
-  const FeedPage = withPage(Feed, 'feed', {
-    location: location,
+  const FeedPage = withPage<FeedProps>(Feed, 'feed', {
+    location,
     title: 'Feed',
     description: 'Feed',
   });
-  const AuthFeedPage = requireAuthentication(FeedPage);
+  const AuthFeedPage = requireAuthentication<FeedProps>(FeedPage);
 
   const match = path.matchPath(location.pathname, {
     path: routes.feed.path,

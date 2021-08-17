@@ -1,10 +1,19 @@
 import React from 'react';
-import { Tags } from '../views';
+import Tags, { TagsProps } from '../views/blog/tags';
 import { withPage } from '../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location, pageContext: { tags } }) => {
+export interface TagsTemplateData {
+
+}
+
+export interface TagsTemplateContext {
+  tags: TagsProps['tags']
+}
+
+export default ({ location, pageContext: { tags } }: PageProps<TagsTemplateData, TagsTemplateContext>) => {
   const TagsPage = withPage(Tags, 'tags', {
-    location: location,
+    location,
     title: 'Tags',
     description: 'Tags',
   });

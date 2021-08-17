@@ -1,33 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Navigation from './navigation';
-import Program from './program';
+import Program, { Flow, ProgramProps } from './program';
 import Folder from './folder';
-import { getFeedItem } from '../../reducers/feed/actions';
-import { connect } from 'react-redux';
+import { FolderFeedType, getFeedItem, ProgramFeedType, useFeed } from '../../contexts/feed';
 
-export interface FeedProps {}
-
-class Feed extends Component<FeedProps> {
-  render() {
-    const { allFlows, feed } = this.props;
-    const currentItem = getFeedItem(feed);
-
-    return (
-      <div className="container-fluid">
-        <div className="row flex-xl-nowrap">
-          <Navigation />
-          {currentItem && currentItem.type === 'program' && (
-            <Program program={currentItem.entity} allFlows={allFlows} />
-          )}
-          {currentItem && currentItem.type === 'folder' && <Folder folder={currentItem.entity} />}
-        </div>
-      </div>
-    );
-  }
+export interface FeedProps {
+  allFlows: ProgramProps['allFlows']
 }
 
-export default connect((state) => {
-  return {
-    feed: state.feed,
-  };
-})(Feed);
+function Feed(props: FeedProps) {
+  const { allFlows } = props;
+  const { feed } = useFeed()
+  const currentItem = getFeedItem(feed);
+  
+  return (
+    <div className="container-fluid">
+      <div className="row flex-xl-nowrap">
+        <Navigation />
+        {currentItem && currentItem.type === 'program' && (
+          <Program program={currentItem.entity as ProgramFeedType} allFlows={allFlows} />
+        )}
+        {currentItem && currentItem.type === 'folder' && <Folder folder={currentItem.entity as FolderFeedType} />}
+      </div>
+    </div>
+  );
+}
+
+export default Feed;

@@ -1,36 +1,21 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { navigate } from 'gatsby';
 import { pathTo } from '../../routes';
-import { facebookLogin } from '../../reducers/auth/actions';
-import { commitAddLog } from '../../reducers/logs/actions';
-import { connect } from 'react-redux';
+import { facebookLogin } from '../../contexts/auth';
+import { commitAddLog } from '../../contexts/logs';
+import { useAuth, useLogs } from '../../contexts';
+import { WindowLocation } from '@reach/router';
 
-export interface FacebookLoginProps {}
+export interface FacebookLoginProps {
+  location: WindowLocation
+}
 
-class FacebookLogin extends Component<FacebookLoginProps> {
-  async componentDidMount() {
-    const accessToken = this.getAccessToken();
-    if (accessToken === null) {
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('login'));
-      }
-    }
+function FacebookLogin(props: FacebookLoginProps) {
+  const { authDispatch, authRef } = useAuth()
+  const { logsDispatch } = useLogs()
 
-    await this.props.dispatch(facebookLogin(accessToken, this.props.auth.token));
-    if (this.props.auth.isAuthenticated) {
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('feed'));
-      }
-    } else {
-      this.props.dispatch(commitAddLog(this.props.auth.statusText));
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('login'));
-      }
-    }
-  }
-
-  getAccessToken() {
-    const m = this.props.location.hash.match(/access_token=([^&]+)/);
+  const getAccessToken = (): string|null => {
+    const m = props.location.hash.match(/access_token=([^&]+)/);
     if (m) {
       return m[1];
     }
@@ -38,18 +23,29 @@ class FacebookLogin extends Component<FacebookLoginProps> {
     return null;
   }
 
-  render() {
-    return (
-      <section className="section container-fluid">
-        <h3 className="box-title">Login Facebook</h3>
-        <p className="text-center">Application is currently logging you from Facebook</p>
-      </section>
-    );
-  }
+  useEffect(() => {
+    (async () => {
+      const accessToken = getAccessToken();
+      if (accessToken === null) {
+        return navigate(pathTo('login'));
+      }
+
+      await facebookLogin(accessToken, authRef.current.token)(authDispatch);
+      if (authRef.current.isAuthenticated) {
+        return navigate(pathTo('feed'));
+      } else {
+        commitAddLog(authRef.current.statusText)(logsDispatch);
+        return navigate(pathTo('login'));
+      }
+    })()
+  }, [])
+
+  return (
+    <section className="section container-fluid">
+      <h3 className="box-title">Login Facebook</h3>
+      <p className="text-center">Application is currently logging you from Facebook</p>
+    </section>
+  );
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-  };
-})(FacebookLogin);
+export default FacebookLogin;

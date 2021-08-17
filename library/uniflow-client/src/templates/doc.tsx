@@ -1,13 +1,23 @@
 import React from 'react';
-import { Doc } from '../views';
-import { graphql } from 'gatsby';
+import Doc, { DocProps } from '../views/doc/doc';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location, pageContext: { previous, next } }) => {
+export interface DocTemplateData {
+  doc: DocProps['doc']
+  docNav: DocProps['docNav']
+}
+
+export interface DocTemplateContext {
+  previous: DocProps['previous'],
+  next: DocProps['next'],
+}
+
+export default ({ data, location, pageContext: { previous, next } }: PageProps<DocTemplateData, DocTemplateContext>) => {
   const { doc, docNav } = data;
 
-  const DocPage = withPage(Doc, 'doc', {
-    location: location,
+  const DocPage = withPage<DocProps>(Doc, 'doc', {
+    location,
     title: doc.frontmatter.title,
     description: doc.excerpt,
   });

@@ -1,13 +1,22 @@
 import React from 'react';
-import { Article } from '../views';
-import { graphql } from 'gatsby';
+import Article, { ArticleProps } from '../views/blog/article';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location, pageContext: { previous, next } }) => {
+export interface ArticleTemplateData {
+  article: ArticleProps['article']
+}
+
+export interface ArticleTemplateContext {
+  previous: ArticleProps['previous'],
+  next: ArticleProps['next'],
+}
+
+export default ({ data, location, pageContext: { previous, next } }: PageProps<ArticleTemplateData, ArticleTemplateContext>) => {
   const { article } = data;
 
-  const ArticlePage = withPage(Article, 'article', {
-    location: location,
+  const ArticlePage = withPage<ArticleProps>(Article, 'article', {
+    location,
     title: article.frontmatter.title,
     description: article.excerpt,
     image: article.frontmatter.coverSeo.publicURL,

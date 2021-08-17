@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from 'gatsby';
 import debounce from 'lodash/debounce';
-import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
@@ -12,7 +11,7 @@ import {
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlows,
-} from '../../reducers/graph/actions';
+} from '../../contexts/graph';
 import {
   getTags,
   commitUpdateFeed,
@@ -25,259 +24,251 @@ import {
   toFeedPath,
   deserializeFlowsData,
   serializeFlowsData,
-} from '../../reducers/feed/actions';
-import { commitAddLog } from '../../reducers/logs/actions';
+  useFeed,
+  ProgramFeedType,
+} from '../../contexts/feed';
+import { commitAddLog, useLogs } from '../../contexts/logs';
 import Container from '../../container';
 import { UI } from '../../services';
+import { useAuth, useGraph, useUser } from '../../contexts';
 
-const container = new Container()
-const ui = container.get(UI)
+const container = new Container();
+const ui = container.get(UI);
 
-export interface ProgramProps {}
+export interface Flow {
+  clients: string[]
+  name: string
+  tags: string[]
+}
 
-class Program extends Component<ProgramProps> {
-  state = {
+export interface ProgramProps {
+  allFlows: {[key: string] : Flow}
+  program: ProgramFeedType
+}
+
+export interface ProgramState {}
+
+function Program(props: ProgramProps) {
+  const [state, setState] = useState<ProgramState>({
     fetchedSlug: null,
     fetchedUid: null,
     slug: null,
     folderTreeEdit: false,
     folderTree: [],
-  };
-  private _componentIsMounted = false;
-  private _componentShouldUpdate = false;
+  });
+  const { auth } = useAuth()
+  const { logsDispatch } = useLogs()
+  const { user } = useUser()
+  const { feed, feedDispatch } = useFeed()
+  const { graph, graphDispatch } = useGraph()
+  const tags = getTags(feed)
 
-  componentDidMount() {
-    const { program } = this.props;
+  let _componentIsMounted = false;
+  let _componentShouldUpdate = false;
 
-    this._componentIsMounted = true;
-    this._componentShouldUpdate = true;
+  useEffect(() => {
+    setState({
+      slug: null,
+      folderTreeEdit: false,
+      folderTree: [props.program.path],
+    });
 
-    this.setState({ folderTree: [program.path] });
+    onFetchFlowData();
 
-    this.onFetchFlowData();
-  }
-
-  componentWillUnmount() {
-    this._componentIsMounted = false;
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.program.uid !== prevProps.program.uid) {
-      this.setState({
-        slug: null,
-        folderTreeEdit: false,
-        folderTree: [this.props.program.path],
-      });
-
-      this.onFetchFlowData();
+    return () => {
+      _componentIsMounted = false;
     }
-  }
+  }, [props.program.uid])
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this._componentShouldUpdate;
-  }
+  //shouldComponentUpdate(nextProps, nextState) {
+  //  return _componentShouldUpdate;
+  //}
 
-  onRun = (event, index) => {
+  const onRun = (event, index) => {
     event.preventDefault();
 
-    const { graph } = this.props;
+    const { graph } = props;
 
     const runner = new Runner();
     runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
   };
 
-  onPushFlow = async (index, flow) => {
-    await this.props.dispatch(commitPushFlow(index, flow));
+  const onPushFlow = async (index, flow) => {
+    await commitPushFlow(index, flow)(graphDispatch);
 
-    this.onUpdateFlowData();
+    onUpdateFlowData();
   };
 
-  onPopFlow = async (index) => {
-    await this.props.dispatch(commitPopFlow(index));
+  const onPopFlow = async (index) => {
+    await commitPopFlow(index)(graphDispatch);
 
-    this.onUpdateFlowData();
+    onUpdateFlowData();
   };
 
-  onUpdateFlow = async (index, data) => {
-    this._componentShouldUpdate = false;
-    await this.props.dispatch(commitUpdateFlow(index, data));
-    this._componentShouldUpdate = true;
-    this.onUpdateFlowData();
+  const onUpdateFlow = async (index, data) => {
+    _componentShouldUpdate = false;
+    await commitUpdateFlow(index, data)(graphDispatch);
+    _componentShouldUpdate = true;
+    onUpdateFlowData();
   };
 
-  onFetchFlowData = debounce(async () => {
-    const { program } = this.props;
+  const onFetchFlowData = debounce(async () => {
+    const { program } = props;
 
-    await this.props.dispatch(commitSetFlows([]));
+    await commitSetFlows([])(graphDispatch);
     let data = program.data;
     if (!data) {
-      data = await this.props.dispatch(getProgramData(program, this.props.auth.token));
+      data = await getProgramData(program, auth.token)(feedDispatch);
     }
     if (data) {
       program.data = data;
 
-      if (program.slug === this.props.program.slug) {
-        await this.props.dispatch(commitSetFlows(deserializeFlowsData(data)));
+      if (program.slug === props.program.slug) {
+        await commitSetFlows(deserializeFlowsData(data))(graphDispatch);
       }
     }
-    if (this._componentIsMounted) {
-      this._componentShouldUpdate = false;
-      this.setState({ fetchedSlug: program.slug }, () => {
-        this._componentShouldUpdate = true;
+    if (_componentIsMounted) {
+      _componentShouldUpdate = false;
+      setState({ fetchedSlug: program.slug }, () => {
+        _componentShouldUpdate = true;
       });
     }
   }, 1000);
 
-  onUpdateFlowData = debounce(async () => {
-    const { program, graph, user, feed } = this.props;
-    if (program.slug !== this.state.fetchedSlug) return;
+  const onUpdateFlowData = debounce(async () => {
+    const { program, graph, feed } = props;
+    if (program.slug !== state.fetchedSlug) return;
 
     const data = serializeFlowsData(graph);
     if ((feed.uid === 'me' || user.uid === feed.uid) && program.data !== data) {
       program.data = data;
 
-      this._componentShouldUpdate = false;
+      _componentShouldUpdate = false;
       try {
-        await this.props.dispatch(setProgramData(program, this.props.auth.token));
-        this._componentShouldUpdate = true;
+        await setProgramData(program, auth.token)(feedDispatch);
+        _componentShouldUpdate = true;
       } catch (error) {
-        await this.props.dispatch(commitAddLog(error.message));
+        await commitAddLog(error.message)(logsDispatch);
       }
     }
   }, 1000);
 
-  onChangeTitle = async (event) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ name: event.target.value },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangeTitle = async (event) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ name: event.target.value },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangeSlug = (event) => {
-    this.setState({ slug: event.target.value }, this.onUpdate);
+  const onChangeSlug: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setState({ slug: event.target.value }, onUpdate);
   };
 
-  onChangePath = async (selected) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ path: selected },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangePath = async (selected) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ path: selected },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangeClients = async (clients) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ clients: clients },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangeClients = async (clients) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ clients: clients },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangeTags = async (tags) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ tags: tags },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangeTags = async (tags) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ tags: tags },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangeDescription = async (description) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ description: description },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangeDescription = async (description) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ description: description },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangePublic = async (value) => {
-    await this.props.dispatch(
-      commitUpdateFeed({
-        type: 'program',
-        entity: {
-          ...this.props.program,
-          ...{ public: value },
-        },
-      })
-    );
-    this.onUpdate();
+  const onChangePublic = async (value) => {
+    await commitUpdateFeed({
+      type: 'program',
+      entity: {
+        ...props.program,
+        ...{ public: value },
+      },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onUpdate = debounce(async () => {
-    let { program } = this.props;
-    program.slug = this.state.slug ?? program.slug;
+  const onUpdate = debounce(async () => {
+    let { program } = props;
+    program.slug = state.slug ?? program.slug;
 
-    program = await this.props.dispatch(updateProgram(program, this.props.auth.token));
-    const path = toFeedPath(program, this.props.user);
-    if (typeof window !== `undefined` && window.location.pathname !== path) {
-      navigate(path);
-    }
+    program = await updateProgram(program, auth.token)(feedDispatch);
+    const path = toFeedPath(program, user);
+    navigate(path);
   }, 1000);
 
-  onDuplicate = async (event) => {
+  const onDuplicate = async (event) => {
     event.preventDefault();
 
-    const program = this.props.program;
+    const program = props.program;
     program.name += ' Copy';
 
     try {
-      const item = await this.props.dispatch(
-        createProgram(program, this.props.auth.uid, this.props.auth.token)
-      );
+      const item = await createProgram(program, auth.uid, auth.token)(feedDispatch)
       Object.assign(program, item);
-      await this.props.dispatch(setProgramData(program, this.props.auth.token));
-      navigate(toFeedPath(program, this.props.user));
+      await setProgramData(program, auth.token)(feedDispatch);
+      navigate(toFeedPath(program, user));
     } catch (error) {
-      return this.props.dispatch(commitAddLog(error.message));
+      return commitAddLog(error.message)(logsDispatch);
     }
   };
 
-  onDelete = async (event) => {
+  const onDelete = async (event) => {
     event.preventDefault();
 
-    await this.props.dispatch(deleteProgram(this.props.program, this.props.auth.token));
-    navigate(toFeedPath(this.props.program, this.props.user, true));
+    await deleteProgram(props.program, auth.token)(feedDispatch);
+    navigate(toFeedPath(props.program, user, true));
   };
 
-  onFolderEdit = async (event) => {
+  const onFolderEdit = async (event) => {
     event.preventDefault();
 
-    const { feed } = this.props;
+    const { feed } = props;
 
-    const folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token));
-    this.setState({
+    const folderTree = await getFolderTree(feed.uid, auth.token)(feedDispatch);
+    setState({
       folderTreeEdit: true,
       folderTree: folderTree,
     });
   };
 
-  getFlows = (program) => {
-    const { allFlows } = this.props;
+  const getFlows = (program) => {
+    const { allFlows } = props;
     const flowLabels = [];
     const keys = Object.keys(allFlows);
 
@@ -304,8 +295,8 @@ class Program extends Component<ProgramProps> {
     return flowLabels;
   };
 
-  getNodeClipboard = () => {
-    const { program, user } = this.props;
+  const getNodeClipboard = () => {
+    const { program } = props;
 
     if (user.apiKey) {
       return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
@@ -314,244 +305,234 @@ class Program extends Component<ProgramProps> {
     return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`;
   };
 
-  onCopyNodeUsage = (event) => {
-    const clipboard = this.getNodeClipboard();
+  const onCopyNodeUsage: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const clipboard = getNodeClipboard();
 
     ui.copyTextToClipboard(clipboard);
   };
 
-  render() {
-    const { program, tags, graph, user, allFlows } = this.props;
-    const { folderTreeEdit, folderTree } = this.state;
-    const programFlows = this.getFlows(program);
-    const clients = {
-      uniflow: 'Uniflow',
-      node: 'Node',
-      vscode: 'VSCode',
-    };
-    program.slug = this.state.slug ?? program.slug;
+  const { program, allFlows } = props;
+  const { folderTreeEdit, folderTree } = state;
+  const programFlows = getFlows(program);
+  const clients = {
+    uniflow: 'Uniflow',
+    node: 'Node',
+    vscode: 'VSCode',
+  };
+  program.slug = state.slug ?? program.slug;
 
-    return (
-      <section className="section col">
-        <div className="row">
-          <div className="col">
-            <h3>Infos</h3>
-          </div>
-          <div className="d-block col-auto">
-            <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
-              <div className="btn-group-sm" role="group">
-                <button type="button" className="btn text-secondary" onClick={this.onDuplicate}>
-                  <FontAwesomeIcon icon={faClone} />
-                </button>
-                <button type="button" className="btn text-secondary" onClick={this.onDelete}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </div>
+  return (
+    <section className="section col">
+      <div className="row">
+        <div className="col">
+          <h3>Infos</h3>
+        </div>
+        <div className="d-block col-auto">
+          <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
+            <div className="btn-group-sm" role="group">
+              <button type="button" className="btn text-secondary" onClick={onDuplicate}>
+                <FontAwesomeIcon icon={faClone} />
+              </button>
+              <button type="button" className="btn text-secondary" onClick={onDelete}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
             </div>
           </div>
         </div>
-        <form className="form-sm-horizontal">
-          <div className="row mb-3">
-            <label htmlFor="info_title_{{ _uid }}" className="col-sm-2 col-form-label">
-              Title
-            </label>
+      </div>
+      <form className="form-sm-horizontal">
+        <div className="row mb-3">
+          <label htmlFor="program-name" className="col-sm-2 col-form-label">
+            Title
+          </label>
 
-            <div className="col-sm-10">
-              <input
-                type="text"
-                className="form-control"
-                id="info_title_{{ _uid }}"
-                value={program.name}
-                onChange={this.onChangeTitle}
-                placeholder="Title"
-              />
-            </div>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="program-name"
+              value={program.name}
+              onChange={onChangeTitle}
+              placeholder="Title"
+            />
           </div>
+        </div>
 
-          <div className="row mb-3">
-            <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
-              Slug
-            </label>
+        <div className="row mb-3">
+          <label htmlFor="program-slug" className="col-sm-2 col-form-label">
+            Slug
+          </label>
 
-            <div className="col-sm-10">
-              <input
-                type="text"
-                className="form-control"
-                id="info_slug_{{ _uid }}"
-                value={program.slug}
-                onChange={this.onChangeSlug}
-                placeholder="Slug"
-              />
-            </div>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="program-slug"
+              value={program.slug}
+              onChange={onChangeSlug}
+              placeholder="Slug"
+            />
           </div>
+        </div>
 
-          <div className="row mb-3">
-            <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
-              Path
-            </label>
+        <div className="row mb-3">
+          <label htmlFor="program-path" className="col-sm-2 col-form-label">
+            Path
+          </label>
 
-            <div className="col-sm-10">
-              {(folderTreeEdit && (
-                <Select
-                  value={program.path}
-                  onChange={this.onChangePath}
-                  className="form-control"
-                  id="info_path_{{ _uid }}"
-                  options={folderTree.map((value) => {
-                    return { value: value, label: value };
-                  })}
-                />
-              )) || (
-                <div>
-                  <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>{' '}
-                  {program.path}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="info_client_{{ _uid }}" className="col-sm-2 col-form-label">
-              Clients
-            </label>
-
-            <div className="col-sm-10">
+          <div className="col-sm-10">
+            {(folderTreeEdit && (
               <Select
-                value={program.clients}
-                onChange={this.onChangeClients}
+                value={program.path}
+                onChange={onChangePath}
                 className="form-control"
-                id="info_client_{{ _uid }}"
-                multiple={true}
-                options={Object.keys(clients).map((value) => {
-                  return { value: value, label: clients[value] };
+                id="program-path"
+                options={folderTree.map((value) => {
+                  return { value: value, label: value };
                 })}
               />
-            </div>
+            )) || (
+              <div>
+                <button type="button" className="btn btn-secondary" onClick={onFolderEdit}>
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>{' '}
+                {program.path}
+              </div>
+            )}
           </div>
+        </div>
 
-          <div className="row mb-3">
-            <label htmlFor="info_tags_{{ _uid }}" className="col-sm-2 col-form-label">
-              Tags
-            </label>
+        <div className="row mb-3">
+          <label htmlFor="program-clients" className="col-sm-2 col-form-label">
+            Clients
+          </label>
 
-            <div className="col-sm-10">
-              <Select
-                value={program.tags}
-                onChange={this.onChangeTags}
-                className="form-control"
-                id="info_tags_{{ _uid }}"
-                edit={true}
-                multiple={true}
-                options={tags.map((tag) => {
-                  return { value: tag, label: tag };
-                })}
-                placeholder="Tags"
-              />
-            </div>
+          <div className="col-sm-10">
+            <Select
+              value={program.clients}
+              onChange={onChangeClients}
+              className="form-control"
+              id="program-clients"
+              multiple={true}
+              options={Object.keys(clients).map((value) => {
+                return { value: value, label: clients[value] };
+              })}
+            />
           </div>
+        </div>
 
-          <div className="row mb-3">
-            <label htmlFor="info_public_{{ _uid }}" className="col-sm-2 col-form-label">
-              Public
-            </label>
+        <div className="row mb-3">
+          <label htmlFor="program-tags" className="col-sm-2 col-form-label">
+            Tags
+          </label>
 
-            <div className="col-sm-10">
-              <Checkbox
-                className="form-control-plaintext"
-                value={program.public}
-                onChange={this.onChangePublic}
-                id="info_public_{{ _uid }}"
-              />
-            </div>
+          <div className="col-sm-10">
+            <Select
+              value={program.tags}
+              onChange={onChangeTags}
+              className="form-control"
+              id="program-tags"
+              edit={true}
+              multiple={true}
+              options={tags.map((tag) => {
+                return { value: tag, label: tag };
+              })}
+              placeholder="Tags"
+            />
           </div>
+        </div>
 
-          <div className="row mb-3">
-            <label htmlFor="info_description_{{ _uid }}" className="col-sm-2 col-form-label">
-              Description
-            </label>
+        <div className="row mb-3">
+          <label htmlFor="program-public" className="col-sm-2 col-form-label">
+            Public
+          </label>
 
-            <div className="col-sm-10">
-              <Editor
-                className="form-control"
-                id="info_description_{{ _uid }}"
-                value={program.description}
-                onChange={this.onChangeDescription}
-                placeholder="Text"
-                height="200"
-              />
-            </div>
+          <div className="col-sm-10">
+            <Checkbox
+              className="form-control-plaintext"
+              value={program.public}
+              onChange={onChangePublic}
+              id="program-public"
+            />
           </div>
-        </form>
-        {program.clients.map((client) => {
-          if (client === 'uniflow') {
-            return (
-              <div key={`client-${client}`} className="row">
-                <div className="col">
-                  <button className="btn btn-primary" onClick={this.onRun}>
-                    <FontAwesomeIcon icon={faPlay} /> Play
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="program-description" className="col-sm-2 col-form-label">
+            Description
+          </label>
+
+          <div className="col-sm-10">
+            <Editor
+              className="form-control"
+              id="program-description"
+              value={program.description}
+              onChange={onChangeDescription}
+              placeholder="Text"
+              height="200"
+            />
+          </div>
+        </div>
+      </form>
+      {program.clients.map((client) => {
+        if (client === 'uniflow') {
+          return (
+            <div key={`client-${client}`} className="row">
+              <div className="col">
+                <button className="btn btn-primary" onClick={onRun}>
+                  <FontAwesomeIcon icon={faPlay} /> Play
+                </button>
+              </div>
+            </div>
+          );
+        } else if (client === 'node') {
+          const clipboard = getNodeClipboard(user);
+
+          return (
+            <div key={`client-${client}`} className="row mb-3">
+              <label htmlFor="program-node-api-key" className="col-sm-2 col-form-label">
+                Node usage
+              </label>
+              <div className="col-sm-10">
+                <div className="input-group">
+                  <button
+                    type="button"
+                    className="input-group-text"
+                    onClick={onCopyNodeUsage}
+                  >
+                    <FontAwesomeIcon icon={faClipboard} />
                   </button>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="program-node-api-key"
+                    value={clipboard || ''}
+                    readOnly
+                    placeholder="api key"
+                  />
                 </div>
               </div>
-            );
-          } else if (client === 'node') {
-            const clipboard = this.getNodeClipboard(user);
+            </div>
+          );
+        }
 
-            return (
-              <div key={`client-${client}`} className="row mb-3">
-                <label htmlFor="program_node_api_key" className="col-sm-2 col-form-label">
-                  Node usage
-                </label>
-                <div className="col-sm-10">
-                  <div className="input-group">
-                    <button
-                      type="button"
-                      className="input-group-text"
-                      onClick={this.onCopyNodeUsage}
-                    >
-                      <FontAwesomeIcon icon={faClipboard} />
-                    </button>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="program_node_api_key"
-                      value={clipboard || ''}
-                      readOnly
-                      placeholder="api key"
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          }
+        return null;
+      })}
 
-          return null;
-        })}
+      <hr />
 
-        <hr />
-
-        <Flows
-          graph={graph}
-          allFlows={allFlows}
-          programFlows={programFlows}
-          clients={program.clients}
-          onPush={this.onPushFlow}
-          onPop={this.onPopFlow}
-          onUpdate={this.onUpdateFlow}
-          onRun={this.onRun}
-        />
-      </section>
-    );
-  }
+      <Flows
+        graph={graph}
+        allFlows={allFlows}
+        programFlows={programFlows}
+        clients={program.clients}
+        onPush={onPushFlow}
+        onPop={onPopFlow}
+        onUpdate={onUpdateFlow}
+        onRun={onRun}
+      />
+    </section>
+  );
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-    user: state.user,
-    tags: getTags(state.feed),
-    feed: state.feed,
-    graph: state.graph,
-  };
-})(Program);
+export default Program;

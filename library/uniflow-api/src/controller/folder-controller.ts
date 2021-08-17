@@ -24,7 +24,7 @@ class FolderController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(404, "Not found")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async updateFolder(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<FolderApiType>): Promise<FolderApiType> {
+  public async updateFolder(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<Pick<FolderApiType, 'name'|'path'|'slug'>>): Promise<FolderApiType> {
     if (!req.user) {
       throw new ApiException('Not authorized', 401);
     }

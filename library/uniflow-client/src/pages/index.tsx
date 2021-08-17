@@ -1,10 +1,11 @@
 import React from 'react';
-import { Home } from '../views';
+import Home, { HomeProps } from '../views/home';
 import { withPage } from '../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const HomePage = withPage(Home, 'home', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const HomePage = withPage<HomeProps>(Home, 'home', {
+    location,
     title: 'Uniflow',
     description: 'Unified Workflow Automation Tool',
   });

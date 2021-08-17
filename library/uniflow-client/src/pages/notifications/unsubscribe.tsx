@@ -1,10 +1,11 @@
 import React from 'react';
-import { Notifications } from '../../views';
+import Notifications, { NotificationsProps } from '../../views/notifications';
 import { withPage } from '../../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const NotificationPage = withPage(Notifications, 'notifications', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const NotificationPage = withPage<NotificationsProps>(Notifications, 'notifications', {
+    location,
     title: 'Notifications Unsubscribe',
     description: 'Unsubscribe from your notifications',
   });

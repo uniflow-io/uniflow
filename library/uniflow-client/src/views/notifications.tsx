@@ -1,77 +1,88 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { Checkbox } from '../components';
 import { ApiException } from '../models';
-import { getLead, updateLead } from '../reducers/lead/actions';
 import { matchRoute } from '../routes';
+import { WindowLocation } from '@reach/router';
 
-export interface NotificationsProps {}
+import { Api } from '../services';
+import Container from '../container';
+import { ApiExceptionErrors } from '../models/api-exception';
 
-class Notifications extends Component<NotificationsProps> {
-  state = {
-    lead: {
-      uid: undefined,
-      optinNewsletter: false,
-      optinBlog: false,
-      optinGithub: false,
-      githubUsername: null,
-    },
-    errors: {},
-    state: 'loading',
-  };
+const container = new Container();
+const api = container.get(Api);
 
-  async componentDidMount() {
-    const { location } = this.props;
+export interface NotificationsProps {
+  location: WindowLocation
+}
 
-    const uid = this.getId();
+interface LeadState {
+  uid?: string,
+  optinNewsletter: boolean,
+  optinBlog: boolean,
+  optinGithub: boolean,
+  githubUsername: string|null,
+}
 
-    const match = matchRoute(location.pathname);
-    if (uid !== null && match) {
-      if (match.route === 'notificationUnsubscribe') {
-        try {
-          await this.props.dispatch(
-            updateLead(uid, {
+function Notifications(props: NotificationsProps) {
+  const [lead, setLead] = useState<LeadState>({
+    uid: undefined,
+    optinNewsletter: false,
+    optinBlog: false,
+    optinGithub: false,
+    githubUsername: null,
+  })
+  const [errors, setErrors] = useState<ApiExceptionErrors>({})
+  const [state, setState] = useState<'loading'|'not-found'|'form'|'form-submit'|'form-success'|'unsubscribe-success'>('loading')
+
+  useEffect(() => {
+    const { location } = props;
+
+    const uid = getId();
+
+    (async () => {
+      const match = matchRoute(location.pathname);
+      if (uid !== null && match) {
+        if (match.route === 'notificationUnsubscribe') {
+          try {
+            await api.updateLead({uid}, {
               optinNewsletter: false,
               optinBlog: false,
               optinGithub: false,
             })
-          );
-          this.setState({
-            lead: { ...this.state.lead, ...{ uid } },
-            state: 'sent-unsubscribe',
-          });
-        } catch (error) {
-          this.setState({ state: 'not-found' });
-        }
-      } else if (match.route === 'notificationManage') {
-        try {
-          const data = await this.props.dispatch(getLead(uid));
-          this.setState({
-            lead: {
-              ...this.state.lead,
+            setLead({...lead, ...{ uid }})
+            setState('unsubscribe-success')
+          } catch (error) {
+            setState('not-found');
+          }
+        } else if (match.route === 'notificationManage') {
+          try {
+            const data = await api.getLead(uid);
+            setLead({
+              ...lead,
               ...{
                 uid,
                 optinNewsletter: data.optinNewsletter,
                 optinBlog: data.optinBlog,
                 optinGithub: data.optinGithub,
                 githubUsername: data.githubUsername,
-              },
-            },
-            state: 'form',
-          });
-        } catch (error) {
-          this.setState({ state: 'not-found' });
+              }
+            })
+            setState('form');
+          } catch (error) {
+            setState('not-found');
+          }
+        } else {
+          setState('not-found');
         }
       } else {
-        this.setState({ state: 'not-found' });
+        setState('not-found');
       }
-    } else {
-      this.setState({ state: 'not-found' });
-    }
-  }
+    })()
+  }, [])
 
-  getId() {
-    const m = this.props.location.search.match(/id=([^&]+)/);
+  const getId = () => {
+    const m = props.location.search.match(/id=([^&]+)/);
     if (m) {
       return m[1];
     }
@@ -79,142 +90,135 @@ class Notifications extends Component<NotificationsProps> {
     return null;
   }
 
-  onChangeOptinNewsletter = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinNewsletter: value } } });
+  const onChangeOptinNewsletter = (value: boolean) => {
+    setLead({ ...lead, ...{ optinNewsletter: value } });
   };
 
-  onChangeOptinBlog = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinBlog: value } } });
+  const onChangeOptinBlog = (value: boolean) => {
+    setLead({ ...lead, ...{ optinBlog: value } });
   };
 
-  onChangeOptinGithub = (value) => {
-    this.setState({ lead: { ...this.state.lead, ...{ optinGithub: value } } });
+  const onChangeOptinGithub = (value: boolean) => {
+    setLead({ ...lead, ...{ optinGithub: value } });
   };
 
-  onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
 
-    const { lead } = this.state;
+    if(!lead.uid) {
+      setState('not-found')
+      return
+    }
 
-    this.setState({ state: 'sending' }, async () => {
-      try {
-        await this.props.dispatch(
-          updateLead(lead.uid, {
-            optinNewsletter: lead.optinNewsletter,
-            optinBlog: lead.optinBlog,
-            optinGithub: lead.optinGithub,
-          })
-        );
-        this.setState({ state: 'sent' });
-      } catch (error) {
-        if (error instanceof ApiException) {
-          this.setState({ state: 'form', errors: { ...error.errors } });
-        }
+    setState('form-submit')
+    try {
+      await api.updateLead({uid: lead.uid}, {
+        optinNewsletter: lead.optinNewsletter,
+        optinBlog: lead.optinBlog,
+        optinGithub: lead.optinGithub,
+      })
+      setState('form-success');
+    } catch (error) {
+      if (error instanceof ApiException) {
+        setErrors({ ...error.errors })
+        setState('form');
       }
-    });
+    }
   };
 
-  render() {
-    const { state, lead } = this.state;
-    return (
-      <section className="section container-fluid">
-        <h3 className="box-title">Notifications</h3>
-        {state === 'loading' && <p className="text-center">Loading notifications</p>}
-        {state === 'not-found' && (
-          <div className="alert alert-danger text-center" role="alert">
-            Notifications coudn't be restored.
-            <br />
-            You may check your notification link.
+  return (
+    <section className="section container-fluid">
+      <h3 className="box-title">Notifications</h3>
+      {state === 'loading' && <p className="text-center">Loading notifications</p>}
+      {state === 'not-found' && (
+        <div className="alert alert-danger text-center" role="alert">
+          Notifications coudn't be restored.
+          <br />
+          You may check your notification link.
+        </div>
+      )}
+      {['form', 'form-submit'].indexOf(state) !== -1 && (
+        <form className="form-sm-horizontal" onSubmit={onSubmit}>
+          <div className="row mb-3">
+            <label
+              htmlFor="notifications_optinNewsletter_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
+              Subscribe to the newsletter
+            </label>
+
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={lead.optinNewsletter}
+                onChange={onChangeOptinNewsletter}
+                id="notifications_optinNewsletter_{{ _uid }}"
+              />
+            </div>
           </div>
-        )}
-        {['form', 'sending'].indexOf(state) !== -1 && (
-          <form className="form-sm-horizontal">
+          <div className="row mb-3">
+            <label
+              htmlFor="notifications_optinBlog_{{ _uid }}"
+              className="col-sm-2 col-form-label"
+            >
+              Subscribe to blog updates
+            </label>
+
+            <div className="col-sm-10">
+              <Checkbox
+                className="form-control-plaintext"
+                value={lead.optinBlog}
+                onChange={onChangeOptinBlog}
+                id="notifications_optinBlog_{{ _uid }}"
+              />
+            </div>
+          </div>
+          {lead.githubUsername && (
             <div className="row mb-3">
               <label
-                htmlFor="notifications_optinNewsletter_{{ _uid }}"
+                htmlFor="notifications_optinGithub_{{ _uid }}"
                 className="col-sm-2 col-form-label"
               >
-                Subscribe to the newsletter
+                Subscribe to github updates
               </label>
 
               <div className="col-sm-10">
                 <Checkbox
                   className="form-control-plaintext"
-                  value={lead.optinNewsletter}
-                  onChange={this.onChangeOptinNewsletter}
-                  id="notifications_optinNewsletter_{{ _uid }}"
+                  value={lead.optinGithub}
+                  onChange={onChangeOptinGithub}
+                  id="notifications_optinGithub_{{ _uid }}"
                 />
               </div>
             </div>
-            <div className="row mb-3">
-              <label
-                htmlFor="notifications_optinBlog_{{ _uid }}"
-                className="col-sm-2 col-form-label"
-              >
-                Subscribe to blog updates
-              </label>
-
-              <div className="col-sm-10">
-                <Checkbox
-                  className="form-control-plaintext"
-                  value={lead.optinBlog}
-                  onChange={this.onChangeOptinBlog}
-                  id="notifications_optinBlog_{{ _uid }}"
-                />
-              </div>
-            </div>
-            {lead.githubUsername && (
-              <div className="row mb-3">
-                <label
-                  htmlFor="notifications_optinGithub_{{ _uid }}"
-                  className="col-sm-2 col-form-label"
+          )}
+          <div className="row mb-3">
+            <div className="offset-sm-2 col-sm-10">
+              <div className="d-grid">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={state === 'form-submit'}
                 >
-                  Subscribe to github updates
-                </label>
-
-                <div className="col-sm-10">
-                  <Checkbox
-                    className="form-control-plaintext"
-                    value={lead.optinGithub}
-                    onChange={this.onChangeOptinGithub}
-                    id="notifications_optinGithub_{{ _uid }}"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="row mb-3">
-              <div className="offset-sm-2 col-sm-10">
-                <div className="d-grid">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={state === 'sending'}
-                    onClick={this.onSubmit}
-                  >
-                    Save
-                  </button>
-                </div>
+                  Save
+                </button>
               </div>
             </div>
-          </form>
-        )}
-        {state === 'sent' && (
-          <div className="alert alert-success text-center" role="alert">
-            Your notifications settings were saved.
           </div>
-        )}
-        {state === 'sent-unsubscribe' && (
-          <div className="alert alert-success text-center" role="alert">
-            Your were succefully unsubscribed from our emails.
-          </div>
-        )}
-      </section>
-    );
-  }
+        </form>
+      )}
+      {state === 'form-success' && (
+        <div className="alert alert-success text-center" role="alert">
+          Your notifications settings were saved.
+        </div>
+      )}
+      {state === 'unsubscribe-success' && (
+        <div className="alert alert-success text-center" role="alert">
+          Your were succefully unsubscribed from our emails.
+        </div>
+      )}
+    </section>
+  );
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-  };
-})(Notifications);
+export default Notifications;

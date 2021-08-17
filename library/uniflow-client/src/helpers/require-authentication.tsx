@@ -1,20 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { ComponentType } from 'react';
 import { pathTo } from '../routes';
-import { isGranted } from '../reducers/user/actions';
+import { isGranted, UserProviderState, useUser } from '../contexts/user';
 import { navigate } from 'gatsby';
+import { useAuth } from '../contexts';
+import { useEffect } from 'react';
 
-export default function requireAuthentication(Component, role = 'ROLE_USER') {
-  class requireAuthenticationHelper extends React.Component {
-    componentDidMount() {
-      this.checkAuth(this.props.isAuthenticated, this.props.user);
-    }
+export default function requireAuthentication<T>(Component: ComponentType<T>, role = 'ROLE_USER') {
+  function requireAuthenticationHelper(props: T) {
+    const { auth } = useAuth()
+    const { user } = useUser()
 
-    componentDidUpdate(prevProps) {
-      this.checkAuth(this.props.isAuthenticated, this.props.user);
-    }
-
-    checkAuth = (isAuthenticated, user) => {
+    const checkAuth = (isAuthenticated: boolean, user: UserProviderState) => {
       if (!isAuthenticated || (user.uid && !isGranted(user, role))) {
         if (typeof window !== `undefined`) {
           navigate(pathTo('login'));
@@ -22,18 +18,16 @@ export default function requireAuthentication(Component, role = 'ROLE_USER') {
       }
     };
 
-    render() {
-      if (this.props.isAuthenticated === true) {
-        return <Component {...this.props} />;
-      }
+    useEffect(() => {
+      checkAuth(auth.isAuthenticated, user);
+    }, [auth.token])
 
-      return null;
+    if (auth.isAuthenticated === true) {
+      return <Component {...props} />;
     }
+
+    return null;
   }
 
-  return connect((state) => ({
-    token: state.auth.token,
-    user: state.user,
-    isAuthenticated: state.auth.isAuthenticated,
-  }))(requireAuthenticationHelper);
+  return requireAuthenticationHelper;
 }

@@ -2,7 +2,10 @@ import React from 'react';
 import { StaticQuery, graphql } from 'gatsby';
 import ArticleItem from './articleItem';
 
-const Blog = () => (
+export interface BlogProps {
+}
+
+const Blog = (props: BlogProps) => (
   <>
     <section className="section container-fluid">
       <h3>Blog</h3>
@@ -22,7 +25,7 @@ const Blog = () => (
           }
         `}
         render={(data) =>
-          data.allMdx.edges.map((item, i) => (
+          data.allMdx.edges.map((item: any, i: number) => (
             <div className="row mb-3" key={i}>
               <div className="col-md-6 offset-md-3">
                 <ArticleItem article={item.node} />

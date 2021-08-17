@@ -1,64 +1,26 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchSettings } from '../reducers/user/actions';
+import React, { useState } from 'react';
+import { fetchSettings } from '../contexts/user';
 import { matchRoute } from '../routes';
-import { fetchFeed, getFeedItem, commitSetSlugFeed } from '../reducers/feed/actions';
+import { fetchFeed, getFeedItem, commitSetSlugFeed, useFeed } from '../contexts/feed';
+import { useEffect } from 'react';
+import { useAuth, useUser } from '../contexts';
 
 export interface UserManagerProps {}
 
-class UserManager extends Component<UserManagerProps> {
-  state = {
-    fetching: false,
+function UserManager(props: UserManagerProps) {
+  const [isFetching, setIsFetching] = useState<boolean>(false)
+  const { auth, authDispatch } = useAuth()
+  const { userDispatch } = useUser()
+  const { feed, feedDispatch } = useFeed()
+
+  const onFetchUser = async (uid, token) => {
+    await Promise.all([fetchSettings(uid, token)(userDispatch, authDispatch)]);
+
+    const { location } = props;
+    onLocation(location);
   };
 
-  componentDidMount() {
-    const { auth, location } = this.props;
-
-    if (auth.isAuthenticated) {
-      this.onFetchUser(auth.uid, auth.token);
-    }
-
-    this.onLocation(location);
-  }
-
-  componentDidUpdate(prevProps) {
-    const { auth, location } = this.props;
-
-    if (auth.isAuthenticated && auth.token !== prevProps.auth.token) {
-      this.onFetchUser(auth.uid, auth.token);
-    }
-
-    if (location.href !== prevProps.location.href) {
-      this.onLocation(location);
-    }
-  }
-
-  onLocation = (location) => {
-    const { auth } = this.props;
-    const match = matchRoute(location.pathname);
-
-    if (match) {
-      const params = match.match.params;
-      const paths = [params.slug1, params.slug2, params.slug3, params.slug4, params.slug5].filter(
-        (path) => !!path
-      );
-      if (match.route === 'feed' && auth.isAuthenticated) {
-        this.onFetchItem(auth.uid, paths);
-      } else if (match.route === 'userFeed') {
-        this.onFetchItem(params.uid, paths);
-      }
-    }
-  };
-
-  onFetchUser = async (uid, token) => {
-    await Promise.all([this.props.dispatch(fetchSettings(uid, token))]);
-
-    const { location } = this.props;
-    this.onLocation(location);
-  };
-
-  isCachedFeed = (uid, paths = []) => {
-    const { feed } = this.props;
+  const isCachedFeed = (uid, paths = []) => {
     if (
       feed.uid === undefined ||
       feed.slug === undefined ||
@@ -80,14 +42,14 @@ class UserManager extends Component<UserManagerProps> {
         return false;
       }
 
-      this.props.dispatch(commitSetSlugFeed(slug));
+      commitSetSlugFeed(slug)(feedDispatch);
       return true;
     } else if (paths.length === 1 && feed.parentFolder) {
       const parentFolderRealPath = `${
         feed.parentFolder.path === '/' ? '' : feed.parentFolder.path
       }/${feed.parentFolder.slug}`;
       if (parentFolderRealPath === path) {
-        this.props.dispatch(commitSetSlugFeed(null));
+        commitSetSlugFeed(null)(feedDispatch);
         return true;
       }
     } else if (paths.length > 1 && feed.parentFolder) {
@@ -95,14 +57,14 @@ class UserManager extends Component<UserManagerProps> {
         feed.parentFolder.path === '/' ? '' : feed.parentFolder.path
       }/${feed.parentFolder.slug}`;
       if (parentFolderRealPath === path) {
-        this.props.dispatch(commitSetSlugFeed(null));
+        commitSetSlugFeed(null)(feedDispatch);
         return true;
       } else if (parentFolderRealPath === parentPath) {
         if (item.type === 'folder') {
           return false;
         }
 
-        this.props.dispatch(commitSetSlugFeed(slug));
+        commitSetSlugFeed(slug)(feedDispatch);
 
         return true;
       }
@@ -111,39 +73,46 @@ class UserManager extends Component<UserManagerProps> {
     return false;
   };
 
-  onFetchItem = async (uid, paths = []) => {
-    const { fetching } = this.state;
-    const { auth } = this.props;
-
-    if (fetching) {
+  const onFetchItem = async (uid, paths = []) => {
+    if (isFetching || isCachedFeed(uid, paths)) {
       return;
     }
 
-    await new Promise((resolve) => {
-      this.setState({ fetching: true }, resolve);
-    });
-
-    if (this.isCachedFeed(uid, paths)) {
-      return;
-    }
+    setIsFetching(true)
 
     const token = auth.isAuthenticated ? auth.token : null;
-    await this.props.dispatch(fetchFeed(uid, paths, token));
+    await fetchFeed(uid, paths, token)(feedDispatch);
 
-    await new Promise((resolve) => {
-      this.setState({ fetching: false }, resolve);
-    });
+    setIsFetching(false)
   };
 
-  render() {
-    return <></>;
-  }
+  const onLocation = (location) => {
+    const match = matchRoute(location.pathname);
+
+    if (match) {
+      const params = match.match.params;
+      const paths = [params.slug1, params.slug2, params.slug3, params.slug4, params.slug5].filter(
+        (path) => !!path
+      );
+      if (match.route === 'feed' && auth.isAuthenticated) {
+        onFetchItem(auth.uid, paths);
+      } else if (match.route === 'userFeed') {
+        onFetchItem(params.uid, paths);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const { location } = props;
+
+    if (auth.isAuthenticated) {
+      onFetchUser(auth.uid, auth.token);
+    }
+
+    onLocation(location);
+  }, [auth.token])
+
+  return <></>;
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-    user: state.user,
-    feed: state.feed,
-  };
-})(UserManager);
+export default UserManager;

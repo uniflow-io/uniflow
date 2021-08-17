@@ -1,5 +1,7 @@
+export type ApiExceptionErrors = { [key: string]: string[] }
+
 class ApiException extends Error {
-  constructor(errors) {
+  constructor(public errors: ApiExceptionErrors) {
     super('api exception');
 
     this.errors = { ...errors };

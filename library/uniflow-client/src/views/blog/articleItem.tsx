@@ -1,11 +1,42 @@
 import React from 'react';
 import { pathTo } from '../../routes';
 import { Link, graphql } from 'gatsby';
-import { GatsbyImage } from 'gatsby-plugin-image';
+import { GatsbyImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export interface ArticleItemProps {}
+export interface ArticleItemProps {
+  article: {
+    fields: {
+      slug: string
+    }
+    excerpt: string
+    frontmatter: {
+      title: string
+      author: {
+        fields: {
+          slug: string
+        }
+        name: string
+        image: {
+          childImageSharp: {
+            gatsbyImageData: IGatsbyImageData
+          }
+        }
+      }
+      cover: {
+        childImageSharp: {
+          gatsbyImageData: IGatsbyImageData
+        }
+        extension: string
+        publicURL: string
+      }
+      tags: string[]
+      date: string
+    }
+    timeToRead: string
+  }
+}
 
 const ArticleItem = ({ article }: ArticleItemProps) => (
   <div className="card card-link">

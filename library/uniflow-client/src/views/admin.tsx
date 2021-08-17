@@ -1,52 +1,50 @@
-import React, { Component } from 'react';
-import { fetchConfig, updateConfig } from '../reducers/user/actions';
-import { connect } from 'react-redux';
+import React from 'react';
+import { fetchConfig, updateConfig, useUser } from '../contexts/user';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useAuth, useLogs } from '../contexts';
 
-export interface AdminProps {}
-
-class Admin extends Component<AdminProps> {
-  state = {
-    config: {},
-    isSaving: false,
-  };
-
-  async componentDidMount() {
-    const { auth } = this.props;
-
-    const response = await this.props.dispatch(fetchConfig(auth.token, auth.uid));
-    this.setState({
-      config: Object.assign({}, this.state.config, response.data),
-    });
-  }
-
-  onUpdate = (event) => {
-    const { auth } = this.props;
-
-    if (event) {
-      event.preventDefault();
-    }
-
-    this.setState({ isSaving: true }, async () => {
-      await this.props.dispatch(updateConfig(this.state.config, auth.token, auth.uid));
-      this.setState({ isSaving: false });
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <section className="section container-fluid">
-          <h3 className="box-title">Admin</h3>
-          <form className="form-sm-horizontal"></form>
-        </section>
-      </>
-    );
-  }
+export interface AdminProps {
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-    user: state.user,
+export interface AdminState {}
+
+interface ConfigState {
+
+}
+
+function Admin(props: AdminProps) {
+  const [config, setConfig] = useState<ConfigState>({})
+  const [isSaving, setIsSaving]=  useState<boolean>(false)
+  const { auth, authDispatch } = useAuth()
+  const { userDispatch } = useUser()
+  const { logsDispatch } = useLogs()
+
+  useEffect(() => {
+    (async () => {
+      if(auth.token && auth.uid) {
+        const data = await fetchConfig(auth.token, auth.uid)(userDispatch, authDispatch);
+        setConfig(Object.assign({}, config, data));
+      }
+    })()
+  }, [])
+
+  const onUpdate = async () => {
+    setIsSaving(true)
+    if(auth.token && auth.uid) {
+      await updateConfig(config, auth.token, auth.uid)(userDispatch, authDispatch, logsDispatch);
+    }
+    setIsSaving(false);
   };
-})(Admin);
+
+  return (
+    <>
+      <section className="section container-fluid">
+        <h3 className="box-title">Admin</h3>
+        <form className="form-sm-horizontal"></form>
+      </section>
+    </>
+  );
+}
+
+export default Admin;

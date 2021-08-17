@@ -1,13 +1,17 @@
 import React from 'react';
-import { Newsletter } from '../views';
-import { graphql } from 'gatsby';
+import Newsletter, { NewsletterProps } from '../views/newsletter';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location }) => {
+export interface NewsLetterTemplateData {
+  newsletter: NewsletterProps['newsletter']
+}
+
+export default ({ data, location }: PageProps<NewsLetterTemplateData>) => {
   const { newsletter } = data;
 
-  const NewsletterPage = withPage(Newsletter, 'newsletter', {
-    location: location,
+  const NewsletterPage = withPage<NewsletterProps>(Newsletter, 'newsletter', {
+    location,
     title: newsletter.frontmatter.title,
     description: newsletter.excerpt,
   });

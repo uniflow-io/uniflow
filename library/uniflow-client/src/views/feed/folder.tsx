@@ -1,193 +1,172 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { navigate } from 'gatsby';
 import debounce from 'lodash/debounce';
-import { connect } from 'react-redux';
 import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   getFolderTree,
   updateParentFolder,
   deleteParentFolder,
-  setParentFolderFeed,
   toFeedPath,
-} from '../../reducers/feed/actions';
+  useFeed,
+  commitSetParentFolderFeed,
+  FolderFeedType,
+} from '../../contexts/feed';
 import { Select } from '../../components';
+import { useEffect } from 'react';
+import { useAuth, useUser } from '../../contexts';
+import { PathType } from '../../models/type-interface';
 
-export interface FolderProps {}
+export interface FolderProps {
+  folder: FolderFeedType
+}
 
-class Folder extends Component<FolderProps> {
-  state = {
-    slug: null,
-    folderTreeEdit: false,
-    folderTree: [],
+export interface FolderState {}
+
+function Folder(props: FolderProps) {
+  const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
+  const [folderTree, setFolderTree] = useState<PathType[]>([])
+  const { user, userDispatch } = useUser()
+  const { auth, authDispatch } = useAuth()
+  const { feed, feedDispatch, feedRef } = useFeed()
+
+  useEffect(() => {
+    setFolderTreeEdit(false)
+    setFolderTree([props.folder.path])
+  }, [props.folder.uid])
+
+  const onChangeTitle: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    commitSetParentFolderFeed({
+      ...props.folder,
+      ...{ name: event.target.value },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  componentDidMount() {
-    const { folder } = this.props;
-
-    this.setState({ folderTree: [folder.path] });
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.folder.uid !== prevProps.folder.uid) {
-      this.setState({
-        slug: null,
-        folderTreeEdit: false,
-        folderTree: [this.props.folder.path],
-      });
-    }
-  }
-
-  onChangeTitle = async (event) => {
-    await this.props.dispatch(
-      setParentFolderFeed({
-        ...this.props.folder,
-        ...{ name: event.target.value },
-      })
-    );
-    this.onUpdate();
+  const onChangeSlug: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    commitSetParentFolderFeed({
+      ...props.folder,
+      ...{ slug: event.target.value },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangeSlug = (event) => {
-    this.setState({ slug: event.target.value }, this.onUpdate);
+  const onChangePath = async (selected: PathType) => {
+    commitSetParentFolderFeed({
+      ...props.folder,
+      ...{ path: selected },
+    })(feedDispatch)
+    onUpdate();
   };
 
-  onChangePath = async (selected) => {
-    await this.props.dispatch(
-      setParentFolderFeed({
-        ...this.props.folder,
-        ...{ path: selected },
-      })
-    );
-    this.onUpdate();
-  };
-
-  onUpdate = debounce(async () => {
-    let { folder } = this.props;
-    folder.slug = this.state.slug ?? folder.slug;
-
-    folder = await this.props.dispatch(updateParentFolder(folder, this.props.auth.token));
-    const path = toFeedPath(folder, this.props.user);
-    if (typeof window !== `undefined` && window.location.pathname !== path) {
-      navigate(path);
-    }
+  const onUpdate = debounce(async () => {
+    await updateParentFolder(feedRef.current.parentFolder!, auth.token)(feedDispatch, userDispatch, authDispatch);
+    navigate(toFeedPath(feedRef.current.parentFolder!, user));
   }, 1000);
 
-  onDelete = async (event) => {
+  const onDelete: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    await this.props.dispatch(deleteParentFolder(this.props.folder, this.props.auth.token));
-    navigate(toFeedPath(this.props.folder, this.props.user, true));
+    await deleteParentFolder(props.folder, auth.token)(feedDispatch, userDispatch, authDispatch);
+    navigate(toFeedPath(props.folder, user, true));
   };
 
-  onFolderEdit = async (event) => {
+  const onFolderEdit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    const { feed, folder } = this.props;
+    const { folder } = props;
 
-    let folderTree = await this.props.dispatch(getFolderTree(feed.uid, this.props.auth.token));
+    let folderTree = await getFolderTree(feed.uid, auth.token)(feedDispatch, userDispatch, authDispatch);
     folderTree = folderTree.filter((value) => {
       return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
     });
 
-    this.setState({
-      folderTreeEdit: true,
-      folderTree: folderTree,
-    });
+    setFolderTreeEdit(true)
+    setFolderTree(folderTree)
   };
 
-  render() {
-    const { folderTreeEdit, folderTree } = this.state;
-    const { folder } = this.props;
-    folder.slug = this.state.slug ?? folder.slug;
+  const { folder } = props;
 
-    return (
-      <section className="section col">
-        <div className="row">
-          <div className="col">
-            <h3>Infos</h3>
-          </div>
-          <div className="d-block col-auto">
-            <div className="btn-toolbar" role="toolbar" aria-label="folder actions">
-              <div className="btn-group-sm" role="group">
-                <button type="button" className="btn" onClick={this.onDelete}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              </div>
+  return (
+    <section className="section col">
+      <div className="row">
+        <div className="col">
+          <h3>Infos</h3>
+        </div>
+        <div className="d-block col-auto">
+          <div className="btn-toolbar" role="toolbar" aria-label="folder actions">
+            <div className="btn-group-sm" role="group">
+              <button type="button" className="btn" onClick={onDelete}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
             </div>
           </div>
         </div>
-        <form className="form-sm-horizontal">
-          <div className="row mb-3">
-            <label htmlFor="info_name_{{ _uid }}" className="col-sm-2 col-form-label">
-              Title
-            </label>
+      </div>
+      <form className="form-sm-horizontal">
+        <div className="row mb-3">
+          <label htmlFor="folder-name" className="col-sm-2 col-form-label">
+            Title
+          </label>
 
-            <div className="col-sm-10">
-              <input
-                type="text"
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="folder-name"
+              value={folder.name}
+              onChange={onChangeTitle}
+              placeholder="Title"
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="folder-slug" className="col-sm-2 col-form-label">
+            Slug
+          </label>
+
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              id="folder-slug"
+              value={folder.slug}
+              onChange={onChangeSlug}
+              placeholder="Slug"
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <label htmlFor="folder-path" className="col-sm-2 col-form-label">
+            Path
+          </label>
+
+          <div className="col-sm-10">
+            {(folderTreeEdit && (
+              <Select
+                value={folder.path}
+                onChange={onChangePath}
                 className="form-control"
-                id="info_name_{{ _uid }}"
-                value={folder.name}
-                onChange={this.onChangeTitle}
-                placeholder="Title"
+                id="folder-path"
+                options={folderTree.map((value) => {
+                  return { value: value, label: value };
+                })}
               />
-            </div>
+            )) || (
+              <div>
+                <button type="button" className="btn btn-secondary" onClick={onFolderEdit}>
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>{' '}
+                {folder.path}
+              </div>
+            )}
           </div>
-
-          <div className="row mb-3">
-            <label htmlFor="info_slug_{{ _uid }}" className="col-sm-2 col-form-label">
-              Slug
-            </label>
-
-            <div className="col-sm-10">
-              <input
-                type="text"
-                className="form-control"
-                id="info_slug_{{ _uid }}"
-                value={folder.slug}
-                onChange={this.onChangeSlug}
-                placeholder="Slug"
-              />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="info_path_{{ _uid }}" className="col-sm-2 col-form-label">
-              Path
-            </label>
-
-            <div className="col-sm-10">
-              {(folderTreeEdit && (
-                <Select
-                  value={folder.path}
-                  onChange={this.onChangePath}
-                  className="form-control"
-                  id="info_path_{{ _uid }}"
-                  options={folderTree.map((value) => {
-                    return { value: value, label: value };
-                  })}
-                />
-              )) || (
-                <div>
-                  <button type="button" className="btn btn-secondary" onClick={this.onFolderEdit}>
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>{' '}
-                  {folder.path}
-                </div>
-              )}
-            </div>
-          </div>
-        </form>
-      </section>
-    );
-  }
+        </div>
+      </form>
+    </section>
+  );
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-    user: state.user,
-    feed: state.feed,
-  };
-})(Folder);
+export default Folder;

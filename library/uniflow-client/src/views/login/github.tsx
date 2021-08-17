@@ -1,36 +1,21 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { navigate } from 'gatsby';
 import { pathTo } from '../../routes';
-import { githubLogin } from '../../reducers/auth/actions';
-import { commitAddLog } from '../../reducers/logs/actions';
-import { connect } from 'react-redux';
+import { githubLogin } from '../../contexts/auth';
+import { commitAddLog } from '../../contexts/logs';
+import { useAuth, useLogs } from '../../contexts';
+import { WindowLocation } from '@reach/router';
 
-export interface GithubLoginProps {}
+export interface GithubLoginProps {
+  location: WindowLocation
+}
 
-class GithubLogin extends Component<GithubLoginProps> {
-  async componentDidMount() {
-    const code = this.getCode();
-    if (code === null) {
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('login'));
-      }
-    }
+function GithubLogin(props: GithubLoginProps) {
+  const { authDispatch, authRef } = useAuth()
+  const { logsDispatch } = useLogs()
 
-    await this.props.dispatch(githubLogin(code, this.props.auth.token));
-    if (this.props.auth.isAuthenticated) {
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('feed'));
-      }
-    } else {
-      this.props.dispatch(commitAddLog(this.props.auth.statusText));
-      if (typeof window !== `undefined`) {
-        return navigate(pathTo('login'));
-      }
-    }
-  }
-
-  getCode() {
-    const m = this.props.location.search.match(/code=([^&]+)/);
+  const getCode = ():string|null => {
+    const m = props.location.search.match(/code=([^&]+)/);
     if (m) {
       return m[1];
     }
@@ -38,18 +23,29 @@ class GithubLogin extends Component<GithubLoginProps> {
     return null;
   }
 
-  render() {
-    return (
-      <section className="section container-fluid">
-        <h3 className="box-title">Login Github</h3>
-        <p className="text-center">Application is currently logging you from Github</p>
-      </section>
-    );
-  }
+  useEffect(() => {
+    (async () => {
+      const code = getCode();
+      if (code === null) {
+        return navigate(pathTo('login'));
+      }
+
+      await githubLogin(code, authRef.current.token)(authDispatch);
+      if (authRef.current.isAuthenticated) {
+        return navigate(pathTo('feed'));
+      } else {
+        commitAddLog(authRef.current.statusText)(logsDispatch);
+        return navigate(pathTo('login'));
+      }
+    })()
+  }, [])
+
+  return (
+    <section className="section container-fluid">
+      <h3 className="box-title">Login Github</h3>
+      <p className="text-center">Application is currently logging you from Github</p>
+    </section>
+  );
 }
 
-export default connect((state) => {
-  return {
-    auth: state.auth,
-  };
-})(GithubLogin);
+export default GithubLogin;

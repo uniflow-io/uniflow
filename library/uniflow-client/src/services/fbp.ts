@@ -2,13 +2,9 @@ import { Service } from 'typedi';
 
 @Service()
 class FBP {
-  serialize(graph) {
+  serialize(graph) {}
 
-  }
-
-  deserialize(data) {
-
-  }
+  deserialize(data) {}
 }
 
 export default FBP;

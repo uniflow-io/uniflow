@@ -1,10 +1,11 @@
 import React from 'react';
-import { GithubLogin } from '../../views';
+import GithubLogin, { GithubLoginProps } from '../../views/login/github';
 import { withPage } from '../../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const GithubLoginPage = withPage(GithubLogin, 'github-login', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const GithubLoginPage = withPage<GithubLoginProps>(GithubLogin, 'github-login', {
+    location,
     title: 'Login Github',
     description: 'Login Github',
   });

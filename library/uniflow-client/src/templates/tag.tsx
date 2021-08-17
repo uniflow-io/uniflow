@@ -1,13 +1,21 @@
 import React from 'react';
-import { Tag } from '../views';
-import { graphql } from 'gatsby';
+import Tag, { TagProps } from '../views/blog/tag';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location, pageContext: { tag } }) => {
+export interface TagTemplateData {
+  articles: TagProps['articles']
+}
+
+export interface TagTemplateContext {
+  tag: TagProps['tag']
+}
+
+export default ({ data, location, pageContext: { tag } }: PageProps<TagTemplateData, TagTemplateContext>) => {
   const { articles } = data;
 
-  const TagPage = withPage(Tag, 'tag', {
-    location: location,
+  const TagPage = withPage<TagProps>(Tag, 'tag', {
+    location,
     title: tag,
     description: tag,
   });

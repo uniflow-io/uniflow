@@ -1,10 +1,11 @@
 import React from 'react';
-import { Register } from '../views';
+import Register, { RegisterProps } from '../views/login/register';
 import { withPage } from '../helpers';
+import { PageProps } from 'gatsby';
 
-export default ({ location }) => {
-  const RegisterPage = withPage(Register, 'register', {
-    location: location,
+export default ({ location }: PageProps) => {
+  const RegisterPage = withPage<RegisterProps>(Register, 'register', {
+    location,
     title: 'Register',
     description: 'Register',
   });

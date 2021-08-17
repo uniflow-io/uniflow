@@ -6,7 +6,7 @@ import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, U
 import { ApiException } from "../exception";
 import { IsNull } from "typeorm";
 import { ConfigFactory, ProgramFactory, FolderFactory } from "../factory";
-import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageType, PartialType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
+import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageNumberType, PaginationType, PartialType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
 import { ErrorJSON, ValidateErrorJSON } from './interfaces'
 
 @Route("users")
@@ -118,7 +118,7 @@ class UserController extends Controller {
   @Security('role')
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async getUserFolders(@Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:FolderApiType[], total: number}> {
+  public async getUserFolders(@Path('uid') uid: UuidOrUsernameType, @Query() page: PageNumberType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<PaginationType<FolderApiType>> {
     const user = await this.userRepository.findOneByUidOrUsername(uid)
     if (!user) {
       throw new ApiException('User not found', 404);
@@ -173,7 +173,7 @@ class UserController extends Controller {
   @Security('role')
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async getUserPrograms(@Request() req: express.Request, @Path('uid') uid: UuidOrUsernameType, @Query() page: PageType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<{data:ProgramApiType[], total:number}> {
+  public async getUserPrograms(@Request() req: express.Request, @Path('uid') uid: UuidOrUsernameType, @Query() page: PageNumberType = 1, @Query() perPage: PerPageType = 10, @Query() path?: PathType): Promise<PaginationType<ProgramApiType>> {
     const user = await this.userRepository.findOneByUidOrUsername(uid)
     if (!user) {
       throw new ApiException('User not found', 404);

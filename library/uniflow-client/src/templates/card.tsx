@@ -1,9 +1,17 @@
 import React from 'react';
-import { Card } from '../views';
-import { graphql } from 'gatsby';
+import Card, { CardProps } from '../views/library/card';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location }) => {
+export interface CardTemplateData {
+  logo: CardProps['logo']
+  localLibrary: {
+    nodes: CardProps['library'][]
+  }
+  localCard: CardProps['card']
+}
+
+export default ({ data, location }: PageProps<CardTemplateData>) => {
   const { /*library, */ localLibrary, /*card, */ localCard, logo } = data;
   let realCard = {
     //...card,
@@ -17,7 +25,7 @@ export default ({ data, location }) => {
   }
 
   const CardPage = withPage(Card, 'card', {
-    location: location,
+    location,
     title: realCard.name,
     description: realCard.description,
   });

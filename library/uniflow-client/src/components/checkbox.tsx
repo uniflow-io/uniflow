@@ -1,58 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-let id = 0;
+let uniqueId = 0;
 const gen = () => {
-  id += 2;
+  uniqueId += 2;
 
-  return `checkbox_${id}`;
+  return `checkbox_${uniqueId}`;
 };
 
 export interface CheckboxProps {
   label?: string;
   value: boolean;
   className?: string;
-  onChange?: CallableFunction;
+  onChange?: (value: boolean) => void;
+  id?: string
 }
 
-export default class Checkbox extends Component<CheckboxProps> {
-  onChange = () => {
-    const { value } = this.props;
+function Checkbox(props: CheckboxProps) {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = () => {
+    const { value } = props;
 
-    if (this.props.onChange) {
-      this.props.onChange(!value);
+    if (props.onChange) {
+      props.onChange(!value);
     }
   };
 
-  render() {
-    const { value, label, className } = this.props;
-    const uid = gen();
-    return (
-      <>
-        <div className={`form-check form-switch d-sm-none${className ? ' ' + className : ''}`}>
-          <input
-            type="checkbox"
-            className="form-check-input"
-            checked={value}
-            onChange={this.onChange}
-            id={uid}
-          />
-          <label className="form-check-label" htmlFor={uid}>
-            {label ? label : ''}
-          </label>
-        </div>
-        <div className={`form-check d-none d-sm-block${className ? ' ' + className : ''}`}>
-          <input
-            type="checkbox"
-            className="form-check-input"
-            checked={value}
-            onChange={this.onChange}
-            id={uid + 1}
-          />
-          <label className="form-check-label" htmlFor={uid + 1}>
-            {label ? label : ''}
-          </label>
-        </div>
-      </>
-    );
-  }
+  const { value, label, className, id } = props;
+  const uid = id ?? gen();
+  return (
+    <>
+      <div className={`form-check form-switch d-sm-none${className ? ' ' + className : ''}`}>
+        <input
+          type="checkbox"
+          className="form-check-input"
+          checked={value}
+          onChange={onChange}
+          id={uid}
+        />
+        <label className="form-check-label" htmlFor={uid}>
+          {label ? label : ''}
+        </label>
+      </div>
+      <div className={`form-check d-none d-sm-block${className ? ' ' + className : ''}`}>
+        <input
+          type="checkbox"
+          className="form-check-input"
+          checked={value}
+          onChange={onChange}
+          id={uid + 1}
+        />
+        <label className="form-check-label" htmlFor={uid + 1}>
+          {label ? label : ''}
+        </label>
+      </div>
+    </>
+  );
 }
+
+export default Checkbox

@@ -1,9 +1,16 @@
 import React from 'react';
-import { Library } from '../views';
+import Library, { LibraryProps } from '../views/library/library';
 import { withPage } from '../helpers';
-import { graphql } from 'gatsby';
+import { graphql, PageProps } from 'gatsby';
+import { Card } from '../views/library/navigation';
 
-export default ({ location, data: { /*library, */ localLibrary } }) => {
+export interface LibraryPageData {
+  localLibrary: {
+    nodes: Card[]
+  }
+}
+
+export default ({ location, data: { /*library, */ localLibrary } }: PageProps<LibraryPageData>) => {
   const allLibrary = {};
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
@@ -12,8 +19,8 @@ export default ({ location, data: { /*library, */ localLibrary } }) => {
     allLibrary[card.fields.slug] = card;
   });
 
-  const LibraryPage = withPage(Library, 'library', {
-    location: location,
+  const LibraryPage = withPage<LibraryProps>(Library, 'library', {
+    location,
     title: 'Library',
     description: 'Library',
   });

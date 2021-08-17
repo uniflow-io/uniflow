@@ -1,13 +1,18 @@
 import React from 'react';
-import { Contributor } from '../views';
-import { graphql } from 'gatsby';
+import Contributor, { ContributorProps } from '../views/blog/contributor';
+import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
-export default ({ data, location }) => {
+export interface ContributorTemplateData {
+  contributor: ContributorProps['contributor']
+  articles: ContributorProps['articles']
+}
+
+export default ({ data, location }: PageProps<ContributorTemplateData>) => {
   const { contributor } = data;
 
-  const ContributorPage = withPage(Contributor, 'contributor', {
-    location: location,
+  const ContributorPage = withPage<ContributorProps>(Contributor, 'contributor', {
+    location,
     title: contributor.name,
     description: contributor.description,
     image: contributor.image.publicURL,

@@ -7,11 +7,11 @@ class Flow {
       self.props.onUpdate(self.serialize());
     };
   }
-  
+
   onDelete(self) {
     return (event) => {
       event.preventDefault();
-  
+
       self.props.onPop();
     };
   }

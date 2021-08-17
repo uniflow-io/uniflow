@@ -4,7 +4,7 @@ import { Controller, Get, Response, SuccessResponse, Route, Tags, Security, Put,
 import { ProgramService, ProgramClientService, ProgramTagService, FolderService } from "../service";
 import { ApiException } from "../exception";
 import { ProgramRepository, TagRepository } from '../repository';
-import { PageType, PartialType, PerPageType, ProgramApiType, UuidType } from "../model/interfaces";
+import { PageNumberType, PaginationType, PartialType, PerPageType, ProgramApiType, UuidType } from "../model/interfaces";
 import { ErrorJSON, ValidateErrorJSON } from "./interfaces";
 
 @Route('programs')
@@ -23,7 +23,7 @@ class ProgramController extends Controller {
   }
 
   @Get()
-  public async getPrograms(@Query() page: PageType = 1, @Query() perPage: PerPageType = 10): Promise<{data:ProgramApiType[], total: number}> {
+  public async getPrograms(@Query() page: PageNumberType = 1, @Query() perPage: PerPageType = 10): Promise<PaginationType<ProgramApiType>> {
     const data = []
     const [programs, total] = await this.programRepository.findAndCount({
       where: { public: true },

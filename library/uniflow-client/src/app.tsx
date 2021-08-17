@@ -1,30 +1,16 @@
 import React from 'react';
-import thunk from 'redux-thunk';
-import { combineReducers } from 'redux';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { app, auth, feed, logs, graph, user } from './reducers';
-import { commitLoginUserSuccess } from './reducers/auth/actions';
+import { AppProvider, AuthProvider, FeedProvider, LogsProvider, GraphProvider, UserProvider } from './contexts';
+import { composeWrappers } from './helpers';
 
-const store = createStore(
-  combineReducers({
-    app,
-    auth,
-    feed,
-    logs,
-    graph,
-    user,
-  }),
-  undefined,
-  applyMiddleware(thunk)
-);
+export default ({ element }) => {
+  const Providers = composeWrappers([
+    props => <AppProvider>{props.children}</AppProvider>,
+    props => <AuthProvider>{props.children}</AuthProvider>,
+    props => <FeedProvider>{props.children}</FeedProvider>,
+    props => <LogsProvider>{props.children}</LogsProvider>,
+    props => <GraphProvider>{props.children}</GraphProvider>,
+    props => <UserProvider>{props.children}</UserProvider>,
+  ]);
 
-if (typeof window !== `undefined`) {
-  const token = window.localStorage.getItem('token');
-  const uid = window.localStorage.getItem('uid');
-  if (token !== null) {
-    store.dispatch(commitLoginUserSuccess(token, uid));
-  }
+  return <Providers>{element}</Providers>
 }
-
-export default ({ element }) => <Provider store={store}>{element}</Provider>;
