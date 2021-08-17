@@ -285,14 +285,14 @@ export const fetchFeed = (uid, paths, token = null) => {
   };
 };
 
-export const serializeFlowsData = (flows) => {
+export const serializeFlowsData = (graph) => {
   const data = [];
 
-  for (let i = 0; i < flows.length; i++) {
+  for (let i = 0; i < graph.length; i++) {
     data.push({
-      flow: flows[i].flow,
-      data: flows[i].data,
-      codes: flows[i].codes,
+      flow: graph[i].flow,
+      data: graph[i].data,
+      codes: graph[i].codes,
     });
   }
 
@@ -302,16 +302,16 @@ export const serializeFlowsData = (flows) => {
 export const deserializeFlowsData = (raw) => {
   const data = JSON.parse(raw);
 
-  const flows = [];
+  const graph = [];
 
   for (let i = 0; i < data.length; i++) {
-    flows.push({
+    graph.push({
       flow: data[i].flow,
       data: data[i].data,
     });
   }
 
-  return flows;
+  return graph;
 };
 
 export const createProgram = (program, uid, token) => {

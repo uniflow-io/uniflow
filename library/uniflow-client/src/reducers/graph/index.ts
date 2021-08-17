@@ -7,7 +7,7 @@ import {
 
 const defaultState = [];
 
-const flows = (state = defaultState, action) => {
+const graph = (state = defaultState, action) => {
   switch (action.type) {
     case COMMIT_PUSH_FLOW:
       const newStatePush = state.slice();
@@ -39,4 +39,4 @@ const flows = (state = defaultState, action) => {
   }
 };
 
-export default flows;
+export default graph;

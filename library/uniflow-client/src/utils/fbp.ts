@@ -1,5 +1,5 @@
 class FBP {
-  serialize(program, flows) {
+  serialize(graph) {
 
   }
 

@@ -12,7 +12,7 @@ import {
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlows,
-} from '../../reducers/flows/actions';
+} from '../../reducers/graph/actions';
 import {
   getTags,
   commitUpdateFeed,
@@ -76,10 +76,10 @@ class Program extends Component<ProgramProps> {
   onRun = (event, index) => {
     event.preventDefault();
 
-    const { flows } = this.props;
+    const { graph } = this.props;
 
     const runner = new Runner();
-    runner.run(flows.slice(0, index === undefined ? flows.length : index + 1));
+    runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
   };
 
   onPushFlow = async (index, flow) => {
@@ -125,10 +125,10 @@ class Program extends Component<ProgramProps> {
   }, 1000);
 
   onUpdateFlowData = debounce(async () => {
-    const { program, flows, user, feed } = this.props;
+    const { program, graph, user, feed } = this.props;
     if (program.slug !== this.state.fetchedSlug) return;
 
-    const data = serializeFlowsData(flows);
+    const data = serializeFlowsData(graph);
     if ((feed.uid === 'me' || user.uid === feed.uid) && program.data !== data) {
       program.data = data;
 
@@ -317,7 +317,7 @@ class Program extends Component<ProgramProps> {
   };
 
   render() {
-    const { program, tags, flows, user, allFlows } = this.props;
+    const { program, tags, graph, user, allFlows } = this.props;
     const { folderTreeEdit, folderTree } = this.state;
     const programFlows = this.getFlows(program);
     const clients = {
@@ -528,7 +528,7 @@ class Program extends Component<ProgramProps> {
         <hr />
 
         <Flows
-          flows={flows}
+          graph={graph}
           allFlows={allFlows}
           programFlows={programFlows}
           clients={program.clients}
@@ -548,6 +548,6 @@ export default connect((state) => {
     user: state.user,
     tags: getTags(state.feed),
     feed: state.feed,
-    flows: state.flows,
+    graph: state.graph,
   };
 })(Program);

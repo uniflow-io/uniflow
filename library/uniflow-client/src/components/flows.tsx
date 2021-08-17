@@ -11,7 +11,6 @@ class UiFlow extends Component<UiFlowProps> {
 
     let TagName = Search;
     if (tag !== 'search') {
-      // simple hack as webpack do not import dynamic npm modules
       const lasyImports = {
         '@uniflow-io/uniflow-flow-code': () => import('../../../uniflow-flow-code/src'),
         '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
@@ -42,7 +41,7 @@ export interface FlowsProps {
 
 export default class Flows extends Component<FlowsProps> {
   render() {
-    const { flows, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
+    const { graph, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = this.props;
     const uiFlows = (() => {
       const uiFlows = [
         {
@@ -51,8 +50,8 @@ export default class Flows extends Component<FlowsProps> {
         },
       ];
 
-      for (let i = 0; i < flows.length; i++) {
-        const item = flows[i];
+      for (let i = 0; i < graph.length; i++) {
+        const item = graph[i];
 
         uiFlows.push({
           component: item.flow,

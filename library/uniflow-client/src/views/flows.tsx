@@ -3,7 +3,7 @@ import { Link } from 'gatsby';
 import { connect } from 'react-redux';
 import { Remarkable } from 'remarkable';
 import { toFeedPath } from '../reducers/feed/actions';
-import { getFlows } from '../reducers/flows/actions';
+import { getFlows } from '../reducers/graph/actions';
 
 export interface FlowsProps {}
 
