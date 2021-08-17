@@ -3,7 +3,11 @@ import { graphql } from 'gatsby';
 import { Feed } from '../views';
 import { requireAuthentication, withPage } from '../helpers';
 import routes from '../routes';
-import { path } from '../../src/utils';
+import { Path } from '../services'
+import Container from '../container';
+
+const container = new Container()
+const path = container.get(Path)
 
 export default ({ location, data: { localFlows } }) => {
   const allFlows = {};

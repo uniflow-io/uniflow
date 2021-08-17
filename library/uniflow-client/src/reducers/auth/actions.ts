@@ -1,5 +1,6 @@
 import request from 'axios';
-import server from '../../utils/server';
+import Container from '../../container';
+import { Server } from '../../services';
 import jwtDecode from 'jwt-decode';
 import {
   COMMIT_LOGIN_USER_REQUEST,
@@ -7,6 +8,9 @@ import {
   COMMIT_LOGIN_USER_FAILURE,
   COMMIT_LOGOUT_USER,
 } from './actions-types';
+
+const container = new Container()
+const server = container.get(Server)
 
 export const commitLoginUserRequest = () => {
   return async (dispatch) => {

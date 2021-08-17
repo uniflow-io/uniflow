@@ -1,3 +1,6 @@
+import { Service } from 'typedi';
+
+@Service()
 class UI {
   copyTextToClipboard(text: string) {
     const textArea = document.createElement('textarea');
@@ -14,4 +17,4 @@ class UI {
   }
 }
 
-export default new UI();
+export default UI;

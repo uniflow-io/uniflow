@@ -1,3 +1,5 @@
+import { Service } from 'typedi';
+
 type EnvData = {
   env?: string;
   clientUrl?: string;
@@ -7,6 +9,7 @@ type EnvData = {
   trackingId?: string;
 };
 
+@Service()
 class Env {
   envs: EnvData;
   constructor() {
@@ -25,4 +28,4 @@ class Env {
   }
 }
 
-export default new Env();
+export default Env;

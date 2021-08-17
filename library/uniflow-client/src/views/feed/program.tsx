@@ -27,7 +27,11 @@ import {
   serializeFlowsData,
 } from '../../reducers/feed/actions';
 import { commitAddLog } from '../../reducers/logs/actions';
-import { ui } from '../../utils';
+import Container from '../../container';
+import { UI } from '../../services';
+
+const container = new Container()
+const ui = container.get(UI)
 
 export interface ProgramProps {}
 

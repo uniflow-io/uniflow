@@ -1,3 +1,6 @@
+import { Service } from 'typedi';
+
+@Service()
 class Flow {
   onUpdate(self) {
     return () => {
@@ -14,4 +17,4 @@ class Flow {
   }
 }
 
-export default new Flow();
+export default Flow;

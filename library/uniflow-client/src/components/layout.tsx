@@ -11,8 +11,13 @@ import { getNewLogs, commitReadLog } from '../reducers/logs/actions';
 import { commitLogoutUser } from '../reducers/user/actions';
 import { isGranted } from '../reducers/user/actions';
 import { applyTheme, switchTheme } from '../reducers/app/actions';
-import { path } from '../utils';
-import { env } from '../utils';
+import Container from '../container';
+import { Path } from '../services';
+import { Env } from '../services';
+
+const container = new Container()
+const path = container.get(Path)
+const env = container.get(Env)
 
 class MessengerPlatform extends Component {
   render() {

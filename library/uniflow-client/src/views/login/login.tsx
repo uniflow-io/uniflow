@@ -7,7 +7,11 @@ import { Link, navigate } from 'gatsby';
 import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { env } from '../../utils';
+import Container from '../../container';
+import { Env } from '../../services';
+
+const container = new Container()
+const env = container.get(Env)
 
 export interface LoginProps {}
 

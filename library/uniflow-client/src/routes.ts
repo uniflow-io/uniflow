@@ -24,7 +24,11 @@ import {
 
 import { compile } from 'path-to-regexp';
 import { requireAuthentication } from './helpers';
-import { path } from './utils';
+import { Path } from './services'
+import Container from './container';
+
+const container = new Container()
+const path = container.get(Path)
 
 const routes = {
   home: {

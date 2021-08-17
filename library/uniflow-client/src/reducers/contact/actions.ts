@@ -1,6 +1,10 @@
 import request from 'axios';
-import server from '../../utils/server';
+import Container from '../../container';
+import { Server } from '../../services';
 import { ApiException } from '../../models';
+
+const container = new Container()
+const server = container.get(Server)
 
 export const contact = (email: string, message: string) => {
   return async (dispatch) => {

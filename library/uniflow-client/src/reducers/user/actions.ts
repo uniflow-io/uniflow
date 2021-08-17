@@ -1,9 +1,13 @@
 import request from 'axios';
-import server from '../../utils/server';
+import Container from '../../container';
+import { Server } from '../../services';
 import uniq from 'lodash/uniq';
 import { COMMIT_UPDATE_SETTINGS, COMMIT_LOGOUT_USER } from './actions-types';
 import { commitLogoutUser as commitAuthLogoutUser } from '../auth/actions';
 import { commitAddLog } from '../logs/actions';
+
+const container = new Container()
+const server = container.get(Server)
 
 export const commitUpdateSettings = (user) => {
   return async (dispatch) => {

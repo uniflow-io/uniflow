@@ -1,8 +1,14 @@
-import env from './env';
+import { Service, Inject } from 'typedi';
 
+import Env from './env'
+
+@Service()
 class Server {
+  @Inject(() => Env)
+  private env: Env
+
   getBaseUrl() {
-    return env.get('apiUrl');
+    return this.env.get('apiUrl');
   }
 
   handleErrors(response) {
@@ -21,4 +27,4 @@ class Server {
   }
 }
 
-export default new Server();
+export default Server;

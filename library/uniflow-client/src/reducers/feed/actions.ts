@@ -1,5 +1,6 @@
 import request from 'axios';
-import server from '../../utils/server';
+import Container from '../../container';
+import { Server } from '../../services';
 import moment from 'moment';
 import {
   COMMIT_CLEAR_FEED,
@@ -11,6 +12,9 @@ import {
 } from './actions-types';
 import { commitLogoutUser } from '../user/actions';
 import { pathTo } from '../../routes';
+
+const container = new Container()
+const server = container.get(Server)
 
 const fetchCollection = async (uid, type, path, page, config, items = []) => {
   const response = await request.get(

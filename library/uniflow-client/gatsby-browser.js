@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import './src/assets/styles/index.scss';
 import React from 'react';
 import Layout from './src/components/layout';

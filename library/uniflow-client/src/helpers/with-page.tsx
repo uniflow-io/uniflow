@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { commitSetPage } from '../reducers/app/actions';
-import { env } from '../utils';
+import Container from '../container';
+import { Env } from '../services';
+
+const container = new Container()
+const env = container.get(Env)
 
 export default function withPage(Component, page, seo) {
   class PageHelper extends React.Component {

@@ -1,9 +1,11 @@
+import { Service } from 'typedi';
 import { pathToRegexp } from 'path-to-regexp';
 
 const patternCache = {};
 const cacheLimit = 10000;
 let cacheCount = 0;
 
+@Service()
 class Path {
   private compilePath(pattern, options) {
     const cacheKey = '' + options.end + options.strict + options.sensitive;
@@ -70,4 +72,4 @@ class Path {
   };
 }
 
-export default new Path();
+export default Path;

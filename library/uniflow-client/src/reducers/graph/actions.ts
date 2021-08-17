@@ -5,7 +5,12 @@ import {
   COMMIT_SET_FLOWS,
 } from './actions-types';
 import request from 'axios';
-import server from '../../utils/server';
+import Container from '../../container';
+import { Server } from '../../services';
+
+const container = new Container()
+const server = container.get(Server)
+
 
 export const commitPushFlow = (index, flow) => {
   return async (dispatch) => {

@@ -7,7 +7,11 @@ import { navigate } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { env } from '../../utils';
+import Container from '../../container';
+import { Env } from '../../services';
+
+const container = new Container()
+const env = container.get(Env)
 
 export interface RegisterProps {}
 

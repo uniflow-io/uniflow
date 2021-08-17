@@ -6,9 +6,13 @@ import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 import { facebookLoginUrl, githubLoginUrl } from '../reducers/auth/actions';
 import { updateSettings, commitUpdateSettings } from '../reducers/user/actions';
 import { getLead, createLead, updateLead } from '../reducers/lead/actions';
-import { ui } from '../utils';
+import Container from '../container';
+import { UI, Env } from '../services';
 import { Checkbox } from '../components';
-import { env } from '../utils';
+
+const container = new Container()
+const ui = container.get(UI)
+const env = container.get(Env)
 
 export interface SettingsProps {}
 

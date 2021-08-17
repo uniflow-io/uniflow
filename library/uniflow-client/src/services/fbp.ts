@@ -1,3 +1,6 @@
+import { Service } from 'typedi';
+
+@Service()
 class FBP {
   serialize(graph) {
 
@@ -8,4 +11,4 @@ class FBP {
   }
 }
 
-export default new FBP();
+export default FBP;
