@@ -6,7 +6,7 @@ import Helmet from 'react-helmet';
 import { Link, graphql, StaticQuery } from 'gatsby';
 import { connect } from 'react-redux';
 import routes, { pathTo } from '../routes';
-import { UserManager } from '../components';
+import { UserManager } from '.';
 import { getNewLogs, commitReadLog } from '../reducers/logs/actions';
 import { commitLogoutUser } from '../reducers/user/actions';
 import { isGranted } from '../reducers/user/actions';
