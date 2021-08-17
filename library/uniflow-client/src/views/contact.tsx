@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ApiException } from '../exceptions';
+import { ApiException } from '../models';
 import { contact } from '../reducers/contact/actions';
 import { pathTo } from '../routes';
 

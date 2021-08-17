@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Checkbox } from '../components';
-import { ApiException } from '../exceptions';
+import { ApiException } from '../models';
 import { getLead, updateLead } from '../reducers/lead/actions';
 import { matchRoute } from '../routes';
 

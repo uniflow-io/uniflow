@@ -1,6 +1,6 @@
 import request from 'axios';
 import server from '../../utils/server';
-import { ApiException } from '../../exceptions';
+import { ApiException } from '../../models';
 
 export const contact = (email: string, message: string) => {
   return async (dispatch) => {

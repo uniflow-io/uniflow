@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'gatsby';
-import { ApiException } from '../exceptions';
+import { ApiException } from '../models';
 import { createLead } from '../reducers/lead/actions';
 import { pathTo } from '../routes';
 

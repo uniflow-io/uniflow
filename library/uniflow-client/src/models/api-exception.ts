@@ -6,4 +6,4 @@ class ApiException extends Error {
   }
 }
 
-export { ApiException };
+export default ApiException;

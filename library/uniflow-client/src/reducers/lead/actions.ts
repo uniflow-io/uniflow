@@ -1,6 +1,6 @@
 import request from 'axios';
 import server from '../../utils/server';
-import { ApiException } from '../../exceptions';
+import { ApiException } from '../../models';
 
 export const createLead = ({ email, optinNewsletter, optinBlog }) => {
   return async (dispatch) => {
