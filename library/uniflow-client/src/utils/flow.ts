@@ -1,15 +1,17 @@
-const onUpdate = (self) => {
-  return () => {
-    self.props.onUpdate(self.serialize());
-  };
-};
+class Flow {
+  onUpdate(self) {
+    return () => {
+      self.props.onUpdate(self.serialize());
+    };
+  }
+  
+  onDelete(self) {
+    return (event) => {
+      event.preventDefault();
+  
+      self.props.onPop();
+    };
+  }
+}
 
-const onDelete = (self) => {
-  return (event) => {
-    event.preventDefault();
-
-    self.props.onPop();
-  };
-};
-
-export { onUpdate, onDelete };
+export default new Flow();

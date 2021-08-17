@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { Editor, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import {
-  onUpdate,
-  onDelete,
-} from '@uniflow-io/uniflow-client/src/utils/flow'
+import flow from '@uniflow-io/uniflow-client/src/utils/flow'
 
 class TextFlow extends Component {
   state = {
@@ -22,7 +19,7 @@ class TextFlow extends Component {
   }
 
   onChangeText = text => {
-    this.setState({ text: text }, onUpdate(this))
+    this.setState({ text: text }, flow.onUpdate(this))
   }
 
   render() {
@@ -36,7 +33,7 @@ class TextFlow extends Component {
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
-          onDelete={onDelete(this)}
+          onDelete={flow.onDelete(this)}
         />
         <form className="form-sm-horizontal">
           <div className="row mb-3">

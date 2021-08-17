@@ -6,7 +6,7 @@ import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 import { facebookLoginUrl, githubLoginUrl } from '../reducers/auth/actions';
 import { updateSettings, commitUpdateSettings } from '../reducers/user/actions';
 import { getLead, createLead, updateLead } from '../reducers/lead/actions';
-import { copyTextToClipboard } from '../utils';
+import { ui } from '../utils';
 import { Checkbox } from '../components';
 import { env } from '../utils';
 
@@ -190,7 +190,7 @@ class Settings extends Component<SettingsProps> {
     const { user } = this.state;
     const clipboard = this.getClipboard(user);
 
-    copyTextToClipboard(clipboard);
+    ui.copyTextToClipboard(clipboard);
   };
 
   render() {

@@ -3,7 +3,7 @@ import { graphql } from 'gatsby';
 import { Feed } from '../views';
 import { requireAuthentication, withPage } from '../helpers';
 import routes from '../routes';
-import { matchPath } from '../../src/utils';
+import { path } from '../../src/utils';
 
 export default ({ location, data: { localFlows } }) => {
   const allFlows = {};
@@ -18,7 +18,7 @@ export default ({ location, data: { localFlows } }) => {
   });
   const AuthFeedPage = requireAuthentication(FeedPage);
 
-  const match = matchPath(location.pathname, {
+  const match = path.matchPath(location.pathname, {
     path: routes.feed.path,
     exact: true,
   });

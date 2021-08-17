@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { Editor, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import { Select } from '@uniflow-io/uniflow-client/src/components'
-import {
-  onUpdate,
-  onDelete,
-} from '@uniflow-io/uniflow-client/src/utils/flow'
+import flow from '@uniflow-io/uniflow-client/src/utils/flow'
 
 class PromptFlow extends Component {
   state = {
@@ -32,15 +29,15 @@ class PromptFlow extends Component {
   }
 
   onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, onUpdate(this))
+    this.setState({ variable: event.target.value }, flow.onUpdate(this))
   }
 
   onChangeMessageVariable = event => {
-    this.setState({ messageVariable: event.target.value }, onUpdate(this))
+    this.setState({ messageVariable: event.target.value }, flow.onUpdate(this))
   }
 
   onChangeType = type => {
-    this.setState({ type: type }, onUpdate(this))
+    this.setState({ type: type }, flow.onUpdate(this))
   }
 
   onChangeInputString = event => {
@@ -118,7 +115,7 @@ class PromptFlow extends Component {
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
-          onDelete={onDelete(this)}
+          onDelete={flow.onDelete(this)}
         />
         <form className="form-sm-horizontal">
           <div className="row mb-3">

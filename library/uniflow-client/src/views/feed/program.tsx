@@ -27,7 +27,7 @@ import {
   serializeFlowsData,
 } from '../../reducers/feed/actions';
 import { commitAddLog } from '../../reducers/logs/actions';
-import { copyTextToClipboard } from '../../utils';
+import { ui } from '../../utils';
 
 export interface ProgramProps {}
 
@@ -313,7 +313,7 @@ class Program extends Component<ProgramProps> {
   onCopyNodeUsage = (event) => {
     const clipboard = this.getNodeClipboard();
 
-    copyTextToClipboard(clipboard);
+    ui.copyTextToClipboard(clipboard);
   };
 
   render() {

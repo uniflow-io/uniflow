@@ -24,7 +24,7 @@ import {
 
 import { compile } from 'path-to-regexp';
 import { requireAuthentication } from './helpers';
-import { matchPath } from './utils';
+import { path } from './utils';
 
 const routes = {
   home: {
@@ -143,7 +143,7 @@ export const matchRoute = (pathname) => {
 
   for (let i = 0; i < keys.length; i++) {
     route = keys[i];
-    match = matchPath(pathname, {
+    match = path.matchPath(pathname, {
       path: routes[route].path,
       exact: routes[route].exact,
     });

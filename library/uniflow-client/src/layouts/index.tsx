@@ -11,7 +11,7 @@ import { getNewLogs, commitReadLog } from '../reducers/logs/actions';
 import { commitLogoutUser } from '../reducers/user/actions';
 import { isGranted } from '../reducers/user/actions';
 import { applyTheme, switchTheme } from '../reducers/app/actions';
-import { matchPath } from '../utils';
+import { path } from '../utils';
 import { env } from '../utils';
 
 class MessengerPlatform extends Component {
@@ -110,100 +110,100 @@ Alerts = connect((state) => ({
 class Header extends Component {
   onLocation = (location) => {
     if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.home.path,
         exact: true,
       })
     ) {
       return 'home';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.flows.path,
         exact: true,
       })
     ) {
       return 'flows';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.doc.path,
         exact: true,
       })
     ) {
       return 'doc';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.settings.path,
         exact: true,
       })
     ) {
       return 'settings';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.admin.path,
         exact: true,
       })
     ) {
       return 'admin';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.blog.path,
         exact: true,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.article.path,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.contributor.path,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.tags.path,
         exact: true,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.tag.path,
       })
     ) {
       return 'blog';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.library.path,
         exact: true,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.card.path,
       })
     ) {
       return 'library';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.changelog.path,
         exact: true,
       })
     ) {
       return 'changelog';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.contact.path,
         exact: true,
       })
     ) {
       return 'contact';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.login.path,
         exact: true,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.register.path,
         exact: true,
       })
     ) {
       return 'login';
     } else if (
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.feed.path,
       }) ||
-      matchPath(location.pathname, {
+      path.matchPath(location.pathname, {
         path: routes.userFeed.path,
       })
     ) {

@@ -1,10 +1,11 @@
 import env from './env';
 
-export default {
-  getBaseUrl: () => {
+class Server {
+  getBaseUrl() {
     return env.get('apiUrl');
-  },
-  handleErrors: (response) => {
+  }
+
+  handleErrors(response) {
     const errors = {};
 
     if (response.data.validation) {
@@ -17,5 +18,7 @@ export default {
     }
 
     return errors;
-  },
-};
+  }
+}
+
+export default new Server();
