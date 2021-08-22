@@ -4,6 +4,7 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import Helmet from 'react-helmet';
 import { Link, graphql, StaticQuery } from 'gatsby';
+import { WindowLocation } from '@reach/router';
 import routes, { pathTo } from '../routes';
 import { UserManager } from '.';
 import { getNewLogs, commitReadLog } from '../contexts/logs';
@@ -14,6 +15,7 @@ import Container from '../container';
 import { Path } from '../services';
 import { Env } from '../services';
 import { useEffect } from 'react';
+import { IGatsbyImageData } from 'gatsby-plugin-image';
 
 const container = new Container();
 const path = container.get(Path);
@@ -53,7 +55,9 @@ function MessengerPlatform() {
   );
 }
 
-interface AlertProps {}
+interface AlertProps {
+
+}
 
 function Alert(props: AlertProps) {
   const { alert } = props;
@@ -66,10 +70,10 @@ function Alert(props: AlertProps) {
     }, 5000);
   }, [])
 
-  const onClose = (event, id) => {
+  const onClose: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
-    commitReadLog(id)(logsDispatch);
+    commitReadLog(newLogs[alert].id)(logsDispatch);
   };
 
   return (
@@ -80,7 +84,7 @@ function Alert(props: AlertProps) {
         className="close"
         data-dismiss="alert"
         aria-label="Close"
-        onClick={(event) => onClose(event, newLogs[alert].id)}
+        onClick={onClose}
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -95,13 +99,28 @@ function Alerts() {
   return (
     <>
       {Object.keys(newLogs).map((key, index) => (
-        <Alert key={key} alert={key} />
+        <Alert key={index} alert={key} />
       ))}
     </>
   );
 }
 
-interface HeaderProps {}
+interface HeaderProps {
+  location: WindowLocation
+  logo: {
+    childImageSharp: {
+      gatsbyImageData: IGatsbyImageData
+    }
+    publicURL: string
+  }
+  changeLogTags: {
+    edges: [{
+      node: {
+        tag: string
+      }
+    }]
+  }
+}
 
 function Header(props: HeaderProps) {
   const { logo, changeLogTags } = props;
@@ -110,7 +129,7 @@ function Header(props: HeaderProps) {
   const { user, userDispatch } = useUser()
   const {authDispatch} = useAuth()
 
-  const onLocation = (location) => {
+  const onLocation = (location: WindowLocation) => {
     if (
       path.matchPath(location.pathname, {
         path: routes.home.path,
@@ -215,8 +234,8 @@ function Header(props: HeaderProps) {
     return null;
   };
 
-  const onLogout = (e) => {
-    e.preventDefault();
+  const onLogout: React.MouseEventHandler<HTMLAnchorElement> = (event) => {
+    event.preventDefault();
 
     commitLogoutUser()(userDispatch, authDispatch);
   };
@@ -401,7 +420,7 @@ function Header(props: HeaderProps) {
           {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
             <li className="nav-item">
               <a
-                className={`nav-link${active === 'logout' ? ' active' : ''}`}
+                className={`nav-link`}
                 href="/logout"
                 onClick={onLogout}
               >
@@ -483,8 +502,14 @@ function Footer() {
   );
 }
 
-function Layout(props) {
+export interface LayoutProps {
+  location: WindowLocation
+  children: React.ReactNode
+}
+
+function Layout(props: LayoutProps) {
   const app = useApp();
+  const environement = env.get('env')
 
   return (
     <StaticQuery
@@ -539,9 +564,9 @@ function Layout(props) {
             <meta name="twitter:image" content={`${env.get('clientUrl')}${logo.publicURL}`} />
           </Helmet>
           <UserManager location={props.location} />
-          {[
+          {environement && ([
             /*'production', 'preprod'*/
-          ].indexOf(env.get('env')) !== -1 && <MessengerPlatform />}
+          ] as string[]).indexOf(environement) !== -1 && <MessengerPlatform />}
           <Header location={props.location} logo={logo} changeLogTags={changeLogTags} />
           <Alerts />
           {props.children}

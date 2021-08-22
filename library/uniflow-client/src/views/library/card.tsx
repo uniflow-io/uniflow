@@ -10,6 +10,8 @@ import { MDXProvider } from '../../components';
 export interface CardProps {
   library: NavigationProps['library']
   card: {
+    name: string
+    description: string
     repository: {
       url: string
     }

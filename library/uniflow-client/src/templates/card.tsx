@@ -6,15 +6,16 @@ import { withPage } from '../helpers';
 export interface CardTemplateData {
   logo: CardProps['logo']
   localLibrary: {
-    nodes: CardProps['library'][]
+    nodes: CardProps['library']
   }
   localCard: CardProps['card']
 }
 
 export default ({ data, location }: PageProps<CardTemplateData>) => {
   const { /*library, */ localLibrary, /*card, */ localCard, logo } = data;
-  let realCard = {
+  let realCard: CardProps['card'] = {
     //...card,
+    ...localCard,
     official: false,
   };
   if (localCard) {
@@ -24,7 +25,7 @@ export default ({ data, location }: PageProps<CardTemplateData>) => {
     };
   }
 
-  const CardPage = withPage(Card, 'card', {
+  const CardPage = withPage<CardProps>(Card, 'card', {
     location,
     title: realCard.name,
     description: realCard.description,

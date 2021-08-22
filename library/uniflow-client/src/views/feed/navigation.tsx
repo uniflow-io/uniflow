@@ -61,7 +61,6 @@ function Navigation(props: NavigationProps) {
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    const { feed } = props;
     const folderPath = feed.parentFolder
       ? `${feed.parentFolder.path}/${feed.parentFolder.slug}`
       : '/';

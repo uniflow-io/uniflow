@@ -3,9 +3,12 @@ import { fetchSettings } from '../contexts/user';
 import { matchRoute } from '../routes';
 import { fetchFeed, getFeedItem, commitSetSlugFeed, useFeed } from '../contexts/feed';
 import { useEffect } from 'react';
+import { WindowLocation } from '@reach/router';
 import { useAuth, useUser } from '../contexts';
 
-export interface UserManagerProps {}
+export interface UserManagerProps {
+  location: WindowLocation
+}
 
 function UserManager(props: UserManagerProps) {
   const [isFetching, setIsFetching] = useState<boolean>(false)
