@@ -182,7 +182,7 @@ class UserController extends Controller {
     let where: any = {user}
     const isPublicOnly = !req.user || !(uid === req.user.uid || uid === req.user.username)
     if(isPublicOnly) {
-      where = {...where, public: true}
+      where = {...where, isPublic: true}
     }
     if(path) {
       const folder = await this.folderService.fromPath(user, path as string)
@@ -214,7 +214,7 @@ class UserController extends Controller {
     clients?: NotEmptyStringType[]
     tags?: NotEmptyStringType[]
     description?: NotEmptyStringType | null
-    public?: boolean
+    isPublic?: boolean
   }): Promise<ProgramApiType> {
     if(!req.user) {
       throw new ApiException('Not authorized', 401);
@@ -225,7 +225,7 @@ class UserController extends Controller {
       user: req.user,
       folder: await this.folderService.fromPath(req.user, body.path || '/') || null,
       description: body.description ? body.description : null,
-      public: body.public || false,
+      isPublic: body.isPublic || false,
     })
     await this.folderService.setSlug(program, body.slug || body.name)
     program.clients = await this.programClientService.manageByProgramAndClientNames(program, body.clients || [])

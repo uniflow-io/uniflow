@@ -198,7 +198,7 @@ class Api {
     clients?: NotEmptyStringType[]
     tags?: NotEmptyStringType[]
     description?: NotEmptyStringType | null
-    public?: boolean
+    isPublic?: boolean
   }, options: ApiOptions & Required<Pick<ApiOptions, 'token'>>): Promise<ProgramApiType> {
     const response = await request.post(`${this.getBaseUrl()}/users/${path.uid}/programs`, body, this.getOptions(options));
     return response.data

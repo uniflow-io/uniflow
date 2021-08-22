@@ -26,7 +26,7 @@ class ProgramController extends Controller {
   public async getPrograms(@Query() page: PageNumberType = 1, @Query() perPage: PerPageType = 10): Promise<PaginationType<ProgramApiType>> {
     const data = []
     const [programs, total] = await this.programRepository.findAndCount({
-      where: { public: true },
+      where: { isPublic: true },
       relations: ['folder', 'user'],
       order: { updated: "DESC" },
       skip: (page - 1) * perPage,
@@ -78,8 +78,8 @@ class ProgramController extends Controller {
     if(body.description) {
       program.description = body.description
     }
-    if(body.public || body.public === false) {
-      program.public = body.public
+    if(body.isPublic || body.isPublic === false) {
+      program.isPublic = body.isPublic
     }
 
     if(await this.programService.isValid(program)) {
@@ -123,7 +123,7 @@ class ProgramController extends Controller {
       throw new ApiException('Program not found', 404);
     }
     
-    if(!program.public) {
+    if(!program.isPublic) {
       if(!req.user || program.user.id !== req.user.id) {
         throw new ApiException('Not authorized', 401);
       }

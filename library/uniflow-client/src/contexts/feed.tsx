@@ -371,7 +371,7 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
       clients: program.clients,
       tags: program.tags,
       description: program.description,
-      public: program.public,
+      public: program.isPublic,
     };
 
     try {

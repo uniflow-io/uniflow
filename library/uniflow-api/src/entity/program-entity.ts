@@ -62,7 +62,7 @@ export default class ProgramEntity {
     nullable: false,
     default: false,
   })
-  public: boolean;
+  isPublic: boolean;
 
   @Column({
     type: "text",

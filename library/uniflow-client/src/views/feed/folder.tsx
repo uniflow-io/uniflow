@@ -60,8 +60,8 @@ function Folder(props: FolderProps) {
   };
 
   const onUpdate = debounce(async () => {
-    await updateParentFolder(feedRef.current.parentFolder!, auth.token)(feedDispatch, userDispatch, authDispatch);
-    navigate(toFeedPath(feedRef.current.parentFolder!, user));
+    await updateParentFolder(feedRef.current.parentFolder, auth.token)(feedDispatch, userDispatch, authDispatch);
+    navigate(toFeedPath(feedRef.current.parentFolder, user));
   }, 1000);
 
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = async (event) => {

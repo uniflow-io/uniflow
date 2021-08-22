@@ -133,7 +133,7 @@ const models: TsoaRoute.Models = {
             "clients": {"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"},"required":true},
             "tags": {"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"},"required":true},
             "description": {"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}],"required":true},
-            "public": {"dataType":"boolean","required":true},
+            "isPublic": {"dataType":"boolean","required":true},
             "user": {"ref":"UuidOrUsernameType","required":true},
             "created": {"dataType":"datetime","required":true},
             "updated": {"dataType":"datetime","required":true},
@@ -141,7 +141,12 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PageType": {
+    "PaginationType_ProgramApiType_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"total":{"dataType":"double","required":true},"data":{"dataType":"array","array":{"dataType":"refObject","ref":"ProgramApiType"},"required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PageNumberType": {
         "dataType": "refAlias",
         "type": {"dataType":"integer","validators":{"minimum":{"value":1}},"default":"1"},
     },
@@ -153,7 +158,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PartialType_ProgramApiType_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"name":{"ref":"NotEmptyStringType"},"slug":{"ref":"SlugType"},"path":{"ref":"PathType"},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"public":{"dataType":"boolean"},"user":{"ref":"UuidOrUsernameType"},"created":{"dataType":"datetime"},"updated":{"dataType":"datetime"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"name":{"ref":"NotEmptyStringType"},"slug":{"ref":"SlugType"},"path":{"ref":"PathType"},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"isPublic":{"dataType":"boolean"},"user":{"ref":"UuidOrUsernameType"},"created":{"dataType":"datetime"},"updated":{"dataType":"datetime"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiKeyType": {
@@ -189,6 +194,11 @@ const models: TsoaRoute.Models = {
             "uid": {"ref":"UuidType","required":true},
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PaginationType_FolderApiType_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"total":{"dataType":"double","required":true},"data":{"dataType":"array","array":{"dataType":"refObject","ref":"FolderApiType"},"required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -486,7 +496,7 @@ export function RegisterRoutes(app: express.Router) {
         app.get('/api/programs',
             function ProgramController_getPrograms(request: any, response: any, next: any) {
             const args = {
-                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    page: {"default":1,"in":"query","name":"page","ref":"PageNumberType"},
                     perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
             };
 
@@ -777,7 +787,7 @@ export function RegisterRoutes(app: express.Router) {
             function UserController_getUserFolders(request: any, response: any, next: any) {
             const args = {
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
-                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    page: {"default":1,"in":"query","name":"page","ref":"PageNumberType"},
                     perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
                     path: {"in":"query","name":"path","ref":"PathType"},
             };
@@ -839,7 +849,7 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
-                    page: {"default":1,"in":"query","name":"page","ref":"PageType"},
+                    page: {"default":1,"in":"query","name":"page","ref":"PageNumberType"},
                     perPage: {"default":10,"in":"query","name":"perPage","ref":"PerPageType"},
                     path: {"in":"query","name":"path","ref":"PathType"},
             };
@@ -871,7 +881,7 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     _uid: {"in":"path","name":"uid","required":true,"ref":"UuidOrUsernameType"},
-                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"public":{"dataType":"boolean"},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"path":{"ref":"PathType"},"slug":{"ref":"SlugType"},"name":{"ref":"NotEmptyStringType","required":true}}},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"isPublic":{"dataType":"boolean"},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"path":{"ref":"PathType"},"slug":{"ref":"SlugType"},"name":{"ref":"NotEmptyStringType","required":true}}},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

@@ -217,7 +217,7 @@ function Program(props: ProgramProps) {
       type: 'program',
       entity: {
         ...props.program,
-        ...{ public: value },
+        ...{ isPublic: value },
       },
     })(feedDispatch)
     onUpdate();
@@ -450,7 +450,7 @@ function Program(props: ProgramProps) {
           <div className="col-sm-10">
             <Checkbox
               className="form-control-plaintext"
-              value={program.public}
+              value={program.isPublic}
               onChange={onChangePublic}
               id="program-public"
             />

@@ -26,7 +26,7 @@ export default class ProgramService {
       clients: await this.programClientService.toClientNames(program),
       tags: await this.programTagService.toTagNames(program),
       description: program.description,
-      public: program.public,
+      isPublic: program.isPublic,
       user: program.user.username || program.user.uid,
       created: program.created,
       updated: program.updated,

@@ -44,7 +44,7 @@ export interface ProgramApiType {
     clients: NotEmptyStringType[]
     tags: NotEmptyStringType[]
     description: NotEmptyStringType | null
-    public: boolean
+    isPublic: boolean
     user: UuidOrUsernameType
     created: Date
     updated: Date
