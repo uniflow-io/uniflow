@@ -153,7 +153,7 @@ function Program(props: ProgramProps) {
     }
   }, 1000);
 
-  const onChangeTitle = async (event) => {
+  const onChangeName = async (event) => {
     await commitUpdateFeed({
       type: 'program',
       entity: {
@@ -343,7 +343,7 @@ function Program(props: ProgramProps) {
       <form className="form-sm-horizontal">
         <div className="row mb-3">
           <label htmlFor="program-name" className="col-sm-2 col-form-label">
-            Title
+            Name
           </label>
 
           <div className="col-sm-10">
@@ -352,8 +352,8 @@ function Program(props: ProgramProps) {
               className="form-control"
               id="program-name"
               value={program.name}
-              onChange={onChangeTitle}
-              placeholder="Title"
+              onChange={onChangeName}
+              placeholder="Name"
             />
           </div>
         </div>

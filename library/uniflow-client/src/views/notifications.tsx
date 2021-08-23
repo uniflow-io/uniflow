@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Checkbox } from '../components';
-import { ApiException } from '../models';
+import { ApiValidateException } from '../models';
 import { matchRoute } from '../routes';
-import { WindowLocation } from '@reach/router';
+import { WindowLocation, useLocation } from '@reach/router';
 
 import { Api } from '../services';
 import Container from '../container';
-import { ApiExceptionErrors } from '../models/api-exception';
+import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 
 const container = new Container();
 const api = container.get(Api);
 
 export interface NotificationsProps {
-  location: WindowLocation
 }
 
 interface LeadState {
@@ -32,11 +31,11 @@ function Notifications(props: NotificationsProps) {
     optinGithub: false,
     githubUsername: null,
   })
-  const [errors, setErrors] = useState<ApiExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
   const [state, setState] = useState<'loading'|'not-found'|'form'|'form-submit'|'form-success'|'unsubscribe-success'>('loading')
 
   useEffect(() => {
-    const { location } = props;
+    const location = useLocation();
 
     const uid = getId();
 
@@ -119,7 +118,7 @@ function Notifications(props: NotificationsProps) {
       })
       setState('form-success');
     } catch (error) {
-      if (error instanceof ApiException) {
+      if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors })
         setState('form');
       }

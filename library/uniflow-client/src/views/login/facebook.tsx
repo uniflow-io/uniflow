@@ -4,18 +4,18 @@ import { pathTo } from '../../routes';
 import { facebookLogin } from '../../contexts/auth';
 import { commitAddLog } from '../../contexts/logs';
 import { useAuth, useLogs } from '../../contexts';
-import { WindowLocation } from '@reach/router';
+import { WindowLocation, useLocation } from '@reach/router';
 
 export interface FacebookLoginProps {
-  location: WindowLocation
 }
 
 function FacebookLogin(props: FacebookLoginProps) {
   const { authDispatch, authRef } = useAuth()
   const { logsDispatch } = useLogs()
+  const location = useLocation()
 
   const getAccessToken = (): string|null => {
-    const m = props.location.hash.match(/access_token=([^&]+)/);
+    const m = location.hash.match(/access_token=([^&]+)/);
     if (m) {
       return m[1];
     }

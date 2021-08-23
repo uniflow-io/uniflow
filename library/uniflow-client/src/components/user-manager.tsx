@@ -3,11 +3,11 @@ import { fetchSettings } from '../contexts/user';
 import { matchRoute } from '../routes';
 import { fetchFeed, getFeedItem, commitSetSlugFeed, useFeed } from '../contexts/feed';
 import { useEffect } from 'react';
+import { useLocation } from "@reach/router";
 import { WindowLocation } from '@reach/router';
 import { useAuth, useUser } from '../contexts';
 
 export interface UserManagerProps {
-  location: WindowLocation
 }
 
 function UserManager(props: UserManagerProps) {
@@ -15,7 +15,7 @@ function UserManager(props: UserManagerProps) {
   const { auth, authDispatch } = useAuth()
   const { userDispatch } = useUser()
   const { feed, feedDispatch } = useFeed()
-  const { location } = props;
+  const location = useLocation()
 
   const isCachedFeed = (uid: string, paths: string[] = []) => {
     if (

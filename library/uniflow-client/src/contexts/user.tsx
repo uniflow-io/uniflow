@@ -7,6 +7,7 @@ import { AuthDispath, commitLogout } from './auth';
 import { commitAddLog, LogsDispath } from './logs';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { ROLE } from '../models/api-type-interface';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception copy';
 
 const container = new Container();
 const api = container.get(Api);
@@ -79,7 +80,7 @@ export const fetchConfig = (token: string, uid: string) => {
     try {
       return await api.getAdminConfig({uid}, {token})
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
       } else {
         throw error;
@@ -97,9 +98,7 @@ export const updateConfig = (item: object, token: string, uid: string) => {
     try {
       await api.updateAdminConfig({uid}, data, {token})
     } catch (error) {
-      if (error.request.status === 400) {
-        commitAddLog(error.response.data.message)(logsDispatch);
-      } else if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
       } else {
         throw error;
@@ -114,7 +113,7 @@ export const fetchSettings = (uid: string, token: string) => {
       const user = await api.getUserSettings({uid}, {token})
       commitUpdateSettings(user)(dispatch);
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
       } else {
         throw error;
@@ -139,9 +138,7 @@ export const updateSettings = (item: Partial<UserProviderState>, token: string) 
       commitUpdateSettings(user)(dispatch);
       return data;
     } catch (error) {
-      if (error.request.status === 400) {
-        commitAddLog(error.response.data.message)(logsDispatch);
-      } else if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
       } else {
         throw error;

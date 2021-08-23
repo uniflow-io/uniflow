@@ -10,5 +10,5 @@ export default ({ location }: PageProps) => {
     description: 'Unsubscribe from your notifications',
   });
 
-  return <NotificationPage location={location} />;
+  return <NotificationPage />;
 };

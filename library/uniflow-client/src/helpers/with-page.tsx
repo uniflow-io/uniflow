@@ -4,7 +4,7 @@ import Container from '../container';
 import { Env } from '../services';
 import { useEffect } from 'react';
 import { useApp } from '../contexts/app';
-import { WindowLocation } from '@reach/router';
+import { WindowLocation, createMemorySource, createHistory, LocationProvider } from '@reach/router';
 
 const container = new Container();
 const env = container.get(Env);
@@ -22,6 +22,8 @@ export default function withPage<T>(Component: ComponentType<T>, page: string, s
 }) {
   function PageHelper(props: T) {
     const app = useApp();
+    const source = createMemorySource(location.pathname)
+    const history = createHistory(source)
 
     useEffect(() => {
       app.setPage(page);
@@ -75,7 +77,9 @@ export default function withPage<T>(Component: ComponentType<T>, page: string, s
             )}
           </Helmet>
         )}
-        <Component {...props} />
+        <LocationProvider history={history}>
+          <Component {...props} />
+        </LocationProvider>
       </>
     );
   }

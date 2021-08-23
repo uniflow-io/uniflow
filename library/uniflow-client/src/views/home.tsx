@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'gatsby';
-import { ApiException } from '../models';
+import { ApiValidateException } from '../models';
 import { pathTo } from '../routes';
 import { Api } from '../services';
 import Container from '../container';
-import { ApiExceptionErrors } from '../models/api-exception';
+import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 
 const container = new Container();
 const api = container.get(Api);
@@ -14,7 +14,7 @@ export interface HomeProps {
 
 function Home(props: HomeProps) {
   const [email, setEmail] = useState<string>('')
-  const [errors, setErrors] = useState<ApiExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
   const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
 
   const onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -35,7 +35,7 @@ function Home(props: HomeProps) {
         setState('form-success');
       }
     } catch (error) {
-      if (error instanceof ApiException) {
+      if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors })
         setState('form');
       }

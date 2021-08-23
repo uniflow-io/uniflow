@@ -45,7 +45,7 @@ class ProgramController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(404, "Not found")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async updateProgram(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<ProgramApiType>): Promise<ProgramApiType> {
+  public async updateProgram(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<ProgramApiType&{slug: string}>): Promise<ProgramApiType> {
     if (!req.user) {
       throw new ApiException('Not authorized', 401);
     }
@@ -66,7 +66,7 @@ class ProgramController extends Controller {
       program.folder = await this.folderService.fromPath(req.user, body.path) || null
       await this.folderService.setSlug(program, program.slug) // in case of slug conflict when moving program
     }
-    if (body.slug && program.slug !== body.slug) {
+    if (program.slug !== body.slug) {
       await this.folderService.setSlug(program, body.slug)
     }
     if(body.clients) {

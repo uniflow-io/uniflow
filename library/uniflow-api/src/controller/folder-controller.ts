@@ -24,7 +24,7 @@ class FolderController extends Controller {
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(404, "Not found")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async updateFolder(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<Pick<FolderApiType, 'name'|'path'|'slug'>>): Promise<FolderApiType> {
+  public async updateFolder(@Request() req: express.Request, @Path() uid: UuidType, @Body() body: PartialType<Pick<FolderApiType, 'name'|'path'>&{slug: string}>): Promise<FolderApiType> {
     if (!req.user) {
       throw new ApiException('Not authorized', 401);
     }
@@ -51,7 +51,7 @@ class FolderController extends Controller {
       await this.folderService.setSlug(folder, folder.slug) // in case of slug conflict when moving folder
     }
     folder.user = req.user
-    if (body.slug && folder.slug !== body.slug) {
+    if (folder.slug !== body.slug) {
       await this.folderService.setSlug(folder, body.slug)
     }
 

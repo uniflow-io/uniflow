@@ -8,7 +8,8 @@ import { pathTo } from '../routes';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { AuthDispath } from './auth';
 import { FolderApiType, ProgramApiType, UserApiType } from '../models/api-type-interface';
-import { SlugType, UuidType } from '../models/type-interface';
+import { PageNumberType, PathType, SlugType, UuidType } from '../models/type-interface';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception copy';
 
 const container = new Container();
 const api = container.get(Api);
@@ -64,15 +65,21 @@ const defaultState = {
   uid: undefined,
 };
 
-const fetchCollection = async (uid, type, path, page, config, items = []) => {
-  const response = await request.get(
-    `${api.getBaseUrl()}/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`,
-    config
-  );
+const fetchCollection = async (uid: UuidType, type: 'programs'|'folders', path?: PathType, page: PageNumberType = 1, token?: string, items = []) => {
+  let config = {};
+  if (token) {
+    config = {
+      headers: {
+        'Uniflow-Authorization': `Bearer ${token}`,
+      },
+    };
+  }
+
+  const response = await request.get(`${api.getBaseUrl()}/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`, config);
   const { data, total } = response.data;
   items = items.concat(data);
   if (items.length < total) {
-    return await fetchCollection(uid, type, path, page + 1, config, items);
+    return await fetchCollection(uid, type, path, page + 1, token, items);
   }
 
   return items;
@@ -152,7 +159,7 @@ export const getFeedItem = (feed: FeedProviderState, slug = feed.slug): FeedItem
 
 export const toFeedPath = (entity: ProgramFeedType|FolderFeedType, user: UserProviderState, toParent: boolean = false) => {
   const paths = entity.path === '/' ? [] : entity.path.split('/').slice(1);
-  if (!toParent) {
+  if (!toParent && entity.slug) {
     paths.push(entity.slug);
   }
 
@@ -220,15 +227,6 @@ export const getOrderedFeed = (feed: FeedProviderState, filter?: string) => {
 
 export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
-    let config = {};
-    if (token) {
-      config = {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        },
-      };
-    }
-
     const path = `/${paths.join('/')}`;
     const parentPath = `/${paths.slice(0, -1).join('/')}`;
     const parentParentPath = `/${paths.slice(0, -2).join('/')}`;
@@ -244,7 +242,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
     commitClearFeed()(dispatch);
 
     if (paths.length > 0) {
-      const folders = await fetchCollection(uid, 'folders', parentPath, 1, config);
+      const folders = await fetchCollection(uid, 'folders', parentPath, 1, token);
       parentFolderFound = false;
       for (const folder of folders) {
         if (folder.path === parentPath && folder.slug === slug) {
@@ -269,8 +267,8 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
 
     try {
       const [folders, programs] = await Promise.all([
-        fetchCollection(uid, 'folders', feedFolderPath, 1, config),
-        fetchCollection(uid, 'programs', feedProgramPath, 1, config),
+        fetchCollection(uid, 'folders', feedFolderPath, 1, token),
+        fetchCollection(uid, 'programs', feedProgramPath, 1, token),
       ]);
       if (parentFolderFound === true || parentFolderFound === undefined) {
         for (const folder of folders) {
@@ -295,7 +293,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
         })(dispatch)
       }
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -353,7 +351,7 @@ export const createProgram = (program: ProgramFeedType, uid: UuidType, token: st
 
       return program;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -384,7 +382,7 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
 
       return program;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -399,7 +397,7 @@ export const getProgramData = (program: ProgramFeedType, token?: string) => {
       const data = await api.getProgramFlows({uid: program.uid}, {token})
       return data.data;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -408,7 +406,7 @@ export const getProgramData = (program: ProgramFeedType, token?: string) => {
   };
 };
 
-export const setProgramData = (program: ProgramFeedType, token?: string) => {
+export const setProgramData = (program: ProgramFeedType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const body = {
       data: program.data,
@@ -425,7 +423,7 @@ export const setProgramData = (program: ProgramFeedType, token?: string) => {
 
       return data;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -446,7 +444,7 @@ export const deleteProgram = (program: ProgramFeedType, token: string) => {
 
       return isDeleted;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -457,17 +455,8 @@ export const deleteProgram = (program: ProgramFeedType, token: string) => {
 
 export const getFolderTree = (uid: UuidType, token?: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
-    let config = {};
-    if (token) {
-      config = {
-        headers: {
-          'Uniflow-Authorization': `Bearer ${token}`,
-        },
-      };
-    }
-
     try {
-      const folders = await fetchCollection(uid, 'folders', null, 1, config);
+      const folders = await fetchCollection(uid, 'folders', undefined, 1, token);
       const tree = ['/'];
       for (const folder of folders) {
         tree.push(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`);
@@ -475,7 +464,7 @@ export const getFolderTree = (uid: UuidType, token?: string) => {
 
       return tree.sort();
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -484,7 +473,7 @@ export const getFolderTree = (uid: UuidType, token?: string) => {
   };
 };
 
-export const createFolder = (folder: FolderFeedType, uid: UuidType, token?: string) => {
+export const createFolder = (folder: FolderFeedType, uid: UuidType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const data = {
       name: folder.name,
@@ -502,7 +491,7 @@ export const createFolder = (folder: FolderFeedType, uid: UuidType, token?: stri
 
       return folder;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -511,7 +500,7 @@ export const createFolder = (folder: FolderFeedType, uid: UuidType, token?: stri
   };
 };
 
-export const updateParentFolder = (folder: FolderFeedType, token?: string) => {
+export const updateParentFolder = (folder: FolderFeedType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const data = {
       name: folder.name,
@@ -526,7 +515,7 @@ export const updateParentFolder = (folder: FolderFeedType, token?: string) => {
 
       return folder;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;
@@ -535,7 +524,7 @@ export const updateParentFolder = (folder: FolderFeedType, token?: string) => {
   };
 };
 
-export const deleteParentFolder = (folder: FolderFeedType, token?: string) => {
+export const deleteParentFolder = (folder: FolderFeedType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     try {
       const isDeleted = await api.deleteFolder({uid: folder.uid}, {token})
@@ -544,7 +533,7 @@ export const deleteParentFolder = (folder: FolderFeedType, token?: string) => {
 
       return isDeleted;
     } catch (error) {
-      if (error.request.status === 401) {
+      if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
       } else {
         throw error;

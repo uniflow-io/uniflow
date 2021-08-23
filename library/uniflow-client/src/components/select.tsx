@@ -9,7 +9,7 @@ export interface SelectProps {
   className: string;
   id: string;
   multiple?: boolean;
-  options: string[];
+  options: { value: string, label: string }[];
   edit?: boolean;
 }
 

@@ -10,5 +10,5 @@ export default ({ location }: PageProps) => {
     description: 'Login Github',
   });
 
-  return <GithubLoginPage location={location} />;
+  return <GithubLoginPage />;
 };

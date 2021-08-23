@@ -10,5 +10,5 @@ export default ({ location }: PageProps) => {
     description: 'Login Facebook',
   });
 
-  return <FacebookLoginPage location={location} />;
+  return <FacebookLoginPage />;
 };

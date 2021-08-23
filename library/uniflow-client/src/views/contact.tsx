@@ -1,11 +1,11 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import { ApiException } from '../models';
+import { ApiValidateException } from '../models';
 import { pathTo } from '../routes';
 import { useState } from 'react';
 import { Api } from '../services';
 import Container from '../container';
-import { ApiExceptionErrors } from '../models/api-exception';
+import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 
 const container = new Container();
 const api = container.get(Api);
@@ -18,7 +18,7 @@ export interface ContactState {}
 function Contact(props: ContactProps) {
   const [email, setEmail] = useState<string>('')
   const [message, setMessage] = useState<string>('')
-  const [errors, setErrors] = useState<ApiExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
   const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
 
   const onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -39,7 +39,7 @@ function Contact(props: ContactProps) {
         setState('form-success');
       }
     } catch (error) {
-      if (error instanceof ApiException) {
+      if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors })
         setState('form');
       }

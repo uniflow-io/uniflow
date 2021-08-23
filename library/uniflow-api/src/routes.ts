@@ -100,9 +100,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PartialType_Pick_FolderApiType.name-or-path-or-slug__": {
+    "PartialType_Pick_FolderApiType.name-or-path_-and-_slug-string__": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"ref":"NotEmptyStringType"},"path":{"ref":"PathType"},"slug":{"ref":"SlugType"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"name":{"ref":"NotEmptyStringType"},"path":{"ref":"PathType"},"slug":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "LeadApiType": {
@@ -156,7 +156,7 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"integer","validators":{"minimum":{"value":1},"maximum":{"value":100}},"default":"10"},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PartialType_ProgramApiType_": {
+    "PartialType_ProgramApiType-and-_slug-string__": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"name":{"ref":"NotEmptyStringType"},"slug":{"ref":"SlugType"},"path":{"ref":"PathType"},"clients":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"tags":{"dataType":"array","array":{"dataType":"refAlias","ref":"NotEmptyStringType"}},"description":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"isPublic":{"dataType":"boolean"},"user":{"ref":"UuidOrUsernameType"},"created":{"dataType":"datetime"},"updated":{"dataType":"datetime"}},"validators":{}},
     },
@@ -168,7 +168,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ROLE": {
         "dataType": "refEnum",
-        "enums": ["USER","SUPER_ADMIN"],
+        "enums": ["ROLE_USER","ROLE_SUPER_ADMIN"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserApiType": {
@@ -335,7 +335,7 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
-                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_Pick_FolderApiType.name-or-path-or-slug__"},
+                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_Pick_FolderApiType.name-or-path_-and-_slug-string__"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -532,7 +532,7 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     req: {"in":"request","name":"req","required":true,"dataType":"object"},
                     uid: {"in":"path","name":"uid","required":true,"ref":"UuidType"},
-                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_ProgramApiType_"},
+                    body: {"in":"body","name":"body","required":true,"ref":"PartialType_ProgramApiType-and-_slug-string__"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

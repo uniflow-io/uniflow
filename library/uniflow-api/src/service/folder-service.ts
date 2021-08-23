@@ -34,8 +34,8 @@ export default class FolderService {
     return await this.folderRepository.findOneByUserAndPath(user, paths)
   }
   
-  public async setSlug(entity: FolderEntity | ProgramEntity, slug: string): Promise<FolderEntity | ProgramEntity> {
-    slug = TypeModel.generateSlug(slug)
+  public async setSlug(entity: FolderEntity | ProgramEntity, slug?: string): Promise<FolderEntity | ProgramEntity> {
+    slug = TypeModel.generateSlug(slug || entity.name)
     
     let parent = undefined
     if(entity instanceof FolderEntity) {

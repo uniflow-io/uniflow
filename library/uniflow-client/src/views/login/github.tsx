@@ -4,18 +4,18 @@ import { pathTo } from '../../routes';
 import { githubLogin } from '../../contexts/auth';
 import { commitAddLog } from '../../contexts/logs';
 import { useAuth, useLogs } from '../../contexts';
-import { WindowLocation } from '@reach/router';
+import { WindowLocation, useLocation } from '@reach/router';
 
 export interface GithubLoginProps {
-  location: WindowLocation
 }
 
 function GithubLogin(props: GithubLoginProps) {
   const { authDispatch, authRef } = useAuth()
   const { logsDispatch } = useLogs()
+  const location = useLocation()
 
   const getCode = ():string|null => {
-    const m = props.location.search.match(/code=([^&]+)/);
+    const m = location.search.match(/code=([^&]+)/);
     if (m) {
       return m[1];
     }

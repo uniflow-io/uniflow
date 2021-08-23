@@ -10,5 +10,5 @@ export default ({ location }: PageProps) => {
     description: 'Manage your notifications',
   });
 
-  return <NotificationPage location={location} />;
+  return <NotificationPage />;
 };
