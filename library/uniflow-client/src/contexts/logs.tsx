@@ -20,7 +20,7 @@ export interface LogsProviderProps {
 
 export type LogsProviderState = {[type: string]: Log}
 
-let id = 1;
+let logId = 0;
 const defaultState = {};
 
 export const getNewLogs = (logs: LogsProviderState) => {
@@ -33,21 +33,19 @@ export const getNewLogs = (logs: LogsProviderState) => {
 };
 
 export const commitAddLog = (message: string) => {
-  return async (dispatch: LogsDispath) => {
+  return (dispatch: LogsDispath) => {
     dispatch({
       type: LogsActionTypes.COMMIT_ADD_LOG,
       message,
     });
-    return Promise.resolve();
   };
 };
 export const commitReadLog = (id: number) => {
-  return async (dispatch: LogsDispath) => {
+  return (dispatch: LogsDispath) => {
     dispatch({
       type: LogsActionTypes.COMMIT_READ_LOG,
       id,
     });
-    return Promise.resolve();
   };
 };
 
@@ -69,16 +67,13 @@ export function LogsProvider(props: LogsProviderProps) {
   ): LogsProviderState => {
     switch (action.type) {
       case LogsActionTypes.COMMIT_ADD_LOG:
-        const item = new Log({
-          id,
-          message: action.message,
-          status: LOG_STATUS.NEW,
-        });
-        id++;
-  
-        state[item.id] = item;
         return {
           ...state,
+          ...{[logId]: new Log({
+            id: logId++,
+            message: action.message,
+            status: LOG_STATUS.NEW,
+          })}
         };
       case LogsActionTypes.COMMIT_READ_LOG:
         return {

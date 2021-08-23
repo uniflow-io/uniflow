@@ -33,7 +33,7 @@ function FacebookLogin(props: FacebookLoginProps) {
       await facebookLogin(accessToken, authRef.current.token)(authDispatch);
       if (authRef.current.isAuthenticated) {
         return navigate(pathTo('feed'));
-      } else {
+      } else if(authRef.current.statusText) {
         commitAddLog(authRef.current.statusText)(logsDispatch);
         return navigate(pathTo('login'));
       }

@@ -166,6 +166,11 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"string","validators":{"pattern":{"errorMsg":"Api key format is not valid","value":"^[0-9a-z]{32}$"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ROLE": {
+        "dataType": "refEnum",
+        "enums": ["USER","SUPER_ADMIN"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserApiType": {
         "dataType": "refObject",
         "properties": {
@@ -177,7 +182,7 @@ const models: TsoaRoute.Models = {
             "facebookId": {"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}],"required":true},
             "githubId": {"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}],"required":true},
             "apiKey": {"dataType":"union","subSchemas":[{"ref":"ApiKeyType"},{"dataType":"enum","enums":[null]}],"required":true},
-            "roles": {"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["ROLE_USER"]},{"dataType":"enum","enums":["ROLE_SUPER_ADMIN"]}]},"required":true},
+            "roles": {"dataType":"array","array":{"dataType":"refEnum","ref":"ROLE"},"required":true},
             "links": {"dataType":"nestedObjectLiteral","nestedProperties":{"lead":{"dataType":"string"}},"required":true},
         },
         "additionalProperties": false,
@@ -185,7 +190,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PartialType_UserApiType_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"username":{"dataType":"union","subSchemas":[{"ref":"UsernameType"},{"dataType":"enum","enums":[null]}]},"email":{"ref":"EmailType"},"firstname":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"lastname":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"facebookId":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"githubId":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"apiKey":{"dataType":"union","subSchemas":[{"ref":"ApiKeyType"},{"dataType":"enum","enums":[null]}]},"roles":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["ROLE_USER"]},{"dataType":"enum","enums":["ROLE_SUPER_ADMIN"]}]}},"links":{"dataType":"nestedObjectLiteral","nestedProperties":{"lead":{"dataType":"string"}}}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"uid":{"ref":"UuidType"},"username":{"dataType":"union","subSchemas":[{"ref":"UsernameType"},{"dataType":"enum","enums":[null]}]},"email":{"ref":"EmailType"},"firstname":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"lastname":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"facebookId":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"githubId":{"dataType":"union","subSchemas":[{"ref":"NotEmptyStringType"},{"dataType":"enum","enums":[null]}]},"apiKey":{"dataType":"union","subSchemas":[{"ref":"ApiKeyType"},{"dataType":"enum","enums":[null]}]},"roles":{"dataType":"array","array":{"dataType":"refEnum","ref":"ROLE"}},"links":{"dataType":"nestedObjectLiteral","nestedProperties":{"lead":{"dataType":"string"}}}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ConfigApiType": {

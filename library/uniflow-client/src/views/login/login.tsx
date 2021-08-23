@@ -35,9 +35,9 @@ function Login(props: LoginProps) {
 
     await login(username, password)(authDispatch);
     if (authRef.current.isAuthenticated) {
-      return navigate(pathTo('feed'));
-    } else {
-      return commitAddLog(authRef.current.statusText)(logsDispatch);
+      navigate(pathTo('feed'));
+    } else if(authRef.current.statusText) {
+      commitAddLog(authRef.current.statusText)(logsDispatch);
     }
   };
 

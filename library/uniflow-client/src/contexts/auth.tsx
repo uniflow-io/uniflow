@@ -1,7 +1,6 @@
 import React, { MutableRefObject, Reducer, RefObject, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
 import Container from '../container';
 import { Api } from '../services';
-import request from 'axios';
 import jwtDecode from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 
@@ -123,7 +122,7 @@ export const login = (username: string, password: string) => {
         })(dispatch)
       }
     } catch (error) {
-      commitLoginFailure(error)(dispatch);
+      commitLoginFailure(error.response)(dispatch);
     }
   };
 };
@@ -149,7 +148,7 @@ export const facebookLogin = (accessToken: string, token?: string) => {
         })(dispatch)
       }
     } catch (error) {
-      commitLoginFailure(error)(dispatch);
+      commitLoginFailure(error.response)(dispatch);
     }
   };
 };
@@ -174,7 +173,7 @@ export const githubLogin = (code: string, token?: string) => {
         })(dispatch)
       }
     } catch (error) {
-      commitLoginFailure(error)(dispatch);
+      commitLoginFailure(error.response)(dispatch);
     }
   };
 };
@@ -186,7 +185,7 @@ export const register = (email: string, password: string) => {
       await api.createUser({email, password})
       await login(email, password)(dispatch);
     } catch (error) {
-      commitLoginFailure(error, error.response.data.message)(dispatch);
+      commitLoginFailure(error.response, error.response.data.message)(dispatch);
     }
   };
 };
