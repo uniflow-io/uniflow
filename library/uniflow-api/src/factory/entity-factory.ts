@@ -4,6 +4,7 @@ import * as argon2 from 'argon2';
 import AbstractFactory from './abstract-factory';
 import { ClientFactoryInterface, ConfigFactoryInterface, ContactFactoryInterface, FolderFactoryInterface, LeadFactoryInterface, ProgramClientFactoryInterface, ProgramFactoryInterface, ProgramTagFactoryInterface, TagFactoryInterface, UserFactoryInterface } from './interfaces';
 import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramClientEntity, ProgramEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
+import { ROLE } from '../model/api-type-interface';
 
 @Service()
 export class ClientFactory extends AbstractFactory<ClientEntity> implements ClientFactoryInterface {
@@ -57,7 +58,7 @@ export class TagFactory extends AbstractFactory<TagEntity> implements TagFactory
 export class UserFactory extends AbstractFactory<UserEntity> implements UserFactoryInterface {
     public async create(entity?: UserEntity|Object): Promise<UserEntity> {
         const user = await super.create(entity)
-        user.role = user.role ?? 'ROLE_USER'
+        user.role = user.role ?? ROLE.USER
 
         if(user.plainPassword === null) {
             const salt = randomBytes(32);

@@ -16,6 +16,7 @@ import { Path } from '../services';
 import { Env } from '../services';
 import { useEffect } from 'react';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
+import { ROLE } from '../models/api-type-interface';
 
 const container = new Container();
 const path = container.get(Path);
@@ -259,7 +260,7 @@ function Header(props: HeaderProps) {
                 Flows
               </Link>
             </li>
-            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+            {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${active === 'dashboard' ? ' active' : ''}`}
@@ -282,7 +283,7 @@ function Header(props: HeaderProps) {
                 Docs
               </Link>
             </li>
-            {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+            {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${active === 'settings' ? ' active' : ''}`}
@@ -292,7 +293,7 @@ function Header(props: HeaderProps) {
                 </Link>
               </li>
             )}
-            {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+            {auth.isAuthenticated && isGranted(user, ROLE.SUPER_ADMIN) && (
               <li className="nav-item">
                 <Link
                   className={`nav-link${active === 'admin' ? ' active' : ''}`}
@@ -417,7 +418,7 @@ function Header(props: HeaderProps) {
               </Link>
             </li>
           )}
-          {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+          {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
             <li className="nav-item">
               <a
                 className={`nav-link`}
@@ -436,7 +437,7 @@ function Header(props: HeaderProps) {
             Flows
           </Link>
         </li>
-        {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+        {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
           <li className="nav-item">
             <Link
               className={`nav-link${active === 'dashboard' ? ' active' : ''}`}
@@ -459,7 +460,7 @@ function Header(props: HeaderProps) {
             Docs
           </Link>
         </li>
-        {auth.isAuthenticated && isGranted(user, 'ROLE_USER') && (
+        {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
           <li className="nav-item">
             <Link
               className={`nav-link${active === 'settings' ? ' active' : ''}`}
@@ -469,7 +470,7 @@ function Header(props: HeaderProps) {
             </Link>
           </li>
         )}
-        {auth.isAuthenticated && isGranted(user, 'ROLE_SUPER_ADMIN') && (
+        {auth.isAuthenticated && isGranted(user, ROLE.SUPER_ADMIN) && (
           <li className="nav-item">
             <Link className={`nav-link${active === 'admin' ? ' active' : ''}`} to={pathTo('admin')}>
               Admin

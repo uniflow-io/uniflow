@@ -4,7 +4,7 @@ import { ApiException } from '../exception';
 import { LeadRepository, UserRepository } from '../repository';
 import { TypeModel } from '../model';
 import { UserFactory } from '../factory';
-import { UserApiType } from '../model/interfaces';
+import { ROLE, UserApiType } from '../model/interfaces';
 
 @Service()
 export default class UserService {
@@ -20,9 +20,9 @@ export default class UserService {
     }
   
     let roles = []
-    if (user.role === 'ROLE_SUPER_ADMIN') {
-      roles.push('ROLE_USER')
-      roles.push('ROLE_SUPER_ADMIN')
+    if (user.role === ROLE.SUPER_ADMIN) {
+      roles.push(ROLE.USER)
+      roles.push(ROLE.SUPER_ADMIN)
     } else {
       roles.push(user.role)
     }

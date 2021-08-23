@@ -24,6 +24,7 @@ import { requireAuthentication } from './helpers';
 import { Path } from './services';
 import Container from './container';
 import { ComponentType } from 'react';
+import { ROLE } from './models/api-type-interface'
 
 const container = new Container();
 const path = container.get(Path);
@@ -116,7 +117,7 @@ const routes: {[key: string]: {path: string, exact?: boolean, component: Compone
   },
   admin: {
     path: '/admin',
-    component: requireAuthentication(Admin, 'ROLE_SUPER_ADMIN'),
+    component: requireAuthentication(Admin, ROLE.SUPER_ADMIN),
   },
   feed: {
     path: '/me/feed/:slug1?/:slug2?/:slug3?/:slug4?/:slug5?',

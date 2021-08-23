@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { FolderEntity, ProgramEntity } from "../entity";
+import { ROLE } from '../model/api-type-interface';
 
 @Entity({
   name: 'user'
@@ -91,8 +92,8 @@ export default class UserEntity {
     length: 255,
     nullable: false,
   })
-  role: 'ROLE_USER'|'ROLE_SUPER_ADMIN';
-  roles: ('ROLE_USER'|'ROLE_SUPER_ADMIN')[];
+  role: ROLE;
+  roles: ROLE[];
 
   @OneToMany(type => ProgramEntity, program => program.user, {
     cascade: ['insert']

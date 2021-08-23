@@ -55,6 +55,11 @@ export interface TagApiType {
     name: NotEmptyStringType
 }
 
+export enum ROLE {
+    USER = 'USER',
+    SUPER_ADMIN = 'SUPER_ADMIN',
+}
+
 export interface UserApiType {
     uid: UuidType
     username: UsernameType | null
@@ -64,7 +69,7 @@ export interface UserApiType {
     facebookId: NotEmptyStringType | null
     githubId: NotEmptyStringType | null
     apiKey: ApiKeyType | null
-    roles: ('ROLE_USER' | 'ROLE_SUPER_ADMIN')[]
+    roles: ROLE[]
     links: {
         lead?: string
     }

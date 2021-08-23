@@ -6,6 +6,7 @@ import uniq from 'lodash/uniq';
 import { AuthDispath, commitLogout } from './auth';
 import { commitAddLog, LogsDispath } from './logs';
 import { useReducerRef } from '../hooks/use-reducer-ref';
+import { ROLE } from '../models/api-type-interface';
 
 const container = new Container();
 const api = container.get(Api);
@@ -154,12 +155,12 @@ export const isGranted = (user: UserProviderState, attributes: string | string[]
     attributes = [attributes];
   }
 
-  let roles = ['ROLE_USER'];
+  let roles = [ROLE.USER];
   for (let i = 0; i < user.roles.length; i++) {
     const role = user.roles[i];
-    if (role === 'ROLE_SUPER_ADMIN') {
-      roles.push('ROLE_USER');
-      roles.push('ROLE_SUPER_ADMIN');
+    if (role === ROLE.SUPER_ADMIN) {
+      roles.push(ROLE.USER);
+      roles.push(ROLE.SUPER_ADMIN);
     } else {
       roles.push(role);
     }

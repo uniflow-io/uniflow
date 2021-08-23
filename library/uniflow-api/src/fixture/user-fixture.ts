@@ -5,6 +5,7 @@ import { FixtureInterface } from './interfaces';
 import { UserRepository } from '../repository';
 import ReferencesFixture from './references-fixture';
 import { FakeUserFactory } from '../factory';
+import { ROLE } from '../model/api-type-interface';
 
 @Service()
 export default class UserFixture implements FixtureInterface {
@@ -31,7 +32,7 @@ export default class UserFixture implements FixtureInterface {
         await this.save(await this.userFactory.create({
             email: 'admin@uniflow.io',
             plainPassword: 'admin_password',
-            role: 'ROLE_SUPER_ADMIN',
+            role: ROLE.SUPER_ADMIN,
         }))
 
         for(let i = 0; i < 10; i++) {

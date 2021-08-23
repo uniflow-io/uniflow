@@ -7,6 +7,7 @@ import { AppConfig } from '../config';
 import { UserRepository } from '../repository';
 import { UserService } from '../service';
 import { UserEntity } from "../entity";
+import { ROLE } from "../model/api-type-interface";
 
 export async function expressAuthentication(
     request: express.Request,
@@ -59,11 +60,11 @@ export async function expressAuthentication(
       
       for(const scope of scopes ?? []) {
         if(scope === 'user') {
-          if(!user || !userService.isGranted(user, 'ROLE_USER')) {
+          if(!user || !userService.isGranted(user, ROLE.USER)) {
             return Promise.reject(new ApiException('Not authorized', 401))
           }
         } else if(scope === 'same-user') {
-          if(!user || !userService.isGranted(user, 'ROLE_USER') || !request.params.uid) {
+          if(!user || !userService.isGranted(user, ROLE.USER) || !request.params.uid) {
             return Promise.reject(new ApiException('Not authorized', 401))
           }
   
@@ -72,7 +73,7 @@ export async function expressAuthentication(
             return Promise.reject(new ApiException('Not authorized', 401))
           }
         } else if(scope === 'admin') {
-          if(!user || !userService.isGranted(user, 'ROLE_SUPER_ADMIN')) {
+          if(!user || !userService.isGranted(user, ROLE.SUPER_ADMIN)) {
             return Promise.reject(new ApiException('Not authorized', 401))
           }
         }

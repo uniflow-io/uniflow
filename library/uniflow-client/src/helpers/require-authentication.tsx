@@ -4,8 +4,9 @@ import { isGranted, UserProviderState, useUser } from '../contexts/user';
 import { navigate } from 'gatsby';
 import { useAuth } from '../contexts';
 import { useEffect } from 'react';
+import { ROLE } from '../models/api-type-interface';
 
-export default function requireAuthentication<T>(Component: ComponentType<T>, role = 'ROLE_USER') {
+export default function requireAuthentication<T>(Component: ComponentType<T>, role: ROLE = ROLE.USER) {
   function requireAuthenticationHelper(props: T) {
     const { auth } = useAuth()
     const { user } = useUser()
