@@ -15,15 +15,9 @@ function UserManager(props: UserManagerProps) {
   const { auth, authDispatch } = useAuth()
   const { userDispatch } = useUser()
   const { feed, feedDispatch } = useFeed()
+  const { location } = props;
 
-  const onFetchUser = async (uid, token) => {
-    await Promise.all([fetchSettings(uid, token)(userDispatch, authDispatch)]);
-
-    const { location } = props;
-    onLocation(location);
-  };
-
-  const isCachedFeed = (uid, paths = []) => {
+  const isCachedFeed = (uid: string, paths: string[] = []) => {
     if (
       feed.uid === undefined ||
       feed.slug === undefined ||
@@ -41,7 +35,7 @@ function UserManager(props: UserManagerProps) {
     if (paths.length === 0 && feed.parentFolder === null) {
       return true;
     } else if (paths.length === 1 && feed.parentFolder === null) {
-      if (item.type === 'folder') {
+      if (item && item.type === 'folder') {
         return false;
       }
 
@@ -63,7 +57,7 @@ function UserManager(props: UserManagerProps) {
         commitSetSlugFeed(null)(feedDispatch);
         return true;
       } else if (parentFolderRealPath === parentPath) {
-        if (item.type === 'folder') {
+        if (item && item.type === 'folder') {
           return false;
         }
 
@@ -76,20 +70,20 @@ function UserManager(props: UserManagerProps) {
     return false;
   };
 
-  const onFetchItem = async (uid, paths = []) => {
+  const onFetchItem = async (uid: string, paths: string[] = []) => {
     if (isFetching || isCachedFeed(uid, paths)) {
       return;
     }
 
     setIsFetching(true)
 
-    const token = auth.isAuthenticated ? auth.token : null;
-    await fetchFeed(uid, paths, token)(feedDispatch);
+    const token = auth.isAuthenticated ? auth.token : undefined;
+    await fetchFeed(uid, paths, token)(feedDispatch, userDispatch, authDispatch);
 
     setIsFetching(false)
   };
 
-  const onLocation = (location) => {
+  const onLocation = async (location: WindowLocation) => {
     const match = matchRoute(location.pathname);
 
     if (match) {
@@ -97,23 +91,27 @@ function UserManager(props: UserManagerProps) {
       const paths = [params.slug1, params.slug2, params.slug3, params.slug4, params.slug5].filter(
         (path) => !!path
       );
-      if (match.route === 'feed' && auth.isAuthenticated) {
-        onFetchItem(auth.uid, paths);
+      if (match.route === 'feed' && auth.isAuthenticated && auth.uid) {
+        await onFetchItem(auth.uid, paths);
       } else if (match.route === 'userFeed') {
-        onFetchItem(params.uid, paths);
+        await onFetchItem(params.uid, paths);
       }
     }
   };
 
-  useEffect(() => {
-    const { location } = props;
+  const onFetchUser = async (uid: string, token: string) => {
+    await Promise.all([fetchSettings(uid, token)(userDispatch, authDispatch)]);
+  };
 
-    if (auth.isAuthenticated) {
+  useEffect(() => {
+    if (auth.isAuthenticated && auth.uid && auth.token) {
       onFetchUser(auth.uid, auth.token);
     }
-
-    onLocation(location);
   }, [auth.token])
+
+  useEffect(() => {
+    onLocation(location);
+  }, [location])
 
   return <></>;
 }

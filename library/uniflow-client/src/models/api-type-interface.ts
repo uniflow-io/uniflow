@@ -56,8 +56,8 @@ export interface TagApiType {
 }
 
 export enum ROLE {
-    USER = 'USER',
-    SUPER_ADMIN = 'SUPER_ADMIN',
+    USER = 'ROLE_USER',
+    SUPER_ADMIN = 'ROLE_SUPER_ADMIN',
 }
 
 export interface UserApiType {
