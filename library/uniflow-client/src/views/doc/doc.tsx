@@ -69,7 +69,7 @@ function Doc(props: DocProps) {
           </div>
 
           <div className="row">
-            <div className="col-auto me-auto">
+            <div className="col-auto">
               {previous && (
                 <Link
                   to={pathTo('doc', previous.fields.slug ? { slug: previous.fields.slug } : {})}
@@ -79,7 +79,7 @@ function Doc(props: DocProps) {
                 </Link>
               )}
             </div>
-            <div className="col-auto">
+            <div className="col-auto ms-auto">
               {next && (
                 <Link
                   to={pathTo('doc', next.fields.slug ? { slug: next.fields.slug } : {})}

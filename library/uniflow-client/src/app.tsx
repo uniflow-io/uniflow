@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { AppProvider, AuthProvider, FeedProvider, LogsProvider, GraphProvider, UserProvider } from './contexts';
 import { composeWrappers } from './helpers';
 
@@ -12,5 +12,7 @@ export default ({ element }) => {
     props => <UserProvider>{props.children}</UserProvider>,
   ]);
 
-  return <Providers>{element}</Providers>
+  return <StrictMode>
+    <Providers>{element}</Providers>
+  </StrictMode>
 }

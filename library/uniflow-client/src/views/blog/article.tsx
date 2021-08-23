@@ -138,14 +138,14 @@ function Article(props:ArticleProps) {
       </div>
 
       <div className="row">
-        <div className="col-auto me-auto">
+        <div className="col-auto">
           {previous && (
             <Link to={pathTo('article', { slug: previous.fields.slug })} className="pull-left">
               <FontAwesomeIcon icon={faArrowLeft} /> {previous.frontmatter.title}
             </Link>
           )}
         </div>
-        <div className="col-auto">
+        <div className="col-auto ms-auto">
           {next && (
             <Link to={pathTo('article', { slug: next.fields.slug })} className="pull-right">
               {next.frontmatter.title} <FontAwesomeIcon icon={faArrowRight} />

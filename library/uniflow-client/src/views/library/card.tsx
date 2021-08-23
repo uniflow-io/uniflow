@@ -50,7 +50,7 @@ function Card(props: CardProps) {
           <div className="row mb-3">
             <div className="col-sm-12">
               <div className="row text-secondary">
-                <div className="col-auto me-auto">
+                <div className="col-auto">
                   <p>
                     <a href={repository} target="_blank" rel="noopener noreferrer">
                       <FontAwesomeIcon icon={faGithub} /> View on GitHub
@@ -65,7 +65,7 @@ function Card(props: CardProps) {
                   ))}
                 </div>
                 {card.official && (
-                  <div className="col-auto">
+                  <div className="col-auto ms-auto">
                     <span>
                       <GatsbyImage
                         image={logo.childImageSharp.gatsbyImageData}

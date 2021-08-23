@@ -64,7 +64,7 @@ const ArticleItem = ({ article }: ArticleItemProps) => (
       <h4 className="card-title text-center">{article.frontmatter.title}</h4>
       <p className="card-text text-center">{article.excerpt}</p>
       <div className="row pt-1">
-        <div className="col-auto me-auto">
+        <div className="col-auto">
           <small>
             Posted {article.frontmatter.date} by
             <GatsbyImage
@@ -86,7 +86,7 @@ const ArticleItem = ({ article }: ArticleItemProps) => (
             <i>{article.timeToRead} min read</i>
           </small>
         </div>
-        <div className="col-auto">
+        <div className="col-auto ms-auto">
           {article.frontmatter.tags.map((tag, k) => (
             <Link to={pathTo('tag', { tag: tag })} key={k} className="btn btn-sm btn-primary">
               <FontAwesomeIcon icon={faTag} /> {tag}
