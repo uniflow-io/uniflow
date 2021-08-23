@@ -19,6 +19,7 @@ import { useEffect } from 'react';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 import { ROLE } from '../models/api-type-interface';
 import { Log } from '../models';
+import Alert, { AlertType } from '../components/alert'
 
 const container = new Container();
 const path = container.get(Path);
@@ -62,11 +63,11 @@ function MessengerPlatform() {
   );
 }
 
-interface AlertProps {
+interface DisplayLogProps {
   log: Log
 }
 
-function Alert(props: AlertProps) {
+function DisplayLog(props: DisplayLogProps) {
   const { log } = props;
   const { logsDispatch } = useLogs();
 
@@ -83,28 +84,18 @@ function Alert(props: AlertProps) {
   };
 
   return (
-    <div className="alert alert-danger alert-dismissible fade show" role="alert">
-      <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlinkHref="#exclamation-triangle-fill"/></svg>
-      {log.message}
-      <button
-        type="button"
-        className="btn-close"
-        data-dismiss="alert"
-        aria-label="Close"
-        onClick={onClose}
-      ></button>
-    </div>
+    <Alert type={AlertType.DANGER} onClose={onClose}>{log.message}</Alert>
   );
 }
 
-function Alerts() {
+function DisplayLogs() {
   const { logs } = useLogs();
   const newLogs = getNewLogs(logs)
 
   return (
     <>
       {Object.keys(newLogs).map((log, index) => (
-        <Alert key={index} log={logs[log]} />
+        <DisplayLog key={index} log={logs[log]} />
       ))}
     </>
   );
@@ -584,7 +575,7 @@ function Layout(props: LayoutProps) {
             </symbol>
           </svg>
           <Header logo={logo} changeLogTags={changeLogTags} />
-          <Alerts />
+          <DisplayLogs />
           {props.children}
           <Footer />
         </>

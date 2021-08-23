@@ -53,20 +53,6 @@ export default class UserService {
       throw new ApiException('Not authorized', 401);
     }
   }
-  
-  public async setUsername(user: UserEntity, username: string): Promise<UserEntity> {
-    username = TypeModel.generateSlug(username)
-
-    const existUser = await this.userRepository.findOne({username})
-    if(existUser) {
-      const suffix = Math.floor(Math.random() * 1000) + 1 // returns a random integer from 1 to 1000
-      return await this.setUsername(user, `${username}-${suffix}`)
-    }
-
-    user.username = username
-
-    return user
-  }
 
   public async isValid(user: UserEntity): Promise<boolean> {
     return true

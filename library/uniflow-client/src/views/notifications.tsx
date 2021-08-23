@@ -8,6 +8,8 @@ import { WindowLocation, useLocation } from '@reach/router';
 import { Api } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import Alert, { AlertType } from '../components/alert';
+import FormInput, { FormInputType } from '../components/form-input';
 
 const container = new Container();
 const api = container.get(Api);
@@ -31,12 +33,11 @@ function Notifications(props: NotificationsProps) {
     optinGithub: false,
     githubUsername: null,
   })
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'optinNewsletter'|'optinBlog'|'optinGithub'>>({})
   const [state, setState] = useState<'loading'|'not-found'|'form'|'form-submit'|'form-success'|'unsubscribe-success'>('loading')
+  const location = useLocation();
 
   useEffect(() => {
-    const location = useLocation();
-
     const uid = getId();
 
     (async () => {
@@ -56,7 +57,7 @@ function Notifications(props: NotificationsProps) {
           }
         } else if (match.route === 'notificationManage') {
           try {
-            const data = await api.getLead(uid);
+            const data = await api.getLead({uid});
             setLead({
               ...lead,
               ...{
@@ -81,7 +82,7 @@ function Notifications(props: NotificationsProps) {
   }, [])
 
   const getId = () => {
-    const m = props.location.search.match(/id=([^&]+)/);
+    const m = location.search.match(/id=([^&]+)/);
     if (m) {
       return m[1];
     }
@@ -130,66 +131,48 @@ function Notifications(props: NotificationsProps) {
       <h3 className="box-title">Notifications</h3>
       {state === 'loading' && <p className="text-center">Loading notifications</p>}
       {state === 'not-found' && (
-        <div className="alert alert-danger text-center" role="alert">
-          Notifications coudn't be restored.
-          <br />
+        <Alert type={AlertType.DANGER}>
+          Notifications coudn't be restored.<br />
           You may check your notification link.
-        </div>
+        </Alert>
+      )}
+      {state === 'form-success' && (
+        <Alert type={AlertType.SUCCESS}>
+          Your notifications settings have been saved.
+        </Alert>
+      )}
+      {state === 'unsubscribe-success' && (
+        <Alert type={AlertType.SUCCESS}>
+          Your have been succefully unsubscribed from our emails.
+        </Alert>
       )}
       {['form', 'form-submit'].indexOf(state) !== -1 && (
         <form className="form-sm-horizontal" onSubmit={onSubmit}>
-          <div className="row mb-3">
-            <label
-              htmlFor="notifications_optinNewsletter_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
-              Subscribe to the newsletter
-            </label>
-
-            <div className="col-sm-10">
-              <Checkbox
-                className="form-control-plaintext"
-                value={lead.optinNewsletter}
-                onChange={onChangeOptinNewsletter}
-                id="notifications_optinNewsletter_{{ _uid }}"
-              />
-            </div>
-          </div>
-          <div className="row mb-3">
-            <label
-              htmlFor="notifications_optinBlog_{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
-              Subscribe to blog updates
-            </label>
-
-            <div className="col-sm-10">
-              <Checkbox
-                className="form-control-plaintext"
-                value={lead.optinBlog}
-                onChange={onChangeOptinBlog}
-                id="notifications_optinBlog_{{ _uid }}"
-              />
-            </div>
-          </div>
+          <FormInput
+            type={FormInputType.CHECKBOX}
+            id="notifications-optinNewsletter"
+            label="Subscribe to the newsletter"
+            value={lead.optinNewsletter}
+            errors={errors.optinNewsletter}
+            onChange={onChangeOptinNewsletter}
+            />
+          <FormInput
+            type={FormInputType.CHECKBOX}
+            id="notifications-optinBlog"
+            label="Subscribe to blog updates"
+            value={lead.optinBlog}
+            errors={errors.optinBlog}
+            onChange={onChangeOptinBlog}
+            />
           {lead.githubUsername && (
-            <div className="row mb-3">
-              <label
-                htmlFor="notifications_optinGithub_{{ _uid }}"
-                className="col-sm-2 col-form-label"
-              >
-                Subscribe to github updates
-              </label>
-
-              <div className="col-sm-10">
-                <Checkbox
-                  className="form-control-plaintext"
-                  value={lead.optinGithub}
-                  onChange={onChangeOptinGithub}
-                  id="notifications_optinGithub_{{ _uid }}"
-                />
-              </div>
-            </div>
+            <FormInput
+              type={FormInputType.CHECKBOX}
+              id="notifications-optinGithub"
+              label="Subscribe to github updates"
+              value={lead.optinGithub}
+              errors={errors.optinGithub}
+              onChange={onChangeOptinGithub}
+              />
           )}
           <div className="row mb-3">
             <div className="offset-sm-2 col-sm-10">
@@ -205,16 +188,6 @@ function Notifications(props: NotificationsProps) {
             </div>
           </div>
         </form>
-      )}
-      {state === 'form-success' && (
-        <div className="alert alert-success text-center" role="alert">
-          Your notifications settings were saved.
-        </div>
-      )}
-      {state === 'unsubscribe-success' && (
-        <div className="alert alert-success text-center" role="alert">
-          Your were succefully unsubscribed from our emails.
-        </div>
       )}
     </section>
   );

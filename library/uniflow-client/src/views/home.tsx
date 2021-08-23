@@ -5,6 +5,7 @@ import { pathTo } from '../routes';
 import { Api } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import Alert, { AlertType } from '../components/alert';
 
 const container = new Container();
 const api = container.get(Api);
@@ -52,13 +53,13 @@ function Home(props: HomeProps) {
 
             <div id="newsletter-optin" className="d-flex justify-content-center pt-md-5">
               {state === 'form-success' && (
-                <div className="alert alert-success text-center" role="alert">
+                <Alert type={AlertType.SUCCESS}>
                   {email} was succefully registered to the newsletter.
                   <br />
                   Let's check{' '}
                   <Link to={pathTo('tag', { tag: 'case-study' })}>some cases studies</Link> to
                   get started.
-                </div>
+                </Alert>
               )}
               {(state === 'form' || state === 'form-submit') && (
                 <form onSubmit={onSubmit}>

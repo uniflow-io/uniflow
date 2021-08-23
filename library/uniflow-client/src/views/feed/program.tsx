@@ -148,7 +148,7 @@ function Program(props: ProgramProps) {
         await setProgramData(program, auth.token)(feedDispatch);
         _componentShouldUpdate = true;
       } catch (error) {
-        await commitAddLog(error.message)(logsDispatch);
+        commitAddLog(error.message)(logsDispatch);
       }
     }
   }, 1000);
@@ -244,7 +244,7 @@ function Program(props: ProgramProps) {
       await setProgramData(program, auth.token)(feedDispatch);
       navigate(toFeedPath(program, user));
     } catch (error) {
-      return commitAddLog(error.message)(logsDispatch);
+      commitAddLog(error.message)(logsDispatch);
     }
   };
 

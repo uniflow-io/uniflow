@@ -9,6 +9,9 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Container from '../../container';
 import { Env } from '../../services';
 import { useAuth, useLogs } from '../../contexts';
+import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import Alert, { AlertType } from '../../components/alert';
+import FormInput, { FormInputType } from '../../components/form-input';
 
 const container = new Container();
 const env = container.get(Env);
@@ -19,25 +22,24 @@ export interface RegisterProps {
 function Register(props: RegisterProps) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'password'>>({})
   const { auth, authDispatch, authRef } = useAuth()
   const { logsDispatch } = useLogs()
-
-  const onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const onChangePassword: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setPassword(event.target.value);
-  };
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await register(email, password)(authDispatch);
-    if (authRef.current.isAuthenticated) {
-      navigate(pathTo('feed'));
-    } else if(authRef.current.statusText) {
-      commitAddLog(authRef.current.statusText)(logsDispatch);
+    try {
+      await register(email, password)(authDispatch);
+      if (authRef.current.isAuthenticated) {
+        navigate(pathTo('feed'));
+      }
+    } catch(error) {
+      if (error instanceof ApiValidateException) {
+        setErrors({ ...error.errors })
+      } else if(authRef.current.message) {
+        setErrors({form: [authRef.current.message]})
+      }
     }
   };
 
@@ -52,38 +54,29 @@ function Register(props: RegisterProps) {
           <div className="card">
             <article className="card-body">
               <form onSubmit={onSubmit}>
-                <div className="row mb-3">
-                  <div className="input-group">
-                    <div className="input-group-text">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                    <input
-                      className="form-control"
-                      id="register-email"
-                      type="text"
-                      value={email || ''}
-                      onChange={onChangeEmail}
-                      placeholder="Email"
-                      autoComplete="register-email"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="input-group">
-                    <div className="input-group-text">
-                      <FontAwesomeIcon icon={faKey} />
-                    </div>
-                    <input
-                      className="form-control"
-                      id="register-password"
-                      type="password"
-                      value={password || ''}
-                      onChange={onChangePassword}
-                      placeholder="Password"
-                      autoComplete="register-password"
-                    />
-                  </div>
-                </div>
+                {errors.form && errors.form.map((message, i) => (
+                  <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
+                ))}
+                <FormInput
+                  id="register-email"
+                  type={FormInputType.TEXT}
+                  placeholder="Email"
+                  value={email}
+                  errors={errors.email}
+                  icon={faUser}
+                  onChange={setEmail}
+                  autoComplete={true}
+                  />
+                <FormInput
+                  id="register-password"
+                  type={FormInputType.PASSWORD}
+                  placeholder="Password"
+                  value={password}
+                  errors={errors.password}
+                  icon={faKey}
+                  onChange={setPassword}
+                  autoComplete={true}
+                  />
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <div className="d-grid">

@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { Api } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import FormInput, { FormInputType } from '../components/form-input';
+import Alert, { AlertType } from '../components/alert';
 
 const container = new Container();
 const api = container.get(Api);
@@ -18,16 +20,8 @@ export interface ContactState {}
 function Contact(props: ContactProps) {
   const [email, setEmail] = useState<string>('')
   const [message, setMessage] = useState<string>('')
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'message'>>({})
   const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
-
-  const onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const onChangeMessage: React.ChangeEventHandler<HTMLTextAreaElement> = (event) => {
-    setMessage(event.target.value);
-  };
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -39,9 +33,11 @@ function Contact(props: ContactProps) {
         setState('form-success');
       }
     } catch (error) {
+      setState('form');
       if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors })
-        setState('form');
+      } else {
+        setErrors({form: [error.message]})
       }
     }
   };
@@ -52,62 +48,37 @@ function Contact(props: ContactProps) {
         <div className="col-md-12">
           <h3>Contact</h3>
           {state === 'form-success' && (
-            <div className="alert alert-success text-center" role="alert">
+            <Alert type={AlertType.SUCCESS}>
               Your message has been sent, we will glad to ear from you !<br />
               In case check <Link to={pathTo('doc', { slug: 'faq' })}>FAQ</Link> page to see if
               your question has been answered already.
-            </div>
+            </Alert>
           )}
           {(state === 'form' || state === 'form-submit') && [
             <p className="text-center" key="say">
-              You got a question about Uniflow, write more here
-              <br />
-              It will be a pleasure to respond
+              You got a question about Uniflow? Write more here.
             </p>,
             <form key="contactForm" onSubmit={onSubmit}>
-              <div className="row mb-3">
-                <div className="col-md-12">
-                  <input
-                    className={`form-control${errors.email ? ' is-invalid' : ''}`}
-                    id="contact-email"
-                    type="text"
-                    value={email || ''}
-                    onChange={onChangeEmail}
-                    placeholder="Email"
-                  />
-                  {errors.email &&
-                    errors.email.map((message, i) => (
-                      <div
-                        key={`error-${i}`}
-                        className="invalid-feedback"
-                      >
-                        {message}
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              <div className="row mb-3">
-                <div className="col-md-12">
-                  <textarea
-                    className={`form-control${errors.message ? ' is-invalid' : ''}`}
-                    id="contact-message"
-                    value={message || ''}
-                    onChange={onChangeMessage}
-                    placeholder="Message"
-                    rows={15}
-                  />
-                  {errors.message &&
-                    errors.message.map((message, i) => (
-                      <div
-                        key={`error-${i}`}
-                        className="invalid-feedback"
-                      >
-                        {message}
-                      </div>
-                    ))}
-                </div>
-              </div>
+              {errors.form && errors.form.map((message, i) => (
+                <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
+              ))}
+              <FormInput 
+                type={FormInputType.TEXT}
+                id="contact-email"
+                placeholder="Email"
+                value={email}
+                errors={errors.email}
+                onChange={setEmail}
+                />
+              <FormInput 
+                type={FormInputType.TEXTAREA}
+                id="contact-message"
+                placeholder="Message"
+                value={message}
+                errors={errors.message}
+                onChange={setMessage}
+                rows={15}
+                />
 
               <div className="row mb-3">
                 <div className="col-md-12">

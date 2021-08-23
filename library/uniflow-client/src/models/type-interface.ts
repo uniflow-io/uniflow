@@ -28,6 +28,11 @@ export type PaginationType<T> = {
 export type EmailType = string;
 
 /**
+ * @minLength 1 Password should not be empty
+ */
+ export type PasswordType = string
+
+/**
  * Stringified UUIDv4.
  * See [RFC 4112](https://tools.ietf.org/html/rfc4122)
  * @format uuid

@@ -3,10 +3,10 @@ import request, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Env from './env';
 import { ApiValidateException } from '../models';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
-import { EmailOrUsernameType, EmailType, NotEmptyStringType, PageNumberType, PaginationType, PathType, PerPageType, SlugType, UuidOrUsernameType, UuidType } from '../models/type-interface';
+import { EmailOrUsernameType, EmailType, NotEmptyStringType, PageNumberType, PaginationType, PasswordType, PathType, PerPageType, SlugType, UuidOrUsernameType, UuidType } from '../models/type-interface';
 import { ConfigApiType, ContactApiType, FolderApiType, LeadApiType, ProgramApiType, UserApiType } from '../models/api-type-interface';
 import axios from 'axios';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception copy';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
 import ApiNotFoundException from '../models/api-not-found-exception';
 
 export interface ApiOptions {
@@ -81,7 +81,7 @@ class Api {
     return error
   }
 
-  async login(body: {username: EmailOrUsernameType, password: string}): Promise<{token: string, uid: string}> {
+  async login(body: {username: EmailOrUsernameType, password: PasswordType}): Promise<{token: string, uid: string}> {
     try {
       const response = await request.post(`${this.getBaseUrl()}/login`, body);
       return response.data
@@ -207,7 +207,7 @@ class Api {
     }
   }
 
-  async createUser(body: {email: EmailType, password: string}): Promise<UserApiType> {
+  async createUser(body: {email: EmailType, password: PasswordType}): Promise<UserApiType> {
     try {
       const response = await request.post(`${this.getBaseUrl()}/users`, body);
       return response.data

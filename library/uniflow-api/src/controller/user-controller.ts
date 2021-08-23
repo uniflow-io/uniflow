@@ -6,7 +6,7 @@ import { ConfigRepository, FolderRepository, ProgramRepository, TagRepository, U
 import { ApiException } from "../exception";
 import { IsNull } from "typeorm";
 import { ConfigFactory, ProgramFactory, FolderFactory } from "../factory";
-import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageNumberType, PaginationType, PartialType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
+import { ConfigApiType, EmailType, FolderApiType, NotEmptyStringType, PageNumberType, PaginationType, PartialType, PasswordType, PathType, PerPageType, ProgramApiType, SlugType, UserApiType, UuidOrUsernameType } from "../model/interfaces";
 import { ErrorJSON, ValidateErrorJSON } from './interfaces'
 
 @Route("users")
@@ -36,7 +36,7 @@ class UserController extends Controller {
   @SuccessResponse(201, "Created")
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Not authorized")
-  public async createUser(@BodyProp() email: EmailType, @BodyProp('password') plainPassword: string): Promise<UserApiType> {
+  public async createUser(@BodyProp() email: EmailType, @BodyProp('password') plainPassword: PasswordType): Promise<UserApiType> {
     this.setStatus(201)
     const user = await this.userService.create({email, plainPassword});
     return this.userService.getJson(user);
@@ -70,13 +70,22 @@ class UserController extends Controller {
 
     user.firstname = body.firstname ? body.firstname : null
     user.lastname = body.lastname ? body.lastname : null
-    user.username = body.username ? user.username : null
     user.apiKey = body.apiKey ? body.apiKey : null
     user.facebookId = body.facebookId ? body.facebookId : null
     user.githubId = body.githubId ? body.githubId : null
     
-    if(body.username && body.username !== req.user.username) {
-      await this.userService.setUsername(user, body.username)
+    if(body.username !== user.username) {
+      if(body.username) {
+        const existingUser = await this.userRepository.findOne({username: body.username})
+        if(existingUser) {
+          throw new ValidateError({'body.username': {
+            message: 'Username is already taken'
+          }}, 'Validation failed')
+        }
+        user.username = body.username
+      } else {
+        user.username = null
+      }
     }
 
     if(await this.userService.isValid(user)) {

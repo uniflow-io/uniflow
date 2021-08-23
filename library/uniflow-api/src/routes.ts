@@ -56,6 +56,11 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"union","subSchemas":[{"ref":"EmailType"},{"ref":"UsernameType"}],"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PasswordType": {
+        "dataType": "refAlias",
+        "type": {"dataType":"string","validators":{"minLength":{"errorMsg":"Text should contain at least one character","value":1}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "NotEmptyStringType": {
         "dataType": "refAlias",
         "type": {"dataType":"string","validators":{"minLength":{"errorMsg":"Text should contain at least one character","value":1}}},
@@ -220,7 +225,7 @@ export function RegisterRoutes(app: express.Router) {
             function AuthController_login(request: any, response: any, next: any) {
             const args = {
                     username: {"in":"body-prop","name":"username","required":true,"ref":"EmailOrUsernameType"},
-                    password: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
+                    password: {"in":"body-prop","name":"password","required":true,"ref":"PasswordType"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -648,7 +653,7 @@ export function RegisterRoutes(app: express.Router) {
             function UserController_createUser(request: any, response: any, next: any) {
             const args = {
                     email: {"in":"body-prop","name":"email","required":true,"ref":"EmailType"},
-                    plainPassword: {"in":"body-prop","name":"password","required":true,"dataType":"string"},
+                    plainPassword: {"in":"body-prop","name":"password","required":true,"ref":"PasswordType"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

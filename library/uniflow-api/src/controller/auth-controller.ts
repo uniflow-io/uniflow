@@ -2,7 +2,7 @@ import * as express from "express";
 import { Service } from 'typedi';
 import { Controller, Response, SuccessResponse, BodyProp, Post, Route, Tags, Security, Request } from "tsoa";
 import { AuthService } from '../service';
-import { EmailOrUsernameType } from '../model/interfaces';
+import { EmailOrUsernameType, PasswordType } from '../model/interfaces';
 import { ErrorJSON, ValidateErrorJSON } from './interfaces';
 
 @Route()
@@ -19,7 +19,7 @@ class AuthController extends Controller {
   @SuccessResponse(201, "Valid credentials")
   @Response<ValidateErrorJSON>(422, "Validation failed")
   @Response<ErrorJSON>(401, "Bad credentials")
-  public async login(@BodyProp() username: EmailOrUsernameType, @BodyProp() password: string): Promise<{token: string, uid: string}> {
+  public async login(@BodyProp() username: EmailOrUsernameType, @BodyProp() password: PasswordType): Promise<{token: string, uid: string}> {
     this.setStatus(201)
     const { token, user } = await this.authService.login(username, password);
     return { token, uid: user.uid };

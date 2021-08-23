@@ -263,8 +263,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     });
     contributorSet.add(article.frontmatter.author.fields.slug);
 
-    const previous = index === articles.nodes.length - 1 ? null : articles.nodes[index + 1];
-    const next = index === 0 ? null : articles.nodes[index - 1];
+    const previous = index === 0 ? null : articles.nodes[index - 1];
+    const next = index === articles.nodes.length - 1 ? null : articles.nodes[index + 1];
     createPage({
       path: `/blog/${article.fields.slug}`,
       component: require.resolve('./src/templates/article.tsx'),

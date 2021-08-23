@@ -55,7 +55,7 @@ function Navigation(props: NavigationProps) {
       commitSetSlugFeed(null)(feedDispatch);
       navigate(toFeedPath(item, user));
     } catch (error) {
-      return commitAddLog(error.message)(logsDispatch);
+      commitAddLog(error.message)(logsDispatch);
     }
   };
 
@@ -78,7 +78,7 @@ function Navigation(props: NavigationProps) {
       )(feedDispatch, userDispatch, authDispatch)
       navigate(toFeedPath(item, user));
     } catch (error) {
-      return commitAddLog(error.message)(logsDispatch);
+      commitAddLog(error.message)(logsDispatch);
     }
   };
 

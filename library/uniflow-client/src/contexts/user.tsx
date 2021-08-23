@@ -7,7 +7,7 @@ import { AuthDispath, commitLogout } from './auth';
 import { commitAddLog, LogsDispath } from './logs';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { ROLE } from '../models/api-type-interface';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception copy';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
 
 const container = new Container();
 const api = container.get(Api);

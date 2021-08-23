@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { login, facebookLoginUrl, githubLoginUrl } from '../../contexts/auth';
 import { pathTo } from '../../routes';
-import { commitAddLog } from '../../contexts/logs';
 import { Link, navigate } from 'gatsby';
 import { faSignInAlt, faUser, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Container from '../../container';
 import { Env } from '../../services';
-import { useAuth, useLogs } from '../../contexts';
+import { useAuth } from '../../contexts';
+import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import FormInput, { FormInputType } from '../../components/form-input';
+import Alert, { AlertType } from '../../components/alert';
 
 const container = new Container();
 const env = container.get(Env);
@@ -17,32 +19,30 @@ export interface LoginProps {
 }
 
 function Login(props: LoginProps) {
+  const facebookAppId = env.get('facebookAppId');
+  const githubAppId = env.get('githubAppId')
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'username'|'password'>>({})
   const { auth, authDispatch, authRef } = useAuth()
-  const { logsDispatch } = useLogs()
-
-  const onChangeUsername: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const onChangePassword: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setPassword(event.target.value);
-  };
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await login(username, password)(authDispatch);
-    if (authRef.current.isAuthenticated) {
-      navigate(pathTo('feed'));
-    } else if(authRef.current.statusText) {
-      commitAddLog(authRef.current.statusText)(logsDispatch);
+    try{
+      setErrors({})
+      await login(username, password)(authDispatch);
+      if (authRef.current.isAuthenticated) {
+        navigate(pathTo('feed'));
+      }  
+    } catch(error) {
+      if (error instanceof ApiValidateException) {
+        setErrors({ ...error.errors })
+      } else if(authRef.current.message) {
+        setErrors({form: [authRef.current.message]})
+      }
     }
   };
-
-  const facebookAppId = env.get('facebookAppId');
-  const githubAppId = env.get('githubAppId')
 
   return (
     <section className="section container-fluid">
@@ -52,38 +52,29 @@ function Login(props: LoginProps) {
           <div className="card mb-3">
             <article className="card-body">
               <form onSubmit={onSubmit}>
-                <div className="row mb-3">
-                  <div className="input-group">
-                    <div className="input-group-text">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                    <input
-                      className="form-control"
-                      id="login-username"
-                      type="text"
-                      value={username || ''}
-                      onChange={onChangeUsername}
-                      placeholder="Email or Username"
-                      autoComplete="login-username"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="input-group">
-                    <div className="input-group-text">
-                      <FontAwesomeIcon icon={faKey} />
-                    </div>
-                    <input
-                      className="form-control"
-                      id="login-password"
-                      type="password"
-                      value={password || ''}
-                      onChange={onChangePassword}
-                      placeholder="Password"
-                      autoComplete="login-password"
-                    />
-                  </div>
-                </div>
+                {errors.form && errors.form.map((message, i) => (
+                  <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
+                ))}
+                <FormInput
+                  id="login-username"
+                  type={FormInputType.TEXT}
+                  placeholder="Email or Username"
+                  value={username}
+                  errors={errors.username}
+                  icon={faUser}
+                  onChange={setUsername}
+                  autoComplete={true}
+                  />
+                <FormInput
+                  id="login-password"
+                  type={FormInputType.PASSWORD}
+                  placeholder="Password"
+                  value={password}
+                  errors={errors.password}
+                  icon={faKey}
+                  onChange={setPassword}
+                  autoComplete={true}
+                  />
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <div className="d-grid">

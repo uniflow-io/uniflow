@@ -9,7 +9,7 @@ import { useReducerRef } from '../hooks/use-reducer-ref';
 import { AuthDispath } from './auth';
 import { FolderApiType, ProgramApiType, UserApiType } from '../models/api-type-interface';
 import { PageNumberType, PathType, SlugType, UuidType } from '../models/type-interface';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception copy';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
 
 const container = new Container();
 const api = container.get(Api);

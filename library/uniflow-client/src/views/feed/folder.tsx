@@ -19,6 +19,7 @@ import { useAuth, useUser } from '../../contexts';
 import { PathType } from '../../models/type-interface';
 import { ApiValidateException } from '../../models';
 import { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import FormInput, { FormInputType } from '../../components/form-input';
 
 export interface FolderProps {
   folder: FolderFeedType
@@ -29,7 +30,7 @@ export interface FolderState {}
 function Folder(props: FolderProps) {
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
   const [folderTree, setFolderTree] = useState<PathType[]>([])
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'name'|'slug'|'path'>>({})
   const { user, userDispatch } = useUser()
   const { auth, authDispatch } = useAuth()
   const { feed, feedDispatch, feedRef } = useFeed()
@@ -72,18 +73,18 @@ function Folder(props: FolderProps) {
     }
   };
 
-  const onChangeName: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeName = (name: string) => {
     commitSetParentFolderFeed({
       ...folder,
-      ...{ name: event.target.value },
+      ...{ name },
     })(feedDispatch)
     onUpdate();
   };
 
-  const onChangeSlug: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeSlug = (slug: string) => {
     commitSetParentFolderFeed({
       ...folder,
-      ...{ slug: event.target.value },
+      ...{ slug },
     })(feedDispatch)
     onUpdate();
   };
@@ -127,58 +128,22 @@ function Folder(props: FolderProps) {
         </div>
       </div>
       <form className="form-sm-horizontal">
-        <div className="row mb-3">
-          <label htmlFor="folder-name" className="col-sm-2 col-form-label">
-            Name
-          </label>
-
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className={`form-control${errors.name ? ' is-invalid' : ''}`}
-              id="folder-name"
-              value={folder.name}
-              onChange={onChangeName}
-              placeholder="Name"
-            />
-            {errors.name &&
-              errors.name.map((message, i) => (
-                <div
-                  key={`error-${i}`}
-                  className="invalid-feedback"
-                >
-                  {message}
-                </div>
-              ))}
-          </div>
-        </div>
-
-        <div className="row mb-3">
-          <label htmlFor="folder-slug" className="col-sm-2 col-form-label">
-            Slug
-          </label>
-
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className={`form-control${errors.slug ? ' is-invalid' : ''}`}
-              id="folder-slug"
-              value={folder.slug}
-              onChange={onChangeSlug}
-              placeholder="Slug"
-            />
-            {errors.slug &&
-              errors.slug.map((message, i) => (
-                <div
-                  key={`error-${i}`}
-                  className="invalid-feedback"
-                >
-                  {message}
-                </div>
-              ))}
-          </div>
-        </div>
-
+        <FormInput
+          id="folder-name"
+          type={FormInputType.TEXT}
+          label="Name"
+          value={folder.name}
+          errors={errors.name}
+          onChange={onChangeName}
+          />
+        <FormInput
+          id="folder-slug"
+          type={FormInputType.TEXT}
+          label="Slug"
+          value={folder.slug}
+          errors={errors.slug}
+          onChange={onChangeSlug}
+          />
         <div className="row mb-3">
           <label htmlFor="folder-path" className="col-sm-2 col-form-label">
             Path

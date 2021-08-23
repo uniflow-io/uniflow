@@ -32,10 +32,10 @@ function GithubLogin(props: GithubLoginProps) {
 
       await githubLogin(code, authRef.current.token)(authDispatch);
       if (authRef.current.isAuthenticated) {
-        return navigate(pathTo('feed'));
-      } else if(authRef.current.statusText) {
-        commitAddLog(authRef.current.statusText)(logsDispatch);
-        return navigate(pathTo('login'));
+        navigate(pathTo('feed'));
+      } else if(authRef.current.message) {
+        commitAddLog(authRef.current.message)(logsDispatch);
+        navigate(pathTo('login'));
       }
     })()
   }, [])

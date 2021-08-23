@@ -11,6 +11,9 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useAuth, useLogs } from '../contexts';
 import { useStateRef } from '../hooks/use-state-ref';
+import ApiValidateException, { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import Alert, { AlertType } from '../components/alert';
+import FormInput, { FormInputType } from '../components/form-input';
 
 const container = new Container();
 const ui = container.get(UI);
@@ -58,7 +61,8 @@ function Settings(props: SettingsProps) {
     optinGithub: false,
     githubUsername: null,
   })
-  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'apiKey'|'username'|'email'|'firstname'|'lastname'|'optinNewsletter'|'optinBlog'|'optinGithub'>>({})
+  const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
   const { auth, authDispatch } = useAuth()
   const { user, userDispatch } = useUser()
   const { logsDispatch } = useLogs()
@@ -68,7 +72,7 @@ function Settings(props: SettingsProps) {
       setUserSettings({...user});
 
       if (user.links.lead) {
-        const data = await api.getLead(user.links.lead);
+        const data = await api.getLead({uid: user.links.lead});
         setLeadSettings({
           ...leadSettings,
           ...{
@@ -82,20 +86,20 @@ function Settings(props: SettingsProps) {
     })()
   }, [user])
 
-  const onUpdateFirstname: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setUserSettings({ ...userSettings, ...{ firstname: event.target.value }});
+  const onUpdateFirstname = (value: string) => {
+    setUserSettings({ ...userSettings, ...{ firstname: value }});
   };
 
-  const onUpdateLastname: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setUserSettings({ ...userSettings, ...{ lastname: event.target.value }});
+  const onUpdateLastname = (value: string) => {
+    setUserSettings({ ...userSettings, ...{ lastname: value }});
   };
 
-  const onUpdateUsername: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setUserSettings({ ...userSettings, ...{ username: event.target.value }});
+  const onUpdateUsername = (value: string) => {
+    setUserSettings({ ...userSettings, ...{ username: value }});
   };
 
-  const onUpdateApiKey: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setUserSettings({ ...userSettings, ...{ apiKey: event.target.value }});
+  const onUpdateApiKey = (value: string) => {
+    setUserSettings({ ...userSettings, ...{ apiKey: value }});
   };
 
   const onRevokeFacebook: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -125,24 +129,34 @@ function Settings(props: SettingsProps) {
   };
 
   const onUpdate = async () => {
-    setIsSaving(true)
-    if (userSettingsRef.current.links.lead) {
-      await api.updateLead({uid: userSettingsRef.current.links.lead}, {
-        optinNewsletter: leadRef.current.optinNewsletter,
-        optinBlog: leadRef.current.optinBlog,
-        optinGithub: leadRef.current.optinGithub,
-      })
-    } else if(userSettingsRef.current.email && (leadRef.current.optinNewsletter || leadRef.current.optinBlog)) {
-      await api.createLead({
-        email: userSettingsRef.current.email,
-        optinNewsletter: leadRef.current.optinNewsletter,
-        optinBlog: leadRef.current.optinBlog,
-      })
+    setState('form-submit')
+    try {
+      setErrors({})
+      if (userSettingsRef.current.links.lead) {
+        await api.updateLead({uid: userSettingsRef.current.links.lead}, {
+          optinNewsletter: leadRef.current.optinNewsletter,
+          optinBlog: leadRef.current.optinBlog,
+          optinGithub: leadRef.current.optinGithub,
+        })
+      } else if(userSettingsRef.current.email && (leadRef.current.optinNewsletter || leadRef.current.optinBlog)) {
+        await api.createLead({
+          email: userSettingsRef.current.email,
+          optinNewsletter: leadRef.current.optinNewsletter,
+          optinBlog: leadRef.current.optinBlog,
+        })
+      }
+      if(auth.token) {
+        await updateSettings(userSettingsRef.current, auth.token)(userDispatch, authDispatch, logsDispatch);
+      }
+      setState('form-success');
+    } catch (error) {
+      setState('form');
+      if (error instanceof ApiValidateException) {
+        setErrors({ ...error.errors })
+      } else {
+        setErrors({form: [error.message]})
+      }
     }
-    if(auth.token) {
-      await updateSettings(userSettingsRef.current, auth.token)(userDispatch, authDispatch, logsDispatch);
-    }
-    setIsSaving(false)
   }
 
   const onSubmit: React.ChangeEventHandler<HTMLFormElement> = async (event) => {
@@ -187,51 +201,33 @@ function Settings(props: SettingsProps) {
     <section className="section container-fluid">
       <h3 className="box-title">Settings</h3>
       <form className="form-sm-horizontal" onSubmit={onSubmit}>
-        <div className="row mb-3">
-          <label htmlFor="settings-firstname" className="col-sm-2 col-form-label">
-            Firstname
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="settings-firstname"
-              value={userSettings.firstname || ''}
-              onChange={onUpdateFirstname}
-              placeholder="Firstname"
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="settings-lastname" className="col-sm-2 col-form-label">
-            Lastname
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="settings-lastname"
-              value={userSettings.lastname || ''}
-              onChange={onUpdateLastname}
-              placeholder="Lastname"
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="settings-username" className="col-sm-2 col-form-label">
-            Username
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              id="settings-username"
-              value={userSettings.username || ''}
-              onChange={onUpdateUsername}
-              placeholder="Username"
-            />
-          </div>
-        </div>
+        {state === 'form-success' && (
+          <Alert type={AlertType.SUCCESS}>Your settings have been saved.</Alert>
+        )}
+        <FormInput 
+          type={FormInputType.TEXT}
+          id="settings-firstname"
+          label="Firstname"
+          value={userSettings.firstname}
+          errors={errors.firstname}
+          onChange={onUpdateFirstname}
+          />
+        <FormInput 
+          type={FormInputType.TEXT}
+          id="settings-lastname"
+          label="Lastname"
+          value={userSettings.lastname}
+          errors={errors.lastname}
+          onChange={onUpdateLastname}
+          />
+        <FormInput 
+          type={FormInputType.TEXT}
+          id="settings-username"
+          label="Username"
+          value={userSettings.username}
+          errors={errors.username}
+          onChange={onUpdateUsername}
+          />
         {facebookAppId && (
         <div className="row mb-3">
           <label htmlFor="settings-facebook" className="col-sm-2 col-form-label">
@@ -278,26 +274,19 @@ function Settings(props: SettingsProps) {
           </div>
         </div>
         )}
-        <div className="row mb-3">
-          <label htmlFor="settings-apiKeyGenerate" className="col-sm-2 col-form-label">
-            Api key
-          </label>
-          <div className="col-sm-10">
-            <div className="input-group">
-              <button type="button" className="input-group-text" onClick={onGenerateKey}>
-                Generate
-              </button>
-              <input
-                type="text"
-                className="form-control"
-                id="settings-apiKeyGenerate"
-                value={userSettings.apiKey || ''}
-                onChange={onUpdateApiKey}
-                placeholder="api key"
-              />
-            </div>
-          </div>
-        </div>
+        <FormInput 
+          type={FormInputType.TEXT}
+          id="settings-apiKeyGenerate"
+          label="Api key"
+          value={userSettings.apiKey}
+          errors={errors.apiKey}
+          onChange={onUpdateApiKey}
+          groups={(
+            <button type="button" className="input-group-text" onClick={onGenerateKey}>
+              Generate
+            </button>
+          )}
+          />
         <div className="row mb-3">
           <label htmlFor="settings-apiKey" className="col-sm-2 col-form-label">
             Api usage
@@ -318,55 +307,31 @@ function Settings(props: SettingsProps) {
             </div>
           </div>
         </div>
-        <div className="row mb-3">
-          <label
-            htmlFor="settins-optinNewsletter"
-            className="col-sm-2 col-form-label"
-          >
-            Subscribe to the newsletter
-          </label>
-
-          <div className="col-sm-10">
-            <Checkbox
-              className="form-control-plaintext"
-              value={leadSettings.optinNewsletter}
-              onChange={onChangeOptinNewsletter}
-              id="settins-optinNewsletter"
-            />
-          </div>
-        </div>
-        <div className="row mb-3">
-          <label htmlFor="settings-optionBlog" className="col-sm-2 col-form-label">
-            Subscribe to blog updates
-          </label>
-
-          <div className="col-sm-10">
-            <Checkbox
-              className="form-control-plaintext"
-              value={leadSettings.optinBlog}
-              onChange={onChangeOptinBlog}
-              id="settings-optionBlog"
-            />
-          </div>
-        </div>
+        <FormInput 
+          type={FormInputType.CHECKBOX}
+          id="settings-optinNewsletter"
+          label="Subscribe to the newsletter"
+          value={leadSettings.optinNewsletter}
+          errors={errors.optinNewsletter}
+          onChange={onChangeOptinNewsletter}
+          />
+        <FormInput 
+          type={FormInputType.CHECKBOX}
+          id="settings-optinNewsletter"
+          label="Subscribe to blog updates"
+          value={leadSettings.optinBlog}
+          errors={errors.optinBlog}
+          onChange={onChangeOptinBlog}
+          />
         {leadSettings.githubUsername && (
-          <div className="row mb-3">
-            <label
-              htmlFor="settings-optinGithub"
-              className="col-sm-2 col-form-label"
-            >
-              Subscribe to github updates
-            </label>
-
-            <div className="col-sm-10">
-              <Checkbox
-                className="form-control-plaintext"
-                value={leadSettings.optinGithub}
-                onChange={onChangeOptinGithub}
-                id="settings-optinGithub"
-              />
-            </div>
-          </div>
+          <FormInput 
+            type={FormInputType.CHECKBOX}
+            id="settings-optinGithub"
+            label="Subscribe to github updates"
+            value={leadSettings.optinGithub}
+            errors={errors.optinGithub}
+            onChange={onChangeOptinGithub}
+            />
         )}
         <div className="row mb-3">
           <div className="offset-sm-2 col-sm-10">
@@ -374,7 +339,7 @@ function Settings(props: SettingsProps) {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={isSaving}
+                disabled={state === 'form-submit'}
               >
                 Save
               </button>

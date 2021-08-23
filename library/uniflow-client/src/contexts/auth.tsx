@@ -1,8 +1,9 @@
 import React, { MutableRefObject, Reducer, RefObject, useCallback, useContext, useEffect, useReducer, useRef } from 'react';
 import Container from '../container';
 import { Api } from '../services';
-import jwtDecode from 'jwt-decode';
+import jwtDecode, { InvalidTokenError } from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
+import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
 
 const container = new Container();
 const api = container.get(Api);
@@ -17,7 +18,7 @@ export enum AuthActionTypes {
 export type AuthAction = 
   | { type: AuthActionTypes.COMMIT_LOGIN_REQUEST }
   | { type: AuthActionTypes.COMMIT_LOGIN_SUCCESS, token: string, uid: string }
-  | { type: AuthActionTypes.COMMIT_LOGIN_FAILURE, status: number, statusText: string }
+  | { type: AuthActionTypes.COMMIT_LOGIN_FAILURE, message: string }
   | { type: AuthActionTypes.COMMIT_LOGOUT }
 
 export type AuthDispath = React.Dispatch<AuthAction>
@@ -31,7 +32,7 @@ export interface AuthProviderState {
   uid?: string,
   isAuthenticated: boolean,
   isAuthenticating: boolean,
-  statusText?: string,
+  message?: string,
 }
 
 const defaultState = (() => {
@@ -44,7 +45,7 @@ const defaultState = (() => {
         uid: uid,
         isAuthenticated: true,
         isAuthenticating: false,
-        statusText: undefined,
+        message: undefined,
       }
     }
   }
@@ -54,7 +55,7 @@ const defaultState = (() => {
     uid: undefined,
     isAuthenticated: false,
     isAuthenticating: false,
-    statusText: undefined,
+    message: undefined,
   }
 })();
 
@@ -80,7 +81,7 @@ export const commitLoginSuccess = (token: string, uid: string) => {
   };
 };
 
-export const commitLoginFailure = (error: {status: number, statusText: string}, message?: string) => {
+export const commitLoginFailure = (message: string) => {
   return (dispatch: AuthDispath) => {
     if (typeof window !== `undefined`) {
       window.localStorage.removeItem('token');
@@ -88,8 +89,7 @@ export const commitLoginFailure = (error: {status: number, statusText: string}, 
     }
     dispatch({
       type: AuthActionTypes.COMMIT_LOGIN_FAILURE,
-      status: error.status,
-      statusText: message || error.statusText,
+      message,
     });
   };
 };
@@ -111,18 +111,16 @@ export const login = (username: string, password: string) => {
     commitLoginRequest()(dispatch);
     try {
       const data = await api.login({username, password})
-
-      try {
-        jwtDecode(data.token);
-        return commitLoginSuccess(data.token, data.uid)(dispatch);
-      } catch (error) {
-        return commitLoginFailure({
-          status: 403,
-          statusText: 'Invalid token',
-        })(dispatch)
-      }
+      jwtDecode(data.token);
+      commitLoginSuccess(data.token, data.uid)(dispatch);
     } catch (error) {
-      commitLoginFailure(error.response)(dispatch);
+      if(error instanceof InvalidTokenError) {
+        commitLoginFailure('Invalid token')(dispatch)
+      } else {
+        commitLoginFailure('Invalid credentials')(dispatch);
+      }
+
+      throw error
     }
   };
 };
@@ -137,18 +135,16 @@ export const facebookLogin = (accessToken: string, token?: string) => {
     commitLoginRequest()(dispatch);
     try {
       const data = await api.loginFacebook({access_token: accessToken}, {token})
-
-      try {
-        jwtDecode(data.token);
-        return commitLoginSuccess(data.token, data.uid)(dispatch);
-      } catch (error) {
-        return commitLoginFailure({
-          status: 403,
-          statusText: 'Invalid token',
-        })(dispatch)
-      }
+      jwtDecode(data.token);
+      commitLoginSuccess(data.token, data.uid)(dispatch);
     } catch (error) {
-      commitLoginFailure(error.response)(dispatch);
+      if(error instanceof InvalidTokenError) {
+        commitLoginFailure('Invalid token')(dispatch)
+      } else {
+        commitLoginFailure('Invalid credentials')(dispatch);
+      }
+
+      throw error
     }
   };
 };
@@ -163,17 +159,16 @@ export const githubLogin = (code: string, token?: string) => {
     commitLoginRequest()(dispatch);
     try {
       const data = await api.loginGithub({code}, {token})
-      try {
-        jwtDecode(data.token);
-        return commitLoginSuccess(data.token, data.uid)(dispatch);
-      } catch (error) {
-        return commitLoginFailure({
-          status: 403,
-          statusText: 'Invalid token',
-        })(dispatch)
-      }
+      jwtDecode(data.token);
+      commitLoginSuccess(data.token, data.uid)(dispatch);
     } catch (error) {
-      commitLoginFailure(error.response)(dispatch);
+      if(error instanceof InvalidTokenError) {
+        commitLoginFailure('Invalid token')(dispatch)
+      } else {
+        commitLoginFailure('Invalid credentials')(dispatch);
+      }
+
+      throw error
     }
   };
 };
@@ -185,7 +180,13 @@ export const register = (email: string, password: string) => {
       await api.createUser({email, password})
       await login(email, password)(dispatch);
     } catch (error) {
-      commitLoginFailure(error.response, error.response.data.message)(dispatch);
+      if(error instanceof InvalidTokenError) {
+        commitLoginFailure('Invalid token')(dispatch)
+      } else {
+        commitLoginFailure('Invalid credentials')(dispatch);
+      }
+
+      throw error
     }
   };
 };
@@ -207,7 +208,7 @@ export function AuthProvider(props: AuthProviderProps) {
       case AuthActionTypes.COMMIT_LOGIN_REQUEST:
         return Object.assign({}, state, {
           isAuthenticating: true,
-          statusText: undefined,
+          message: undefined,
         });
       case AuthActionTypes.COMMIT_LOGIN_SUCCESS:
         return Object.assign({}, state, {
@@ -215,7 +216,7 @@ export function AuthProvider(props: AuthProviderProps) {
           isAuthenticated: true,
           token: action.token,
           uid: action.uid,
-          statusText: 'You have been successfully logged in.',
+          message: 'You have been successfully logged in.',
         });
       case AuthActionTypes.COMMIT_LOGIN_FAILURE:
         return Object.assign({}, state, {
@@ -223,14 +224,14 @@ export function AuthProvider(props: AuthProviderProps) {
           isAuthenticated: false,
           token: undefined,
           uid: undefined,
-          statusText: `Authentication Error: ${action.status} ${action.statusText}`,
+          message: `Authentication Error: ${action.message}`,
         });
       case AuthActionTypes.COMMIT_LOGOUT:
         return Object.assign({}, state, {
           isAuthenticated: false,
           token: undefined,
           uid: undefined,
-          statusText: 'You have been successfully logged out.',
+          message: 'You have been successfully logged out.',
         });
       default:
         return state;
