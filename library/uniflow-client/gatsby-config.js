@@ -29,12 +29,12 @@ module.exports = {
     `gatsby-plugin-sass`,
     'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-plugin-gtag`,
+      resolve: 'gatsby-plugin-matomo',
       options: {
-        trackingId: process.env.TRACKING_ID,
-        head: true,
-        anonymize: false,
-      },
+        siteId: process.env.GATSBY_MATOMO_SITE_ID,
+        matomoUrl: process.env.GATSBY_MATOMO_URL,
+        siteUrl: process.env.GATSBY_CLIENT_URL
+      }
     },
     {
       resolve: `gatsby-plugin-manifest`,
