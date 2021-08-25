@@ -6,6 +6,7 @@
     Change Ace to Prism editor
     Change React Redux to React Hooks
     Better errors handling
+    Migrate to Matomo tracking
   date: "2021-08-16"
 -
   tag: "v1.1.14"
