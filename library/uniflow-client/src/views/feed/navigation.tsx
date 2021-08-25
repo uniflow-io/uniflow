@@ -15,8 +15,11 @@ import { commitAddLog, useLogs } from '../../contexts/logs';
 import { faBars, faFolder, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth, useUser } from '../../contexts';
+import { useEffect } from 'react';
 
-export interface NavigationProps {}
+export interface NavigationProps {
+  type?: 'program'|'folder'
+}
 
 export interface NavigationState {}
 
@@ -28,6 +31,10 @@ function Navigation(props: NavigationProps) {
   const { user, userDispatch } = useUser()
   const { feed, feedDispatch } = useFeed()
   const { authDispatch } = useAuth()
+
+  useEffect(() => {
+    setIsCollapsed(props.type === 'program')
+  }, [props.type])
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearch(event.target.value);

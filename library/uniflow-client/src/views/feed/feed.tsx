@@ -16,7 +16,7 @@ function Feed(props: FeedProps) {
   return (
     <div className="container-fluid">
       <div className="row flex-xl-nowrap">
-        <Navigation />
+        <Navigation type={currentItem && currentItem.type} />
         {currentItem && currentItem.type === 'program' && (
           <Program program={currentItem.entity as ProgramFeedType} allFlows={allFlows} />
         )}
