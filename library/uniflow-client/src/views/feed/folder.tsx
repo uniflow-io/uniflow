@@ -20,6 +20,7 @@ import { PathType } from '../../models/type-interface';
 import { ApiValidateException } from '../../models';
 import { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
 import FormInput, { FormInputType } from '../../components/form-input';
+import Alert, { AlertType } from '../../components/alert';
 
 export interface FolderProps {
   folder: FolderFeedType
@@ -30,7 +31,7 @@ export interface FolderState {}
 function Folder(props: FolderProps) {
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
   const [folderTree, setFolderTree] = useState<PathType[]>([])
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'name'|'slug'|'path'>>({})
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'name'|'slug'|'path'>>({})
   const { user, userDispatch } = useUser()
   const { auth, authDispatch } = useAuth()
   const { feed, feedDispatch, feedRef } = useFeed()
@@ -128,6 +129,9 @@ function Folder(props: FolderProps) {
         </div>
       </div>
       <form className="form-sm-horizontal">
+        {errors.form && errors.form.map((message, i) => (
+          <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
+        ))}
         <FormInput
           id="folder-name"
           type={FormInputType.TEXT}

@@ -204,6 +204,9 @@ function Settings(props: SettingsProps) {
         {state === 'form-success' && (
           <Alert type={AlertType.SUCCESS}>Your settings have been saved.</Alert>
         )}
+        {errors.form && errors.form.map((message, i) => (
+          <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
+        ))}
         <FormInput 
           type={FormInputType.TEXT}
           id="settings-firstname"

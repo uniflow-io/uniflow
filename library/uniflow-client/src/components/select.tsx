@@ -5,7 +5,7 @@ import { useApp } from '../contexts/app';
 
 export interface SelectProps {
   value: string;
-  onChange: CallableFunction;
+  onChange?: (value: any) => void;
   className: string;
   id: string;
   multiple?: boolean;

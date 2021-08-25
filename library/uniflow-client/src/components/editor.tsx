@@ -8,7 +8,7 @@ export interface EditorProps {
   readonly: boolean;
   width: number;
   height: number;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
 }
 
 function Editor(props: EditorProps) {

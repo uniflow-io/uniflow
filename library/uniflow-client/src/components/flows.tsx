@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Search } from '.';
+import { GraphProviderState } from '../contexts';
 
 export interface UiFlowProps {}
 
@@ -31,7 +32,18 @@ function UiFlow(props: UiFlowProps) {
   );
 }
 
-export interface FlowsProps {}
+export interface Flow {
+  clients: string[]
+  name: string
+  tags: string[]
+}
+
+export interface FlowsProps {
+  graph: GraphProviderState
+  allFlows: {[key: string] : Flow}
+  programFlows: {key: string, label: string}[]
+  clients: string[]
+}
 
 function Flows(props: FlowsProps) {
   const { graph, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
@@ -60,27 +72,31 @@ function Flows(props: FlowsProps) {
     return uiFlows;
   })();
 
-  return uiFlows.map((item, i) => (
-    <UiFlow
-      key={i}
-      tag={item.component}
-      allFlows={allFlows}
-      programFlows={programFlows}
-      clients={clients}
-      onPush={(component) => {
-        onPush(item.index, component);
-      }}
-      onPop={() => {
-        onPop(item.index);
-      }}
-      onUpdate={(data) => {
-        onUpdate(item.index, data);
-      }}
-      onRun={(event) => {
-        onRun(event, item.index);
-      }}
-    />
-  ));
+  return (
+    <>
+    {uiFlows.map((item, i) => (
+      <UiFlow
+        key={i}
+        tag={item.component}
+        allFlows={allFlows}
+        programFlows={programFlows}
+        clients={clients}
+        onPush={(component) => {
+          onPush(item.index, component);
+        }}
+        onPop={() => {
+          onPop(item.index);
+        }}
+        onUpdate={(data) => {
+          onUpdate(item.index, data);
+        }}
+        onRun={(event) => {
+          onRun(event, item.index);
+        }}
+      />
+    ))}
+    </>
+  )
 }
 
 export default Flows

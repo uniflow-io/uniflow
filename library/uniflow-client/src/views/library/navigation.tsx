@@ -79,11 +79,21 @@ function Navigation(props: NavigationProps) {
           />
         </div>
         <button
-          className="btn d-sm-none p-0 ml-3 isCollapsedd"
+          className="btn d-sm-none py-0 px-1 ms-3 isCollapsedd"
           type="button"
           onClick={onToggle}
         >
-          <FontAwesomeIcon icon={faBars} />
+          {isCollapsed && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+              <title>Expand</title>
+              <use xlinkHref="#nav-expand"/>
+            </svg>
+          ) || (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+              <title>Collapse</title>
+              <use xlinkHref="#nav-collapse"/>
+            </svg>
+          )}
         </button>
       </form>
       <nav className={`sidebar-nav${isCollapsed ? ' d-none d-sm-block' : ''}`}>
