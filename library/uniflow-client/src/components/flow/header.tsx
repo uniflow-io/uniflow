@@ -2,7 +2,13 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-export default function Header(props) {
+export interface HeaderProps {
+  title?: string
+  clients: string[]
+  
+}
+
+export default function Header(props: HeaderProps) {
   return (
     <div className="row">
       <div className="col-4 col-sm-2">

@@ -3,7 +3,7 @@ uniflow-client-node
 
 This is official Node Client for Uniflow
 
-It allows executing Uniflow Programs on [Node](https://nodejs.org)
+It allows executing Uniflow on [Node](https://nodejs.org)
 
 ## Documentation
 

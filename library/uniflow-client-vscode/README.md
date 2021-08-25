@@ -3,7 +3,7 @@ uniflow-client-vscode
 
 This is official VSCode Client for Uniflow
 
-It allows executing Uniflow Programs on [Visual Studio Code](https://code.visualstudio.com/)
+It allows executing Uniflow on [Visual Studio Code](https://code.visualstudio.com/)
 
 ## Documentation
 

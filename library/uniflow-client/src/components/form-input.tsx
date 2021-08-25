@@ -47,6 +47,7 @@ function FormInput(props: FormInputProps) {
       )}
 
       <div className={label ? ' col-sm-10' : 'col-sm-12'}>
+        {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
         <div className="input-group">
           {(icon && (
           <div className="input-group-text">
@@ -54,7 +55,6 @@ function FormInput(props: FormInputProps) {
           </div>
           ))}
           {groups}
-          {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
           <input
             className={`form-control${errors ? ' is-invalid' : ''}`}
             id={id}
@@ -64,17 +64,18 @@ function FormInput(props: FormInputProps) {
             placeholder={placeholder}
             autoComplete={autoComplete?id:undefined}
           />
-          )}
         </div>
+        )}
         {(type === FormInputType.TEXTAREA) && (
-        <Editor
-          className={`form-control${errors ? ' is-invalid' : ''}`}
-          id={id}
-          value={value || ''}
-          onChange={onChange}
-          placeholder={placeholder}
-          rows={rows}
-        />
+        <div className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}>
+          <Editor
+            id={id}
+            value={value || ''}
+            onChange={onChange}
+            placeholder={placeholder}
+            rows={rows}
+          />
+        </div>
         )}
         {(type === FormInputType.CHECKBOX) && (
         <Checkbox
