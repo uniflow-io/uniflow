@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import Container from '../container';
 import { Api } from '../services';
-import { Program } from '../services/api';
+import { ProgramApiType } from '../models/api-type-interface';
 
 const container = new Container();
 const api = container.get(Api);
@@ -19,17 +19,18 @@ export interface FlowsState {}
 
 function Flows(props: FlowsProps) {
   const [page, setPage] = useState<number>(1)
-  const [programs, setPrograms] = useState<Program[]>([])
-  const [isLoadMore, setIsLoadMore] = useState<boolean>(false)
+  const [programs, setPrograms] = useState<ProgramApiType[]>([])
+  const [state, setState] = useState<'loaded'|'load-more'|'loading'>('loaded')
   const { user } = useUser();
   const md = new Remarkable();
 
   const onFetchPrograms = async () => {
-    const programsPagination = await api.getPrograms(page);
+    setState('loading')
+    const programsPagination = await api.getPrograms({page});
     const fetchPrograms = programs.slice().concat(programsPagination.data);
     setPage(page + 1)
     setPrograms(fetchPrograms)
-    setIsLoadMore(fetchPrograms.length < programsPagination.total)
+    setState(fetchPrograms.length < programsPagination.total ? 'load-more' : 'loaded')
   };
 
   useEffect(() => {
@@ -53,13 +54,19 @@ function Flows(props: FlowsProps) {
               ></dd>,
             ])}
           </dl>
-          {isLoadMore && (
+          {(state === 'loading' || state === 'load-more') && (
             <div className="row">
               <div className="col-md-12">
                 <div className="d-grid">
-                  <button className="btn btn-primary" onClick={onFetchPrograms}>
-                    Load more
+                  {state === 'load-more' && (
+                  <button className="btn btn-primary" onClick={onFetchPrograms}>Load more</button>
+                  )}
+                  {state === 'loading' && (
+                  <button className="btn btn-primary" type="button" disabled>
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
                   </button>
+                  )}
                 </div>
               </div>
             </div>

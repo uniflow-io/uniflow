@@ -13,11 +13,6 @@ export interface ApiOptions {
   token?: string
 }
 
-export interface Program {
-  name: string,
-  description: string,
-}
-
 @Service()
 class Api {
   @Inject(() => Env)
