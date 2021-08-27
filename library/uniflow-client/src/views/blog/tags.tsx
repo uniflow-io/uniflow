@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 
 export interface TagsProps {
-  tags: {[key: string]: number}
+  tags: { [key: string]: number };
 }
 
 const Tags: FC<TagsProps> = ({ tags }) => {

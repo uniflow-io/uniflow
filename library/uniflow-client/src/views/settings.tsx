@@ -18,28 +18,27 @@ import { FC } from 'react';
 const container = new Container();
 const ui = container.get(UI);
 const env = container.get(Env);
-const api = container.get(Api)
+const api = container.get(Api);
 
-export interface SettingsProps {
-}
+export interface SettingsProps {}
 
 interface UserSettingsState {
-  apiKey?: string,
-  username?: string,
-  email?: string,
-  firstname?: string,
-  lastname?: string,
-  facebookId?: string,
-  githubId?: string,
+  apiKey?: string;
+  username?: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
+  facebookId?: string;
+  githubId?: string;
   links: {
-    lead?: string,
-  },
+    lead?: string;
+  };
 }
 interface LeadState {
-  optinNewsletter: boolean,
-  optinBlog: boolean,
-  optinGithub: boolean,
-  githubUsername: string|null,
+  optinNewsletter: boolean;
+  optinBlog: boolean;
+  optinGithub: boolean;
+  githubUsername: string | null;
 }
 
 const Settings: FC<SettingsProps> = () => {
@@ -54,25 +53,37 @@ const Settings: FC<SettingsProps> = () => {
     links: {
       lead: undefined,
     },
-  })
+  });
   const [leadSettings, setLeadSettings, leadRef] = useStateRef<LeadState>({
     optinNewsletter: false,
     optinBlog: false,
     optinGithub: false,
     githubUsername: null,
-  })
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'apiKey'|'username'|'email'|'firstname'|'lastname'|'optinNewsletter'|'optinBlog'|'optinGithub'>>({})
-  const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
-  const { auth, authDispatch } = useAuth()
-  const { user, userDispatch } = useUser()
-  const { logsDispatch } = useLogs()
+  });
+  const [errors, setErrors] = useState<
+    ApiValidateExceptionErrors<
+      | 'form'
+      | 'apiKey'
+      | 'username'
+      | 'email'
+      | 'firstname'
+      | 'lastname'
+      | 'optinNewsletter'
+      | 'optinBlog'
+      | 'optinGithub'
+    >
+  >({});
+  const [state, setState] = useState<'form' | 'form-submit' | 'form-success'>('form');
+  const { auth, authDispatch } = useAuth();
+  const { user, userDispatch } = useUser();
+  const { logsDispatch } = useLogs();
 
   useEffect(() => {
     (async () => {
-      setUserSettings({...user});
+      setUserSettings({ ...user });
 
       if (user.links.lead) {
-        const data = await api.getLead({uid: user.links.lead});
+        const data = await api.getLead({ uid: user.links.lead });
         setLeadSettings({
           ...leadSettings,
           ...{
@@ -83,37 +94,37 @@ const Settings: FC<SettingsProps> = () => {
           },
         });
       }
-    })()
-  }, [user])
+    })();
+  }, [user]);
 
   const onUpdateFirstname = (value: string) => {
-    setUserSettings({ ...userSettings, ...{ firstname: value }});
+    setUserSettings({ ...userSettings, ...{ firstname: value } });
   };
 
   const onUpdateLastname = (value: string) => {
-    setUserSettings({ ...userSettings, ...{ lastname: value }});
+    setUserSettings({ ...userSettings, ...{ lastname: value } });
   };
 
   const onUpdateUsername = (value: string) => {
-    setUserSettings({ ...userSettings, ...{ username: value }});
+    setUserSettings({ ...userSettings, ...{ username: value } });
   };
 
   const onUpdateApiKey = (value: string) => {
-    setUserSettings({ ...userSettings, ...{ apiKey: value }});
+    setUserSettings({ ...userSettings, ...{ apiKey: value } });
   };
 
   const onRevokeFacebook: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
     setUserSettings({ ...userSettings, ...{ facebookId: undefined } });
-    await onUpdate()
+    await onUpdate();
   };
 
   const onRevokeGithub: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
     setUserSettings({ ...userSettings, ...{ githubId: undefined } });
-    await onUpdate()
+    await onUpdate();
   };
 
   const onChangeOptinNewsletter = (value: boolean) => {
@@ -129,44 +140,54 @@ const Settings: FC<SettingsProps> = () => {
   };
 
   const onUpdate = async () => {
-    setState('form-submit')
+    setState('form-submit');
     try {
-      setErrors({})
+      setErrors({});
       if (userSettingsRef.current.links.lead) {
-        await api.updateLead({uid: userSettingsRef.current.links.lead}, {
-          optinNewsletter: leadRef.current.optinNewsletter,
-          optinBlog: leadRef.current.optinBlog,
-          optinGithub: leadRef.current.optinGithub,
-        })
-      } else if(userSettingsRef.current.email && (leadRef.current.optinNewsletter || leadRef.current.optinBlog)) {
+        await api.updateLead(
+          { uid: userSettingsRef.current.links.lead },
+          {
+            optinNewsletter: leadRef.current.optinNewsletter,
+            optinBlog: leadRef.current.optinBlog,
+            optinGithub: leadRef.current.optinGithub,
+          }
+        );
+      } else if (
+        userSettingsRef.current.email &&
+        (leadRef.current.optinNewsletter || leadRef.current.optinBlog)
+      ) {
         await api.createLead({
           email: userSettingsRef.current.email,
           optinNewsletter: leadRef.current.optinNewsletter,
           optinBlog: leadRef.current.optinBlog,
-        })
+        });
       }
-      if(auth.token) {
-        await updateSettings(userSettingsRef.current, auth.token)(userDispatch, authDispatch, logsDispatch);
+      if (auth.token) {
+        await updateSettings(userSettingsRef.current, auth.token)(
+          userDispatch,
+          authDispatch,
+          logsDispatch
+        );
       }
       setState('form-success');
     } catch (error) {
       setState('form');
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
+        setErrors({ ...error.errors });
       } else {
-        setErrors({form: [error.message]})
+        setErrors({ form: [error.message] });
       }
     }
-  }
+  };
 
   const onSubmit: React.ChangeEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    await onUpdate()
+    await onUpdate();
   };
 
   const onGenerateKey: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -176,7 +197,7 @@ const Settings: FC<SettingsProps> = () => {
     }
 
     setUserSettings({ ...userSettings, ...{ apiKey: apiKey } });
-    await onUpdate()
+    await onUpdate();
   };
 
   const getClipboard = (user: UserSettingsState) => {
@@ -195,7 +216,7 @@ const Settings: FC<SettingsProps> = () => {
 
   const clipboard = getClipboard(user);
   const facebookAppId = env.get('facebookAppId');
-  const githubAppId = env.get('githubAppId')
+  const githubAppId = env.get('githubAppId');
 
   return (
     <section className="section container-fluid">
@@ -204,92 +225,89 @@ const Settings: FC<SettingsProps> = () => {
         {state === 'form-success' && (
           <Alert type={AlertType.SUCCESS}>Your settings have been saved.</Alert>
         )}
-        {errors.form && errors.form.map((message, i) => (
-          <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-        ))}
-        <FormInput 
+        {errors.form &&
+          errors.form.map((message, i) => (
+            <Alert key={i} type={AlertType.DANGER}>
+              {message}
+            </Alert>
+          ))}
+        <FormInput
           type={FormInputType.TEXT}
           id="settings-firstname"
           label="Firstname"
           value={userSettings.firstname}
           errors={errors.firstname}
           onChange={onUpdateFirstname}
-          />
-        <FormInput 
+        />
+        <FormInput
           type={FormInputType.TEXT}
           id="settings-lastname"
           label="Lastname"
           value={userSettings.lastname}
           errors={errors.lastname}
           onChange={onUpdateLastname}
-          />
-        <FormInput 
+        />
+        <FormInput
           type={FormInputType.TEXT}
           id="settings-username"
           label="Username"
           value={userSettings.username}
           errors={errors.username}
           onChange={onUpdateUsername}
-          />
+        />
         {facebookAppId && (
-        <div className="row mb-3">
-          <label htmlFor="settings-facebook" className="col-sm-2 col-form-label">
-            Facebook
-          </label>
-          <div className="col-sm-10">
-            <div className="d-grid">
-              {(userSettings.facebookId && (
-                <button onClick={onRevokeFacebook} className="btn btn-info">
-                  <FontAwesomeIcon icon={faFacebookF} /> Revoke Facebook
-                </button>
-              )) || (
-                <a
-                  href={facebookLoginUrl(facebookAppId)}
-                  className="btn btn-social btn-facebook"
-                >
-                  <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
-                </a>
-              )}
+          <div className="row mb-3">
+            <label htmlFor="settings-facebook" className="col-sm-2 col-form-label">
+              Facebook
+            </label>
+            <div className="col-sm-10">
+              <div className="d-grid">
+                {(userSettings.facebookId && (
+                  <button onClick={onRevokeFacebook} className="btn btn-info">
+                    <FontAwesomeIcon icon={faFacebookF} /> Revoke Facebook
+                  </button>
+                )) || (
+                  <a href={facebookLoginUrl(facebookAppId)} className="btn btn-social btn-facebook">
+                    <FontAwesomeIcon icon={faFacebookF} /> Connect with Facebook
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-        </div>
         )}
         {githubAppId && (
-        <div className="row mb-3">
-          <label htmlFor="settings-github" className="col-sm-2 col-form-label">
-            Github
-          </label>
-          <div className="col-sm-10">
-            <div className="d-grid">
-              {(userSettings.githubId && (
-                <button onClick={onRevokeGithub} className="btn btn-info">
-                  <FontAwesomeIcon icon={faGithub} /> Revoke Github
-                </button>
-              )) || (
-                <a
-                  href={githubLoginUrl(githubAppId)}
-                  className="btn btn-social btn-github"
-                >
-                  <FontAwesomeIcon icon={faGithub} /> Connect with Github
-                </a>
-              )}
+          <div className="row mb-3">
+            <label htmlFor="settings-github" className="col-sm-2 col-form-label">
+              Github
+            </label>
+            <div className="col-sm-10">
+              <div className="d-grid">
+                {(userSettings.githubId && (
+                  <button onClick={onRevokeGithub} className="btn btn-info">
+                    <FontAwesomeIcon icon={faGithub} /> Revoke Github
+                  </button>
+                )) || (
+                  <a href={githubLoginUrl(githubAppId)} className="btn btn-social btn-github">
+                    <FontAwesomeIcon icon={faGithub} /> Connect with Github
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-        </div>
         )}
-        <FormInput 
+        <FormInput
           type={FormInputType.TEXT}
           id="settings-apiKeyGenerate"
           label="Api key"
           value={userSettings.apiKey}
           errors={errors.apiKey}
           onChange={onUpdateApiKey}
-          groups={(
+          groups={
             <button type="button" className="input-group-text" onClick={onGenerateKey}>
               Generate
             </button>
-          )}
-          />
+          }
+        />
         <div className="row mb-3">
           <label htmlFor="settings-apiKey" className="col-sm-2 col-form-label">
             Api usage
@@ -310,40 +328,36 @@ const Settings: FC<SettingsProps> = () => {
             </div>
           </div>
         </div>
-        <FormInput 
+        <FormInput
           type={FormInputType.CHECKBOX}
           id="settings-optinNewsletter"
           label="Subscribe to the newsletter"
           value={leadSettings.optinNewsletter}
           errors={errors.optinNewsletter}
           onChange={onChangeOptinNewsletter}
-          />
-        <FormInput 
+        />
+        <FormInput
           type={FormInputType.CHECKBOX}
           id="settings-optinNewsletter"
           label="Subscribe to blog updates"
           value={leadSettings.optinBlog}
           errors={errors.optinBlog}
           onChange={onChangeOptinBlog}
-          />
+        />
         {leadSettings.githubUsername && (
-          <FormInput 
+          <FormInput
             type={FormInputType.CHECKBOX}
             id="settings-optinGithub"
             label="Subscribe to github updates"
             value={leadSettings.optinGithub}
             errors={errors.optinGithub}
             onChange={onChangeOptinGithub}
-            />
+          />
         )}
         <div className="row mb-3">
           <div className="offset-sm-2 col-sm-10">
             <div className="d-grid">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={state === 'form-submit'}
-              >
+              <button type="submit" className="btn btn-primary" disabled={state === 'form-submit'}>
                 Save
               </button>
             </div>
@@ -352,6 +366,6 @@ const Settings: FC<SettingsProps> = () => {
       </form>
     </section>
   );
-}
+};
 
 export default Settings;

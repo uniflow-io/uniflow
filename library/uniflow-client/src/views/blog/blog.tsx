@@ -3,8 +3,7 @@ import { StaticQuery, graphql } from 'gatsby';
 import ArticleItem from './articleItem';
 import { FC } from 'react';
 
-export interface BlogProps {
-}
+export interface BlogProps {}
 
 const Blog: FC<BlogProps> = () => (
   <>

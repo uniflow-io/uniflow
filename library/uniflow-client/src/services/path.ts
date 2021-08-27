@@ -7,7 +7,10 @@ let cacheCount = 0;
 
 @Service()
 class Path {
-  private compilePath(pattern: string, options: {end: boolean, strict: boolean, sensitive: boolean}) {
+  private compilePath(
+    pattern: string,
+    options: { end: boolean; strict: boolean; sensitive: boolean }
+  ) {
     const cacheKey = '' + options.end + options.strict + options.sensitive;
     const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
 
@@ -25,7 +28,10 @@ class Path {
     return compiledPattern;
   }
 
-  matchPath(pathname: string, options: {path: string, exact?: boolean, strict?: boolean, sensitive?: boolean}) {
+  matchPath(
+    pathname: string,
+    options: { path: string; exact?: boolean; strict?: boolean; sensitive?: boolean }
+  ) {
     const parent = arguments[2];
 
     if (typeof options === 'string') options = { path: options };

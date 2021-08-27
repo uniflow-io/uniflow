@@ -15,17 +15,17 @@ const container = new Container();
 const api = container.get(Api);
 
 export type ProgramFeedType = ProgramApiType & {
-  data: string
-  updated: Moment
-}
+  data: string;
+  updated: Moment;
+};
 
 export type FolderFeedType = FolderApiType & {
-  updated: Moment
-}
+  updated: Moment;
+};
 
 export interface FeedItem {
-  type: 'program'|'folder'
-  entity: ProgramFeedType|FolderFeedType
+  type: 'program' | 'folder';
+  entity: ProgramFeedType | FolderFeedType;
 }
 
 export enum FeedActionTypes {
@@ -37,25 +37,25 @@ export enum FeedActionTypes {
   COMMIT_SET_UID_FEED = 'COMMIT_SET_UID_FEED',
 }
 
-export type FeedAction = 
+export type FeedAction =
   | { type: FeedActionTypes.COMMIT_CLEAR_FEED }
-  | { type: FeedActionTypes.COMMIT_UPDATE_FEED, item: FeedItem }
-  | { type: FeedActionTypes.COMMIT_DELETE_FEED, item: FeedItem }
-  | { type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED, parentFolder: FolderFeedType|null }
-  | { type: FeedActionTypes.COMMIT_SET_SLUG_FEED, slug: SlugType|null }
-  | { type: FeedActionTypes.COMMIT_SET_UID_FEED, uid: UuidType }
+  | { type: FeedActionTypes.COMMIT_UPDATE_FEED; item: FeedItem }
+  | { type: FeedActionTypes.COMMIT_DELETE_FEED; item: FeedItem }
+  | { type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED; parentFolder: FolderFeedType | null }
+  | { type: FeedActionTypes.COMMIT_SET_SLUG_FEED; slug: SlugType | null }
+  | { type: FeedActionTypes.COMMIT_SET_UID_FEED; uid: UuidType };
 
-export type FeedDispath = React.Dispatch<FeedAction>
+export type FeedDispath = React.Dispatch<FeedAction>;
 
 export interface FeedProviderProps {
   children: React.ReactNode;
 }
 
 export interface FeedProviderState {
-  items: {[key: string]: FeedItem},
-  parentFolder?: FolderFeedType|null,
-  slug?: SlugType|null,
-  uid?: UuidType,
+  items: { [key: string]: FeedItem };
+  parentFolder?: FolderFeedType | null;
+  slug?: SlugType | null;
+  uid?: UuidType;
 }
 
 const defaultState = {
@@ -65,7 +65,14 @@ const defaultState = {
   uid: undefined,
 };
 
-const fetchCollection = async (uid: UuidType, type: 'programs'|'folders', path?: PathType, page: PageNumberType = 1, token?: string, items = []) => {
+const fetchCollection = async (
+  uid: UuidType,
+  type: 'programs' | 'folders',
+  path?: PathType,
+  page: PageNumberType = 1,
+  token?: string,
+  items = []
+) => {
   let config = {};
   if (token) {
     config = {
@@ -75,7 +82,10 @@ const fetchCollection = async (uid: UuidType, type: 'programs'|'folders', path?:
     };
   }
 
-  const response = await request.get(`${api.getBaseUrl()}/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`, config);
+  const response = await request.get(
+    `${api.getBaseUrl()}/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`,
+    config
+  );
   const { data, total } = response.data;
   items = items.concat(data);
   if (items.length < total) {
@@ -111,7 +121,7 @@ export const commitDeleteFeed = (item: FeedItem) => {
   };
 };
 
-export const commitSetParentFolderFeed = (parentFolder: FolderFeedType|null) => {
+export const commitSetParentFolderFeed = (parentFolder: FolderFeedType | null) => {
   return (dispatch: FeedDispath) => {
     dispatch({
       type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED,
@@ -120,7 +130,7 @@ export const commitSetParentFolderFeed = (parentFolder: FolderFeedType|null) => 
   };
 };
 
-export const commitSetSlugFeed = (slug: SlugType|null) => {
+export const commitSetSlugFeed = (slug: SlugType | null) => {
   return (dispatch: FeedDispath) => {
     dispatch({
       type: FeedActionTypes.COMMIT_SET_SLUG_FEED,
@@ -138,7 +148,7 @@ export const commitSetUidFeed = (uid: UuidType) => {
   };
 };
 
-export const getFeedItem = (feed: FeedProviderState, slug = feed.slug): FeedItem|undefined => {
+export const getFeedItem = (feed: FeedProviderState, slug = feed.slug): FeedItem | undefined => {
   if (slug === undefined) return undefined;
 
   if (slug === null && feed.parentFolder) {
@@ -157,13 +167,17 @@ export const getFeedItem = (feed: FeedProviderState, slug = feed.slug): FeedItem
   return undefined;
 };
 
-export const toFeedPath = (entity: ProgramFeedType|FolderFeedType, user: UserProviderState, toParent: boolean = false) => {
+export const toFeedPath = (
+  entity: ProgramFeedType | FolderFeedType,
+  user: UserProviderState,
+  toParent = false
+) => {
   const paths = entity.path === '/' ? [] : entity.path.split('/').slice(1);
   if (!toParent && entity.slug) {
     paths.push(entity.slug);
   }
 
-  const slugs: {[key: string]: string} = {};
+  const slugs: { [key: string]: string } = {};
   for (let i = 0; i < paths.length; i++) {
     slugs[`slug${i + 1}`] = paths[i];
   }
@@ -178,8 +192,8 @@ export const toFeedPath = (entity: ProgramFeedType|FolderFeedType, user: UserPro
 
 export const getTags = (feed: FeedProviderState) => {
   let tags = Object.keys(feed.items).reduce(function (currentTags: string[], key) {
-    const entity = feed.items[key].entity
-    const tags = 'tags' in entity ? entity.tags : []
+    const entity = feed.items[key].entity;
+    const tags = 'tags' in entity ? entity.tags : [];
     return currentTags.concat();
   }, []);
 
@@ -197,10 +211,10 @@ export const getOrderedFeed = (feed: FeedProviderState, filter?: string) => {
   if (filter !== undefined) {
     keys = keys.filter((key) => {
       const item = feed.items[key];
-      let words: string[] = [];
+      const words: string[] = [];
       if (item.type === 'program') {
         words.push(item.entity.name);
-        const tags = 'tags' in item.entity ? item.entity.tags : []
+        const tags = 'tags' in item.entity ? item.entity.tags : [];
         for (let i = 0; i < tags.length; i++) {
           words.push(tags[i]);
         }
@@ -259,7 +273,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
           commitUpdateFeed({
             type: 'folder',
             entity: folder,
-          })(dispatch)
+          })(dispatch);
         }
         feedFolderPath = parentParentPath;
       }
@@ -275,7 +289,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
           commitUpdateFeed({
             type: 'folder',
             entity: folder,
-          })(dispatch)
+          })(dispatch);
         }
       }
       if (parentFolderFound === false) {
@@ -290,7 +304,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
         commitUpdateFeed({
           type: 'program',
           entity: program,
-        })(dispatch)
+        })(dispatch);
       }
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
@@ -342,12 +356,12 @@ export const createProgram = (program: ProgramFeedType, uid: UuidType, token: st
     };
 
     try {
-      program = await api.createUserProgram({uid}, data, {token})
+      program = await api.createUserProgram({ uid }, data, { token });
 
       commitUpdateFeed({
         type: 'program',
         entity: program,
-      })(dispatch)
+      })(dispatch);
 
       return program;
     } catch (error) {
@@ -373,12 +387,12 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
     };
 
     try {
-      program = await api.updateProgram({uid: program.uid}, data, {token});
+      program = await api.updateProgram({ uid: program.uid }, data, { token });
 
       commitUpdateFeed({
         type: 'program',
         entity: program,
-      })(dispatch)
+      })(dispatch);
 
       return program;
     } catch (error) {
@@ -394,7 +408,7 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
 export const getProgramData = (program: ProgramFeedType, token?: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     try {
-      const data = await api.getProgramFlows({uid: program.uid}, {token})
+      const data = await api.getProgramFlows({ uid: program.uid }, { token });
       return data.data;
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
@@ -413,13 +427,13 @@ export const setProgramData = (program: ProgramFeedType, token: string) => {
     };
 
     try {
-      const data = await api.updateProgramFlows({uid: program.uid}, body, {token});
+      const data = await api.updateProgramFlows({ uid: program.uid }, body, { token });
       program.updated = moment();
 
       commitUpdateFeed({
         type: 'program',
         entity: program,
-      })(dispatch)
+      })(dispatch);
 
       return data;
     } catch (error) {
@@ -435,12 +449,12 @@ export const setProgramData = (program: ProgramFeedType, token: string) => {
 export const deleteProgram = (program: ProgramFeedType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     try {
-      const isDeleted = await api.deleteProgram({uid: program.uid}, {token})
+      const isDeleted = await api.deleteProgram({ uid: program.uid }, { token });
 
       commitDeleteFeed({
         type: 'program',
         entity: program,
-      })(dispatch)
+      })(dispatch);
 
       return isDeleted;
     } catch (error) {
@@ -482,12 +496,12 @@ export const createFolder = (folder: FolderFeedType, uid: UuidType, token: strin
     };
 
     try {
-      folder = await api.createUserFolder({uid}, data, {token})
+      folder = await api.createUserFolder({ uid }, data, { token });
 
       commitUpdateFeed({
         type: 'folder',
         entity: folder,
-      })(dispatch)
+      })(dispatch);
 
       return folder;
     } catch (error) {
@@ -509,7 +523,7 @@ export const updateParentFolder = (folder: FolderFeedType, token: string) => {
     };
 
     try {
-      folder = await api.updateFolder({uid: folder.uid}, data, {token})
+      folder = await api.updateFolder({ uid: folder.uid }, data, { token });
 
       commitSetParentFolderFeed(folder)(dispatch);
 
@@ -527,7 +541,7 @@ export const updateParentFolder = (folder: FolderFeedType, token: string) => {
 export const deleteParentFolder = (folder: FolderFeedType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     try {
-      const isDeleted = await api.deleteFolder({uid: folder.uid}, {token})
+      const isDeleted = await api.deleteFolder({ uid: folder.uid }, { token });
 
       commitSetParentFolderFeed(undefined)(dispatch);
 
@@ -542,64 +556,68 @@ export const deleteParentFolder = (folder: FolderFeedType, token: string) => {
   };
 };
 
-export const FeedContext = React.createContext<{feed: FeedProviderState, feedDispatch: FeedDispath, feedRef: MutableRefObject<FeedProviderState>}>({
+export const FeedContext = React.createContext<{
+  feed: FeedProviderState;
+  feedDispatch: FeedDispath;
+  feedRef: MutableRefObject<FeedProviderState>;
+}>({
   feed: defaultState,
   feedDispatch: () => {
     throw new Error('FeedContext not yet initialized.');
   },
   feedRef: {
-    current: defaultState
-  }
+    current: defaultState,
+  },
 });
 FeedContext.displayName = 'FeedContext';
 
 export const FeedProvider: FC<FeedProviderProps> = (props) => {
-  const [feed, feedDispatch, feedRef] = useReducerRef<FeedProviderState, FeedAction>((
-    state: FeedProviderState = defaultState,
-    action: FeedAction
-  ) => {
-    switch (action.type) {
-      case FeedActionTypes.COMMIT_CLEAR_FEED:
-        return {
-          ...state,
-          items: {},
-        };
-      case FeedActionTypes.COMMIT_UPDATE_FEED:
-        state.items[`${action.item.type}-${action.item.entity.uid}`] = action.item;
-        return {
-          ...state,
-        };
-      case FeedActionTypes.COMMIT_DELETE_FEED:
-        delete state.items[`${action.item.type}-${action.item.entity.uid}`];
-        return {
-          ...state,
-        };
-      case FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED:
-        return {
-          ...state,
-          parentFolder: action.parentFolder,
-        };
-      case FeedActionTypes.COMMIT_SET_SLUG_FEED:
-        return {
-          ...state,
-          slug: action.slug,
-        };
-      case FeedActionTypes.COMMIT_SET_UID_FEED:
-        return {
-          ...state,
-          uid: action.uid,
-        };
-      default:
-        return state;
-    }
-  }, defaultState);
+  const [feed, feedDispatch, feedRef] = useReducerRef<FeedProviderState, FeedAction>(
+    (state: FeedProviderState = defaultState, action: FeedAction) => {
+      switch (action.type) {
+        case FeedActionTypes.COMMIT_CLEAR_FEED:
+          return {
+            ...state,
+            items: {},
+          };
+        case FeedActionTypes.COMMIT_UPDATE_FEED:
+          state.items[`${action.item.type}-${action.item.entity.uid}`] = action.item;
+          return {
+            ...state,
+          };
+        case FeedActionTypes.COMMIT_DELETE_FEED:
+          delete state.items[`${action.item.type}-${action.item.entity.uid}`];
+          return {
+            ...state,
+          };
+        case FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED:
+          return {
+            ...state,
+            parentFolder: action.parentFolder,
+          };
+        case FeedActionTypes.COMMIT_SET_SLUG_FEED:
+          return {
+            ...state,
+            slug: action.slug,
+          };
+        case FeedActionTypes.COMMIT_SET_UID_FEED:
+          return {
+            ...state,
+            uid: action.uid,
+          };
+        default:
+          return state;
+      }
+    },
+    defaultState
+  );
 
   return (
-    <FeedContext.Provider value={{feed, feedDispatch, feedRef}}>
+    <FeedContext.Provider value={{ feed, feedDispatch, feedRef }}>
       {props.children}
     </FeedContext.Provider>
   );
-}
+};
 
 export const FeedConsumer = FeedContext.Consumer;
 

@@ -3,9 +3,7 @@ import { FC } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
 
-export interface UiFlowProps {
-  
-}
+export interface UiFlowProps {}
 
 const UiFlow: FC<UiFlowProps> = (props) => {
   const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
@@ -33,19 +31,19 @@ const UiFlow: FC<UiFlowProps> = (props) => {
       />
     </Suspense>
   );
-}
+};
 
 export interface Flow {
-  clients: string[]
-  name: string
-  tags: string[]
+  clients: string[];
+  name: string;
+  tags: string[];
 }
 
 export interface FlowsProps {
-  graph: GraphProviderState
-  allFlows: {[key: string] : Flow}
-  programFlows: {key: string, label: string}[]
-  clients: string[]
+  graph: GraphProviderState;
+  allFlows: { [key: string]: Flow };
+  programFlows: { key: string; label: string }[];
+  clients: string[];
 }
 
 const Flows: FC<FlowsProps> = (props) => {
@@ -77,29 +75,29 @@ const Flows: FC<FlowsProps> = (props) => {
 
   return (
     <>
-    {uiFlows.map((item, i) => (
-      <UiFlow
-        key={i}
-        tag={item.component}
-        allFlows={allFlows}
-        programFlows={programFlows}
-        clients={clients}
-        onPush={(component) => {
-          onPush(item.index, component);
-        }}
-        onPop={() => {
-          onPop(item.index);
-        }}
-        onUpdate={(data) => {
-          onUpdate(item.index, data);
-        }}
-        onRun={(event) => {
-          onRun(event, item.index);
-        }}
-      />
-    ))}
+      {uiFlows.map((item, i) => (
+        <UiFlow
+          key={i}
+          tag={item.component}
+          allFlows={allFlows}
+          programFlows={programFlows}
+          clients={clients}
+          onPush={(component) => {
+            onPush(item.index, component);
+          }}
+          onPop={() => {
+            onPop(item.index);
+          }}
+          onUpdate={(data) => {
+            onUpdate(item.index, data);
+          }}
+          onRun={(event) => {
+            onRun(event, item.index);
+          }}
+        />
+      ))}
     </>
-  )
-}
+  );
+};
 
-export default Flows
+export default Flows;

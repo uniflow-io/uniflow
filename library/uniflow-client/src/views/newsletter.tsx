@@ -7,15 +7,15 @@ import { FC } from 'react';
 
 export interface NewsletterProps {
   newsletter: {
-    body: string
-    excerpt: string
+    body: string;
+    excerpt: string;
     frontmatter: {
-      title: string
-    }
+      title: string;
+    };
     parent: {
-      relativePath: string
-    }
-  }
+      relativePath: string;
+    };
+  };
 }
 
 const Newsletter: FC<NewsletterProps> = (props: NewsletterProps) => {
@@ -47,6 +47,6 @@ const Newsletter: FC<NewsletterProps> = (props: NewsletterProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default Newsletter;

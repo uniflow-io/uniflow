@@ -13,4 +13,4 @@ const Page: FC<PageProps> = ({ location }) => {
   return <HomePage />;
 };
 
-export default Page
+export default Page;

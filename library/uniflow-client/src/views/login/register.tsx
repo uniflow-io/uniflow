@@ -9,7 +9,9 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Container from '../../container';
 import { Env } from '../../services';
 import { useAuth, useLogs } from '../../contexts';
-import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import ApiValidateException, {
+  ApiValidateExceptionErrors,
+} from '../../models/api-validate-exception';
 import Alert, { AlertType } from '../../components/alert';
 import FormInput, { FormInputType } from '../../components/form-input';
 import { FC } from 'react';
@@ -17,15 +19,16 @@ import { FC } from 'react';
 const container = new Container();
 const env = container.get(Env);
 
-export interface RegisterProps {
-}
+export interface RegisterProps {}
 
 const Register: FC<RegisterProps> = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'password'>>({})
-  const { auth, authDispatch, authRef } = useAuth()
-  const { logsDispatch } = useLogs()
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form' | 'email' | 'password'>>(
+    {}
+  );
+  const { auth, authDispatch, authRef } = useAuth();
+  const { logsDispatch } = useLogs();
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -35,17 +38,17 @@ const Register: FC<RegisterProps> = () => {
       if (authRef.current.isAuthenticated) {
         navigate(pathTo('feed'));
       }
-    } catch(error) {
+    } catch (error) {
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
-      } else if(authRef.current.message) {
-        setErrors({form: [authRef.current.message]})
+        setErrors({ ...error.errors });
+      } else if (authRef.current.message) {
+        setErrors({ form: [authRef.current.message] });
       }
     }
   };
 
   const facebookAppId = env.get('facebookAppId');
-  const githubAppId = env.get('githubAppId')
+  const githubAppId = env.get('githubAppId');
 
   return (
     <section className="section container-fluid">
@@ -55,9 +58,12 @@ const Register: FC<RegisterProps> = () => {
           <div className="card">
             <article className="card-body">
               <form onSubmit={onSubmit}>
-                {errors.form && errors.form.map((message, i) => (
-                  <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-                ))}
+                {errors.form &&
+                  errors.form.map((message, i) => (
+                    <Alert key={i} type={AlertType.DANGER}>
+                      {message}
+                    </Alert>
+                  ))}
                 <FormInput
                   id="register-email"
                   type={FormInputType.TEXT}
@@ -67,7 +73,7 @@ const Register: FC<RegisterProps> = () => {
                   icon={faUser}
                   onChange={setEmail}
                   autoComplete={true}
-                  />
+                />
                 <FormInput
                   id="register-password"
                   type={FormInputType.PASSWORD}
@@ -77,7 +83,7 @@ const Register: FC<RegisterProps> = () => {
                   icon={faKey}
                   onChange={setPassword}
                   autoComplete={true}
-                  />
+                />
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <div className="d-grid">
@@ -110,10 +116,7 @@ const Register: FC<RegisterProps> = () => {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="d-grid">
-                      <a
-                        href={githubLoginUrl(githubAppId)}
-                        className="btn btn-social btn-github"
-                      >
+                      <a href={githubLoginUrl(githubAppId)} className="btn btn-social btn-github">
                         <FontAwesomeIcon icon={faGithub} /> Register with Github
                       </a>
                     </div>
@@ -126,6 +129,6 @@ const Register: FC<RegisterProps> = () => {
       </div>
     </section>
   );
-}
+};
 
 export default Register;

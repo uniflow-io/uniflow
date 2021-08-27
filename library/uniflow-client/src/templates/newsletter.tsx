@@ -4,7 +4,7 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface NewsLetterTemplateData {
-  newsletter: NewsletterProps['newsletter']
+  newsletter: NewsletterProps['newsletter'];
 }
 
 export default ({ data, location }: PageProps<NewsLetterTemplateData>) => {

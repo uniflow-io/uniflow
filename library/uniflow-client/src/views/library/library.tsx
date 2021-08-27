@@ -5,7 +5,7 @@ import { MDXProvider } from '../../components';
 import { FC } from 'react';
 
 export interface LibraryProps {
-  library: NavigationProps['library']
+  library: NavigationProps['library'];
 }
 
 const Library: FC<LibraryProps> = (props) => {
@@ -23,6 +23,6 @@ const Library: FC<LibraryProps> = (props) => {
       </div>
     </div>
   );
-}
+};
 
 export default Library;

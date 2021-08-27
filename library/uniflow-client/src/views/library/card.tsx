@@ -8,29 +8,29 @@ import Navigation, { NavigationProps } from './navigation';
 import { MDXProvider } from '../../components';
 
 export interface CardProps {
-  library: NavigationProps['library']
+  library: NavigationProps['library'];
   card: {
-    name: string
-    description: string
+    name: string;
+    description: string;
     repository: {
-      url: string
-    }
-    official: boolean
+      url: string;
+    };
+    official: boolean;
     fields: {
-      slug: string
-      catalogs: string[]
-    }
+      slug: string;
+      catalogs: string[];
+    };
     readme: {
       childMdx: {
-        body: string
-      }
-    }
-  }
+        body: string;
+      };
+    };
+  };
   logo: {
     childImageSharp: {
-      gatsbyImageData: IGatsbyImageData
-    }
-  }
+      gatsbyImageData: IGatsbyImageData;
+    };
+  };
 }
 
 const Card: FC<CardProps> = (props) => {
@@ -93,6 +93,6 @@ const Card: FC<CardProps> = (props) => {
       </div>
     </div>
   );
-}
+};
 
 export default Card;

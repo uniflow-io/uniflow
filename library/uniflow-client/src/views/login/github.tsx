@@ -7,22 +7,21 @@ import { useAuth, useLogs } from '../../contexts';
 import { useLocation } from '@reach/router';
 import { FC } from 'react';
 
-export interface GithubLoginProps {
-}
+export interface GithubLoginProps {}
 
 const GithubLogin: FC<GithubLoginProps> = (props) => {
-  const { authDispatch, authRef } = useAuth()
-  const { logsDispatch } = useLogs()
-  const location = useLocation()
+  const { authDispatch, authRef } = useAuth();
+  const { logsDispatch } = useLogs();
+  const location = useLocation();
 
-  const getCode = ():string|null => {
+  const getCode = (): string | null => {
     const m = location.search.match(/code=([^&]+)/);
     if (m) {
       return m[1];
     }
 
     return null;
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -34,12 +33,12 @@ const GithubLogin: FC<GithubLoginProps> = (props) => {
       await githubLogin(code, authRef.current.token)(authDispatch);
       if (authRef.current.isAuthenticated) {
         navigate(pathTo('feed'));
-      } else if(authRef.current.message) {
+      } else if (authRef.current.message) {
         commitAddLog(authRef.current.message)(logsDispatch);
         navigate(pathTo('login'));
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   return (
     <section className="section container-fluid">
@@ -47,6 +46,6 @@ const GithubLogin: FC<GithubLoginProps> = (props) => {
       <p className="text-center">Application is currently logging you from Github</p>
     </section>
   );
-}
+};
 
 export default GithubLogin;

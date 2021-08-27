@@ -11,57 +11,57 @@ import { FC } from 'react';
 
 export interface ArticleProps {
   article: {
-    body: string
-    timeToRead: string
-    excerpt: string
+    body: string;
+    timeToRead: string;
+    excerpt: string;
     frontmatter: {
-      title: string
+      title: string;
       author: {
         fields: {
-          slug: string
-        }
-        name: string
+          slug: string;
+        };
+        name: string;
         image: {
           childImageSharp: {
-            gatsbyImageData: IGatsbyImageData
-          }
-        }
-      }
+            gatsbyImageData: IGatsbyImageData;
+          };
+        };
+      };
       cover: {
         childImageSharp: {
-          gatsbyImageData: IGatsbyImageData
-        }
-        extension: string
-        publicURL: string
-      }
+          gatsbyImageData: IGatsbyImageData;
+        };
+        extension: string;
+        publicURL: string;
+      };
       coverSeo: {
-        publicURL: string
-      }
-      coverAuthor: string
-      coverOriginalUrl: string
-      tags: string[]
-      date: string
-    }
+        publicURL: string;
+      };
+      coverAuthor: string;
+      coverOriginalUrl: string;
+      tags: string[];
+      date: string;
+    };
     parent: {
-      relativePath: string
-    }
-  },
+      relativePath: string;
+    };
+  };
   previous?: {
     frontmatter: {
-      title: string
-    },
+      title: string;
+    };
     fields: {
-      slug: string
-    },
-  },
+      slug: string;
+    };
+  };
   next?: {
     frontmatter: {
-      title: string
-    },
+      title: string;
+    };
     fields: {
-      slug: string
-    },
-  },
+      slug: string;
+    };
+  };
 }
 
 const Article: FC<ArticleProps> = (props) => {
@@ -86,11 +86,7 @@ const Article: FC<ArticleProps> = (props) => {
         )}
         <figcaption className="figure-caption text-center">
           credit{' '}
-          <a
-            href={article.frontmatter.coverOriginalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={article.frontmatter.coverOriginalUrl} target="_blank" rel="noopener noreferrer">
             {article.frontmatter.coverAuthor}
           </a>
         </figcaption>
@@ -156,6 +152,6 @@ const Article: FC<ArticleProps> = (props) => {
       </div>
     </section>
   );
-}
+};
 
 export default Article;

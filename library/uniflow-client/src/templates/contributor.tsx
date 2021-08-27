@@ -4,8 +4,8 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface ContributorTemplateData {
-  contributor: ContributorProps['contributor']
-  articles: ContributorProps['articles']
+  contributor: ContributorProps['contributor'];
+  articles: ContributorProps['articles'];
 }
 
 export default ({ data, location }: PageProps<ContributorTemplateData>) => {

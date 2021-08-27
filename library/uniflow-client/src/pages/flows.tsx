@@ -13,4 +13,4 @@ const Page: FC<PageProps> = ({ location }) => {
   return <FlowsPage />;
 };
 
-export default Page
+export default Page;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { FC } from 'react';
 
-export interface NotFoundProps {
-}
+export interface NotFoundProps {}
 
 const NotFound: FC<NotFoundProps> = () => {
   return (
@@ -14,6 +13,6 @@ const NotFound: FC<NotFoundProps> = () => {
       </div>
     </section>
   );
-}
+};
 
-export default NotFound
+export default NotFound;

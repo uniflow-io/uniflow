@@ -9,7 +9,7 @@ export interface SelectProps {
   className: string;
   id: string;
   multiple?: boolean;
-  options: { value: string, label: string }[];
+  options: { value: string; label: string }[];
   edit?: boolean;
 }
 
@@ -133,6 +133,6 @@ const Select: FC<SelectProps> = (props) => {
       theme={themes[app.theme]}
     />
   );
-}
+};
 
 export default Select;

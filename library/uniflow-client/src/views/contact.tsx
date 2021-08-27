@@ -13,32 +13,33 @@ import { FC } from 'react';
 const container = new Container();
 const api = container.get(Api);
 
-export interface ContactProps {
-}
+export interface ContactProps {}
 
 export interface ContactState {}
 
 const Contact: FC<ContactProps> = () => {
-  const [email, setEmail] = useState<string>('')
-  const [message, setMessage] = useState<string>('')
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'message'>>({})
-  const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
+  const [email, setEmail] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form' | 'email' | 'message'>>(
+    {}
+  );
+  const [state, setState] = useState<'form' | 'form-submit' | 'form-success'>('form');
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    setState('form-submit')
+    setState('form-submit');
     try {
-      const data = await api.contact({email, message});
+      const data = await api.contact({ email, message });
       if (data === true) {
         setState('form-success');
       }
     } catch (error) {
       setState('form');
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
+        setErrors({ ...error.errors });
       } else {
-        setErrors({form: [error.message]})
+        setErrors({ form: [error.message] });
       }
     }
   };
@@ -51,8 +52,8 @@ const Contact: FC<ContactProps> = () => {
           {state === 'form-success' && (
             <Alert type={AlertType.SUCCESS}>
               Your message has been sent, we will glad to ear from you !<br />
-              In case check <Link to={pathTo('doc', { slug: 'faq' })}>FAQ</Link> page to see if
-              your question has been answered already.
+              In case check <Link to={pathTo('doc', { slug: 'faq' })}>FAQ</Link> page to see if your
+              question has been answered already.
             </Alert>
           )}
           {(state === 'form' || state === 'form-submit') && [
@@ -60,18 +61,21 @@ const Contact: FC<ContactProps> = () => {
               You got a question about Uniflow? Write more here.
             </p>,
             <form key="contactForm" onSubmit={onSubmit}>
-              {errors.form && errors.form.map((message, i) => (
-                <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-              ))}
-              <FormInput 
+              {errors.form &&
+                errors.form.map((message, i) => (
+                  <Alert key={i} type={AlertType.DANGER}>
+                    {message}
+                  </Alert>
+                ))}
+              <FormInput
                 type={FormInputType.TEXT}
                 id="contact-email"
                 placeholder="Email"
                 value={email}
                 errors={errors.email}
                 onChange={setEmail}
-                />
-              <FormInput 
+              />
+              <FormInput
                 type={FormInputType.TEXTAREA}
                 id="contact-message"
                 placeholder="Message"
@@ -79,7 +83,7 @@ const Contact: FC<ContactProps> = () => {
                 errors={errors.message}
                 onChange={setMessage}
                 rows={15}
-                />
+              />
 
               <div className="row mb-3">
                 <div className="col-md-12">
@@ -100,6 +104,6 @@ const Contact: FC<ContactProps> = () => {
       </div>
     </section>
   );
-}
+};
 
 export default Contact;

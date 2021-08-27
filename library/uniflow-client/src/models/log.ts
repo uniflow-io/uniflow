@@ -7,8 +7,8 @@ export enum LOG_STATUS {
 
 export default class Log {
   public created: moment.Moment;
-  public id: number = 0;
-  public message: string = '';
+  public id = 0;
+  public message = '';
   public status: LOG_STATUS = LOG_STATUS.NEW;
   constructor(data: { id: number; message: string; status: string }) {
     Object.assign(this, data);

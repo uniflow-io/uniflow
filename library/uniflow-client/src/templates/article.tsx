@@ -4,15 +4,19 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface ArticleTemplateData {
-  article: ArticleProps['article']
+  article: ArticleProps['article'];
 }
 
 export interface ArticleTemplateContext {
-  previous: ArticleProps['previous'],
-  next: ArticleProps['next'],
+  previous: ArticleProps['previous'];
+  next: ArticleProps['next'];
 }
 
-export default ({ data, location, pageContext: { previous, next } }: PageProps<ArticleTemplateData, ArticleTemplateContext>) => {
+export default ({
+  data,
+  location,
+  pageContext: { previous, next },
+}: PageProps<ArticleTemplateData, ArticleTemplateContext>) => {
   const { article } = data;
 
   const ArticlePage = withPage<ArticleProps>(Article, 'article', {

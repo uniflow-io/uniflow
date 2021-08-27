@@ -4,14 +4,18 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface TagTemplateData {
-  articles: TagProps['articles']
+  articles: TagProps['articles'];
 }
 
 export interface TagTemplateContext {
-  tag: TagProps['tag']
+  tag: TagProps['tag'];
 }
 
-export default ({ data, location, pageContext: { tag } }: PageProps<TagTemplateData, TagTemplateContext>) => {
+export default ({
+  data,
+  location,
+  pageContext: { tag },
+}: PageProps<TagTemplateData, TagTemplateContext>) => {
   const { articles } = data;
 
   const TagPage = withPage<TagProps>(Tag, 'tag', {

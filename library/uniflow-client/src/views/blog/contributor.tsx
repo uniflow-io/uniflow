@@ -6,19 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface ContributorProps {
   contributor: {
-    name: string
-    description: string
+    name: string;
+    description: string;
     image: {
       childImageSharp: {
-        gatsbyImageData: IGatsbyImageData
-      }
-      publicURL: string
-    }
-    twitter: string
-  }
+        gatsbyImageData: IGatsbyImageData;
+      };
+      publicURL: string;
+    };
+    twitter: string;
+  };
   articles: {
-    edges: {node:ArticleItemProps['article']}[]
-  }
+    edges: { node: ArticleItemProps['article'] }[];
+  };
 }
 
 const Contributor: FC<ContributorProps> = (props) => {
@@ -74,6 +74,6 @@ const Contributor: FC<ContributorProps> = (props) => {
       </div>
     </section>
   );
-}
+};
 
 export default Contributor;

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import FacebookLogin, { FacebookLoginProps } from '../../views/login/facebook';
 import { withPage } from '../../helpers';
-import { PageProps } from 'gatsby'
+import { PageProps } from 'gatsby';
 
 const Page: FC<PageProps> = ({ location }) => {
   const FacebookLoginPage = withPage<FacebookLoginProps>(FacebookLogin, 'facebook-login', {
@@ -13,4 +13,4 @@ const Page: FC<PageProps> = ({ location }) => {
   return <FacebookLoginPage />;
 };
 
-export default Page
+export default Page;

@@ -6,30 +6,51 @@ export enum AlertType {
 }
 
 export interface AlertProps {
-  type: AlertType
-  children: React.ReactNode
-  onClose?: React.MouseEventHandler<HTMLButtonElement>
+  type: AlertType;
+  children: React.ReactNode;
+  onClose?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const Alert: FC<AlertProps> = (props) => {
-  const {type, children, onClose} = props
-  const [isClosed, setIsClosed] = useState<Boolean>(false)
+  const { type, children, onClose } = props;
+  const [isClosed, setIsClosed] = useState<boolean>(false);
 
   const defaultOnClose: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
-    setIsClosed(true)
-  }
+    setIsClosed(true);
+  };
 
   return isClosed ? (
     <></>
   ) : (
-    <div className={`alert alert-${type === AlertType.DANGER ? 'danger' : 'success'} alert-dismissible fade show`} role="alert">
+    <div
+      className={`alert alert-${
+        type === AlertType.DANGER ? 'danger' : 'success'
+      } alert-dismissible fade show`}
+      role="alert"
+    >
       {type === AlertType.SUCCESS && (
-      <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlinkHref="#check-circle-fill"/></svg>
+        <svg
+          className="bi flex-shrink-0 me-2"
+          width="24"
+          height="24"
+          role="img"
+          aria-label="Success:"
+        >
+          <use xlinkHref="#check-circle-fill" />
+        </svg>
       )}
       {type === AlertType.DANGER && (
-      <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlinkHref="#exclamation-triangle-fill"/></svg>
+        <svg
+          className="bi flex-shrink-0 me-2"
+          width="24"
+          height="24"
+          role="img"
+          aria-label="Danger:"
+        >
+          <use xlinkHref="#exclamation-triangle-fill" />
+        </svg>
       )}
       {children}
       <button
@@ -41,6 +62,6 @@ const Alert: FC<AlertProps> = (props) => {
       ></button>
     </div>
   );
-}
+};
 
-export default Alert
+export default Alert;

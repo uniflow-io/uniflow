@@ -11,20 +11,24 @@ const container = new Container();
 const env = container.get(Env);
 
 export interface WithPageProps {
-  location: WindowLocation
+  location: WindowLocation;
 }
 
-export default function withPage<T>(Component: ComponentType<T>, page: string, seo: {
-  title: string,
-  description: string,
-  location: WindowLocation,
-  type?: string,
-  image?: string | {url: string, width: string, height: string}
-}) {
+export default function withPage<T>(
+  Component: ComponentType<T>,
+  page: string,
+  seo: {
+    title: string;
+    description: string;
+    location: WindowLocation;
+    type?: string;
+    image?: string | { url: string; width: string; height: string };
+  }
+) {
   const PageHelper: FC<T> = (props) => {
     const app = useApp();
-    const source = createMemorySource(location.pathname + location.search)
-    const history = createHistory(source)
+    const source = createMemorySource(location.pathname + location.search);
+    const history = createHistory(source);
 
     useEffect(() => {
       app.setPage(page);
@@ -83,7 +87,7 @@ export default function withPage<T>(Component: ComponentType<T>, page: string, s
         </LocationProvider>
       </>
     );
-  }
+  };
 
   return PageHelper;
 }

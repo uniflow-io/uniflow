@@ -11,35 +11,35 @@ import { FC } from 'react';
 
 export interface DocProps {
   doc: {
-    excerpt: string
-    body: string
+    excerpt: string;
+    body: string;
     frontmatter: {
-      title: string
-    }
+      title: string;
+    };
     fields: {
-      slug: string
-    }
+      slug: string;
+    };
     parent: {
-      relativePath: string
-    }
-  }
-  docNav: NavigationProps['docNav'],
+      relativePath: string;
+    };
+  };
+  docNav: NavigationProps['docNav'];
   previous?: {
     frontmatter: {
-      title: string
-    },
+      title: string;
+    };
     fields: {
-      slug: string
-    },
-  },
+      slug: string;
+    };
+  };
   next?: {
     frontmatter: {
-      title: string
-    },
+      title: string;
+    };
     fields: {
-      slug: string
-    },
-  }
+      slug: string;
+    };
+  };
 }
 
 const Doc: FC<DocProps> = (props) => {
@@ -95,6 +95,6 @@ const Doc: FC<DocProps> = (props) => {
       </div>
     </div>
   );
-}
+};
 
 export default Doc;

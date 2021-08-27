@@ -33,9 +33,11 @@ import Container from '../../container';
 import { UI } from '../../services';
 import { useAuth, useGraph, useUser } from '../../contexts';
 import { PathType } from '../../models/type-interface';
-import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import ApiValidateException, {
+  ApiValidateExceptionErrors,
+} from '../../models/api-validate-exception';
 import FormInput, { FormInputType } from '../../components/form-input';
-import { useLocation } from "@reach/router";
+import { useLocation } from '@reach/router';
 import Alert, { AlertType } from '../../components/alert';
 import { Flow } from '../../components/flows';
 import { FC } from 'react';
@@ -44,34 +46,38 @@ const container = new Container();
 const ui = container.get(UI);
 
 export interface ProgramProps {
-  allFlows: {[key: string] : Flow}
-  program: ProgramFeedType
+  allFlows: { [key: string]: Flow };
+  program: ProgramFeedType;
 }
 
 export interface ProgramState {}
 
 const Program: FC<ProgramProps> = (props) => {
-  const [fetchedSlug, setFetchedSlug] = useState<string>()
-  const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
-  const [folderTree, setFolderTree] = useState<PathType[]>([])
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'name'|'slug'|'path'|'clients'|'tags'|'isPublic'|'description'>>({})
-  const { auth, authDispatch } = useAuth()
-  const { logsDispatch } = useLogs()
-  const { user, userDispatch } = useUser()
-  const { feed, feedDispatch, feedRef } = useFeed()
-  const { graph, graphDispatch } = useGraph()
-  const location = useLocation()
+  const [fetchedSlug, setFetchedSlug] = useState<string>();
+  const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false);
+  const [folderTree, setFolderTree] = useState<PathType[]>([]);
+  const [errors, setErrors] = useState<
+    ApiValidateExceptionErrors<
+      'form' | 'name' | 'slug' | 'path' | 'clients' | 'tags' | 'isPublic' | 'description'
+    >
+  >({});
+  const { auth, authDispatch } = useAuth();
+  const { logsDispatch } = useLogs();
+  const { user, userDispatch } = useUser();
+  const { feed, feedDispatch, feedRef } = useFeed();
+  const { graph, graphDispatch } = useGraph();
+  const location = useLocation();
 
   const { program, allFlows } = props;
-  const clients: {[key: string]: string} = {
+  const clients: { [key: string]: string } = {
     uniflow: 'Uniflow',
     node: 'Node',
     vscode: 'VSCode',
   };
 
   const getProgramRef = (): ProgramFeedType => {
-    return getFeedItem(feedRef.current)!.entity as ProgramFeedType
-  }
+    return getFeedItem(feedRef.current)!.entity as ProgramFeedType;
+  };
 
   const getFlows = (program: ProgramFeedType) => {
     const { allFlows } = props;
@@ -102,18 +108,18 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   const programFlows = getFlows(program);
-  const tags = getTags(feed)
+  const tags = getTags(feed);
 
   useEffect(() => {
-    setFolderTreeEdit(false)
-    setFolderTree([props.program.path])
+    setFolderTreeEdit(false);
+    setFolderTree([props.program.path]);
 
     return () => {
-      onUpdate.cancel()
-      onFetchFlowData.cancel()
-      onUpdateFlowData.cancel()
-    }
-  }, [props.program.uid])
+      onUpdate.cancel();
+      onFetchFlowData.cancel();
+      onUpdateFlowData.cancel();
+    };
+  }, [props.program.uid]);
 
   const onRun = (index?: number) => {
     const { graph } = props;
@@ -145,7 +151,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ name },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -156,7 +162,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ slug },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -167,7 +173,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ path },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -178,7 +184,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ clients },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -189,7 +195,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ tags },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -200,7 +206,7 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ description },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -211,73 +217,101 @@ const Program: FC<ProgramProps> = (props) => {
         ...props.program,
         ...{ isPublic },
       },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
-  const onFetchFlowData = useMemo(() => debounce(async () => {
-    const programRef = getProgramRef();
+  const onFetchFlowData = useMemo(
+    () =>
+      debounce(async () => {
+        const programRef = getProgramRef();
 
-    commitSetFlows([])(graphDispatch);
-    let data = programRef.data;
-    if (!data && auth.token) {
-      data = await getProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
-    }
-    if (data) {
-      programRef.data = data;
-
-      if (programRef.slug === props.program.slug) {
-        commitSetFlows(deserializeFlowsData(data))(graphDispatch);
-      }
-    }
-    setFetchedSlug(programRef.slug)
-  }, 1000), [props.program.uid])
-
-  const onUpdateFlowData = useMemo(() => debounce(async () => {
-    const { graph, feed } = props;
-    const programRef = getProgramRef();
-    if (programRef.slug !== fetchedSlug) return;
-
-    const data = serializeFlowsData(graph);
-    if (auth.token && (feed.uid === 'me' || user.uid === feed.uid) && programRef.data !== data) {
-      programRef.data = data;
-
-      try {
-        await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
-      } catch (error) {
-        commitAddLog(error.message)(logsDispatch);
-      }
-    }
-  }, 1000), [props.program.uid])
-
-  const onUpdate = useMemo(() => debounce(async () => {
-    if(auth.token) {
-      try {
-        setErrors({})
-        await updateProgram(getProgramRef(), auth.token)(feedDispatch, userDispatch, authDispatch);
-        const path = toFeedPath(getProgramRef(), user);
-        if(getProgramRef().slug && path !== location.pathname) {
-          navigate(path);
+        commitSetFlows([])(graphDispatch);
+        let data = programRef.data;
+        if (!data && auth.token) {
+          data = await getProgramData(programRef, auth.token)(
+            feedDispatch,
+            userDispatch,
+            authDispatch
+          );
         }
-      } catch(error) {
-        if (error instanceof ApiValidateException) {
-          setErrors({ ...error.errors })
-        } else {
-          setErrors({form: [error.message]})
+        if (data) {
+          programRef.data = data;
+
+          if (programRef.slug === props.program.slug) {
+            commitSetFlows(deserializeFlowsData(data))(graphDispatch);
+          }
         }
-      }
-    }
-  }, 1000), [props.program.uid])
+        setFetchedSlug(programRef.slug);
+      }, 1000),
+    [props.program.uid]
+  );
+
+  const onUpdateFlowData = useMemo(
+    () =>
+      debounce(async () => {
+        const { graph, feed } = props;
+        const programRef = getProgramRef();
+        if (programRef.slug !== fetchedSlug) return;
+
+        const data = serializeFlowsData(graph);
+        if (
+          auth.token &&
+          (feed.uid === 'me' || user.uid === feed.uid) &&
+          programRef.data !== data
+        ) {
+          programRef.data = data;
+
+          try {
+            await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
+          } catch (error) {
+            commitAddLog(error.message)(logsDispatch);
+          }
+        }
+      }, 1000),
+    [props.program.uid]
+  );
+
+  const onUpdate = useMemo(
+    () =>
+      debounce(async () => {
+        if (auth.token) {
+          try {
+            setErrors({});
+            await updateProgram(getProgramRef(), auth.token)(
+              feedDispatch,
+              userDispatch,
+              authDispatch
+            );
+            const path = toFeedPath(getProgramRef(), user);
+            if (getProgramRef().slug && path !== location.pathname) {
+              navigate(path);
+            }
+          } catch (error) {
+            if (error instanceof ApiValidateException) {
+              setErrors({ ...error.errors });
+            } else {
+              setErrors({ form: [error.message] });
+            }
+          }
+        }
+      }, 1000),
+    [props.program.uid]
+  );
 
   const onDuplicate: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    if(auth.token && auth.uid) {
+    if (auth.token && auth.uid) {
       const program = props.program;
       program.name += ' Copy';
-  
+
       try {
-        const item = createProgram(program, auth.uid, auth.token)(feedDispatch, userDispatch, authDispatch)
+        const item = createProgram(program, auth.uid, auth.token)(
+          feedDispatch,
+          userDispatch,
+          authDispatch
+        );
         Object.assign(program, item);
         await setProgramData(program, auth.token)(feedDispatch, userDispatch, authDispatch);
         navigate(toFeedPath(program, user));
@@ -290,7 +324,7 @@ const Program: FC<ProgramProps> = (props) => {
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    if(auth.token) {
+    if (auth.token) {
       await deleteProgram(props.program, auth.token)(feedDispatch, userDispatch, authDispatch);
       navigate(toFeedPath(props.program, user, true));
     }
@@ -299,13 +333,16 @@ const Program: FC<ProgramProps> = (props) => {
   const onFolderEdit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    if(feed.uid) {
-      const folderTree = await getFolderTree(feed.uid, auth.token)(feedDispatch, userDispatch, authDispatch);
-      setFolderTreeEdit(true)
-      setFolderTree(folderTree)
+    if (feed.uid) {
+      const folderTree = await getFolderTree(feed.uid, auth.token)(
+        feedDispatch,
+        userDispatch,
+        authDispatch
+      );
+      setFolderTreeEdit(true);
+      setFolderTree(folderTree);
     }
   };
-
 
   const getNodeClipboard = () => {
     const { program } = props;
@@ -318,7 +355,7 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   const onCopyNodeUsage: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const clipboard = getNodeClipboard();
     ui.copyTextToClipboard(clipboard);
@@ -344,9 +381,12 @@ const Program: FC<ProgramProps> = (props) => {
         </div>
       </div>
       <form className="form-sm-horizontal">
-        {errors.form && errors.form.map((message, i) => (
-          <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-        ))}
+        {errors.form &&
+          errors.form.map((message, i) => (
+            <Alert key={i} type={AlertType.DANGER}>
+              {message}
+            </Alert>
+          ))}
         <FormInput
           id="program-name"
           type={FormInputType.TEXT}
@@ -354,7 +394,7 @@ const Program: FC<ProgramProps> = (props) => {
           value={program.name}
           errors={errors.name}
           onChange={onChangeName}
-          />
+        />
         <FormInput
           id="program-slug"
           type={FormInputType.TEXT}
@@ -362,7 +402,7 @@ const Program: FC<ProgramProps> = (props) => {
           value={program.slug}
           errors={errors.slug}
           onChange={onChangeSlug}
-          />
+        />
         <div className="row mb-3">
           <label htmlFor="program-path" className="col-sm-2 col-form-label">
             Path
@@ -435,10 +475,13 @@ const Program: FC<ProgramProps> = (props) => {
           return (
             <div key={`client-${client}`} className="row">
               <div className="col">
-                <button className="btn btn-primary" onClick={(event) => {
-                  event.preventDefault();
-                  onRun()
-                }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    onRun();
+                  }}
+                >
                   <FontAwesomeIcon icon={faPlay} /> Play
                 </button>
               </div>
@@ -454,11 +497,7 @@ const Program: FC<ProgramProps> = (props) => {
               </label>
               <div className="col-sm-10">
                 <div className="input-group">
-                  <button
-                    type="button"
-                    className="input-group-text"
-                    onClick={onCopyNodeUsage}
-                  >
+                  <button type="button" className="input-group-text" onClick={onCopyNodeUsage}>
                     <FontAwesomeIcon icon={faClipboard} />
                   </button>
                   <input
@@ -492,6 +531,6 @@ const Program: FC<ProgramProps> = (props) => {
       />
     </section>
   );
-}
+};
 
 export default Program;

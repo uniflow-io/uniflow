@@ -13,10 +13,10 @@ export interface CheckboxProps {
   value: boolean;
   className?: string;
   onChange?: (value: boolean) => void;
-  id?: string
+  id?: string;
 }
 
-const Checkbox:FC<CheckboxProps> = (props) => {
+const Checkbox: FC<CheckboxProps> = (props) => {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = () => {
     const { value } = props;
 
@@ -55,6 +55,6 @@ const Checkbox:FC<CheckboxProps> = (props) => {
       </div>
     </>
   );
-}
+};
 
-export default Checkbox
+export default Checkbox;

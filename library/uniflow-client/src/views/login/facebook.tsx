@@ -7,22 +7,21 @@ import { useAuth, useLogs } from '../../contexts';
 import { useLocation } from '@reach/router';
 import { FC } from 'react';
 
-export interface FacebookLoginProps {
-}
+export interface FacebookLoginProps {}
 
 const FacebookLogin: FC<FacebookLoginProps> = (props) => {
-  const { authDispatch, authRef } = useAuth()
-  const { logsDispatch } = useLogs()
-  const location = useLocation()
+  const { authDispatch, authRef } = useAuth();
+  const { logsDispatch } = useLogs();
+  const location = useLocation();
 
-  const getAccessToken = (): string|null => {
+  const getAccessToken = (): string | null => {
     const m = location.hash.match(/access_token=([^&]+)/);
     if (m) {
       return m[1];
     }
 
     return null;
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -34,12 +33,12 @@ const FacebookLogin: FC<FacebookLoginProps> = (props) => {
       await facebookLogin(accessToken, authRef.current.token)(authDispatch);
       if (authRef.current.isAuthenticated) {
         navigate(pathTo('feed'));
-      } else if(authRef.current.message) {
+      } else if (authRef.current.message) {
         commitAddLog(authRef.current.message)(logsDispatch);
         navigate(pathTo('login'));
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   return (
     <section className="section container-fluid">
@@ -47,6 +46,6 @@ const FacebookLogin: FC<FacebookLoginProps> = (props) => {
       <p className="text-center">Application is currently logging you from Facebook</p>
     </section>
   );
-}
+};
 
 export default FacebookLogin;

@@ -13,30 +13,29 @@ import { FC } from 'react';
 const container = new Container();
 const api = container.get(Api);
 
-export interface FlowsProps {
-}
+export interface FlowsProps {}
 
 export interface FlowsState {}
 
 const Flows: FC<FlowsProps> = () => {
-  const [page, setPage] = useState<number>(1)
-  const [programs, setPrograms] = useState<ProgramApiType[]>([])
-  const [state, setState] = useState<'loaded'|'load-more'|'loading'>('loaded')
+  const [page, setPage] = useState<number>(1);
+  const [programs, setPrograms] = useState<ProgramApiType[]>([]);
+  const [state, setState] = useState<'loaded' | 'load-more' | 'loading'>('loaded');
   const { user } = useUser();
   const md = new Remarkable();
 
   const onFetchPrograms = async () => {
-    setState('loading')
-    const programsPagination = await api.getPrograms({page});
+    setState('loading');
+    const programsPagination = await api.getPrograms({ page });
     const fetchPrograms = programs.slice().concat(programsPagination.data);
-    setPage(page + 1)
-    setPrograms(fetchPrograms)
-    setState(fetchPrograms.length < programsPagination.total ? 'load-more' : 'loaded')
+    setPage(page + 1);
+    setPrograms(fetchPrograms);
+    setState(fetchPrograms.length < programsPagination.total ? 'load-more' : 'loaded');
   };
 
   useEffect(() => {
     onFetchPrograms();
-  }, [])
+  }, []);
 
   return (
     <section className="section container-fluid">
@@ -60,13 +59,19 @@ const Flows: FC<FlowsProps> = () => {
               <div className="col-md-12">
                 <div className="d-grid">
                   {state === 'load-more' && (
-                  <button className="btn btn-primary" onClick={onFetchPrograms}>Load more</button>
+                    <button className="btn btn-primary" onClick={onFetchPrograms}>
+                      Load more
+                    </button>
                   )}
                   {state === 'loading' && (
-                  <button className="btn btn-primary" type="button" disabled>
-                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Loading...
-                  </button>
+                    <button className="btn btn-primary" type="button" disabled>
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Loading...
+                    </button>
                   )}
                 </div>
               </div>
@@ -76,6 +81,6 @@ const Flows: FC<FlowsProps> = () => {
       </div>
     </section>
   );
-}
+};
 
 export default Flows;

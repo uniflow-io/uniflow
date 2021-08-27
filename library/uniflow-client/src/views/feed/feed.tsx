@@ -6,14 +6,14 @@ import { FolderFeedType, getFeedItem, ProgramFeedType, useFeed } from '../../con
 import { FC } from 'react';
 
 export interface FeedProps {
-  allFlows: ProgramProps['allFlows']
+  allFlows: ProgramProps['allFlows'];
 }
 
 const Feed: FC<FeedProps> = (props) => {
   const { allFlows } = props;
-  const { feed } = useFeed()
+  const { feed } = useFeed();
   const currentItem = getFeedItem(feed);
-  
+
   return (
     <div className="container-fluid">
       <div className="row flex-xl-nowrap">
@@ -21,10 +21,12 @@ const Feed: FC<FeedProps> = (props) => {
         {currentItem && currentItem.type === 'program' && (
           <Program program={currentItem.entity as ProgramFeedType} allFlows={allFlows} />
         )}
-        {currentItem && currentItem.type === 'folder' && <Folder folder={currentItem.entity as FolderFeedType} />}
+        {currentItem && currentItem.type === 'folder' && (
+          <Folder folder={currentItem.entity as FolderFeedType} />
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Feed;

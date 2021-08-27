@@ -1,4 +1,4 @@
-export type ApiValidateExceptionErrors<T extends string = string> = { [key in T]?: string[] }
+export type ApiValidateExceptionErrors<T extends string = string> = { [key in T]?: string[] };
 
 class ApiValidateException extends Error {
   constructor(public errors: ApiValidateExceptionErrors) {

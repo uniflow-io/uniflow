@@ -4,11 +4,11 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface CardTemplateData {
-  logo: CardProps['logo']
+  logo: CardProps['logo'];
   localLibrary: {
-    nodes: CardProps['library']
-  }
-  localCard: CardProps['card']
+    nodes: CardProps['library'];
+  };
+  localCard: CardProps['card'];
 }
 
 export default ({ data, location }: PageProps<CardTemplateData>) => {

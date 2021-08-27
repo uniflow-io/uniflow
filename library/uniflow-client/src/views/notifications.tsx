@@ -14,15 +14,14 @@ import { FC } from 'react';
 const container = new Container();
 const api = container.get(Api);
 
-export interface NotificationsProps {
-}
+export interface NotificationsProps {}
 
 interface LeadState {
-  uid?: string,
-  optinNewsletter: boolean,
-  optinBlog: boolean,
-  optinGithub: boolean,
-  githubUsername: string|null,
+  uid?: string;
+  optinNewsletter: boolean;
+  optinBlog: boolean;
+  optinGithub: boolean;
+  githubUsername: string | null;
 }
 
 const Notifications: FC<NotificationsProps> = () => {
@@ -32,9 +31,13 @@ const Notifications: FC<NotificationsProps> = () => {
     optinBlog: false,
     optinGithub: false,
     githubUsername: null,
-  })
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'optinNewsletter'|'optinBlog'|'optinGithub'>>({})
-  const [state, setState] = useState<'loading'|'not-found'|'form'|'form-submit'|'form-success'|'unsubscribe-success'>('loading')
+  });
+  const [errors, setErrors] = useState<
+    ApiValidateExceptionErrors<'form' | 'optinNewsletter' | 'optinBlog' | 'optinGithub'>
+  >({});
+  const [state, setState] = useState<
+    'loading' | 'not-found' | 'form' | 'form-submit' | 'form-success' | 'unsubscribe-success'
+  >('loading');
   const location = useLocation();
 
   useEffect(() => {
@@ -45,19 +48,22 @@ const Notifications: FC<NotificationsProps> = () => {
       if (uid !== null && match) {
         if (match.route === 'notificationUnsubscribe') {
           try {
-            await api.updateLead({uid}, {
-              optinNewsletter: false,
-              optinBlog: false,
-              optinGithub: false,
-            })
-            setLead({...lead, ...{ uid }})
-            setState('unsubscribe-success')
+            await api.updateLead(
+              { uid },
+              {
+                optinNewsletter: false,
+                optinBlog: false,
+                optinGithub: false,
+              }
+            );
+            setLead({ ...lead, ...{ uid } });
+            setState('unsubscribe-success');
           } catch (error) {
             setState('not-found');
           }
         } else if (match.route === 'notificationManage') {
           try {
-            const data = await api.getLead({uid});
+            const data = await api.getLead({ uid });
             setLead({
               ...lead,
               ...{
@@ -66,8 +72,8 @@ const Notifications: FC<NotificationsProps> = () => {
                 optinBlog: data.optinBlog,
                 optinGithub: data.optinGithub,
                 githubUsername: data.githubUsername,
-              }
-            })
+              },
+            });
             setState('form');
           } catch (error) {
             setState('not-found');
@@ -78,8 +84,8 @@ const Notifications: FC<NotificationsProps> = () => {
       } else {
         setState('not-found');
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   const getId = () => {
     const m = location.search.match(/id=([^&]+)/);
@@ -88,7 +94,7 @@ const Notifications: FC<NotificationsProps> = () => {
     }
 
     return null;
-  }
+  };
 
   const onChangeOptinNewsletter = (value: boolean) => {
     setLead({ ...lead, ...{ optinNewsletter: value } });
@@ -105,22 +111,25 @@ const Notifications: FC<NotificationsProps> = () => {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    if(!lead.uid) {
-      setState('not-found')
-      return
+    if (!lead.uid) {
+      setState('not-found');
+      return;
     }
 
-    setState('form-submit')
+    setState('form-submit');
     try {
-      await api.updateLead({uid: lead.uid}, {
-        optinNewsletter: lead.optinNewsletter,
-        optinBlog: lead.optinBlog,
-        optinGithub: lead.optinGithub,
-      })
+      await api.updateLead(
+        { uid: lead.uid },
+        {
+          optinNewsletter: lead.optinNewsletter,
+          optinBlog: lead.optinBlog,
+          optinGithub: lead.optinGithub,
+        }
+      );
       setState('form-success');
     } catch (error) {
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
+        setErrors({ ...error.errors });
         setState('form');
       }
     }
@@ -132,14 +141,13 @@ const Notifications: FC<NotificationsProps> = () => {
       {state === 'loading' && <p className="text-center">Loading notifications</p>}
       {state === 'not-found' && (
         <Alert type={AlertType.DANGER}>
-          Notifications coudn't be restored.<br />
+          Notifications coudn't be restored.
+          <br />
           You may check your notification link.
         </Alert>
       )}
       {state === 'form-success' && (
-        <Alert type={AlertType.SUCCESS}>
-          Your notifications settings have been saved.
-        </Alert>
+        <Alert type={AlertType.SUCCESS}>Your notifications settings have been saved.</Alert>
       )}
       {state === 'unsubscribe-success' && (
         <Alert type={AlertType.SUCCESS}>
@@ -155,7 +163,7 @@ const Notifications: FC<NotificationsProps> = () => {
             value={lead.optinNewsletter}
             errors={errors.optinNewsletter}
             onChange={onChangeOptinNewsletter}
-            />
+          />
           <FormInput
             type={FormInputType.CHECKBOX}
             id="notifications-optinBlog"
@@ -163,7 +171,7 @@ const Notifications: FC<NotificationsProps> = () => {
             value={lead.optinBlog}
             errors={errors.optinBlog}
             onChange={onChangeOptinBlog}
-            />
+          />
           {lead.githubUsername && (
             <FormInput
               type={FormInputType.CHECKBOX}
@@ -172,7 +180,7 @@ const Notifications: FC<NotificationsProps> = () => {
               value={lead.optinGithub}
               errors={errors.optinGithub}
               onChange={onChangeOptinGithub}
-              />
+            />
           )}
           <div className="row mb-3">
             <div className="offset-sm-2 col-sm-10">
@@ -191,6 +199,6 @@ const Notifications: FC<NotificationsProps> = () => {
       )}
     </section>
   );
-}
+};
 
 export default Notifications;

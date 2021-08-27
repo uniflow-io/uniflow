@@ -3,20 +3,19 @@ import { fetchSettings } from '../contexts/user';
 import { matchRoute } from '../routes';
 import { fetchFeed, getFeedItem, commitSetSlugFeed, useFeed } from '../contexts/feed';
 import { useEffect } from 'react';
-import { useLocation } from "@reach/router";
+import { useLocation } from '@reach/router';
 import { WindowLocation } from '@reach/router';
 import { useAuth, useUser } from '../contexts';
 import { FC } from 'react';
 
-export interface UserManagerProps {
-}
+export interface UserManagerProps {}
 
 const UserManager: FC<UserManagerProps> = (props) => {
-  const [isFetching, setIsFetching] = useState<boolean>(false)
-  const { auth, authDispatch } = useAuth()
-  const { userDispatch } = useUser()
-  const { feed, feedDispatch } = useFeed()
-  const location = useLocation()
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const { auth, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
+  const { feed, feedDispatch } = useFeed();
+  const location = useLocation();
 
   const isCachedFeed = (uid: string, paths: string[] = []) => {
     if (
@@ -76,12 +75,12 @@ const UserManager: FC<UserManagerProps> = (props) => {
       return;
     }
 
-    setIsFetching(true)
+    setIsFetching(true);
 
     const token = auth.isAuthenticated ? auth.token : undefined;
     await fetchFeed(uid, paths, token)(feedDispatch, userDispatch, authDispatch);
 
-    setIsFetching(false)
+    setIsFetching(false);
   };
 
   const onLocation = async (location: WindowLocation) => {
@@ -108,13 +107,13 @@ const UserManager: FC<UserManagerProps> = (props) => {
     if (auth.isAuthenticated && auth.uid && auth.token) {
       onFetchUser(auth.uid, auth.token);
     }
-  }, [auth.token])
+  }, [auth.token]);
 
   useEffect(() => {
     onLocation(location);
-  }, [location])
+  }, [location]);
 
   return <></>;
-}
+};
 
 export default UserManager;

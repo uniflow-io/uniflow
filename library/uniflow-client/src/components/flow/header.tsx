@@ -5,9 +5,8 @@ import { FC } from 'react';
 import { cpuUsage } from 'node:process';
 
 export interface HeaderProps {
-  title?: string
-  clients: string[]
-  
+  title?: string;
+  clients: string[];
 }
 
 const Header: FC<HeaderProps> = (props) => {
@@ -49,6 +48,6 @@ const Header: FC<HeaderProps> = (props) => {
       </div>
     </div>
   );
-}
+};
 
-export default Header
+export default Header;

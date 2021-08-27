@@ -58,7 +58,7 @@ export const AppProvider: FC<AppProviderProps> = (props) => {
       {props.children}
     </AppContext.Provider>
   );
-}
+};
 
 export const AppConsumer = AppContext.Consumer;
 

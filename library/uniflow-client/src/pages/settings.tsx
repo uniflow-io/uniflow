@@ -14,4 +14,4 @@ const Page: FC<PageProps> = ({ location }) => {
   return <AuthSettingsPage />;
 };
 
-export default Page
+export default Page;

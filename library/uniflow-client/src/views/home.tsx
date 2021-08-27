@@ -11,13 +11,12 @@ import { FC } from 'react';
 const container = new Container();
 const api = container.get(Api);
 
-export interface HomeProps {
-}
+export interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
-  const [email, setEmail] = useState<string>('')
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
-  const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')
+  const [email, setEmail] = useState<string>('');
+  const [errors, setErrors] = useState<ApiValidateExceptionErrors>({});
+  const [state, setState] = useState<'form' | 'form-submit' | 'form-success'>('form');
 
   const onChangeEmail: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setEmail(event.target.value);
@@ -26,24 +25,24 @@ const Home: FC<HomeProps> = () => {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    setState('form-submit')
+    setState('form-submit');
     try {
       const data = await api.createLead({
         email,
         optinNewsletter: true,
         optinBlog: true,
-      })
+      });
       if (data) {
         setState('form-success');
       }
     } catch (error) {
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
+        setErrors({ ...error.errors });
         setState('form');
       }
     }
   };
-  
+
   return (
     <>
       <section className="section container vh-100">
@@ -58,15 +57,13 @@ const Home: FC<HomeProps> = () => {
                   {email} was succefully registered to the newsletter.
                   <br />
                   Let's check{' '}
-                  <Link to={pathTo('tag', { tag: 'case-study' })}>some cases studies</Link> to
-                  get started.
+                  <Link to={pathTo('tag', { tag: 'case-study' })}>some cases studies</Link> to get
+                  started.
                 </Alert>
               )}
               {(state === 'form' || state === 'form-submit') && (
                 <form onSubmit={onSubmit}>
-                  <div
-                    className={`input-group input-group-lg${errors.email ? ' is-invalid' : ''}`}
-                  >
+                  <div className={`input-group input-group-lg${errors.email ? ' is-invalid' : ''}`}>
                     <input
                       className={`form-control${errors.email ? ' is-invalid' : ''}`}
                       id="newsletter-email"
@@ -82,14 +79,12 @@ const Home: FC<HomeProps> = () => {
                     >
                       Subscribe to the newsletter
                     </button>
-                    {errors.email && errors.email.map((message, i) => (
-                      <div
-                        key={`error-${i}`}
-                        className="invalid-feedback"
-                      >
-                        {message}
-                      </div>
-                    ))}
+                    {errors.email &&
+                      errors.email.map((message, i) => (
+                        <div key={`error-${i}`} className="invalid-feedback">
+                          {message}
+                        </div>
+                      ))}
                   </div>
                 </form>
               )}
@@ -132,6 +127,6 @@ const Home: FC<HomeProps> = () => {
       </section>
     </>
   );
-}
+};
 
 export default Home;

@@ -5,7 +5,7 @@
  * @default 1
  * @minimum 1
  */
-export type PageNumberType = number
+export type PageNumberType = number;
 
 /**
  * @isInt
@@ -13,12 +13,12 @@ export type PageNumberType = number
  * @minimum 1
  * @maximum 100
  */
-export type PerPageType = number
+export type PerPageType = number;
 
 export type PaginationType<T> = {
-    data: T[]
-    total: number
-}  
+  data: T[];
+  total: number;
+};
 
 /**
  * @format email
@@ -30,7 +30,7 @@ export type EmailType = string;
 /**
  * @minLength 1 Password should not be empty
  */
- export type PasswordType = string
+export type PasswordType = string;
 
 /**
  * Stringified UUIDv4.
@@ -62,12 +62,12 @@ export type PathType = string;
 /**
  * @pattern `^[0-9a-z]{32}$` Api key format is not valid
  */
-export type ApiKeyType = string
+export type ApiKeyType = string;
 
 /**
  * @minLength 1 Text should contain at least one character
  */
-export type NotEmptyStringType = string
+export type NotEmptyStringType = string;
 
-export type UuidOrUsernameType = UuidType|UsernameType
-export type EmailOrUsernameType = EmailType|UsernameType
+export type UuidOrUsernameType = UuidType | UsernameType;
+export type EmailOrUsernameType = EmailType | UsernameType;

@@ -1,4 +1,3 @@
-class ApiNotFoundException extends Error {
-}
+class ApiNotFoundException extends Error {}
 
 export default ApiNotFoundException;

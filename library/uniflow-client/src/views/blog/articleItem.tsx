@@ -8,34 +8,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export interface ArticleItemProps {
   article: {
     fields: {
-      slug: string
-    }
-    excerpt: string
+      slug: string;
+    };
+    excerpt: string;
     frontmatter: {
-      title: string
+      title: string;
       author: {
         fields: {
-          slug: string
-        }
-        name: string
+          slug: string;
+        };
+        name: string;
         image: {
           childImageSharp: {
-            gatsbyImageData: IGatsbyImageData
-          }
-        }
-      }
+            gatsbyImageData: IGatsbyImageData;
+          };
+        };
+      };
       cover: {
         childImageSharp: {
-          gatsbyImageData: IGatsbyImageData
-        }
-        extension: string
-        publicURL: string
-      }
-      tags: string[]
-      date: string
-    }
-    timeToRead: string
-  }
+          gatsbyImageData: IGatsbyImageData;
+        };
+        extension: string;
+        publicURL: string;
+      };
+      tags: string[];
+      date: string;
+    };
+    timeToRead: string;
+  };
 }
 
 const ArticleItem: FC<ArticleItemProps> = ({ article }) => (

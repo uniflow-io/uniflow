@@ -5,34 +5,31 @@ import { useEffect } from 'react';
 import { useAuth, useLogs } from '../contexts';
 import { FC } from 'react';
 
-export interface AdminProps {
-}
+export interface AdminProps {}
 
 export interface AdminState {}
 
-interface ConfigState {
-
-}
+interface ConfigState {}
 
 const Admin: FC<AdminProps> = () => {
-  const [config, setConfig] = useState<ConfigState>({})
-  const [isSaving, setIsSaving]=  useState<boolean>(false)
-  const { auth, authDispatch } = useAuth()
-  const { userDispatch } = useUser()
-  const { logsDispatch } = useLogs()
+  const [config, setConfig] = useState<ConfigState>({});
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const { auth, authDispatch } = useAuth();
+  const { userDispatch } = useUser();
+  const { logsDispatch } = useLogs();
 
   useEffect(() => {
     (async () => {
-      if(auth.token && auth.uid) {
+      if (auth.token && auth.uid) {
         const data = await fetchConfig(auth.token, auth.uid)(userDispatch, authDispatch);
         setConfig(Object.assign({}, config, data));
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   const onUpdate = async () => {
-    setIsSaving(true)
-    if(auth.token && auth.uid) {
+    setIsSaving(true);
+    if (auth.token && auth.uid) {
       await updateConfig(config, auth.token, auth.uid)(userDispatch, authDispatch, logsDispatch);
     }
     setIsSaving(false);
@@ -46,6 +43,6 @@ const Admin: FC<AdminProps> = () => {
       </section>
     </>
   );
-}
+};
 
 export default Admin;

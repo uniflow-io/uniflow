@@ -17,29 +17,29 @@ export enum UserActionTypes {
   COMMIT_LOGOUT = 'COMMIT_LOGOUT',
 }
 
-export type UserAction = 
-  | { type: UserActionTypes.COMMIT_UPDATE_SETTINGS, user: UserProviderState }
-  | { type: UserActionTypes.COMMIT_LOGOUT }
+export type UserAction =
+  | { type: UserActionTypes.COMMIT_UPDATE_SETTINGS; user: UserProviderState }
+  | { type: UserActionTypes.COMMIT_LOGOUT };
 
-export type UserDispath = React.Dispatch<UserAction>
+export type UserDispath = React.Dispatch<UserAction>;
 
 export interface UserProviderProps {
   children: React.ReactNode;
 }
 
 export interface UserProviderState {
-  uid?: string,
-  apiKey?: string,
-  username?: string,
-  email?: string,
-  firstname?: string,
-  lastname?: string,
-  facebookId?: string,
-  githubId?: string,
-  roles: string[],
+  uid?: string;
+  apiKey?: string;
+  username?: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
+  facebookId?: string;
+  githubId?: string;
+  roles: string[];
   links: {
-    lead?: string,
-  },
+    lead?: string;
+  };
 }
 
 const defaultState = {
@@ -78,7 +78,7 @@ export const commitLogoutUser = () => {
 export const fetchConfig = (token: string, uid: string) => {
   return async (dispatch: UserDispath, authDispath: AuthDispath) => {
     try {
-      return await api.getAdminConfig({uid}, {token})
+      return await api.getAdminConfig({ uid }, { token });
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
@@ -96,7 +96,7 @@ export const updateConfig = (item: object, token: string, uid: string) => {
     };
 
     try {
-      await api.updateAdminConfig({uid}, data, {token})
+      await api.updateAdminConfig({ uid }, data, { token });
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
@@ -110,7 +110,7 @@ export const updateConfig = (item: object, token: string, uid: string) => {
 export const fetchSettings = (uid: string, token: string) => {
   return async (dispatch: UserDispath, authDispath: AuthDispath) => {
     try {
-      const user = await api.getUserSettings({uid}, {token})
+      const user = await api.getUserSettings({ uid }, { token });
       commitUpdateSettings(user)(dispatch);
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
@@ -134,7 +134,7 @@ export const updateSettings = (item: Partial<UserProviderState>, token: string) 
     };
 
     try {
-      const user = await api.updateUserSettings({uid: item.uid}, data, {token})
+      const user = await api.updateUserSettings({ uid: item.uid }, data, { token });
       commitUpdateSettings(user)(dispatch);
       return data;
     } catch (error) {
@@ -178,43 +178,47 @@ export const isGranted = (user: UserProviderState, attributes: string | string[]
   return false;
 };
 
-export const UserContext = React.createContext<{user: UserProviderState, userDispatch: UserDispath, userRef: MutableRefObject<UserProviderState>}>({
+export const UserContext = React.createContext<{
+  user: UserProviderState;
+  userDispatch: UserDispath;
+  userRef: MutableRefObject<UserProviderState>;
+}>({
   user: defaultState,
   userDispatch: () => {
     throw new Error('UserContext not yet initialized.');
   },
   userRef: {
     current: defaultState,
-  }
+  },
 });
 UserContext.displayName = 'UserContext';
 
 export const UserProvider: FC<UserProviderProps> = (props) => {
-  const [user, userDispatch, userRef] = useReducerRef<UserProviderState, UserAction>((
-    state: UserProviderState = defaultState,
-    action: UserAction
-  ) => {
-    switch (action.type) {
-      case UserActionTypes.COMMIT_UPDATE_SETTINGS:
-        return {
-          ...state,
-          ...action.user,
-        };
-      case UserActionTypes.COMMIT_LOGOUT:
-        return {
-          ...defaultState,
-        };
+  const [user, userDispatch, userRef] = useReducerRef<UserProviderState, UserAction>(
+    (state: UserProviderState = defaultState, action: UserAction) => {
+      switch (action.type) {
+        case UserActionTypes.COMMIT_UPDATE_SETTINGS:
+          return {
+            ...state,
+            ...action.user,
+          };
+        case UserActionTypes.COMMIT_LOGOUT:
+          return {
+            ...defaultState,
+          };
         default:
-        return state;
-    }
-  }, defaultState);
+          return state;
+      }
+    },
+    defaultState
+  );
 
   return (
-    <UserContext.Provider value={{user, userDispatch, userRef}}>
+    <UserContext.Provider value={{ user, userDispatch, userRef }}>
       {props.children}
     </UserContext.Provider>
   );
-}
+};
 
 export const UserConsumer = UserContext.Consumer;
 

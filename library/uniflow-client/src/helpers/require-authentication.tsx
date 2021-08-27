@@ -7,10 +7,13 @@ import { useEffect } from 'react';
 import { ROLE } from '../models/api-type-interface';
 import { FC } from 'react';
 
-export default function requireAuthentication<T>(Component: ComponentType<T>, role: ROLE = ROLE.USER) {
+export default function requireAuthentication<T>(
+  Component: ComponentType<T>,
+  role: ROLE = ROLE.USER
+) {
   const requireAuthenticationHelper: FC<T> = (props) => {
-    const { auth } = useAuth()
-    const { user } = useUser()
+    const { auth } = useAuth();
+    const { user } = useUser();
 
     const checkAuth = (isAuthenticated: boolean, user: UserProviderState) => {
       if (!isAuthenticated || (user.uid && !isGranted(user, role))) {
@@ -22,14 +25,14 @@ export default function requireAuthentication<T>(Component: ComponentType<T>, ro
 
     useEffect(() => {
       checkAuth(auth.isAuthenticated, user);
-    }, [auth.token])
+    }, [auth.token]);
 
     if (auth.isAuthenticated === true) {
       return <Component {...props} />;
     }
 
     return null;
-  }
+  };
 
   return requireAuthenticationHelper;
 }

@@ -3,7 +3,7 @@ import { navigate } from 'gatsby';
 import debounce from 'lodash/debounce';
 import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLocation } from "@reach/router";
+import { useLocation } from '@reach/router';
 import {
   getFolderTree,
   updateParentFolder,
@@ -24,52 +24,62 @@ import Alert, { AlertType } from '../../components/alert';
 import { FC } from 'react';
 
 export interface FolderProps {
-  folder: FolderFeedType
+  folder: FolderFeedType;
 }
 
 export interface FolderState {}
 
 const Folder: FC<FolderProps> = (props) => {
-  const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
-  const [folderTree, setFolderTree] = useState<PathType[]>([])
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'name'|'slug'|'path'>>({})
-  const { user, userDispatch } = useUser()
-  const { auth, authDispatch } = useAuth()
-  const { feed, feedDispatch, feedRef } = useFeed()
+  const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false);
+  const [folderTree, setFolderTree] = useState<PathType[]>([]);
+  const [errors, setErrors] = useState<
+    ApiValidateExceptionErrors<'form' | 'name' | 'slug' | 'path'>
+  >({});
+  const { user, userDispatch } = useUser();
+  const { auth, authDispatch } = useAuth();
+  const { feed, feedDispatch, feedRef } = useFeed();
   const { folder } = props;
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
-    setFolderTreeEdit(false)
-    setFolderTree([props.folder.path])
+    setFolderTreeEdit(false);
+    setFolderTree([props.folder.path]);
 
     return () => {
-      onUpdate.cancel()
-    }
-  }, [props.folder.uid])
+      onUpdate.cancel();
+    };
+  }, [props.folder.uid]);
 
-  const onUpdate = useMemo(() => debounce(async () => {
-    if(feedRef.current.parentFolder && auth.token) {
-      try {
-        setErrors({})
-        await updateParentFolder(feedRef.current.parentFolder, auth.token)(feedDispatch, userDispatch, authDispatch);
-  
-        const path = toFeedPath(feedRef.current.parentFolder, user)
-        if(feedRef.current.parentFolder.slug && path !== location.pathname) {
-          navigate(path);
+  const onUpdate = useMemo(
+    () =>
+      debounce(async () => {
+        if (feedRef.current.parentFolder && auth.token) {
+          try {
+            setErrors({});
+            await updateParentFolder(feedRef.current.parentFolder, auth.token)(
+              feedDispatch,
+              userDispatch,
+              authDispatch
+            );
+
+            const path = toFeedPath(feedRef.current.parentFolder, user);
+            if (feedRef.current.parentFolder.slug && path !== location.pathname) {
+              navigate(path);
+            }
+          } catch (error) {
+            if (error instanceof ApiValidateException) {
+              setErrors({ ...error.errors });
+            }
+          }
         }
-      } catch(error) {
-        if (error instanceof ApiValidateException) {
-          setErrors({ ...error.errors })
-        }
-      }
-    }
-  }, 1000), [props.folder.uid])
+      }, 1000),
+    [props.folder.uid]
+  );
 
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    if(auth.token) {
+    if (auth.token) {
       await deleteParentFolder(folder, auth.token)(feedDispatch, userDispatch, authDispatch);
       navigate(toFeedPath(folder, user, true));
     }
@@ -79,7 +89,7 @@ const Folder: FC<FolderProps> = (props) => {
     commitSetParentFolderFeed({
       ...folder,
       ...{ name },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -87,7 +97,7 @@ const Folder: FC<FolderProps> = (props) => {
     commitSetParentFolderFeed({
       ...folder,
       ...{ slug },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
@@ -95,21 +105,25 @@ const Folder: FC<FolderProps> = (props) => {
     commitSetParentFolderFeed({
       ...folder,
       ...{ path: selected },
-    })(feedDispatch)
+    })(feedDispatch);
     onUpdate();
   };
 
   const onFolderEdit: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
 
-    if(feed.uid) {
-      let folderTree = await getFolderTree(feed.uid, auth.token)(feedDispatch, userDispatch, authDispatch);
+    if (feed.uid) {
+      let folderTree = await getFolderTree(feed.uid, auth.token)(
+        feedDispatch,
+        userDispatch,
+        authDispatch
+      );
       folderTree = folderTree.filter((value) => {
         return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
       });
-  
-      setFolderTreeEdit(true)
-      setFolderTree(folderTree)
+
+      setFolderTreeEdit(true);
+      setFolderTree(folderTree);
     }
   };
 
@@ -130,9 +144,12 @@ const Folder: FC<FolderProps> = (props) => {
         </div>
       </div>
       <form className="form-sm-horizontal">
-        {errors.form && errors.form.map((message, i) => (
-          <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-        ))}
+        {errors.form &&
+          errors.form.map((message, i) => (
+            <Alert key={i} type={AlertType.DANGER}>
+              {message}
+            </Alert>
+          ))}
         <FormInput
           id="folder-name"
           type={FormInputType.TEXT}
@@ -140,7 +157,7 @@ const Folder: FC<FolderProps> = (props) => {
           value={folder.name}
           errors={errors.name}
           onChange={onChangeName}
-          />
+        />
         <FormInput
           id="folder-slug"
           type={FormInputType.TEXT}
@@ -148,7 +165,7 @@ const Folder: FC<FolderProps> = (props) => {
           value={folder.slug}
           errors={errors.slug}
           onChange={onChangeSlug}
-          />
+        />
         <div className="row mb-3">
           <label htmlFor="folder-path" className="col-sm-2 col-form-label">
             Path
@@ -175,10 +192,7 @@ const Folder: FC<FolderProps> = (props) => {
             )}
             {errors.path &&
               errors.path.map((message, i) => (
-                <div
-                  key={`error-${i}`}
-                  className="invalid-feedback"
-                >
+                <div key={`error-${i}`} className="invalid-feedback">
                   {message}
                 </div>
               ))}
@@ -187,6 +201,6 @@ const Folder: FC<FolderProps> = (props) => {
       </form>
     </section>
   );
-}
+};
 
 export default Folder;

@@ -11,6 +11,6 @@ const Page: FC<PageProps> = ({ location }) => {
   });
 
   return <BlogPage />;
-}
+};
 
 export default Page;

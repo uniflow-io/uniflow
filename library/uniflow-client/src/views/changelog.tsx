@@ -4,14 +4,13 @@ import { FC } from 'react';
 
 interface ChangelogItem {
   node: {
-    date: string
-    label: string
-    tag: string
-  }
+    date: string;
+    label: string;
+    tag: string;
+  };
 }
 
-export interface ChangelogProps {
-}
+export interface ChangelogProps {}
 
 const Changelog: FC<ChangelogProps> = () => {
   return (
@@ -72,6 +71,6 @@ const Changelog: FC<ChangelogProps> = () => {
       </div>
     </section>
   );
-}
+};
 
 export default Changelog;

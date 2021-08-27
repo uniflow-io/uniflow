@@ -19,23 +19,23 @@ import { useEffect } from 'react';
 import { FC } from 'react';
 
 export interface NavigationProps {
-  type?: 'program'|'folder'
+  type?: 'program' | 'folder';
 }
 
 export interface NavigationState {}
 
 const Navigation: FC<NavigationProps> = (props) => {
-  const [search, setSearch] = useState<string>('')
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
-  const { auth } = useAuth()
-  const { logsDispatch } = useLogs()
-  const { user, userDispatch } = useUser()
-  const { feed, feedDispatch } = useFeed()
-  const { authDispatch } = useAuth()
+  const [search, setSearch] = useState<string>('');
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
+  const { auth } = useAuth();
+  const { logsDispatch } = useLogs();
+  const { user, userDispatch } = useUser();
+  const { feed, feedDispatch } = useFeed();
+  const { authDispatch } = useAuth();
 
   useEffect(() => {
-    setIsCollapsed(props.type === 'program')
-  }, [props.type])
+    setIsCollapsed(props.type === 'program');
+  }, [props.type]);
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearch(event.target.value);
@@ -59,7 +59,7 @@ const Navigation: FC<NavigationProps> = (props) => {
         },
         auth.uid,
         auth.token
-      )(feedDispatch, userDispatch, authDispatch)
+      )(feedDispatch, userDispatch, authDispatch);
       commitSetSlugFeed(null)(feedDispatch);
       navigate(toFeedPath(item, user));
     } catch (error) {
@@ -83,7 +83,7 @@ const Navigation: FC<NavigationProps> = (props) => {
         },
         auth.uid,
         auth.token
-      )(feedDispatch, userDispatch, authDispatch)
+      )(feedDispatch, userDispatch, authDispatch);
       navigate(toFeedPath(item, user));
     } catch (error) {
       commitAddLog(error.message)(logsDispatch);
@@ -92,10 +92,7 @@ const Navigation: FC<NavigationProps> = (props) => {
 
   const currentItem = getFeedItem(feed);
   const folderActiveClass = () => {
-    return feed.parentFolder &&
-      feed.parentFolder.slug === feed.slug
-      ? 'active'
-      : undefined;
+    return feed.parentFolder && feed.parentFolder.slug === feed.slug ? 'active' : undefined;
   };
   const itemActiveClass = (item: FeedItem) => {
     return currentItem && currentItem.entity.slug === item.entity.slug ? 'active' : undefined;
@@ -103,11 +100,7 @@ const Navigation: FC<NavigationProps> = (props) => {
 
   return (
     <div className="sidebar">
-      <form
-        className="sidebar-search d-flex align-items-center"
-        role="search"
-        onSubmit={onSubmit}
-      >
+      <form className="sidebar-search d-flex align-items-center" role="search" onSubmit={onSubmit}>
         <div className="input-group">
           <input
             type="search"
@@ -128,15 +121,29 @@ const Navigation: FC<NavigationProps> = (props) => {
           type="button"
           onClick={onToggle}
         >
-          {isCollapsed && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+          {(isCollapsed && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              className="bi bi-expand"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
               <title>Expand</title>
-              <use xlinkHref="#nav-expand"/>
+              <use xlinkHref="#nav-expand" />
             </svg>
-          ) || (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+          )) || (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              className="bi bi-expand"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
               <title>Collapse</title>
-              <use xlinkHref="#nav-collapse"/>
+              <use xlinkHref="#nav-collapse" />
             </svg>
           )}
         </button>
@@ -149,9 +156,7 @@ const Navigation: FC<NavigationProps> = (props) => {
                 <span className="link">
                   <FontAwesomeIcon icon={faArrowLeft} /> Back
                 </span>
-                <Link to={toFeedPath(feed.parentFolder, user, true)}>
-                  Back
-                </Link>
+                <Link to={toFeedPath(feed.parentFolder, user, true)}>Back</Link>
               </li>,
               <li className={folderActiveClass()} key={'folder'}>
                 <span className="link">.</span>
@@ -167,7 +172,8 @@ const Navigation: FC<NavigationProps> = (props) => {
                     </>
                   )}
                   {item.type === 'program' && <>{item.entity.name} </>}
-                  {item.type === 'program' && 'tags' in item.entity &&
+                  {item.type === 'program' &&
+                    'tags' in item.entity &&
                     item.entity.tags.map((tag, j) => (
                       <span key={j} className="badge badge-light mr-1">
                         {tag}
@@ -182,6 +188,6 @@ const Navigation: FC<NavigationProps> = (props) => {
       </nav>
     </div>
   );
-}
+};
 
 export default Navigation;

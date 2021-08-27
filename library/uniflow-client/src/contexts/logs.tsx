@@ -9,17 +9,17 @@ export enum LogsActionTypes {
   COMMIT_READ_LOG = 'COMMIT_READ_LOG',
 }
 
-export type LogsAction = 
-  | { type: LogsActionTypes.COMMIT_ADD_LOG, message: string }
-  | { type: LogsActionTypes.COMMIT_READ_LOG, id: number }
+export type LogsAction =
+  | { type: LogsActionTypes.COMMIT_ADD_LOG; message: string }
+  | { type: LogsActionTypes.COMMIT_READ_LOG; id: number };
 
-export type LogsDispath = React.Dispatch<LogsAction>
+export type LogsDispath = React.Dispatch<LogsAction>;
 
 export interface LogsProviderProps {
   children: React.ReactNode;
 }
 
-export type LogsProviderState = {[type: string]: Log}
+export type LogsProviderState = { [type: string]: Log };
 
 let logId = 0;
 const defaultState = {};
@@ -50,52 +50,60 @@ export const commitReadLog = (id: number) => {
   };
 };
 
-export const LogsContext = React.createContext<{logs: LogsProviderState, logsDispatch: LogsDispath, logsRef: MutableRefObject<LogsProviderState>}>({
+export const LogsContext = React.createContext<{
+  logs: LogsProviderState;
+  logsDispatch: LogsDispath;
+  logsRef: MutableRefObject<LogsProviderState>;
+}>({
   logs: defaultState,
   logsDispatch: () => {
     throw new Error('LogContext not yet initialized.');
   },
   logsRef: {
     current: defaultState,
-  }
+  },
 });
 LogsContext.displayName = 'LogContext';
 
 export const LogsProvider: FC<LogsProviderProps> = (props) => {
-  const [logs, logsDispatch, logsRef] = useReducerRef<LogsProviderState, LogsAction>((
-    state: LogsProviderState = defaultState,
-    action: LogsAction
-  ): LogsProviderState => {
-    switch (action.type) {
-      case LogsActionTypes.COMMIT_ADD_LOG:
-        return {
-          ...state,
-          ...{[logId]: new Log({
-            id: logId++,
-            message: action.message,
-            status: LOG_STATUS.NEW,
-          })}
-        };
-      case LogsActionTypes.COMMIT_READ_LOG:
-        return {
-          ...state,
-          ...{[action.id]: new Log({
-            id: action.id,
-            message: state[action.id].message,
-            status: LOG_STATUS.READ,
-          })}
-        }
-      default:
-        return state;
-    }
-  }, defaultState);
+  const [logs, logsDispatch, logsRef] = useReducerRef<LogsProviderState, LogsAction>(
+    (state: LogsProviderState = defaultState, action: LogsAction): LogsProviderState => {
+      switch (action.type) {
+        case LogsActionTypes.COMMIT_ADD_LOG:
+          return {
+            ...state,
+            ...{
+              [logId]: new Log({
+                id: logId++,
+                message: action.message,
+                status: LOG_STATUS.NEW,
+              }),
+            },
+          };
+        case LogsActionTypes.COMMIT_READ_LOG:
+          return {
+            ...state,
+            ...{
+              [action.id]: new Log({
+                id: action.id,
+                message: state[action.id].message,
+                status: LOG_STATUS.READ,
+              }),
+            },
+          };
+        default:
+          return state;
+      }
+    },
+    defaultState
+  );
 
   return (
-    <LogsContext.Provider value={{logs, logsDispatch, logsRef}}>
+    <LogsContext.Provider value={{ logs, logsDispatch, logsRef }}>
       {props.children}
     </LogsContext.Provider>
   );
-}
+};
 
 export const LogsConsumer = LogsContext.Consumer;
 

@@ -4,16 +4,20 @@ import { graphql, PageProps } from 'gatsby';
 import { withPage } from '../helpers';
 
 export interface DocTemplateData {
-  doc: DocProps['doc']
-  docNav: DocProps['docNav']
+  doc: DocProps['doc'];
+  docNav: DocProps['docNav'];
 }
 
 export interface DocTemplateContext {
-  previous: DocProps['previous'],
-  next: DocProps['next'],
+  previous: DocProps['previous'];
+  next: DocProps['next'];
 }
 
-export default ({ data, location, pageContext: { previous, next } }: PageProps<DocTemplateData, DocTemplateContext>) => {
+export default ({
+  data,
+  location,
+  pageContext: { previous, next },
+}: PageProps<DocTemplateData, DocTemplateContext>) => {
   const { doc, docNav } = data;
 
   const DocPage = withPage<DocProps>(Doc, 'doc', {

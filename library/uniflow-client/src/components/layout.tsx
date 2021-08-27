@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { useLocation } from "@reach/router";
+import { useLocation } from '@reach/router';
 import Helmet from 'react-helmet';
 import { Link, graphql, StaticQuery } from 'gatsby';
 import { WindowLocation } from '@reach/router';
@@ -19,7 +19,7 @@ import { useEffect } from 'react';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
 import { ROLE } from '../models/api-type-interface';
 import { Log } from '../models';
-import Alert, { AlertType } from '../components/alert'
+import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
 
 const container = new Container();
@@ -55,17 +55,17 @@ const MessengerPlatform: FC = () => {
       <div id="fb-root" />
 
       {/* Your customer chat code */}
-      {(React.createElement('div', {
-        className: "fb-customerchat",
-        attribution: "setup_tool",
-        page_id: "1899593680350111",
-      }))}
+      {React.createElement('div', {
+        className: 'fb-customerchat',
+        attribution: 'setup_tool',
+        page_id: '1899593680350111',
+      })}
     </div>
   );
-}
+};
 
 interface DisplayLogProps {
-  log: Log
+  log: Log;
 }
 
 const DisplayLog: FC<DisplayLogProps> = (props) => {
@@ -76,7 +76,7 @@ const DisplayLog: FC<DisplayLogProps> = (props) => {
     setTimeout(() => {
       commitReadLog(log.id)(logsDispatch);
     }, 5000);
-  }, [])
+  }, []);
 
   const onClose: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
@@ -85,13 +85,15 @@ const DisplayLog: FC<DisplayLogProps> = (props) => {
   };
 
   return (
-    <Alert type={AlertType.DANGER} onClose={onClose}>{log.message}</Alert>
+    <Alert type={AlertType.DANGER} onClose={onClose}>
+      {log.message}
+    </Alert>
   );
-}
+};
 
 const DisplayLogs: FC = () => {
   const { logs } = useLogs();
-  const newLogs = getNewLogs(logs)
+  const newLogs = getNewLogs(logs);
 
   return (
     <>
@@ -100,31 +102,33 @@ const DisplayLogs: FC = () => {
       ))}
     </>
   );
-}
+};
 
 interface HeaderProps {
   logo: {
     childImageSharp: {
-      gatsbyImageData: IGatsbyImageData
-    }
-    publicURL: string
-  }
+      gatsbyImageData: IGatsbyImageData;
+    };
+    publicURL: string;
+  };
   changeLogTags: {
-    edges: [{
-      node: {
-        tag: string
+    edges: [
+      {
+        node: {
+          tag: string;
+        };
       }
-    }]
-  }
+    ];
+  };
 }
 
 const Header: FC<HeaderProps> = (props) => {
   const { logo, changeLogTags } = props;
   const app = useApp();
   const { auth } = useAuth();
-  const { user, userDispatch } = useUser()
-  const {authDispatch} = useAuth()
-  const location = useLocation()
+  const { user, userDispatch } = useUser();
+  const { authDispatch } = useAuth();
+  const location = useLocation();
 
   const onLocation = (location: WindowLocation) => {
     if (
@@ -416,11 +420,7 @@ const Header: FC<HeaderProps> = (props) => {
           )}
           {auth.isAuthenticated && isGranted(user, ROLE.USER) && (
             <li className="nav-item">
-              <a
-                className={`nav-link`}
-                href="/logout"
-                onClick={onLogout}
-              >
+              <a className={`nav-link`} href="/logout" onClick={onLogout}>
                 <FontAwesomeIcon icon={faPowerOff} />
               </a>
             </li>
@@ -481,7 +481,7 @@ const Header: FC<HeaderProps> = (props) => {
       </ul>
     </>
   );
-}
+};
 
 const Footer: FC = () => {
   return (
@@ -497,16 +497,16 @@ const Footer: FC = () => {
       </div>
     </footer>
   );
-}
+};
 
 export interface LayoutProps {
-  location: WindowLocation
-  children: React.ReactNode
+  location: WindowLocation;
+  children: React.ReactNode;
 }
 
 const Layout: FC<LayoutProps> = (props) => {
   const app = useApp();
-  const environement = env.get('env')
+  const environement = env.get('env');
 
   return (
     <StaticQuery
@@ -561,24 +561,39 @@ const Layout: FC<LayoutProps> = (props) => {
             <meta name="twitter:image" content={`${env.get('clientUrl')}${logo.publicURL}`} />
           </Helmet>
           <UserManager />
-          {environement && ([
-            /*'production', 'preprod'*/
-          ] as string[]).indexOf(environement) !== -1 && <MessengerPlatform />}
-          <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
+          {environement &&
+            (
+              [
+                /*'production', 'preprod'*/
+              ] as string[]
+            ).indexOf(environement) !== -1 && <MessengerPlatform />}
+          <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
             <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
             </symbol>
             <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
             </symbol>
             <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
             </symbol>
             <symbol id="nav-expand" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"></path>
+              <path
+                fillRule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zM7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708l2-2zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10z"
+              ></path>
             </symbol>
-            <symbol id="nav-collapse" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707l-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"></path>
+            <symbol
+              id="nav-collapse"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fillRule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8zm7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0zm-.5 11.707l-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0v-3.793z"
+              ></path>
             </symbol>
           </svg>
           <Header logo={logo} changeLogTags={changeLogTags} />
@@ -589,6 +604,6 @@ const Layout: FC<LayoutProps> = (props) => {
       )}
     />
   );
-}
+};
 
 export default Layout;

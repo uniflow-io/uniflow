@@ -13,10 +13,10 @@ const path = container.get(Path);
 export interface FeedPageData {
   localFlows: {
     nodes: {
-      name: string
-      uniflow: Flow
-    }[]
-  }
+      name: string;
+      uniflow: Flow;
+    }[];
+  };
 }
 
 const Page: FC<PageProps<FeedPageData>> = ({ location, data: { localFlows } }) => {
@@ -58,4 +58,4 @@ export const query = graphql`
   }
 `;
 
-export default Page
+export default Page;

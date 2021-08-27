@@ -4,25 +4,25 @@ import { pathTo } from '../../routes';
 import { FC } from 'react';
 
 export interface Card {
-  name: string
-  description: string
+  name: string;
+  description: string;
   fields: {
-    slug: string
-    catalogs: string[]
-  }
+    slug: string;
+    catalogs: string[];
+  };
 }
 
 export interface NavigationProps {
-  library: Card[]
-  slug?: string
+  library: Card[];
+  slug?: string;
 }
 
 const Navigation: FC<NavigationProps> = (props) => {
-  const [search, setSearch] = useState<string>('')
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
+  const [search, setSearch] = useState<string>('');
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(true);
 
   const onSearch: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearch( event.target.value );
+    setSearch(event.target.value);
   };
 
   const onToggle: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -62,11 +62,7 @@ const Navigation: FC<NavigationProps> = (props) => {
 
   return (
     <div className="sidebar">
-      <form
-        className="sidebar-search d-flex align-items-center"
-        role="search"
-        onSubmit={onSubmit}
-      >
+      <form className="sidebar-search d-flex align-items-center" role="search" onSubmit={onSubmit}>
         <div className="input-group">
           <input
             type="search"
@@ -82,15 +78,29 @@ const Navigation: FC<NavigationProps> = (props) => {
           type="button"
           onClick={onToggle}
         >
-          {isCollapsed && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+          {(isCollapsed && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              className="bi bi-expand"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
               <title>Expand</title>
-              <use xlinkHref="#nav-expand"/>
+              <use xlinkHref="#nav-expand" />
             </svg>
-          ) || (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="bi bi-expand" fill="currentColor" viewBox="0 0 16 16">
+          )) || (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              className="bi bi-expand"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
               <title>Collapse</title>
-              <use xlinkHref="#nav-collapse"/>
+              <use xlinkHref="#nav-collapse" />
             </svg>
           )}
         </button>
@@ -117,6 +127,6 @@ const Navigation: FC<NavigationProps> = (props) => {
       </nav>
     </div>
   );
-}
+};
 
 export default Navigation;

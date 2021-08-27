@@ -44,7 +44,9 @@ const components: MDXProviderComponentsProp = {
 };
 
 export interface MDXProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
-export default (props: MDXProviderProps) => <MDXProvider components={components}>{props.children}</MDXProvider>;
+export default (props: MDXProviderProps) => (
+  <MDXProvider components={components}>{props.children}</MDXProvider>
+);

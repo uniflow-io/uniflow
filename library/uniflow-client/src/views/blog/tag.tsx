@@ -5,10 +5,10 @@ import ArticleItem, { ArticleItemProps } from './articleItem';
 import { FC } from 'react';
 
 export interface TagProps {
-  tag: string
+  tag: string;
   articles: {
-    edges: {node: ArticleItemProps['article']}[]
-  }
+    edges: { node: ArticleItemProps['article'] }[];
+  };
 }
 
 const Tag: FC<TagProps> = (props) => {
@@ -44,6 +44,6 @@ const Tag: FC<TagProps> = (props) => {
       </div>
     </section>
   );
-}
+};
 
 export default Tag;

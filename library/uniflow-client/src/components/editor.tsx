@@ -39,6 +39,6 @@ const Editor: FC<EditorProps> = (props) => {
       }}
     />
   );
-}
+};
 
 export default Editor;

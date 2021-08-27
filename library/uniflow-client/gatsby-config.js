@@ -33,8 +33,8 @@ module.exports = {
       options: {
         siteId: process.env.GATSBY_MATOMO_SITE_ID,
         matomoUrl: process.env.GATSBY_MATOMO_URL,
-        siteUrl: process.env.GATSBY_CLIENT_URL
-      }
+        siteUrl: process.env.GATSBY_CLIENT_URL,
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,

@@ -9,7 +9,7 @@ export interface SearchProps {
 }
 
 const Search: FC<SearchProps> = (props) => {
-  const [search, setSearch] = useState<string>('@uniflow-io/uniflow-flow-code')
+  const [search, setSearch] = useState<string>('@uniflow-io/uniflow-flow-code');
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -52,6 +52,6 @@ const Search: FC<SearchProps> = (props) => {
       </div>
     </form>
   );
-}
+};
 
-export default Search
+export default Search;

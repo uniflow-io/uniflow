@@ -8,7 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Container from '../../container';
 import { Env } from '../../services';
 import { useAuth } from '../../contexts';
-import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import ApiValidateException, {
+  ApiValidateExceptionErrors,
+} from '../../models/api-validate-exception';
 import FormInput, { FormInputType } from '../../components/form-input';
 import Alert, { AlertType } from '../../components/alert';
 import { FC } from 'react';
@@ -16,31 +18,32 @@ import { FC } from 'react';
 const container = new Container();
 const env = container.get(Env);
 
-export interface LoginProps {
-}
+export interface LoginProps {}
 
 const Login: FC<LoginProps> = (props) => {
   const facebookAppId = env.get('facebookAppId');
-  const githubAppId = env.get('githubAppId')
+  const githubAppId = env.get('githubAppId');
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'username'|'password'>>({})
-  const { auth, authDispatch, authRef } = useAuth()
+  const [errors, setErrors] = useState<
+    ApiValidateExceptionErrors<'form' | 'username' | 'password'>
+  >({});
+  const { auth, authDispatch, authRef } = useAuth();
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
-    try{
-      setErrors({})
+    try {
+      setErrors({});
       await login(username, password)(authDispatch);
       if (authRef.current.isAuthenticated) {
         navigate(pathTo('feed'));
-      }  
-    } catch(error) {
+      }
+    } catch (error) {
       if (error instanceof ApiValidateException) {
-        setErrors({ ...error.errors })
-      } else if(authRef.current.message) {
-        setErrors({form: [authRef.current.message]})
+        setErrors({ ...error.errors });
+      } else if (authRef.current.message) {
+        setErrors({ form: [authRef.current.message] });
       }
     }
   };
@@ -53,9 +56,12 @@ const Login: FC<LoginProps> = (props) => {
           <div className="card mb-3">
             <article className="card-body">
               <form onSubmit={onSubmit}>
-                {errors.form && errors.form.map((message, i) => (
-                  <Alert key={i} type={AlertType.DANGER}>{message}</Alert>
-                ))}
+                {errors.form &&
+                  errors.form.map((message, i) => (
+                    <Alert key={i} type={AlertType.DANGER}>
+                      {message}
+                    </Alert>
+                  ))}
                 <FormInput
                   id="login-username"
                   type={FormInputType.TEXT}
@@ -65,7 +71,7 @@ const Login: FC<LoginProps> = (props) => {
                   icon={faUser}
                   onChange={setUsername}
                   autoComplete={true}
-                  />
+                />
                 <FormInput
                   id="login-password"
                   type={FormInputType.PASSWORD}
@@ -75,7 +81,7 @@ const Login: FC<LoginProps> = (props) => {
                   icon={faKey}
                   onChange={setPassword}
                   autoComplete={true}
-                  />
+                />
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <div className="d-grid">
@@ -108,10 +114,7 @@ const Login: FC<LoginProps> = (props) => {
                 <div className="row">
                   <div className="col-md-12">
                     <div className="d-grid">
-                      <a
-                        href={githubLoginUrl(githubAppId)}
-                        className="btn btn-social btn-github"
-                      >
+                      <a href={githubLoginUrl(githubAppId)} className="btn btn-social btn-github">
                         <FontAwesomeIcon icon={faGithub} /> Login with Github
                       </a>
                     </div>
@@ -130,6 +133,6 @@ const Login: FC<LoginProps> = (props) => {
       </div>
     </section>
   );
-}
+};
 
 export default Login;

@@ -6,11 +6,14 @@ import { Card } from '../views/library/navigation';
 
 export interface LibraryPageData {
   localLibrary: {
-    nodes: Card[]
-  }
+    nodes: Card[];
+  };
 }
 
-const Page: FC<PageProps<LibraryPageData>> = ({ location, data: { /*library, */ localLibrary } }) => {
+const Page: FC<PageProps<LibraryPageData>> = ({
+  location,
+  data: { /*library, */ localLibrary },
+}) => {
   const allLibrary = {};
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
@@ -56,4 +59,4 @@ export const query = graphql`
   }
 `;
 
-export default Page
+export default Page;

@@ -1,4 +1,3 @@
-class ApiNotAuthorizedException extends Error {
-}
+class ApiNotAuthorizedException extends Error {}
 
 export default ApiNotAuthorizedException;

@@ -13,4 +13,4 @@ const Page: FC<PageProps> = ({ location }) => {
   return <ChangelogPage />;
 };
 
-export default Page
+export default Page;

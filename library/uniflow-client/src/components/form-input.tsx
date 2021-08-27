@@ -15,78 +15,81 @@ export enum FormInputType {
 }
 
 export interface FormInputProps {
-  type: FormInputType
-  id: string
-  label?: string
-  placeholder?: string
-  value?: any
-  errors?: string[]
-  icon?: IconDefinition
-  groups?: React.ReactNode | React.ReactNodeArray
-  onChange?: (value: any) => void
-  autoComplete?: boolean
-  rows?: number
-  multiple?: boolean
-  options?: SelectProps['options']
+  type: FormInputType;
+  id: string;
+  label?: string;
+  placeholder?: string;
+  value?: any;
+  errors?: string[];
+  icon?: IconDefinition;
+  groups?: React.ReactNode | React.ReactNodeArray;
+  onChange?: (value: any) => void;
+  autoComplete?: boolean;
+  rows?: number;
+  multiple?: boolean;
+  options?: SelectProps['options'];
 }
 
 const FormInput: FC<FormInputProps> = (props) => {
-  const {type, id, label, value, errors, icon, onChange, autoComplete, rows, multiple, options } = props
-  const placeholder = props.placeholder || label
-  const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : []
+  const { type, id, label, value, errors, icon, onChange, autoComplete, rows, multiple, options } =
+    props;
+  const placeholder = props.placeholder || label;
+  const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : [];
 
   const onChangeInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    if(onChange) {
-      onChange(event.target.value)
+    if (onChange) {
+      onChange(event.target.value);
     }
-  }
+  };
 
   return (
     <div className="row mb-3">
       {label && (
-      <label htmlFor="settings-lastname" className="col-sm-2 col-form-label">{label}</label>
+        <label htmlFor="settings-lastname" className="col-sm-2 col-form-label">
+          {label}
+        </label>
       )}
 
       <div className={label ? ' col-sm-10' : 'col-sm-12'}>
         {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
-        <div className="input-group">
-          {(icon && (
-          <div className="input-group-text">
-            <FontAwesomeIcon icon={icon} />
+          <div className="input-group">
+            {icon && (
+              <div className="input-group-text">
+                <FontAwesomeIcon icon={icon} />
+              </div>
+            )}
+            {groups}
+            <input
+              className={`form-control${errors ? ' is-invalid' : ''}`}
+              id={id}
+              type={type === FormInputType.PASSWORD ? 'password' : 'text'}
+              value={value || ''}
+              onChange={onChangeInput}
+              placeholder={placeholder}
+              autoComplete={autoComplete ? id : undefined}
+            />
           </div>
-          ))}
-          {groups}
-          <input
-            className={`form-control${errors ? ' is-invalid' : ''}`}
-            id={id}
-            type={type === FormInputType.PASSWORD ? 'password' : 'text'}
-            value={value || ''}
-            onChange={onChangeInput}
-            placeholder={placeholder}
-            autoComplete={autoComplete?id:undefined}
-          />
-        </div>
         )}
-        {(type === FormInputType.TEXTAREA) && (
-        <div className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}>
-          <Editor
+        {type === FormInputType.TEXTAREA && (
+          <div className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}>
+            <Editor
+              id={id}
+              value={value || ''}
+              onChange={onChange}
+              placeholder={placeholder}
+              rows={rows}
+            />
+          </div>
+        )}
+        {type === FormInputType.CHECKBOX && (
+          <Checkbox
             id={id}
-            value={value || ''}
+            className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}
+            value={value}
             onChange={onChange}
-            placeholder={placeholder}
-            rows={rows}
-          />
-        </div>
-        )}
-        {(type === FormInputType.CHECKBOX) && (
-        <Checkbox
-          id={id}
-          className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}
-          value={value}
-          onChange={onChange}
           />
         )}
-        {(type === FormInputType.SELECT) && (
+        {type === FormInputType.SELECT && (
           <Select
             id={id}
             value={value}
@@ -94,19 +97,17 @@ const FormInput: FC<FormInputProps> = (props) => {
             className={`form-control${errors ? ' is-invalid' : ''}`}
             multiple={multiple}
             options={options!}
-            />
+          />
         )}
-        {errors && errors.map((message, i) => (
-          <div
-            key={`error-${i}`}
-            className="invalid-feedback"
-          >
-            {message}
-          </div>
-        ))}
+        {errors &&
+          errors.map((message, i) => (
+            <div key={`error-${i}`} className="invalid-feedback">
+              {message}
+            </div>
+          ))}
       </div>
     </div>
   );
-}
+};
 
-export default FormInput
+export default FormInput;
