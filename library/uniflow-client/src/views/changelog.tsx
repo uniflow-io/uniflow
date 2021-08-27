@@ -1,5 +1,6 @@
 import React from 'react';
 import { StaticQuery, graphql } from 'gatsby';
+import { FC } from 'react';
 
 interface ChangelogItem {
   node: {
@@ -12,7 +13,7 @@ interface ChangelogItem {
 export interface ChangelogProps {
 }
 
-function Changelog(props: ChangelogProps) {
+const Changelog: FC<ChangelogProps> = () => {
   return (
     <section className="section container-fluid">
       <div className="row">

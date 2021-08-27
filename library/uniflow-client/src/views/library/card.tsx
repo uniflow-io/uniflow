@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { GatsbyImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,7 +33,7 @@ export interface CardProps {
   }
 }
 
-function Card(props: CardProps) {
+const Card: FC<CardProps> = (props) => {
   const { library, card, logo } = props;
   let repository = card.repository.url;
   let editUrl = null;

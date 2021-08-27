@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Changelog, { ChangelogProps } from '../views/changelog';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const ChangelogPage = withPage<ChangelogProps>(Changelog, 'changelog', {
     location,
     title: 'ChangeLog',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <ChangelogPage />;
 };
+
+export default Page

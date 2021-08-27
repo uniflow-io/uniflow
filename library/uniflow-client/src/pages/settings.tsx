@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Settings, { SettingsProps } from '../views/settings';
 import { requireAuthentication, withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const AuthSettings = withPage<SettingsProps>(Settings, 'settings', {
     location,
     title: 'Settings',
@@ -13,3 +13,5 @@ export default ({ location }: PageProps) => {
 
   return <AuthSettingsPage />;
 };
+
+export default Page

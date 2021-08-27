@@ -7,6 +7,7 @@ import Navigation, { NavigationProps } from './navigation';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { pathTo } from '../../routes';
 import { MDXProvider } from '../../components';
+import { FC } from 'react';
 
 export interface DocProps {
   doc: {
@@ -41,7 +42,7 @@ export interface DocProps {
   }
 }
 
-function Doc(props: DocProps) {
+const Doc: FC<DocProps> = (props) => {
   const { doc, docNav, previous, next } = props;
 
   return (

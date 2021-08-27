@@ -5,9 +5,10 @@ import { navigate } from 'gatsby';
 import { useAuth } from '../contexts';
 import { useEffect } from 'react';
 import { ROLE } from '../models/api-type-interface';
+import { FC } from 'react';
 
 export default function requireAuthentication<T>(Component: ComponentType<T>, role: ROLE = ROLE.USER) {
-  function requireAuthenticationHelper(props: T) {
+  const requireAuthenticationHelper: FC<T> = (props) => {
     const { auth } = useAuth()
     const { user } = useUser()
 

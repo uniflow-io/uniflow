@@ -6,11 +6,12 @@ import { useEffect } from 'react';
 import { useLocation } from "@reach/router";
 import { WindowLocation } from '@reach/router';
 import { useAuth, useUser } from '../contexts';
+import { FC } from 'react';
 
 export interface UserManagerProps {
 }
 
-function UserManager(props: UserManagerProps) {
+const UserManager: FC<UserManagerProps> = (props) => {
   const [isFetching, setIsFetching] = useState<boolean>(false)
   const { auth, authDispatch } = useAuth()
   const { userDispatch } = useUser()

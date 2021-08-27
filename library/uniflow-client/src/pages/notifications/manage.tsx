@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Notifications, { NotificationsProps } from '../../views/notifications';
 import { withPage } from '../../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const NotificationPage = withPage<NotificationsProps>(Notifications, 'notifications', {
     location,
     title: 'Notifications Manage',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <NotificationPage />;
 };
+
+export default Page

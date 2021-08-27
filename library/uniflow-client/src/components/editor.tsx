@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import ReactPrismEditor from 'react-prism-editor';
 import { useApp } from '../contexts/app';
 
@@ -6,12 +6,12 @@ export interface EditorProps {
   value: string;
   language: string;
   readonly: boolean;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   onChange?: (value: string) => void;
 }
 
-function Editor(props: EditorProps) {
+const Editor: FC<EditorProps> = (props) => {
   const { value, language, readonly, width, height, onChange } = props;
   const app = useApp();
 

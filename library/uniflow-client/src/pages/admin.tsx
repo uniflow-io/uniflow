@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Admin, { AdminProps } from '../views/admin';
 import { requireAuthentication, withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 import { ROLE } from '../models/api-type-interface';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const AdminPage = withPage<AdminProps>(Admin, 'admin', {
     location,
     title: 'Admin',
@@ -14,3 +14,5 @@ export default ({ location }: PageProps) => {
 
   return <AuthAdminPage />;
 };
+
+export default Page

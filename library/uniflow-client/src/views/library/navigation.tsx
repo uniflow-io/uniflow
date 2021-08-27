@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'gatsby';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { pathTo } from '../../routes';
+import { FC } from 'react';
 
 export interface Card {
   name: string
@@ -18,7 +17,7 @@ export interface NavigationProps {
   slug?: string
 }
 
-function Navigation(props: NavigationProps) {
+const Navigation: FC<NavigationProps> = (props) => {
   const [search, setSearch] = useState<string>('')
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
 
@@ -79,7 +78,7 @@ function Navigation(props: NavigationProps) {
           />
         </div>
         <button
-          className="btn d-sm-none py-0 px-1 ms-3 isCollapsedd"
+          className="btn d-sm-none py-0 px-0 ms-3 isCollapsedd"
           type="button"
           onClick={onToggle}
         >

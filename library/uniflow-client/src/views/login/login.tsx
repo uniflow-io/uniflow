@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts';
 import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
 import FormInput, { FormInputType } from '../../components/form-input';
 import Alert, { AlertType } from '../../components/alert';
+import { FC } from 'react';
 
 const container = new Container();
 const env = container.get(Env);
@@ -18,7 +19,7 @@ const env = container.get(Env);
 export interface LoginProps {
 }
 
-function Login(props: LoginProps) {
+const Login: FC<LoginProps> = (props) => {
   const facebookAppId = env.get('facebookAppId');
   const githubAppId = env.get('githubAppId')
   const [username, setUsername] = useState<string>('');

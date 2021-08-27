@@ -2,12 +2,13 @@ import React, { useState, SyntheticEvent } from 'react';
 import { Select } from '../components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons';
+import { FC } from 'react';
 
 export interface SearchProps {
   onPush?: CallableFunction;
 }
 
-function Search(props: SearchProps) {
+const Search: FC<SearchProps> = (props) => {
   const [search, setSearch] = useState<string>('@uniflow-io/uniflow-flow-code')
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {

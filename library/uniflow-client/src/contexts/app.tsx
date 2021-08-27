@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 export interface AppProviderProps {
   children: React.ReactNode;
@@ -25,7 +26,7 @@ export const AppContext = React.createContext<AppProviderState>({
 });
 AppContext.displayName = 'AppContext';
 
-export function AppProvider(props: AppProviderProps) {
+export const AppProvider: FC<AppProviderProps> = (props) => {
   const [page, setPage] = useState<string>('home');
   const [theme, setTheme] = useState<Theme>('light');
 

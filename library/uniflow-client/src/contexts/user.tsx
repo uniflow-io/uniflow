@@ -1,13 +1,13 @@
-import React, { MutableRefObject, RefObject, useContext, useEffect, useReducer } from 'react';
+import React, { MutableRefObject, useContext } from 'react';
 import Container from '../container';
 import { Api } from '../services';
-import request from 'axios';
 import uniq from 'lodash/uniq';
 import { AuthDispath, commitLogout } from './auth';
-import { commitAddLog, LogsDispath } from './logs';
+import { LogsDispath } from './logs';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { ROLE } from '../models/api-type-interface';
 import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -189,7 +189,7 @@ export const UserContext = React.createContext<{user: UserProviderState, userDis
 });
 UserContext.displayName = 'UserContext';
 
-export function UserProvider(props: UserProviderProps) {
+export const UserProvider: FC<UserProviderProps> = (props) => {
   const [user, userDispatch, userRef] = useReducerRef<UserProviderState, UserAction>((
     state: UserProviderState = defaultState,
     action: UserAction

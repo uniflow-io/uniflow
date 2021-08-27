@@ -1,10 +1,13 @@
 import React, { Suspense, lazy } from 'react';
+import { FC } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
 
-export interface UiFlowProps {}
+export interface UiFlowProps {
+  
+}
 
-function UiFlow(props: UiFlowProps) {
+const UiFlow: FC<UiFlowProps> = (props) => {
   const { tag, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
 
   let TagName = Search;
@@ -45,7 +48,7 @@ export interface FlowsProps {
   clients: string[]
 }
 
-function Flows(props: FlowsProps) {
+const Flows: FC<FlowsProps> = (props) => {
   const { graph, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
   const uiFlows = (() => {
     const uiFlows = [

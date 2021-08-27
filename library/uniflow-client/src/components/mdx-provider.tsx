@@ -1,9 +1,9 @@
-import React from 'react';
-import { MDXProvider } from '@mdx-js/react';
+import React, { ReactNode } from 'react';
+import { MDXProvider, MDXProviderComponentsProp } from '@mdx-js/react';
 import { Link } from 'gatsby';
 import { Editor } from '../components';
 
-const components = {
+const components: MDXProviderComponentsProp = {
   h1: (props) => (
     <h3 className={'mb-3'} {...props}>
       {props.children}
@@ -43,4 +43,8 @@ const components = {
   },
 };
 
-export default (props) => <MDXProvider components={components}>{props.children}</MDXProvider>;
+export interface MDXProviderProps {
+  children: ReactNode
+}
+
+export default (props: MDXProviderProps) => <MDXProvider components={components}>{props.children}</MDXProvider>;

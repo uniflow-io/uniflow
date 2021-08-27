@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { default as ReactSelect } from 'react-select';
 import { default as ReactCreatableSelect } from 'react-select/creatable';
 import { useApp } from '../contexts/app';
@@ -13,7 +13,7 @@ export interface SelectProps {
   edit?: boolean;
 }
 
-function Select(props: SelectProps) {
+const Select: FC<SelectProps> = (props) => {
   const { value, options, edit, multiple } = props;
   const app = useApp();
   const customStyles = {

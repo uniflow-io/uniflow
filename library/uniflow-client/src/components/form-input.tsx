@@ -1,6 +1,7 @@
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { FC } from 'react';
 import Checkbox from './checkbox';
 import Editor from './editor';
 import Select, { SelectProps } from './select';
@@ -29,7 +30,7 @@ export interface FormInputProps {
   options?: SelectProps['options']
 }
 
-function FormInput(props: FormInputProps) {
+const FormInput: FC<FormInputProps> = (props) => {
   const {type, id, label, value, errors, icon, onChange, autoComplete, rows, multiple, options } = props
   const placeholder = props.placeholder || label
   const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : []

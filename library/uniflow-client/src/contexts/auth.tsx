@@ -4,6 +4,7 @@ import { Api } from '../services';
 import jwtDecode, { InvalidTokenError } from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -202,7 +203,7 @@ export const AuthContext = React.createContext<{auth: AuthProviderState, authDis
 });
 AuthContext.displayName = 'AuthContext';
 
-export function AuthProvider(props: AuthProviderProps) {
+export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const [auth, authDispatch, authRef] = useReducerRef<AuthProviderState, AuthAction>((state = defaultState, action) => {
     switch (action.type) {
       case AuthActionTypes.COMMIT_LOGIN_REQUEST:

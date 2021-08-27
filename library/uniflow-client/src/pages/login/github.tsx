@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import GithubLogin, { GithubLoginProps } from '../../views/login/github';
 import { withPage } from '../../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const GithubLoginPage = withPage<GithubLoginProps>(GithubLogin, 'github-login', {
     location,
     title: 'Login Github',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <GithubLoginPage />;
 };
+
+export default Page

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Home, { HomeProps } from '../views/home';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const HomePage = withPage<HomeProps>(Home, 'home', {
     location,
     title: 'Uniflow',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <HomePage />;
 };
+
+export default Page

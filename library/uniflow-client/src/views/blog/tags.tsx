@@ -3,12 +3,13 @@ import { pathTo } from '../../routes';
 import { Link } from 'gatsby';
 import { faTag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FC } from 'react';
 
 export interface TagsProps {
   tags: {[key: string]: number}
 }
 
-const Tags = ({ tags }: TagsProps) => {
+const Tags: FC<TagsProps> = ({ tags }) => {
   const orderedTags = Object.keys(tags).sort((tag1: string, tag2: string): number => {
     return tags[tag2] - tags[tag1];
   });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FC } from 'react';
 
 let uniqueId = 0;
 const gen = () => {
@@ -15,7 +16,7 @@ export interface CheckboxProps {
   id?: string
 }
 
-function Checkbox(props: CheckboxProps) {
+const Checkbox:FC<CheckboxProps> = (props) => {
   const onChange: React.ChangeEventHandler<HTMLInputElement> = () => {
     const { value } = props;
 

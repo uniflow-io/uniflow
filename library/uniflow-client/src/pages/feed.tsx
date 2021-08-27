@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { graphql, PageProps } from 'gatsby';
 import Feed, { FeedProps } from '../views/feed/feed';
 import { requireAuthentication, withPage } from '../helpers';
@@ -19,7 +19,7 @@ export interface FeedPageData {
   }
 }
 
-export default ({ location, data: { localFlows } }: PageProps<FeedPageData>) => {
+const Page: FC<PageProps<FeedPageData>> = ({ location, data: { localFlows } }) => {
   const allFlows = {};
   localFlows.nodes.forEach((flow) => {
     allFlows[flow.name] = flow.uniflow;
@@ -57,3 +57,5 @@ export const query = graphql`
     }
   }
 `;
+
+export default Page

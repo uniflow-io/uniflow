@@ -12,10 +12,11 @@ import {
   FeedItem,
 } from '../../contexts/feed';
 import { commitAddLog, useLogs } from '../../contexts/logs';
-import { faBars, faFolder, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth, useUser } from '../../contexts';
 import { useEffect } from 'react';
+import { FC } from 'react';
 
 export interface NavigationProps {
   type?: 'program'|'folder'
@@ -23,7 +24,7 @@ export interface NavigationProps {
 
 export interface NavigationState {}
 
-function Navigation(props: NavigationProps) {
+const Navigation: FC<NavigationProps> = (props) => {
   const [search, setSearch] = useState<string>('')
   const [isCollapsed, setIsCollapsed] = useState<boolean>(true)
   const { auth } = useAuth()
@@ -123,7 +124,7 @@ function Navigation(props: NavigationProps) {
           )}
         </div>
         <button
-          className="btn d-sm-none py-0 px-1 ms-3 isCollapsedd"
+          className="btn d-sm-none py-0 px-0 ms-3 isCollapsedd"
           type="button"
           onClick={onToggle}
         >

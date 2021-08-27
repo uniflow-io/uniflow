@@ -2,12 +2,13 @@ import React from 'react';
 import Navigation, { NavigationProps } from './navigation';
 import MDXDocument from './library.mdx';
 import { MDXProvider } from '../../components';
+import { FC } from 'react';
 
 export interface LibraryProps {
   library: NavigationProps['library']
 }
 
-function Library(props: LibraryProps) {
+const Library: FC<LibraryProps> = (props) => {
   const { library } = props;
 
   return (

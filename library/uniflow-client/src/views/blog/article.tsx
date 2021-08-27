@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { pathTo } from '../../routes';
 import { MDXProvider } from '../../components';
+import { FC } from 'react';
 
 export interface ArticleProps {
   article: {
@@ -63,7 +64,7 @@ export interface ArticleProps {
   },
 }
 
-function Article(props:ArticleProps) {
+const Article: FC<ArticleProps> = (props) => {
   const { article, previous, next } = props;
 
   return (

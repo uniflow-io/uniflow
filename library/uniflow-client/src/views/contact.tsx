@@ -8,6 +8,7 @@ import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 import FormInput, { FormInputType } from '../components/form-input';
 import Alert, { AlertType } from '../components/alert';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -17,7 +18,7 @@ export interface ContactProps {
 
 export interface ContactState {}
 
-function Contact(props: ContactProps) {
+const Contact: FC<ContactProps> = () => {
   const [email, setEmail] = useState<string>('')
   const [message, setMessage] = useState<string>('')
   const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'message'>>({})

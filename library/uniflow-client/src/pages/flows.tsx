@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Flows, { FlowsProps } from '../views/flows';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const FlowsPage = withPage<FlowsProps>(Flows, 'flows', {
     location,
     title: 'Uniflow',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <FlowsPage />;
 };
+
+export default Page

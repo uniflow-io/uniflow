@@ -4,7 +4,8 @@ import Container from '../container';
 import { Env } from '../services';
 import { useEffect } from 'react';
 import { useApp } from '../contexts/app';
-import { WindowLocation, createMemorySource, createHistory, LocationProvider, HistorySource } from '@reach/router';
+import { WindowLocation, createMemorySource, createHistory, LocationProvider } from '@reach/router';
+import { FC } from 'react';
 
 const container = new Container();
 const env = container.get(Env);
@@ -20,7 +21,7 @@ export default function withPage<T>(Component: ComponentType<T>, page: string, s
   type?: string,
   image?: string | {url: string, width: string, height: string}
 }) {
-  function PageHelper(props: T) {
+  const PageHelper: FC<T> = (props) => {
     const app = useApp();
     const source = createMemorySource(location.pathname + location.search)
     const history = createHistory(source)

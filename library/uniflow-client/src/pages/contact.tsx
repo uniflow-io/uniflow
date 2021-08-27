@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Contact, { ContactProps } from '../views/contact';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const ContactPage = withPage<ContactProps>(Contact, 'contact', {
     location,
     title: 'Contact',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <ContactPage />;
 };
+
+export default Page

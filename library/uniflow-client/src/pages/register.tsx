@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Register, { RegisterProps } from '../views/login/register';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const RegisterPage = withPage<RegisterProps>(Register, 'register', {
     location,
     title: 'Register',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <RegisterPage />;
 };
+
+export default Page

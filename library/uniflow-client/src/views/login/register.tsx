@@ -12,6 +12,7 @@ import { useAuth, useLogs } from '../../contexts';
 import ApiValidateException, { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
 import Alert, { AlertType } from '../../components/alert';
 import FormInput, { FormInputType } from '../../components/form-input';
+import { FC } from 'react';
 
 const container = new Container();
 const env = container.get(Env);
@@ -19,7 +20,7 @@ const env = container.get(Env);
 export interface RegisterProps {
 }
 
-function Register(props: RegisterProps) {
+const Register: FC<RegisterProps> = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'email'|'password'>>({})

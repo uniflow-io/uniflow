@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Blog, { BlogProps } from '../views/blog/blog';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const BlogPage = withPage<BlogProps>(Blog, 'blog', {
     location,
     title: 'Blog',
@@ -11,4 +11,6 @@ export default ({ location }: PageProps) => {
   });
 
   return <BlogPage />;
-};
+}
+
+export default Page;

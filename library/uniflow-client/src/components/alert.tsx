@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 
 export enum AlertType {
   SUCCESS = 'SUCCESS',
@@ -11,7 +11,7 @@ export interface AlertProps {
   onClose?: React.MouseEventHandler<HTMLButtonElement>
 }
 
-function Alert(props: AlertProps) {
+const Alert: FC<AlertProps> = (props) => {
   const {type, children, onClose} = props
   const [isClosed, setIsClosed] = useState<Boolean>(false)
 

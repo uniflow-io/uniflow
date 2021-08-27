@@ -1,9 +1,10 @@
 import React from 'react';
+import { FC } from 'react';
 
 export interface NotFoundProps {
 }
 
-function NotFound(props: NotFoundProps) {
+const NotFound: FC<NotFoundProps> = () => {
   return (
     <section className="section container-fluid">
       <div className="row">

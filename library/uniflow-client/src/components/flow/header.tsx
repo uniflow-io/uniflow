@@ -1,6 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FC } from 'react';
+import { cpuUsage } from 'node:process';
 
 export interface HeaderProps {
   title?: string
@@ -8,7 +10,7 @@ export interface HeaderProps {
   
 }
 
-export default function Header(props: HeaderProps) {
+const Header: FC<HeaderProps> = (props) => {
   return (
     <div className="row">
       <div className="col-4 col-sm-2">
@@ -48,3 +50,5 @@ export default function Header(props: HeaderProps) {
     </div>
   );
 }
+
+export default Header

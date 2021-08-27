@@ -2,6 +2,7 @@ import React from 'react';
 import { pathTo } from '../../routes';
 import { Link } from 'gatsby';
 import ArticleItem, { ArticleItemProps } from './articleItem';
+import { FC } from 'react';
 
 export interface TagProps {
   tag: string
@@ -10,7 +11,7 @@ export interface TagProps {
   }
 }
 
-function Tag(props: TagProps) {
+const Tag: FC<TagProps> = (props) => {
   const { tag, articles } = props;
 
   return (

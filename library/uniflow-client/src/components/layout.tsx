@@ -20,12 +20,13 @@ import { IGatsbyImageData } from 'gatsby-plugin-image';
 import { ROLE } from '../models/api-type-interface';
 import { Log } from '../models';
 import Alert, { AlertType } from '../components/alert'
+import { FC } from 'react';
 
 const container = new Container();
 const path = container.get(Path);
 const env = container.get(Env);
 
-function MessengerPlatform() {
+const MessengerPlatform: FC = () => {
   return (
     <div>
       <Helmet>
@@ -67,7 +68,7 @@ interface DisplayLogProps {
   log: Log
 }
 
-function DisplayLog(props: DisplayLogProps) {
+const DisplayLog: FC<DisplayLogProps> = (props) => {
   const { log } = props;
   const { logsDispatch } = useLogs();
 
@@ -88,7 +89,7 @@ function DisplayLog(props: DisplayLogProps) {
   );
 }
 
-function DisplayLogs() {
+const DisplayLogs: FC = () => {
   const { logs } = useLogs();
   const newLogs = getNewLogs(logs)
 
@@ -117,7 +118,7 @@ interface HeaderProps {
   }
 }
 
-function Header(props: HeaderProps) {
+const Header: FC<HeaderProps> = (props) => {
   const { logo, changeLogTags } = props;
   const app = useApp();
   const { auth } = useAuth();
@@ -482,7 +483,7 @@ function Header(props: HeaderProps) {
   );
 }
 
-function Footer() {
+const Footer: FC = () => {
   return (
     <footer className="text-muted d-flex border-top">
       <div className="container-fluid">
@@ -503,7 +504,7 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
-function Layout(props: LayoutProps) {
+const Layout: FC<LayoutProps> = (props) => {
   const app = useApp();
   const environement = env.get('env')
 

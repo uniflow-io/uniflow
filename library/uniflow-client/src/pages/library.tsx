@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Library, { LibraryProps } from '../views/library/library';
 import { withPage } from '../helpers';
 import { graphql, PageProps } from 'gatsby';
@@ -10,7 +10,7 @@ export interface LibraryPageData {
   }
 }
 
-export default ({ location, data: { /*library, */ localLibrary } }: PageProps<LibraryPageData>) => {
+const Page: FC<PageProps<LibraryPageData>> = ({ location, data: { /*library, */ localLibrary } }) => {
   const allLibrary = {};
   /*library.nodes.forEach(card => {
     allLibrary[card.fields.slug] = card;
@@ -55,3 +55,5 @@ export const query = graphql`
     }
   }
 `;
+
+export default Page

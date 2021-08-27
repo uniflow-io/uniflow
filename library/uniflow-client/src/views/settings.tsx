@@ -3,10 +3,9 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 import { facebookLoginUrl, githubLoginUrl } from '../contexts/auth';
-import { updateSettings, commitUpdateSettings, useUser } from '../contexts/user';
+import { updateSettings, useUser } from '../contexts/user';
 import Container from '../container';
 import { UI, Env, Api } from '../services';
-import { Checkbox } from '../components';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useAuth, useLogs } from '../contexts';
@@ -14,6 +13,7 @@ import { useStateRef } from '../hooks/use-state-ref';
 import ApiValidateException, { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 import Alert, { AlertType } from '../components/alert';
 import FormInput, { FormInputType } from '../components/form-input';
+import { FC } from 'react';
 
 const container = new Container();
 const ui = container.get(UI);
@@ -42,7 +42,7 @@ interface LeadState {
   githubUsername: string|null,
 }
 
-function Settings(props: SettingsProps) {
+const Settings: FC<SettingsProps> = () => {
   const [userSettings, setUserSettings, userSettingsRef] = useStateRef<UserSettingsState>({
     apiKey: undefined,
     username: undefined,

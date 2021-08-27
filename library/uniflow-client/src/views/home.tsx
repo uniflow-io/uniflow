@@ -6,6 +6,7 @@ import { Api } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 import Alert, { AlertType } from '../components/alert';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -13,7 +14,7 @@ const api = container.get(Api);
 export interface HomeProps {
 }
 
-function Home(props: HomeProps) {
+const Home: FC<HomeProps> = () => {
   const [email, setEmail] = useState<string>('')
   const [errors, setErrors] = useState<ApiValidateExceptionErrors>({})
   const [state, setState] = useState<'form'|'form-submit'|'form-success'>('form')

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import ArticleItem, { ArticleItemProps } from './articleItem';
 import { GatsbyImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -21,7 +21,7 @@ export interface ContributorProps {
   }
 }
 
-function Contributor(props: ContributorProps) {
+const Contributor: FC<ContributorProps> = (props) => {
   const { contributor, articles } = props;
 
   return (

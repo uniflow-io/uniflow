@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import Container from '../container';
 import { Api } from '../services';
 import { ProgramApiType } from '../models/api-type-interface';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -17,7 +18,7 @@ export interface FlowsProps {
 
 export interface FlowsState {}
 
-function Flows(props: FlowsProps) {
+const Flows: FC<FlowsProps> = () => {
   const [page, setPage] = useState<number>(1)
   const [programs, setPrograms] = useState<ProgramApiType[]>([])
   const [state, setState] = useState<'loaded'|'load-more'|'loading'>('loaded')

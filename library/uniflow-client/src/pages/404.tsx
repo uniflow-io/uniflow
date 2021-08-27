@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import NotFound, { NotFoundProps } from '../views/not-found';
 import { withPage } from '../helpers';
 import { PageProps } from 'gatsby';
 
-export default ({ location }: PageProps) => {
+const Page: FC<PageProps> = ({ location }) => {
   const NotFoundPage = withPage<NotFoundProps>(NotFound, '404', {
     location,
     title: '404',
@@ -12,3 +12,5 @@ export default ({ location }: PageProps) => {
 
   return <NotFoundPage />;
 };
+
+export default Page

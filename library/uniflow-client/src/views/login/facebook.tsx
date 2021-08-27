@@ -4,12 +4,13 @@ import { pathTo } from '../../routes';
 import { facebookLogin } from '../../contexts/auth';
 import { commitAddLog } from '../../contexts/logs';
 import { useAuth, useLogs } from '../../contexts';
-import { WindowLocation, useLocation } from '@reach/router';
+import { useLocation } from '@reach/router';
+import { FC } from 'react';
 
 export interface FacebookLoginProps {
 }
 
-function FacebookLogin(props: FacebookLoginProps) {
+const FacebookLogin: FC<FacebookLoginProps> = (props) => {
   const { authDispatch, authRef } = useAuth()
   const { logsDispatch } = useLogs()
   const location = useLocation()

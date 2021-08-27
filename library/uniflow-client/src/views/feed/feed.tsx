@@ -1,14 +1,15 @@
 import React from 'react';
 import Navigation from './navigation';
-import Program, { Flow, ProgramProps } from './program';
+import Program, { ProgramProps } from './program';
 import Folder from './folder';
 import { FolderFeedType, getFeedItem, ProgramFeedType, useFeed } from '../../contexts/feed';
+import { FC } from 'react';
 
 export interface FeedProps {
   allFlows: ProgramProps['allFlows']
 }
 
-function Feed(props: FeedProps) {
+const Feed: FC<FeedProps> = (props) => {
   const { allFlows } = props;
   const { feed } = useFeed()
   const currentItem = getFeedItem(feed);

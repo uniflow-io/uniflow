@@ -38,7 +38,7 @@ export interface ArticleItemProps {
   }
 }
 
-const ArticleItem = ({ article }: ArticleItemProps) => (
+const ArticleItem: FC<ArticleItemProps> = ({ article }) => (
   <div className="card card-link">
     <Link className="btn btn-default" to={pathTo('article', { slug: article.fields.slug })}>
       Read More

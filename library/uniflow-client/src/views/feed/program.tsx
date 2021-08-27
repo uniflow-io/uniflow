@@ -38,6 +38,7 @@ import FormInput, { FormInputType } from '../../components/form-input';
 import { useLocation } from "@reach/router";
 import Alert, { AlertType } from '../../components/alert';
 import { Flow } from '../../components/flows';
+import { FC } from 'react';
 
 const container = new Container();
 const ui = container.get(UI);
@@ -49,7 +50,7 @@ export interface ProgramProps {
 
 export interface ProgramState {}
 
-function Program(props: ProgramProps) {
+const Program: FC<ProgramProps> = (props) => {
   const [fetchedSlug, setFetchedSlug] = useState<string>()
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
   const [folderTree, setFolderTree] = useState<PathType[]>([])

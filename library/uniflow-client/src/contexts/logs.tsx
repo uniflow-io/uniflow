@@ -1,4 +1,5 @@
 import React, { MutableRefObject, RefObject, useContext, useReducer } from 'react';
+import { FC } from 'react';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { Log } from '../models';
 import { LOG_STATUS } from '../models/log';
@@ -60,7 +61,7 @@ export const LogsContext = React.createContext<{logs: LogsProviderState, logsDis
 });
 LogsContext.displayName = 'LogContext';
 
-export function LogsProvider(props: LogsProviderProps) {
+export const LogsProvider: FC<LogsProviderProps> = (props) => {
   const [logs, logsDispatch, logsRef] = useReducerRef<LogsProviderState, LogsAction>((
     state: LogsProviderState = defaultState,
     action: LogsAction

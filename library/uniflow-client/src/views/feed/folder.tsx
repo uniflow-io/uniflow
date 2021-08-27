@@ -21,6 +21,7 @@ import { ApiValidateException } from '../../models';
 import { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
 import FormInput, { FormInputType } from '../../components/form-input';
 import Alert, { AlertType } from '../../components/alert';
+import { FC } from 'react';
 
 export interface FolderProps {
   folder: FolderFeedType
@@ -28,7 +29,7 @@ export interface FolderProps {
 
 export interface FolderState {}
 
-function Folder(props: FolderProps) {
+const Folder: FC<FolderProps> = (props) => {
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false)
   const [folderTree, setFolderTree] = useState<PathType[]>([])
   const [errors, setErrors] = useState<ApiValidateExceptionErrors<'form'|'name'|'slug'|'path'>>({})

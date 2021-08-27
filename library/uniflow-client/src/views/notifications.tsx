@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Checkbox } from '../components';
 import { ApiValidateException } from '../models';
 import { matchRoute } from '../routes';
-import { WindowLocation, useLocation } from '@reach/router';
+import { useLocation } from '@reach/router';
 
 import { Api } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
 import Alert, { AlertType } from '../components/alert';
 import FormInput, { FormInputType } from '../components/form-input';
+import { FC } from 'react';
 
 const container = new Container();
 const api = container.get(Api);
@@ -25,7 +25,7 @@ interface LeadState {
   githubUsername: string|null,
 }
 
-function Notifications(props: NotificationsProps) {
+const Notifications: FC<NotificationsProps> = () => {
   const [lead, setLead] = useState<LeadState>({
     uid: undefined,
     optinNewsletter: false,

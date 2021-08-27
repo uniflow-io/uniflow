@@ -1,4 +1,4 @@
-import React, { MutableRefObject, RefObject, useContext, useReducer } from 'react';
+import React, { FC, MutableRefObject, RefObject, useContext, useReducer } from 'react';
 import Container from '../container';
 import { Api } from '../services';
 import request from 'axios';
@@ -553,7 +553,7 @@ export const FeedContext = React.createContext<{feed: FeedProviderState, feedDis
 });
 FeedContext.displayName = 'FeedContext';
 
-export function FeedProvider(props: FeedProviderProps) {
+export const FeedProvider: FC<FeedProviderProps> = (props) => {
   const [feed, feedDispatch, feedRef] = useReducerRef<FeedProviderState, FeedAction>((
     state: FeedProviderState = defaultState,
     action: FeedAction

@@ -1,5 +1,6 @@
 import request from 'axios';
 import React, { MutableRefObject, RefObject, useContext, useReducer } from 'react';
+import { FC } from 'react';
 import Container from '../container';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { Api } from '../services';
@@ -80,7 +81,7 @@ export const GraphContext = React.createContext<{graph: GraphProviderState, grap
 });
 GraphContext.displayName = 'GraphContext';
 
-export function GraphProvider(props: GraphProviderProps) {
+export const GraphProvider: FC<GraphProviderProps> = (props) => {
   const [graph, graphDispatch, graphRef] = useReducerRef<GraphProviderState, GraphAction>((
     state: GraphProviderState = defaultState,
     action: GraphAction

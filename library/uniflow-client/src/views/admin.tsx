@@ -3,6 +3,7 @@ import { fetchConfig, updateConfig, useUser } from '../contexts/user';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useAuth, useLogs } from '../contexts';
+import { FC } from 'react';
 
 export interface AdminProps {
 }
@@ -13,7 +14,7 @@ interface ConfigState {
 
 }
 
-function Admin(props: AdminProps) {
+const Admin: FC<AdminProps> = () => {
   const [config, setConfig] = useState<ConfigState>({})
   const [isSaving, setIsSaving]=  useState<boolean>(false)
   const { auth, authDispatch } = useAuth()

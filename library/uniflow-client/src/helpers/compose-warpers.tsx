@@ -1,9 +1,10 @@
 import React from 'react';
+import { FC } from 'react';
 
 export default function composeWrappers(
-  wrappers: React.FunctionComponent[]
-): React.FunctionComponent {
-  return wrappers.reduce((Acc, Current): React.FunctionComponent => {
+  wrappers: FC[]
+): FC {
+  return wrappers.reduce((Acc, Current): FC => {
     return props => <Current><Acc {...props} /></Current>
   });
 }

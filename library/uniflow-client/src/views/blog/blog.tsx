@@ -1,11 +1,12 @@
 import React from 'react';
 import { StaticQuery, graphql } from 'gatsby';
 import ArticleItem from './articleItem';
+import { FC } from 'react';
 
 export interface BlogProps {
 }
 
-const Blog = (props: BlogProps) => (
+const Blog: FC<BlogProps> = () => (
   <>
     <section className="section container-fluid">
       <h3>Blog</h3>

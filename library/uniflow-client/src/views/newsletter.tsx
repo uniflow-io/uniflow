@@ -3,6 +3,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { MDXProvider } from '../components';
+import { FC } from 'react';
 
 export interface NewsletterProps {
   newsletter: {
@@ -17,7 +18,7 @@ export interface NewsletterProps {
   }
 }
 
-function Newsletter(props: NewsletterProps) {
+const Newsletter: FC<NewsletterProps> = (props: NewsletterProps) => {
   const { newsletter } = props;
 
   return (
