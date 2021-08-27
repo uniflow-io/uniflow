@@ -8,7 +8,8 @@ type AppConfigData = {
   apiUrl: string;
   facebookAppId: string;
   githubAppId: string;
-  trackingId: string;
+  matomoSiteId: string;
+  matomoUrl: string;
 };
 
 const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || 'development';
@@ -59,12 +60,18 @@ const appConfig = convict<AppConfigData>({
     env: 'GATSBY_GITHUB_APP_ID',
     doc: 'Github App Id',
   },
-  trackingId: {
+  matomoSiteId: {
     format: String,
     default: '',
-    env: 'GATSBY_TRACKING_ID',
-    doc: 'Tracking Id',
+    env: 'GATSBY_MATOMO_SITE_ID',
+    doc: 'Matomo Site Id',
   },
+  matomoUrl: {
+    format: String,
+    default: '',
+    env: 'GATSBY_MATOMO_URL',
+    doc: 'Matomo URL',
+  }
 });
 
 appConfig.validate({
