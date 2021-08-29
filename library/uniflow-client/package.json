@@ -97,7 +97,7 @@
     "@oclif/dev-cli": "^1.26.0",
     "@types/convict": "^6.1.1",
     "@types/dotenv": "8.2.0",
-    "@types/express": "4.17.13",
+    "@types/express": "^4.17.13",
     "@types/mdx-js__react": "^1.5.4",
     "@types/node": "16.6.1",
     "@types/react": "^17.0.18",

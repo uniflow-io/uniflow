@@ -11,7 +11,7 @@ const UiFlow: FC<UiFlowProps> = (props) => {
   let TagName = Search;
   if (tag !== 'search') {
     const lasyImports = {
-      '@uniflow-io/uniflow-flow-code': () => import('../../../uniflow-flow-code/src'),
+      '@uniflow-io/uniflow-flow-function': () => import('../../../uniflow-flow-function/src'),
       '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
       '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
     };

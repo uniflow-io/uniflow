@@ -1,7 +1,7 @@
-uniflow-flow-code
+uniflow-flow-function
 -----------------------
 
-This is official Code Flow for Uniflow
+This is official Function Flow for Uniflow
 
 ## Documentation
 
@@ -17,6 +17,6 @@ If you have problems or questions go to our contact page, we will then try to he
 
 ## License
 
-Uniflow is [fair-code](http://faircode.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/1.x/LICENSE.md) license.
+Uniflow is [fair-function](http://fairfunction.io) distributed under [AGPL-3.0 License with Commons Clause](https://github.com/uniflow-io/uniflow/blob/1.x/LICENSE.md) license.
 
 Additional information about license can be found in the [FAQ](https://uniflow.io/docs/faq#which-license-does-uniflow-use) page.

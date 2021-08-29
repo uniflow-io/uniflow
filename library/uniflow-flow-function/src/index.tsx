@@ -6,7 +6,7 @@ import Flow from '@uniflow-io/uniflow-client/src/services/flow'
 const container = new Container()
 const flow = container.get(Flow)
 
-class CodeFlow extends Component {
+class FunctionFlow extends Component {
   state = {
     isRunning: false,
     code: null,
@@ -20,7 +20,7 @@ class CodeFlow extends Component {
     this.setState({ code: data })
   }
 
-  onChangeCode = code => {
+  onChangeFunction = (code) => {
     this.setState({ code: code }, flow.onUpdate(this))
   }
 
@@ -31,7 +31,7 @@ class CodeFlow extends Component {
     return (
       <>
         <FlowHeader
-          title="Code"
+          title="Function"
           clients={clients}
           isRunning={isRunning}
           onRun={onRun}
@@ -43,7 +43,7 @@ class CodeFlow extends Component {
               htmlFor="code{{ _uid }}"
               className="col-sm-2 col-form-label"
             >
-              Code
+              Function
             </label>
 
             <div className="col-sm-10">
@@ -51,8 +51,8 @@ class CodeFlow extends Component {
                 className="form-control"
                 id="code{{ _uid }}"
                 value={code}
-                onChange={this.onChangeCode}
-                placeholder="Code"
+                onChange={this.onChangeFunction}
+                placeholder="Function"
                 height="200"
                 language="javascript"
               />
@@ -64,4 +64,4 @@ class CodeFlow extends Component {
   }
 }
 
-export default CodeFlow
+export default FunctionFlow
