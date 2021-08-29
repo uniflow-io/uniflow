@@ -21,11 +21,11 @@ export interface FunctionFlowProps {
 const FunctionFlow: FC<FunctionFlowProps> = (props) => {
   const { clients, onPop, onUpdate, onRun, isRunning, data } = props
 
-  const serialize = () => {
+  const onSerialize = () => {
     return data.code
   }
 
-  const deserialize = (data: string) => {
+  const onDeserialize = (data: string) => {
     return { code: data }
   }
 

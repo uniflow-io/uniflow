@@ -1,10 +1,8 @@
-import React, { MutableRefObject } from 'react';
+import React, { MutableRefObject, createContext, useContext } from 'react';
 import { FC } from 'react';
 import Container from '../container';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { Api } from '../services';
-import { createContext, useContext } from 'use-context-selector';
-
 
 const container = new Container();
 const api = container.get(Api);

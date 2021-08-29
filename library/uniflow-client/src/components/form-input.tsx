@@ -1,6 +1,6 @@
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { Fragment, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { FC } from 'react';
 import Checkbox from './checkbox';
 import Editor from './editor';
@@ -13,6 +13,39 @@ export enum FormInputType {
   PASSWORD = 'PASSWORD',
   CHECKBOX = 'CHECKBOX',
   SELECT = 'SELECT',
+}
+
+interface InputGroupsProps {
+  children: ReactNode
+  icon?: IconDefinition
+  groups: React.ReactNodeArray;
+  errors?: string[];
+}
+
+const InputGroups: FC<InputGroupsProps> = ({ children, icon, groups, errors }) => {
+  const errorMessages = errors && errors.map((message, i) => (
+    <div key={`error-${i}`} className="invalid-feedback">
+      {message}
+    </div>
+  ))
+
+  return icon || groups.length > 0 ? (
+    <div className="input-group">
+      {icon && (
+        <div className="input-group-text">
+          <FontAwesomeIcon icon={icon} />
+        </div>
+      )}
+      {groups}
+      {children}
+      {errorMessages}
+    </div>
+  ) : (
+    <>
+        {children}
+        {errorMessages}
+    </>
+  )
 }
 
 export interface FormInputProps {
@@ -35,6 +68,7 @@ export interface FormInputProps {
 const FormInput: FC<FormInputProps> = (props) => {
   const { type, id, label, value, errors, icon, onChange, autoComplete, rows, language, multiple, options } =
     props;
+    
   const placeholder = props.placeholder || label;
   const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : [];
 
@@ -43,35 +77,6 @@ const FormInput: FC<FormInputProps> = (props) => {
       onChange(event.target.value);
     }
   };
-
-  const errorMessages = errors &&
-    errors.map((message, i) => (
-      <div key={`error-${i}`} className="invalid-feedback">
-        {message}
-      </div>
-    ))
-
-  const InputGroups: FC<{
-    children: ReactNode
-  }> = ({ children }) => {
-    return icon || groups.length > 0 ? (
-      <div className="input-group">
-        {icon && (
-          <div className="input-group-text">
-            <FontAwesomeIcon icon={icon} />
-          </div>
-        )}
-        {groups}
-        {children}
-        {errorMessages}
-      </div>
-    ) : (
-      <>
-          {children}
-          {errorMessages}
-      </>
-    )
-  }
 
   return (
     <div className="row mb-3">
@@ -82,7 +87,7 @@ const FormInput: FC<FormInputProps> = (props) => {
       )}
 
       <div className={label ? 'col-sm-10' : 'col-sm-12'}>
-        <InputGroups>
+        <InputGroups icon={icon} groups={groups} errors={errors}>
         {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
           <input
             className={`form-control${errors ? ' is-invalid' : ''}`}

@@ -1,12 +1,16 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { FC } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
 
+import FlowFunction from '../../../uniflow-flow-function/src'
+import FlowPrompt from '../../../uniflow-flow-prompt/src'
+import FlowText from '../../../uniflow-flow-text/src'
+
 const lasyImports = {
-  '@uniflow-io/uniflow-flow-function': () => import('../../../uniflow-flow-function/src'),
-  '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
-  '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
+  '@uniflow-io/uniflow-flow-function': FlowFunction,
+  '@uniflow-io/uniflow-flow-prompt': FlowPrompt,
+  '@uniflow-io/uniflow-flow-text': FlowText,
 };
 
 export interface Flow {
@@ -37,10 +41,9 @@ const Flows: FC<FlowsProps> = (props) => {
         }}
         />
       {graph.flows.map((flow, index) => {
-        const TagName = lazy(lasyImports[flow.type]);
+        const TagName = lasyImports[flow.type];
         return (
           <React.Fragment key={index}>
-            <Suspense fallback={<div>Loading...</div>}>
               <TagName
                 isRunning={flow.isRunning}
                 data={flow.data}
@@ -59,7 +62,6 @@ const Flows: FC<FlowsProps> = (props) => {
                   onRun(index);
                 }}
               />
-            </Suspense>
             <Search
               programFlows={programFlows}
               onPush={(flowType) => {

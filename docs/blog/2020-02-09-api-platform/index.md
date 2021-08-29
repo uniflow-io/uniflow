@@ -11,6 +11,6 @@ tags: ["blog"]
 
 Uniflow API integrate [Api-platform](https://api-platform.com). By the time [uniflow.io](https://uniflow.io) will progressly move it's RPC calls to the standard REST api.
 
-If you want know more about api doc, you can find it at [Uniflow API doc](https://api.uniflow.io/api/docs).
+If you want know more about api doc, you can find it at [Uniflow API doc](https://api.uniflow.io/docs).
 
 Enjoy 🚀

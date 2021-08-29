@@ -5,7 +5,7 @@ import { useApp } from '../contexts/app';
 export interface EditorProps {
   id: string
   value: string;
-  language: string;
+  language?: string;
   readonly: boolean;
   width?: number;
   height?: number;

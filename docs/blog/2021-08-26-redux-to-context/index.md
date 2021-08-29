@@ -1,6 +1,6 @@
 ---
 title: React Redux to React Context
-date: 2021-08-27
+date: 2021-08-26
 author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png

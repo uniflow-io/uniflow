@@ -115,8 +115,8 @@ const Program: FC<ProgramProps> = (props) => {
     setFolderTree([props.program.path]);
 
     return () => {
-      onUpdate.cancel();
       onFetchFlowData.cancel();
+      onUpdate.cancel();
       onUpdateFlowData.cancel();
     };
   }, [props.program.uid]);
