@@ -15,10 +15,10 @@ export enum GraphActionTypes {
 }
 
 export type GraphAction =
-  | { type: GraphActionTypes.COMMIT_PUSH_FLOW }
-  | { type: GraphActionTypes.COMMIT_POP_FLOW }
-  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW }
-  | { type: GraphActionTypes.COMMIT_SET_FLOWS };
+  | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flow: string }
+  | { type: GraphActionTypes.COMMIT_POP_FLOW, index: number }
+  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: any }
+  | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] };
 
 export type GraphDispath = React.Dispatch<GraphAction>;
 
@@ -26,11 +26,19 @@ export interface GraphProviderProps {
   children: React.ReactNode;
 }
 
-export type GraphProviderState = Array<string>;
+export interface GraphProviderState {
+  flows: {
+    type: string
+    isRunning: boolean
+    data?: any
+  }[]
+};
 
-const defaultState: GraphProviderState = [];
+const defaultState: GraphProviderState = {
+  flows: []
+};
 
-export const commitPushFlow = (index, flow) => {
+export const commitPushFlow = (index: number, flow: string) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_PUSH_FLOW,
@@ -40,7 +48,7 @@ export const commitPushFlow = (index, flow) => {
     return Promise.resolve();
   };
 };
-export const commitPopFlow = (index) => {
+export const commitPopFlow = (index: number) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_POP_FLOW,
@@ -49,7 +57,7 @@ export const commitPopFlow = (index) => {
     return Promise.resolve();
   };
 };
-export const commitUpdateFlow = (index, data) => {
+export const commitUpdateFlow = (index: number, data: any) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_UPDATE_FLOW,
@@ -59,7 +67,7 @@ export const commitUpdateFlow = (index, data) => {
     return Promise.resolve();
   };
 };
-export const commitSetFlows = (flows) => {
+export const commitSetFlows = (flows: GraphProviderState['flows']) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_SET_FLOWS,
@@ -89,30 +97,39 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
     (state: GraphProviderState = defaultState, action: GraphAction) => {
       switch (action.type) {
         case GraphActionTypes.COMMIT_PUSH_FLOW:
-          const newStatePush = state.slice();
-          newStatePush.splice(action.index, 0, {
-            flow: action.flow,
-          });
-          return newStatePush;
+          return {
+            ...state,
+            ...{flows: state.flows.slice().splice(action.index, 0, {
+              type: action.flow,
+              isRunning: false,
+            })} 
+          };
         case GraphActionTypes.COMMIT_POP_FLOW:
-          const newStatePop = state.slice();
-          newStatePop.splice(action.index, 1);
-          return newStatePop;
+          return {
+            ...state,
+            ...{flows: state.flows.splice(action.index, 1)} 
+          };
         case GraphActionTypes.COMMIT_UPDATE_FLOW:
-          return state.map((item, index) => {
-            if (index !== action.index) {
-              return item;
-            }
-
-            return {
-              ...item,
-              ...{
-                data: action.data,
-              },
-            };
-          });
+          return {
+            ...state,
+            ...{flows: state.flows.map((item, index) => {
+              if (index !== action.index) {
+                return item;
+              }
+  
+              return {
+                ...item,
+                ...{
+                  data: action.data,
+                },
+              };
+            })} 
+          };
         case GraphActionTypes.COMMIT_SET_FLOWS:
-          return action.flows.slice();
+          return {
+            ...state,
+            ...{flows: action.flows.slice()} 
+          };
         default:
           return state;
       }

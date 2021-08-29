@@ -56,11 +56,11 @@ const Flows: FC<FlowsProps> = (props) => {
       },
     ];
 
-    for (let i = 0; i < graph.length; i++) {
-      const item = graph[i];
+    for (let i = 0; i < graph.flows.length; i++) {
+      const item = graph.flows[i];
 
       uiFlows.push({
-        component: item.flow,
+        component: item.type,
         index: i,
       });
 

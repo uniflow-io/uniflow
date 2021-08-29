@@ -1,6 +1,6 @@
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import { FC } from 'react';
 import Checkbox from './checkbox';
 import Editor from './editor';
@@ -9,6 +9,7 @@ import Select, { SelectProps } from './select';
 export enum FormInputType {
   TEXT = 'TEXT',
   TEXTAREA = 'TEXTAREA',
+  EDITOR = 'EDITOR',
   PASSWORD = 'PASSWORD',
   CHECKBOX = 'CHECKBOX',
   SELECT = 'SELECT',
@@ -36,11 +37,38 @@ const FormInput: FC<FormInputProps> = (props) => {
   const placeholder = props.placeholder || label;
   const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : [];
 
-  const onChangeInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeInput: React.ChangeEventHandler<HTMLInputElement|HTMLTextAreaElement> = (event) => {
     if (onChange) {
       onChange(event.target.value);
     }
   };
+
+  const errorMessages = errors &&
+    errors.map((message, i) => (
+      <div key={`error-${i}`} className="invalid-feedback">
+        {message}
+      </div>
+    ))
+
+  const InputGroups: FC<{
+    children: ReactNode
+  }> = ({ children }) => {
+    return icon || groups.length > 0 ? (
+      <div className="input-group">
+        {icon && (
+          <div className="input-group-text">
+            <FontAwesomeIcon icon={icon} />
+          </div>
+        )}
+        {groups}
+        {children}
+        {errorMessages}
+      </div>
+    ) : <Fragment>
+        {children}
+        {errorMessages}
+    </Fragment>
+  }
 
   return (
     <div className="row mb-3">
@@ -51,26 +79,29 @@ const FormInput: FC<FormInputProps> = (props) => {
       )}
 
       <div className={label ? ' col-sm-10' : 'col-sm-12'}>
+        <InputGroups>
         {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
-          <div className="input-group">
-            {icon && (
-              <div className="input-group-text">
-                <FontAwesomeIcon icon={icon} />
-              </div>
-            )}
-            {groups}
-            <input
-              className={`form-control${errors ? ' is-invalid' : ''}`}
-              id={id}
-              type={type === FormInputType.PASSWORD ? 'password' : 'text'}
-              value={value || ''}
-              onChange={onChangeInput}
-              placeholder={placeholder}
-              autoComplete={autoComplete ? id : undefined}
-            />
-          </div>
+          <input
+            className={`form-control${errors ? ' is-invalid' : ''}`}
+            id={id}
+            type={type === FormInputType.PASSWORD ? 'password' : 'text'}
+            value={value || ''}
+            onChange={onChangeInput}
+            placeholder={placeholder}
+            autoComplete={autoComplete ? id : undefined}
+          />
         )}
         {type === FormInputType.TEXTAREA && (
+          <textarea
+            className={`form-control${errors ? ' is-invalid' : ''}`}
+            id={id}
+            value={value || ''}
+            onChange={onChangeInput}
+            placeholder={placeholder}
+            rows={rows}
+          />
+        )}
+        {type === FormInputType.EDITOR && (
           <div className={`form-control-plaintext${errors ? ' is-invalid' : ''}`}>
             <Editor
               id={id}
@@ -99,12 +130,7 @@ const FormInput: FC<FormInputProps> = (props) => {
             options={options!}
           />
         )}
-        {errors &&
-          errors.map((message, i) => (
-            <div key={`error-${i}`} className="invalid-feedback">
-              {message}
-            </div>
-          ))}
+        </InputGroups>
       </div>
     </div>
   );

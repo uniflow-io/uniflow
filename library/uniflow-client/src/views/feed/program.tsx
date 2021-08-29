@@ -463,7 +463,7 @@ const Program: FC<ProgramProps> = (props) => {
         />
         <FormInput
           id="program-description"
-          type={FormInputType.TEXTAREA}
+          type={FormInputType.EDITOR}
           label="Description"
           value={program.description}
           errors={errors.description}
