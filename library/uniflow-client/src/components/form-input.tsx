@@ -27,12 +27,13 @@ export interface FormInputProps {
   onChange?: (value: any) => void;
   autoComplete?: boolean;
   rows?: number;
+  language?: string
   multiple?: boolean;
   options?: SelectProps['options'];
 }
 
 const FormInput: FC<FormInputProps> = (props) => {
-  const { type, id, label, value, errors, icon, onChange, autoComplete, rows, multiple, options } =
+  const { type, id, label, value, errors, icon, onChange, autoComplete, rows, language, multiple, options } =
     props;
   const placeholder = props.placeholder || label;
   const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : [];
@@ -64,10 +65,12 @@ const FormInput: FC<FormInputProps> = (props) => {
         {children}
         {errorMessages}
       </div>
-    ) : <Fragment>
-        {children}
-        {errorMessages}
-    </Fragment>
+    ) : (
+      <>
+          {children}
+          {errorMessages}
+      </>
+    )
   }
 
   return (
@@ -78,7 +81,7 @@ const FormInput: FC<FormInputProps> = (props) => {
         </label>
       )}
 
-      <div className={label ? ' col-sm-10' : 'col-sm-12'}>
+      <div className={label ? 'col-sm-10' : 'col-sm-12'}>
         <InputGroups>
         {(type === FormInputType.TEXT || type === FormInputType.PASSWORD) && (
           <input
@@ -109,6 +112,7 @@ const FormInput: FC<FormInputProps> = (props) => {
               onChange={onChange}
               placeholder={placeholder}
               rows={rows}
+              language={language}
             />
           </div>
         )}

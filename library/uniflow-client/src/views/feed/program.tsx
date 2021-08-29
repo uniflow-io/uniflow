@@ -128,8 +128,8 @@ const Program: FC<ProgramProps> = (props) => {
     runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
   };
 
-  const onPushFlow = async (index: number, flow) => {
-    commitPushFlow(index, flow)(graphDispatch);
+  const onPushFlow = async (index: number, flowType: string) => {
+    commitPushFlow(index, flowType)(graphDispatch);
     onUpdateFlowData();
   };
 
@@ -139,7 +139,7 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdateFlowData();
   };
 
-  const onUpdateFlow = async (index: number, data) => {
+  const onUpdateFlow = async (index: number, data: any) => {
     commitUpdateFlow(index, data)(graphDispatch);
     onUpdateFlowData();
   };

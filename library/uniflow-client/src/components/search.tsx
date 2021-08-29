@@ -5,7 +5,7 @@ import { faDotCircle } from '@fortawesome/free-regular-svg-icons';
 import { FC } from 'react';
 
 export interface SearchProps {
-  onPush?: CallableFunction;
+  onPush?: (value: string) => void;
   programFlows: { key: string; label: string }[]
 }
 

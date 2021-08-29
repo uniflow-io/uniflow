@@ -3,6 +3,7 @@ import ReactPrismEditor from 'react-prism-editor';
 import { useApp } from '../contexts/app';
 
 export interface EditorProps {
+  id: string
   value: string;
   language: string;
   readonly: boolean;
@@ -12,7 +13,7 @@ export interface EditorProps {
 }
 
 const Editor: FC<EditorProps> = (props) => {
-  const { value, language, readonly, width, height, onChange } = props;
+  const { id, value, language, readonly, width, height, onChange } = props;
   const app = useApp();
 
   let theme = 'default';
@@ -24,6 +25,7 @@ const Editor: FC<EditorProps> = (props) => {
 
   return (
     <ReactPrismEditor
+      id={id}
       style={{
         height: height ? height + 'px' : '100%',
         width: width ? width + 'px' : '100%',

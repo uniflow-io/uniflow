@@ -2,14 +2,22 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FC } from 'react';
-import { cpuUsage } from 'node:process';
 
 export interface HeaderProps {
   title?: string;
   clients: string[];
+  isRunning: boolean
+  onPop: () => void
+  onRun: () => void
 }
 
 const Header: FC<HeaderProps> = (props) => {
+  const onDelete: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    props.onPop();
+  }
+
   return (
     <div className="row">
       <div className="col-4 col-sm-2">
@@ -38,11 +46,9 @@ const Header: FC<HeaderProps> = (props) => {
       <div className="d-block col-auto">
         <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
           <div className="btn-group-sm" role="group">
-            {props.onDelete && (
-              <button type="button" className="btn" onClick={props.onDelete}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            )}
+            <button type="button" className="btn" onClick={onDelete}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
           </div>
         </div>
       </div>

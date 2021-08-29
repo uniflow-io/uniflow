@@ -1,8 +1,10 @@
-import React, { MutableRefObject, useContext } from 'react';
+import React, { MutableRefObject } from 'react';
 import { FC } from 'react';
 import Container from '../container';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { Api } from '../services';
+import { createContext, useContext } from 'use-context-selector';
+
 
 const container = new Container();
 const api = container.get(Api);
@@ -15,7 +17,7 @@ export enum GraphActionTypes {
 }
 
 export type GraphAction =
-  | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flow: string }
+  | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flowType: string }
   | { type: GraphActionTypes.COMMIT_POP_FLOW, index: number }
   | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: any }
   | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] };
@@ -30,7 +32,7 @@ export interface GraphProviderState {
   flows: {
     type: string
     isRunning: boolean
-    data?: any
+    data: any
   }[]
 };
 
@@ -38,12 +40,12 @@ const defaultState: GraphProviderState = {
   flows: []
 };
 
-export const commitPushFlow = (index: number, flow: string) => {
+export const commitPushFlow = (index: number, flowType: string) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_PUSH_FLOW,
       index,
-      flow,
+      flowType,
     });
     return Promise.resolve();
   };
@@ -77,7 +79,7 @@ export const commitSetFlows = (flows: GraphProviderState['flows']) => {
   };
 };
 
-export const GraphContext = React.createContext<{
+export const GraphContext = createContext<{
   graph: GraphProviderState;
   graphDispatch: GraphDispath;
   graphRef: MutableRefObject<GraphProviderState>;
@@ -97,17 +99,22 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
     (state: GraphProviderState = defaultState, action: GraphAction) => {
       switch (action.type) {
         case GraphActionTypes.COMMIT_PUSH_FLOW:
+          const pushFlows = state.flows.slice()
+          pushFlows.splice(action.index, 0, {
+            type: action.flowType,
+            isRunning: false,
+            data: {},
+          })
           return {
             ...state,
-            ...{flows: state.flows.slice().splice(action.index, 0, {
-              type: action.flow,
-              isRunning: false,
-            })} 
+            ...{flows: pushFlows} 
           };
         case GraphActionTypes.COMMIT_POP_FLOW:
+          const popFlows = state.flows.slice()
+          popFlows.splice(action.index, 1)
           return {
             ...state,
-            ...{flows: state.flows.splice(action.index, 1)} 
+            ...{flows: popFlows} 
           };
         case GraphActionTypes.COMMIT_UPDATE_FLOW:
           return {
@@ -123,7 +130,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
                   data: action.data,
                 },
               };
-            })} 
+            })}
           };
         case GraphActionTypes.COMMIT_SET_FLOWS:
           return {
@@ -144,7 +151,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
   );
 };
 
-export const GraphConsumer = GraphContext.Consumer;
+//export const GraphConsumer = GraphContext.Consumer;
 
 export function useGraph() {
   return useContext(GraphContext);
