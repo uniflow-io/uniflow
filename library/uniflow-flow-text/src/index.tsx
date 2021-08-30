@@ -27,7 +27,7 @@ class TextFlow extends Component {
   }
 
   render() {
-    const { clients, onRun } = this.props
+    const { clients, onPlay } = this.props
     const { isRunning, text } = this.state
 
     return (
@@ -36,7 +36,7 @@ class TextFlow extends Component {
           title="Text"
           clients={clients}
           isRunning={isRunning}
-          onRun={onRun}
+          onPlay={onPlay}
           onDelete={flow.onDelete(this)}
         />
         <form className="form-sm-horizontal">

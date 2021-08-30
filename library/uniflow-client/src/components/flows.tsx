@@ -1,37 +1,61 @@
-import React from 'react';
-import { FC } from 'react';
+import React, { ForwardRefRenderFunction, useImperativeHandle, useMemo } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
 
 import FlowFunction from '../../../uniflow-flow-function/src'
-import FlowPrompt from '../../../uniflow-flow-prompt/src'
-import FlowText from '../../../uniflow-flow-text/src'
+//import FlowPrompt from '../../../uniflow-flow-prompt/src'
+//import FlowText from '../../../uniflow-flow-text/src'
+import { Flow, FlowHandle } from './flow/flow';
+import { forwardRef } from 'react';
+import { useRef } from 'react';
+import { createRef } from 'react';
+import { useEffect } from 'react';
 
-const lasyImports = {
+const flowImports = {
   '@uniflow-io/uniflow-flow-function': FlowFunction,
-  '@uniflow-io/uniflow-flow-prompt': FlowPrompt,
-  '@uniflow-io/uniflow-flow-text': FlowText,
+  //'@uniflow-io/uniflow-flow-prompt': FlowPrompt,
+  //'@uniflow-io/uniflow-flow-text': FlowText,
 };
 
-export interface Flow {
-  clients: string[];
-  name: string;
-  tags: string[];
+export interface FlowsHandle {
+  onSerialize: (index: number) => string | undefined
+  onDeserialize: (index: number, data?: string) => any
+  onCompile: (index: number) => string
+  onExecute: (index: number) => void
 }
 
 export interface FlowsProps {
   graph: GraphProviderState;
-  allFlows: { [key: string]: Flow };
   programFlows: { key: string; label: string }[];
   clients: string[];
   onPush: (index: number, flowType: string) => void
   onPop: (index: number) => void
   onUpdate: (index: number, data: any) => void
-  onRun: (index?: number) => void
+  onPlay: (index?: number) => void
 }
 
-const Flows: FC<FlowsProps> = (props) => {
-  const { graph, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
+const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
+  const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;
+  const flowRefs = useMemo(() => 
+    Array(graph.flows.length).fill().map(() => createRef()), 
+    [graph.flows]
+  );
+
+  useImperativeHandle(ref, () => ({
+    onSerialize: (index: number) => {
+      return flowRefs[index].current?.onSerialize()
+    },
+    onDeserialize: (index: number, data?: string) => {
+      return flowRefs[index].current?.onDeserialize(data)
+    },
+    onCompile: (index: number) => {
+      return flowRefs[index].current?.onCompile() || ''
+    },
+    onExecute: (index: number) => {
+      return flowRefs[index].current?.onExecute()
+    }
+  }), [graph.flows])
+
   return (
     <>
       <Search
@@ -41,27 +65,25 @@ const Flows: FC<FlowsProps> = (props) => {
         }}
         />
       {graph.flows.map((flow, index) => {
-        const TagName = lasyImports[flow.type];
+        const Flow = flowImports[flow.type] as Flow<any>;
+
         return (
           <React.Fragment key={index}>
-              <TagName
-                isRunning={flow.isRunning}
-                data={flow.data}
-                allFlows={allFlows}
-                clients={clients}
-                onPush={(flowType) => {
-                  onPush(index, flowType);
-                }}
-                onPop={() => {
-                  onPop(index);
-                }}
-                onUpdate={(data) => {
-                  onUpdate(index, data);
-                }}
-                onRun={() => {
-                  onRun(index);
-                }}
-              />
+            <Flow
+              ref={flowRefs[index]}
+              clients={clients}
+              isRunning={flow.isRunning}
+              data={flow.data}
+              onPop={() => {
+                onPop(index);
+              }}
+              onUpdate={(data: any) => {
+                onUpdate(index, data);
+              }}
+              onPlay={() => {
+                onPlay(index);
+              }}
+            />
             <Search
               programFlows={programFlows}
               onPush={(flowType) => {
@@ -73,6 +95,6 @@ const Flows: FC<FlowsProps> = (props) => {
       })}
     </>
   );
-};
+});
 
 export default Flows;

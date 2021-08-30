@@ -316,34 +316,6 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
   };
 };
 
-export const serializeFlowsData = (graph) => {
-  const data = [];
-
-  for (let i = 0; i < graph.length; i++) {
-    data.push({
-      flow: graph[i].flow,
-      data: graph[i].data,
-    });
-  }
-
-  return JSON.stringify(data);
-};
-
-export const deserializeFlowsData = (raw) => {
-  const data = JSON.parse(raw);
-
-  const graph = [];
-
-  for (let i = 0; i < data.length; i++) {
-    graph.push({
-      flow: data[i].flow,
-      data: data[i].data,
-    });
-  }
-
-  return graph;
-};
-
 export const createProgram = (program: ProgramFeedType, uid: UuidType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const data = {

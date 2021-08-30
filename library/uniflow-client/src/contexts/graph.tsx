@@ -149,7 +149,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
   );
 };
 
-//export const GraphConsumer = GraphContext.Consumer;
+export const GraphConsumer = GraphContext.Consumer;
 
 export function useGraph() {
   return useContext(GraphContext);

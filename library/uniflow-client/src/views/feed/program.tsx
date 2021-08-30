@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, createRef } from 'react';
 import { navigate } from 'gatsby';
 import debounce from 'lodash/debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -22,8 +22,6 @@ import {
   setProgramData,
   getFolderTree,
   toFeedPath,
-  deserializeFlowsData,
-  serializeFlowsData,
   useFeed,
   ProgramFeedType,
   getFeedItem,
@@ -39,21 +37,22 @@ import ApiValidateException, {
 import FormInput, { FormInputType } from '../../components/form-input';
 import { useLocation } from '@reach/router';
 import Alert, { AlertType } from '../../components/alert';
-import { Flow } from '../../components/flows';
+import { FlowMetadata } from '../../components/flow/flow';
 import { FC } from 'react';
+import { FlowsHandle } from '../../components/flows';
+import { useRef } from 'react';
 
 const container = new Container();
 const ui = container.get(UI);
 
 export interface ProgramProps {
-  allFlows: { [key: string]: Flow };
+  allFlows: { [key: string]: FlowMetadata };
   program: ProgramFeedType;
 }
 
 export interface ProgramState {}
 
 const Program: FC<ProgramProps> = (props) => {
-  const [fetchedSlug, setFetchedSlug] = useState<string>();
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false);
   const [folderTree, setFolderTree] = useState<PathType[]>([]);
   const [errors, setErrors] = useState<
@@ -61,11 +60,12 @@ const Program: FC<ProgramProps> = (props) => {
       'form' | 'name' | 'slug' | 'path' | 'clients' | 'tags' | 'isPublic' | 'description'
     >
   >({});
-  const { auth, authDispatch } = useAuth();
   const { logsDispatch } = useLogs();
+  const { auth, authDispatch } = useAuth();
   const { user, userDispatch } = useUser();
   const { feed, feedDispatch, feedRef } = useFeed();
-  const { graph, graphDispatch } = useGraph();
+  const { graph, graphDispatch, graphRef } = useGraph();
+  const flowsRef = useRef<FlowsHandle>(null)
   const location = useLocation();
 
   const { program, allFlows } = props;
@@ -121,7 +121,7 @@ const Program: FC<ProgramProps> = (props) => {
     };
   }, [props.program.uid]);
 
-  const onRun = (index?: number) => {
+  const onPlay = (index?: number) => {
     const { graph } = props;
 
     const runner = new Runner();
@@ -135,7 +135,6 @@ const Program: FC<ProgramProps> = (props) => {
 
   const onPopFlow = async (index: number) => {
     commitPopFlow(index)(graphDispatch);
-
     onUpdateFlowData();
   };
 
@@ -221,6 +220,35 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
+  const onSerializeFlowsData = () => {
+    const data = [];
+
+    for (let index = 0; index < graphRef.current.flows.length; index++) {
+      const flow = graphRef.current.flows[index]
+      data.push({
+        flow: flow.type,
+        data: flowsRef.current?.onSerialize(index),
+      });
+    }
+
+    return JSON.stringify(data);
+  };
+
+  const onDeserializeFlowsData = (raw) => {
+    const data = JSON.parse(raw);
+
+    const graph = [];
+
+    for (let i = 0; i < data.length; i++) {
+      graph.push({
+        flow: data[i].flow,
+        data: data[i].data,
+      });
+    }
+
+    return graph;
+  };
+
   const onFetchFlowData = useMemo(
     () =>
       debounce(async () => {
@@ -239,7 +267,7 @@ const Program: FC<ProgramProps> = (props) => {
           programRef.data = data;
 
           if (programRef.slug === props.program.slug) {
-            commitSetFlows(deserializeFlowsData(data))(graphDispatch);
+            commitSetFlows(onDeserializeFlowsData(data))(graphDispatch);
           }
         }
         setFetchedSlug(programRef.slug);
@@ -250,14 +278,12 @@ const Program: FC<ProgramProps> = (props) => {
   const onUpdateFlowData = useMemo(
     () =>
       debounce(async () => {
-        const { graph, feed } = props;
         const programRef = getProgramRef();
-        if (programRef.slug !== fetchedSlug) return;
 
-        const data = serializeFlowsData(graph);
+        const data = onSerializeFlowsData();
         if (
           auth.token &&
-          (feed.uid === 'me' || user.uid === feed.uid) &&
+          (feedRef.current.uid === 'me' || user.uid === feedRef.current.uid) &&
           programRef.data !== data
         ) {
           programRef.data = data;
@@ -479,7 +505,7 @@ const Program: FC<ProgramProps> = (props) => {
                   className="btn btn-primary"
                   onClick={(event) => {
                     event.preventDefault();
-                    onRun();
+                    onPlay();
                   }}
                 >
                   <FontAwesomeIcon icon={faPlay} /> Play
@@ -520,14 +546,14 @@ const Program: FC<ProgramProps> = (props) => {
       <hr />
 
       <Flows
-        graph={graph}
-        allFlows={allFlows}
-        programFlows={programFlows}
+        ref={flowsRef}
         clients={program.clients}
+        graph={graph}
+        programFlows={programFlows}
         onPush={onPushFlow}
         onPop={onPopFlow}
         onUpdate={onUpdateFlow}
-        onRun={onRun}
+        onPlay={onPlay}
       />
     </section>
   );

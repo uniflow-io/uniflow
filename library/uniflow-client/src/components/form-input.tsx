@@ -70,7 +70,7 @@ const FormInput: FC<FormInputProps> = (props) => {
     props;
     
   const placeholder = props.placeholder || label;
-  const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [props.groups]) : [];
+  const groups = props.groups ? (Array.isArray(props.groups) ? props.groups : [<React.Fragment key="item">{props.groups}</React.Fragment>]) : [];
 
   const onChangeInput: React.ChangeEventHandler<HTMLInputElement|HTMLTextAreaElement> = (event) => {
     if (onChange) {
