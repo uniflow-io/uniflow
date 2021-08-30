@@ -15,7 +15,7 @@ const container = new Container();
 const api = container.get(Api);
 
 export type ProgramFeedType = ProgramApiType & {
-  data: string;
+  data: string | null;
   updated: Moment;
 };
 
@@ -389,6 +389,8 @@ export const getProgramData = (program: ProgramFeedType, token?: string) => {
         throw error;
       }
     }
+
+    return null
   };
 };
 

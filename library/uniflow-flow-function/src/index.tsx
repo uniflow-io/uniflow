@@ -12,7 +12,7 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      return data.code
+      return data?.code
     },
     onDeserialize: (data?: string) => {
       return { code: data }
@@ -46,7 +46,7 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
           id="code"
           type={FormInputType.EDITOR}
           label="Code"
-          value={data.code}
+          value={data?.code}
           onChange={onChangeCode}
           language="javascript"
           />

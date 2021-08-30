@@ -17,7 +17,7 @@ export enum GraphActionTypes {
 export type GraphAction =
   | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flowType: string }
   | { type: GraphActionTypes.COMMIT_POP_FLOW, index: number }
-  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: any }
+  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: object }
   | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] };
 
 export type GraphDispath = React.Dispatch<GraphAction>;
@@ -30,7 +30,7 @@ export interface GraphProviderState {
   flows: {
     type: string
     isRunning: boolean
-    data: any
+    data?: object
   }[]
 };
 
@@ -57,7 +57,7 @@ export const commitPopFlow = (index: number) => {
     return Promise.resolve();
   };
 };
-export const commitUpdateFlow = (index: number, data: any) => {
+export const commitUpdateFlow = (index: number, data: object) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_UPDATE_FLOW,
@@ -101,7 +101,6 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
           pushFlows.splice(action.index, 0, {
             type: action.flowType,
             isRunning: false,
-            data: {},
           })
           return {
             ...state,

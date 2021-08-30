@@ -11,6 +11,8 @@ import {
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlows,
+  GraphProviderState,
+  GraphProviderProps,
 } from '../../contexts/graph';
 import {
   getTags,
@@ -65,6 +67,7 @@ const Program: FC<ProgramProps> = (props) => {
   const { user, userDispatch } = useUser();
   const { feed, feedDispatch, feedRef } = useFeed();
   const { graph, graphDispatch, graphRef } = useGraph();
+  const [ fetchedGraph, setFetchedGraph ] = useState<GraphProviderState['flows']>([])
   const flowsRef = useRef<FlowsHandle>(null)
   const location = useLocation();
 
@@ -113,6 +116,7 @@ const Program: FC<ProgramProps> = (props) => {
   useEffect(() => {
     setFolderTreeEdit(false);
     setFolderTree([props.program.path]);
+    onFetchFlowData()
 
     return () => {
       onFetchFlowData.cancel();
@@ -128,20 +132,31 @@ const Program: FC<ProgramProps> = (props) => {
     runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
   };
 
-  const onPushFlow = async (index: number, flowType: string) => {
+  const onPushFlow = (index: number, flowType: string) => {
     commitPushFlow(index, flowType)(graphDispatch);
     onUpdateFlowData();
   };
 
-  const onPopFlow = async (index: number) => {
+  const onPopFlow = (index: number) => {
     commitPopFlow(index)(graphDispatch);
     onUpdateFlowData();
   };
 
-  const onUpdateFlow = async (index: number, data: any) => {
+  const onUpdateFlow = (index: number, data: object) => {
     commitUpdateFlow(index, data)(graphDispatch);
     onUpdateFlowData();
   };
+
+  useEffect(() => {
+    for (let index = 0; index < graph.flows.length; index++) {
+      const flow = graph.flows[index]
+      if(flow.data === undefined && flowsRef.current) {
+        const data = flowsRef.current.onDeserialize(index, fetchedGraph[index]?.data)
+        onUpdateFlow(index, data);
+      }
+    }
+
+  }, [graph.flows.length])
 
   const onChangeName = async (name: string) => {
     commitUpdateFeed({
@@ -220,11 +235,11 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
-  const onSerializeFlowsData = () => {
+  const onSerializeFlowsData = (flows: GraphProviderState['flows']): string => {
     const data = [];
 
-    for (let index = 0; index < graphRef.current.flows.length; index++) {
-      const flow = graphRef.current.flows[index]
+    for (let index = 0; index < flows.length; index++) {
+      const flow = flows[index]
       data.push({
         flow: flow.type,
         data: flowsRef.current?.onSerialize(index),
@@ -234,15 +249,16 @@ const Program: FC<ProgramProps> = (props) => {
     return JSON.stringify(data);
   };
 
-  const onDeserializeFlowsData = (raw) => {
+  const onDeserializeFlowsData = (raw: string): GraphProviderState['flows'] => {
     const data = JSON.parse(raw);
 
     const graph = [];
 
-    for (let i = 0; i < data.length; i++) {
+    for (let index = 0; index < data.length; index++) {
       graph.push({
-        flow: data[i].flow,
-        data: data[i].data,
+        type: data[index].flow,
+        isRunning: false,
+        data: data[index].data,
       });
     }
 
@@ -265,12 +281,12 @@ const Program: FC<ProgramProps> = (props) => {
         }
         if (data) {
           programRef.data = data;
-
-          if (programRef.slug === props.program.slug) {
-            commitSetFlows(onDeserializeFlowsData(data))(graphDispatch);
+          const graphData = onDeserializeFlowsData(data);
+          setFetchedGraph(graphData)
+          for (let index = 0; index < graphData.length; index++) {
+            onPushFlow(index, graphData[index].type)
           }
         }
-        setFetchedSlug(programRef.slug);
       }, 1000),
     [props.program.uid]
   );
@@ -280,7 +296,7 @@ const Program: FC<ProgramProps> = (props) => {
       debounce(async () => {
         const programRef = getProgramRef();
 
-        const data = onSerializeFlowsData();
+        const data = onSerializeFlowsData(graphRef.current.flows);
         if (
           auth.token &&
           (feedRef.current.uid === 'me' || user.uid === feedRef.current.uid) &&

@@ -1,4 +1,4 @@
-import React, { ForwardRefRenderFunction, useImperativeHandle, useMemo } from 'react';
+import React, { useImperativeHandle, useMemo } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
 
@@ -19,7 +19,7 @@ const flowImports = {
 
 export interface FlowsHandle {
   onSerialize: (index: number) => string | undefined
-  onDeserialize: (index: number, data?: string) => any
+  onDeserialize: (index: number, data?: string) => object
   onCompile: (index: number) => string
   onExecute: (index: number) => void
 }
@@ -30,7 +30,7 @@ export interface FlowsProps {
   clients: string[];
   onPush: (index: number, flowType: string) => void
   onPop: (index: number) => void
-  onUpdate: (index: number, data: any) => void
+  onUpdate: (index: number, data: object) => void
   onPlay: (index?: number) => void
 }
 
@@ -77,7 +77,7 @@ const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
               onPop={() => {
                 onPop(index);
               }}
-              onUpdate={(data: any) => {
+              onUpdate={(data: object) => {
                 onUpdate(index, data);
               }}
               onPlay={() => {
