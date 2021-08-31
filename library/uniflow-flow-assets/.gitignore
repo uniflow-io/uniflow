@@ -3,6 +3,3 @@
 
 # npm
 /node_modules
-
-# webpack
-/dist

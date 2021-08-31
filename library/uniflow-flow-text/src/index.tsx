@@ -1,65 +1,91 @@
-import React, { Component } from 'react'
-import { Editor, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import Container from '@uniflow-io/uniflow-client/src/container'
-import Flow from '@uniflow-io/uniflow-client/src/services/flow'
+import React, { useImperativeHandle } from 'react'
+import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
+import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 
-const container = new Container()
-const flow = container.get(Flow)
-
-class TextFlow extends Component {
-  state = {
-    isRunning: false,
-    text: null,
-  }
-
-  serialize = () => {
-    return [this.state.text]
-  }
-
-  deserialize = data => {
-    let [text] = data || [null]
-
-    this.setState({ text: text })
-  }
-
-  onChangeText = text => {
-    this.setState({ text: text }, flow.onUpdate(this))
-  }
-
-  render() {
-    const { clients, onPlay } = this.props
-    const { isRunning, text } = this.state
-
-    return (
-      <>
-        <FlowHeader
-          title="Text"
-          clients={clients}
-          isRunning={isRunning}
-          onPlay={onPlay}
-          onDelete={flow.onDelete(this)}
-        />
-        <form className="form-sm-horizontal">
-          <div className="row mb-3">
-            <label htmlFor="text{{ _uid }}" className="col-sm-2 col-form-label">
-              Text
-            </label>
-
-            <div className="col-sm-10">
-              <Editor
-                className="form-control"
-                id="text{{ _uid }}"
-                value={text}
-                onChange={this.onChangeText}
-                placeholder="Text"
-                height="200"
-              />
-            </div>
-          </div>
-        </form>
-      </>
-    )
-  }
+export interface TextFlowData {
+  variable?: string
+  text?: string
 }
 
+const TextFlow = flow<TextFlowData>((props, ref) => {
+  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
+
+  useImperativeHandle(ref, () => ({
+    onSerialize: () => {
+      return [data?.variable, data?.text].join(',')
+    },
+    onDeserialize: (data?: string) => {
+      const [variable, text] = data?.split(',') || [undefined, undefined]
+      return { variable, text }
+    },
+    onCompile: () => {
+      if (!data || !data.variable) {
+        return ''
+      }
+    
+      let text = data.text || ''
+      text = JSON.stringify(text)
+    
+      return data.variable + ' = ' + text
+    },
+    onExecute: async (runner) => {
+      if (data && data.variable) {
+        let context = runner.getContext()
+        if (context[data.variable]) {
+          onUpdate({
+            ...data,
+            text: context[data.variable]
+          })
+        } else {
+          return runner.run()
+        }
+      }
+    }
+  }), [data])
+
+  const onChangeVariable = (variable: string) => {
+    onUpdate({
+      ...data,
+      variable
+    })
+  }
+
+  const onChangeText = (text: string) => {
+    onUpdate({
+      ...data,
+      text
+    })
+  }
+
+  return (
+    <>
+      <FlowHeader
+        title="Text"
+        clients={clients}
+        isPlaying={isPlaying}
+        onPlay={onPlay}
+        onPop={onPop}
+      />
+      <form className="form-sm-horizontal">
+        <FormInput
+          id="variable"
+          type={FormInputType.TEXT}
+          label="Variable"
+          value={data?.variable}
+          onChange={onChangeVariable}
+          />
+        <FormInput
+          id="text"
+          type={FormInputType.EDITOR}
+          label="Text"
+          value={data?.text}
+          onChange={onChangeText}
+          />
+      </form>
+    </>
+  )
+})
+
 export default TextFlow
+

@@ -12,13 +12,18 @@ export enum GraphActionTypes {
   COMMIT_POP_FLOW = 'COMMIT_POP_FLOW',
   COMMIT_UPDATE_FLOW = 'COMMIT_UPDATE_FLOW',
   COMMIT_SET_FLOWS = 'COMMIT_SET_FLOWS',
+  COMMIT_PLAY_FLOW = 'COMMIT_PLAY_FLOW',
+  COMMIT_STOP_FLOW = 'COMMIT_STOP_FLOW',
 }
 
 export type GraphAction =
   | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flowType: string }
   | { type: GraphActionTypes.COMMIT_POP_FLOW, index: number }
   | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: object }
-  | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] };
+  | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] }
+  | { type: GraphActionTypes.COMMIT_PLAY_FLOW, index: number }
+  | { type: GraphActionTypes.COMMIT_STOP_FLOW, index: number }
+
 
 export type GraphDispath = React.Dispatch<GraphAction>;
 
@@ -29,7 +34,7 @@ export interface GraphProviderProps {
 export interface GraphProviderState {
   flows: {
     type: string
-    isRunning: boolean
+    isPlaying: boolean
     data?: object
   }[]
 };
@@ -76,6 +81,24 @@ export const commitSetFlows = (flows: GraphProviderState['flows']) => {
     return Promise.resolve();
   };
 };
+export const commitPlayFlow = (index: number) => {
+  return async (dispatch: GraphDispath) => {
+    dispatch({
+      type: GraphActionTypes.COMMIT_PLAY_FLOW,
+      index,
+    });
+    return Promise.resolve();
+  };
+};
+export const commitStopFlow = (index: number) => {
+  return async (dispatch: GraphDispath) => {
+    dispatch({
+      type: GraphActionTypes.COMMIT_STOP_FLOW,
+      index,
+    });
+    return Promise.resolve();
+  };
+};
 
 export const GraphContext = createContext<{
   graph: GraphProviderState;
@@ -100,7 +123,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
           const pushFlows = state.flows.slice()
           pushFlows.splice(action.index, 0, {
             type: action.flowType,
-            isRunning: false,
+            isPlaying: false,
           })
           return {
             ...state,
@@ -134,6 +157,38 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
             ...state,
             ...{flows: action.flows.slice()} 
           };
+        case GraphActionTypes.COMMIT_PLAY_FLOW:
+          return {
+            ...state,
+            ...{flows: state.flows.map((item, index) => {
+              if (index !== action.index) {
+                return item;
+              }
+  
+              return {
+                ...item,
+                ...{
+                  isPlaying: true
+                },
+              };
+            })}
+          };
+          case GraphActionTypes.COMMIT_STOP_FLOW:
+            return {
+              ...state,
+              ...{flows: state.flows.map((item, index) => {
+                if (index !== action.index) {
+                  return item;
+                }
+    
+                return {
+                  ...item,
+                  ...{
+                    isPlaying: false
+                  },
+                };
+              })}
+            };
         default:
           return state;
       }

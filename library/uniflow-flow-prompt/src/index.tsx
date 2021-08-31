@@ -1,276 +1,262 @@
-import React, { Component } from 'react'
-import { Editor, FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import { Select } from '@uniflow-io/uniflow-client/src/components'
-import Container from '@uniflow-io/uniflow-client/src/container'
-import Flow from '@uniflow-io/uniflow-client/src/services/flow'
+import React, { useImperativeHandle, useRef, useState } from 'react'
+import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
+import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import { ClientType } from '../../uniflow-flow-function/node_modules/@uniflow-io/uniflow-client/src/models/runner'
+import { MouseEventHandler } from 'react'
+import { ChangeEventHandler } from 'react'
+import { useStateRef } from '@uniflow-io/uniflow-client/src/hooks/use-state-ref'
 
-const container = new Container()
-const flow = container.get(Flow)
+enum PromptChoicheType {
+  STRING = 'string',
+  TEXT = 'text',
+  FILE = 'file',
+}
 
-class PromptFlow extends Component {
-  state = {
-    isRunning: false,
-    variable: null,
-    messageVariable: null,
-    type: null,
-    promptDisplay: false,
-    message: null,
-    input: null,
-  }
+export interface PromptFlowData {
+  variable?: string
+  messageVariable?: string,
+  type?: string,
+}
 
-  serialize = () => {
-    return [this.state.variable, this.state.messageVariable, this.state.type]
-  }
+const PromptFlow = flow<PromptFlowData>((props, ref) => {
+  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
+  const [promptInput, setPromptInput] = useState<boolean>(false)
+  const [message, setMessage] = useState<string>()
+  const [input, setInput, inputRef] = useStateRef<string|undefined>(undefined)
+  const inputResolve = useRef<(value: unknown) => void>()
 
-  deserialize = data => {
-    let [variable, messageVariable, type] = data || [null, null, null]
+  useImperativeHandle(ref, () => ({
+    onSerialize: () => {
+      return [data?.variable, data?.messageVariable, data?.type].join(',')
+    },
+    onDeserialize: (data?: string) => {
+      const [variable, messageVariable, type] = data?.split(',') || [undefined, undefined, undefined]
+      return { variable, messageVariable, type }
+    },
+    onCompile: (client) => {
+      if (!data || !data.variable) {
+        return ''
+      }
+    
+      if (client === ClientType.NODE) {
+        return `
+        (function() {
+          return new Promise(function(resolve) {
+            const rl = readline.createInterface({
+              input: process.stdin,
+              output: process.stdout
+            });
+        
+            rl.question(${
+              data.messageVariable
+                ? data.messageVariable
+                : JSON.stringify('prompt')
+            } + ': ', function(answer) {
+              ${data.variable} = answer
+        
+              rl.close()
+            });
+        
+            rl.on('close', () => {
+              resolve()
+            })
+          })
+        })()
+        `
+      }
 
-    this.setState({
-      variable: variable,
-      messageVariable: messageVariable,
-      type: type,
+      return data.variable + ' = ' + JSON.stringify(inputRef.current || '')
+    },
+    onExecute: async (runner) => {
+      let context = runner.getContext()
+      if (data?.messageVariable && context[data.messageVariable]) {
+        setMessage(context[data.messageVariable])
+      } else {
+        setMessage(undefined)
+      }
+      setPromptInput(true)
+      setInput(undefined)
+      await new Promise(resolve => {
+        inputResolve.current = resolve
+      })
+      setPromptInput(false)
+      runner.run()
+    }
+  }), [data])
+
+  const onChangeVariable = (variable: string) => {
+    onUpdate({
+      ...data,
+      variable
     })
   }
 
-  onChangeVariable = event => {
-    this.setState({ variable: event.target.value }, flow.onUpdate(this))
+  const onChangeMessageVariable = (messageVariable: string) => {
+    onUpdate({
+      ...data,
+      messageVariable
+    })
   }
 
-  onChangeMessageVariable = event => {
-    this.setState({ messageVariable: event.target.value }, flow.onUpdate(this))
+  const onChangeType = (type: string) => {
+    onUpdate({
+      ...data,
+      type
+    })
   }
 
-  onChangeType = type => {
-    this.setState({ type: type }, flow.onUpdate(this))
+  const onChangeInputString = (input: string) => {
+    setInput(input)
   }
 
-  onChangeInputString = event => {
-    this.setState({ input: event.target.value })
+  const onChangeInputText = (input: string) => {
+    setInput(input)
   }
 
-  onChangeInputText = value => {
-    this.setState({ input: value })
-  }
-
-  onChangeInputFile = event => {
+  const onChangeInputFile: ChangeEventHandler<HTMLInputElement> = (event) => {
     event.persist()
     event.preventDefault()
 
-    let file = event.target.files[0]
+    let file = event.target.files![0]
 
     return new Promise((resolve, error) => {
       let reader = new FileReader()
       reader.onerror = error
       reader.onload = e => {
-        this.setState({ input: e.target.result }, resolve)
+        setInput(e.target?.result?.toString())
+        resolve(undefined)
       }
       reader.readAsText(file)
     })
   }
 
-  onInputSave = event => {
+  const onInputSave: MouseEventHandler<HTMLButtonElement> = event => {
     event.preventDefault()
 
-    if (this.inputResolve) {
-      this.inputResolve()
+    if (inputResolve.current) {
+      inputResolve.current(undefined)
     }
   }
+  const allChoices: {[key in PromptChoicheType]: string} = {
+    [PromptChoicheType.STRING]: 'String',
+    [PromptChoicheType.TEXT]: 'Text',
+    [PromptChoicheType.FILE]: 'File',
+  }
 
-  render() {
-    const { clients, onPlay } = this.props
-    const {
-      isRunning,
-      variable,
-      messageVariable,
-      type,
-      promptDisplay,
-      message,
-      input,
-    } = this.state
+  let choices: {[key: string]: string} = {},
+    clientKeyChoices: PromptChoicheType[] = []
+  if (clients.length === 1 && clients.indexOf('uniflow') !== -1) {
+    clientKeyChoices = [PromptChoicheType.STRING, PromptChoicheType.TEXT, PromptChoicheType.FILE]
+  } else if (clients.length === 1 && clients.indexOf('node') !== -1) {
+    clientKeyChoices = [PromptChoicheType.STRING]
+  } else if (
+    clients.length === 2 &&
+    clients.indexOf('node') !== -1 &&
+    clients.indexOf('uniflow') !== -1
+  ) {
+    clientKeyChoices = [PromptChoicheType.STRING]
+  }
+  choices = clientKeyChoices.reduce(function(value, key) {
+    value[key] = allChoices[key]
+    return value
+  }, choices)
 
-    const allChoices = {
-      string: 'String',
-      text: 'Text',
-      file: 'File',
-    }
+  return (
+    <>
+      <FlowHeader
+        title="Prompt"
+        clients={clients}
+        isPlaying={isPlaying}
+        onPlay={onPlay}
+        onPop={onPop}
+      />
+      <form className="form-sm-horizontal">
+        <FormInput
+          id="variable"
+          type={FormInputType.TEXT}
+          label="Variable"
+          value={data?.variable}
+          onChange={onChangeVariable}
+          />
+        <FormInput
+          id="messageVariable"
+          type={FormInputType.TEXT}
+          label="Message"
+          value={data?.messageVariable}
+          onChange={onChangeMessageVariable}
+          />
+        <FormInput
+          id="type"
+          type={FormInputType.SELECT}
+          label="Type"
+          value={data?.type}
+          onChange={onChangeType}
+          options={Object.keys(choices).map((type: string) => {
+            return { value: type, label: choices[type] }
+          })}
+          />
+        {promptInput && message && (
+          <div className="row mb-3">
+            <div className="offset-md-2 col-sm-10">{message}</div>
+          </div>
+        )}
 
-    let choices = {},
-      clientKeyChoices = []
-    if (clients.length === 1 && clients.indexOf('uniflow') !== -1) {
-      clientKeyChoices = ['string', 'text', 'file']
-    } else if (clients.length === 1 && clients.indexOf('node') !== -1) {
-      clientKeyChoices = ['string']
-    } else if (
-      clients.length === 2 &&
-      clients.indexOf('node') !== -1 &&
-      clients.indexOf('uniflow') !== -1
-    ) {
-      clientKeyChoices = ['string']
-    }
-    choices = clientKeyChoices.reduce(function(value, key) {
-      value[key] = allChoices[key]
-      return value
-    }, choices)
+        {promptInput && data?.type === PromptChoicheType.STRING && (
+          <FormInput
+            id="input-string"
+            type={FormInputType.TEXT}
+            label="Input"
+            value={input}
+            onChange={onChangeInputString}
+            />
+        )}
 
-    return (
-      <>
-        <FlowHeader
-          title="Prompt"
-          clients={clients}
-          isRunning={isRunning}
-          onPlay={onPlay}
-          onDelete={flow.onDelete(this)}
-        />
-        <form className="form-sm-horizontal">
+        {promptInput && data?.type === PromptChoicheType.TEXT && (
+          <FormInput
+            id="input-text"
+            type={FormInputType.EDITOR}
+            label="Input"
+            value={input}
+            onChange={onChangeInputText}
+            />
+        )}
+
+        {promptInput && data?.type === PromptChoicheType.FILE && (
           <div className="row mb-3">
             <label
-              htmlFor="variable{{ _uid }}"
+              htmlFor="input-file"
               className="col-sm-2 col-form-label"
             >
-              Variable
+              Input
             </label>
 
             <div className="col-sm-10">
               <input
-                id="variable{{ _uid }}"
-                type="text"
-                value={variable || ''}
-                onChange={this.onChangeVariable}
+                id="input-file"
+                type="file"
+                onChange={onChangeInputFile}
                 className="form-control"
               />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label
-              htmlFor="variable{{ _uid }}"
-              className="col-sm-2 col-form-label"
-            >
-              Message Variable
-            </label>
-
-            <div className="col-sm-10">
-              <input
-                id="variable{{ _uid }}"
-                type="text"
-                value={messageVariable || ''}
-                onChange={this.onChangeMessageVariable}
-                className="form-control"
-              />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="type{{ _uid }}" className="col-sm-2 col-form-label">
-              Type
-            </label>
-
-            <div className="col-sm-10">
-              <Select
-                value={type}
-                onChange={this.onChangeType}
-                className="form-control"
-                id="type{{ _uid }}"
-                options={Object.keys(choices).map(value => {
-                  return { value: value, label: choices[value] }
-                })}
-              />
-            </div>
-          </div>
-
-          {promptDisplay && message && (
-            <div className="row mb-3">
-              <div className="offset-md-2 col-sm-10">{message}</div>
-            </div>
-          )}
-
-          {promptDisplay && type === 'string' && (
-            <div className="row mb-3">
-              <label
-                htmlFor="input_string{{ _uid }}"
-                className="col-sm-2 col-form-label"
-              >
-                Input
-              </label>
-
-              <div className="col-sm-10">
-                <input
-                  id="input_string{{ _uid }}"
-                  type="text"
-                  value={input || ''}
-                  onChange={this.onChangeInputString}
-                  className="form-control"
-                />
-              </div>
-            </div>
-          )}
-
-          {promptDisplay && type === 'text' && (
-            <div className="row mb-3">
-              <label
-                htmlFor="input_text{{ _uid }}"
-                className="col-sm-2 col-form-label"
-              >
-                Input
-              </label>
-
-              <div className="col-sm-10">
-                <Editor
-                  className="form-control"
-                  id="input_text{{ _uid }}"
-                  value={input || ''}
-                  onChange={this.onChangeInputText}
-                  placeholder="Text"
-                  height="200"
-                />
-              </div>
-            </div>
-          )}
-
-          {promptDisplay && type === 'file' && (
-            <div className="row mb-3">
-              <label
-                htmlFor="input_file{{ _uid }}"
-                className="col-sm-2 col-form-label"
-              >
-                Input
-              </label>
-
-              <div className="col-sm-10">
-                <input
-                  id="input_file{{ _uid }}"
-                  type="file"
-                  onChange={this.onChangeInputFile}
-                  className="form-control"
-                />
-              </div>
-            </div>
-          )}
-        </form>
-        {promptDisplay && (
-          <div className="row">
-            <div className="d-block col-auto">
-              <div
-                className="btn-toolbar"
-                role="toolbar"
-                aria-label="flow object actions"
-              >
-                <div className="btn-group-sm" role="group">
-                  <button
-                    type="submit"
-                    onClick={this.onInputSave}
-                    className="btn btn-info"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         )}
-      </>
-    )
-  }
-}
+      </form>
+      {promptInput && (
+        <div className="row mb-3">
+          <div className="col-sm-10 offset-sm-2">
+            <button
+              type="submit"
+              onClick={onInputSave}
+              className="btn btn-primary"
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+})
 
 export default PromptFlow

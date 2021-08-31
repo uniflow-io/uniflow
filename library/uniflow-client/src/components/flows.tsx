@@ -1,29 +1,33 @@
 import React, { useImperativeHandle, useMemo } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
-
-import FlowFunction from '../../../uniflow-flow-function/src'
-//import FlowPrompt from '../../../uniflow-flow-prompt/src'
-//import FlowText from '../../../uniflow-flow-text/src'
 import { FlowHandle } from './flow/flow';
 import { forwardRef } from 'react';
-import { useRef } from 'react';
 import { createRef } from 'react';
-import { useEffect } from 'react';
 import { RefObject } from 'react';
-import { FC } from 'react';
+import { ClientType, FlowRunner } from '../models/runner';
+
+import FunctionFlow from '../../../uniflow-flow-function/src'
+import PromptFlow from '../../../uniflow-flow-prompt/src'
+import AssetsFlow from '../../../uniflow-flow-assets/src'
+import TextFlow from '../../../uniflow-flow-text/src'
+import CanvasFlow from '../../../uniflow-flow-canvas/src'
+import ObjectFlow from '../../../uniflow-flow-object/src'
 
 const flowImports: any = {
-  '@uniflow-io/uniflow-flow-function': FlowFunction,
-  //'@uniflow-io/uniflow-flow-prompt': FlowPrompt,
-  //'@uniflow-io/uniflow-flow-text': FlowText,
+  '@uniflow-io/uniflow-flow-function': FunctionFlow,
+  '@uniflow-io/uniflow-flow-prompt': PromptFlow,
+  '@uniflow-io/uniflow-flow-text': TextFlow,
+  '@uniflow-io/uniflow-flow-assets': AssetsFlow,
+  '@uniflow-io/uniflow-flow-canvas': CanvasFlow,
+  '@uniflow-io/uniflow-flow-object': ObjectFlow,
 };
 
 export interface FlowsHandle {
   onSerialize: (index: number) => string | undefined
   onDeserialize: (index: number, data?: string) => object
-  onCompile: (index: number) => string
-  onExecute: (index: number) => void
+  onCompile: (index: number, client: ClientType) => string
+  onExecute: (index: number, runner: FlowRunner) => Promise<void>
 }
 
 export interface FlowsProps {
@@ -50,11 +54,11 @@ const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
     onDeserialize: (index: number, data?: string) => {
       return flowRefs[index].current?.onDeserialize(data)
     },
-    onCompile: (index: number) => {
-      return flowRefs[index].current?.onCompile() || ''
+    onCompile: (index: number, client: ClientType) => {
+      return flowRefs[index].current?.onCompile(client) || ''
     },
-    onExecute: (index: number) => {
-      return flowRefs[index].current?.onExecute()
+    onExecute: async (index: number, runner: FlowRunner) => {
+      return flowRefs[index].current?.onExecute(runner)
     }
   }), [graph.flows])
 
@@ -74,7 +78,7 @@ const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
             <Flow
               ref={flowRefs[index]}
               clients={clients}
-              isRunning={flow.isRunning}
+              isPlaying={flow.isPlaying}
               data={flow.data}
               onPop={() => {
                 onPop(index);

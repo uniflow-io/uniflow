@@ -6,7 +6,7 @@ import { FC } from 'react';
 export interface FlowHeaderProps {
   title?: string;
   clients: string[];
-  isRunning: boolean
+  isPlaying: boolean
   onPop: () => void
   onPlay: () => void
 }
@@ -26,12 +26,12 @@ const FlowHeader: FC<FlowHeaderProps> = (props) => {
       <div className="col">
         <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
           <div className="btn-group-sm" role="group">
-            {props.clients.indexOf('uniflow') !== -1 && props.isRunning === false && (
+            {props.clients.indexOf('uniflow') !== -1 && props.isPlaying === false && (
               <button type="button" className="btn btn-primary" onClick={props.onPlay}>
                 <FontAwesomeIcon icon={faPlay} />
               </button>
             )}
-            {props.clients.indexOf('uniflow') !== -1 && props.isRunning === true && (
+            {props.clients.indexOf('uniflow') !== -1 && props.isPlaying === true && (
               <button type="button" className="btn">
                 <span
                   className="spinner-border spinner-border-sm"

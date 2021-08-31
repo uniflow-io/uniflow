@@ -1,7 +1,7 @@
 {
-  "name": "@uniflow-io/uniflow-flow-prompt",
+  "name": "@uniflow-io/uniflow-flow-object",
   "version": "1.1.14",
-  "description": "Uniflow prompt flow",
+  "description": "Uniflow object flow",
   "author": {
     "name": "Mathieu Ledru",
     "email": "matyo91@gmail.com"
@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/uniflow-io/uniflow/issues"
   },
-  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-flow-prompt#readme",
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-flow-object#readme",
   "keywords": [
     "uniflow",
     "uniflow-flow"
@@ -19,23 +19,32 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/uniflow-io/uniflow.git",
-    "directory": "library/uniflow-flow-prompt"
+    "directory": "library/uniflow-flow-object"
   },
   "publishConfig": {
     "access": "public"
   },
   "uniflow": {
-    "name": "Prompt",
+    "name": "Object",
     "tags": [
       "ui"
     ],
     "clients": [
       "uniflow",
-      "node"
+      "jetbrains",
+      "chrome",
+      "node",
+      "rust"
     ]
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@uniflow-io/uniflow-client": "^1.1.14",
+    "property-accessor": "^1.0.0",
     "react": "^17.0.2"
   }
 }

@@ -11,7 +11,14 @@ require('dotenv').config({
 });
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-  let config = {};
+  let config = {
+    resolve: {
+      fallback: {
+        vm: require.resolve('vm-browserify'),
+      },
+    },
+  };
+  
   if (activeEnv === 'production') {
     config.devtool = false;
   }

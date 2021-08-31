@@ -10,7 +10,7 @@ tags: ["blog"]
 ---
 
 Uniflow did succeffully do the migration from Javascript to Typescript. 🎉  
-This is applied for Uniflow Client (front) and Uniflow Api (back)
+This is applied for Uniflow Client (front) and Uniflow Api (back).
 
 Typescript allow to fully type variables and get more consistent when coding.  
 This allow detect errors at compile time and will save development time cost overtime.

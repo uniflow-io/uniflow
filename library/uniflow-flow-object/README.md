@@ -1,7 +1,7 @@
-uniflow-wasm-reverse-word
--------------------------
+uniflow-flow-object
+-------------------
 
-This is official Reverse Word Wasi for Uniflow
+This is official Object Flow for Uniflow
 
 ## Documentation
 

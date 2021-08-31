@@ -30,7 +30,9 @@
       "core"
     ],
     "clients": [
-      "uniflow"
+      "uniflow",
+      "node",
+      "vscode"
     ]
   },
   "dependencies": {

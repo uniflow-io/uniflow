@@ -1,4 +1,5 @@
 import { ForwardRefExoticComponent, PropsWithoutRef, RefAttributes, forwardRef, ForwardRefRenderFunction } from "react";
+import { ClientType, FlowRunner } from "../../models/runner";
 
 export interface FlowMetadata {
   clients: string[];
@@ -9,12 +10,12 @@ export interface FlowMetadata {
 export interface FlowHandle<T extends object> {
   onSerialize: () => string | undefined
   onDeserialize: (data?: string) => T
-  onCompile: () => string
-  onExecute: () => void
+  onCompile: (client: ClientType) => string
+  onExecute: (runner: FlowRunner) => Promise<void>
 }
 
 export interface FlowProps<T extends object> {
-  isRunning: boolean
+  isPlaying: boolean
   data?: T
   clients: string[];
   onPop: () => void

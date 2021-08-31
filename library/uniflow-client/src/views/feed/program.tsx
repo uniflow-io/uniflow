@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 import { Flows, Select } from '../../components';
-import Runner from '../../models/runner';
+import Runner, { ClientType } from '../../models/runner';
 import {
   commitPushFlow,
   commitPopFlow,
@@ -75,12 +75,11 @@ const Program: FC<ProgramProps> = (props) => {
   const [ fetchedFlows, setFetchedFlows ] = useState<DeserialisedFlows>([])
   const flowsRef = useRef<FlowsHandle>(null)
   const location = useLocation();
-
   const { program, allFlows } = props;
-  const clients: { [key: string]: string } = {
-    uniflow: 'Uniflow',
-    node: 'Node',
-    vscode: 'VSCode',
+  const clients: { [key in ClientType]: string } = {
+    [ClientType.UNIFLOW]: 'Uniflow',
+    [ClientType.NODE]: 'Node',
+    [ClientType.VSCODE]: 'VSCode',
   };
 
   const getProgramRef = (): ProgramFeedType => {
@@ -129,9 +128,9 @@ const Program: FC<ProgramProps> = (props) => {
     };
   }, [props.program.uid]);
 
-  const onPlay = (index?: number) => {
+  const onPlay = async (index?: number) => {
     const runner = new Runner();
-    //runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1));
+    await runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1), flowsRef, graphDispatch);
   };
 
   const onPushFlow = (index: number, flowType: string) => {

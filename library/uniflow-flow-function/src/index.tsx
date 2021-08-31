@@ -8,7 +8,7 @@ export interface FunctionFlowData {
 }
 
 const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
-  const { onPop, onUpdate, onPlay, isRunning, data, clients } = props
+  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
@@ -18,10 +18,10 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
       return { code: data }
     },
     onCompile: () => {
-      return ''
+      return data?.code || ''
     },
-    onExecute: () => {
-  
+    onExecute: async (runner) => {
+      return runner.run()
     }
   }), [data])
 
@@ -37,7 +37,7 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
       <FlowHeader
         title="Function"
         clients={clients}
-        isRunning={isRunning}
+        isPlaying={isPlaying}
         onPlay={onPlay}
         onPop={onPop}
       />
