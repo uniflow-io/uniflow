@@ -1,5 +1,5 @@
 import { Command, flags } from '@oclif/command';
-import * as open from 'open';
+import open from 'open';
 import { StartCommand } from '.';
 
 import { appConfig } from '../config';
@@ -61,7 +61,7 @@ export default class StartCommandCommand extends Command {
         await app();
 
         const url = `http://localhost:${appConfig.get('port')}`;
-        this.log(`\nUniflow client v${require('../../package.json').version} is ready on:\n${url}`);
+        this.log(`\nUniflow client v${require('../../../../package.json').version} is ready on:\n${url}`);
 
         // Allow to open uniflow editor by pressing "o"
         if (Boolean(process.stdout.isTTY) && process.stdin.setRawMode) {
@@ -99,6 +99,7 @@ export default class StartCommandCommand extends Command {
         this.error(`There was an error: ${error.message}`);
 
         processExistCode = 1;
+        // @ts-ignore
         process.emit('SIGINT');
       }
     })();

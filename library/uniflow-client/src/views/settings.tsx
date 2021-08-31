@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useAuth, useLogs } from '../contexts';
 import { useStateRef } from '../hooks/use-state-ref';
-import ApiValidateException, { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import { ApiValidateException, ApiValidateExceptionErrors } from '../models/api-exceptions';
 import Alert, { AlertType } from '../components/alert';
 import FormInput, { FormInputType } from '../components/form-input';
 import { FC } from 'react';
@@ -23,13 +23,13 @@ const api = container.get(Api);
 export interface SettingsProps {}
 
 interface UserSettingsState {
-  apiKey?: string;
-  username?: string;
+  username?: string | null;
   email?: string;
-  firstname?: string;
-  lastname?: string;
-  facebookId?: string;
-  githubId?: string;
+  firstname?: string | null;
+  lastname?: string | null;
+  facebookId?: string | null;
+  githubId?: string | null;
+  apiKey?: string | null;
   links: {
     lead?: string;
   };
@@ -200,7 +200,7 @@ const Settings: FC<SettingsProps> = () => {
     await onUpdate();
   };
 
-  const getClipboard = (user: UserSettingsState) => {
+  const getClipboard = () => {
     if (userSettings.apiKey) {
       return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${userSettings.apiKey}`;
     }
@@ -209,12 +209,12 @@ const Settings: FC<SettingsProps> = () => {
   };
 
   const onCopyApiUsage: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    const clipboard = getClipboard(user);
+    const clipboard = getClipboard();
 
     ui.copyTextToClipboard(clipboard || '');
   };
 
-  const clipboard = getClipboard(user);
+  const clipboard = getClipboard();
   const facebookAppId = env.get('facebookAppId');
   const githubAppId = env.get('githubAppId');
 

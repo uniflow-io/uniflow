@@ -4,7 +4,7 @@ import * as argon2 from 'argon2';
 import AbstractFactory from './abstract-factory';
 import { ClientFactoryInterface, ConfigFactoryInterface, ContactFactoryInterface, FolderFactoryInterface, LeadFactoryInterface, ProgramClientFactoryInterface, ProgramFactoryInterface, ProgramTagFactoryInterface, TagFactoryInterface, UserFactoryInterface } from './interfaces';
 import { ClientEntity, ConfigEntity, ContactEntity, FolderEntity, LeadEntity, ProgramClientEntity, ProgramEntity, ProgramTagEntity, TagEntity, UserEntity } from '../entity';
-import { ROLE } from '../model/api-type-interface';
+import { ROLE } from '../model/api-type-interfaces';
 
 @Service()
 export class ClientFactory extends AbstractFactory<ClientEntity> implements ClientFactoryInterface {

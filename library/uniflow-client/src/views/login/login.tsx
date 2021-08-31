@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Container from '../../container';
 import { Env } from '../../services';
 import { useAuth } from '../../contexts';
-import ApiValidateException, {
-  ApiValidateExceptionErrors,
-} from '../../models/api-validate-exception';
+import {
+ApiValidateException,  ApiValidateExceptionErrors,
+} from '../../models/api-exceptions';
 import FormInput, { FormInputType } from '../../components/form-input';
 import Alert, { AlertType } from '../../components/alert';
 import { FC } from 'react';

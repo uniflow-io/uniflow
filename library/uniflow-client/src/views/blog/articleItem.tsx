@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { pathTo } from '../../routes';
 import { Link, graphql } from 'gatsby';
 import { GatsbyImage, IGatsbyImageData } from 'gatsby-plugin-image';
@@ -49,7 +49,6 @@ const ArticleItem: FC<ArticleItemProps> = ({ article }) => (
         className="card-img-top"
         style={{ maxHeight: '50vh' }}
         alt="Cover"
-        width="100%"
       />
     )) ||
       (article.frontmatter.cover.extension === 'svg' && (
@@ -69,8 +68,6 @@ const ArticleItem: FC<ArticleItemProps> = ({ article }) => (
             Posted {article.frontmatter.date} by
             <GatsbyImage
               image={article.frontmatter.author.image.childImageSharp.gatsbyImageData}
-              width="36"
-              height="36"
               alt={article.frontmatter.author.name}
               className="rounded-circle mx-2"
               style={{ verticalAlign: 'middle', display: 'inline-block' }}

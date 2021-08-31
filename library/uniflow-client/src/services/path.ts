@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
-import { pathToRegexp } from 'path-to-regexp';
+import { pathToRegexp, Key } from 'path-to-regexp';
 
-const patternCache = {};
+const patternCache: {[key: string]: {[key: string]: {re: RegExp, keys: Key[]}}} = {};
 const cacheLimit = 10000;
 let cacheCount = 0;
 
@@ -16,7 +16,7 @@ class Path {
 
     if (cache[pattern]) return cache[pattern];
 
-    const keys = [];
+    const keys: Key[] = [];
     const re = pathToRegexp(pattern, keys, options);
     const compiledPattern = { re: re, keys: keys };
 
@@ -69,7 +69,7 @@ class Path {
       path: path, // the path pattern used to match
       url: path === '/' && url === '' ? '/' : url, // the matched portion of the URL
       isExact: isExact, // whether or not we matched exactly
-      params: keys.reduce(function (memo, key, index) {
+      params: keys.reduce(function (memo: {[key: string]: string}, key, index) {
         memo[key.name] = values[index];
         return memo;
       }, {}),

@@ -115,9 +115,8 @@ const FormInput: FC<FormInputProps> = (props) => {
               id={id}
               value={value || ''}
               onChange={onChange}
-              placeholder={placeholder}
-              rows={rows}
               language={language}
+              readonly={false}
             />
           </div>
         )}

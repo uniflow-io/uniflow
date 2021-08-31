@@ -1,4 +1,4 @@
-// from @uniflow-io/uniflow-api/src/model/api-type-interface
+// from @uniflow-io/uniflow-api/src/model/api-type-interfaces
 
 import {
   ApiKeyType,
@@ -9,7 +9,8 @@ import {
   NotEmptyStringType,
   PathType,
   UuidOrUsernameType,
-} from './type-interface';
+  DateType,
+} from './type-interfaces';
 
 export interface ClientApiType {
   uid: UuidType;
@@ -32,8 +33,8 @@ export interface FolderApiType {
   slug: SlugType;
   path: PathType;
   user: UuidOrUsernameType;
-  created: Date;
-  updated: Date;
+  created: DateType;
+  updated: DateType;
 }
 
 export interface LeadApiType {
@@ -55,8 +56,8 @@ export interface ProgramApiType {
   description: NotEmptyStringType | null;
   isPublic: boolean;
   user: UuidOrUsernameType;
-  created: Date;
-  updated: Date;
+  created: DateType;
+  updated: DateType;
 }
 
 export interface TagApiType {

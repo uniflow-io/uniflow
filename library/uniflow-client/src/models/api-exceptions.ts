@@ -8,4 +8,12 @@ class ApiValidateException extends Error {
   }
 }
 
-export default ApiValidateException;
+export { ApiValidateException };
+
+class ApiNotAuthorizedException extends Error {}
+
+export { ApiNotAuthorizedException };
+
+class ApiNotFoundException extends Error {}
+
+export { ApiNotFoundException };

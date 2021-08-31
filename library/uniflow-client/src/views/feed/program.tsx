@@ -32,10 +32,10 @@ import { commitAddLog, useLogs } from '../../contexts/logs';
 import Container from '../../container';
 import { UI } from '../../services';
 import { useAuth, useGraph, useUser } from '../../contexts';
-import { PathType } from '../../models/type-interface';
-import ApiValidateException, {
-  ApiValidateExceptionErrors,
-} from '../../models/api-validate-exception';
+import { PathType } from '../../models/type-interfaces';
+import {
+ApiValidateException,  ApiValidateExceptionErrors,
+} from '../../models/api-exceptions';
 import FormInput, { FormInputType } from '../../components/form-input';
 import { useLocation } from '@reach/router';
 import Alert, { AlertType } from '../../components/alert';
@@ -46,6 +46,11 @@ import { useRef } from 'react';
 
 const container = new Container();
 const ui = container.get(UI);
+
+type DeserialisedFlows = {
+  type: string
+  data?: string
+}[]
 
 export interface ProgramProps {
   allFlows: { [key: string]: FlowMetadata };
@@ -67,7 +72,7 @@ const Program: FC<ProgramProps> = (props) => {
   const { user, userDispatch } = useUser();
   const { feed, feedDispatch, feedRef } = useFeed();
   const { graph, graphDispatch, graphRef } = useGraph();
-  const [ fetchedGraph, setFetchedGraph ] = useState<GraphProviderState['flows']>([])
+  const [ fetchedFlows, setFetchedFlows ] = useState<DeserialisedFlows>([])
   const flowsRef = useRef<FlowsHandle>(null)
   const location = useLocation();
 
@@ -83,7 +88,6 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   const getFlows = (program: ProgramFeedType) => {
-    const { allFlows } = props;
     const flowLabels = [];
     const keys = Object.keys(allFlows);
 
@@ -126,10 +130,8 @@ const Program: FC<ProgramProps> = (props) => {
   }, [props.program.uid]);
 
   const onPlay = (index?: number) => {
-    const { graph } = props;
-
     const runner = new Runner();
-    runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
+    //runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1));
   };
 
   const onPushFlow = (index: number, flowType: string) => {
@@ -151,7 +153,7 @@ const Program: FC<ProgramProps> = (props) => {
     for (let index = 0; index < graph.flows.length; index++) {
       const flow = graph.flows[index]
       if(flow.data === undefined && flowsRef.current) {
-        const data = flowsRef.current.onDeserialize(index, fetchedGraph[index]?.data)
+        const data = flowsRef.current.onDeserialize(index, fetchedFlows[index]?.data)
         onUpdateFlow(index, data);
       }
     }
@@ -191,7 +193,7 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
-  const onChangeClients = async (clients) => {
+  const onChangeClients = async (clients: string[]) => {
     commitUpdateFeed({
       type: 'program',
       entity: {
@@ -202,7 +204,7 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
-  const onChangeTags = async (tags) => {
+  const onChangeTags = async (tags: string[]) => {
     commitUpdateFeed({
       type: 'program',
       entity: {
@@ -249,7 +251,7 @@ const Program: FC<ProgramProps> = (props) => {
     return JSON.stringify(data);
   };
 
-  const onDeserializeFlowsData = (raw: string): GraphProviderState['flows'] => {
+  const onDeserializeFlowsData = (raw: string): DeserialisedFlows => {
     const data = JSON.parse(raw);
 
     const graph = [];
@@ -257,7 +259,6 @@ const Program: FC<ProgramProps> = (props) => {
     for (let index = 0; index < data.length; index++) {
       graph.push({
         type: data[index].flow,
-        isRunning: false,
         data: data[index].data,
       });
     }
@@ -277,12 +278,12 @@ const Program: FC<ProgramProps> = (props) => {
             feedDispatch,
             userDispatch,
             authDispatch
-          );
+          ) || null;
         }
         if (data) {
           programRef.data = data;
           const graphData = onDeserializeFlowsData(data);
-          setFetchedGraph(graphData)
+          setFetchedFlows(graphData)
           for (let index = 0; index < graphData.length; index++) {
             onPushFlow(index, graphData[index].type)
           }
@@ -345,7 +346,6 @@ const Program: FC<ProgramProps> = (props) => {
     event.preventDefault();
 
     if (auth.token && auth.uid) {
-      const program = props.program;
       program.name += ' Copy';
 
       try {
@@ -380,15 +380,13 @@ const Program: FC<ProgramProps> = (props) => {
         feedDispatch,
         userDispatch,
         authDispatch
-      );
+      ) || [];
       setFolderTreeEdit(true);
       setFolderTree(folderTree);
     }
   };
 
   const getNodeClipboard = () => {
-    const { program } = props;
-
     if (user.apiKey) {
       return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
     }
@@ -530,7 +528,7 @@ const Program: FC<ProgramProps> = (props) => {
             </div>
           );
         } else if (client === 'node') {
-          const clipboard = getNodeClipboard(user);
+          const clipboard = getNodeClipboard();
 
           return (
             <div key={`client-${client}`} className="row mb-3">

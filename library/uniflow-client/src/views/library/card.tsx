@@ -14,6 +14,7 @@ export interface CardProps {
     description: string;
     repository: {
       url: string;
+      directory: string
     };
     official: boolean;
     fields: {

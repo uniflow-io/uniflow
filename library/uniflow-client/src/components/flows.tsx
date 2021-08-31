@@ -5,13 +5,15 @@ import { GraphProviderState } from '../contexts';
 import FlowFunction from '../../../uniflow-flow-function/src'
 //import FlowPrompt from '../../../uniflow-flow-prompt/src'
 //import FlowText from '../../../uniflow-flow-text/src'
-import { Flow, FlowHandle } from './flow/flow';
+import { FlowHandle } from './flow/flow';
 import { forwardRef } from 'react';
 import { useRef } from 'react';
 import { createRef } from 'react';
 import { useEffect } from 'react';
+import { RefObject } from 'react';
+import { FC } from 'react';
 
-const flowImports = {
+const flowImports: any = {
   '@uniflow-io/uniflow-flow-function': FlowFunction,
   //'@uniflow-io/uniflow-flow-prompt': FlowPrompt,
   //'@uniflow-io/uniflow-flow-text': FlowText,
@@ -36,8 +38,8 @@ export interface FlowsProps {
 
 const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
   const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;
-  const flowRefs = useMemo(() => 
-    Array(graph.flows.length).fill().map(() => createRef()), 
+  const flowRefs: RefObject<FlowHandle<any>>[] = useMemo(() => 
+    Array(graph.flows.length).fill(null).map(() => createRef()), 
     [graph.flows]
   );
 
@@ -65,7 +67,7 @@ const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
         }}
         />
       {graph.flows.map((flow, index) => {
-        const Flow = flowImports[flow.type] as Flow<any>;
+        const Flow = flowImports[flow.type];
 
         return (
           <React.Fragment key={index}>

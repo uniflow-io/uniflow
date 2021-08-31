@@ -1,4 +1,4 @@
-import { ApiKeyType, EmailType, UsernameType, UuidType, SlugType, NotEmptyStringType, PathType, UuidOrUsernameType } from "./type-interface"
+import { ApiKeyType, EmailType, UsernameType, UuidType, SlugType, NotEmptyStringType, PathType, UuidOrUsernameType, DateType } from "./type-interfaces"
 
 export interface ClientApiType {
     uid: UuidType
@@ -21,8 +21,8 @@ export interface FolderApiType {
     slug: SlugType
     path: PathType
     user: UuidOrUsernameType
-    created: Date
-    updated: Date
+    created: DateType
+    updated: DateType
 }
 
 export interface LeadApiType {
@@ -44,8 +44,8 @@ export interface ProgramApiType {
     description: NotEmptyStringType | null
     isPublic: boolean
     user: UuidOrUsernameType
-    created: Date
-    updated: Date
+    created: DateType
+    updated: DateType
 }
 
 export interface TagApiType {

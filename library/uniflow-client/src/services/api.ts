@@ -1,8 +1,8 @@
 import { Service, Inject } from 'typedi';
 import request, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import Env from './env';
-import { ApiValidateException } from '../models';
-import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import { ApiValidateException } from '../models/api-exceptions';
+import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import {
   EmailOrUsernameType,
   EmailType,
@@ -15,7 +15,7 @@ import {
   SlugType,
   UuidOrUsernameType,
   UuidType,
-} from '../models/type-interface';
+} from '../models/type-interfaces';
 import {
   ConfigApiType,
   ContactApiType,
@@ -23,10 +23,10 @@ import {
   LeadApiType,
   ProgramApiType,
   UserApiType,
-} from '../models/api-type-interface';
+} from '../models/api-type-interfaces';
 import axios from 'axios';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
-import ApiNotFoundException from '../models/api-not-found-exception';
+import { ApiNotAuthorizedException } from '../models/api-exceptions';
+import { ApiNotFoundException } from '../models/api-exceptions';
 
 export interface ApiOptions {
   token?: string;
@@ -35,6 +35,7 @@ export interface ApiOptions {
 @Service()
 class Api {
   @Inject(() => Env)
+  // @ts-ignore
   private env: Env;
 
   private getBaseUrl() {
@@ -82,7 +83,7 @@ class Api {
             for (const item of axiosError.response.data.validation) {
               errors[item.key] = errors[item.key] || [];
               for (const message of item.messages) {
-                errors[item.key].push(message);
+                errors[item.key]?.push(message);
               }
             }
           }

@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
-import { default as ReactSelect } from 'react-select';
+import { default as ReactSelect, GroupTypeBase, OptionsType, OptionTypeBase, StylesConfig } from 'react-select';
 import { default as ReactCreatableSelect } from 'react-select/creatable';
+import { ThemeConfig } from 'react-select/src/theme';
 import { useApp } from '../contexts/app';
 
 export interface SelectProps {
-  value: string;
+  value: string|string[];
   onChange?: (value: any) => void;
   className: string;
   id: string;
@@ -16,7 +17,7 @@ export interface SelectProps {
 const Select: FC<SelectProps> = (props) => {
   const { value, options, edit, multiple } = props;
   const app = useApp();
-  const customStyles = {
+  const customStyles: {[key: string]: StylesConfig<OptionTypeBase, false, GroupTypeBase<OptionTypeBase>>} = {
     light: {
       menu: (provided) => ({
         ...provided,
@@ -60,7 +61,7 @@ const Select: FC<SelectProps> = (props) => {
       }),
     },
   };
-  const themes = {
+  const themes: {[key: string]: ThemeConfig} = {
     light: (theme) => theme,
     dark: (theme) => ({
       ...theme,
@@ -93,11 +94,11 @@ const Select: FC<SelectProps> = (props) => {
   };
 
   const selectOptions = options || [];
-  let selectValue = undefined;
+  let selectValue: any = undefined;
 
   if (multiple === true) {
     selectValue = [];
-    if (value) {
+    if (value && Array.isArray(value)) {
       selectValue = value.map((data) => {
         return { value: data, label: data };
       });
@@ -108,22 +109,23 @@ const Select: FC<SelectProps> = (props) => {
     });
   }
 
-  const DisplaySelect = edit === true ? ReactCreatableSelect : ReactSelect;
+  
+  const DisplaySelect: any = edit === true ? ReactCreatableSelect : ReactSelect;
 
   return (
     <DisplaySelect
       isMulti={multiple === true}
       value={selectValue}
-      onChange={(data) => {
+      onChange={(data: {value: string}|{value: string}[]) => {
         const { onChange, multiple } = props;
         if (onChange) {
-          if (multiple === true) {
+          if (multiple === true && Array.isArray(data)) {
             onChange(
               (data || []).map((option) => {
                 return option.value;
               })
             );
-          } else {
+          } else if(!Array.isArray(data)) {
             onChange(data.value);
           }
         }

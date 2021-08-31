@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import { Remarkable } from 'remarkable';
-import { toFeedPath } from '../contexts/feed';
+import { apiToPaginatedProgramFeedEntity, ProgramFeedType, toFeedPath } from '../contexts/feed';
 import { useUser } from '../contexts';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Container from '../container';
 import { Api } from '../services';
-import { ProgramApiType } from '../models/api-type-interface';
 import { FC } from 'react';
 
 const container = new Container();
@@ -19,14 +18,14 @@ export interface FlowsState {}
 
 const Flows: FC<FlowsProps> = () => {
   const [page, setPage] = useState<number>(1);
-  const [programs, setPrograms] = useState<ProgramApiType[]>([]);
+  const [programs, setPrograms] = useState<ProgramFeedType[]>([]);
   const [state, setState] = useState<'loaded' | 'load-more' | 'loading'>('loaded');
   const { user } = useUser();
   const md = new Remarkable();
 
   const onFetchPrograms = async () => {
     setState('loading');
-    const programsPagination = await api.getPrograms({ page });
+    const programsPagination = apiToPaginatedProgramFeedEntity(await api.getPrograms({ page }));
     const fetchPrograms = programs.slice().concat(programsPagination.data);
     setPage(page + 1);
     setPrograms(fetchPrograms);
@@ -50,7 +49,7 @@ const Flows: FC<FlowsProps> = () => {
               <dd
                 className="col-md-10"
                 key={i * 2 + 1}
-                dangerouslySetInnerHTML={{ __html: md.render(program.description) }}
+                dangerouslySetInnerHTML={{ __html: md.render(program.description || '') }}
               ></dd>,
             ])}
           </dl>

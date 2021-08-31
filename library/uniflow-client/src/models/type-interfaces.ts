@@ -1,14 +1,11 @@
-// https://tsoa-community.github.io/docs/upgrading.html#new-features
-export type PartialType<T> = {
-  [P in keyof T]?: T[P];
-};
+// from @uniflow-io/uniflow-api/src/model/type-interfaces
 
 /**
  * @isInt
  * @default 1
  * @minimum 1
  */
-export type PageNumberType = number
+export type PageNumberType = number;
 
 /**
  * @isInt
@@ -16,12 +13,12 @@ export type PageNumberType = number
  * @minimum 1
  * @maximum 100
  */
-export type PerPageType = number
+export type PerPageType = number;
 
 export type PaginationType<T> = {
-  data: T[]
-  total: number
-}
+  data: T[];
+  total: number;
+};
 
 /**
  * @format email
@@ -33,7 +30,7 @@ export type EmailType = string;
 /**
  * @minLength 1 Password should not be empty
  */
- export type PasswordType = string
+export type PasswordType = string;
 
 /**
  * Stringified UUIDv4.
@@ -43,6 +40,8 @@ export type EmailType = string;
  * @example "52907745-7672-470e-a803-a2f8feb52944"
  */
 export type UuidType = string;
+
+export type DateType = string;
 
 /**
  * @pattern `^[0-9a-z-]+$` Username format is not valid
@@ -65,12 +64,12 @@ export type PathType = string;
 /**
  * @pattern `^[0-9a-z]{32}$` Api key format is not valid
  */
-export type ApiKeyType = string
+export type ApiKeyType = string;
 
 /**
  * @minLength 1 Text should contain at least one character
  */
-export type NotEmptyStringType = string
+export type NotEmptyStringType = string;
 
-export type UuidOrUsernameType = UuidType|UsernameType
-export type EmailOrUsernameType = EmailType|UsernameType
+export type UuidOrUsernameType = UuidType | UsernameType;
+export type EmailOrUsernameType = EmailType | UsernameType;

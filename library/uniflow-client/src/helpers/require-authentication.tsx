@@ -4,7 +4,7 @@ import { isGranted, UserProviderState, useUser } from '../contexts/user';
 import { navigate } from 'gatsby';
 import { useAuth } from '../contexts';
 import { useEffect } from 'react';
-import { ROLE } from '../models/api-type-interface';
+import { ROLE } from '../models/api-type-interfaces';
 import { FC } from 'react';
 
 export default function requireAuthentication<T>(
