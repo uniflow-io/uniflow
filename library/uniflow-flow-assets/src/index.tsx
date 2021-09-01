@@ -1,11 +1,10 @@
 import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useImperativeHandle } from 'react'
-import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 import LZString from 'lz-string'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FlowRunner } from '@uniflow-io/uniflow-client/src/models/runner'
 
 export interface AssetsFlowData {
   variable?: string

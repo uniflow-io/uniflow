@@ -4,17 +4,7 @@ import vm from 'vm';
 import { commitPlayFlow, commitStopFlow, GraphDispath, GraphProviderState } from '../contexts';
 import { RefObject } from 'react';
 import { FlowsHandle } from '../components/flows';
-
-export enum ClientType {
-  UNIFLOW = 'uniflow',
-  NODE = 'node',
-  VSCODE = 'vscode',
-}
-
-export interface FlowRunner {
-  run: (code?: string) => any
-  getContext: () => any
-}
+import { ClientType } from './interfaces';
 
 export default class Runner {
   async run(flows: GraphProviderState['flows'], flowsRef: RefObject<FlowsHandle>, graphDispatch: GraphDispath) {

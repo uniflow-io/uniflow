@@ -1,12 +1,11 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
-import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
-import { ClientType } from '../../uniflow-flow-function/node_modules/@uniflow-io/uniflow-client/src/models/runner'
+import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 import { MouseEventHandler } from 'react'
 import { ChangeEventHandler } from 'react'
 import { useStateRef } from '@uniflow-io/uniflow-client/src/hooks/use-state-ref'
-import { FlowRunner } from '../../uniflow-flow-function/node_modules/@uniflow-io/uniflow-client/src/models/runner'
+import { ClientType } from '@uniflow-io/uniflow-client/src/models/interfaces'
 
 enum PromptChoicheType {
   STRING = 'string',

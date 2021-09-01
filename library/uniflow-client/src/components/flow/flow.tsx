@@ -1,11 +1,17 @@
 import { ForwardRefExoticComponent, PropsWithoutRef, RefAttributes, forwardRef, ForwardRefRenderFunction } from "react";
-import { ClientType, FlowRunner } from "../../models/runner";
+import { ClientType } from "../../models/interfaces";
 
 export interface FlowMetadata {
   clients: string[];
   name: string;
   tags: string[];
 }
+
+export interface FlowRunner {
+  run: (code?: string) => any
+  getContext: () => any
+}
+
 
 export interface FlowHandle<T extends object> {
   onSerialize: () => string | undefined

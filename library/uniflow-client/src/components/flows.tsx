@@ -1,11 +1,10 @@
 import React, { useImperativeHandle, useMemo } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
-import { FlowHandle } from './flow/flow';
+import { FlowHandle, FlowRunner } from './flow/flow';
 import { forwardRef } from 'react';
 import { createRef } from 'react';
 import { RefObject } from 'react';
-import { ClientType, FlowRunner } from '../models/runner';
 
 import FunctionFlow from '../../../uniflow-flow-function/src'
 import PromptFlow from '../../../uniflow-flow-prompt/src'
@@ -13,6 +12,7 @@ import AssetsFlow from '../../../uniflow-flow-assets/src'
 import TextFlow from '../../../uniflow-flow-text/src'
 import CanvasFlow from '../../../uniflow-flow-canvas/src'
 import ObjectFlow from '../../../uniflow-flow-object/src'
+import { ClientType } from '../models/interfaces';
 
 const flowImports: any = {
   '@uniflow-io/uniflow-flow-function': FunctionFlow,

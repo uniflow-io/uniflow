@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { faClipboard } from '@fortawesome/free-regular-svg-icons';
 import { Flows, Select } from '../../components';
-import Runner, { ClientType } from '../../models/runner';
+import Runner from '../../models/runner';
 import {
   commitPushFlow,
   commitPopFlow,
@@ -43,6 +43,7 @@ import { FlowMetadata } from '../../components/flow/flow';
 import { FC } from 'react';
 import { FlowsHandle } from '../../components/flows';
 import { useRef } from 'react';
+import { ClientType } from '../../models/interfaces';
 
 const container = new Container();
 const ui = container.get(UI);

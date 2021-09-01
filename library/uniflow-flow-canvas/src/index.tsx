@@ -1,9 +1,8 @@
 import React, { useImperativeHandle } from 'react'
-import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
+import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 import { useRef } from 'react'
-import { FlowRunner } from '@uniflow-io/uniflow-client/src/models/runner'
 
 export interface CanvasFlowData {
   variable?: string
