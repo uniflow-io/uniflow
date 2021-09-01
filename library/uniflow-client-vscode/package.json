@@ -49,12 +49,12 @@
     "dev": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^16.6.1",
+    "@types/node": "^16.7.10",
     "@types/vscode": "^1.59.0",
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.2"
   },
   "dependencies": {
     "@wasmer/wasi": "^0.12.0"

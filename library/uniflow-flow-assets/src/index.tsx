@@ -5,6 +5,7 @@ import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 import LZString from 'lz-string'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FlowRunner } from '@uniflow-io/uniflow-client/src/models/runner'
 
 export interface AssetsFlowData {
   variable?: string
@@ -40,7 +41,7 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
     
       return data.variable + ' = ' + JSON.stringify(assets)
     },
-    onExecute: async (runner) => {
+    onExecute: async (runner: FlowRunner) => {
       if (data?.variable) {
         return runner.run()
       }

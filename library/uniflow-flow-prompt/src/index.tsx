@@ -6,6 +6,7 @@ import { ClientType } from '../../uniflow-flow-function/node_modules/@uniflow-io
 import { MouseEventHandler } from 'react'
 import { ChangeEventHandler } from 'react'
 import { useStateRef } from '@uniflow-io/uniflow-client/src/hooks/use-state-ref'
+import { FlowRunner } from '../../uniflow-flow-function/node_modules/@uniflow-io/uniflow-client/src/models/runner'
 
 enum PromptChoicheType {
   STRING = 'string',
@@ -68,7 +69,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
 
       return data.variable + ' = ' + JSON.stringify(inputRef.current || '')
     },
-    onExecute: async (runner) => {
+    onExecute: async (runner: FlowRunner) => {
       let context = runner.getContext()
       if (data?.messageVariable && context[data.messageVariable]) {
         setMessage(context[data.messageVariable])

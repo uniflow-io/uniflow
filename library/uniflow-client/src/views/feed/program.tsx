@@ -307,7 +307,9 @@ const Program: FC<ProgramProps> = (props) => {
           try {
             await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
           } catch (error) {
-            commitAddLog(error.message)(logsDispatch);
+            if(error instanceof Error) {
+              commitAddLog(error.message)(logsDispatch);
+            }
           }
         }
       }, 1000),
@@ -332,7 +334,7 @@ const Program: FC<ProgramProps> = (props) => {
           } catch (error) {
             if (error instanceof ApiValidateException) {
               setErrors({ ...error.errors });
-            } else {
+            } else if (error instanceof Error) {
               setErrors({ form: [error.message] });
             }
           }
@@ -357,7 +359,9 @@ const Program: FC<ProgramProps> = (props) => {
         await setProgramData(program, auth.token)(feedDispatch, userDispatch, authDispatch);
         navigate(toFeedPath(program, user));
       } catch (error) {
-        commitAddLog(error.message)(logsDispatch);
+        if(error instanceof Error) {
+          commitAddLog(error.message)(logsDispatch);
+        }
       }
     }
   };
@@ -477,7 +481,7 @@ const Program: FC<ProgramProps> = (props) => {
           onChange={onChangeClients}
           multiple={true}
           options={Object.keys(clients).map((value) => {
-            return { value: value, label: clients[value] };
+            return { value: value, label: clients[value as ClientType] };
           })}
         />
         <FormInput

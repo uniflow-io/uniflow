@@ -2,6 +2,7 @@ import React, { useImperativeHandle } from 'react'
 import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
 import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import { FlowRunner } from '@uniflow-io/uniflow-client/src/models/runner'
 
 export interface FunctionFlowData {
   code?: string
@@ -20,7 +21,7 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
     onCompile: () => {
       return data?.code || ''
     },
-    onExecute: async (runner) => {
+    onExecute: async (runner: FlowRunner) => {
       return runner.run()
     }
   }), [data])

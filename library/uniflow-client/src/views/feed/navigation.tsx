@@ -67,7 +67,9 @@ const Navigation: FC<NavigationProps> = (props) => {
         }
       }
     } catch (error) {
-      commitAddLog(error.message)(logsDispatch);
+      if(error instanceof Error) {
+        commitAddLog(error.message)(logsDispatch);
+      }
     }
   };
 
@@ -94,7 +96,9 @@ const Navigation: FC<NavigationProps> = (props) => {
         }
       }
     } catch (error) {
-      commitAddLog(error.message)(logsDispatch);
+      if(error instanceof Error) {
+        commitAddLog(error.message)(logsDispatch);
+      }
     }
   };
 

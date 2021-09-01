@@ -174,7 +174,7 @@ const Settings: FC<SettingsProps> = () => {
       setState('form');
       if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors });
-      } else {
+      } else if(error instanceof Error) {
         setErrors({ form: [error.message] });
       }
     }

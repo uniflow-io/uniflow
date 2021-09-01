@@ -3,6 +3,7 @@ import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
 import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
 import { flow } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 import { useRef } from 'react'
+import { FlowRunner } from '@uniflow-io/uniflow-client/src/models/runner'
 
 export interface CanvasFlowData {
   variable?: string
@@ -25,7 +26,7 @@ const CanvasFlow = flow<CanvasFlowData>((props, ref) => {
     onCompile: () => {
       return ''
     },
-    onExecute: async (runner) => {
+    onExecute: async (runner: FlowRunner) => {
       let context = runner.getContext()
       if (data?.variable && canvasRef.current) {
         context[data?.variable] = canvasRef.current
