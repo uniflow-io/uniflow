@@ -98,7 +98,9 @@ export class Start extends Command {
 					});
 				}
 			} catch (error) {
-				this.error(`There was an error: ${error.message}`);
+				if(error instanceof Error) {
+					this.error(`There was an error: ${error.message}`);
+				}
 
 				processExistCode = 1;
 				// @ts-ignore

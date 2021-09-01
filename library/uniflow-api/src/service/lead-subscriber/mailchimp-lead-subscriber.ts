@@ -1,11 +1,11 @@
 import * as mailchimpMarketing from '@mailchimp/mailchimp_marketing'
 import * as md5 from 'md5'
 import * as fs from 'fs'
-import * as unified from 'unified'
 import * as path from 'path'
-import * as markdown from 'remark-parse'
-import * as remark2rehype from 'remark-rehype'
-import * as html from 'rehype-stringify'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
 import { Transformer } from "unified";
 import { Node, Parent } from "unist";
 import { VFile, VFileCompatible } from 'vfile'
@@ -493,19 +493,23 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
 
   private async processMailchimpMarkdown(vFile: VFileCompatible): Promise<string> {
     return new Promise(resolve => {
-      const processor = unified().use(markdown).use(this.imagesInline).use(remark2rehype).use(html)
-      processor.process(vFile, function (error, htmlContent: VFile) {
+      /*const processor = unified().use(remarkParse).use(this.imagesInline).use(remarkRehype).use(rehypeStringify)
+      processor.process(vFile, (error, htmlContent) => {
         if (error) throw error
 
-        htmlContent.contents = htmlContent.contents.toString()
-          .replace(/LEAD_ID/g, '*|LEAD_ID|*')
-          .replace(/GUSERNAME/g, '*|GUSERNAME|*')
-          .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
-          .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
-          .replace(/RSSITEM\:CONTENT/g, '*|RSSITEM:CONTENT|*')
-        
-        resolve(htmlContent.contents)
-      })
+        if(htmlContent) {
+          htmlContent.value = htmlContent.value.toString()
+            .replace(/LEAD_ID/g, '*|LEAD_ID|*')
+            .replace(/GUSERNAME/g, '*|GUSERNAME|*')
+            .replace(/RSSFEED\:TITLE/g, '*|RSSFEED:TITLE|*')
+            .replace(/RSSFEED\:URL/g, '*|RSSFEED:URL|*')
+            .replace(/RSSITEM\:CONTENT/g, '*|RSSITEM:CONTENT|*')
+          
+          resolve(htmlContent.value)
+        } else {
+          resolve('')
+        }
+      })*/
     })
   }
 
