@@ -16,12 +16,12 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      let object = JSON.stringify(transform())
-      return [data?.variable, object].join(',')
+      let object = transform()
+      return JSON.stringify([data?.variable, object])
     },
     onDeserialize: (data?: string) => {
-      let [variable, object] = data?.split(',') || [undefined, undefined]
-      let keyValueList = reverseTransform(JSON.parse(object || '[]'))
+      let [variable, object] = data ? JSON.parse(data) : [undefined, []]
+      let keyValueList = reverseTransform(object)
   
       return { variable, keyValueList }
     },
@@ -168,7 +168,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
           onChange={onChangeVariable}
           />
         {data?.keyValueList?.map((item, index) => (
-          <div className="row" key={index}>
+          <div className="row mb-3" key={index}>
             <div className="col-sm-4 offset-sm-2">
               <input
                 type="text"
@@ -202,11 +202,11 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
         ))}
       </form>
       <div className="row mb-3">
-        <div className="col-auto ml-auto">
+        <div className="col-sm-10 offset-sm-2">
           <button
             type="submit"
             onClick={onAddItem}
-            className="btn btn-info"
+            className="btn btn-primary"
           >
             Add Item
           </button>

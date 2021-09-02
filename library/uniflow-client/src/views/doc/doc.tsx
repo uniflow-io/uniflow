@@ -47,7 +47,7 @@ const Doc: FC<DocProps> = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row flex-sm-nowrap">
         <Navigation docNav={docNav} slug={doc.fields.slug} />
         <section className="section col">
           <h3 className="mb-3">{doc.frontmatter.title}</h3>

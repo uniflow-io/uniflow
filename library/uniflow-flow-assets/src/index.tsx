@@ -161,17 +161,15 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
                   }}
                   className="form-control"
                 />
-                <div className="input-group-append">
-                  <button
-                    type="button"
-                    className="input-group-text"
-                    onClick={event => {
-                      onRemoveFile(event, index)
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faTimes} />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="input-group-text"
+                  onClick={event => {
+                    onRemoveFile(event, index)
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
               </div>
             </div>
           </div>

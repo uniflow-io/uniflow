@@ -16,10 +16,10 @@ const CanvasFlow = flow<CanvasFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      return [data?.variable, data?.width, data?.height].join(',')
+      return JSON.stringify([data?.variable, data?.width, data?.height])
     },
     onDeserialize: (data?: string) => {
-      const [variable, width, height] = data?.split(',') || [undefined, undefined, undefined]
+      const [variable, width, height] = data ? JSON.parse(data) : [undefined, undefined, undefined]
       return { variable, width: Number(width), height: Number(height) }
     },
     onCompile: () => {

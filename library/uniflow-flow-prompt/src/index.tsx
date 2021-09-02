@@ -28,10 +28,10 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      return [data?.variable, data?.messageVariable, data?.type].join(',')
+      return JSON.stringify([data?.variable, data?.messageVariable, data?.type])
     },
     onDeserialize: (data?: string) => {
-      const [variable, messageVariable, type] = data?.split(',') || [undefined, undefined, undefined]
+      const [variable, messageVariable, type] = data ? JSON.parse(data) : [undefined, undefined, undefined]
       return { variable, messageVariable, type }
     },
     onCompile: (client) => {

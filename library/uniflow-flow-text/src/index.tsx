@@ -13,10 +13,10 @@ const TextFlow = flow<TextFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      return [data?.variable, data?.text].join(',')
+      return JSON.stringify([data?.variable, data?.text])
     },
     onDeserialize: (data?: string) => {
-      const [variable, text] = data?.split(',') || [undefined, undefined]
+      const [variable, text] = data ? JSON.parse(data) : [undefined, undefined]
       return { variable, text }
     },
     onCompile: () => {

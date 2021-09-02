@@ -12,10 +12,11 @@ const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
-      return data?.code
+      return JSON.stringify(data?.code)
     },
     onDeserialize: (data?: string) => {
-      return { code: data }
+      const code = data ? JSON.parse(data) : undefined
+      return { code }
     },
     onCompile: () => {
       return data?.code || ''

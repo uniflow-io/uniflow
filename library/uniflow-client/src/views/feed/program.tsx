@@ -273,7 +273,7 @@ const Program: FC<ProgramProps> = (props) => {
 
         commitSetFlows([])(graphDispatch);
         let data = programRef.data;
-        if (!data && auth.token) {
+        if (!data) {
           data = await getProgramData(programRef, auth.token)(
             feedDispatch,
             userDispatch,
@@ -517,8 +517,8 @@ const Program: FC<ProgramProps> = (props) => {
       {program.clients.map((client) => {
         if (client === 'uniflow') {
           return (
-            <div key={`client-${client}`} className="row">
-              <div className="col">
+            <div key={`client-${client}`} className="row mb-3">
+              <div className="col-sm-10 offset-sm-2">
                 <button
                   className="btn btn-primary"
                   onClick={(event) => {

@@ -3,6 +3,11 @@ body {
   background-color: var(--bg-color);
 }
 
+hr {
+  background-color: var(--border-color);
+  opacity: 1;
+}
+
 a {
   color: var(--primary-color);
 

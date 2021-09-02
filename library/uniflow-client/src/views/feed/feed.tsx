@@ -16,7 +16,7 @@ const Feed: FC<FeedProps> = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row flex-sm-nowrap">
         <Navigation type={currentItem && currentItem.type} />
         {currentItem && currentItem.type === 'program' && (
           <Program program={currentItem.entity as ProgramFeedType} allFlows={allFlows} />

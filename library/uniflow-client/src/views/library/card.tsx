@@ -45,7 +45,7 @@ const Card: FC<CardProps> = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row flex-sm-nowrap">
         <Navigation library={library} slug={card.fields.slug} />
         <section className="section col">
           <div className="row mb-3">
