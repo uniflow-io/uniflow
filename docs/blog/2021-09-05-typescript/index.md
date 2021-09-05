@@ -1,6 +1,6 @@
 ---
 title: Typescript
-date: 2021-08-27
+date: 2021-09-05
 author: Mathieu Ledru
 cover: images/cover.svg
 coverSeo: images/cover.png
