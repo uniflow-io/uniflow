@@ -34,6 +34,8 @@ module.exports = {
         siteId: process.env.GATSBY_MATOMO_SITE_ID,
         matomoUrl: process.env.GATSBY_MATOMO_URL,
         siteUrl: process.env.GATSBY_CLIENT_URL,
+        matomoPhpScript: 'matomo.php',
+        matomoJsScript: 'matomo.js'
       },
     },
     {
