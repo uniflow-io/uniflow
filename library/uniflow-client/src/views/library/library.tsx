@@ -13,9 +13,9 @@ const Library: FC<LibraryProps> = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row flex-sm-nowrap">
         <Navigation library={library} />
-        <section className="section col">
+        <section className="section section-with-sidebar col">
           <MDXProvider>
             <MDXDocument />
           </MDXProvider>

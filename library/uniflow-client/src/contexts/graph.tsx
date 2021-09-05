@@ -1,10 +1,8 @@
-import React, { MutableRefObject } from 'react';
+import React, { MutableRefObject, createContext, useContext } from 'react';
 import { FC } from 'react';
 import Container from '../container';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { Api } from '../services';
-import { createContext, useContext } from 'use-context-selector';
-
 
 const container = new Container();
 const api = container.get(Api);
@@ -14,13 +12,18 @@ export enum GraphActionTypes {
   COMMIT_POP_FLOW = 'COMMIT_POP_FLOW',
   COMMIT_UPDATE_FLOW = 'COMMIT_UPDATE_FLOW',
   COMMIT_SET_FLOWS = 'COMMIT_SET_FLOWS',
+  COMMIT_PLAY_FLOW = 'COMMIT_PLAY_FLOW',
+  COMMIT_STOP_FLOW = 'COMMIT_STOP_FLOW',
 }
 
 export type GraphAction =
   | { type: GraphActionTypes.COMMIT_PUSH_FLOW, index: number, flowType: string }
   | { type: GraphActionTypes.COMMIT_POP_FLOW, index: number }
-  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: any }
-  | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] };
+  | { type: GraphActionTypes.COMMIT_UPDATE_FLOW, index: number, data: object }
+  | { type: GraphActionTypes.COMMIT_SET_FLOWS, flows: GraphProviderState['flows'] }
+  | { type: GraphActionTypes.COMMIT_PLAY_FLOW, index: number }
+  | { type: GraphActionTypes.COMMIT_STOP_FLOW, index: number }
+
 
 export type GraphDispath = React.Dispatch<GraphAction>;
 
@@ -31,8 +34,8 @@ export interface GraphProviderProps {
 export interface GraphProviderState {
   flows: {
     type: string
-    isRunning: boolean
-    data: any
+    isPlaying: boolean
+    data?: object
   }[]
 };
 
@@ -59,7 +62,7 @@ export const commitPopFlow = (index: number) => {
     return Promise.resolve();
   };
 };
-export const commitUpdateFlow = (index: number, data: any) => {
+export const commitUpdateFlow = (index: number, data: object) => {
   return async (dispatch: GraphDispath) => {
     dispatch({
       type: GraphActionTypes.COMMIT_UPDATE_FLOW,
@@ -74,6 +77,24 @@ export const commitSetFlows = (flows: GraphProviderState['flows']) => {
     dispatch({
       type: GraphActionTypes.COMMIT_SET_FLOWS,
       flows,
+    });
+    return Promise.resolve();
+  };
+};
+export const commitPlayFlow = (index: number) => {
+  return async (dispatch: GraphDispath) => {
+    dispatch({
+      type: GraphActionTypes.COMMIT_PLAY_FLOW,
+      index,
+    });
+    return Promise.resolve();
+  };
+};
+export const commitStopFlow = (index: number) => {
+  return async (dispatch: GraphDispath) => {
+    dispatch({
+      type: GraphActionTypes.COMMIT_STOP_FLOW,
+      index,
     });
     return Promise.resolve();
   };
@@ -102,8 +123,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
           const pushFlows = state.flows.slice()
           pushFlows.splice(action.index, 0, {
             type: action.flowType,
-            isRunning: false,
-            data: {},
+            isPlaying: false,
           })
           return {
             ...state,
@@ -137,6 +157,38 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
             ...state,
             ...{flows: action.flows.slice()} 
           };
+        case GraphActionTypes.COMMIT_PLAY_FLOW:
+          return {
+            ...state,
+            ...{flows: state.flows.map((item, index) => {
+              if (index !== action.index) {
+                return item;
+              }
+  
+              return {
+                ...item,
+                ...{
+                  isPlaying: true
+                },
+              };
+            })}
+          };
+          case GraphActionTypes.COMMIT_STOP_FLOW:
+            return {
+              ...state,
+              ...{flows: state.flows.map((item, index) => {
+                if (index !== action.index) {
+                  return item;
+                }
+    
+                return {
+                  ...item,
+                  ...{
+                    isPlaying: false
+                  },
+                };
+              })}
+            };
         default:
           return state;
       }
@@ -151,7 +203,7 @@ export const GraphProvider: FC<GraphProviderProps> = (props) => {
   );
 };
 
-//export const GraphConsumer = GraphContext.Consumer;
+export const GraphConsumer = GraphContext.Consumer;
 
 export function useGraph() {
   return useContext(GraphContext);

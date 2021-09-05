@@ -5,8 +5,8 @@ import uniq from 'lodash/uniq';
 import { AuthDispath, commitLogout } from './auth';
 import { LogsDispath } from './logs';
 import { useReducerRef } from '../hooks/use-reducer-ref';
-import { ROLE } from '../models/api-type-interface';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
+import { ROLE, UserApiType } from '../models/api-type-interfaces';
+import { ApiNotAuthorizedException } from '../models/api-exceptions';
 import { FC } from 'react';
 
 const container = new Container();
@@ -29,14 +29,14 @@ export interface UserProviderProps {
 
 export interface UserProviderState {
   uid?: string;
-  apiKey?: string;
-  username?: string;
+  username?: string | null;
   email?: string;
-  firstname?: string;
-  lastname?: string;
-  facebookId?: string;
-  githubId?: string;
-  roles: string[];
+  firstname?: string | null;
+  lastname?: string | null;
+  facebookId?: string | null;
+  githubId?: string | null;
+  apiKey?: string | null;
+  roles: ROLE[];
   links: {
     lead?: string;
   };
@@ -134,9 +134,11 @@ export const updateSettings = (item: Partial<UserProviderState>, token: string) 
     };
 
     try {
-      const user = await api.updateUserSettings({ uid: item.uid }, data, { token });
-      commitUpdateSettings(user)(dispatch);
-      return data;
+      if(item.uid) {
+        const user = await api.updateUserSettings({ uid: item.uid }, data, { token });
+        commitUpdateSettings(user)(dispatch);
+        return user;
+      }
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(dispatch, authDispath);
@@ -158,7 +160,7 @@ export const isGranted = (user: UserProviderState, attributes: string | string[]
     if (role === ROLE.SUPER_ADMIN) {
       roles.push(ROLE.USER);
       roles.push(ROLE.SUPER_ADMIN);
-    } else {
+    } else if(role) {
       roles.push(role);
     }
   }

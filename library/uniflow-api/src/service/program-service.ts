@@ -28,8 +28,8 @@ export default class ProgramService {
       description: program.description,
       isPublic: program.isPublic,
       user: program.user.username || program.user.uid,
-      created: program.created,
-      updated: program.updated,
+      created: program.created.toDateString(),
+      updated: program.updated.toDateString(),
     }
   }
 }

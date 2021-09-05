@@ -7,7 +7,7 @@ import { AppConfig } from '../config';
 import { UserRepository } from '../repository';
 import { UserService } from '../service';
 import { UserEntity } from "../entity";
-import { ROLE } from "../model/api-type-interface";
+import { ROLE } from "../model/api-type-interfaces";
 
 export async function expressAuthentication(
     request: express.Request,

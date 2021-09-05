@@ -7,19 +7,21 @@ import { commitLogoutUser, UserDispath, UserProviderState } from './user';
 import { pathTo } from '../routes';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { AuthDispath } from './auth';
-import { FolderApiType, ProgramApiType, UserApiType } from '../models/api-type-interface';
-import { PageNumberType, PathType, SlugType, UuidType } from '../models/type-interface';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
+import { FolderApiType, ProgramApiType, UserApiType } from '../models/api-type-interfaces';
+import { NotEmptyStringType, PageNumberType, PaginationType, PathType, SlugType, UuidType } from '../models/type-interfaces';
+import { ApiNotAuthorizedException } from '../models/api-exceptions';
 
 const container = new Container();
 const api = container.get(Api);
 
-export type ProgramFeedType = ProgramApiType & {
-  data: string;
+export type ProgramFeedType = Omit<ProgramApiType,'created'|'updated'> & {
+  data: string | null;
+  created: Moment;
   updated: Moment;
 };
 
-export type FolderFeedType = FolderApiType & {
+export type FolderFeedType = Omit<FolderApiType,'created'|'updated'> & {
+  created: Moment;
   updated: Moment;
 };
 
@@ -41,7 +43,7 @@ export type FeedAction =
   | { type: FeedActionTypes.COMMIT_CLEAR_FEED }
   | { type: FeedActionTypes.COMMIT_UPDATE_FEED; item: FeedItem }
   | { type: FeedActionTypes.COMMIT_DELETE_FEED; item: FeedItem }
-  | { type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED; parentFolder: FolderFeedType | null }
+  | { type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED; parentFolder?: FolderFeedType | null }
   | { type: FeedActionTypes.COMMIT_SET_SLUG_FEED; slug: SlugType | null }
   | { type: FeedActionTypes.COMMIT_SET_UID_FEED; uid: UuidType };
 
@@ -65,31 +67,66 @@ const defaultState = {
   uid: undefined,
 };
 
+export const apiToFolderFeedEntity = (apiEntity: FolderApiType): FolderFeedType => {
+  return {
+    ...apiEntity,
+    ...{
+      created: moment(apiEntity.created),
+      updated: moment(apiEntity.updated),
+    }
+  }
+}
+
+export const apiToPaginatedFolderFeedEntity = (apiPaginationEntity: PaginationType<FolderApiType>): PaginationType<FolderFeedType> => {
+  const { data, total } = apiPaginationEntity;
+
+  return {
+    data: data.map((apiEntity) => apiToFolderFeedEntity(apiEntity)),
+    total
+  }
+}
+
+export const apiToProgramFeedEntity = (apiEntity: ProgramApiType): ProgramFeedType => {
+  return {
+    ...apiEntity,
+    ...{
+      data: null,
+      created: moment(apiEntity.created),
+      updated: moment(apiEntity.updated),
+    }
+  }
+}
+
+export const apiToPaginatedProgramFeedEntity = (apiPaginationEntity: PaginationType<ProgramApiType>): PaginationType<ProgramFeedType> => {
+  const { data, total } = apiPaginationEntity;
+
+  return {
+    data: data.map((apiEntity) => apiToProgramFeedEntity(apiEntity)),
+    total
+  }
+}
+
 const fetchCollection = async (
   uid: UuidType,
   type: 'programs' | 'folders',
   path?: PathType,
   page: PageNumberType = 1,
   token?: string,
-  items = []
-) => {
-  let config = {};
-  if (token) {
-    config = {
-      headers: {
-        'Uniflow-Authorization': `Bearer ${token}`,
-      },
-    };
+  items: (ProgramFeedType|FolderFeedType)[] = []
+): Promise<(ProgramFeedType | FolderFeedType)[]> => {
+  let paginedEntities: PaginationType<ProgramFeedType|FolderFeedType> | undefined
+  if(type === 'programs') {
+    paginedEntities = apiToPaginatedProgramFeedEntity(await api.getUserPrograms({uid}, {page, path}, {token}))
+  } else if (type === 'folders') {
+    paginedEntities = apiToPaginatedFolderFeedEntity(await api.getUserFolders({uid}, {page, path}, {token}))
   }
 
-  const response = await request.get(
-    `${api.getBaseUrl()}/users/${uid}/${type}?page=${page}${path ? `&path=${path}` : ''}`,
-    config
-  );
-  const { data, total } = response.data;
-  items = items.concat(data);
-  if (items.length < total) {
-    return await fetchCollection(uid, type, path, page + 1, token, items);
+  if(paginedEntities) {
+    const { data, total } = paginedEntities;
+    items = items.concat(data);
+    if (items.length < total) {
+      return await fetchCollection(uid, type, path, page + 1, token, items);
+    }
   }
 
   return items;
@@ -121,7 +158,7 @@ export const commitDeleteFeed = (item: FeedItem) => {
   };
 };
 
-export const commitSetParentFolderFeed = (parentFolder: FolderFeedType | null) => {
+export const commitSetParentFolderFeed = (parentFolder?: FolderFeedType | null) => {
   return (dispatch: FeedDispath) => {
     dispatch({
       type: FeedActionTypes.COMMIT_SET_PARENT_FOLDER_FEED,
@@ -246,7 +283,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
     const parentParentPath = `/${paths.slice(0, -2).join('/')}`;
     const slug = paths.length > 0 ? paths[paths.length - 1] : null;
     const parentSlug = paths.length > 1 ? paths[paths.length - 2] : null;
-    let feedFolderPath = parentPath;
+    let folderPathFeed = parentPath;
     let feedProgramPath = parentPath;
     let parentFolderFound: boolean | undefined = undefined;
 
@@ -262,7 +299,7 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
         if (folder.path === parentPath && folder.slug === slug) {
           commitSetSlugFeed(null)(dispatch);
           commitSetParentFolderFeed(folder)(dispatch);
-          feedFolderPath = path;
+          folderPathFeed = path;
           feedProgramPath = path;
           parentFolderFound = true;
         }
@@ -275,13 +312,13 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
             entity: folder,
           })(dispatch);
         }
-        feedFolderPath = parentParentPath;
+        folderPathFeed = parentParentPath;
       }
     }
 
     try {
       const [folders, programs] = await Promise.all([
-        fetchCollection(uid, 'folders', feedFolderPath, 1, token),
+        fetchCollection(uid, 'folders', folderPathFeed, 1, token),
         fetchCollection(uid, 'programs', feedProgramPath, 1, token),
       ]);
       if (parentFolderFound === true || parentFolderFound === undefined) {
@@ -316,35 +353,15 @@ export const fetchFeed = (uid: UuidType, paths: string[], token?: string) => {
   };
 };
 
-export const serializeFlowsData = (graph) => {
-  const data = [];
-
-  for (let i = 0; i < graph.length; i++) {
-    data.push({
-      flow: graph[i].flow,
-      data: graph[i].data,
-    });
-  }
-
-  return JSON.stringify(data);
-};
-
-export const deserializeFlowsData = (raw) => {
-  const data = JSON.parse(raw);
-
-  const graph = [];
-
-  for (let i = 0; i < data.length; i++) {
-    graph.push({
-      flow: data[i].flow,
-      data: data[i].data,
-    });
-  }
-
-  return graph;
-};
-
-export const createProgram = (program: ProgramFeedType, uid: UuidType, token: string) => {
+export const createProgram = (program: {
+  name: NotEmptyStringType;
+  slug?: SlugType;
+  path?: PathType;
+  clients?: NotEmptyStringType[];
+  tags?: NotEmptyStringType[];
+  description?: NotEmptyStringType | null;
+  isPublic?: boolean;
+}, uid: UuidType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const data = {
       name: program.name,
@@ -356,14 +373,14 @@ export const createProgram = (program: ProgramFeedType, uid: UuidType, token: st
     };
 
     try {
-      program = await api.createUserProgram({ uid }, data, { token });
+      const programFeed = apiToProgramFeedEntity(await api.createUserProgram({ uid }, data, { token }));
 
       commitUpdateFeed({
         type: 'program',
-        entity: program,
+        entity: programFeed,
       })(dispatch);
 
-      return program;
+      return programFeed;
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
@@ -387,7 +404,7 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
     };
 
     try {
-      program = await api.updateProgram({ uid: program.uid }, data, { token });
+      program = apiToProgramFeedEntity(await api.updateProgram({ uid: program.uid }, data, { token }));
 
       commitUpdateFeed({
         type: 'program',
@@ -487,7 +504,7 @@ export const getFolderTree = (uid: UuidType, token?: string) => {
   };
 };
 
-export const createFolder = (folder: FolderFeedType, uid: UuidType, token: string) => {
+export const createFolder = (folder: { name: NotEmptyStringType; slug?: SlugType; path?: PathType }, uid: UuidType, token: string) => {
   return async (dispatch: FeedDispath, userDispatch: UserDispath, authDispath: AuthDispath) => {
     const data = {
       name: folder.name,
@@ -496,14 +513,14 @@ export const createFolder = (folder: FolderFeedType, uid: UuidType, token: strin
     };
 
     try {
-      folder = await api.createUserFolder({ uid }, data, { token });
-
+      const folderFeed = apiToFolderFeedEntity(await api.createUserFolder({ uid }, data, { token }));
+      
       commitUpdateFeed({
         type: 'folder',
-        entity: folder,
+        entity: folderFeed,
       })(dispatch);
 
-      return folder;
+      return folderFeed;
     } catch (error) {
       if (error instanceof ApiNotAuthorizedException) {
         commitLogoutUser()(userDispatch, authDispath);
@@ -523,7 +540,7 @@ export const updateParentFolder = (folder: FolderFeedType, token: string) => {
     };
 
     try {
-      folder = await api.updateFolder({ uid: folder.uid }, data, { token });
+      folder = apiToFolderFeedEntity(await api.updateFolder({ uid: folder.uid }, data, { token }));
 
       commitSetParentFolderFeed(folder)(dispatch);
 

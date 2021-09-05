@@ -16,9 +16,9 @@ import {
 import { Select } from '../../components';
 import { useEffect } from 'react';
 import { useAuth, useUser } from '../../contexts';
-import { PathType } from '../../models/type-interface';
-import { ApiValidateException } from '../../models';
-import { ApiValidateExceptionErrors } from '../../models/api-validate-exception';
+import { PathType } from '../../models/type-interfaces';
+import { ApiValidateException } from '../../models/api-exceptions';
+import { ApiValidateExceptionErrors } from '../../models/api-exceptions';
 import FormInput, { FormInputType } from '../../components/form-input';
 import Alert, { AlertType } from '../../components/alert';
 import { FC } from 'react';
@@ -117,7 +117,7 @@ const Folder: FC<FolderProps> = (props) => {
         feedDispatch,
         userDispatch,
         authDispatch
-      );
+      ) || [];
       folderTree = folderTree.filter((value) => {
         return value.indexOf(`${folder.path === '/' ? '' : folder.path}/${folder.slug}`) !== 0;
       });
@@ -128,7 +128,7 @@ const Folder: FC<FolderProps> = (props) => {
   };
 
   return (
-    <section className="section col">
+    <section className="section section-with-sidebar col">
       <div className="row">
         <div className="col">
           <h3>Infos</h3>

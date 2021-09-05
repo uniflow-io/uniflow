@@ -29,7 +29,9 @@ export default class LeadsSyncCommand extends Command {
 				await this.leadSubscriber.sync()
 				this.log('Leads were succefully synced')
 			} catch (error) {
-				this.error(`There was an error: ${error.message}`)
+				if(error instanceof Error) {
+					this.error(`There was an error: ${error.message}`)
+				}
 			}
 		})()
 	}

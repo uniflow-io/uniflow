@@ -14,6 +14,7 @@ export interface CardProps {
     description: string;
     repository: {
       url: string;
+      directory: string
     };
     official: boolean;
     fields: {
@@ -44,9 +45,9 @@ const Card: FC<CardProps> = (props) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row flex-sm-nowrap">
         <Navigation library={library} slug={card.fields.slug} />
-        <section className="section col">
+        <section className="section section-with-sidebar col">
           <div className="row mb-3">
             <div className="col-sm-12">
               <div className="row text-secondary">

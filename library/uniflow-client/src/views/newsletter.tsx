@@ -23,7 +23,7 @@ const Newsletter: FC<NewsletterProps> = (props: NewsletterProps) => {
 
   return (
     <div className="container-fluid">
-      <div className="row flex-xl-nowrap">
+      <div className="row">
         <section className="section col">
           <h3 className="mb-3">{newsletter.frontmatter.title}</h3>
 

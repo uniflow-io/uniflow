@@ -75,8 +75,8 @@ export default class FolderService {
       slug: folder.slug,
       path: await this.toPath(folder.parent || undefined),
       user: folder.user.username || folder.user.uid,
-      created: folder.created,
-      updated: folder.updated,
+      created: folder.created.toDateString(),
+      updated: folder.updated.toDateString(),
     }
   }
 }

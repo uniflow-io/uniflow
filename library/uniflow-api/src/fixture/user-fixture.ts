@@ -5,7 +5,7 @@ import { FixtureInterface } from './interfaces';
 import { UserRepository } from '../repository';
 import ReferencesFixture from './references-fixture';
 import { FakeUserFactory } from '../factory';
-import { ROLE } from '../model/api-type-interface';
+import { ROLE } from '../model/api-type-interfaces';
 
 @Service()
 export default class UserFixture implements FixtureInterface {

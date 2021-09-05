@@ -1,33 +1,67 @@
-import React, { Suspense, lazy } from 'react';
-import { FC } from 'react';
+import React, { useImperativeHandle, useMemo } from 'react';
 import { Search } from '.';
 import { GraphProviderState } from '../contexts';
+import { FlowHandle, FlowRunner } from './flow/flow';
+import { forwardRef } from 'react';
+import { createRef } from 'react';
+import { RefObject } from 'react';
 
-const lasyImports = {
-  '@uniflow-io/uniflow-flow-function': () => import('../../../uniflow-flow-function/src'),
-  '@uniflow-io/uniflow-flow-prompt': () => import('../../../uniflow-flow-prompt/src'),
-  '@uniflow-io/uniflow-flow-text': () => import('../../../uniflow-flow-text/src'),
+import FunctionFlow from '../../../uniflow-flow-function/src'
+import PromptFlow from '../../../uniflow-flow-prompt/src'
+import AssetsFlow from '../../../uniflow-flow-assets/src'
+import TextFlow from '../../../uniflow-flow-text/src'
+import CanvasFlow from '../../../uniflow-flow-canvas/src'
+import ObjectFlow from '../../../uniflow-flow-object/src'
+import { ClientType } from '../models/interfaces';
+
+const flowImports: any = {
+  '@uniflow-io/uniflow-flow-function': FunctionFlow,
+  '@uniflow-io/uniflow-flow-prompt': PromptFlow,
+  '@uniflow-io/uniflow-flow-text': TextFlow,
+  '@uniflow-io/uniflow-flow-assets': AssetsFlow,
+  '@uniflow-io/uniflow-flow-canvas': CanvasFlow,
+  '@uniflow-io/uniflow-flow-object': ObjectFlow,
 };
 
-export interface Flow {
-  clients: string[];
-  name: string;
-  tags: string[];
+export interface FlowsHandle {
+  onSerialize: (index: number) => string | undefined
+  onDeserialize: (index: number, data?: string) => object
+  onCompile: (index: number, client: ClientType) => string
+  onExecute: (index: number, runner: FlowRunner) => Promise<void>
 }
 
 export interface FlowsProps {
   graph: GraphProviderState;
-  allFlows: { [key: string]: Flow };
   programFlows: { key: string; label: string }[];
   clients: string[];
   onPush: (index: number, flowType: string) => void
   onPop: (index: number) => void
-  onUpdate: (index: number, data: any) => void
-  onRun: (index?: number) => void
+  onUpdate: (index: number, data: object) => void
+  onPlay: (index?: number) => void
 }
 
-const Flows: FC<FlowsProps> = (props) => {
-  const { graph, onPush, onPop, onUpdate, onRun, allFlows, programFlows, clients } = props;
+const Flows = forwardRef<FlowsHandle, FlowsProps>((props, ref) => {
+  const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;
+  const flowRefs: RefObject<FlowHandle<any>>[] = useMemo(() => 
+    Array(graph.flows.length).fill(null).map(() => createRef()), 
+    [graph.flows]
+  );
+
+  useImperativeHandle(ref, () => ({
+    onSerialize: (index: number) => {
+      return flowRefs[index].current?.onSerialize()
+    },
+    onDeserialize: (index: number, data?: string) => {
+      return flowRefs[index].current?.onDeserialize(data)
+    },
+    onCompile: (index: number, client: ClientType) => {
+      return flowRefs[index].current?.onCompile(client) || ''
+    },
+    onExecute: async (index: number, runner: FlowRunner) => {
+      return flowRefs[index].current?.onExecute(runner)
+    }
+  }), [graph.flows])
+
   return (
     <>
       <Search
@@ -37,29 +71,25 @@ const Flows: FC<FlowsProps> = (props) => {
         }}
         />
       {graph.flows.map((flow, index) => {
-        const TagName = lazy(lasyImports[flow.type]);
+        const Flow = flowImports[flow.type];
+
         return (
           <React.Fragment key={index}>
-            <Suspense fallback={<div>Loading...</div>}>
-              <TagName
-                isRunning={flow.isRunning}
-                data={flow.data}
-                allFlows={allFlows}
-                clients={clients}
-                onPush={(flowType) => {
-                  onPush(index, flowType);
-                }}
-                onPop={() => {
-                  onPop(index);
-                }}
-                onUpdate={(data) => {
-                  onUpdate(index, data);
-                }}
-                onRun={() => {
-                  onRun(index);
-                }}
-              />
-            </Suspense>
+            <Flow
+              ref={flowRefs[index]}
+              clients={clients}
+              isPlaying={flow.isPlaying}
+              data={flow.data}
+              onPop={() => {
+                onPop(index);
+              }}
+              onUpdate={(data: object) => {
+                onUpdate(index, data);
+              }}
+              onPlay={() => {
+                onPlay(index);
+              }}
+            />
             <Search
               programFlows={programFlows}
               onPush={(flowType) => {
@@ -71,6 +101,6 @@ const Flows: FC<FlowsProps> = (props) => {
       })}
     </>
   );
-};
+});
 
 export default Flows;

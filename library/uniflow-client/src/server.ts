@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 import { appConfig } from './config';
 
 export default async function server() {

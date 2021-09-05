@@ -1,33 +1,30 @@
-import React, { FC } from 'react'
-import { FlowHeader } from '@uniflow-io/uniflow-client/src/components'
-import Container from '@uniflow-io/uniflow-client/src/container'
-import Flow from '@uniflow-io/uniflow-client/src/services/flow'
-import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import React, { useImperativeHandle } from 'react'
+import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
 
-const container = new Container()
-const flow = container.get(Flow)
-
-export interface FunctionFlowProps {
-  isRunning: boolean
-  data: {
-    code?: string
-  }
-  clients: string[];
-  onPop: () => void
-  onUpdate: (data: any) => void
-  onRun: () => void
+export interface FunctionFlowData {
+  code?: string
 }
 
-const FunctionFlow: FC<FunctionFlowProps> = (props) => {
-  const { clients, onPop, onUpdate, onRun, isRunning, data } = props
+const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
+  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
-  const serialize = () => {
-    return data.code
-  }
-
-  const deserialize = (data: string) => {
-    return { code: data }
-  }
+  useImperativeHandle(ref, () => ({
+    onSerialize: () => {
+      return JSON.stringify(data?.code)
+    },
+    onDeserialize: (data?: string) => {
+      const code = data ? JSON.parse(data) : undefined
+      return { code }
+    },
+    onCompile: () => {
+      return data?.code || ''
+    },
+    onExecute: async (runner: FlowRunner) => {
+      return runner.run()
+    }
+  }), [data])
 
   const onChangeCode = (code: string) => {
     onUpdate({
@@ -41,8 +38,8 @@ const FunctionFlow: FC<FunctionFlowProps> = (props) => {
       <FlowHeader
         title="Function"
         clients={clients}
-        isRunning={isRunning}
-        onRun={onRun}
+        isPlaying={isPlaying}
+        onPlay={onPlay}
         onPop={onPop}
       />
       <form className="form-sm-horizontal">
@@ -50,13 +47,13 @@ const FunctionFlow: FC<FunctionFlowProps> = (props) => {
           id="code"
           type={FormInputType.EDITOR}
           label="Code"
-          value={data.code}
+          value={data?.code}
           onChange={onChangeCode}
           language="javascript"
           />
       </form>
     </>
   )
-}
+})
 
 export default FunctionFlow

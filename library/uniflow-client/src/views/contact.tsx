@@ -1,11 +1,11 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import { ApiValidateException } from '../models';
+import { ApiValidateException } from '../models/api-exceptions';
 import { pathTo } from '../routes';
 import { useState } from 'react';
 import { Api } from '../services';
 import Container from '../container';
-import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import FormInput, { FormInputType } from '../components/form-input';
 import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
@@ -38,7 +38,7 @@ const Contact: FC<ContactProps> = () => {
       setState('form');
       if (error instanceof ApiValidateException) {
         setErrors({ ...error.errors });
-      } else {
+      } else if (error instanceof Error) {
         setErrors({ form: [error.message] });
       }
     }

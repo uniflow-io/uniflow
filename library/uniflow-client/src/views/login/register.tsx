@@ -9,9 +9,9 @@ import { faFacebookF, faGithub } from '@fortawesome/free-brands-svg-icons';
 import Container from '../../container';
 import { Env } from '../../services';
 import { useAuth, useLogs } from '../../contexts';
-import ApiValidateException, {
-  ApiValidateExceptionErrors,
-} from '../../models/api-validate-exception';
+import {
+ApiValidateException,  ApiValidateExceptionErrors,
+} from '../../models/api-exceptions';
 import Alert, { AlertType } from '../../components/alert';
 import FormInput, { FormInputType } from '../../components/form-input';
 import { FC } from 'react';

@@ -12,7 +12,7 @@ import Container from '../container';
 import { Api } from '../services';
 import jwtDecode, { InvalidTokenError } from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
-import ApiNotAuthorizedException from '../models/api-not-authorized-exception';
+import { ApiNotAuthorizedException } from '../models/api-exceptions';
 import { FC } from 'react';
 
 const container = new Container();

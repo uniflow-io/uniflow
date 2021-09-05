@@ -24,7 +24,7 @@ import { requireAuthentication } from './helpers';
 import { Path } from './services';
 import Container from './container';
 import { ComponentType } from 'react';
-import { ROLE } from './models/api-type-interface';
+import { ROLE } from './models/api-type-interfaces';
 
 const container = new Container();
 const path = container.get(Path);

@@ -27,7 +27,7 @@ export default function withPage<T>(
 ) {
   const PageHelper: FC<T> = (props) => {
     const app = useApp();
-    const source = createMemorySource(location.pathname + location.search);
+    const source = createMemorySource(seo.location.pathname + seo.location.search);
     const history = createHistory(source);
 
     useEffect(() => {

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { ApiValidateException } from '../models';
+import { ApiValidateException } from '../models/api-exceptions';
 import { matchRoute } from '../routes';
 import { useLocation } from '@reach/router';
 
 import { Api } from '../services';
 import Container from '../container';
-import { ApiValidateExceptionErrors } from '../models/api-validate-exception';
+import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import Alert, { AlertType } from '../components/alert';
 import FormInput, { FormInputType } from '../components/form-input';
 import { FC } from 'react';

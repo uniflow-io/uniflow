@@ -52,18 +52,24 @@ const Navigation: FC<NavigationProps> = (props) => {
       : '/';
 
     try {
-      const item = await createFolder(
-        {
-          name: search,
-          path: folderPath,
-        },
-        auth.uid,
-        auth.token
-      )(feedDispatch, userDispatch, authDispatch);
-      commitSetSlugFeed(null)(feedDispatch);
-      navigate(toFeedPath(item, user));
+      if(auth.uid && auth.token) {
+        const item = await createFolder(
+          {
+            name: search,
+            path: folderPath,
+          },
+          auth.uid,
+          auth.token
+        )(feedDispatch, userDispatch, authDispatch);
+        commitSetSlugFeed(null)(feedDispatch);
+        if(item) {
+          navigate(toFeedPath(item, user));
+        }
+      }
     } catch (error) {
-      commitAddLog(error.message)(logsDispatch);
+      if(error instanceof Error) {
+        commitAddLog(error.message)(logsDispatch);
+      }
     }
   };
 
@@ -74,19 +80,25 @@ const Navigation: FC<NavigationProps> = (props) => {
       : '/';
 
     try {
-      const item = await createProgram(
-        {
-          name: search,
-          clients: ['uniflow'],
-          tags: [],
-          path: folderPath,
-        },
-        auth.uid,
-        auth.token
-      )(feedDispatch, userDispatch, authDispatch);
-      navigate(toFeedPath(item, user));
+      if(auth.uid && auth.token) {
+        const item = await createProgram(
+          {
+            name: search,
+            clients: ['uniflow'],
+            tags: [],
+            path: folderPath,
+          },
+          auth.uid,
+          auth.token
+        )(feedDispatch, userDispatch, authDispatch);
+        if(item) {
+          navigate(toFeedPath(item, user));
+        }
+      }
     } catch (error) {
-      commitAddLog(error.message)(logsDispatch);
+      if(error instanceof Error) {
+        commitAddLog(error.message)(logsDispatch);
+      }
     }
   };
 

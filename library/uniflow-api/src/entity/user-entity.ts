@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { FolderEntity, ProgramEntity } from "../entity";
-import { ROLE } from '../model/api-type-interface';
+import { ROLE } from '../model/api-type-interfaces';
 
 @Entity({
   name: 'user'

@@ -5,7 +5,7 @@ import { requireAuthentication, withPage } from '../helpers';
 import routes from '../routes';
 import { Path } from '../services';
 import Container from '../container';
-import { Flow } from '../views/feed/program';
+import { FlowMetadata } from '../components/flow/flow';
 
 const container = new Container();
 const path = container.get(Path);
@@ -14,7 +14,7 @@ export interface FeedPageData {
   localFlows: {
     nodes: {
       name: string;
-      uniflow: Flow;
+      uniflow: FlowMetadata;
     }[];
   };
 }

@@ -3,15 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FC } from 'react';
 
-export interface HeaderProps {
+export interface FlowHeaderProps {
   title?: string;
   clients: string[];
-  isRunning: boolean
+  isPlaying: boolean
   onPop: () => void
-  onRun: () => void
+  onPlay: () => void
 }
 
-const Header: FC<HeaderProps> = (props) => {
+const FlowHeader: FC<FlowHeaderProps> = (props) => {
   const onDelete: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault();
 
@@ -26,12 +26,12 @@ const Header: FC<HeaderProps> = (props) => {
       <div className="col">
         <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
           <div className="btn-group-sm" role="group">
-            {props.clients.indexOf('uniflow') !== -1 && props.isRunning === false && (
-              <button type="button" className="btn btn-primary" onClick={props.onRun}>
+            {props.clients.indexOf('uniflow') !== -1 && props.isPlaying === false && (
+              <button type="button" className="btn btn-primary" onClick={props.onPlay}>
                 <FontAwesomeIcon icon={faPlay} />
               </button>
             )}
-            {props.clients.indexOf('uniflow') !== -1 && props.isRunning === true && (
+            {props.clients.indexOf('uniflow') !== -1 && props.isPlaying === true && (
               <button type="button" className="btn">
                 <span
                   className="spinner-border spinner-border-sm"
@@ -56,4 +56,4 @@ const Header: FC<HeaderProps> = (props) => {
   );
 };
 
-export default Header;
+export default FlowHeader;

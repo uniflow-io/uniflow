@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, createRef } from 'react';
 import { navigate } from 'gatsby';
 import debounce from 'lodash/debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,8 @@ import {
   commitPopFlow,
   commitUpdateFlow,
   commitSetFlows,
+  GraphProviderState,
+  GraphProviderProps,
 } from '../../contexts/graph';
 import {
   getTags,
@@ -22,8 +24,6 @@ import {
   setProgramData,
   getFolderTree,
   toFeedPath,
-  deserializeFlowsData,
-  serializeFlowsData,
   useFeed,
   ProgramFeedType,
   getFeedItem,
@@ -32,28 +32,35 @@ import { commitAddLog, useLogs } from '../../contexts/logs';
 import Container from '../../container';
 import { UI } from '../../services';
 import { useAuth, useGraph, useUser } from '../../contexts';
-import { PathType } from '../../models/type-interface';
-import ApiValidateException, {
-  ApiValidateExceptionErrors,
-} from '../../models/api-validate-exception';
+import { PathType } from '../../models/type-interfaces';
+import {
+ApiValidateException,  ApiValidateExceptionErrors,
+} from '../../models/api-exceptions';
 import FormInput, { FormInputType } from '../../components/form-input';
 import { useLocation } from '@reach/router';
 import Alert, { AlertType } from '../../components/alert';
-import { Flow } from '../../components/flows';
+import { FlowMetadata } from '../../components/flow/flow';
 import { FC } from 'react';
+import { FlowsHandle } from '../../components/flows';
+import { useRef } from 'react';
+import { ClientType } from '../../models/interfaces';
 
 const container = new Container();
 const ui = container.get(UI);
 
+type DeserialisedFlows = {
+  type: string
+  data?: string
+}[]
+
 export interface ProgramProps {
-  allFlows: { [key: string]: Flow };
+  allFlows: { [key: string]: FlowMetadata };
   program: ProgramFeedType;
 }
 
 export interface ProgramState {}
 
 const Program: FC<ProgramProps> = (props) => {
-  const [fetchedSlug, setFetchedSlug] = useState<string>();
   const [folderTreeEdit, setFolderTreeEdit] = useState<boolean>(false);
   const [folderTree, setFolderTree] = useState<PathType[]>([]);
   const [errors, setErrors] = useState<
@@ -61,18 +68,19 @@ const Program: FC<ProgramProps> = (props) => {
       'form' | 'name' | 'slug' | 'path' | 'clients' | 'tags' | 'isPublic' | 'description'
     >
   >({});
-  const { auth, authDispatch } = useAuth();
   const { logsDispatch } = useLogs();
+  const { auth, authDispatch } = useAuth();
   const { user, userDispatch } = useUser();
   const { feed, feedDispatch, feedRef } = useFeed();
-  const { graph, graphDispatch } = useGraph();
+  const { graph, graphDispatch, graphRef } = useGraph();
+  const [ fetchedFlows, setFetchedFlows ] = useState<DeserialisedFlows>([])
+  const flowsRef = useRef<FlowsHandle>(null)
   const location = useLocation();
-
   const { program, allFlows } = props;
-  const clients: { [key: string]: string } = {
-    uniflow: 'Uniflow',
-    node: 'Node',
-    vscode: 'VSCode',
+  const clients: { [key in ClientType]: string } = {
+    [ClientType.UNIFLOW]: 'Uniflow',
+    [ClientType.NODE]: 'Node',
+    [ClientType.VSCODE]: 'VSCode',
   };
 
   const getProgramRef = (): ProgramFeedType => {
@@ -80,7 +88,6 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   const getFlows = (program: ProgramFeedType) => {
-    const { allFlows } = props;
     const flowLabels = [];
     const keys = Object.keys(allFlows);
 
@@ -113,36 +120,45 @@ const Program: FC<ProgramProps> = (props) => {
   useEffect(() => {
     setFolderTreeEdit(false);
     setFolderTree([props.program.path]);
+    onFetchFlowData()
 
     return () => {
-      onUpdate.cancel();
       onFetchFlowData.cancel();
+      onUpdate.cancel();
       onUpdateFlowData.cancel();
     };
   }, [props.program.uid]);
 
-  const onRun = (index?: number) => {
-    const { graph } = props;
-
+  const onPlay = async (index?: number) => {
     const runner = new Runner();
-    runner.run(graph.slice(0, index === undefined ? graph.length : index + 1));
+    await runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1), flowsRef, graphDispatch);
   };
 
-  const onPushFlow = async (index: number, flowType: string) => {
+  const onPushFlow = (index: number, flowType: string) => {
     commitPushFlow(index, flowType)(graphDispatch);
     onUpdateFlowData();
   };
 
-  const onPopFlow = async (index: number) => {
+  const onPopFlow = (index: number) => {
     commitPopFlow(index)(graphDispatch);
-
     onUpdateFlowData();
   };
 
-  const onUpdateFlow = async (index: number, data: any) => {
+  const onUpdateFlow = (index: number, data: object) => {
     commitUpdateFlow(index, data)(graphDispatch);
     onUpdateFlowData();
   };
+
+  useEffect(() => {
+    for (let index = 0; index < graph.flows.length; index++) {
+      const flow = graph.flows[index]
+      if(flow.data === undefined && flowsRef.current) {
+        const data = flowsRef.current.onDeserialize(index, fetchedFlows[index]?.data)
+        onUpdateFlow(index, data);
+      }
+    }
+
+  }, [graph.flows.length])
 
   const onChangeName = async (name: string) => {
     commitUpdateFeed({
@@ -177,7 +193,7 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
-  const onChangeClients = async (clients) => {
+  const onChangeClients = async (clients: string[]) => {
     commitUpdateFeed({
       type: 'program',
       entity: {
@@ -188,7 +204,7 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
-  const onChangeTags = async (tags) => {
+  const onChangeTags = async (tags: string[]) => {
     commitUpdateFeed({
       type: 'program',
       entity: {
@@ -221,6 +237,35 @@ const Program: FC<ProgramProps> = (props) => {
     onUpdate();
   };
 
+  const onSerializeFlowsData = (flows: GraphProviderState['flows']): string => {
+    const data = [];
+
+    for (let index = 0; index < flows.length; index++) {
+      const flow = flows[index]
+      data.push({
+        flow: flow.type,
+        data: flowsRef.current?.onSerialize(index),
+      });
+    }
+
+    return JSON.stringify(data);
+  };
+
+  const onDeserializeFlowsData = (raw: string): DeserialisedFlows => {
+    const data = JSON.parse(raw);
+
+    const graph = [];
+
+    for (let index = 0; index < data.length; index++) {
+      graph.push({
+        type: data[index].flow,
+        data: data[index].data,
+      });
+    }
+
+    return graph;
+  };
+
   const onFetchFlowData = useMemo(
     () =>
       debounce(async () => {
@@ -228,21 +273,21 @@ const Program: FC<ProgramProps> = (props) => {
 
         commitSetFlows([])(graphDispatch);
         let data = programRef.data;
-        if (!data && auth.token) {
+        if (!data) {
           data = await getProgramData(programRef, auth.token)(
             feedDispatch,
             userDispatch,
             authDispatch
-          );
+          ) || null;
         }
         if (data) {
           programRef.data = data;
-
-          if (programRef.slug === props.program.slug) {
-            commitSetFlows(deserializeFlowsData(data))(graphDispatch);
+          const graphData = onDeserializeFlowsData(data);
+          setFetchedFlows(graphData)
+          for (let index = 0; index < graphData.length; index++) {
+            onPushFlow(index, graphData[index].type)
           }
         }
-        setFetchedSlug(programRef.slug);
       }, 1000),
     [props.program.uid]
   );
@@ -250,14 +295,12 @@ const Program: FC<ProgramProps> = (props) => {
   const onUpdateFlowData = useMemo(
     () =>
       debounce(async () => {
-        const { graph, feed } = props;
         const programRef = getProgramRef();
-        if (programRef.slug !== fetchedSlug) return;
 
-        const data = serializeFlowsData(graph);
+        const data = onSerializeFlowsData(graphRef.current.flows);
         if (
           auth.token &&
-          (feed.uid === 'me' || user.uid === feed.uid) &&
+          (feedRef.current.uid === 'me' || user.uid === feedRef.current.uid) &&
           programRef.data !== data
         ) {
           programRef.data = data;
@@ -265,7 +308,9 @@ const Program: FC<ProgramProps> = (props) => {
           try {
             await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
           } catch (error) {
-            commitAddLog(error.message)(logsDispatch);
+            if(error instanceof Error) {
+              commitAddLog(error.message)(logsDispatch);
+            }
           }
         }
       }, 1000),
@@ -290,7 +335,7 @@ const Program: FC<ProgramProps> = (props) => {
           } catch (error) {
             if (error instanceof ApiValidateException) {
               setErrors({ ...error.errors });
-            } else {
+            } else if (error instanceof Error) {
               setErrors({ form: [error.message] });
             }
           }
@@ -303,7 +348,6 @@ const Program: FC<ProgramProps> = (props) => {
     event.preventDefault();
 
     if (auth.token && auth.uid) {
-      const program = props.program;
       program.name += ' Copy';
 
       try {
@@ -316,7 +360,9 @@ const Program: FC<ProgramProps> = (props) => {
         await setProgramData(program, auth.token)(feedDispatch, userDispatch, authDispatch);
         navigate(toFeedPath(program, user));
       } catch (error) {
-        commitAddLog(error.message)(logsDispatch);
+        if(error instanceof Error) {
+          commitAddLog(error.message)(logsDispatch);
+        }
       }
     }
   };
@@ -338,15 +384,13 @@ const Program: FC<ProgramProps> = (props) => {
         feedDispatch,
         userDispatch,
         authDispatch
-      );
+      ) || [];
       setFolderTreeEdit(true);
       setFolderTree(folderTree);
     }
   };
 
   const getNodeClipboard = () => {
-    const { program } = props;
-
     if (user.apiKey) {
       return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
     }
@@ -362,7 +406,7 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   return (
-    <section className="section col">
+    <section className="section section-with-sidebar col">
       <div className="row">
         <div className="col">
           <h3>Infos</h3>
@@ -438,7 +482,7 @@ const Program: FC<ProgramProps> = (props) => {
           onChange={onChangeClients}
           multiple={true}
           options={Object.keys(clients).map((value) => {
-            return { value: value, label: clients[value] };
+            return { value: value, label: clients[value as ClientType] };
           })}
         />
         <FormInput
@@ -473,13 +517,13 @@ const Program: FC<ProgramProps> = (props) => {
       {program.clients.map((client) => {
         if (client === 'uniflow') {
           return (
-            <div key={`client-${client}`} className="row">
-              <div className="col">
+            <div key={`client-${client}`} className="row mb-3">
+              <div className="col-sm-10 offset-sm-2">
                 <button
                   className="btn btn-primary"
                   onClick={(event) => {
                     event.preventDefault();
-                    onRun();
+                    onPlay();
                   }}
                 >
                   <FontAwesomeIcon icon={faPlay} /> Play
@@ -488,7 +532,7 @@ const Program: FC<ProgramProps> = (props) => {
             </div>
           );
         } else if (client === 'node') {
-          const clipboard = getNodeClipboard(user);
+          const clipboard = getNodeClipboard();
 
           return (
             <div key={`client-${client}`} className="row mb-3">
@@ -520,14 +564,14 @@ const Program: FC<ProgramProps> = (props) => {
       <hr />
 
       <Flows
-        graph={graph}
-        allFlows={allFlows}
-        programFlows={programFlows}
+        ref={flowsRef}
         clients={program.clients}
+        graph={graph}
+        programFlows={programFlows}
         onPush={onPushFlow}
         onPop={onPopFlow}
         onUpdate={onUpdateFlow}
-        onRun={onRun}
+        onPlay={onPlay}
       />
     </section>
   );

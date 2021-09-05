@@ -17,7 +17,7 @@ import { Path } from '../services';
 import { Env } from '../services';
 import { useEffect } from 'react';
 import { IGatsbyImageData } from 'gatsby-plugin-image';
-import { ROLE } from '../models/api-type-interface';
+import { ROLE } from '../models/api-type-interfaces';
 import { Log } from '../models';
 import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
