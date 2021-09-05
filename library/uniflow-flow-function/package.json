@@ -1,6 +1,6 @@
 {
   "name": "@uniflow-io/uniflow-flow-function",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "Uniflow function flow",
   "author": {
     "name": "Mathieu Ledru",
@@ -36,7 +36,7 @@
     ]
   },
   "dependencies": {
-    "@uniflow-io/uniflow-client": "^1.1.14",
+    "@uniflow-io/uniflow-client": "^1.1.15",
     "react": "^17.0.2"
   },
   "devDependencies": {
