@@ -7,7 +7,7 @@
     Change React Redux to React Hooks
     Better errors handling
     Migrate to Matomo tracking
-  date: "2021-08-16"
+  date: "2021-09-06"
 -
   tag: "v1.1.14"
   label: |-
