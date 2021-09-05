@@ -128,7 +128,7 @@ const Folder: FC<FolderProps> = (props) => {
   };
 
   return (
-    <section className="section col">
+    <section className="section section-with-sidebar col">
       <div className="row">
         <div className="col">
           <h3>Infos</h3>
