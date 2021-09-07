@@ -9,7 +9,7 @@ coverOriginalUrl: https://www.typescriptlang.org
 tags: ["blog"]
 ---
 
-Uniflow did succeffully do the migration from Javascript to Typescript. 🎉  
+Uniflow did succefully do the migration from Javascript to Typescript. 🎉  
 This is applied for Uniflow Client (front) and Uniflow Api (back).
 
 Typescript allow to fully type variables and get more consistent when coding.  
