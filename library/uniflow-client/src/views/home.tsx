@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'gatsby';
 import { ApiValidateException } from '../models/api-exceptions';
 import { pathTo } from '../routes';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
+import { Editor } from '../components';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export interface HomeProps {}
 
@@ -122,6 +123,32 @@ const Home: FC<HomeProps> = () => {
           <div className="col-lg-4 py-md-5">
             <h3>Community</h3>
             <p>Get inspiration from community.</p>
+          </div>
+        </div>
+      </section>
+      <section className="section container">
+        <div className="row py-5">
+          <div className="col-lg-12 text-center">
+            <h2>Self-host</h2>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-4 py-md-5">
+            <h3>npx</h3>
+            <Editor readonly={true} value="npx @uniflow-io/uniflow" />
+          </div>
+          <div className="col-lg-4 py-md-5">
+            <h3>npm</h3>
+            <Editor readonly={true} value={["npm install uniflow-io/uniflow -g","uniflow"].join('\n')} />
+          </div>
+          <div className="col-lg-4 py-md-5">
+            <h3>docker</h3>
+            <Editor readonly={true} value={[
+              "docker run --it --rm \\",
+              "           --name uniflow \\",
+              '           -p 8016:8016 \\',
+              '           uniflowio/uniflow'
+            ].join('\n')} />
           </div>
         </div>
       </section>

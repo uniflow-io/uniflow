@@ -31,7 +31,7 @@ export default class UserFixture implements FixtureInterface {
     public async load() {
         await this.save(await this.userFactory.create({
             email: 'admin@uniflow.io',
-            plainPassword: 'admin_password',
+            plainPassword: 'admin',
             role: ROLE.SUPER_ADMIN,
         }))
 

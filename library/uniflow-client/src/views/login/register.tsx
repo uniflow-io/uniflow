@@ -17,7 +17,7 @@ import FormInput, { FormInputType } from '../../components/form-input';
 import { FC } from 'react';
 
 const container = new Container();
-const env = container.get(Env);
+const env = new Env(); //container.get(Env);
 
 export interface RegisterProps {}
 

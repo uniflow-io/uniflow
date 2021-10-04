@@ -16,9 +16,9 @@ import FormInput, { FormInputType } from '../components/form-input';
 import { FC } from 'react';
 
 const container = new Container();
-const ui = container.get(UI);
-const env = container.get(Env);
-const api = container.get(Api);
+const ui = new UI(); //container.get(UI);
+const env = new Env(); //container.get(Env);
+const api = new Api(env); //container.get(Api);
 
 export interface SettingsProps {}
 

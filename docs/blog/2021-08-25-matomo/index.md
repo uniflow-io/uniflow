@@ -10,6 +10,6 @@ tags: ["blog"]
 ---
 
 Uniflow migrate it's tracking to [Matomo](https://matomo.org) 📈
-This is an alternative to [Google Analytics](https://analytics.google.com/) and allows to get ride of cookies contents as Matomo is focused on privacy first.
+This is an alternative to [Google Analytics](https://analytics.google.com/) and allows to get ride of cookies consent as Matomo is focused on privacy first.
 
 Happy flowing. 🎉

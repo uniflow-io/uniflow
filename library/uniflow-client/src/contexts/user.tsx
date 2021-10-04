@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useContext } from 'react';
 import Container from '../container';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import uniq from 'lodash/uniq';
 import { AuthDispath, commitLogout } from './auth';
 import { LogsDispath } from './logs';
@@ -10,7 +10,7 @@ import { ApiNotAuthorizedException } from '../models/api-exceptions';
 import { FC } from 'react';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export enum UserActionTypes {
   COMMIT_UPDATE_SETTINGS = 'COMMIT_UPDATE_SETTINGS',

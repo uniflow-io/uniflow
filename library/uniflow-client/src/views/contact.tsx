@@ -3,7 +3,7 @@ import React from 'react';
 import { ApiValidateException } from '../models/api-exceptions';
 import { pathTo } from '../routes';
 import { useState } from 'react';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import FormInput, { FormInputType } from '../components/form-input';
@@ -11,7 +11,7 @@ import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export interface ContactProps {}
 

@@ -8,7 +8,7 @@ import Container from '../container';
 import { FlowMetadata } from '../components/flow/flow';
 
 const container = new Container();
-const path = container.get(Path);
+const path = new Path(); //container.get(Path);
 
 export interface FeedPageData {
   localFlows: {

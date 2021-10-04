@@ -27,7 +27,7 @@ import { ComponentType } from 'react';
 import { ROLE } from './models/api-type-interfaces';
 
 const container = new Container();
-const path = container.get(Path);
+const path = new Path(); //container.get(Path);
 
 const routes: { [key: string]: { path: string; exact?: boolean; component: ComponentType<any> } } =
   {

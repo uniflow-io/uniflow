@@ -9,14 +9,14 @@ import React, {
   useRef,
 } from 'react';
 import Container from '../container';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import jwtDecode, { InvalidTokenError } from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { ApiNotAuthorizedException } from '../models/api-exceptions';
 import { FC } from 'react';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export enum AuthActionTypes {
   COMMIT_LOGIN_REQUEST = 'COMMIT_LOGIN_REQUEST',

@@ -46,7 +46,7 @@ import { useRef } from 'react';
 import { ClientType } from '../../models/interfaces';
 
 const container = new Container();
-const ui = container.get(UI);
+const ui = new UI(); //container.get(UI);
 
 type DeserialisedFlows = {
   type: string

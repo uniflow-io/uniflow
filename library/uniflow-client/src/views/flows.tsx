@@ -6,11 +6,11 @@ import { useUser } from '../contexts';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Container from '../container';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import { FC } from 'react';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export interface FlowsProps {}
 

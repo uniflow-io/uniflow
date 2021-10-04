@@ -23,8 +23,8 @@ import Alert, { AlertType } from '../components/alert';
 import { FC } from 'react';
 
 const container = new Container();
-const path = container.get(Path);
-const env = container.get(Env);
+const path = new Path(); //container.get(Path);
+const env = new Env(); //container.get(Env);
 
 const MessengerPlatform: FC = () => {
   return (

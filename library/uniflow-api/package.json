@@ -30,8 +30,8 @@
   "files": [
     "bin",
     "dist",
-    "public",
-    "oclif.manifest.json"
+    "oclif.manifest.json",
+    "public"
   ],
   "oclif": {
     "commands": "./dist/command",
@@ -42,7 +42,10 @@
     "prepack": "make build",
     "start": "run-script-os",
     "start:default": "cd bin && ./uniflow-api",
-    "start:windows": "cd bin && uniflow-api"
+    "start:windows": "cd bin && uniflow-api",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
+    "prettier": "prettier \"**/*.{md,css,scss,yaml,yml}\""
   },
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.59",

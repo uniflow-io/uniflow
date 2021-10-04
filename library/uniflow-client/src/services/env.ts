@@ -9,7 +9,7 @@ type EnvData = {
   trackingId?: string;
 };
 
-@Service()
+//@Service()
 class Env {
   envs: EnvData;
   constructor() {

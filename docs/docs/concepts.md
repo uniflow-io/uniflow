@@ -17,7 +17,7 @@ A Flow here is viewed as :
 ## What is a Program ?
 
 A Program is globally use for naming and identifying a Rail and it's Flows. As a
-shortcut, we when talking about Flows, we are talking about Programs.
+shortcut, when talking about Flows, we are talking about Programs.
 
 ## What is a Client ?
 

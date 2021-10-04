@@ -5,12 +5,15 @@
 /node_modules
 
 # dotenv
-/.env.*
-
-# gatsby
-/.cache
-/public
+/.env.development
+/.env.local
+/.env.preprod
+/.env.production
 
 # typescript
 /dist
 oclif.manifest.json
+
+# gatsby
+/.cache
+/public

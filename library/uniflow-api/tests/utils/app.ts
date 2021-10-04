@@ -10,7 +10,7 @@ export function testApp(app: App): supertest.SuperTest<supertest.Test> {
 export async function loginApp(app: App, username?: string): Promise<{token: string, uid: string}> {
     let password = ''
     if(username === 'admin@uniflow.io') {
-        password = 'admin_password'
+        password = 'admin'
     } else if(!username || username === 'user@uniflow.io') {
         username = 'user@uniflow.io'
         password = 'user_password'

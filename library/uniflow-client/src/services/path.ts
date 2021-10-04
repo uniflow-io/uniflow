@@ -5,7 +5,7 @@ const patternCache: {[key: string]: {[key: string]: {re: RegExp, keys: Key[]}}} 
 const cacheLimit = 10000;
 let cacheCount = 0;
 
-@Service()
+//@Service()
 class Path {
   private compilePath(
     pattern: string,

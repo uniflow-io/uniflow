@@ -32,11 +32,13 @@ export interface ApiOptions {
   token?: string;
 }
 
-@Service()
+//@Service()
 class Api {
-  @Inject(() => Env)
+  //@Inject(() => Env)
   // @ts-ignore
-  private env: Env;
+  //private env: Env;
+
+  constructor(private env: Env) {}
 
   private getBaseUrl() {
     return `${this.env.get('apiUrl')}/api`;

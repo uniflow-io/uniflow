@@ -4,7 +4,7 @@ import { ApiValidateException } from '../models/api-exceptions';
 import { matchRoute } from '../routes';
 import { useLocation } from '@reach/router';
 
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import Container from '../container';
 import { ApiValidateExceptionErrors } from '../models/api-exceptions';
 import Alert, { AlertType } from '../components/alert';
@@ -12,7 +12,7 @@ import FormInput, { FormInputType } from '../components/form-input';
 import { FC } from 'react';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export interface NotificationsProps {}
 

@@ -16,7 +16,7 @@ import Alert, { AlertType } from '../../components/alert';
 import { FC } from 'react';
 
 const container = new Container();
-const env = container.get(Env);
+const env = new Env(); //container.get(Env);
 
 export interface LoginProps {}
 

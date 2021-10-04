@@ -1,0 +1,20 @@
+# logs
+/*.log
+
+# npm
+/node_modules
+
+# dotenv
+/.env.development
+/.env.local
+/.env.preprod
+/.env.production
+
+# typescript
+/dist
+/database.sqlite
+oclif.manifest.json
+
+# gatsby
+/.cache
+/public

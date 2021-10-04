@@ -2,10 +2,10 @@ import React, { MutableRefObject, createContext, useContext } from 'react';
 import { FC } from 'react';
 import Container from '../container';
 import { useReducerRef } from '../hooks/use-reducer-ref';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export enum GraphActionTypes {
   COMMIT_PUSH_FLOW = 'COMMIT_PUSH_FLOW',

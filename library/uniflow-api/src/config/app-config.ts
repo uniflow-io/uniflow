@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { Inject, Service } from 'typedi';
 
-interface DatabaseConfigData {
+export interface DatabaseConfigData {
   type: 'sqlite' | 'mongodb' | 'mysql' |'postgres'
   sqlite: {
     database: string
@@ -27,7 +27,7 @@ interface DatabaseConfigData {
   },
 }
 
-interface MailChimpConfigData {
+export interface MailChimpConfigData {
   apiKey: string,
   serverPrefix: string,
   listId: string,
@@ -35,8 +35,8 @@ interface MailChimpConfigData {
 
 export type AppConfigData = {
   env: 'development' | 'preprod' | 'production' | 'test',
-  database: DatabaseConfigData,
   port: number,
+  database: DatabaseConfigData,
   corsAllowOrigin: string,
   jwtSecret: string,
   facebookAppId: string,
@@ -69,6 +69,13 @@ export default class AppConfig {
         format: ['development' , 'preprod' , 'production' , 'test'],
         default: 'development',
         env: 'NODE_ENV'
+      },
+      port: {
+        format: Number,
+        default: 8017,
+        arg: 'port',
+        env: 'PORT',
+        doc: 'HTTP port uniflow api can be reached'
       },
       database: {
         type: {
@@ -157,13 +164,6 @@ export default class AppConfig {
             env: 'DB_POSTGRES_PORT'
           },
         },
-      },
-      port: {
-        format: Number,
-        default: 8017,
-        arg: 'port',
-        env: 'PORT',
-        doc: 'HTTP port uniflow api can be reached'
       },
       corsAllowOrigin: {
         format: String,

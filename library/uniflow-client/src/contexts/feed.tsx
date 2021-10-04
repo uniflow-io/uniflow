@@ -1,6 +1,6 @@
 import React, { FC, MutableRefObject, RefObject, useContext, useReducer } from 'react';
 import Container from '../container';
-import { Api } from '../services';
+import { Api, Env } from '../services';
 import request from 'axios';
 import moment, { Moment } from 'moment';
 import { commitLogoutUser, UserDispath, UserProviderState } from './user';
@@ -12,7 +12,7 @@ import { NotEmptyStringType, PageNumberType, PaginationType, PathType, SlugType,
 import { ApiNotAuthorizedException } from '../models/api-exceptions';
 
 const container = new Container();
-const api = container.get(Api);
+const api = new Api(new Env()); //container.get(Api);
 
 export type ProgramFeedType = Omit<ProgramApiType,'created'|'updated'> & {
   data: string | null;
