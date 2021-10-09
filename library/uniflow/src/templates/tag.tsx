@@ -1,7 +1,31 @@
-import { graphql } from 'gatsby'
-import Page from '@uniflow-io/uniflow-client/src/templates/tag'
+import React from 'react';
+import Tag, { TagProps } from '@uniflow-io/uniflow-client/src/views/blog/tag';
+import { graphql, PageProps } from 'gatsby';
+import { withPage } from '@uniflow-io/uniflow-client/src/helpers';
 
-export default Page;
+export interface TagTemplateData {
+  articles: TagProps['articles'];
+}
+
+export interface TagTemplateContext {
+  tag: TagProps['tag'];
+}
+
+export default ({
+  data,
+  location,
+  pageContext: { tag },
+}: PageProps<TagTemplateData, TagTemplateContext>) => {
+  const { articles } = data;
+
+  const TagPage = withPage<TagProps>(Tag, 'tag', {
+    location,
+    title: tag,
+    description: tag,
+  });
+
+  return <TagPage tag={tag} articles={articles} />;
+};
 
 export const query = graphql`
   query ($tag: String) {
