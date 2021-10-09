@@ -1,4 +1,3 @@
-const path = require('path');
 const projectPath = '.'
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const _ = require('lodash');

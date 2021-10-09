@@ -1,5 +1,4 @@
-const path = require('path');
-const projectPath = './node_modules/@uniflow-io/uniflow-client' //path.dirname(require.resolve("@uniflow-io/uniflow-client"));
+const projectPath = '.'
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const _ = require('lodash');
 const fs = require('fs');
