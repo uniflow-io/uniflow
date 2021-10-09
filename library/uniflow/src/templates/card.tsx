@@ -1,45 +1,7 @@
-import React from 'react';
-import Card, { CardProps } from '@uniflow-io/uniflow-client/src/views/library/card';
-import { graphql, PageProps } from 'gatsby';
-import { withPage } from '@uniflow-io/uniflow-client/src/helpers';
+import { graphql } from 'gatsby'
+import Page from '@uniflow-io/uniflow-client/src/templates/card'
 
-export interface CardTemplateData {
-  logo: CardProps['logo'];
-  localLibrary: {
-    nodes: CardProps['library'];
-  };
-  localCard: CardProps['card'];
-}
-
-export default ({ data, location }: PageProps<CardTemplateData>) => {
-  const { /*library, */ localLibrary, /*card, */ localCard, logo } = data;
-  let realCard: CardProps['card'] = {
-    //...card,
-    ...localCard,
-    official: false,
-  };
-  if (localCard) {
-    realCard = {
-      ...localCard,
-      official: true,
-    };
-  }
-
-  const CardPage = withPage<CardProps>(Card, 'card', {
-    location,
-    title: realCard.name,
-    description: realCard.description,
-  });
-
-  const allLibrary = {};
-  /*library.nodes.forEach(card => {
-    allLibrary[card.fields.slug] = card;
-  });*/
-  localLibrary.nodes.forEach((card) => {
-    allLibrary[card.fields.slug] = card;
-  });
-  return <CardPage library={Object.values(allLibrary)} card={realCard} logo={logo} />;
-};
+export default Page;
 
 /*
     library: allNpmPackage(filter: {deprecated: {eq: "false"}}) {

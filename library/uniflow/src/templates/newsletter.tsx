@@ -1,23 +1,7 @@
-import React from 'react';
-import Newsletter, { NewsletterProps } from '@uniflow-io/uniflow-client/src/views/newsletter';
-import { graphql, PageProps } from 'gatsby';
-import { withPage } from '@uniflow-io/uniflow-client/src/helpers';
+import { graphql } from 'gatsby'
+import Page from '@uniflow-io/uniflow-client/src/templates/newsletter'
 
-export interface NewsLetterTemplateData {
-  newsletter: NewsletterProps['newsletter'];
-}
-
-export default ({ data, location }: PageProps<NewsLetterTemplateData>) => {
-  const { newsletter } = data;
-
-  const NewsletterPage = withPage<NewsletterProps>(Newsletter, 'newsletter', {
-    location,
-    title: newsletter.frontmatter.title,
-    description: newsletter.excerpt,
-  });
-
-  return <NewsletterPage newsletter={newsletter} />;
-};
+export default Page;
 
 export const query = graphql`
   query ($id: String) {

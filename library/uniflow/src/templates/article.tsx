@@ -1,34 +1,7 @@
-import React from 'react';
-import Article, { ArticleProps } from '@uniflow-io/uniflow-client/src/views/blog/article';
-import { graphql, PageProps } from 'gatsby';
-import { withPage } from '@uniflow-io/uniflow-client/src/helpers';
+import { graphql } from 'gatsby'
+import Page from '@uniflow-io/uniflow-client/src/templates/article'
 
-export interface ArticleTemplateData {
-  article: ArticleProps['article'];
-}
-
-export interface ArticleTemplateContext {
-  previous: ArticleProps['previous'];
-  next: ArticleProps['next'];
-}
-
-export default ({
-  data,
-  location,
-  pageContext: { previous, next },
-}: PageProps<ArticleTemplateData, ArticleTemplateContext>) => {
-  const { article } = data;
-
-  const ArticlePage = withPage<ArticleProps>(Article, 'article', {
-    location,
-    title: article.frontmatter.title,
-    description: article.excerpt,
-    image: article.frontmatter.coverSeo.publicURL,
-    type: 'article',
-  });
-
-  return <ArticlePage article={article} previous={previous} next={next} />;
-};
+export default Page;
 
 export const query = graphql`
   query ($id: String) {

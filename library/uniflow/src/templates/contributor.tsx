@@ -1,25 +1,7 @@
-import React from 'react';
-import Contributor, { ContributorProps } from '@uniflow-io/uniflow-client/src/views/blog/contributor';
-import { graphql, PageProps } from 'gatsby';
-import { withPage } from '@uniflow-io/uniflow-client/src/helpers';
+import { graphql } from 'gatsby'
+import Page from '@uniflow-io/uniflow-client/src/templates/contributor'
 
-export interface ContributorTemplateData {
-  contributor: ContributorProps['contributor'];
-  articles: ContributorProps['articles'];
-}
-
-export default ({ data, location }: PageProps<ContributorTemplateData>) => {
-  const { contributor } = data;
-
-  const ContributorPage = withPage<ContributorProps>(Contributor, 'contributor', {
-    location,
-    title: contributor.name,
-    description: contributor.description,
-    image: contributor.image.publicURL,
-  });
-
-  return <ContributorPage contributor={contributor} articles={data.articles} />;
-};
+export default Page;
 
 export const query = graphql`
   query ($slug: String) {
