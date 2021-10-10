@@ -1,7 +1,6 @@
 {
     "entryFile": "./src/api/routes.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
-    "outputDirectory": "./src/api",
     "controllerPathGlobs": ["./src/api/controller/**/*-controller.ts"],
     "spec": {
         "outputDirectory": "./dist",
@@ -28,7 +27,7 @@
     },
     "routes": {
         "basePath": "/api",
-        "routesDir": "./src",
+        "routesDir": "./src/api",
         "middleware": "express",
         "iocModule": "src/api/container",
         "authenticationModule": "src/api/security/authentication"
