@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import * as open from 'open'
+import open from 'open'
 import * as Config from '@oclif/config'
 import { default as Container } from '../container'
 import { Command, flags } from '@oclif/command'

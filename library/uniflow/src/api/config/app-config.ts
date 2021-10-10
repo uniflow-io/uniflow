@@ -1,4 +1,4 @@
-import * as convict from 'convict';
+import convict from 'convict';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { Inject, Service } from 'typedi';

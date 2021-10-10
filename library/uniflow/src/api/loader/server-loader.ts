@@ -1,7 +1,7 @@
 import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
-import * as express from 'express';
-import * as helmet from 'helmet';
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
 import * as swaggerUi from 'swagger-ui-express';
 import { Service } from 'typedi';
 import { NextFunction, Request, Response } from "express";

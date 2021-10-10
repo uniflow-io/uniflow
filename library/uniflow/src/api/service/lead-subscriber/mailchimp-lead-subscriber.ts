@@ -1,5 +1,5 @@
 import * as mailchimpMarketing from '@mailchimp/mailchimp_marketing'
-import * as md5 from 'md5'
+import md5 from 'md5'
 import * as fs from 'fs'
 import * as path from 'path'
 import { unified } from 'unified'
@@ -430,7 +430,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     return items.emails
   }
 
-  private imagesInline(): Transformer {
+  /*private imagesInline(): Transformer {
     const transformer = async (node: any, file: VFile): Promise<Node> => {
       if (!file.path) {
         return node
@@ -464,7 +464,7 @@ export default class MailchimpLeadSubscriber implements LeadSubscriberInterface 
     }
 
     return transformer
-  }
+  }*/
 
   /**
    * this :

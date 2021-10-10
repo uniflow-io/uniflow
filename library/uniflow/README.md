@@ -1,7 +1,7 @@
 uniflow
 --------------
 
-This is official Uniflow Client for Uniflow
+This is official Uniflow Cli
 
 ## Documentation
 
