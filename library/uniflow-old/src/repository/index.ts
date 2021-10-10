@@ -1,0 +1,10 @@
+export { default as ClientRepository } from './client-repository';
+export { default as ConfigRepository } from './config-repository';
+export { default as ContactRepository } from './contact-repository';
+export { default as FolderRepository } from './folder-repository';
+export { default as LeadRepository } from './lead-repository';
+export { default as ProgramClientRepository } from './program-client-repository';
+export { default as ProgramRepository } from './program-repository';
+export { default as ProgramTagRepository } from './program-tag-repository';
+export { default as TagRepository } from './tag-repository';
+export { default as UserRepository } from './user-repository';
