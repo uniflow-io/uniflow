@@ -3,8 +3,8 @@
   "private": true,
   "homepage": "https://uniflow.io",
   "devDependencies": {
-    "@types/faker": "^5.5.8",
-    "faker": "^5.5.3",
-    "lerna": "^4.0.0"
+    "@types/faker": "^6.6.11",
+    "faker": "^6.6.6",
+    "lerna": "^8.2.1"
   }
 }
