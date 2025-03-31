@@ -1,48 +1,47 @@
-##
-##usage :
-##-------
+.PHONY: run
 
-MAKE = make
-NODE_ENV ?= local
-NPM_BIN = ./node_modules/.bin
+DOCKER_COMPOSE ?= docker compose
+DOCKER_USER ?= "$(shell id -u):$(shell id -g)"
+ENV ?= "dev"
 
-build: clean ## build
-	if [ ! -f .env.$(NODE_ENV) ]; then cp .env .env.$(NODE_ENV); fi
-	$(NPM_BIN)/tsoa spec-and-routes
-	$(NPM_BIN)/tsc -b
-	$(NPM_BIN)/oclif-dev manifest
+init:
+	@make -s docker-compose-check
+	@if [ ! -e compose.override.yml ]; then \
+		cp compose.override.dist.yml compose.override.yml; \
+	fi
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp composer install --no-interaction --no-scripts
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm nodejs
+	@make -s install
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) up -d
 
-clean: ## clean
-	rm -rf dist database.sqlite oclif.manifest.json
+run:
+	@make -s up
 
-dev: ## dev
-	NODE_ENV=development $(NPM_BIN)/nodemon
+debug:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) -f compose.yml -f compose.override.yml -f compose.debug.yml up -d
 
-serve: build ## serve
-	./bin/uniflow-api
+up:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) up -d
 
-typeorm: ## typeorm
-	$(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts $(CMD)
+down:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down
 
-fixtures: ## fixtures
-	$(MAKE) typeorm CMD="schema:drop"
-	$(MAKE) typeorm CMD="schema:sync"
-	$(NPM_BIN)/ts-node --transpile-only ./src/fixtures.ts
+install:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp bin/console sylius:install -s default -n
 
-test: ## test
-	if [ -f database.test.sqlite ]; then rm database.test.sqlite; fi
-	NODE_ENV=test $(MAKE) fixtures
-	NODE_ENV=test $(NPM_BIN)/jest --maxWorkers=1
+clean:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down -v
 
-uniflow-api-start: build ## uniflow-api-start
-	./bin/uniflow-api start
+php-shell:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec frankenphp sh
 
-uniflow-api-leads-sync: build ## uniflow-api-leads-sync
-	./bin/uniflow-api leads-sync
+node-shell:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm -i nodejs sh
 
-# DEFAULT
-.DEFAULT_GOAL := help
-help:
-	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+node-watch:
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm -i nodejs "npm run watch"
 
-##
+docker-compose-check:
+	@$(DOCKER_COMPOSE) version >/dev/null 2>&1 || (echo "Please install docker compose binary or set DOCKER_COMPOSE=\"docker-compose\" for legacy binary" && exit 1)
+	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
+	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
