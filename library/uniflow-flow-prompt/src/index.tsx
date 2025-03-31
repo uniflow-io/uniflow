@@ -1,11 +1,11 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
-import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import FlowHeader from '../../uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import { MouseEventHandler } from 'react'
 import { ChangeEventHandler } from 'react'
-import { useStateRef } from '@uniflow-io/uniflow-client/src/hooks/use-state-ref'
-import { ClientType } from '@uniflow-io/uniflow-client/src/models/interfaces'
+import { useStateRef } from '../../uniflow-client/src/hooks/use-state-ref'
+import { ClientType } from '../../uniflow-client/src/models/interfaces'
 
 enum PromptChoicheType {
   STRING = 'string',
@@ -38,7 +38,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
       if (!data || !data.variable) {
         return ''
       }
-    
+
       if (client === ClientType.NODE) {
         return `
         (function() {
@@ -47,17 +47,17 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
               input: process.stdin,
               output: process.stdout
             });
-        
+
             rl.question(${
               data.messageVariable
                 ? data.messageVariable
                 : JSON.stringify('prompt')
             } + ': ', function(answer) {
               ${data.variable} = answer
-        
+
               rl.close()
             });
-        
+
             rl.on('close', () => {
               resolve()
             })

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useImperativeHandle } from 'react'
-import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import FlowHeader from '../../uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import LZString from 'lz-string'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -32,12 +32,12 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
       if (!data || !data.variable) {
         return ''
       }
-    
+
       let assets = data?.assets?.reduce(function(data, asset) {
         data[asset[0]] = asset[1]
         return data
       }, {}) || {}
-    
+
       return data.variable + ' = ' + JSON.stringify(assets)
     },
     onExecute: async (runner: FlowRunner) => {

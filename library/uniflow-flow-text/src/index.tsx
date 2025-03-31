@@ -1,7 +1,7 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import FlowHeader from '../../uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 
 export interface TextFlowData {
   variable?: string
@@ -23,10 +23,10 @@ const TextFlow = flow<TextFlowData>((props, ref) => {
       if (!data || !data.variable) {
         return ''
       }
-    
+
       let text = data.text || ''
       text = JSON.stringify(text)
-    
+
       return data.variable + ' = ' + text
     },
     onExecute: async (runner: FlowRunner) => {

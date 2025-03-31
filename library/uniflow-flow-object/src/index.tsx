@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useImperativeHandle } from 'react'
-import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import FlowHeader from '../../uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import PropertyAccessor from 'property-accessor'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,14 +22,14 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     onDeserialize: (data?: string) => {
       let [variable, object] = data ? JSON.parse(data) : [undefined, []]
       let keyValueList = reverseTransform(object)
-  
+
       return { variable, keyValueList }
     },
     onCompile: () => {
       if (!data || !data.variable) {
         return ''
       }
-    
+
       let object = transform()
       return data.variable + ' = ' + JSON.stringify(object)
     },
@@ -46,7 +46,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
       }
     }
   }), [data])
-  
+
   const transform = (): {[key: string]: string|number} => {
     return data?.keyValueList?.reduce(function(object, item) {
       if (item.key) {

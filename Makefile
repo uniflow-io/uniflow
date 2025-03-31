@@ -11,11 +11,11 @@ clean: ## clean
 
 install: ## install
 	npm install
-	$(LERNA) exec -- npm install
+	$(LERNA) exec --ignore uniflow --ignore uniflow-api -- npm install
 
 upgrade: ## upgrade
 	npx npm-check-updates -u
-	$(LERNA) exec -- npx npm-check-updates -u
+	$(LERNA) exec --ignore uniflow --ignore uniflow-api -- npx npm-check-updates -u
 
 lint: ## lint
 	$(LERNA) exec -- npm run lint
