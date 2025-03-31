@@ -11,7 +11,11 @@ clean: ## clean
 
 install: ## install
 	npm install
-	$(LERNA) bootstrap
+	$(LERNA) exec -- npm install
+
+upgrade: ## upgrade
+	npx npm-check-updates -u
+	$(LERNA) exec -- npx npm-check-updates -u
 
 lint: ## lint
 	$(LERNA) exec -- npm run lint

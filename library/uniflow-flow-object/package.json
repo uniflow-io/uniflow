@@ -45,7 +45,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@uniflow-io/uniflow-client": "^1.1.15",
     "property-accessor": "^1.0.0",
-    "react": "^19.0.0"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.12"
