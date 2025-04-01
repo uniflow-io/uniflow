@@ -1,9 +1,9 @@
-import Highlight from 'prism-react-renderer';
+import { Highlight } from 'prism-react-renderer';
 import React, { FC } from 'react';
 import PrismCore from 'react-prism-editor';
 import { useApp } from '../contexts/app';
-import vsDark from 'prism-react-renderer/themes/vsDark';
-import vsLigth from 'prism-react-renderer/themes/vsLight';
+//import vsDark from 'prism-react-renderer/themes/vsDark';
+//import vsLigth from 'prism-react-renderer/themes/vsLight';
 import Prism from 'prismjs/components/prism-core';
 
 export interface EditorProps {
@@ -21,13 +21,13 @@ const Editor: FC<EditorProps> = (props) => {
   const app = useApp();
 
   let theme = 'default';
-  let highlightTheme = vsLigth;
+  //let highlightTheme = vsLigth;
   if (app.theme === 'dark') {
     theme = 'tomorrow';
-    highlightTheme = vsDark;
+    //highlightTheme = vsDark;
   } else if (app.theme === 'sepia') {
     theme = 'solarizedlight';
-    highlightTheme = vsLigth;
+    //highlightTheme = vsLigth;
   }
 
   //quick fix :
@@ -39,7 +39,11 @@ const Editor: FC<EditorProps> = (props) => {
   //cf https://github.com/lumia2046/react-prism-editor/pull/9
   if(readonly === true) {
     return (
-      <Highlight Prism={Prism} theme={highlightTheme} code={value} language="jsx">
+      <Highlight
+        prism={Prism}
+        code={value}
+        language="jsx"
+      >
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre className={className} style={style}>
             {tokens.map((line, i) => (

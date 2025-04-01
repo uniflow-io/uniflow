@@ -1,5 +1,6 @@
 const projectPath = '.'
 const { createFilePath } = require(`gatsby-source-filesystem`);
+const readingTime = require("reading-time")
 const _ = require('lodash');
 const fs = require('fs');
 const localPackages = '../';
@@ -86,6 +87,12 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions;
 
   if (node.internal.type === `Mdx`) {
+    createNodeField({
+      node,
+      name: `timeToRead`,
+      value: readingTime(node.body)
+    });
+
     const parent = getNode(node.parent);
 
     if (parent.internal.type === 'File') {
@@ -352,3 +359,13 @@ exports.onCreatePage = ({ page, actions }) => {
     resolve();
   });*/
 };
+
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions;
+
+  createTypes(`#graphql
+    type Mdx implements Node {
+      timeToRead: Float @proxy(from: "fields.timeToRead.minutes")
+    }
+  `)
+}
