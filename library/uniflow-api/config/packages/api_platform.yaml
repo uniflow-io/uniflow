@@ -1,4 +1,6 @@
 api_platform:
+    title: Uniflow API
+    version: 1.0.0
     mapping:
         paths:
             - '%kernel.project_dir%/config/api_platform'
@@ -8,3 +10,7 @@ api_platform:
         json: ['application/merge-patch+json']
     swagger:
         versions: [3]
+        api_keys:
+          apiKey:
+            name: Uniflow-Authorization
+            type: header

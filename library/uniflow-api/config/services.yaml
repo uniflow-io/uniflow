@@ -11,6 +11,13 @@ services:
         # fetching services directly from the container via $container->get() won't work
         public: false
 
+        bind:
+            $appOauthFacebookId:   '%env(resolve:APP_FACEBOOK_ID)%'
+            $appOauthGithubId:     '%env(resolve:APP_GITHUB_ID)%'
+            $appOauthGithubSecret: '%env(resolve:APP_GITHUB_SECRET)%'
+            $appOauthMediumId:     '%env(resolve:APP_MEDIUM_ID)%'
+            $appOauthMediumSecret: '%env(resolve:APP_MEDIUM_SECRET)%'
+
     _instanceof:
         Sylius\Bundle\ResourceBundle\Controller\ResourceController:
             autowire: false
