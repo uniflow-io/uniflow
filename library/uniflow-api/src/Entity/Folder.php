@@ -3,86 +3,50 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\User\ShopUser as User;
+use App\Repository\FolderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(
- *     name="folder",
- *     indexes={@ORM\Index(name="index_search", columns={"slug", "name"})}
- * )
- * @ORM\Entity(repositoryClass="App\Repository\FolderRepository")
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Table(name: 'folder')]
+#[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
+#[ORM\Entity(repositoryClass: FolderRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Folder
 {
     use TimestampTrait;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The name is required"
-     * )
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $name = '';
+    #[Assert\NotBlank(message: 'The name is required')]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    protected string $name = '';
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The slug is required"
-     * )
-     * @Gedmo\Slug(fields={"slug"}, unique=true, updatable=true)
-     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
-     */
-    protected $slug = '';
+    #[Assert\NotBlank(message: 'The slug is required')]
+    #[Slug(fields: ['slug'], unique: true, updatable: true)]
+    #[ORM\Column(type: 'string', length: 255, unique: true, nullable: false)]
+    protected string $slug = '';
 
-    /**
-     * @var User
-     *
-     * @Assert\NotBlank(
-     *     message="The user is required"
-     * )
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="folders", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
-     */
-    protected $user;
+    #[Assert\NotBlank(message: 'The user is required')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'folders', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    protected User $user;
 
-    /**
-     * @var Folder|null
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="children", cascade={"persist"})
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
-     */
-    protected $parent;
+    #[ORM\ManyToOne(targetEntity: Folder::class, inversedBy: 'children', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    protected ?Folder $parent = null;
 
-    /**
-     * @var Collection|Folder[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Folder", mappedBy="parent", cascade={"persist"})
-     */
-    protected $children;
+    #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'parent', cascade: ['persist'])]
+    protected Collection $children;
 
-    /**
-     * @var Collection|Program[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Program", mappedBy="folder", cascade={"persist"})
-     */
-    protected $programs;
+    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'folder', cascade: ['persist'])]
+    protected Collection $programs;
 
     public function __construct()
     {
@@ -90,7 +54,7 @@ class Folder
         $this->programs = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -141,7 +105,7 @@ class Folder
         return $this->parent;
     }
 
-    public function setParent($parent): self
+    public function setParent(?Folder $parent): self
     {
         $this->parent = $parent;
 
@@ -185,9 +149,6 @@ class Folder
         return $this;
     }
 
-    /**
-     * @return Collection|Program[]
-     */
     public function getPrograms(): Collection
     {
         return $this->programs;

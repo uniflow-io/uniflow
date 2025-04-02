@@ -2,129 +2,86 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\User\ShopUser as User;
+use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Slug;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups"={"program"}},
- *     collectionOperations={"get"},
- *     itemOperations={
- *         "get"={"security"="is_granted('view', object)"}
- *     },
- * )
- * @ORM\Table(
- *     name="program",
- *     indexes={@ORM\Index(name="index_search", columns={"slug", "name"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_slug", columns={"user_id", "slug"})}
- * )
- * @ORM\Entity(repositoryClass="App\Repository\ProgramRepository")
- * @UniqueEntity(fields={"user", "slug"}, message="The slug '{{ value }}' is already taken.")
- * @ORM\HasLifecycleCallbacks
- */
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Put(),
+        new Delete()
+    ]
+)]
+#[ORM\Table(name: 'program')]
+#[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
+#[ORM\UniqueConstraint(name: 'unique_slug', columns: ['user_id', 'slug'])]
+#[ORM\Entity(repositoryClass: ProgramRepository::class)]
+#[UniqueEntity(fields: ['user', 'slug'], message: 'The slug \'{{ value }}\' is already taken.')]
+#[ORM\HasLifecycleCallbacks]
 class Program
 {
     use TimestampTrait;
 
-    /**
-     * @var int|null
-     *
-     * @Groups({"program"})
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[Groups(['program'])]
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The name is required"
-     * )
-     * @Groups({"program"})
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $name = '';
+    #[Assert\NotBlank(message: 'The name is required')]
+    #[Groups(['program'])]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    protected string $name = '';
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The slug is required"
-     * )
-     * @Gedmo\Slug(fields={"slug"}, unique=true, updatable=true)
-     * @ORM\Column(type="string", length=255, unique=true, nullable=false)
-     */
-    protected $slug = '';
+    #[Assert\NotBlank(message: 'The slug is required')]
+    #[Slug(fields: ['slug'], unique: true, updatable: true)]
+    #[ORM\Column(type: 'string', length: 255, unique: true, nullable: false)]
+    protected string $slug = '';
 
-    /**
-     * @var User
-     *
-     * @Assert\NotBlank(
-     *     message="The user is required"
-     * )
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="programs", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
-     */
-    protected $user;
+    #[Assert\NotBlank(message: 'The user is required')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'programs', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    protected User $user;
 
-    /**
-     * @var Folder|null
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Folder", inversedBy="programs", cascade={"persist"})
-     * @ORM\JoinColumn(name="folder_id", referencedColumnName="id", onDelete="cascade")
-     */
-    protected $folder;
+    #[ORM\ManyToOne(targetEntity: Folder::class, inversedBy: 'programs', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'folder_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    protected ?Folder $folder = null;
 
-    /**
-     * @var Collection|Client[]
-     *
-     * @Assert\NotBlank(
-     *     message="The client can't be empty"
-     * )
-     * @ORM\ManyToMany(targetEntity="App\Entity\Client", inversedBy="clients", cascade={"persist"})
-     * @ORM\JoinTable(name="program_client")
-     */
-    protected $clients;
+    #[Assert\NotBlank(message: 'The client can\'t be empty')]
+    #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'clients', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'program_client')]
+    protected Collection $clients;
 
-    /**
-     * @var Collection|Tag[]
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="programs", cascade={"persist"})
-     * @ORM\JoinTable(name="program_tag")
-     */
-    protected $tags;
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'programs', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'program_tag')]
+    protected Collection $tags;
 
-    /**
-     * @var string|null
-     *
-     * @Groups({"program"})
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $description;
+    #[Groups(['program'])]
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $description = null;
 
-    /**
-     * @var boolean
-     *
-     * @Groups({"program"})
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    protected $public = false;
+    #[Groups(['program'])]
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    protected bool $public = false;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $data;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $data = null;
 
     public function __construct()
     {
@@ -132,7 +89,7 @@ class Program
         $this->tags = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
@@ -206,9 +163,6 @@ class Program
         return $this;
     }
 
-    /**
-     * @return Collection|Client[]
-     */
     public function getClients(): Collection
     {
         return $this->clients;
@@ -230,9 +184,6 @@ class Program
         return $this;
     }
 
-    /**
-     * @return Collection|Tag[]
-     */
     public function getTags(): Collection
     {
         return $this->tags;

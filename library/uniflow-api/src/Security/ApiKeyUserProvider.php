@@ -4,9 +4,11 @@ namespace App\Security;
 
 use App\Services\UserService;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use App\Entity\User\ShopUser;
+use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
 
 class ApiKeyUserProvider implements UserProviderInterface
 {
@@ -21,24 +23,33 @@ class ApiKeyUserProvider implements UserProviderInterface
         $this->userService = $userService;
     }
 
-    public function loadUserByApiKey($apiKey)
+    public function loadUserByApiKey($apiKey): UserInterface
     {
-        // Look up the username based on the token in the database, via
-        // an API call, or do something entirely different
-        return $this->userService->findOneByApiKey($apiKey);
+        $user = $this->userService->findOneByApiKey($apiKey);
+        if (!$user instanceof SyliusUserInterface) {
+            throw new UserNotFoundException();
+        }
+        return $user;
+    }
+
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        return $this->loadUserByUsername($identifier);
     }
 
     /**
-     * @param string $username
-     * @return mixed|UserInterface
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @deprecated since Symfony 5.3, use loadUserByIdentifier() instead
      */
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username): UserInterface
     {
-        return $this->userService->findOneByEmailOrUsername($username);
+        $user = $this->userService->findOneByEmailOrUsername($username);
+        if (!$user instanceof SyliusUserInterface) {
+            throw new UserNotFoundException();
+        }
+        return $user;
     }
 
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): UserInterface
     {
         // this is used for storing authentication in the session
         // but in this example, the token is sent in each request,
@@ -47,8 +58,8 @@ class ApiKeyUserProvider implements UserProviderInterface
         throw new UnsupportedUserException();
     }
 
-    public function supportsClass($class)
+    public function supportsClass(string $class): bool
     {
-        return User::class === $class;
+        return ShopUser::class === $class;
     }
 }

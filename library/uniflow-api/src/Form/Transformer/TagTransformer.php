@@ -21,25 +21,32 @@ class TagTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param Tag[] $tags
-     * @return mixed|string
+     * @param Tag[]|null $tags
+     * @return mixed
      */
-    public function transform($tags)
+    public function transform($tags): mixed
     {
-        $arrayTags = [];
+        if (null === $tags) {
+            return [];
+        }
 
+        $arrayTags = [];
         foreach ($tags as $tag) {
             $arrayTags[] = $tag->getName();
         }
-
         return $arrayTags;
     }
 
     /**
-     * Transforms the value the users has typed to a value that suits the field in the Document
+     * @param mixed $arrayTags
+     * @return ArrayCollection
      */
-    public function reverseTransform($arrayTags)
+    public function reverseTransform($arrayTags): mixed
     {
+        if (null === $arrayTags) {
+            return new ArrayCollection();
+        }
+
         $tags = new ArrayCollection();
 
         foreach ($arrayTags as $tagName) {

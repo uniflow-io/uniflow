@@ -29,20 +29,18 @@ class PathTransformer implements DataTransformerInterface
 
     /**
      * @param Folder|null $value
-     * @return array
+     * @return array|mixed
      */
-    public function transform($value)
+    public function transform($value): mixed
     {
         return $this->folderService->toPath($value);
     }
 
     /**
      * @param array $value
-     * @return ArrayCollection|mixed
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return Folder|null
      */
-    public function reverseTransform($value)
+    public function reverseTransform($value): mixed
     {
         return $this->folderService->findOneByUserAndPath($this->user, $value);
     }

@@ -21,25 +21,32 @@ class ClientTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param Client[] $clients
-     * @return mixed|string
+     * @param Client[]|null $clients
+     * @return mixed
      */
-    public function transform($clients)
+    public function transform($clients): mixed
     {
-        $arrayClients = [];
+        if (null === $clients) {
+            return [];
+        }
 
+        $arrayClients = [];
         foreach ($clients as $client) {
             $arrayClients[] = $client->getName();
         }
-
         return $arrayClients;
     }
 
     /**
-     * Transforms the value the users has typed to a value that suits the field in the Document
+     * @param mixed $arrayClients
+     * @return ArrayCollection
      */
-    public function reverseTransform($arrayClients)
+    public function reverseTransform($arrayClients): mixed
     {
+        if (null === $arrayClients) {
+            return new ArrayCollection();
+        }
+
         $clients = new ArrayCollection();
 
         foreach ($arrayClients as $clientName) {

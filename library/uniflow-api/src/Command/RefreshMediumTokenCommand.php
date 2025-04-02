@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Services\ConfigService;
 use GuzzleHttp\Client;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,25 +13,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[AsCommand(
+    name: 'app:refresh-medium-token',
+    description: 'Refresh Medium token'
+)]
 class RefreshMediumTokenCommand extends Command
 {
-    protected static $defaultName = 'app:refresh-medium-token';
-
-    /** @var string */
-    protected $appOauthMediumId;
-
-    /** @var string */
-    protected $appOauthMediumSecret;
-
-    /** @var ConfigService */
-    protected $configService;
-
-    /** @var HttpClientInterface */
-    protected $httpClient;
+    private string $appOauthMediumId;
+    private string $appOauthMediumSecret;
+    private ConfigService $configService;
+    private HttpClientInterface $httpClient;
 
     public function __construct(
-        $appOauthMediumId,
-        $appOauthMediumSecret,
+        string $appOauthMediumId,
+        string $appOauthMediumSecret,
         ConfigService $configService,
         HttpClientInterface $httpClient
     ) {
@@ -40,13 +36,6 @@ class RefreshMediumTokenCommand extends Command
         $this->httpClient = $httpClient;
 
         parent::__construct();
-    }
-
-    protected function configure()
-    {
-        $this
-            ->setDescription('Refresh Medium token')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

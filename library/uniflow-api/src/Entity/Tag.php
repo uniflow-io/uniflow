@@ -3,61 +3,44 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Table(
- *     name="tag",
- *     indexes={@ORM\Index(name="index_search_tags", columns={"name"})}
- * )
- * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
- * @UniqueEntity("name", message="The name '{{ value }}' is already taken.")
- */
+#[ORM\Table(name: 'tag')]
+#[ORM\Index(name: 'index_search_tags', columns: ['name'])]
+#[ORM\Entity(repositoryClass: TagRepository::class)]
+#[UniqueEntity('name', message: 'The name \'{{ value }}\' is already taken.')]
 class Tag
 {
     use TimestampTrait;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The name is required"
-     * )
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    protected $name = '';
+    #[Assert\NotBlank(message: 'The name is required')]
+    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
+    protected string $name = '';
 
-    /**
-     * @var Collection|Program[]
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Program", mappedBy="tags", cascade={"persist"})
-     */
-    protected $programs;
+    #[ORM\ManyToMany(targetEntity: Program::class, mappedBy: 'tags', cascade: ['persist'])]
+    protected Collection $programs;
 
     public function __construct()
     {
         $this->programs = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -67,7 +50,7 @@ class Tag
         return $this->name;
     }
 
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -88,9 +71,6 @@ class Tag
         return $this;
     }
 
-    /**
-     * @return Collection|Program[]
-     */
     public function getPrograms(): Collection
     {
         return $this->programs;

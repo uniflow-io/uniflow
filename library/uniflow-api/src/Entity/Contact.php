@@ -3,46 +3,29 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Table(name="contact")
- * @ORM\Entity(repositoryClass="App\Repository\ContactRepository")
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Table(name: 'contact')]
+#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Contact
 {
     use TimestampTrait;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The name is required"
-     * )
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    protected $email = '';
+    #[Assert\NotBlank(message: 'The name is required')]
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    protected string $email = '';
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank(
-     *     message="The name is required"
-     * )
-     * @ORM\Column(type="text", nullable=false)
-     */
-    protected $message = '';
+    #[Assert\NotBlank(message: 'The name is required')]
+    #[ORM\Column(type: 'text', nullable: false)]
+    protected string $message = '';
 
     public function getId(): ?int
     {

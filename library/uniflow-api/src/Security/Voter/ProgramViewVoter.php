@@ -15,7 +15,7 @@ class ProgramViewVoter extends Voter
     /**
      * @inheritDoc
      */
-    protected function supports(string $attribute, $subject)
+    protected function supports(string $attribute, $subject): bool
     {
         return $attribute === self::VIEW && $subject instanceof Program;
     }
@@ -24,7 +24,7 @@ class ProgramViewVoter extends Voter
      * @inheritDoc
      * @var Program $subject
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         if($subject->getPublic())
         {

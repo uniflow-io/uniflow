@@ -11,16 +11,15 @@ use GuzzleHttp\Client;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\LogicException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SecurityController extends AbstractController
@@ -49,11 +48,8 @@ class SecurityController extends AbstractController
     /** @var JWTTokenManagerInterface */
     protected $jwtTokenManager;
 
-    /** @var UserPasswordEncoderInterface */
-    protected $userPasswordEncoder;
-
-    /** @var Session */
-    protected $session;
+    /** @var UserPasswordHasherInterface */
+    protected $userPasswordHasher;
 
     /** @var HttpClientInterface */
     protected $httpClient;
@@ -67,8 +63,7 @@ class SecurityController extends AbstractController
         UserService $userService,
         ConfigService $configService,
         JWTTokenManagerInterface $jwtTokenManager,
-        UserPasswordEncoderInterface $userPasswordEncoder,
-        SessionInterface $session,
+        UserPasswordHasherInterface $userPasswordHasher,
         HttpClientInterface $httpClient
     ) {
         $this->appOauthFacebookId = $appOauthFacebookId;
@@ -79,8 +74,7 @@ class SecurityController extends AbstractController
         $this->userService = $userService;
         $this->configService = $configService;
         $this->jwtTokenManager = $jwtTokenManager;
-        $this->userPasswordEncoder = $userPasswordEncoder;
-        $this->session = $session;
+        $this->userPasswordHasher = $userPasswordHasher;
         $this->httpClient = $httpClient;
     }
     /**
@@ -146,13 +140,8 @@ class SecurityController extends AbstractController
             $user = new User();
             $user->setFacebookId($facebookId);
             $user->setEmail($facebookEmail);
-            $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid('uniflow', true)));
             $this->userService->save($user);
-
-            $this->session->getFlashBag()->add(
-                'notice',
-                'User registered !'
-            );
         } elseif ($user->getFacebookId() === null) {
             $user->setFacebookId($facebookId);
             $this->userService->save($user);
@@ -231,13 +220,8 @@ class SecurityController extends AbstractController
             $user = new User();
             $user->setGithubId($githubId);
             $user->setEmail($githubEmail);
-            $user->setPassword($this->userPasswordEncoder->encodePassword($user, uniqid('uniflow', true)));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid('uniflow', true)));
             $this->userService->save($user);
-
-            $this->session->getFlashBag()->add(
-                'notice',
-                'User registered !'
-            );
         } elseif ($user->getGithubId() === null) {
             $user->setGithubId($githubId);
             $this->userService->save($user);
@@ -328,13 +312,8 @@ class SecurityController extends AbstractController
         }
 
         if ($form->isValid()) {
-            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPassword()));
             $this->userService->save($user);
-
-            $this->session->getFlashBag()->add(
-                'notice',
-                'User registered !'
-            );
 
             return new JsonResponse([
                 'token' => $this->jwtTokenManager->create($user)

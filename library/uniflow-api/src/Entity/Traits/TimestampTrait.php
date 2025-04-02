@@ -3,26 +3,18 @@
 namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Timestampable;
 use DateTime;
 
 trait TimestampTrait
 {
-    /**
-     * @var DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    protected $created;
+    #[Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created', type: 'datetime', nullable: false)]
+    protected DateTime $created;
 
-    /**
-     * @var DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    protected $updated;
+    #[Timestampable(on: 'update')]
+    #[ORM\Column(name: 'updated', type: 'datetime', nullable: false)]
+    protected DateTime $updated;
 
     public function getCreated(): DateTime
     {

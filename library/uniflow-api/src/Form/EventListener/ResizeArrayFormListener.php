@@ -11,12 +11,17 @@ use Symfony\Component\Form\FormInterface;
 
 class ResizeArrayFormListener extends ResizeFormListener
 {
+    protected $type;
+    protected $options;
+
     public function __construct($type = '', array $options = [], bool $allowAdd = false, bool $allowDelete = false, $deleteEmpty = false)
     {
         parent::__construct($type, $options, $allowAdd, $allowDelete, $deleteEmpty);
+        $this->type = $type;
+        $this->options = $options;
     }
 
-    public function preSetData(FormEvent $event)
+    public function preSetData(FormEvent $event): void
     {
         $form = $event->getForm();
         $data = $event->getData();

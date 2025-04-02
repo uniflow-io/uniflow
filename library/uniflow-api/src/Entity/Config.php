@@ -3,35 +3,26 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Repository\ConfigRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="config")
- * @ORM\Entity(repositoryClass="App\Repository\ConfigRepository")
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Table(name: 'config')]
+#[ORM\Entity(repositoryClass: ConfigRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Config
 {
     use TimestampTrait;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $mediumToken;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $mediumToken = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $mediumRefreshToken;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $mediumRefreshToken = null;
 
     public function getId(): ?int
     {

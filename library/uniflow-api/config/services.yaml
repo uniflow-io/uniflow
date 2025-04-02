@@ -35,3 +35,13 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    Symfony\Component\Cache\Adapter\TagAwareAdapter:
+        arguments:
+            - '@cache.app'
+
+    # Explicitly define the kernel service
+    kernel:
+        class: App\Kernel
+        public: true
+        synthetic: true
