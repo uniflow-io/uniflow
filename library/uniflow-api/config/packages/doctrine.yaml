@@ -10,6 +10,9 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
+#        enable_lazy_ghost_objects: true
+#        controller_resolver:
+#            auto_mapping: true
         entity_managers:
             default:
                 auto_mapping: true

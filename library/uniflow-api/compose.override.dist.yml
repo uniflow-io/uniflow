@@ -56,9 +56,9 @@ services:
 #          - ./frankenphp-config:/frankenphp-config:rw
           - frankenphp_config:/frankenphp-config
         ports:
-          - "80:80" # HTTP
-          - "443:443" # HTTPS
-          - "443:443/udp" # HTTP/3
+          - "8017:80" # HTTP
+          - "8018:443" # HTTPS
+          - "8018:443/udp" # HTTP/3
         command: >
           sh -c "chown -R 1000:1000 /frankenphp-data /frankenphp-config &&
                  mkdir -p /frankenphp-data/caddy/pki /frankenphp-config/caddy &&
@@ -67,7 +67,7 @@ services:
         volumes:
             - mysql-data:/var/lib/mysql:rw
         ports:
-            - "3306:3306"
+            - "8086:3306"
     nodejs:
         image: node:${NODE_VERSION:-22}-alpine
         user: ${DOCKER_USER:-1000:1000}
