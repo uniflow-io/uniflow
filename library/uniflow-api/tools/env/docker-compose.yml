@@ -1,0 +1,9 @@
+services:
+  mysql:
+    container_name: darkwood-com_mysql
+    hostname: darkwood-com_mysql
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ../../var/db:/var/lib/mysql

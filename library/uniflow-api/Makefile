@@ -1,5 +1,5 @@
 ##
-##usage :
+##Dev
 ##-------
 
 .PHONY: run
@@ -49,6 +49,18 @@ docker-compose-check: ## docker-compose-check
 	@$(DOCKER_COMPOSE) version >/dev/null 2>&1 || (echo "Please install docker compose binary or set DOCKER_COMPOSE=\"docker-compose\" for legacy binary" && exit 1)
 	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
 	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
+##
+##DevOps
+##-------------
+
+php-cs-fixer: ## Check and fix coding styles using PHP CS Fixer
+	composer php-cs-fixer
+
+phpstan: ## Execute PHPStan analysis
+	composer phpstan
+
+phpunit: ## Launch PHPUnit test suite
+	composer phpunit
 
 # DEFAULT
 .DEFAULT_GOAL := help
