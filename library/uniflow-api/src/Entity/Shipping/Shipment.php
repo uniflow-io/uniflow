@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\Shipment as BaseShipment;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_shipment')]
-class Shipment extends BaseShipment
-{
-}
+class Shipment extends BaseShipment {}

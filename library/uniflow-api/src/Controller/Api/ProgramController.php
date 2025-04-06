@@ -1,33 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
-use App\Services\FolderService;
-use App\Services\UserService;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Form\ProgramType;
 use App\Entity\Program;
+use App\Entity\User;
+use App\Form\ProgramType;
+use App\Services\FolderService;
 use App\Services\ProgramService;
 use App\Services\TagService;
-use App\Entity\User;
+use App\Services\UserService;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Encoder\JsonDecode;
-use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+
+use function count;
+use function in_array;
 
 class ProgramController extends AbstractController
 {
-    public function __construct(protected \App\Services\ProgramService $programService, protected \App\Services\TagService $tagService, protected \App\Services\UserService $userService, protected \App\Services\FolderService $folderService)
-    {
-    }
+    public function __construct(protected ProgramService $programService, protected TagService $tagService, protected UserService $userService, protected FolderService $folderService) {}
 
     #[Route(path: '/api/program/{username}/list', name: 'api_program_list', methods: ['GET'])]
-    public function list(Request $request, $username = 'me'): \Symfony\Component\HttpFoundation\JsonResponse
+    public function list(Request $request, $username = 'me'): JsonResponse
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -39,7 +41,7 @@ class ProgramController extends AbstractController
             $fetchUser = $user;
         } else {
             $fetchUser = $this->userService->findOneByUsername($username);
-            if (is_null($fetchUser)) {
+            if (null === $fetchUser) {
                 throw new NotFoundHttpException();
             }
         }
@@ -63,7 +65,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route(path: '/api/program/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
-    public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): \Symfony\Component\HttpFoundation\JsonResponse
+    public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): JsonResponse
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -82,7 +84,7 @@ class ProgramController extends AbstractController
 
         $client = $request->get('client');
 
-        $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], function ($path, $slug) {
+        $path = array_reduce([$slug1, $slug2, $slug3, $slug4, $slug5], static function ($path, $slug) {
             if ($slug) {
                 $path[] = $slug;
             }
@@ -130,33 +132,8 @@ class ProgramController extends AbstractController
             'folder' => $parentFolder ? $this->folderService->getJsonFolder($parentFolder) : null,
             'children' => $children,
         ];
+
         return new JsonResponse($data);
-    }
-
-    private function manage(Request $request, Program $entity): JsonResponse
-    {
-        $form = $this->createForm(ProgramType::class, $entity, [
-            'csrf_protection' => false,
-        ]);
-
-        if (in_array($request->getMethod(), ['POST', 'PUT'])) {
-            $content = $request->getContent();
-            if (!empty($content)) {
-                $data = json_decode($content, true);
-                $form->submit($data);
-            } else {
-                $form->handleRequest($request);
-            }
-
-            if ($form->isValid()) {
-                $this->programService->save($entity);
-                $this->tagService->clean();
-
-                return new JsonResponse($this->programService->getJsonProgram($entity));
-            }
-        }
-
-        return new JsonResponse($this->programService->getJsonProgram($entity), Response::HTTP_BAD_REQUEST);
     }
 
     #[Route(path: '/api/program/create', name: 'api_program_create', methods: ['POST'])]
@@ -169,7 +146,7 @@ class ProgramController extends AbstractController
         }
 
         $entity = new Program();
-        $entity->setCreated(new \DateTime());
+        $entity->setCreated(new DateTime());
         $entity->setUser($user);
 
         return $this->manage($request, $entity);
@@ -203,7 +180,7 @@ class ProgramController extends AbstractController
 
         if (!$entity->getPublic()) {
             $user = $this->getUser();
-            if (!$user instanceof UserInterface || $entity->getUser()->getId() != $user->getId()) {
+            if (!$user instanceof UserInterface || $entity->getUser()->getId() !== $user->getId()) {
                 throw $this->createAccessDeniedException('You are not allowed to view this section.');
             }
         }
@@ -263,7 +240,7 @@ class ProgramController extends AbstractController
         $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
-            'programs' => array_map(fn(Program $program) => [
+            'programs' => array_map(fn (Program $program) => [
                 'name' => $program->getName(),
                 'slug' => $program->getSlug(),
                 'path' => $this->folderService->toPath($program->getFolder()),
@@ -271,5 +248,31 @@ class ProgramController extends AbstractController
                 'username' => $program->getUser()->getUsername(),
             ], $programs),
         ]);
+    }
+
+    private function manage(Request $request, Program $entity): JsonResponse
+    {
+        $form = $this->createForm(ProgramType::class, $entity, [
+            'csrf_protection' => false,
+        ]);
+
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $content = $request->getContent();
+            if (!empty($content)) {
+                $data = json_decode($content, true);
+                $form->submit($data);
+            } else {
+                $form->handleRequest($request);
+            }
+
+            if ($form->isValid()) {
+                $this->programService->save($entity);
+                $this->tagService->clean();
+
+                return new JsonResponse($this->programService->getJsonProgram($entity));
+            }
+        }
+
+        return new JsonResponse($this->programService->getJsonProgram($entity), Response::HTTP_BAD_REQUEST);
     }
 }

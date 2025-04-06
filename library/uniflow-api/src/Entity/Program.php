@@ -1,23 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Entity\Traits\TimestampTrait;
 use App\Entity\User\ShopUser as User;
 use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
@@ -25,7 +29,7 @@ use ApiPlatform\Metadata\Delete;
         new GetCollection(),
         new Post(),
         new Put(),
-        new Delete()
+        new Delete(),
     ]
 )]
 #[ORM\Table(name: 'program')]
@@ -34,24 +38,24 @@ use ApiPlatform\Metadata\Delete;
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity(fields: ['user', 'slug'], message: "The slug '{{ value }}' is already taken.")]
 #[ORM\HasLifecycleCallbacks]
-class Program implements \Stringable
+class Program implements Stringable
 {
     use TimestampTrait;
 
     #[Groups(['program'])]
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
     #[Groups(['program'])]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
     #[Assert\NotBlank(message: 'The slug is required')]
     #[Slug(fields: ['slug'], unique: true, updatable: true)]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     protected string $slug = '';
 
     #[Assert\NotBlank(message: 'The user is required')]
@@ -79,14 +83,14 @@ class Program implements \Stringable
     protected Collection $tags;
 
     #[Groups(['program'])]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $description = null;
 
     #[Groups(['program'])]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: false)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
     protected bool $public = false;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $data = null;
 
     public function __construct()

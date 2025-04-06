@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Tag;
 use App\Repository\TagRepository;
-use Doctrine\ORM\EntityManager;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TagService
@@ -15,14 +17,14 @@ class TagService
     protected $tagRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
+        protected EntityManagerInterface $em
     ) {
         $this->tagRepository = $this->em->getRepository(Tag::class);
     }
 
     public function save(Tag $tag): Tag
     {
-        $tag->setUpdated(new \DateTime());
+        $tag->setUpdated(new DateTime());
         $this->em->persist($tag);
         $this->em->flush();
 

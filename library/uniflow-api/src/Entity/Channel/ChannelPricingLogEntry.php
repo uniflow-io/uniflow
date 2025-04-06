@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\ChannelPricingLogEntry as BaseChannelPricingLogE
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_channel_pricing_log_entry')]
-class ChannelPricingLogEntry extends BaseChannelPricingLogEntry
-{
-}
+class ChannelPricingLogEntry extends BaseChannelPricingLogEntry {}

@@ -1,50 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Api;
 
-use App\Entity\User;
+use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Services\ContactService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Contact;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 class ContactController extends AbstractController
 {
-    public function __construct(protected \App\Services\ContactService $contactService, protected \Twig\Environment $twig, protected \Symfony\Component\Mailer\MailerInterface $mailer)
-    {
-    }
-
-    private function send(string $templateName, array $context, string $fromEmail, string $toEmail): void
-    {
-        $template = $this->twig->load($templateName);
-        $subject = $template->renderBlock('subject', $context);
-        $textBody = $template->renderBlock('body_text', $context);
-        $htmlBody = $template->renderBlock('body_html', $context);
-
-        $message = (new Email())
-            ->from($fromEmail)
-            ->to($toEmail)
-            ->subject($subject);
-
-        if (!empty($htmlBody)) {
-            $message
-                ->html($htmlBody)
-                ->text($textBody);
-        } else {
-            $message->html($textBody);
-        }
-
-        $this->mailer->send($message);
-    }
+    public function __construct(protected ContactService $contactService, protected Environment $twig, protected MailerInterface $mailer) {}
 
     #[Route(path: '/api/contact/create', name: 'api_contact_set', methods: ['POST'])]
     public function create(Request $request): JsonResponse
@@ -76,5 +50,30 @@ class ContactController extends AbstractController
         return new JsonResponse([
             'message' => $form->getErrors(true)->current()->getMessage(),
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    private function send(string $templateName, array $context, string $fromEmail, string $toEmail): void
+    {
+        $template = $this->twig->load($templateName);
+        $subject = $template->renderBlock('subject', $context);
+        $textBody = $template->renderBlock('body_text', $context);
+        $htmlBody = $template->renderBlock('body_html', $context);
+
+        $message = (new Email())
+            ->from($fromEmail)
+            ->to($toEmail)
+            ->subject($subject)
+        ;
+
+        if (!empty($htmlBody)) {
+            $message
+                ->html($htmlBody)
+                ->text($textBody)
+            ;
+        } else {
+            $message->html($textBody);
+        }
+
+        $this->mailer->send($message);
     }
 }

@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\ShopBillingData as BaseShopBillingData;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_shop_billing_data')]
-class ShopBillingData extends BaseShopBillingData
-{
-}
+class ShopBillingData extends BaseShopBillingData {}

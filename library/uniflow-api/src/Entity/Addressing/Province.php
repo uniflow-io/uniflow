@@ -9,6 +9,4 @@ use Sylius\Component\Addressing\Model\Province as BaseProvince;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_province')]
-class Province extends BaseProvince
-{
-}
+class Province extends BaseProvince {}

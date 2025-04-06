@@ -1,30 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'client')]
 #[ORM\Index(name: 'index_search_clients', columns: ['name'])]
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[UniqueEntity('name', message: "The name '{{ value }}' is already taken.")]
-class Client implements \Stringable
+class Client implements Stringable
 {
     use TimestampTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
     /**

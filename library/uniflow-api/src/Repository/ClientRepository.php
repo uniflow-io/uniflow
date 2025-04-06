@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Client;
@@ -20,7 +22,8 @@ class ClientRepository extends ServiceEntityRepository
         ;
 
         $qb->where('c.name = :name')
-            ->setParameter('name', $client);
+            ->setParameter('name', $client)
+        ;
 
         $query = $qb->getQuery();
 
@@ -37,7 +40,8 @@ class ClientRepository extends ServiceEntityRepository
         ;
 
         $qb->leftJoin('c.programs', 'p')
-            ->andWhere('p.id IS NULL');
+            ->andWhere('p.id IS NULL')
+        ;
 
         $query = $qb->getQuery();
 

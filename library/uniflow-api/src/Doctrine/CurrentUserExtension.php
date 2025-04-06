@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Doctrine;
 
@@ -10,6 +11,8 @@ use App\Entity\Program;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Core\Security;
 
+use function sprintf;
+
 class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     private $security;
@@ -19,12 +22,12 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
         $this->security = $security;
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?string $operationName = null)
     {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = [])
+    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, ?string $operationName = null, array $context = [])
     {
         $this->addWhere($queryBuilder, $resourceClass);
     }

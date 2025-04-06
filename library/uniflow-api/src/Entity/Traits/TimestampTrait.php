@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Traits;
 
+use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Timestampable;
-use DateTime;
 
 trait TimestampTrait
 {
     #[Timestampable(on: 'create')]
-    #[ORM\Column(name: 'created', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(name: 'created', type: Types::DATETIME_MUTABLE, nullable: false)]
     protected DateTime $created;
 
     #[Timestampable(on: 'update')]
-    #[ORM\Column(name: 'updated', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(name: 'updated', type: Types::DATETIME_MUTABLE, nullable: false)]
     protected DateTime $updated;
 
     public function getCreated(): DateTime

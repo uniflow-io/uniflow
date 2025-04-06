@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
 use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
@@ -14,5 +16,5 @@ return static function (ECSConfig $config): void {
     ]);
 
     $config->ruleWithConfiguration(BinaryOperatorSpacesFixer::class, []);
-    $config->ruleWithConfiguration(PhpdocSeparationFixer::class, ['groups' => [['ORM\\*']]]);
+    $config->ruleWithConfiguration(PhpdocSeparationFixer::class, ['groups' => [['ORM\*']]]);
 };

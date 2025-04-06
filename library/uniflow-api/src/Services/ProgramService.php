@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Folder;
 use App\Entity\Program;
-use App\Repository\ProgramRepository;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
+use App\Repository\ProgramRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
@@ -18,17 +20,16 @@ class ProgramService
     protected $programRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em,
-        protected \Symfony\Component\Cache\Adapter\TagAwareAdapter $cache,
-        protected \App\Services\FolderService $folderService
-    )
-    {
+        protected EntityManagerInterface $em,
+        protected TagAwareAdapter $cache,
+        protected FolderService $folderService
+    ) {
         $this->programRepository = $this->em->getRepository(Program::class);
     }
 
     public function save(Program $program): Program
     {
-        $program->setUpdated(new \DateTime());
+        $program->setUpdated(new DateTime());
 
         $this->em->persist($program);
         $this->em->flush();

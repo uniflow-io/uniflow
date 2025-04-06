@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Contact;
-use Doctrine\ORM\EntityManager;
 use App\Repository\ContactRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ContactService
@@ -15,15 +17,14 @@ class ContactService
     protected $contactRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em
+    ) {
         $this->contactRepository = $this->em->getRepository(Contact::class);
     }
 
     public function save(Contact $contact): Contact
     {
-        $contact->setUpdated(new \DateTime());
+        $contact->setUpdated(new DateTime());
 
         $this->em->persist($contact);
         $this->em->flush();

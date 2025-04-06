@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\TaxonImage as BaseTaxonImage;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_taxon_image')]
-class TaxonImage extends BaseTaxonImage
-{
-}
+class TaxonImage extends BaseTaxonImage {}

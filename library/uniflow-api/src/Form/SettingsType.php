@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\User;
@@ -11,10 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SettingsType extends AbstractType
 {
     /**
-     * Build Form
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * Build Form.
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

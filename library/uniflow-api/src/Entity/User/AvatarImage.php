@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\AvatarImage as BaseAvatarImage;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_avatar_image')]
-class AvatarImage extends BaseAvatarImage
-{
-}
+class AvatarImage extends BaseAvatarImage {}

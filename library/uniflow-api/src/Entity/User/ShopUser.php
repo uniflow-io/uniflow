@@ -6,62 +6,42 @@ namespace App\Entity\User;
 
 use App\Entity\Folder;
 use App\Entity\Program;
-use App\Entity\Traits\TimestampTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Core\Model\ShopUser as BaseShopUser;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_shop_user')]
 class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterface
 {
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $firstname = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $lastname = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $facebookId = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $githubId = null;
 
-    /**
-     * @var string|null
-     */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $apiKey = null;
 
     /**
      * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
      */
-    #[ORM\OneToMany(targetEntity: \App\Entity\Program::class, mappedBy: 'user', cascade: ['persist'])]
-    protected \Doctrine\Common\Collections\Collection $programs;
+    #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'user', cascade: ['persist'])]
+    protected Collection $programs;
 
     /**
      * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
      */
-    #[ORM\OneToMany(targetEntity: \App\Entity\Folder::class, mappedBy: 'user', cascade: ['persist'])]
-    protected \Doctrine\Common\Collections\Collection $folders;
-
+    #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'user', cascade: ['persist'])]
+    protected Collection $folders;
 
     public function __construct()
     {

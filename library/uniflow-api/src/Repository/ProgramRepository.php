@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Folder;
@@ -7,6 +9,8 @@ use App\Entity\Program;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+
+use function count;
 
 class ProgramRepository extends ServiceEntityRepository
 {
@@ -18,7 +22,8 @@ class ProgramRepository extends ServiceEntityRepository
     public function findOne(?int $id = null): ?Program
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p');
+            ->select('p')
+        ;
 
         if ($id) {
             $qb->andWhere('p.id = :id')->setParameter('id', $id);
@@ -35,7 +40,8 @@ class ProgramRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->select('p')
-            ->andWhere('p.user = :user')->setParameter('user', $user);
+            ->andWhere('p.user = :user')->setParameter('user', $user)
+        ;
 
         if ($id) {
             $qb->andWhere('p.id = :id')->setParameter('id', $id);
@@ -55,12 +61,13 @@ class ProgramRepository extends ServiceEntityRepository
             return null;
         }
 
-        $slug  = $path[$level - 1];
+        $slug = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
-            ->andWhere('p.slug = :slug')->setParameter('slug', $slug);
+            ->andWhere('p.slug = :slug')->setParameter('slug', $slug)
+        ;
 
         if ($level === 1) {
             $qb->andWhere('p.folder IS NULL');
@@ -93,7 +100,8 @@ class ProgramRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->select('p')
-            ->andWhere('p.user = :user')->setParameter('user', $user);
+            ->andWhere('p.user = :user')->setParameter('user', $user)
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -106,7 +114,8 @@ class ProgramRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         return $qb->getQuery()->getResult();
     }
@@ -119,7 +128,8 @@ class ProgramRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         if ($client) {
             $qb->leftJoin('p.clients', 'c');
@@ -137,14 +147,15 @@ class ProgramRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         if ($client) {
             $qb->leftJoin('p.clients', 'c');
             $qb->andWhere('c.name = :name')->setParameter('name', $client);
         }
 
-        if ($folder instanceof \App\Entity\Folder) {
+        if ($folder instanceof Folder) {
             $qb->andWhere('p.folder = :folder')->setParameter('folder', $folder);
         } else {
             $qb->andWhere('p.folder is NULL');
@@ -162,7 +173,8 @@ class ProgramRepository extends ServiceEntityRepository
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
             ->andWhere('p.public = :public')->setParameter('public', true)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         if ($client) {
             $qb->leftJoin('p.clients', 'c');
@@ -181,14 +193,15 @@ class ProgramRepository extends ServiceEntityRepository
             ->select('p')
             ->andWhere('p.user = :user')->setParameter('user', $user)
             ->andWhere('p.public = :public')->setParameter('public', true)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         if ($client) {
             $qb->leftJoin('p.clients', 'c');
             $qb->andWhere('c.name = :name')->setParameter('name', $client);
         }
 
-        if ($folder instanceof \App\Entity\Folder) {
+        if ($folder instanceof Folder) {
             $qb->andWhere('p.folder = :folder')->setParameter('folder', $folder);
         } else {
             $qb->andWhere('p.folder is NULL');
@@ -205,7 +218,8 @@ class ProgramRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->select('p')
             ->andWhere('p.public = :public')->setParameter('public', true)
-            ->addOrderBy('p.updated', 'DESC');
+            ->addOrderBy('p.updated', 'DESC')
+        ;
 
         if ($limit) {
             $qb->setMaxResults($limit);

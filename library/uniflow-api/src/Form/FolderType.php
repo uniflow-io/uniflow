@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Folder;
@@ -7,24 +9,16 @@ use App\Form\Transformer\PathTransformer;
 use App\Form\Type\ArrayType;
 use App\Services\FolderService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FolderType extends AbstractType
 {
-    public function __construct(protected \App\Services\FolderService $folderService)
-    {
-    }
+    public function __construct(protected FolderService $folderService) {}
 
     /**
-     * Build Form
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * Build Form.
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

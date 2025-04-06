@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Tag;
@@ -20,7 +22,8 @@ class TagRepository extends ServiceEntityRepository
         ;
 
         $qb->where('t.name = :name')
-            ->setParameter('name', $tag);
+            ->setParameter('name', $tag)
+        ;
 
         $query = $qb->getQuery();
 
@@ -37,7 +40,8 @@ class TagRepository extends ServiceEntityRepository
         ;
 
         $qb->leftJoin('t.programs', 'p')
-            ->andWhere('p.id IS NULL');
+            ->andWhere('p.id IS NULL')
+        ;
 
         $query = $qb->getQuery();
 

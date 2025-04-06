@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Transformer;
 
 use App\Entity\Tag;
 use App\Services\TagService;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class TagTransformer implements DataTransformerInterface
 {
-    public function __construct(protected \App\Services\TagService $tagService)
-    {
-    }
+    public function __construct(protected TagService $tagService) {}
 
     /**
-     * @param Tag[]|null $tags
-     * @return mixed
+     * @param null|Tag[] $tags
      */
     public function transform($tags): mixed
     {
@@ -34,6 +32,7 @@ class TagTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $arrayTags
+     *
      * @return ArrayCollection
      */
     public function reverseTransform($arrayTags): mixed

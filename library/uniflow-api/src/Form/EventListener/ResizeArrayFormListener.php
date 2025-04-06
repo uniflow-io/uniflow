@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use ArrayAccess;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
+use Traversable;
+
+use function is_array;
 
 class ResizeArrayFormListener extends ResizeFormListener
 {
@@ -31,7 +33,7 @@ class ResizeArrayFormListener extends ResizeFormListener
             $data = [];
         }
 
-        if (!\is_array($data) && !($data instanceof \Traversable && $data instanceof \ArrayAccess)) {
+        if (!is_array($data) && !($data instanceof Traversable && $data instanceof ArrayAccess)) {
             $data = [];
         }
 
@@ -43,7 +45,7 @@ class ResizeArrayFormListener extends ResizeFormListener
         // Then add all rows again in the correct order
         foreach ($data as $name => $value) {
             $form->add($name, $this->type, array_replace([
-                'property_path' => '['.$name.']',
+                'property_path' => '[' . $name . ']',
             ], $this->options));
         }
     }

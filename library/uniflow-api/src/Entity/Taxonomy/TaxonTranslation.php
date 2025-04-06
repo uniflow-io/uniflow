@@ -9,6 +9,4 @@ use Sylius\Component\Taxonomy\Model\TaxonTranslation as BaseTaxonTranslation;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_taxon_translation')]
-class TaxonTranslation extends BaseTaxonTranslation
-{
-}
+class TaxonTranslation extends BaseTaxonTranslation {}

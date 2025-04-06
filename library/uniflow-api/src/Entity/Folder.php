@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
@@ -7,30 +9,32 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'folder')]
 #[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
 #[ORM\Entity(repositoryClass: FolderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Folder implements \Stringable
+class Folder implements Stringable
 {
     use TimestampTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
     #[Assert\NotBlank(message: 'The slug is required')]
     #[Slug(fields: ['slug'], unique: true, updatable: true)]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     protected string $slug = '';
 
     #[Assert\NotBlank(message: 'The user is required')]
@@ -38,14 +42,14 @@ class Folder implements \Stringable
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: Folder::class, inversedBy: 'children', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'cascade')]
     protected ?Folder $parent = null;
 
     /**
      * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
      */
-    #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'parent', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', cascade: ['persist'])]
     protected Collection $children;
 
     /**
@@ -106,19 +110,19 @@ class Folder implements \Stringable
         return $this;
     }
 
-    public function getParent(): ?Folder
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?Folder $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    public function addFolder(Folder $child): self
+    public function addFolder(self $child): self
     {
         $this->children->add($child);
         $child->setParent($this);
@@ -126,7 +130,7 @@ class Folder implements \Stringable
         return $this;
     }
 
-    public function removeFolder(Folder $child): self
+    public function removeFolder(self $child): self
     {
         $this->children->removeElement($child);
         $child->setParent(null);

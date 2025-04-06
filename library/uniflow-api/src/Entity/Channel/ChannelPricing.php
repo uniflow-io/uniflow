@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\ChannelPricing as BaseChannelPricing;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_channel_pricing')]
-class ChannelPricing extends BaseChannelPricing
-{
-}
+class ChannelPricing extends BaseChannelPricing {}

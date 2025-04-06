@@ -9,6 +9,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->removeUnusedImports();
     $rectorConfig->import(__DIR__ . '/vendor/sylius/sylius-rector/config/config.php');
     $rectorConfig->paths([
-        __DIR__ . '/src'
+        __DIR__ . '/src',
     ]);
 };

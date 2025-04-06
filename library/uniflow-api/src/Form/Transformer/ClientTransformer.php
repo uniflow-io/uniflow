@@ -1,22 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form\Transformer;
 
 use App\Entity\Client;
 use App\Services\ClientService;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class ClientTransformer implements DataTransformerInterface
 {
-    public function __construct(protected \App\Services\ClientService $clientService)
-    {
-    }
+    public function __construct(protected ClientService $clientService) {}
 
     /**
-     * @param Client[]|null $clients
-     * @return mixed
+     * @param null|Client[] $clients
      */
     public function transform($clients): mixed
     {
@@ -34,6 +32,7 @@ class ClientTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $arrayClients
+     *
      * @return ArrayCollection
      */
     public function reverseTransform($arrayClients): mixed

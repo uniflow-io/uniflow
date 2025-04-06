@@ -1,11 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Folder;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+
+use function count;
 
 class FolderRepository extends ServiceEntityRepository
 {
@@ -56,7 +60,7 @@ class FolderRepository extends ServiceEntityRepository
             return null;
         }
 
-        $slug  = $path[$level - 1];
+        $slug = $path[$level - 1];
 
         $qb = $this->createQueryBuilder('f')
             ->select('f')
@@ -111,7 +115,7 @@ class FolderRepository extends ServiceEntityRepository
             ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
 
-        if ($folder instanceof \App\Entity\Folder) {
+        if ($folder instanceof Folder) {
             $qb->andWhere('f.parent = :parent')->setParameter('parent', $folder);
         } else {
             $qb->andWhere('f.parent is NULL');

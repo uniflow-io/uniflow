@@ -9,6 +9,4 @@ use Sylius\Component\Locale\Model\Locale as BaseLocale;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_locale')]
-class Locale extends BaseLocale
-{
-}
+class Locale extends BaseLocale {}

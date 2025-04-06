@@ -9,6 +9,4 @@ use Sylius\Component\Promotion\Model\PromotionTranslation as BasePromotionTransl
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_promotion_translation')]
-class PromotionTranslation extends BasePromotionTranslation
-{
-}
+class PromotionTranslation extends BasePromotionTranslation {}

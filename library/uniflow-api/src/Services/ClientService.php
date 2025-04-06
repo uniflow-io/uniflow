@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Client;
 use App\Repository\ClientRepository;
-use Doctrine\ORM\EntityManager;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ClientService
@@ -15,15 +17,14 @@ class ClientService
     protected $clientRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em
+    ) {
         $this->clientRepository = $this->em->getRepository(Client::class);
     }
 
     public function save(Client $client): Client
     {
-        $client->setUpdated(new \DateTime());
+        $client->setUpdated(new DateTime());
 
         $this->em->persist($client);
         $this->em->flush();

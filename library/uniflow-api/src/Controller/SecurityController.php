@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Config;
@@ -7,19 +9,23 @@ use App\Entity\User;
 use App\Form\RegisterType;
 use App\Services\ConfigService;
 use App\Services\UserService;
-use GuzzleHttp\Client;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\LogicException;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SecurityController extends AbstractController
@@ -31,30 +37,25 @@ class SecurityController extends AbstractController
      * @param string $appOauthMediumId
      * @param string $appOauthMediumSecret
      */
-    public function __construct(protected $appOauthFacebookId, protected $appOauthGithubId, protected $appOauthGithubSecret, protected $appOauthMediumId, protected $appOauthMediumSecret, protected \App\Services\UserService $userService, protected \App\Services\ConfigService $configService, protected \Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface $jwtTokenManager, protected \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface $userPasswordHasher, protected \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient)
-    {
-    }
+    public function __construct(protected $appOauthFacebookId, protected $appOauthGithubId, protected $appOauthGithubSecret, protected $appOauthMediumId, protected $appOauthMediumSecret, protected UserService $userService, protected ConfigService $configService, protected JWTTokenManagerInterface $jwtTokenManager, protected UserPasswordHasherInterface $userPasswordHasher, protected HttpClientInterface $httpClient) {}
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/api/login_check', name: 'api_login_check')]
-    public function loginCheck() : never
+    public function loginCheck(): never
     {
         throw new LogicException('This should never be reached!');
     }
 
     /**
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransportExceptionInterface
      */
     #[Route(path: '/api/login/facebook', name: 'api_login_facebook', methods: ['POST'])]
-    public function facebookLogin(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    public function facebookLogin(Request $request): JsonResponse
     {
         $token = null;
 
@@ -69,7 +70,7 @@ class SecurityController extends AbstractController
 
         // Make sure it's the correct app.
         $tokenApp = $response->toArray();
-        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] != $this->appOauthFacebookId) {
+        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] !== $this->appOauthFacebookId) {
             throw new AccessDeniedHttpException('Bad credentials.');
         }
 
@@ -83,10 +84,10 @@ class SecurityController extends AbstractController
         }
 
         $facebookId = $tokenUser['id'];
-        $facebookEmail = $tokenUser['id'].'@facebook.com';
+        $facebookEmail = $tokenUser['id'] . '@facebook.com';
 
         $user = $this->getUser();
-        if (!$user instanceof \Symfony\Component\Security\Core\User\UserInterface) {
+        if (!$user instanceof UserInterface) {
             $user = $this->userService->findOneByFacebookId($facebookId);
             if ($user === null) {
                 $user = $this->userService->findOneByEmail($facebookEmail);
@@ -105,21 +106,18 @@ class SecurityController extends AbstractController
         }
 
         return new JsonResponse([
-            'token' => $this->jwtTokenManager->create($user)
+            'token' => $this->jwtTokenManager->create($user),
         ]);
     }
 
     /**
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransportExceptionInterface
      */
     #[Route(path: '/api/login/github', name: 'api_login_github', methods: ['POST'])]
-    public function githubLogin(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    public function githubLogin(Request $request): JsonResponse
     {
         $code = null;
 
@@ -132,13 +130,13 @@ class SecurityController extends AbstractController
         // Get the token's Github app.
         $response = $this->httpClient->request('POST', 'https://github.com/login/oauth/access_token', [
             'headers' => [
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
             ],
             'body' => [
                 'client_id' => $this->appOauthGithubId,
                 'client_secret' => $this->appOauthGithubSecret,
-                'code' => $code
-            ]
+                'code' => $code,
+            ],
         ]);
 
         $tokenResp = $response->toArray();
@@ -153,8 +151,8 @@ class SecurityController extends AbstractController
             'headers' => [
                 'Accept' => 'application/json',
                 'User-Agent' => 'Uniflow App',
-                'Authorization' => 'Bearer ' . $token
-            ]
+                'Authorization' => 'Bearer ' . $token,
+            ],
         ]);
 
         // Try to fetch user by it's token ID, create it otherwise.
@@ -164,10 +162,10 @@ class SecurityController extends AbstractController
         }
 
         $githubId = $tokenUser['id'];
-        $githubEmail = $tokenUser['id'].'@github.com';
+        $githubEmail = $tokenUser['id'] . '@github.com';
 
         $user = $this->getUser();
-        if (!$user instanceof \Symfony\Component\Security\Core\User\UserInterface) {
+        if (!$user instanceof UserInterface) {
             $user = $this->userService->findOneByGithubId($githubId);
             if ($user === null) {
                 $user = $this->userService->findOneByEmail($githubEmail);
@@ -186,20 +184,17 @@ class SecurityController extends AbstractController
         }
 
         return new JsonResponse([
-            'token' => $this->jwtTokenManager->create($user)
+            'token' => $this->jwtTokenManager->create($user),
         ]);
     }
 
     /**
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     #[Route(path: '/api/login/medium', name: 'api_login_medium', methods: ['POST'])]
-    public function mediumLogin(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    public function mediumLogin(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -218,15 +213,15 @@ class SecurityController extends AbstractController
         // Get the token's Medium app.
         $response = $this->httpClient->request('POST', 'https://api.medium.com/v1/tokens', [
             'headers' => [
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
             ],
             'body' => [
                 'client_id' => $this->appOauthMediumId,
                 'client_secret' => $this->appOauthMediumSecret,
                 'code' => $code,
                 'grant_type' => 'authorization_code',
-                'redirect_uri' => 'https:'.$this->generateUrl('loginMedium', [], UrlGeneratorInterface::NETWORK_PATH),
-            ]
+                'redirect_uri' => 'https:' . $this->generateUrl('loginMedium', [], UrlGeneratorInterface::NETWORK_PATH),
+            ],
         ]);
 
         $tokenResp = $response->toArray();
@@ -251,10 +246,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/api/register', name: 'api_register', methods: ['POST'])]
-    public function register(Request $request): \Symfony\Component\HttpFoundation\JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $user = new User();
 
@@ -275,12 +270,12 @@ class SecurityController extends AbstractController
             $this->userService->save($user);
 
             return new JsonResponse([
-                'token' => $this->jwtTokenManager->create($user)
+                'token' => $this->jwtTokenManager->create($user),
             ]);
         }
 
         return new JsonResponse([
             'message' => $form->getErrors(true)->current()->getMessage(),
-        ], \Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED);
+        ], Response::HTTP_UNAUTHORIZED);
     }
 }

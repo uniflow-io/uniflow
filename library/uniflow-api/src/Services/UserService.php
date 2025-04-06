@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserService
@@ -15,15 +17,14 @@ class UserService
     protected $userRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em
+    ) {
         $this->userRepository = $this->em->getRepository(User::class);
     }
 
     public function save(User $user): User
     {
-        $user->setUpdated(new \DateTime());
+        $user->setUpdated(new DateTime());
 
         $this->em->persist($user);
         $this->em->flush();

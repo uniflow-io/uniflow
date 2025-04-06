@@ -9,6 +9,4 @@ use Sylius\Component\Product\Model\ProductAttributeValue as BaseProductAttribute
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_product_attribute_value')]
-class ProductAttributeValue extends BaseProductAttributeValue
-{
-}
+class ProductAttributeValue extends BaseProductAttributeValue {}

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository\User;
 
 use App\Entity\User;
@@ -19,7 +21,8 @@ class ShopUserRepository extends ServiceEntityRepository
     public function findAll(): array
     {
         $qb = $this->createQueryBuilder('u')
-            ->select('u');
+            ->select('u')
+        ;
 
         $query = $qb->getQuery();
 
@@ -29,11 +32,13 @@ class ShopUserRepository extends ServiceEntityRepository
     public function findOne(?int $id = null): ?User
     {
         $qb = $this->createQueryBuilder('u')
-            ->select('u');
+            ->select('u')
+        ;
 
         if ($id) {
             $qb->where('u.id = :id')
-                ->setParameter('id', $id);
+                ->setParameter('id', $id)
+            ;
         } else {
             $qb->setMaxResults(1);
         }
@@ -50,7 +55,8 @@ class ShopUserRepository extends ServiceEntityRepository
         ;
 
         $qb->andWhere($qb->expr()->orX('u.email = :username', 'u.username = :username'))
-            ->setParameter('username', $username);
+            ->setParameter('username', $username)
+        ;
         $qb->setMaxResults(1);
 
         $query = $qb->getQuery();
@@ -65,7 +71,8 @@ class ShopUserRepository extends ServiceEntityRepository
         ;
 
         $qb->where('u.facebookId = :facebookId')
-            ->setParameter('facebookId', $facebookId);
+            ->setParameter('facebookId', $facebookId)
+        ;
 
         $query = $qb->getQuery();
 
@@ -79,7 +86,8 @@ class ShopUserRepository extends ServiceEntityRepository
         ;
 
         $qb->where('u.githubId = :githubId')
-            ->setParameter('githubId', $githubId);
+            ->setParameter('githubId', $githubId)
+        ;
 
         $query = $qb->getQuery();
 

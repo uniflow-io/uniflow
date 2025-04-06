@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Security\Voter;
-
 
 use App\Entity\Program;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -12,22 +12,17 @@ class ProgramViewVoter extends Voter
 {
     public const VIEW = 'view';
 
-    /**
-     * @inheritDoc
-     */
     protected function supports(string $attribute, $subject): bool
     {
         return $attribute === self::VIEW && $subject instanceof Program;
     }
 
     /**
-     * @inheritDoc
-     * @var Program $subject
+     * @var Program
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        if($subject->getPublic())
-        {
+        if ($subject->getPublic()) {
             return true;
         }
 

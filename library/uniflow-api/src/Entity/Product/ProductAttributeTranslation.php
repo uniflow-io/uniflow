@@ -9,6 +9,4 @@ use Sylius\Component\Product\Model\ProductAttributeTranslation as BaseProductAtt
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_product_attribute_translation')]
-class ProductAttributeTranslation extends BaseProductAttributeTranslation
-{
-}
+class ProductAttributeTranslation extends BaseProductAttributeTranslation {}

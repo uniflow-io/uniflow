@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\OrderItemUnit as BaseOrderItemUnit;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_order_item_unit')]
-class OrderItemUnit extends BaseOrderItemUnit
-{
-}
+class OrderItemUnit extends BaseOrderItemUnit {}

@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
-use App\Security\ApiKeyUserProvider;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
+use UnexpectedValueException;
+
+use function sprintf;
 
 class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {
@@ -30,15 +32,15 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *  B) For an API token authentication system, you return a 401 response
      *      return new Response('Auth header required', 401);
      *
-     * @param Request $request The request that resulted in an AuthenticationException
+     * @param Request                 $request       The request that resulted in an AuthenticationException
      * @param AuthenticationException $authException The exception that started the authentication process
      *
      * @return Response
      */
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, ?AuthenticationException $authException = null)
     {
         $data = [
-            'message' => 'Authentication Required'
+            'message' => 'Authentication Required',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
@@ -48,8 +50,6 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      * Does the authenticator support the given Request?
      *
      * If this returns false, the authenticator will be skipped.
-     *
-     * @param Request $request
      *
      * @return bool
      */
@@ -75,11 +75,9 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      *      return array('api_key' => $request->headers->get('X-API-TOKEN'));
      *
-     * @param Request $request
-     *
      * @return mixed Any non-null value
      *
-     * @throws \UnexpectedValueException If null is returned
+     * @throws UnexpectedValueException If null is returned
      */
     public function getCredentials(Request $request)
     {
@@ -96,15 +94,14 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      * You may throw an AuthenticationException if you wish. If you return
      * null, then a UsernameNotFoundException is thrown for you.
      *
-     * @param UserProviderInterface $userProvider
+     * @return null|UserInterface
      *
      * @throws AuthenticationException
-     * @return UserInterface|null
      */
     public function getUser(mixed $credentials, UserProviderInterface $userProvider)
     {
         if (!$userProvider instanceof ApiKeyUserProvider) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The user provider must be an instance of ApiKeyUserProvider (%s was given).',
                     $userProvider::class
@@ -126,9 +123,8 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * The *credentials* are the return value from getCredentials()
      *
-     * @param UserInterface $user
-     *
      * @return bool
+     *
      * @throws AuthenticationException
      */
     public function checkCredentials(mixed $credentials, UserInterface $user)
@@ -145,15 +141,12 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      * If you return null, the request will continue, but the user will
      * not be authenticated. This is probably not what you want to do.
      *
-     * @param Request $request
-     * @param AuthenticationException $exception
-     *
-     * @return Response|null
+     * @return null|Response
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
         ];
 
         return new JsonResponse($data, Response::HTTP_FORBIDDEN);
@@ -168,11 +161,9 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      * If you return null, the current request will continue, and the user
      * will be authenticated. This makes sense, for example, with an API.
      *
-     * @param Request $request
-     * @param TokenInterface $token
      * @param string $providerKey The provider (i.e. firewall) key
      *
-     * @return Response|null
+     * @return null|Response
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {

@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Folder;
-use App\Repository\FolderRepository;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
+use App\Repository\FolderRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
 class FolderService
 {
@@ -17,15 +18,14 @@ class FolderService
     protected $folderRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em
+    ) {
         $this->folderRepository = $this->em->getRepository(Folder::class);
     }
 
     public function save(Folder $folder): Folder
     {
-        $folder->setUpdated(new \DateTime());
+        $folder->setUpdated(new DateTime());
 
         $this->em->persist($folder);
         $this->em->flush();

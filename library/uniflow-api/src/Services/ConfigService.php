@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\Config;
-use Doctrine\ORM\EntityManager;
 use App\Repository\ConfigRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ConfigService
@@ -15,15 +17,14 @@ class ConfigService
     protected $configRepository;
 
     public function __construct(
-        protected \Doctrine\ORM\EntityManagerInterface $em
-    )
-    {
+        protected EntityManagerInterface $em
+    ) {
         $this->configRepository = $this->em->getRepository(Config::class);
     }
 
     public function save(Config $config): Config
     {
-        $config->setUpdated(new \DateTime());
+        $config->setUpdated(new DateTime());
 
         $this->em->persist($config);
         $this->em->flush();

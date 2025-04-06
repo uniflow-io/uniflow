@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
 use App\Repository\ContactRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,16 +18,16 @@ class Contact
     use TimestampTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     protected string $email = '';
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     protected string $message = '';
 
     public function getId(): ?int

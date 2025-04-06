@@ -1,20 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
+use App\Entity\User\ShopUser;
 use App\Services\UserService;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use App\Entity\User\ShopUser;
-use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class ApiKeyUserProvider implements UserProviderInterface
 {
-    public function __construct(protected \App\Services\UserService $userService)
-    {
-    }
+    public function __construct(protected UserService $userService) {}
 
     public function loadUserByApiKey($apiKey): UserInterface
     {
