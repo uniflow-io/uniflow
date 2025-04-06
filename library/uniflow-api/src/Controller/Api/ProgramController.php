@@ -248,13 +248,10 @@ class ProgramController extends AbstractController
         $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
-            'programs' => array_map(fn (Program $program) => [
-                'name' => $program->getName(),
-                'slug' => $program->getSlug(),
-                'path' => $this->folderService->toPath($program->getFolder()),
-                'description' => $program->getDescription(),
-                'username' => $program->getUser()->getUsername(),
+            'data' => array_map(fn (Program $program) => [
+                $this->programService->getJsonProgram($program)
             ], $programs),
+            'total' => count($programs),
         ]);
     }
 

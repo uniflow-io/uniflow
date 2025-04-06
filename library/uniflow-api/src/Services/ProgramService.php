@@ -111,14 +111,14 @@ class ProgramService
         }
 
         return [
-            'id' => $program->getId(),
+            'uid' => $program->getUid(),
             'name' => $program->getName(),
             'slug' => $program->getSlug(),
             'path' => $this->folderService->toPath($program->getFolder()),
             'clients' => $clients,
             'tags' => $tags,
             'description' => $program->getDescription(),
-            'public' => $program->getPublic(),
+            'isPublic' => $program->getPublic(),
             'created' => $program->getCreated()->format('c'),
             'updated' => $program->getUpdated()->format('c'),
         ];
