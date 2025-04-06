@@ -33,9 +33,10 @@ class ProgramController extends AbstractController
         protected FolderService $folderService
     ) {}
 
-    #[Route(path: '/api/program/{username}/list', name: 'api_program_list', methods: ['GET'])]
+    #[Route(path: '/api/programs/{username}/list', name: 'api_program_list', methods: ['GET'])]
     public function list(Request $request, $username = 'me'): JsonResponse
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -69,9 +70,10 @@ class ProgramController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/api/program/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
+    #[Route(path: '/api/programs/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
     public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): JsonResponse
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -141,7 +143,7 @@ class ProgramController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/api/program/create', name: 'api_program_create', methods: ['POST'])]
+    #[Route(path: '/api/programs/create', name: 'api_program_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -157,7 +159,7 @@ class ProgramController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/program/update/{id}', name: 'api_program_update', methods: ['PUT'])]
+    #[Route(path: '/api/programs/update/{id}', name: 'api_program_update', methods: ['PUT'])]
     public function update(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -174,7 +176,7 @@ class ProgramController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/program/getData/{id}', name: 'api_program_get_data', methods: ['GET'])]
+    #[Route(path: '/api/programs/getData/{id}', name: 'api_program_get_data', methods: ['GET'])]
     public function getData($id): JsonResponse
     {
         $entity = $this->programService->findOne($id);
@@ -184,6 +186,7 @@ class ProgramController extends AbstractController
         }
 
         if (!$entity->getPublic()) {
+            /** @var User $user */
             $user = $this->getUser();
             if (!$user instanceof UserInterface || $entity->getUser()->getId() !== $user->getId()) {
                 throw $this->createAccessDeniedException('You are not allowed to view this section.');
@@ -193,7 +196,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(['data' => $entity->getData()]);
     }
 
-    #[Route(path: '/api/program/setData/{id}', name: 'api_program_set_data', methods: ['PUT'])]
+    #[Route(path: '/api/programs/setData/{id}', name: 'api_program_set_data', methods: ['PUT'])]
     public function setData(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -220,7 +223,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(false, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route(path: '/api/program/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
+    #[Route(path: '/api/programs/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();
@@ -239,7 +242,7 @@ class ProgramController extends AbstractController
         return new JsonResponse($this->programService->getJsonProgram($entity));
     }
 
-    #[Route(path: '/api/program/last-public', name: 'api_program_last_public', methods: ['GET'])]
+    #[Route(path: '/api/programs', name: 'api_program_last_public', methods: ['GET'])]
     public function lastPublic(): JsonResponse
     {
         $programs = $this->programService->findLastPublic(15);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\UidTrait;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Client implements Stringable
 {
     use TimestampTrait;
+    use UidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

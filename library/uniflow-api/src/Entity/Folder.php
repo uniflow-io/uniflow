@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\UidTrait;
 use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Folder implements Stringable
 {
     use TimestampTrait;
+    use UidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

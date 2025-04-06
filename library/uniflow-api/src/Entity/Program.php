@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\UidTrait;
 use App\Entity\User\ShopUser as User;
 use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,6 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Program implements Stringable
 {
     use TimestampTrait;
+    use UidTrait;
 
     #[Groups(['program'])]
     #[ORM\Id]
@@ -87,7 +89,7 @@ class Program implements Stringable
     protected ?string $description = null;
 
     #[Groups(['program'])]
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
+    #[ORM\Column(name: 'is_public', type: Types::BOOLEAN, nullable: false)]
     protected bool $public = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

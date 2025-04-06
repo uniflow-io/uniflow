@@ -6,7 +6,7 @@ namespace App\Repository\User;
 
 use App\Entity\User\ShopUser as User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class ShopUserRepository extends ServiceEntityRepository
 {
