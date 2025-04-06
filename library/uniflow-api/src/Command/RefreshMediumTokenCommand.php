@@ -19,22 +19,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 )]
 class RefreshMediumTokenCommand extends Command
 {
-    private string $appOauthMediumId;
-    private string $appOauthMediumSecret;
-    private ConfigService $configService;
-    private HttpClientInterface $httpClient;
+
+
 
     public function __construct(
-        string $appOauthMediumId,
-        string $appOauthMediumSecret,
-        ConfigService $configService,
-        HttpClientInterface $httpClient
+        private readonly string $appOauthMediumId,
+        private readonly string $appOauthMediumSecret,
+        private readonly ConfigService $configService,
+        private readonly HttpClientInterface $httpClient
     ) {
-        $this->appOauthMediumId = $appOauthMediumId;
-        $this->appOauthMediumSecret = $appOauthMediumSecret;
-        $this->configService = $configService;
-        $this->httpClient = $httpClient;
-
         parent::__construct();
     }
 

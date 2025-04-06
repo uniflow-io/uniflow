@@ -96,20 +96,18 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      * You may throw an AuthenticationException if you wish. If you return
      * null, then a UsernameNotFoundException is thrown for you.
      *
-     * @param mixed $credentials
      * @param UserProviderInterface $userProvider
      *
      * @throws AuthenticationException
-     *
      * @return UserInterface|null
      */
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser(mixed $credentials, UserProviderInterface $userProvider)
     {
         if (!$userProvider instanceof ApiKeyUserProvider) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The user provider must be an instance of ApiKeyUserProvider (%s was given).',
-                    get_class($userProvider)
+                    $userProvider::class
                 )
             );
         }
@@ -128,14 +126,12 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * The *credentials* are the return value from getCredentials()
      *
-     * @param mixed $credentials
      * @param UserInterface $user
      *
      * @return bool
-     *
      * @throws AuthenticationException
      */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials(mixed $credentials, UserInterface $user)
     {
         return true;
     }

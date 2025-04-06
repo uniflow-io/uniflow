@@ -15,34 +15,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends AbstractController
 {
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    public function __construct(
-        UserService $userService
-    ) {
-        $this->userService = $userService;
+    public function __construct(protected \App\Services\UserService $userService)
+    {
     }
 
-    /**
-     * @Route("/api/user/getSettings", name="api_user_get_settings", methods={"GET"})
-     */
-    public function getSettings(Request $request): JsonResponse
+    #[Route(path: '/api/user/getSettings', name: 'api_user_get_settings', methods: ['GET'])]
+    public function getSettings() : JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
-
         return new JsonResponse($this->userService->getJsonSettings($user));
     }
 
-    /**
-     * @Route("/api/user/setSettings", name="api_user_set_settings", methods={"PUT"})
-     */
+    #[Route(path: '/api/user/setSettings', name: 'api_user_set_settings', methods: ['PUT'])]
     public function setSettings(Request $request): JsonResponse
     {
         /** @var User $user */

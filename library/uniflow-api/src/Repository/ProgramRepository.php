@@ -72,8 +72,10 @@ class ProgramRepository extends ServiceEntityRepository
                 } else {
                     $qb->leftJoin('f' . ($i + 1) . '.parent', 'f' . $i);
                 }
+
                 $qb->andWhere('f' . $i . '.slug = :slug' . $i)->setParameter('slug' . $i, $slug);
             }
+
             $qb->andWhere('f0.parent IS NULL');
         }
 
@@ -142,7 +144,7 @@ class ProgramRepository extends ServiceEntityRepository
             $qb->andWhere('c.name = :name')->setParameter('name', $client);
         }
 
-        if ($folder) {
+        if ($folder instanceof \App\Entity\Folder) {
             $qb->andWhere('p.folder = :folder')->setParameter('folder', $folder);
         } else {
             $qb->andWhere('p.folder is NULL');
@@ -186,7 +188,7 @@ class ProgramRepository extends ServiceEntityRepository
             $qb->andWhere('c.name = :name')->setParameter('name', $client);
         }
 
-        if ($folder) {
+        if ($folder instanceof \App\Entity\Folder) {
             $qb->andWhere('p.folder = :folder')->setParameter('folder', $folder);
         } else {
             $qb->andWhere('p.folder is NULL');

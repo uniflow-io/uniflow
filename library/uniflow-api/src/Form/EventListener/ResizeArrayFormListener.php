@@ -12,7 +12,8 @@ use Symfony\Component\Form\FormInterface;
 class ResizeArrayFormListener extends ResizeFormListener
 {
     protected $type;
-    protected $options;
+
+    protected array $options;
 
     public function __construct($type = '', array $options = [], bool $allowAdd = false, bool $allowDelete = false, $deleteEmpty = false)
     {

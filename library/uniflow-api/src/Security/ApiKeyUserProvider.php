@@ -12,15 +12,8 @@ use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
 
 class ApiKeyUserProvider implements UserProviderInterface
 {
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    public function __construct(
-        UserService $userService
-    ) {
-        $this->userService = $userService;
+    public function __construct(protected \App\Services\UserService $userService)
+    {
     }
 
     public function loadUserByApiKey($apiKey): UserInterface
@@ -29,6 +22,7 @@ class ApiKeyUserProvider implements UserProviderInterface
         if (!$user instanceof SyliusUserInterface) {
             throw new UserNotFoundException();
         }
+
         return $user;
     }
 
@@ -46,6 +40,7 @@ class ApiKeyUserProvider implements UserProviderInterface
         if (!$user instanceof SyliusUserInterface) {
             throw new UserNotFoundException();
         }
+
         return $user;
     }
 

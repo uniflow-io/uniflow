@@ -10,20 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class UserService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var UserRepository
      */
     protected $userRepository;
 
     public function __construct(
-        EntityManagerInterface $em
+        protected \Doctrine\ORM\EntityManagerInterface $em
     )
     {
-        $this->em = $em;
         $this->userRepository = $this->em->getRepository(User::class);
     }
 

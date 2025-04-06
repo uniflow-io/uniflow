@@ -9,11 +9,11 @@ use DateTime;
 trait TimestampTrait
 {
     #[Timestampable(on: 'create')]
-    #[ORM\Column(name: 'created', type: 'datetime', nullable: false)]
+    #[ORM\Column(name: 'created', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
     protected DateTime $created;
 
     #[Timestampable(on: 'update')]
-    #[ORM\Column(name: 'updated', type: 'datetime', nullable: false)]
+    #[ORM\Column(name: 'updated', type: \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE, nullable: false)]
     protected DateTime $updated;
 
     public function getCreated(): DateTime

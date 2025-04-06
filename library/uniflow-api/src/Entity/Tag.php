@@ -13,20 +13,23 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table(name: 'tag')]
 #[ORM\Index(name: 'index_search_tags', columns: ['name'])]
 #[ORM\Entity(repositoryClass: TagRepository::class)]
-#[UniqueEntity('name', message: 'The name \'{{ value }}\' is already taken.')]
-class Tag
+#[UniqueEntity('name', message: "The name '{{ value }}' is already taken.")]
+class Tag implements \Stringable
 {
     use TimestampTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
+     */
     #[ORM\ManyToMany(targetEntity: Program::class, mappedBy: 'tags', cascade: ['persist'])]
     protected Collection $programs;
 

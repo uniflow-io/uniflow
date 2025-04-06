@@ -10,20 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class ConfigService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var ConfigRepository
      */
     protected $configRepository;
 
     public function __construct(
-        EntityManagerInterface $em
+        protected \Doctrine\ORM\EntityManagerInterface $em
     )
     {
-        $this->em = $em;
         $this->configRepository = $this->em->getRepository(Config::class);
     }
 

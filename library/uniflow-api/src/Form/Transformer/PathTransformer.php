@@ -12,18 +12,12 @@ use Symfony\Component\Form\DataTransformerInterface;
 class PathTransformer implements DataTransformerInterface
 {
     /**
-     * @var FolderService
-     */
-    protected $folderService;
-
-    /**
      * @var User
      */
     protected $user;
 
-    public function __construct(FolderService $folderService, User $user)
+    public function __construct(protected \App\Services\FolderService $folderService, User $user)
     {
-        $this->folderService = $folderService;
         $this->user = $user;
     }
 

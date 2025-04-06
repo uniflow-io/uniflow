@@ -16,14 +16,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FolderType extends AbstractType
 {
-    /**
-     * @var FolderService
-     */
-    protected $folderService;
-
-    public function __construct(FolderService $folderService)
+    public function __construct(protected \App\Services\FolderService $folderService)
     {
-        $this->folderService = $folderService;
     }
 
     /**

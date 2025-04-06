@@ -19,29 +19,8 @@ use Twig\Environment;
 
 class ContactController extends AbstractController
 {
-    /**
-     * @var ContactService
-     */
-    protected $contactService;
-
-    /**
-     * @var Environment
-     */
-    protected $twig;
-
-    /**
-     * @var MailerInterface
-     */
-    protected $mailer;
-
-    public function __construct(
-        ContactService $contactService,
-        Environment $twig,
-        MailerInterface $mailer
-    ) {
-        $this->contactService = $contactService;
-        $this->twig = $twig;
-        $this->mailer = $mailer;
+    public function __construct(protected \App\Services\ContactService $contactService, protected \Twig\Environment $twig, protected \Symfony\Component\Mailer\MailerInterface $mailer)
+    {
     }
 
     private function send(string $templateName, array $context, string $fromEmail, string $toEmail): void
@@ -67,9 +46,7 @@ class ContactController extends AbstractController
         $this->mailer->send($message);
     }
 
-    /**
-     * @Route("/api/contact/create", name="api_contact_set", methods={"POST"})
-     */
+    #[Route(path: '/api/contact/create', name: 'api_contact_set', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $contact = new Contact();

@@ -16,39 +16,26 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ConfigController extends AbstractController
 {
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
-
-    public function __construct(
-        ConfigService $configService
-    ) {
-        $this->configService = $configService;
+    public function __construct(protected \App\Services\ConfigService $configService)
+    {
     }
 
-    /**
-     * @Route("/api/config/getConfig", name="api_config_get", methods={"GET"})
-     */
-    public function getConfig(Request $request): JsonResponse
+    #[Route(path: '/api/config/getConfig', name: 'api_config_get', methods: ['GET'])]
+    public function getConfig() : JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This config does not have access to this section.');
         }
-
         $config = $this->configService->findOne();
         if (!$config) {
             $config = new Config();
         }
-
         return new JsonResponse($this->configService->getJson($config));
     }
 
-    /**
-     * @Route("/api/config/setConfig", name="api_config_set", methods={"PUT"})
-     */
+    #[Route(path: '/api/config/setConfig', name: 'api_config_set', methods: ['PUT'])]
     public function setConfig(Request $request): JsonResponse
     {
         /** @var User $user */

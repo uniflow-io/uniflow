@@ -18,31 +18,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class FolderController extends AbstractController
 {
-    /**
-     * @var FolderService
-     */
-    protected $folderService;
-
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    public function __construct(
-        FolderService $folderService,
-        UserService $userService
-    ) {
-        $this->folderService = $folderService;
-        $this->userService = $userService;
+    public function __construct(protected \App\Services\FolderService $folderService, protected \App\Services\UserService $userService)
+    {
     }
 
     /**
-     * @Route("/api/folder/{username}/tree", name="api_folder_tree", methods={"GET"})
      *
      * @param string $username
      * @return JsonResponse
      */
-    public function tree($username = 'me')
+    #[Route(path: '/api/folder/{username}/tree', name: 'api_folder_tree', methods: ['GET'])]
+    public function tree($username = 'me'): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -59,9 +45,8 @@ class FolderController extends AbstractController
         foreach ($folders as $folder) {
             $data[] = $this->folderService->toPath($folder);
         }
-        usort($data, function ($path1, $path2) {
-            return strcmp(implode('/', $path1), implode('/', $path2));
-        });
+
+        usort($data, fn($path1, $path2) => strcmp(implode('/', $path1), implode('/', $path2)));
 
         return new JsonResponse($data);
     }
@@ -91,9 +76,7 @@ class FolderController extends AbstractController
         return new JsonResponse('folder not created', Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @Route("/api/folder/create", name="api_folder_create", methods={"POST"})
-     */
+    #[Route(path: '/api/folder/create', name: 'api_folder_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -109,9 +92,7 @@ class FolderController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    /**
-     * @Route("/api/folder/update/{id}", name="api_folder_update", methods={"PUT"})
-     */
+    #[Route(path: '/api/folder/update/{id}', name: 'api_folder_update', methods: ['PUT'])]
     public function update(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -128,9 +109,7 @@ class FolderController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    /**
-     * @Route("/api/folder/delete/{id}", name="api_folder_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/api/folder/delete/{id}', name: 'api_folder_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();

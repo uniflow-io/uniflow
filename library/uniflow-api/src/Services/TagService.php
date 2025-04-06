@@ -10,19 +10,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class TagService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var TagRepository
      */
     protected $tagRepository;
 
     public function __construct(
-        EntityManagerInterface $em
+        protected \Doctrine\ORM\EntityManagerInterface $em
     ) {
-        $this->em            = $em;
         $this->tagRepository = $this->em->getRepository(Tag::class);
     }
 

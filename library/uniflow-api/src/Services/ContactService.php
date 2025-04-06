@@ -10,20 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class ContactService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var ContactRepository
      */
     protected $contactRepository;
 
     public function __construct(
-        EntityManagerInterface $em
+        protected \Doctrine\ORM\EntityManagerInterface $em
     )
     {
-        $this->em = $em;
         $this->contactRepository = $this->em->getRepository(Contact::class);
     }
 

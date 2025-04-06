@@ -10,14 +10,8 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class ClientTransformer implements DataTransformerInterface
 {
-    /**
-     * @var ClientService
-     */
-    protected $clientService;
-
-    public function __construct(ClientService $clientService)
+    public function __construct(protected \App\Services\ClientService $clientService)
     {
-        $this->clientService = $clientService;
     }
 
     /**
@@ -34,6 +28,7 @@ class ClientTransformer implements DataTransformerInterface
         foreach ($clients as $client) {
             $arrayClients[] = $client->getName();
         }
+
         return $arrayClients;
     }
 

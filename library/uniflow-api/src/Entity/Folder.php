@@ -15,22 +15,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
 #[ORM\Entity(repositoryClass: FolderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Folder
+class Folder implements \Stringable
 {
     use TimestampTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
     #[Assert\NotBlank(message: 'The slug is required')]
     #[Slug(fields: ['slug'], unique: true, updatable: true)]
-    #[ORM\Column(type: 'string', length: 255, unique: true, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true, nullable: false)]
     protected string $slug = '';
 
     #[Assert\NotBlank(message: 'The user is required')]
@@ -42,9 +42,15 @@ class Folder
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'cascade')]
     protected ?Folder $parent = null;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
+     */
     #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'parent', cascade: ['persist'])]
     protected Collection $children;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
+     */
     #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'folder', cascade: ['persist'])]
     protected Collection $programs;
 

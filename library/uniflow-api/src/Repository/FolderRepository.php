@@ -74,8 +74,10 @@ class FolderRepository extends ServiceEntityRepository
                 } else {
                     $qb->leftJoin('f' . ($i + 1) . '.parent', 'f' . $i);
                 }
+
                 $qb->andWhere('f' . $i . '.slug = :slug' . $i)->setParameter('slug' . $i, $slug);
             }
+
             $qb->andWhere('f0.parent IS NULL');
         }
 
@@ -109,7 +111,7 @@ class FolderRepository extends ServiceEntityRepository
             ->andWhere('f.user = :user')->setParameter('user', $user)
         ;
 
-        if ($folder) {
+        if ($folder instanceof \App\Entity\Folder) {
             $qb->andWhere('f.parent = :parent')->setParameter('parent', $folder);
         } else {
             $qb->andWhere('f.parent is NULL');

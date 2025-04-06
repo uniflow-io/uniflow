@@ -22,42 +22,12 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ProgramController extends AbstractController
 {
-    /**
-     * @var ProgramService
-     */
-    protected $programService;
-
-    /**
-     * @var TagService
-     */
-    protected $tagService;
-
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    /**
-     * @var FolderService
-     */
-    protected $folderService;
-
-    public function __construct(
-        ProgramService $programService,
-        TagService $tagService,
-        UserService $userService,
-        FolderService $folderService
-    ) {
-        $this->programService = $programService;
-        $this->tagService = $tagService;
-        $this->userService = $userService;
-        $this->folderService = $folderService;
+    public function __construct(protected \App\Services\ProgramService $programService, protected \App\Services\TagService $tagService, protected \App\Services\UserService $userService, protected \App\Services\FolderService $folderService)
+    {
     }
 
-    /**
-     * @Route("/api/program/{username}/list", name="api_program_list", methods={"GET"})
-     */
-    public function listAction(Request $request, $username = 'me')
+    #[Route(path: '/api/program/{username}/list', name: 'api_program_list', methods: ['GET'])]
+    public function list(Request $request, $username = 'me'): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -92,10 +62,8 @@ class ProgramController extends AbstractController
         return new JsonResponse($data);
     }
 
-    /**
-     * @Route("/api/program/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}", name="api_program_tree", methods={"GET"})
-     */
-    public function treeAction(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null)
+    #[Route(path: '/api/program/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
+    public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
@@ -118,6 +86,7 @@ class ProgramController extends AbstractController
             if ($slug) {
                 $path[] = $slug;
             }
+
             return $path;
         }, []);
 
@@ -149,6 +118,7 @@ class ProgramController extends AbstractController
 
             $children[] = $d;
         }
+
         foreach ($folders as $folder) {
             $d = $this->folderService->getJsonFolder($folder);
             $d['type'] = 'folder';
@@ -189,9 +159,7 @@ class ProgramController extends AbstractController
         return new JsonResponse($this->programService->getJsonProgram($entity), Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @Route("/api/program/create", name="api_program_create", methods={"POST"})
-     */
+    #[Route(path: '/api/program/create', name: 'api_program_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -207,9 +175,7 @@ class ProgramController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    /**
-     * @Route("/api/program/update/{id}", name="api_program_update", methods={"PUT"})
-     */
+    #[Route(path: '/api/program/update/{id}', name: 'api_program_update', methods: ['PUT'])]
     public function update(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -226,9 +192,7 @@ class ProgramController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    /**
-     * @Route("/api/program/getData/{id}", name="api_program_get_data", methods={"GET"})
-     */
+    #[Route(path: '/api/program/getData/{id}', name: 'api_program_get_data', methods: ['GET'])]
     public function getData($id): JsonResponse
     {
         $entity = $this->programService->findOne($id);
@@ -247,9 +211,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(['data' => $entity->getData()]);
     }
 
-    /**
-     * @Route("/api/program/setData/{id}", name="api_program_set_data", methods={"PUT"})
-     */
+    #[Route(path: '/api/program/setData/{id}', name: 'api_program_set_data', methods: ['PUT'])]
     public function setData(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -276,9 +238,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(false, Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @Route("/api/program/delete/{id}", name="api_program_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/api/program/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();
@@ -297,23 +257,19 @@ class ProgramController extends AbstractController
         return new JsonResponse($this->programService->getJsonProgram($entity));
     }
 
-    /**
-     * @Route("/api/program/last-public", name="api_program_last_public", methods={"GET"})
-     */
+    #[Route(path: '/api/program/last-public', name: 'api_program_last_public', methods: ['GET'])]
     public function lastPublic(): JsonResponse
     {
         $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
-            'programs' => array_map(function (Program $program) {
-                return [
-                    'name' => $program->getName(),
-                    'slug' => $program->getSlug(),
-                    'path' => $this->folderService->toPath($program->getFolder()),
-                    'description' => $program->getDescription(),
-                    'username' => $program->getUser()->getUsername(),
-                ];
-            }, $programs),
+            'programs' => array_map(fn(Program $program) => [
+                'name' => $program->getName(),
+                'slug' => $program->getSlug(),
+                'path' => $this->folderService->toPath($program->getFolder()),
+                'description' => $program->getDescription(),
+                'username' => $program->getUser()->getUsername(),
+            ], $programs),
         ]);
     }
 }

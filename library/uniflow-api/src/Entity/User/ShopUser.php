@@ -22,52 +22,45 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
 {
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $firstname;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $firstname = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $lastname;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $lastname = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $facebookId;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $facebookId = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $githubId;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $githubId = null;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $apiKey;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $apiKey = null;
 
     /**
-     * @var Collection|Program[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Program", mappedBy="user", cascade={"persist"})
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
      */
-    protected $programs;
+    #[ORM\OneToMany(targetEntity: \App\Entity\Program::class, mappedBy: 'user', cascade: ['persist'])]
+    protected \Doctrine\Common\Collections\Collection $programs;
 
     /**
-     * @var Collection|Folder[]
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Folder", mappedBy="user", cascade={"persist"})
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
      */
-    protected $folders;
+    #[ORM\OneToMany(targetEntity: \App\Entity\Folder::class, mappedBy: 'user', cascade: ['persist'])]
+    protected \Doctrine\Common\Collections\Collection $folders;
 
 
     public function __construct()
@@ -78,7 +71,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
         $this->folders = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->firstname . ' ' . $this->lastname;
     }

@@ -13,35 +13,17 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 class ProgramService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var ProgramRepository
      */
     protected $programRepository;
 
-    /**
-     * @var TagAwareAdapter
-     */
-    protected $cache;
-
-    /**
-     * @var FolderService
-     */
-    protected $folderService;
-
     public function __construct(
-        EntityManagerInterface $em,
-        TagAwareAdapter $cache,
-        FolderService $folderService
+        protected \Doctrine\ORM\EntityManagerInterface $em,
+        protected \Symfony\Component\Cache\Adapter\TagAwareAdapter $cache,
+        protected \App\Services\FolderService $folderService
     )
     {
-        $this->em = $em;
         $this->programRepository = $this->em->getRepository(Program::class);
-        $this->cache = $cache;
-        $this->folderService = $folderService;
     }
 
     public function save(Program $program): Program

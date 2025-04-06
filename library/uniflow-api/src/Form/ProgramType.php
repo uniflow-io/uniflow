@@ -30,30 +30,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProgramType extends AbstractType
 {
-    /**
-     * @var ClientService
-     */
-    protected $clientService;
-
-    /**
-     * @var TagService
-     */
-    protected $tagService;
-
-    /**
-     * @var FolderService
-     */
-    protected $folderService;
-
-    public function __construct(
-        ClientService $clientService,
-        TagService $tagService,
-        FolderService $folderService
-    )
+    public function __construct(protected \App\Services\ClientService $clientService, protected \App\Services\TagService $tagService, protected \App\Services\FolderService $folderService)
     {
-        $this->clientService = $clientService;
-        $this->tagService = $tagService;
-        $this->folderService = $folderService;
     }
 
     /**

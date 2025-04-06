@@ -10,14 +10,8 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class TagTransformer implements DataTransformerInterface
 {
-    /**
-     * @var TagService
-     */
-    protected $tagService;
-
-    public function __construct(TagService $tagService)
+    public function __construct(protected \App\Services\TagService $tagService)
     {
-        $this->tagService = $tagService;
     }
 
     /**
@@ -34,6 +28,7 @@ class TagTransformer implements DataTransformerInterface
         foreach ($tags as $tag) {
             $arrayTags[] = $tag->getName();
         }
+
         return $arrayTags;
     }
 

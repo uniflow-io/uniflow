@@ -12,20 +12,14 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 class FolderService
 {
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var FolderRepository
      */
     protected $folderRepository;
 
     public function __construct(
-        EntityManagerInterface $em
+        protected \Doctrine\ORM\EntityManagerInterface $em
     )
     {
-        $this->em = $em;
         $this->folderRepository = $this->em->getRepository(Folder::class);
     }
 

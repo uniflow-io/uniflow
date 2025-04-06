@@ -32,26 +32,26 @@ use ApiPlatform\Metadata\Delete;
 #[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
 #[ORM\UniqueConstraint(name: 'unique_slug', columns: ['user_id', 'slug'])]
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
-#[UniqueEntity(fields: ['user', 'slug'], message: 'The slug \'{{ value }}\' is already taken.')]
+#[UniqueEntity(fields: ['user', 'slug'], message: "The slug '{{ value }}' is already taken.")]
 #[ORM\HasLifecycleCallbacks]
-class Program
+class Program implements \Stringable
 {
     use TimestampTrait;
 
     #[Groups(['program'])]
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     #[Assert\NotBlank(message: 'The name is required')]
     #[Groups(['program'])]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
     protected string $name = '';
 
     #[Assert\NotBlank(message: 'The slug is required')]
     #[Slug(fields: ['slug'], unique: true, updatable: true)]
-    #[ORM\Column(type: 'string', length: 255, unique: true, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true, nullable: false)]
     protected string $slug = '';
 
     #[Assert\NotBlank(message: 'The user is required')]
@@ -63,24 +63,30 @@ class Program
     #[ORM\JoinColumn(name: 'folder_id', referencedColumnName: 'id', onDelete: 'cascade')]
     protected ?Folder $folder = null;
 
-    #[Assert\NotBlank(message: 'The client can\'t be empty')]
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Client>
+     */
+    #[Assert\NotBlank(message: "The client can't be empty")]
     #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'clients', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'program_client')]
     protected Collection $clients;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Tag>
+     */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'programs', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'program_tag')]
     protected Collection $tags;
 
     #[Groups(['program'])]
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
     protected ?string $description = null;
 
     #[Groups(['program'])]
-    #[ORM\Column(type: 'boolean', nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: false)]
     protected bool $public = false;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
     protected ?string $data = null;
 
     public function __construct()
