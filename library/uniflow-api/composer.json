@@ -25,7 +25,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "runtime/frankenphp-symfony": "*",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "sylius/paypal-plugin": "^2.0",
         "sylius/sylius": "~2.0.0",
         "symfony/dotenv": "^6.4 || ^7.1",
