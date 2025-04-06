@@ -17,12 +17,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $firstname = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $lastname = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $facebookId = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -51,10 +45,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
         $this->folders = new ArrayCollection();
     }
 
-    public function __toString(): string
-    {
-        return $this->firstname . ' ' . $this->lastname;
-    }
 
     public function getSalt()
     {
@@ -64,30 +54,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFirstname(): ?string
-    {
-        return $this->firstname;
-    }
-
-    public function setFirstname(?string $firstname): self
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(?string $lastname): self
-    {
-        $this->lastname = $lastname;
-
-        return $this;
     }
 
     public function getFacebookId(): ?string
@@ -137,7 +103,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function removeProgram(Program $program): self
     {
         $this->programs->removeElement($program);
-        $program->setUser(null);
 
         return $this;
     }
@@ -145,7 +110,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     /**
      * @return Collection|Program[]
      */
-    public function getPrograms(): Collection|Collection
+    public function getPrograms(): Collection
     {
         return $this->programs;
     }
@@ -161,7 +126,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function removeFolder(Folder $folder): self
     {
         $this->folders->removeElement($folder);
-        $folder->setUser(null);
 
         return $this;
     }
@@ -169,7 +133,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     /**
      * @return Collection|Folder[]
      */
-    public function getFolders(): Collection|Collection
+    public function getFolders(): Collection
     {
         return $this->folders;
     }

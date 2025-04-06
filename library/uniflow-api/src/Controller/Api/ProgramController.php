@@ -26,7 +26,12 @@ use function in_array;
 
 class ProgramController extends AbstractController
 {
-    public function __construct(protected ProgramService $programService, protected TagService $tagService, protected UserService $userService, protected FolderService $folderService) {}
+    public function __construct(
+        protected ProgramService $programService,
+        protected TagService $tagService,
+        protected UserService $userService,
+        protected FolderService $folderService
+    ) {}
 
     #[Route(path: '/api/program/{username}/list', name: 'api_program_list', methods: ['GET'])]
     public function list(Request $request, $username = 'me'): JsonResponse

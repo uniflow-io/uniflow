@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
@@ -17,8 +22,13 @@ use UnexpectedValueException;
 
 use function sprintf;
 
-class ApiKeyAuthenticator extends AbstractGuardAuthenticator
+class ApiKeyAuthenticator extends AbstractAuthenticator
 {
+    public function __construct(
+        private ApiKeyUserProvider $userProvider,
+    ) {
+    }
+
     /**
      * Returns a response that directs the user to authenticate.
      *
@@ -53,7 +63,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * @return bool
      */
-    public function supports(Request $request)
+    public function supports(Request $request): ?bool
     {
         return $request->query->has('apiKey');
     }
@@ -79,11 +89,18 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * @throws UnexpectedValueException If null is returned
      */
-    public function getCredentials(Request $request)
+    public function authenticate(Request $request): Passport
     {
-        return [
-            'token' => $request->query->get('apiKey'),
-        ];
+        $apiKey = $request->query->get('apiKey');
+        if (null === $apiKey) {
+            throw new CustomUserMessageAuthenticationException('No API key provided');
+        }
+
+        return new SelfValidatingPassport(
+            new UserBadge($apiKey, function(string $apiKey) {
+                return $this->userProvider->loadUserByApiKey($apiKey);
+            })
+        );
     }
 
     /**
@@ -143,13 +160,13 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * @return null|Response
      */
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
         ];
 
-        return new JsonResponse($data, Response::HTTP_FORBIDDEN);
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -165,8 +182,9 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      * @return null|Response
      */
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // on success, let the request continue
         return null;
     }
 
