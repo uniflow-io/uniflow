@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Entity\Folder;
-use App\Entity\User;
+use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;

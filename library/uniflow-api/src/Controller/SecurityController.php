@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Config;
-use App\Entity\User;
+use App\Entity\User\ShopUser as User;
 use App\Form\RegisterType;
 use App\Services\ConfigService;
 use App\Services\UserService;

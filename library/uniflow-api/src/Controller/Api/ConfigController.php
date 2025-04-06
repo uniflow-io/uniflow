@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Config;
-use App\Entity\User;
+use App\Entity\User\ShopUser as User;
 use App\Form\ConfigType;
 use App\Services\ConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

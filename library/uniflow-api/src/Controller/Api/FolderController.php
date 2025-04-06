@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Entity\Folder;
-use App\Entity\User;
+use App\Entity\User\ShopUser as User;
 use App\Form\FolderType;
 use App\Services\FolderService;
 use App\Services\UserService;

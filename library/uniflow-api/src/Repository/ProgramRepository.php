@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Folder;
 use App\Entity\Program;
-use App\Entity\User;
+use App\Entity\User\ShopUser as User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
