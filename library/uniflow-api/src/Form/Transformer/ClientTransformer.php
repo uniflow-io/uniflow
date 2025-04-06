@@ -32,10 +32,8 @@ class ClientTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $arrayClients
-     *
-     * @return ArrayCollection
      */
-    public function reverseTransform($arrayClients): mixed
+    public function reverseTransform($arrayClients): ArrayCollection
     {
         if (null === $arrayClients) {
             return new ArrayCollection();

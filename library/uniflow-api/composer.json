@@ -25,6 +25,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "api-platform/doctrine-orm": "^4.0.3",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sylius/paypal-plugin": "^2.0",
         "sylius/sylius": "^2.0",

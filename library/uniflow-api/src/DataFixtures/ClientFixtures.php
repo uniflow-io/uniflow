@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ClientFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach (['uniflow', 'node', 'chome', 'jetbrains', 'rust'] as $name) {
             $client = new Client();

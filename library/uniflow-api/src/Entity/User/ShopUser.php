@@ -145,7 +145,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     /**
      * @return Collection|Program[]
      */
-    public function getPrograms(): Collection
+    public function getPrograms(): Collection|Collection
     {
         return $this->programs;
     }
@@ -169,7 +169,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     /**
      * @return Collection|Folder[]
      */
-    public function getFolders(): Collection
+    public function getFolders(): Collection|Collection
     {
         return $this->folders;
     }

@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ArrayType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $resizeListener = new ResizeArrayFormListener(
             TextType::class,
@@ -23,7 +23,7 @@ class ArrayType extends AbstractType
         $builder->addEventSubscriber($resizeListener);
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'array';
     }

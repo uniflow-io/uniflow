@@ -32,10 +32,8 @@ class TagTransformer implements DataTransformerInterface
 
     /**
      * @param mixed $arrayTags
-     *
-     * @return ArrayCollection
      */
-    public function reverseTransform($arrayTags): mixed
+    public function reverseTransform($arrayTags): ArrayCollection
     {
         if (null === $arrayTags) {
             return new ArrayCollection();

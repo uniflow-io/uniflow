@@ -15,7 +15,7 @@ class SettingsType extends AbstractType
     /**
      * Build Form.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('firstname', TextType::class);
         $builder->add('lastname', TextType::class);
@@ -25,7 +25,7 @@ class SettingsType extends AbstractType
         $builder->add('githubId', TextType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,

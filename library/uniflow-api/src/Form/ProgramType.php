@@ -27,7 +27,7 @@ class ProgramType extends AbstractType
     /**
      * Build Form.
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class);
         $builder->add('slug', TextType::class);
@@ -55,7 +55,7 @@ class ProgramType extends AbstractType
         $builder->get('path')->addModelTransformer($pathTransformer);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Program::class,

@@ -33,10 +33,8 @@ class PathTransformer implements DataTransformerInterface
 
     /**
      * @param array $value
-     *
-     * @return null|Folder
      */
-    public function reverseTransform($value): mixed
+    public function reverseTransform($value): ?Folder
     {
         return $this->folderService->findOneByUserAndPath($this->user, $value);
     }
