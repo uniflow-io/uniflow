@@ -325,9 +325,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   /*library.nodes.forEach(card => {
         cardSlugs.add(card.fields.slug);
     });*/
-  localLibrary.nodes.forEach((card) => {
+  /*localLibrary.nodes.forEach((card) => {
     cardSlugs.add(card.fields.slug);
-  });
+  });*/
   cardSlugs.forEach(function (cardSlug) {
     createPage({
       path: `/library/${cardSlug}`,
