@@ -2,14 +2,13 @@
 ##usage :
 ##-------
 
-NODE_ENV ?= local
 NPM_BIN = ./node_modules/.bin
 
 build: clean ## build
-	if [ ! -f .env.$(NODE_ENV) ]; then cp .env .env.$(NODE_ENV); fi
-	$(NPM_BIN)/tsc -b
-	$(NPM_BIN)/oclif-dev manifest
-	GATSBY_ACTIVE_ENV=$(NODE_ENV) $(NPM_BIN)/gatsby build
+	if [ ! -f .env.production ]; then cp .env .env.production; fi
+	# $(NPM_BIN)/tsc -b
+	# $(NPM_BIN)/oclif-dev manifest
+	GATSBY_ACTIVE_ENV=production $(NPM_BIN)/gatsby build
 
 clean: ## clean
 	rm -rf .cache dist public
