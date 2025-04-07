@@ -102,7 +102,6 @@ module.exports = {
                         nodes {
                           id
                           excerpt
-                          html
                           fields {
                             slug
                           }
