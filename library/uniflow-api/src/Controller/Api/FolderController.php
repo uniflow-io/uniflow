@@ -18,9 +18,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 use function in_array;
 
+#[Route('/api/v1/uniflow/folder')]
 class FolderController extends AbstractController
 {
     public function __construct(protected FolderService $folderService, protected UserService $userService) {}
@@ -28,7 +30,7 @@ class FolderController extends AbstractController
     /**
      * @param string $username
      */
-    #[Route(path: '/api/folder/{username}/tree', name: 'api_folder_tree', methods: ['GET'])]
+    #[Route(path: '/{username}/tree', name: 'api_folder_tree', methods: ['GET'])]
     public function tree($username = 'me'): JsonResponse
     {
         $user = $this->getUser();
@@ -53,7 +55,7 @@ class FolderController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/api/folder/create', name: 'api_folder_create', methods: ['POST'])]
+    #[Route(path: '/create', name: 'api_folder_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -63,13 +65,14 @@ class FolderController extends AbstractController
         }
 
         $entity = new Folder();
+        $entity->setUid(Uuid::v7()->toString());
         $entity->setCreated(new DateTime());
         $entity->setUser($user);
 
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/folder/update/{id}', name: 'api_folder_update', methods: ['PUT'])]
+    #[Route(path: '/update/{id}', name: 'api_folder_update', methods: ['PUT'])]
     public function update(Request $request, $id): JsonResponse
     {
         $user = $this->getUser();
@@ -86,7 +89,7 @@ class FolderController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/folder/delete/{id}', name: 'api_folder_delete', methods: ['DELETE'])]
+    #[Route(path: '/delete/{id}', name: 'api_folder_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();

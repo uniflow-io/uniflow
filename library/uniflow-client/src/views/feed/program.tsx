@@ -252,7 +252,7 @@ const Program: FC<ProgramProps> = (props) => {
   };
 
   const onDeserializeFlowsData = (raw: string): DeserialisedFlows => {
-    const data = JSON.parse(raw);
+      const data = JSON.parse(raw);
 
     const graph = [];
 

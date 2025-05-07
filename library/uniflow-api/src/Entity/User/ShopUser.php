@@ -6,16 +6,20 @@ namespace App\Entity\User;
 
 use App\Entity\Folder;
 use App\Entity\Program;
+use App\Entity\Traits\UidTrait;
+use App\Repository\User\ShopUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Core\Model\ShopUser as BaseShopUser;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ShopUserRepository::class)]
 #[ORM\Table(name: 'sylius_shop_user')]
 class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterface
 {
+    use UidTrait;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $facebookId = null;
 
@@ -40,6 +44,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function __construct()
     {
         parent::__construct();
+        //UidTrait::__construct();
 
         $this->programs = new ArrayCollection();
         $this->folders = new ArrayCollection();

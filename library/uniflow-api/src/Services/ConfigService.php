@@ -8,6 +8,7 @@ use App\Entity\Config;
 use App\Repository\ConfigRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class ConfigService
 {
@@ -41,6 +42,36 @@ class ConfigService
     public function findOne(?int $id = null): ?Config
     {
         return $this->configRepository->findOne($id);
+    }
+
+    public function getConfig(): Config
+    {
+        $config = $this->findOne();
+        if (!$config) {
+            $config = new Config();
+            $config->setUid(Uuid::v7()->toString());
+            $this->save($config);
+        }
+        return $config;
+    }
+
+    public function updateConfig(Config $config, array $data): bool
+    {
+        if (isset($data['mediumToken'])) {
+            $config->setMediumToken($data['mediumToken']);
+        }
+
+        try {
+            $this->save($config);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getJsonConfig(Config $config): array
+    {
+        return $this->getJson($config);
     }
 
     public function getJson(Config $config): array

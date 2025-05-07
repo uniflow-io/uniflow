@@ -8,6 +8,7 @@ use App\Entity\Client;
 use App\Services\ClientService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class ClientTransformer implements DataTransformerInterface
 {
@@ -46,6 +47,7 @@ class ClientTransformer implements DataTransformerInterface
 
             if (!$client) {
                 $client = new Client();
+                $client->setUid(Uuid::v7()->toString());
                 $client->setName($clientName);
                 $this->clientService->save($client);
             }

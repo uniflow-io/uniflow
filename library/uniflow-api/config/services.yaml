@@ -11,12 +11,16 @@ services:
         # fetching services directly from the container via $container->get() won't work
         public: false
 
-        bind:
-            $appOauthFacebookId:   '%env(resolve:APP_FACEBOOK_ID)%'
-            $appOauthGithubId:     '%env(resolve:APP_GITHUB_ID)%'
-            $appOauthGithubSecret: '%env(resolve:APP_GITHUB_SECRET)%'
-            $appOauthMediumId:     '%env(resolve:APP_MEDIUM_ID)%'
-            $appOauthMediumSecret: '%env(resolve:APP_MEDIUM_SECRET)%'
+        #bind:
+        #    $appOauthFacebookId:   '%env(resolve:APP_FACEBOOK_ID)%'
+        #    $appOauthGithubId:     '%env(resolve:APP_GITHUB_ID)%'
+        #    $appOauthGithubSecret: '%env(resolve:APP_GITHUB_SECRET)%'
+        #    $appOauthMediumId:     '%env(resolve:APP_MEDIUM_ID)%'
+        #    $appOauthMediumSecret: '%env(resolve:APP_MEDIUM_SECRET)%'
+        #    $facebookAppId:        '%env(resolve:APP_FACEBOOK_ID)%'
+        #    $facebookAppSecret:    '%env(resolve:APP_FACEBOOK_SECRET)%'
+        #    $githubClientId:       '%env(resolve:APP_GITHUB_ID)%'
+        #    $githubClientSecret:   '%env(resolve:APP_GITHUB_SECRET)%'
 
     _instanceof:
         Sylius\Bundle\ResourceBundle\Controller\ResourceController:
@@ -38,6 +42,18 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+    App\Services\AuthService:
+        arguments:
+            $em: '@doctrine.orm.entity_manager'
+            $userService: '@App\Services\UserService'
+            $passwordHasher: '@security.user_password_hasher'
+            $jwtManager: '@lexik_jwt_authentication.jwt_manager'
+            $httpClient: '@http_client'
+            #$facebookAppId: '%env(resolve:APP_FACEBOOK_ID)%'
+            #$facebookAppSecret: '%env(resolve:APP_FACEBOOK_SECRET)%'
+            #$githubClientId: '%env(resolve:APP_GITHUB_ID)%'
+            #$githubClientSecret: '%env(resolve:APP_GITHUB_SECRET)%'
 
     Symfony\Component\Cache\Adapter\TagAwareAdapter:
         arguments:
@@ -91,3 +107,19 @@ services:
 #        class: Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader
 #        arguments: ['@annotation_reader']
 #        tags: [routing.loader]
+
+    gedmo.mapping.driver.attribute:
+        class: Gedmo\Mapping\Driver\AttributeReader
+
+    # Gedmo Sluggable Extension Listener
+    gedmo.listener.sluggable:
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_listener, event: 'onFlush' }
+            - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+            - { name: doctrine.event_listener, event: 'prePersist' }
+        # calls:
+            # Uncomment the below call if using attributes, and comment the call for the annotation reader
+            # - [ setAnnotationReader, [ '@gedmo.mapping.driver.attribute' ] ]
+            # The `annotation_reader` service was deprecated in Symfony 6.4 and removed in Symfony 7.0
+            # - [ setAnnotationReader, [ '@annotation_reader' ] ]

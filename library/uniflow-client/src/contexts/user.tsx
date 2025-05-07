@@ -125,8 +125,10 @@ export const fetchSettings = (uid: string, token: string) => {
 export const updateSettings = (item: Partial<UserProviderState>, token: string) => {
   return async (dispatch: UserDispath, authDispath: AuthDispath, logsDispatch: LogsDispath) => {
     const data = {
-      firstname: item.firstname,
-      lastname: item.lastname,
+      customer: {
+          firstname: item.firstname,
+          lastname: item.lastname,
+      },
       username: item.username,
       apiKey: item.apiKey,
       facebookId: item.facebookId,

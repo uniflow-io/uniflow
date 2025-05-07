@@ -36,6 +36,27 @@ class ProgramRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
+    public function findOneByUid(?User $user, ?string $uid = null): ?Program
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p')
+        ;
+
+        if($user) {
+            $qb->andWhere('p.user = :user')->setParameter('user', $user);
+        }
+
+        if ($uid) {
+            $qb->andWhere('p.uid = :uid')->setParameter('uid', $uid);
+        } else {
+            $qb->setMaxResults(1);
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+
     public function findOneByUser(User $user, ?int $id = null): ?Program
     {
         $qb = $this->createQueryBuilder('p')

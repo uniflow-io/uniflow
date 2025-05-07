@@ -396,11 +396,11 @@ export const updateProgram = (program: ProgramFeedType, token: string) => {
     const data = {
       name: program.name,
       slug: program.slug,
-      path: program.path,
+      //path: program.path,
       clients: program.clients,
       tags: program.tags,
       description: program.description,
-      isPublic: program.isPublic,
+      //isPublic: program.isPublic,
     };
 
     try {
@@ -514,7 +514,7 @@ export const createFolder = (folder: { name: NotEmptyStringType; slug?: SlugType
 
     try {
       const folderFeed = apiToFolderFeedEntity(await api.createUserFolder({ uid }, data, { token }));
-      
+
       commitUpdateFeed({
         type: 'folder',
         entity: folderFeed,

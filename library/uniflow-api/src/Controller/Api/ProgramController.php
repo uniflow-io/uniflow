@@ -20,10 +20,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 use function count;
 use function in_array;
 
+#[Route('/api/v1/uniflow/program')]
 class ProgramController extends AbstractController
 {
     public function __construct(
@@ -33,7 +35,7 @@ class ProgramController extends AbstractController
         protected FolderService $folderService
     ) {}
 
-    #[Route(path: '/api/programs/{username}/list', name: 'api_program_list', methods: ['GET'])]
+    #[Route(path: '/{username}/list', name: 'api_program_list', methods: ['GET'])]
     public function list(Request $request, $username = 'me'): JsonResponse
     {
         /** @var User $user */
@@ -70,10 +72,23 @@ class ProgramController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/api/programs/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
+    #[Route(path: '/public', name: 'api_program_last_public', methods: ['GET'])]
+    public function lastPublic(): JsonResponse //to deprecate => use api_program_list
+    {
+        $programs = $this->programService->findLastPublic(15);
+
+        return new JsonResponse([
+            'data' => array_map(fn (Program $program) => [
+                $this->programService->getJsonProgram($program)
+            ], $programs),
+            'total' => count($programs),
+        ]);
+    }
+
+    /*#[Route(path: '/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
     public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): JsonResponse
     {
-        /** @var User $user */
+        // @var User $user
         $user = $this->getUser();
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
@@ -141,9 +156,9 @@ class ProgramController extends AbstractController
         ];
 
         return new JsonResponse($data);
-    }
+    }*/
 
-    #[Route(path: '/api/programs/create', name: 'api_program_create', methods: ['POST'])]
+    #[Route(path: '/create', name: 'api_program_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -153,21 +168,22 @@ class ProgramController extends AbstractController
         }
 
         $entity = new Program();
+        $entity->setUid(Uuid::v7()->toString());
         $entity->setCreated(new DateTime());
         $entity->setUser($user);
 
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/programs/update/{id}', name: 'api_program_update', methods: ['PUT'])]
-    public function update(Request $request, $id): JsonResponse
+    #[Route(path: '/{uid}', name: 'api_program_update', methods: ['PUT'])]
+    public function update(Request $request, $uid): JsonResponse
     {
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->programService->findOneByUser($user, $id);
+        $entity = $this->programService->findOneByUid($user, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');
@@ -176,10 +192,10 @@ class ProgramController extends AbstractController
         return $this->manage($request, $entity);
     }
 
-    #[Route(path: '/api/programs/getData/{id}', name: 'api_program_get_data', methods: ['GET'])]
-    public function getData($id): JsonResponse
+    #[Route(path: '/{uid}/flows', name: 'api_program_get_flows', methods: ['GET'])]
+    public function getFlows($uid): JsonResponse
     {
-        $entity = $this->programService->findOne($id);
+        $entity = $this->programService->findOneByUid(null, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');
@@ -196,15 +212,15 @@ class ProgramController extends AbstractController
         return new JsonResponse(['data' => $entity->getData()]);
     }
 
-    #[Route(path: '/api/programs/setData/{id}', name: 'api_program_set_data', methods: ['PUT'])]
-    public function setData(Request $request, $id): JsonResponse
+    #[Route(path: '/{uid}/flows', name: 'api_program_set_flows', methods: ['PUT'])]
+    public function setFlows(Request $request, $uid): JsonResponse
     {
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->programService->findOneByUser($user, $id);
+        $entity = $this->programService->findOneByUid($user, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');
@@ -212,8 +228,12 @@ class ProgramController extends AbstractController
 
         if ('PUT' === $request->getMethod()) {
             $content = $request->getContent();
+            $data = null;
+            if (!empty($content)) {
+                $data = json_decode($content, true)['data'];
+            }
 
-            $entity->setData($content);
+            $entity->setData($data);
 
             $this->programService->save($entity);
 
@@ -223,7 +243,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(false, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route(path: '/api/programs/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
+    #[Route(path: '/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();
@@ -240,19 +260,6 @@ class ProgramController extends AbstractController
         $this->programService->remove($entity);
 
         return new JsonResponse($this->programService->getJsonProgram($entity));
-    }
-
-    #[Route(path: '/api/programs', name: 'api_program_last_public', methods: ['GET'])]
-    public function lastPublic(): JsonResponse
-    {
-        $programs = $this->programService->findLastPublic(15);
-
-        return new JsonResponse([
-            'data' => array_map(fn (Program $program) => [
-                $this->programService->getJsonProgram($program)
-            ], $programs),
-            'total' => count($programs),
-        ]);
     }
 
     private function manage(Request $request, Program $entity): JsonResponse

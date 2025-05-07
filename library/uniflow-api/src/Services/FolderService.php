@@ -9,6 +9,7 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class FolderService
 {
@@ -70,17 +71,82 @@ class FolderService
         return $this->folderRepository->findByUserAndParent($user, $folder);
     }
 
-    public function toPath(?Folder $folder): array
+    public function getUserFolders(string $uid, int $page, int $perPage, ?string $path = null): array
     {
-        $path = [];
+        $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
+        if (!$user) {
+            return [];
+        }
+
+        $parent = null;
+        if ($path) {
+            $parent = $this->findOneByUserAndPath($user, explode('/', trim($path, '/')));
+        }
+
+        $offset = ($page - 1) * $perPage;
+        return $this->folderRepository->findBy(
+            ['user' => $user, 'parent' => $parent],
+            ['created' => 'DESC'],
+            $perPage,
+            $offset
+        );
+    }
+
+    public function countUserFolders(string $uid, ?string $path = null): int
+    {
+        $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
+        if (!$user) {
+            return 0;
+        }
+
+        $parent = null;
+        if ($path) {
+            $parent = $this->findOneByUserAndPath($user, explode('/', trim($path, '/')));
+        }
+
+        return $this->folderRepository->count(['user' => $user, 'parent' => $parent]);
+    }
+
+    public function createFolder(User $user, array $data): ?Folder
+    {
+        $folder = new Folder();
+        $folder->setUid(Uuid::v7()->toString());
+        $folder->setUser($user);
+        $folder->setName($data['name']);
+
+        if (isset($data['path'])) {
+            $parent = $this->findOneByUserAndPath($user, explode('/', trim($data['path'], '/')));
+            $folder->setParent($parent);
+        }
+
+        if (isset($data['slug'])) {
+            $folder->setSlug($data['slug']);
+        } else {
+            $folder->setSlug($data['name']);
+        }
+
+        $folder->setCreated(new DateTime());
+        $folder->setUpdated(new DateTime());
+
+        try {
+            $this->save($folder);
+            return $folder;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function toPath(?Folder $folder): string
+    {
+        $paths = [];
 
         while ($folder) {
-            array_unshift($path, $folder->getSlug());
+            array_unshift($paths, $folder->getSlug());
 
             $folder = $folder->getParent();
         }
 
-        return $path;
+        return '/' . implode('/', $paths);
     }
 
     public function getJsonFolder(Folder $folder): array

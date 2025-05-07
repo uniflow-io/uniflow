@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampTrait;
+use App\Entity\Traits\UidTrait;
 use App\Repository\TagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('name', message: "The name '{{ value }}' is already taken.")]
 class Tag implements Stringable
 {
+    use UidTrait;
     use TimestampTrait;
 
     #[ORM\Id]

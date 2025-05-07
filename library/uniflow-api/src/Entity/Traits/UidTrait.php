@@ -8,27 +8,24 @@ use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Timestampable;
-use Symfony\Component\Uid\Ulid;
-use Symfony\Bridge\Doctrine\Types\UlidType;
+use Symfony\Component\Uid\Uuid;
 
 trait UidTrait
 {
-    #[ORM\Column(type: UlidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.ulid_generator')]
-    protected Ulid $uid;
+    #[ORM\Column(type: Types::STRING, length: 36, unique: true, nullable: false)]
+    protected string $uid = '';
 
-    public function __construct()
+    /*public function __construct()
     {
-        $this->uid = new Ulid();
-    }
+        $this->uid = Uuid::v7()->toString();
+    }*/
 
-    public function getUid(): Ulid
+    public function getUid(): string
     {
         return $this->uid;
     }
 
-    public function setUid(Ulid $uid): self
+    public function setUid(string $uid): self
     {
         $this->uid = $uid;
 

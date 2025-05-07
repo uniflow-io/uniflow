@@ -15,15 +15,18 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Symfony\Component\Uid\Uuid;
 
+#[Route('/api/v1/uniflow/contact')]
 class ContactController extends AbstractController
 {
     public function __construct(protected ContactService $contactService, protected Environment $twig, protected MailerInterface $mailer) {}
 
-    #[Route(path: '/api/contact/create', name: 'api_contact_set', methods: ['POST'])]
+    #[Route(path: '/create', name: 'api_contact_set', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $contact = new Contact();
+        $contact->setUid(Uuid::v7()->toString());
 
         $form = $this->createForm(ContactType::class, $contact, [
             'csrf_protection' => false,

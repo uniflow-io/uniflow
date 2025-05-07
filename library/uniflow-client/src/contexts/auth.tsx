@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import Container from '../container';
 import { Api, Env } from '../services';
-import jwtDecode, { InvalidTokenError } from 'jwt-decode';
+import { jwtDecode, InvalidTokenError } from 'jwt-decode';
 import { useReducerRef } from '../hooks/use-reducer-ref';
 import { ApiNotAuthorizedException } from '../models/api-exceptions';
 import { FC } from 'react';

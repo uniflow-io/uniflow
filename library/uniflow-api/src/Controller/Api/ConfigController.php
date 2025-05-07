@@ -15,12 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
+#[Route('/api/v1/uniflow/config')]
 class ConfigController extends AbstractController
 {
     public function __construct(protected ConfigService $configService) {}
 
-    #[Route(path: '/api/config/getConfig', name: 'api_config_get', methods: ['GET'])]
+    #[Route(path: '/getConfig', name: 'api_config_get', methods: ['GET'])]
     public function getConfig(): JsonResponse
     {
         /** @var User $user */
@@ -36,7 +38,7 @@ class ConfigController extends AbstractController
         return new JsonResponse($this->configService->getJson($config));
     }
 
-    #[Route(path: '/api/config/setConfig', name: 'api_config_set', methods: ['PUT'])]
+    #[Route(path: '/setConfig', name: 'api_config_set', methods: ['PUT'])]
     public function setConfig(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -48,6 +50,7 @@ class ConfigController extends AbstractController
         $config = $this->configService->findOne();
         if (!$config) {
             $config = new Config();
+            $config->setUid(Uuid::v7()->toString());
         }
 
         $form = $this->createForm(ConfigType::class, $config, [

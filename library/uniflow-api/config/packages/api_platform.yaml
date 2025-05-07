@@ -10,7 +10,7 @@ api_platform:
         versions: [3]
         api_keys:
             apiKey:
-                name: Uniflow-Authorization
+                name: Authorization
                 type: header
     
     # Enable OpenAPI documentation

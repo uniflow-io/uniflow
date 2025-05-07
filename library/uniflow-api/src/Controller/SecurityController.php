@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Config;
 use App\Entity\User\ShopUser as User;
 use App\Form\RegisterType;
+use App\Services\AuthService;
 use App\Services\ConfigService;
 use App\Services\UserService;
 use Doctrine\ORM\NonUniqueResultException;
@@ -23,91 +24,103 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LogicException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+#[Route('/api/v1/uniflow')]
 class SecurityController extends AbstractController
 {
-    /**
-     * @param string $appOauthFacebookId
-     * @param string $appOauthGithubId
-     * @param string $appOauthGithubSecret
-     * @param string $appOauthMediumId
-     * @param string $appOauthMediumSecret
-     */
-    public function __construct(protected $appOauthFacebookId, protected $appOauthGithubId, protected $appOauthGithubSecret, protected $appOauthMediumId, protected $appOauthMediumSecret, protected UserService $userService, protected ConfigService $configService, protected JWTTokenManagerInterface $jwtTokenManager, protected UserPasswordHasherInterface $userPasswordHasher, protected HttpClientInterface $httpClient) {}
+    public function __construct(
+        protected AuthService $authService,
+        protected UserService $userService,
+        protected ConfigService $configService,
+        protected JWTTokenManagerInterface $jwtTokenManager,
+        protected UserPasswordHasherInterface $userPasswordHasher,
+        protected HttpClientInterface $httpClient,
+        /*protected string $appOauthFacebookId,
+        protected string $appOauthGithubId,
+        protected string $appOauthGithubSecret,
+        protected string $appOauthMediumId,
+        protected string $appOauthMediumSecret*/
+    ) {}
 
     /**
      * @throws Exception
      */
-    #[Route(path: '/api/login_check', name: 'api_login_check')]
+    #[Route(path: '/login_check', name: 'api_login_check')]
     public function loginCheck(): never
     {
         throw new LogicException('This should never be reached!');
     }
 
+    #[Route(path: '/login', name: 'api_auth_login', methods: ['POST'])]
+    public function login(Request $request): JsonResponse
+    {
+        $content = json_decode($request->getContent(), true);
+
+        if (!isset($content['username']) || !isset($content['password'])) {
+            return new JsonResponse([
+                'message' => 'Username and password are required',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            $result = $this->authService->login($content['username'], $content['password']);
+
+            return new JsonResponse([
+                'token' => $result['token'],
+                'uid' => $result['user']->getUid(),
+            ], Response::HTTP_CREATED);
+        } catch (AuthenticationException $e) {
+            return new JsonResponse([
+                'message' => 'Bad credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+    }
+
     /**
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransportExceptionInterface
      */
-    #[Route(path: '/api/login/facebook', name: 'api_login_facebook', methods: ['POST'])]
+    #[Route(path: '/login-facebook', name: 'api_auth_login_facebook', methods: ['POST'])]
     public function facebookLogin(Request $request): JsonResponse
     {
-        $token = null;
+        $content = json_decode($request->getContent(), true);
 
-        $content = $request->getContent();
-        if (!empty($content)) {
-            $data = json_decode($content, true);
-            $token = $data['access_token'] ?? null;
+        if (!isset($content['access_token'])) {
+            return new JsonResponse([
+                'message' => 'Access token is required',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Get the token's Facebook app info.
-        $response = $this->httpClient->request('GET', 'https://graph.facebook.com/app/?access_token=' . $token);
+        try {
+            $result = $this->authService->facebookLogin(
+                $content['access_token'],
+                $this->getUser()
+            );
 
-        // Make sure it's the correct app.
-        $tokenApp = $response->toArray();
-        if (!$tokenApp || !isset($tokenApp['id']) || $tokenApp['id'] !== $this->appOauthFacebookId) {
-            throw new AccessDeniedHttpException('Bad credentials.');
+            return new JsonResponse([
+                'token' => $result['token'],
+                'uid' => $result['user']->getUid(),
+            ], Response::HTTP_CREATED);
+        } catch (AuthenticationException $e) {
+            return new JsonResponse([
+                'message' => 'Bad credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        // Get the token's Facebook user info.
-        $response = $this->httpClient->request('GET', 'https://graph.facebook.com/me/?access_token=' . $token);
-
-        // Try to fetch user by it's token ID, create it otherwise.
-        $tokenUser = $response->toArray();
-        if (!$tokenUser || !isset($tokenUser['id'])) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
-
-        $facebookId = $tokenUser['id'];
-        $facebookEmail = $tokenUser['id'] . '@facebook.com';
-
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            $user = $this->userService->findOneByFacebookId($facebookId);
-            if ($user === null) {
-                $user = $this->userService->findOneByEmail($facebookEmail);
-            }
-        }
-
-        if ($user === null) {
-            $user = new User();
-            $user->setFacebookId($facebookId);
-            $user->setEmail($facebookEmail);
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid('uniflow', true)));
-            $this->userService->save($user);
-        } elseif ($user->getFacebookId() === null) {
-            $user->setFacebookId($facebookId);
-            $this->userService->save($user);
-        }
-
-        return new JsonResponse([
-            'token' => $this->jwtTokenManager->create($user),
-        ]);
     }
 
     /**
@@ -116,76 +129,36 @@ class SecurityController extends AbstractController
      * @throws OptimisticLockException
      * @throws TransportExceptionInterface
      */
-    #[Route(path: '/api/login/github', name: 'api_login_github', methods: ['POST'])]
+    #[Route(path: '/login-github', name: 'api_auth_login_github', methods: ['POST'])]
     public function githubLogin(Request $request): JsonResponse
     {
-        $code = null;
+        $content = json_decode($request->getContent(), true);
 
-        $content = $request->getContent();
-        if (!empty($content)) {
-            $data = json_decode($content, true);
-            $code = $data['code'] ?? null;
+        if (!isset($content['code'])) {
+            return new JsonResponse([
+                'message' => 'GitHub code is required',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Get the token's Github app.
-        $response = $this->httpClient->request('POST', 'https://github.com/login/oauth/access_token', [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'body' => [
-                'client_id' => $this->appOauthGithubId,
-                'client_secret' => $this->appOauthGithubSecret,
-                'code' => $code,
-            ],
-        ]);
+        try {
+            $result = $this->authService->githubLogin(
+                $content['code'],
+                $this->getUser()
+            );
 
-        $tokenResp = $response->toArray();
-        if (!$tokenResp || !isset($tokenResp['access_token'])) {
-            throw new AccessDeniedHttpException('Bad credentials.');
+            return new JsonResponse([
+                'token' => $result['token'],
+                'uid' => $result['user']->getUid(),
+            ], Response::HTTP_CREATED);
+        } catch (AuthenticationException $e) {
+            return new JsonResponse([
+                'message' => 'Bad credentials',
+            ], Response::HTTP_UNAUTHORIZED);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        $token = $tokenResp['access_token'];
-
-        // Get the token's Github user info.
-        $response = $this->httpClient->request('GET', 'https://api.github.com/user', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Uniflow App',
-                'Authorization' => 'Bearer ' . $token,
-            ],
-        ]);
-
-        // Try to fetch user by it's token ID, create it otherwise.
-        $tokenUser = $response->toArray();
-        if (!$tokenUser || !isset($tokenUser['id'])) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
-
-        $githubId = $tokenUser['id'];
-        $githubEmail = $tokenUser['id'] . '@github.com';
-
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            $user = $this->userService->findOneByGithubId($githubId);
-            if ($user === null) {
-                $user = $this->userService->findOneByEmail($githubEmail);
-            }
-        }
-
-        if ($user === null) {
-            $user = new User();
-            $user->setGithubId($githubId);
-            $user->setEmail($githubEmail);
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, uniqid('uniflow', true)));
-            $this->userService->save($user);
-        } elseif ($user->getGithubId() === null) {
-            $user->setGithubId($githubId);
-            $this->userService->save($user);
-        }
-
-        return new JsonResponse([
-            'token' => $this->jwtTokenManager->create($user),
-        ]);
     }
 
     /**
@@ -193,7 +166,7 @@ class SecurityController extends AbstractController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    #[Route(path: '/api/login/medium', name: 'api_login_medium', methods: ['POST'])]
+    #[Route(path: '/login/medium', name: 'api_login_medium', methods: ['POST'])]
     public function mediumLogin(Request $request): JsonResponse
     {
         /** @var User $user */
@@ -214,13 +187,14 @@ class SecurityController extends AbstractController
         $response = $this->httpClient->request('POST', 'https://api.medium.com/v1/tokens', [
             'headers' => [
                 'Accept' => 'application/json',
+                'Content-Type' => 'application/x-www-form-urlencoded',
             ],
             'body' => [
+                'code' => $code,
                 'client_id' => $this->appOauthMediumId,
                 'client_secret' => $this->appOauthMediumSecret,
-                'code' => $code,
                 'grant_type' => 'authorization_code',
-                'redirect_uri' => 'https:' . $this->generateUrl('loginMedium', [], UrlGeneratorInterface::NETWORK_PATH),
+                'redirect_uri' => $this->generateUrl('api_login_medium', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ],
         ]);
 
@@ -230,30 +204,29 @@ class SecurityController extends AbstractController
         }
 
         $token = $tokenResp['access_token'];
-        $refreshToken = $tokenResp['refresh_token'];
 
         $config = $this->configService->findOne();
-        if (!$config) {
+        if ($config === null) {
             $config = new Config();
         }
 
         $config->setMediumToken($token);
-        $config->setMediumRefreshToken($refreshToken);
-
         $this->configService->save($config);
 
-        return new JsonResponse();
+        return new JsonResponse([
+            'token' => $this->jwtTokenManager->create($user),
+        ]);
     }
 
     /**
-     * @throws Exception
+     * @throws NonUniqueResultException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    #[Route(path: '/api/register', name: 'api_register', methods: ['POST'])]
+    #[Route(path: '/register', name: 'api_register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
-        $user = new User();
-
-        $form = $this->createForm(RegisterType::class, $user, [
+        $form = $this->createForm(RegisterType::class, new User(), [
             'csrf_protection' => false,
         ]);
 
@@ -266,7 +239,9 @@ class SecurityController extends AbstractController
         }
 
         if ($form->isValid()) {
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPassword()));
+            /** @var User $user */
+            $user = $form->getData();
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $user->getPlainPassword()));
             $this->userService->save($user);
 
             return new JsonResponse([
@@ -276,6 +251,6 @@ class SecurityController extends AbstractController
 
         return new JsonResponse([
             'message' => $form->getErrors(true)->current()->getMessage(),
-        ], Response::HTTP_UNAUTHORIZED);
+        ], Response::HTTP_BAD_REQUEST);
     }
 }

@@ -11,6 +11,7 @@ use App\Repository\ProgramRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Uid\Uuid;
 
 class ProgramService
 {
@@ -46,6 +47,11 @@ class ProgramService
     public function findOne(?int $id = null): ?Program
     {
         return $this->programRepository->findOne($id);
+    }
+
+    public function findOneByUid(?User $user, ?string $uid = null): ?Program
+    {
+        return $this->programRepository->findOneByUid($user, $uid);
     }
 
     public function findOneByUser(User $user, ?int $id = null): ?Program
@@ -98,6 +104,76 @@ class ProgramService
         return $this->programRepository->findLastPublic($limit);
     }
 
+    public function getUserPrograms(string $uid, int $page, int $perPage, ?string $path = null): array
+    {
+        $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
+        if (!$user) {
+            return [];
+        }
+
+        $folder = null;
+        if ($path) {
+            $folder = $this->folderService->findOneByUserAndPath($user, explode('/', trim($path, '/')));
+        }
+
+        $offset = ($page - 1) * $perPage;
+        return $this->programRepository->findBy(
+            ['user' => $user, 'folder' => $folder],
+            ['created' => 'DESC'],
+            $perPage,
+            $offset
+        );
+    }
+
+    public function countUserPrograms(string $uid, ?string $path = null): int
+    {
+        $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
+        if (!$user) {
+            return 0;
+        }
+
+        $folder = null;
+        if ($path) {
+            $folder = $this->folderService->findOneByUserAndPath($user, explode('/', trim($path, '/')));
+        }
+
+        return $this->programRepository->count(['user' => $user, 'folder' => $folder]);
+    }
+
+    public function createProgram(User $user, array $data): ?Program
+    {
+        $program = new Program();
+        $program->setUid(Uuid::v7()->toString());
+        $program->setUser($user);
+        $program->setName($data['name']);
+
+        if (isset($data['path'])) {
+            $folder = $this->folderService->findOneByUserAndPath($user, explode('/', trim($data['path'], '/')));
+            $program->setFolder($folder);
+        }
+
+        if (isset($data['slug'])) {
+            $program->setSlug($data['slug']);
+        } else {
+            $program->setSlug($data['name']);
+        }
+
+        if (isset($data['description'])) {
+            $program->setDescription($data['description']);
+        }
+
+        $program->setPublic(isset($data['isPublic']) ? $data['isPublic'] : false);
+        $program->setCreated(new DateTime());
+        $program->setUpdated(new DateTime());
+
+        try {
+            $this->save($program);
+            return $program;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function getJsonProgram(Program $program): array
     {
         $clients = [];
@@ -119,6 +195,7 @@ class ProgramService
             'tags' => $tags,
             'description' => $program->getDescription(),
             'isPublic' => $program->getPublic(),
+            'user' => $program->getUser()->getUsername() ?? $program->getUser()->getUid(),
             'created' => $program->getCreated()->format('c'),
             'updated' => $program->getUpdated()->format('c'),
         ];

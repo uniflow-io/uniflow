@@ -8,6 +8,7 @@ use App\Entity\Tag;
 use App\Services\TagService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class TagTransformer implements DataTransformerInterface
 {
@@ -46,6 +47,7 @@ class TagTransformer implements DataTransformerInterface
 
             if (!$tag) {
                 $tag = new Tag();
+                $tag->setUid(Uuid::v7()->toString());
                 $tag->setName($tagName);
                 $this->tagService->save($tag);
             }
