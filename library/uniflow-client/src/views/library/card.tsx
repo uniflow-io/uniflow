@@ -78,9 +78,9 @@ const Card: FC<CardProps> = (props) => {
                   </div>
                 )}
               </div>
-              <MDXProvider>
+              {/*<MDXProvider>
                 <MDXRenderer>{card.readme.childMdx.body}</MDXRenderer>
-              </MDXProvider>
+              </MDXProvider>*/}
               {editUrl && (
                 <p>
                   <a href={editUrl} target="_blank" rel="noopener noreferrer">

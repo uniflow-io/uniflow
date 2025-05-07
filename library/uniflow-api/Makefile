@@ -1,44 +1,66 @@
 ##
-##usage :
+##Dev
 ##-------
 
-MAKE = make
-NODE_ENV ?= local
-NPM_BIN = ./node_modules/.bin
+.PHONY: run
 
-build: clean ## build
-	if [ ! -f .env.$(NODE_ENV) ]; then cp .env .env.$(NODE_ENV); fi
-	$(NPM_BIN)/tsoa spec-and-routes
-	$(NPM_BIN)/tsc -b
-	$(NPM_BIN)/oclif-dev manifest
+DOCKER_COMPOSE ?= docker compose
+DOCKER_USER ?= "$(shell id -u):$(shell id -g)"
+ENV ?= "dev"
+
+init: ## init
+	@make -s docker-compose-check
+	@if [ ! -e compose.override.yml ]; then \
+		cp compose.override.dist.yml compose.override.yml; \
+	fi
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp composer install --no-interaction --no-scripts
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm nodejs
+	@make -s install
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) up -d
+
+run: ## run
+	@make -s up
+
+debug: ## debug
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) -f compose.yml -f compose.override.yml -f compose.debug.yml up -d
+
+up: ## up
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) up -d
+
+down: ## down
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down
+
+install: ## install
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp bin/console sylius:install -s default -n
 
 clean: ## clean
-	rm -rf dist database.sqlite oclif.manifest.json
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down -v
 
-dev: ## dev
-	NODE_ENV=development $(NPM_BIN)/nodemon
+php-shell: ## php-shell
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec frankenphp sh
 
-serve: build ## serve
-	./bin/uniflow-api
+node-shell: ## node-shell
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm -i nodejs sh
 
-typeorm: ## typeorm
-	$(NPM_BIN)/ts-node --transpile-only $(NPM_BIN)/typeorm -f ./src/ormconfig.ts $(CMD)
+node-watch: ## node-watch
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm -i nodejs "npm run watch"
 
-fixtures: ## fixtures
-	$(MAKE) typeorm CMD="schema:drop"
-	$(MAKE) typeorm CMD="schema:sync"
-	$(NPM_BIN)/ts-node --transpile-only ./src/fixtures.ts
+docker-compose-check: ## docker-compose-check
+	@$(DOCKER_COMPOSE) version >/dev/null 2>&1 || (echo "Please install docker compose binary or set DOCKER_COMPOSE=\"docker-compose\" for legacy binary" && exit 1)
+	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
+	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
+##
+##DevOps
+##-------------
 
-test: ## test
-	if [ -f database.test.sqlite ]; then rm database.test.sqlite; fi
-	NODE_ENV=test $(MAKE) fixtures
-	NODE_ENV=test $(NPM_BIN)/jest --maxWorkers=1
+php-cs-fixer: ## Check and fix coding styles using PHP CS Fixer
+	composer php-cs-fixer
 
-uniflow-api-start: build ## uniflow-api-start
-	./bin/uniflow-api start
+phpstan: ## Execute PHPStan analysis
+	composer phpstan
 
-uniflow-api-leads-sync: build ## uniflow-api-leads-sync
-	./bin/uniflow-api leads-sync
+phpunit: ## Launch PHPUnit test suite
+	composer phpunit
 
 # DEFAULT
 .DEFAULT_GOAL := help

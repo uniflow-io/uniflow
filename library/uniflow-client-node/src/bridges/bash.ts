@@ -1,8 +1,6 @@
 const cp = require('child_process')
 const merge = require('merge')
 
-let defSpawnOptions = { stdio: 'inherit' }
-
 /**
  * @summary Get shell program meta for current platform
  * @private
@@ -16,7 +14,7 @@ function getShell() {
   }
 }
 
-function execSh(command, commandArgs, options, callback) {
+function execSh(command: any, commandArgs: any, options: any, callback: any) {
   if (Array.isArray(command)) {
     command = command.join(';')
   }
@@ -25,6 +23,7 @@ function execSh(command, commandArgs, options, callback) {
     options = { stdio: null }
   }
 
+  const defSpawnOptions = { stdio: ['inherit', 'pipe', 'pipe'] }
   if (typeof options === 'function') {
     callback = options
     options = defSpawnOptions
@@ -51,20 +50,20 @@ function execSh(command, commandArgs, options, callback) {
   }
 
   if (child.stdout) {
-    child.stdout.on('data', function(data) {
+    child.stdout.on('data', function(data: any) {
       stdout += data
     })
   }
 
   if (child.stderr) {
-    child.stderr.on('data', function(data) {
+    child.stderr.on('data', function(data: any) {
       stderr += data
     })
   }
 
-  child.on('close', function(code) {
+  child.on('close', function(code: any) {
     if (code) {
-      let e = new Error('Shell command exit with non zero code: ' + code)
+      let e: any = new Error('Shell command exit with non zero code: ' + code)
       e.code = code
       callback(e, stdout, stderr)
     } else {
@@ -75,11 +74,11 @@ function execSh(command, commandArgs, options, callback) {
   return child
 }
 
-module.exports = function(commandArgs) {
+export default function(commandArgs: any) {
   return {
-    exec: function(command) {
+    exec: function(command: any) {
       return new Promise((resolve, reject) => {
-        execSh(command, commandArgs, {}, function(err, stdout, stderr) {
+        execSh(command, commandArgs, {}, function(err: any, stdout: any, stderr: any) {
           if (err) {
             reject(stderr)
           } else {

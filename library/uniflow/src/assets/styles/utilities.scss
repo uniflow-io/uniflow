@@ -1,9 +1,0 @@
-.border-top {
-  border-top-color: var(--border-color) !important;
-}
-
-@each $color, $value in $theme-colors {
-  .text-#{$color} {
-    color: var(--#{$color}-color) !important;
-  }
-}

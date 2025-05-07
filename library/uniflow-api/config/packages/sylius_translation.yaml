@@ -1,0 +1,23 @@
+#sylius_translation:
+#    locale_provider: sylius.locale_provider
+#    locale_fallback: '%locale%'
+#    default_locale: '%locale%'
+#    resources:
+#        translatable:
+#            driver: doctrine/orm
+#            translation:
+#                classes:
+#                    model: Sylius\Component\Resource\Translation\TranslatableInterface
+#                    interface: Sylius\Component\Resource\Translation\TranslationInterface 
+
+#sylius_translation:
+#    locale_provider: sylius.locale_provider
+#    locale_fallback: '%locale%'
+#    default_locale: '%locale%'
+#    resources:
+#        translatable:
+#            driver: doctrine/orm
+#            translation:
+#                classes:
+#                    model: Sylius\Component\Resource\Translation\TranslatableInterface
+#                    interface: Sylius\Component\Resource\Translation\TranslationInterface 

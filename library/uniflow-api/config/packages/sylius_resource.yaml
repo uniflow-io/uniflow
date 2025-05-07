@@ -1,0 +1,34 @@
+# @see https://github.com/Sylius/SyliusResourceBundle/blob/master/docs/index.md
+sylius_resource:
+    # Override default settings
+    #settings:
+
+    # Configure the mapping for your resources
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+
+    # Configure your resources
+    resources:
+        #app.book:
+            #classes:
+                #model: App\Entity\Book
+
+#    translation:
+#        locale_provider: sylius.locale_provider
+#        default_locale: '%locale%'
+#        locale_fallback: true
+#
+#    resources:
+#        sylius.locale:
+#            driver: doctrine/orm
+#            classes:
+#                model: Sylius\Component\Locale\Model\Locale
+#                interface: Sylius\Component\Locale\Model\LocaleInterface
+#                repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository
+#        sylius.translation:
+#            driver: doctrine/orm
+#            classes:
+#                model: Sylius\Component\Resource\Translation\TranslatableInterface
+#                interface: Sylius\Component\Resource\Translation\TranslationInterface
+#                repository: Sylius\Bundle\ResourceBundle\Doctrine\ORM\TranslatableEntityRepository

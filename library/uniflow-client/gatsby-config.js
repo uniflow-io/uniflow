@@ -102,7 +102,6 @@ module.exports = {
                         nodes {
                           id
                           excerpt
-                          html
                           fields {
                             slug
                           }
@@ -188,7 +187,6 @@ module.exports = {
       options: {
         extensions: [`.mdx`, `.md`],
         gatsbyRemarkPlugins: [`gatsby-remark-images`, `gatsby-remark-static-images`],
-        plugins: [`gatsby-remark-images`, `gatsby-remark-static-images`], // https://github.com/gatsbyjs/gatsby/issues/15486#issuecomment-510153237
       },
     },
     {

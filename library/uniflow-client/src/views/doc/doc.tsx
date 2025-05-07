@@ -54,9 +54,9 @@ const Doc: FC<DocProps> = (props) => {
 
           <div className="row mb-3">
             <div className="col-sm-12">
-              <MDXProvider>
+              {/*<MDXProvider>
                 <MDXRenderer>{doc.body}</MDXRenderer>
-              </MDXProvider>
+              </MDXProvider>*/}
               <p>
                 <a
                   href={`https://github.com/uniflow-io/uniflow/edit/1.x/docs/docs/${doc.parent.relativePath}`}

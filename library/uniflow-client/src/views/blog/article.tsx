@@ -119,9 +119,9 @@ const Article: FC<ArticleProps> = (props) => {
 
       <div className="row mb-3">
         <div className="col-sm-12">
-          <MDXProvider>
+         {/*<MDXProvider>
             <MDXRenderer>{article.body}</MDXRenderer>
-          </MDXProvider>
+          </MDXProvider>*/}
           <p>
             <a
               href={`https://github.com/uniflow-io/uniflow/edit/1.x/docs/blog/${article.parent.relativePath}`}

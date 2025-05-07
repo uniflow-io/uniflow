@@ -1,7 +1,7 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '@uniflow-io/uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '@uniflow-io/uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '@uniflow-io/uniflow-client/src/components/flow/flow'
+import FlowHeader from '../../uniflow-client/src/components/flow/header'
+import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
+import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 
 export interface FunctionFlowData {
   code?: string

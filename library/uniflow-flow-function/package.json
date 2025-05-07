@@ -36,7 +36,6 @@
     ]
   },
   "dependencies": {
-    "@uniflow-io/uniflow-client": "^1.1.15",
     "react": "^18.2.0"
   },
   "devDependencies": {

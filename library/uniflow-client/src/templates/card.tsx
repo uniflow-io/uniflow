@@ -70,8 +70,7 @@ export default ({ data, location }: PageProps<CardTemplateData>) => {
     }
 */
 
-export const query = graphql`
-  query ($slug: String) {
+/*
     localCard: npmLocalPackage(fields: { slug: { eq: $slug } }) {
       name
       description
@@ -99,6 +98,10 @@ export const query = graphql`
         }
       }
     }
+*/
+
+export const query = graphql`
+  query {
     logo: file(sourceInstanceName: { eq: "images" }, relativePath: { eq: "logo.png" }) {
       publicURL
       childImageSharp {

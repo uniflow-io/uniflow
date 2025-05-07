@@ -1,19 +1,19 @@
-const Program = require('./models/program')
-const Runner = require('./models/runner')
-const Api = require('./models/api')
+import Program  from './models/program'
+import Runner  from './models/runner'
+import Api  from './models/api'
 
-function parseArgv(argv) {
+function parseArgv(argv: any) {
   // Removing node/bin and called script name
   argv = argv.slice(2)
 
   // Returned object
-  let args = {},
-    values = []
+  let args: any = {},
+    values: any[] = []
 
   let argName, argValue
 
   // For each argument
-  argv.forEach(function(arg, index) {
+  argv.forEach(function(arg: any) {
     // Separate argument, for a key/value return
     arg = arg.split('=')
 
@@ -56,18 +56,21 @@ function parseArgv(argv) {
   let api = new Api(env, apiKey),
     identifier = args['values'][0],
     commandArgs = args['values'].slice(1)
-  let response = await api.endpoint('program')
-  const programId = response.data.filter((program) => {
+  let response:any = await api.endpoint('program')
+  let data = await response.json()
+  const programData = data.filter((program: any) => {
     return program.slug === identifier
   }).shift()
-  if(!programId) {
-    console.log('Not such process [' + identifier + ']')
+  if(!programData) {
+    console.log('Not such program [' + identifier + ']')
     return
   }
 
-  response = await api.endpoint('program_data', { id: response.data[i].id })
-  let program = new Program(response.data),
-  flows = program.deserializeFlowsData(),
-  runner = new Runner(commandArgs, api)
+  response = await api.endpoint('program_flows', { uid: programData.uid })
+  data = await response.json()
+  programData.data = data.data
+  let program = new Program(programData),
+    flows = program.deserializeFlowsData(),
+    runner = new Runner(commandArgs, api)
   runner.run(flows)
 })()

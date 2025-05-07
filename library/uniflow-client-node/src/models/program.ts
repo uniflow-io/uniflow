@@ -1,15 +1,15 @@
 class Program
 {
-  constructor(private data) {
+  constructor(private programData: any) {
   }
 
-  serializeFlowsData(data) {
-    this.data = JSON.stringify(data)
+  serializeFlowsData(data: any) {
+    this.programData.data = JSON.stringify(data)
   }
 
   deserializeFlowsData() {
-    return JSON.parse(this.data)
+    return JSON.parse(this.programData.data)
   }
 }
 
-module.exports = Program
+export default Program

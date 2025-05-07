@@ -1,2 +1,2 @@
 const http = require('http')
-module.exports = http
+export default http
