@@ -12,7 +12,7 @@ class ClientFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        foreach (['uniflow', 'node', 'chome', 'jetbrains', 'rust'] as $name) {
+        foreach (['uniflow', 'php', 'node', 'chome', 'jetbrains', 'rust'] as $name) {
             $client = new Client();
             $client->setName($name);
 
