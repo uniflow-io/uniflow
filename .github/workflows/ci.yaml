@@ -195,7 +195,6 @@ jobs:
         ports:
             - 3311:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        # https://hub.docker.com/_/elasticsearch/
     strategy:
       matrix:
         php: [ '8.3' ]
@@ -216,10 +215,10 @@ jobs:
           (cd library/uniflow-api && composer install)
           (cd library/uniflow-api && composer install -d tools/phpunit)
 
-      - name: Load Fixtures
-        run: |
-          (cd library/uniflow-api && bin/console --env=test doctrine:database:create)
-          (cd library/uniflow-api && bin/console --env=test doctrine:schema:update --force)
+#      - name: Load Fixtures
+#        run: |
+#          (cd library/uniflow-api && bin/console --env=test doctrine:database:create)
+#          (cd library/uniflow-api && bin/console --env=test doctrine:schema:update --force)
 
       - name: Launch PHPUnit test suite
         run: (cd library/uniflow-api/tools && phpunit/vendor/bin/phpunit --configuration phpunit/phpunit.xml)
