@@ -2,6 +2,9 @@
 
 namespace App\Command;
 
+use App\Model\Api;
+use App\Model\Program;
+use App\Model\Runner;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,23 +52,45 @@ class ClientCommand extends Command
         $this->environment = $input->getOption('environment');
 
         // Get identifier and command args
+        $api = new Api($this->environment, $this->apiKey);
         $identifier = $input->getArgument('identifier');
         $commandArgs = $input->getArgument('command_args');
 
-        try {
-            // TODO: Implement API client and program execution logic
-            // This would involve:
-            // 1. Creating an API client with the environment and API key
-            // 2. Fetching program data using the identifier
-            // 3. Fetching program flows
-            // 4. Creating a program instance and deserializing flows
-            // 5. Running the program with the command arguments
+        //try {
+            // Fetch program data
+            $response = $api->endpoint('program');
+            $data = json_decode($response, true);
+
+            // Find program by identifier
+            $programData = null;
+            foreach ($data as $program) {
+                if ($program['slug'] === $identifier) {
+                    $programData = $program;
+                    break;
+                }
+            }
+
+            if (!$programData) {
+                $io->error('No such program [' . $identifier . ']');
+                return Command::FAILURE;
+            }
+
+            // Fetch program flows
+            $response = $api->endpoint('program_flows', ['uid' => $programData['uid']]);
+            $data = json_decode($response, true);
+            $programData['data'] = $data['data'];
+
+            // Create program instance and run flows
+            $program = new Program($programData);
+            $flows = $program->deserializeFlowsData();
+            $runner = new Runner($commandArgs, $api);
+            $runner->run($flows);
 
             $io->success('Program execution completed successfully');
             return Command::SUCCESS;
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             $io->error('Error: ' . $e->getMessage());
             return Command::FAILURE;
-        }
+        }*/
     }
 }
