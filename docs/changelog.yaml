@@ -1,3 +1,8 @@
+- tag: "v1.1.17"
+  label: |-
+    Add Sylius
+    Add api tests
+  date: "2025-05-10"
 -
   tag: "v1.1.16"
   label: |-

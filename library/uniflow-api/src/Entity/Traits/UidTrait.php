@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Traits;
 
-use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation\Timestampable;
 use Symfony\Component\Uid\Uuid;
 
 trait UidTrait

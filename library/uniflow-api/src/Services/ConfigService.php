@@ -8,6 +8,7 @@ use App\Entity\Config;
 use App\Repository\ConfigRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 
 class ConfigService
@@ -52,6 +53,7 @@ class ConfigService
             $config->setUid(Uuid::v7()->toString());
             $this->save($config);
         }
+
         return $config;
     }
 
@@ -63,8 +65,9 @@ class ConfigService
 
         try {
             $this->save($config);
+
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }

@@ -19,8 +19,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class RefreshMediumTokenCommand extends Command
 {
     public function __construct(
-        //private readonly string $appOauthMediumId,
-        //private readonly string $appOauthMediumSecret,
+        // private readonly string $appOauthMediumId,
+        // private readonly string $appOauthMediumSecret,
         private readonly ConfigService $configService,
         private readonly HttpClientInterface $httpClient
     ) {
@@ -31,6 +31,7 @@ class RefreshMediumTokenCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        /*
         $config = $this->configService->findOne();
         if ($config && $config->getMediumToken() && $config->getMediumRefreshToken()) {
             // Get the token's Medium app.
@@ -56,6 +57,7 @@ class RefreshMediumTokenCommand extends Command
 
             $this->configService->save($config);
         }
+        */
 
         $io->success('Medium token is refreshed');
 

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Entity\Customer\Customer;
 use App\Entity\User\ShopUser as User;
 use App\Repository\User\ShopUserRepository as UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -13,16 +15,15 @@ use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Uid\Uuid;
-use App\Entity\Customer\Customer;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserService
 {
     /**
      * @var UserRepository
      */
-    //protected $userRepository;
+    // protected $userRepository;
 
     public function __construct(
         protected EntityManagerInterface $entityManager,
@@ -34,7 +35,7 @@ class UserService
         private readonly string $githubAppId,
         private readonly string $githubAppSecret*/
     ) {
-        //$this->userRepository = $this->entityManager->getRepository(User::class);
+        // $this->userRepository = $this->entityManager->getRepository(User::class);
     }
 
     /**
@@ -136,7 +137,7 @@ class UserService
         // Set default role and enable the user
         $user->addRole('ROLE_USER');
         $user->setEnabled(true);
-        $user->setVerifiedAt(new \DateTime());
+        $user->setVerifiedAt(new DateTime());
 
         $this->save($user);
 
@@ -173,6 +174,7 @@ class UserService
      * @throws ORMException
      * @throws OptimisticLockException
      */
+    /*
     public function facebookLogin(string $accessToken, ?User $currentUser = null): array
     {
         // Get the token's Facebook app info
@@ -217,12 +219,14 @@ class UserService
             'token' => $this->jwtManager->create($user),
         ];
     }
+    */
 
     /**
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      */
+    /*
     public function githubLogin(string $code, ?User $currentUser = null): array
     {
         // Get the token's Github app
@@ -282,6 +286,7 @@ class UserService
             'token' => $this->jwtManager->create($user),
         ];
     }
+    */
 
     public function getJsonSettings(User $user): array
     {

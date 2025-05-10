@@ -42,7 +42,7 @@ class ProgramType extends AbstractType
             'allow_delete' => true,
         ]);
         $builder->add('description', TextareaType::class);
-        //$builder->add('public', CheckboxType::class);
+        // $builder->add('public', CheckboxType::class);
         /*$builder->add('path', ArrayType::class, [
             'property_path' => 'folder',
         ]);*/
@@ -51,8 +51,8 @@ class ProgramType extends AbstractType
         $builder->get('clients')->addModelTransformer($clientTransformer);
         $tagTransformer = new TagTransformer($this->tagService);
         $builder->get('tags')->addModelTransformer($tagTransformer);
-        //$pathTransformer = new PathTransformer($this->folderService, $options['data']->getUser());
-        //$builder->get('path')->addModelTransformer($pathTransformer);
+        // $pathTransformer = new PathTransformer($this->folderService, $options['data']->getUser());
+        // $builder->get('path')->addModelTransformer($pathTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

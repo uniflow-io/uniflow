@@ -78,7 +78,7 @@ class SecurityController extends AbstractController
             return new JsonResponse([
                 'message' => 'Bad credentials',
             ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -91,37 +91,39 @@ class SecurityController extends AbstractController
      * @throws OptimisticLockException
      * @throws TransportExceptionInterface
      */
-    #[Route(path: '/login-facebook', name: 'api_auth_login_facebook', methods: ['POST'])]
-    public function facebookLogin(Request $request): JsonResponse
-    {
-        $content = json_decode($request->getContent(), true);
-
-        if (!isset($content['access_token'])) {
-            return new JsonResponse([
-                'message' => 'Access token is required',
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        try {
-            $result = $this->authService->facebookLogin(
-                $content['access_token'],
-                $this->getUser()
-            );
-
-            return new JsonResponse([
-                'token' => $result['token'],
-                'uid' => $result['user']->getUid(),
-            ], Response::HTTP_CREATED);
-        } catch (AuthenticationException $e) {
-            return new JsonResponse([
-                'message' => 'Bad credentials',
-            ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
-            return new JsonResponse([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-    }
+    /**
+     * #[Route(path: '/login-facebook', name: 'api_auth_login_facebook', methods: ['POST'])]
+     * public function facebookLogin(Request $request): JsonResponse
+     * {
+     * $content = json_decode($request->getContent(), true);.
+     *
+     * if (!isset($content['access_token'])) {
+     * return new JsonResponse([
+     * 'message' => 'Access token is required',
+     * ], Response::HTTP_UNPROCESSABLE_ENTITY);
+     * }
+     *
+     * try {
+     * $result = $this->authService->facebookLogin(
+     * $content['access_token'],
+     * $this->getUser()
+     * );
+     *
+     * return new JsonResponse([
+     * 'token' => $result['token'],
+     * 'uid' => $result['user']->getUid(),
+     * ], Response::HTTP_CREATED);
+     * } catch (AuthenticationException $e) {
+     * return new JsonResponse([
+     * 'message' => 'Bad credentials',
+     * ], Response::HTTP_UNAUTHORIZED);
+     * } catch (Exception $e) {
+     * return new JsonResponse([
+     * 'message' => $e->getMessage(),
+     * ], Response::HTTP_UNPROCESSABLE_ENTITY);
+     * }
+     * }
+     */
 
     /**
      * @throws NonUniqueResultException
@@ -129,94 +131,98 @@ class SecurityController extends AbstractController
      * @throws OptimisticLockException
      * @throws TransportExceptionInterface
      */
-    #[Route(path: '/login-github', name: 'api_auth_login_github', methods: ['POST'])]
-    public function githubLogin(Request $request): JsonResponse
-    {
-        $content = json_decode($request->getContent(), true);
-
-        if (!isset($content['code'])) {
-            return new JsonResponse([
-                'message' => 'GitHub code is required',
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        try {
-            $result = $this->authService->githubLogin(
-                $content['code'],
-                $this->getUser()
-            );
-
-            return new JsonResponse([
-                'token' => $result['token'],
-                'uid' => $result['user']->getUid(),
-            ], Response::HTTP_CREATED);
-        } catch (AuthenticationException $e) {
-            return new JsonResponse([
-                'message' => 'Bad credentials',
-            ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
-            return new JsonResponse([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-    }
+    /**
+     * #[Route(path: '/login-github', name: 'api_auth_login_github', methods: ['POST'])]
+     * public function githubLogin(Request $request): JsonResponse
+     * {
+     * $content = json_decode($request->getContent(), true);.
+     *
+     * if (!isset($content['code'])) {
+     * return new JsonResponse([
+     * 'message' => 'GitHub code is required',
+     * ], Response::HTTP_UNPROCESSABLE_ENTITY);
+     * }
+     *
+     * try {
+     * $result = $this->authService->githubLogin(
+     * $content['code'],
+     * $this->getUser()
+     * );
+     *
+     * return new JsonResponse([
+     * 'token' => $result['token'],
+     * 'uid' => $result['user']->getUid(),
+     * ], Response::HTTP_CREATED);
+     * } catch (AuthenticationException $e) {
+     * return new JsonResponse([
+     * 'message' => 'Bad credentials',
+     * ], Response::HTTP_UNAUTHORIZED);
+     * } catch (Exception $e) {
+     * return new JsonResponse([
+     * 'message' => $e->getMessage(),
+     * ], Response::HTTP_UNPROCESSABLE_ENTITY);
+     * }
+     * }
+     */
 
     /**
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    #[Route(path: '/login/medium', name: 'api_login_medium', methods: ['POST'])]
-    public function mediumLogin(Request $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        $code = null;
-
-        $content = $request->getContent();
-        if (!empty($content)) {
-            $data = json_decode($content, true);
-            $code = $data['code'] ?? null;
-        }
-
-        // Get the token's Medium app.
-        $response = $this->httpClient->request('POST', 'https://api.medium.com/v1/tokens', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ],
-            'body' => [
-                'code' => $code,
-                'client_id' => $this->appOauthMediumId,
-                'client_secret' => $this->appOauthMediumSecret,
-                'grant_type' => 'authorization_code',
-                'redirect_uri' => $this->generateUrl('api_login_medium', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            ],
-        ]);
-
-        $tokenResp = $response->toArray();
-        if (!$tokenResp || !isset($tokenResp['access_token'])) {
-            throw new AccessDeniedHttpException('Bad credentials.');
-        }
-
-        $token = $tokenResp['access_token'];
-
-        $config = $this->configService->findOne();
-        if ($config === null) {
-            $config = new Config();
-        }
-
-        $config->setMediumToken($token);
-        $this->configService->save($config);
-
-        return new JsonResponse([
-            'token' => $this->jwtTokenManager->create($user),
-        ]);
-    }
+    /**
+     * #[Route(path: '/login/medium', name: 'api_login_medium', methods: ['POST'])]
+     * public function mediumLogin(Request $request): JsonResponse
+     * {
+     * // @var User $user
+     * $user = $this->getUser();
+     * if (!$user instanceof UserInterface) {
+     * throw new AccessDeniedException('This user does not have access to this section.');
+     * }.
+     *
+     * $code = null;
+     *
+     * $content = $request->getContent();
+     * if (!empty($content)) {
+     * $data = json_decode($content, true);
+     * $code = $data['code'] ?? null;
+     * }
+     *
+     * // Get the token's Medium app.
+     * $response = $this->httpClient->request('POST', 'https://api.medium.com/v1/tokens', [
+     * 'headers' => [
+     * 'Accept' => 'application/json',
+     * 'Content-Type' => 'application/x-www-form-urlencoded',
+     * ],
+     * 'body' => [
+     * 'code' => $code,
+     * 'client_id' => $this->appOauthMediumId,
+     * 'client_secret' => $this->appOauthMediumSecret,
+     * 'grant_type' => 'authorization_code',
+     * 'redirect_uri' => $this->generateUrl('api_login_medium', [], UrlGeneratorInterface::ABSOLUTE_URL),
+     * ],
+     * ]);
+     *
+     * $tokenResp = $response->toArray();
+     * if (!$tokenResp || !isset($tokenResp['access_token'])) {
+     * throw new AccessDeniedHttpException('Bad credentials.');
+     * }
+     *
+     * $token = $tokenResp['access_token'];
+     *
+     * $config = $this->configService->findOne();
+     * if ($config === null) {
+     * $config = new Config();
+     * }
+     *
+     * $config->setMediumToken($token);
+     * $this->configService->save($config);
+     *
+     * return new JsonResponse([
+     * 'token' => $this->jwtTokenManager->create($user),
+     * ]);
+     * }
+     */
 
     /**
      * @throws NonUniqueResultException

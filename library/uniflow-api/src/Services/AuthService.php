@@ -6,10 +6,10 @@ namespace App\Services;
 
 use App\Entity\User\ShopUser as User;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AuthService
@@ -20,10 +20,10 @@ class AuthService
         private UserPasswordHasherInterface $passwordHasher,
         private JWTTokenManagerInterface $jwtManager,
         private HttpClientInterface $httpClient,
-        //private string $facebookAppId,
-        //private string $facebookAppSecret,
-        //private string $githubClientId,
-        //private string $githubClientSecret
+        // private string $facebookAppId,
+        // private string $facebookAppSecret,
+        // private string $githubClientId,
+        // private string $githubClientSecret
     ) {}
 
     public function login(string $username, string $password): array
@@ -44,6 +44,7 @@ class AuthService
         ];
     }
 
+    /*
     public function facebookLogin(string $accessToken, ?UserInterface $currentUser = null): array
     {
         // Verify Facebook access token and get user info
@@ -155,4 +156,5 @@ class AuthService
             'user' => $user,
         ];
     }
+    */
 }
