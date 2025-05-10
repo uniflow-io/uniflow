@@ -79,6 +79,7 @@ const Program: FC<ProgramProps> = (props) => {
   const { program, allFlows } = props;
   const clients: { [key in ClientType]: string } = {
     [ClientType.UNIFLOW]: 'Uniflow',
+    [ClientType.PHP]: 'Php',
     [ClientType.NODE]: 'Node',
     [ClientType.VSCODE]: 'VSCode',
   };
@@ -390,12 +391,27 @@ const Program: FC<ProgramProps> = (props) => {
     }
   };
 
+  const getPhpClipboard = () => {
+    if (user.apiKey) {
+      return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key=${user.apiKey} ${program.slug}`;
+    }
+
+    return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key={your-api-key} ${program.slug}`;
+  };
+
   const getNodeClipboard = () => {
     if (user.apiKey) {
       return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
     }
 
     return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`;
+  };
+
+  const onCopyPhpUsage: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    const clipboard = getPhpClipboard();
+    ui.copyTextToClipboard(clipboard);
   };
 
   const onCopyNodeUsage: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -515,7 +531,7 @@ const Program: FC<ProgramProps> = (props) => {
         />
       </form>
       {program.clients.map((client) => {
-        if (client === 'uniflow') {
+        if (client === ClientType.UNIFLOW) {
           return (
             <div key={`client-${client}`} className="row mb-3">
               <div className="col-sm-10 offset-sm-2">
@@ -531,7 +547,32 @@ const Program: FC<ProgramProps> = (props) => {
               </div>
             </div>
           );
-        } else if (client === 'node') {
+        } else if (client === ClientType.PHP) {
+            const clipboard = getPhpClipboard();
+
+            return (
+              <div key={`client-${client}`} className="row mb-3">
+                <label htmlFor="program-php-api-key" className="col-sm-2 col-form-label">
+                  PHP usage
+                </label>
+                <div className="col-sm-10">
+                  <div className="input-group">
+                    <button type="button" className="input-group-text" onClick={onCopyPhpUsage}>
+                      <FontAwesomeIcon icon={faClipboard} />
+                    </button>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="program-php-api-key"
+                      value={clipboard || ''}
+                      readOnly
+                      placeholder="api key"
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          } else if (client === ClientType.NODE) {
           const clipboard = getNodeClipboard();
 
           return (
