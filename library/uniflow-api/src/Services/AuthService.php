@@ -44,6 +44,7 @@ class AuthService
         ];
     }
 
+    /*
     public function facebookLogin(string $accessToken, ?UserInterface $currentUser = null): array
     {
         // Verify Facebook access token and get user info
@@ -155,4 +156,5 @@ class AuthService
             'user' => $user,
         ];
     }
+    */
 }
