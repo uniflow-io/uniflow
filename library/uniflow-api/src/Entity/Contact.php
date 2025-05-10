@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Contact
 {
-    use UidTrait;
     use TimestampTrait;
+    use UidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

@@ -15,8 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Config
 {
-    use UidTrait;
     use TimestampTrait;
+    use UidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

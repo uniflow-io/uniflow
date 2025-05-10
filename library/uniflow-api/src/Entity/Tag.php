@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity('name', message: "The name '{{ value }}' is already taken.")]
 class Tag implements Stringable
 {
-    use UidTrait;
     use TimestampTrait;
+    use UidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]

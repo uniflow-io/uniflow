@@ -73,19 +73,20 @@ class ProgramController extends AbstractController
     }
 
     #[Route(path: '/public', name: 'api_program_last_public', methods: ['GET'])]
-    public function lastPublic(): JsonResponse //to deprecate => use api_program_list
+    public function lastPublic(): JsonResponse // to deprecate => use api_program_list
     {
         $programs = $this->programService->findLastPublic(15);
 
         return new JsonResponse([
             'data' => array_map(fn (Program $program) => [
-                $this->programService->getJsonProgram($program)
+                $this->programService->getJsonProgram($program),
             ], $programs),
             'total' => count($programs),
         ]);
     }
 
-    /*#[Route(path: '/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
+    /**
+    #[Route(path: '/{username}/tree/{slug1}/{slug2}/{slug3}/{slug4}/{slug5}', name: 'api_program_tree', methods: ['GET'])]
     public function tree(Request $request, $username = 'me', $slug1 = null, $slug2 = null, $slug3 = null, $slug4 = null, $slug5 = null): JsonResponse
     {
         // @var User $user
@@ -156,8 +157,8 @@ class ProgramController extends AbstractController
         ];
 
         return new JsonResponse($data);
-    }*/
-
+    }
+     */
     #[Route(path: '/create', name: 'api_program_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {

@@ -42,7 +42,7 @@ class ProgramRepository extends ServiceEntityRepository
             ->select('p')
         ;
 
-        if($user) {
+        if ($user) {
             $qb->andWhere('p.user = :user')->setParameter('user', $user);
         }
 
