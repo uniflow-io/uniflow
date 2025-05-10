@@ -174,6 +174,7 @@ class UserService
      * @throws ORMException
      * @throws OptimisticLockException
      */
+    /*
     public function facebookLogin(string $accessToken, ?User $currentUser = null): array
     {
         // Get the token's Facebook app info
@@ -218,12 +219,14 @@ class UserService
             'token' => $this->jwtManager->create($user),
         ];
     }
+    */
 
     /**
      * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      */
+    /*
     public function githubLogin(string $code, ?User $currentUser = null): array
     {
         // Get the token's Github app
@@ -283,6 +286,7 @@ class UserService
             'token' => $this->jwtManager->create($user),
         ];
     }
+    */
 
     public function getJsonSettings(User $user): array
     {

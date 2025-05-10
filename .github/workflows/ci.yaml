@@ -182,7 +182,7 @@ jobs:
           (cd library/uniflow-api && composer install -d tools/phpstan)
 
       - name: Execute PHPStan analysis
-        run: (cd library/uniflow-api/tools && phpstan/vendor/bin/phpstan --configuration=phpstan/phpstan.neon)
+        run: (cd library/uniflow-api/tools && phpstan/vendor/bin/phpstan --configuration=phpstan/phpstan.neon.dist)
 
   phpunit:
     name: Launch PHPUnit test suite

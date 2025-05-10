@@ -13,8 +13,9 @@ use Symfony\Component\Security\Core\Security;
 
 use function sprintf;
 
-class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+class CurrentUserExtension // implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
+    /*
     private $security;
 
     public function __construct(Security $security)
@@ -43,4 +44,5 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
             $queryBuilder->setParameter('current_user', $this->security->getUser());
         }
     }
+    */
 }
