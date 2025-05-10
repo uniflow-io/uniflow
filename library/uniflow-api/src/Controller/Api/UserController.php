@@ -6,10 +6,12 @@ namespace App\Controller\Api;
 
 use App\Entity\User\ShopUser as User;
 use App\Form\SettingsType;
-use App\Services\UserService;
 use App\Services\ConfigService;
 use App\Services\FolderService;
 use App\Services\ProgramService;
+use App\Services\UserService;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/v1/uniflow/user')]
@@ -46,14 +47,14 @@ class UserController extends AbstractController
         try {
             $user = $this->userService->create([
                 'email' => $content['email'],
-                'plainPassword' => $content['password']
+                'plainPassword' => $content['password'],
             ]);
 
             return new JsonResponse(
                 $this->userService->getJsonSettings($user),
                 Response::HTTP_CREATED
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -114,6 +115,7 @@ class UserController extends AbstractController
         }
 
         $config = $this->configService->getConfig();
+
         return new JsonResponse($this->configService->getJsonConfig($config));
     }
 
@@ -147,8 +149,8 @@ class UserController extends AbstractController
         $total = $this->folderService->countUserFolders($uid, $path);
 
         return new JsonResponse([
-            'data' => array_map(fn($folder) => $this->folderService->getJsonFolder($folder), $folders),
-            'total' => $total
+            'data' => array_map(fn ($folder) => $this->folderService->getJsonFolder($folder), $folders),
+            'total' => $total,
         ]);
     }
 
@@ -185,8 +187,8 @@ class UserController extends AbstractController
         $total = $this->programService->countUserPrograms($uid, $path);
 
         return new JsonResponse([
-            'data' => array_map(fn($program) => $this->programService->getJsonProgram($program), $programs),
-            'total' => $total
+            'data' => array_map(fn ($program) => $this->programService->getJsonProgram($program), $programs),
+            'total' => $total,
         ]);
     }
 

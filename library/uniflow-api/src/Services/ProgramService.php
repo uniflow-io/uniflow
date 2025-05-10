@@ -10,6 +10,7 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\ProgramRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Uid\Uuid;
 
@@ -117,6 +118,7 @@ class ProgramService
         }
 
         $offset = ($page - 1) * $perPage;
+
         return $this->programRepository->findBy(
             ['user' => $user, 'folder' => $folder],
             ['created' => 'DESC'],
@@ -162,14 +164,15 @@ class ProgramService
             $program->setDescription($data['description']);
         }
 
-        $program->setPublic(isset($data['isPublic']) ? $data['isPublic'] : false);
+        $program->setPublic($data['isPublic'] ?? false);
         $program->setCreated(new DateTime());
         $program->setUpdated(new DateTime());
 
         try {
             $this->save($program);
+
             return $program;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

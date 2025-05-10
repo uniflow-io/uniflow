@@ -78,7 +78,7 @@ class SecurityController extends AbstractController
             return new JsonResponse([
                 'message' => 'Bad credentials',
             ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -116,7 +116,7 @@ class SecurityController extends AbstractController
             return new JsonResponse([
                 'message' => 'Bad credentials',
             ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -154,7 +154,7 @@ class SecurityController extends AbstractController
             return new JsonResponse([
                 'message' => 'Bad credentials',
             ], Response::HTTP_UNAUTHORIZED);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return new JsonResponse([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);

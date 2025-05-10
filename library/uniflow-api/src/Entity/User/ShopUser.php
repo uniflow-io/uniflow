@@ -44,12 +44,11 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function __construct()
     {
         parent::__construct();
-        //UidTrait::__construct();
+        // UidTrait::__construct();
 
         $this->programs = new ArrayCollection();
         $this->folders = new ArrayCollection();
     }
-
 
     public function getSalt()
     {

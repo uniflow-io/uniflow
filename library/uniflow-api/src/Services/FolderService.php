@@ -9,6 +9,7 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 
 class FolderService
@@ -84,6 +85,7 @@ class FolderService
         }
 
         $offset = ($page - 1) * $perPage;
+
         return $this->folderRepository->findBy(
             ['user' => $user, 'parent' => $parent],
             ['created' => 'DESC'],
@@ -130,8 +132,9 @@ class FolderService
 
         try {
             $this->save($folder);
+
             return $folder;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

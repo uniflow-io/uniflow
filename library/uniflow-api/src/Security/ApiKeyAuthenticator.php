@@ -11,13 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use UnexpectedValueException;
 
 use function sprintf;
@@ -26,8 +25,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private ApiKeyUserProvider $userProvider,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns a response that directs the user to authenticate.
@@ -60,8 +58,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      * Does the authenticator support the given Request?
      *
      * If this returns false, the authenticator will be skipped.
-     *
-     * @return bool
      */
     public function supports(Request $request): ?bool
     {
@@ -97,7 +93,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($apiKey, function(string $apiKey) {
+            new UserBadge($apiKey, function (string $apiKey) {
                 return $this->userProvider->loadUserByApiKey($apiKey);
             })
         );
@@ -157,13 +153,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      *
      * If you return null, the request will continue, but the user will
      * not be authenticated. This is probably not what you want to do.
-     *
-     * @return null|Response
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
@@ -177,10 +171,6 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
      *
      * If you return null, the current request will continue, and the user
      * will be authenticated. This makes sense, for example, with an API.
-     *
-     * @param string $providerKey The provider (i.e. firewall) key
-     *
-     * @return null|Response
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
