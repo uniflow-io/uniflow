@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Bridge\AgentBridge;
 use App\Model\Api;
 use App\Model\Program;
 use App\Model\Runner;
@@ -22,7 +23,7 @@ class ClientCommand extends Command
     private ?string $apiKey;
     private string $environment;
 
-    public function __construct()
+    public function __construct(private AgentBridge $agentBridge)
     {
         parent::__construct();
     }
@@ -83,7 +84,7 @@ class ClientCommand extends Command
             // Create program instance and run flows
             $program = new Program($programData);
             $flows = $program->deserializeFlowsData();
-            $runner = new Runner($commandArgs, $api);
+            $runner = new Runner($commandArgs, $api, $this->agentBridge);
             $runner->run($flows);
 
             $io->success('Program execution completed successfully');

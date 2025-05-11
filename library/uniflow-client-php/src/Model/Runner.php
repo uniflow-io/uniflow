@@ -4,16 +4,18 @@ namespace App\Model;
 
 include __DIR__ . '/../../lib/js2php/build/JSInterpreter.php';
 
+use App\Bridge\AgentBridge;
 use App\Bridge\ConsoleBridge;
 use JSInterpreter;
 use JSParser;
 use JSCompiler;
+use NeuronAI\Chat\Messages\UserMessage;
 
 class Runner {
     private $commandArgs;
     private $api;
 
-    public function __construct($commandArgs, $api) {
+    public function __construct($commandArgs, $api, private AgentBridge $agentBridge) {
         $this->commandArgs = $commandArgs;
         $this->api = $api;
     }
@@ -24,7 +26,20 @@ class Runner {
             'log' => function(...$args) {
                 echo implode(' ', $args) . PHP_EOL;
             },
+            'agent' => $this->agentBridge->getBridge(),
         ];
+
+        /*$message = new UserMessage("I would like to respond to important emails.
+
+        Please find important unread emails in my inbox and summarize them here (leave out details, because people are watching).
+
+        Then, find a free slot this week (May 14 2025) in my calendar that would be ideal to respond to ALL important emails and create a calendar event.");*/
+        $message = new UserMessage("fetch my last email subject from gmail");
+        //$message = new UserMessage("recherche l'entreprise LaPoste à Paris");
+        /** @var Agent */
+        $agent = $context['agent'];
+        echo $agent->chat($message)->getContent()."\n";
+        die(); // @todo remove this line
 
         $promise = new \React\Promise\Promise(function($resolve) {
             $resolve('');
