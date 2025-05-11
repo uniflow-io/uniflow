@@ -44,6 +44,7 @@
             mbstring
             xmlwriter
             zip
+            session
           ]);
         };
       in
