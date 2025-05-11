@@ -2,7 +2,12 @@
 
 namespace App\Model;
 
+include __DIR__ . '/../../lib/js2php/build/JSInterpreter.php';
+
 use App\Bridge\ConsoleBridge;
+use JSInterpreter;
+use JSParser;
+use JSCompiler;
 
 class Runner {
     private $commandArgs;
@@ -15,15 +20,18 @@ class Runner {
 
     public function run($flows) {
         $context = [
-            'console' => (new ConsoleBridge())->getBridge(),
+            //'console' => (new ConsoleBridge())->getBridge(),
+            'log' => function(...$args) {
+                echo implode(' ', $args) . PHP_EOL;
+            },
         ];
 
         $promise = new \React\Promise\Promise(function($resolve) {
-            $resolve(null);
+            $resolve('');
         });
 
         foreach ($flows as $flow) {
-            $promise = $promise->then(function() use ($flow, $context) {
+            $promise = $promise->then(function($totalCode) use ($flow) {
                 $interpreter = null;
 
                 if ($flow['flow'] === '@uniflow-io/uniflow-flow-object') {
@@ -43,7 +51,7 @@ class Runner {
                                 return '';
                             }
                             $object = $this->transform($data['keyValueList']);
-                            return '$' . $data['variable'] . ' = ' . json_encode($object) . ';';
+                            return 'var ' . $data['variable'] . ' = ' . json_encode($object) . ';';
                         }
                     ];
                 } elseif ($flow['flow'] === '@uniflow-io/uniflow-flow-text') {
@@ -63,7 +71,7 @@ class Runner {
                                 return '';
                             }
                             $text = $data['text'] ?? '';
-                            return '$' . $data['variable'] . ' = ' . json_encode($text) . ';';
+                            return 'var ' . $data['variable'] . ' = ' . json_encode($text) . ';';
                         }
                     ];
                 } elseif ($flow['flow'] === '@uniflow-io/uniflow-flow-function') {
@@ -81,11 +89,40 @@ class Runner {
                     $data = $interpreter['onDeserialize']($flow['data']);
                     $code = $interpreter['onCompile']($data);
                     if ($code) {
-                        eval($code);
+                        $totalCode .= $code;
                     }
                 }
+
+                return $totalCode;
             });
         }
+
+        $promise->then(function($code) {
+            dump($code);
+            $interpreter = new JSInterpreter($code);
+
+            echo $interpreter->run(array());
+            die();
+
+            /*// Create parser and compiler instances
+            $parser = new JSParser();
+            $compiler = new JSCompiler();
+
+            // Parse the JavaScript code
+            list(, $ast) = $parser->parse('
+                log("Hello from JavaScript!");
+            ');
+
+            // Compile to PHP code
+            $code = $compiler($ast, ['generate' => 'string']);
+
+            // Create interpreter with compiled code
+            $interpreter = new JSInterpreter($code);
+
+            // Run the code with the context
+            $interpreter->run($context);
+            die();*/
+        });
 
         return $promise;
     }

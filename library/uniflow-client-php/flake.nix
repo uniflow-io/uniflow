@@ -12,9 +12,39 @@
 
     perSystem = { config, self', inputs', pkgs, system, lib, ... }:
       let
+        # Define PHP extensions to include
+        phpExtensions = [
+          # Core extensions
+          "filter"
+          "openssl"
+          "curl"
+          "simplexml"
+          "tokenizer"
+          "dom"
+          "mbstring"
+          "xmlwriter"
+          "zip"
+        ];
+
+        # Helper function to get PHP extensions
+        getPhpExtensions = php: extensions:
+          map (ext: php.extensions.${ext})
+              (builtins.filter (ext: php.extensions ? ${ext}) extensions);
+
         php = pkgs.api.buildPhpFromComposer {
           src = inputs.self;
-          php = pkgs.php83; # Change to php56, php70, ..., php81, php82, php83 etc.
+          php = pkgs.php83.withExtensions ({ all, ... }: with all; [
+            # v8js
+            filter
+            openssl
+            curl
+            simplexml
+            tokenizer
+            dom
+            mbstring
+            xmlwriter
+            zip
+          ]);
         };
       in
       {
@@ -35,9 +65,16 @@
             php.packages.psalm
             pkgs.phpunit
             self'.packages.satis
+            # pkgs.v8
+            # pkgs.v8.dev  # Add V8 development files
+            pkgs.pkg-config  # Required for finding V8
           ];
 
-          shellHook = '''';
+          # shellHook = '''
+          #   export PKG_CONFIG_PATH="${pkgs.v8}/lib/pkgconfig:$PKG_CONFIG_PATH"
+          #   export V8_INCLUDE_PATH="$\{pkgs.v8.dev}/include"
+          #   export V8_LIB_PATH="${pkgs.v8}/lib"
+          # '';
         };
 
         checks = {
