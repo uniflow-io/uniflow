@@ -84,3 +84,24 @@ Sylius is completely free and released under the [MIT License](https://github.co
 
 Sylius was originally created by [Paweł Jędrzejewski](http://pjedrzejewski.com).
 See the list of [contributors from our awesome community](https://github.com/Sylius/Sylius/contributors).
+
+## Upsun Deployment
+
+This application can be deployed on [Upsun](https://upsun.com/), the successor to Platform.sh.
+
+### Configuration
+
+The necessary configuration files are already included:
+- `.upsun.yml` - Main application configuration
+- `.upsun/services.yaml` - PostgreSQL service definition
+- `.upsun/routes.yaml` - HTTP routes configuration
+
+### Deploying to Upsun
+
+1. Create a Upsun account if you don't have one yet
+2. Install the Upsun CLI: `curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash`
+3. From the project root, run: `cd library/uniflow-api && upsun init`
+4. Follow the CLI instructions to create a new project or connect to an existing one
+5. Push your code: `git push upsun main`
+
+The deployment will automatically configure PostgreSQL for you.

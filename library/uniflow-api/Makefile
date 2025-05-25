@@ -68,3 +68,21 @@ help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 ##
+## Upsun
+##
+upsun-init: ## Initialize Upsun project
+	upsun init
+
+upsun-push: ## Push to Upsun
+	git push upsun
+
+upsun-ssh: ## SSH into Upsun environment
+	upsun ssh
+
+upsun-db-dump: ## Create database dump from Upsun
+	upsun db:dump
+
+upsun-redeploy: ## Trigger a redeployment on Upsun
+	upsun redeploy
+
+##
