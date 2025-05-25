@@ -12,7 +12,7 @@ SYMFONY         = symfony
 
 ##
 ##Dev
-##-------
+##-------------
 
 nix: ## Start nix development
 	$(NIX)
@@ -74,7 +74,7 @@ phpunit: ## Launch PHPUnit test suite
 
 ##
 ## Upsun
-##
+##-------------
 upsun-init: ## Initialize Upsun project
 	upsun init
 
