@@ -1,0 +1,9 @@
+# Set database environment variables
+export DB_HOST="database.internal"
+export DB_PORT="5432"
+export DB_PATH="main"
+export DB_DATABASE="$DB_PATH"
+export DB_USERNAME="main"
+export DB_PASSWORD="main"
+export DB_SCHEME="postgresql"
+export DATABASE_URL="${DB_SCHEME}://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_PATH}"

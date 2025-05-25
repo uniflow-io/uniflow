@@ -121,7 +121,10 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
+        },
+        "php-cs-fixer": "cd tools && castor app:tools:php-cs-fixer",
+        "phpstan": "cd tools && castor app:tools:phpstan",
+        "phpunit": "cd tools && castor app:tools:phpunit"
     },
     "replace": {
         "symfony/polyfill-apcu": "*",
