@@ -31,6 +31,7 @@
     ],
     "clients": [
       "uniflow",
+      "php",
       "node",
       "vscode"
     ]
