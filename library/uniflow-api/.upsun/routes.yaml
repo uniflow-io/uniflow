@@ -1,0 +1,7 @@
+"https://{default}/":
+    type: upstream
+    upstream: "uniflow-api:http"
+
+"https://www.{default}/":
+    type: redirect
+    to: "https://{default}/" 
