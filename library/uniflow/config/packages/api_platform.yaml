@@ -1,0 +1,33 @@
+api_platform:
+    title: Uniflow API
+    version: 1.0.0
+    mapping:
+        paths:
+            - '%kernel.project_dir%/config/api_platform'
+            - '%kernel.project_dir%/src/Entity'
+            - '%kernel.project_dir%/src/ApiResource'
+    patch_formats:
+        json: ['application/merge-patch+json']
+    swagger:
+        versions: [3]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    
+    # Enable OpenAPI documentation
+    openapi:
+        contact:
+            name: Uniflow API Team
+            url: https://uniflow.io
+            email: contact@uniflow.io
+        termsOfService: https://uniflow.io/terms
+        license:
+            name: MIT
+            url: https://opensource.org/licenses/MIT
+
+    # Configure documentation modifiers
+#    documentation:
+#        accept_language_header:
+#            enabled: true
+#            header_name: Accept-Language
