@@ -64,6 +64,7 @@
         "symfony/debug-bundle": "^6.4 || ^7.2",
         "symfony/http-client": "^6.4 || ^7.2",
         "symfony/intl": "^6.4 || ^7.2",
+        "symfony/maker-bundle": "*",
         "symfony/web-profiler-bundle": "^6.4 || ^7.2"
     },
     "config": {

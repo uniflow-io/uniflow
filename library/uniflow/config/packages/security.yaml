@@ -102,13 +102,13 @@ security:
                 target: sylius_shop_homepage
                 invalidate_session: false
         
-        #api_uniflow:
-        #    pattern: ^/api/v1/uniflow
-        #    provider: sylius_shop_user_provider
-        #    stateless: true
-        #    jwt: true
-        #    custom_authenticators:
-        #        - App\Security\ApiKeyAuthenticator
+        api_uniflow:
+            pattern: ^/api/v1/uniflow
+            provider: sylius_shop_user_provider
+            stateless: true
+            jwt: true
+            custom_authenticators:
+                - App\Security\ApiKeyAuthenticator
 
         image_resolver:
             pattern: ^/media/cache/resolve

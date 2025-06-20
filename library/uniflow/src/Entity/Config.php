@@ -23,18 +23,18 @@ class Config
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    /*#[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $mediumToken = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    protected ?string $mediumRefreshToken = null;
+    protected ?string $mediumRefreshToken = null;*/
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getMediumToken(): ?string
+    /*public function getMediumToken(): ?string
     {
         return $this->mediumToken;
     }
@@ -56,5 +56,5 @@ class Config
         $this->mediumRefreshToken = $mediumRefreshToken;
 
         return $this;
-    }
+    }*/
 }

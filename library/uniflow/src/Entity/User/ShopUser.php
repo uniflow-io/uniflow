@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Table(name: 'sylius_shop_user')]
 class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterface
 {
-    //use UidTrait;
+    use UidTrait;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $facebookId = null;
