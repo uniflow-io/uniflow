@@ -30,9 +30,11 @@
         "sylius/mollie-plugin": "^3.0",
         "sylius/paypal-plugin": "^2.0",
         "sylius/sylius": "^2.1",
+        "symfony/asset-mapper": "^7.2",
         "symfony/dotenv": "^6.4 || ^7.2",
         "symfony/flex": "^2.7",
-        "symfony/runtime": "^6.4 || ^7.2"
+        "symfony/runtime": "^6.4 || ^7.2",
+        "symfonycasts/sass-bundle": "^0.8.2"
     },
     "require-dev": {
         "behat/behat": "^3.14",
@@ -122,7 +124,8 @@
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         }
     },
     "replace": {

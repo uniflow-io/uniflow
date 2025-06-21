@@ -23,7 +23,7 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $user = new User();
+        /*$user = new User();
         $user->setFirstName('Mathieu');
         $user->setLastName('Ledru');
         $user->setPassword($this->passwordHasher->hashPassword($user, 'admin'));
@@ -31,6 +31,6 @@ class UserFixtures extends Fixture
         $user->setRoles(['ROLE_SUPER_ADMIN']);
 
         $manager->persist($user);
-        $manager->flush();
+        $manager->flush();*/
     }
 }

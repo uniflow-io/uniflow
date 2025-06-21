@@ -1,0 +1,138 @@
+<header class="navbar navbar-top navbar-expand flex-row">
+    <!-- Logo/Brand -->
+    <a class="navbar-brand mr-0 mr-md-2" href="{{ path('app_shop_home') }}" aria-label="Uniflow">
+        <img src="{{ asset('images/logo.svg') }}" width="36" height="36" class="d-block" alt="Uniflow" />
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="navbar-nav-scroll d-none d-md-flex">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_flows' ? ' active' : '' }}" href="{{ path('app_shop_flows') }}">
+                    Flows
+                </a>
+            </li>
+            {% if app.user and is_granted('ROLE_USER') %}
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_feed' ? ' active' : '' }}" href="{{ path('app_shop_feed') }}">
+                    Dashboard
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_library' ? ' active' : '' }}" href="{{ path('app_shop_library') }}">
+                    Library
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_doc' ? ' active' : '' }}" href="{{ path('app_shop_doc') }}">
+                    Docs
+                </a>
+            </li>
+            {% if app.user and is_granted('ROLE_USER') %}
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_settings' ? ' active' : '' }}" href="{{ path('app_shop_settings') }}">
+                    Settings
+                </a>
+            </li>
+            {% endif %}
+            {% if app.user and is_granted('ROLE_SUPER_ADMIN') %}
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') == 'app_shop_admin' ? ' active' : '' }}" href="{{ path('app_shop_admin') }}">
+                    Admin
+                </a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link{{ app.request.get('_route') starts with 'app_shop_blog' ? ' active' : '' }}" href="{{ path('app_shop_blog') }}">
+                    Blog
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Right Side Navigation -->
+    <ul class="navbar-nav flex-row ms-auto">
+        <li class="nav-item">
+            <a class="nav-item nav-link{{ app.request.get('_route') == 'app_shop_changelog' ? ' active' : '' }}" href="{{ path('app_shop_changelog') }}">
+                {{ changelog_version|default('v1.0.0') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://github.com/uniflow-io/uniflow" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://twitter.com/uniflow_io" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" aria-label="Theme" id="theme-switcher">
+                <span id="theme-icon">
+                    <!-- Theme icon will be inserted by JavaScript -->
+                </span>
+            </a>
+        </li>
+        {% if not app.user %}
+        <li class="nav-item">
+            <a class="nav-link{{ app.request.get('_route') == 'app_shop_login' ? ' active' : '' }}" href="{{ path('app_shop_login') }}">
+                Login
+            </a>
+        </li>
+        {% endif %}
+        {% if app.user and is_granted('ROLE_USER') %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_shop_logout') }}">
+                <i class="fas fa-power-off"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</header>
+
+<!-- Mobile Bottom Navigation -->
+<ul class="nav nav-bar-bottom fixed-bottom justify-content-center d-flex d-md-none">
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_flows' ? ' active' : '' }}" href="{{ path('app_shop_flows') }}">
+            Flows
+        </a>
+    </li>
+    {% if app.user and is_granted('ROLE_USER') %}
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_feed' ? ' active' : '' }}" href="{{ path('app_shop_feed') }}">
+            Dashboard
+        </a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_library' ? ' active' : '' }}" href="{{ path('app_shop_library') }}">
+            Library
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_doc' ? ' active' : '' }}" href="{{ path('app_shop_doc') }}">
+            Docs
+        </a>
+    </li>
+    {% if app.user and is_granted('ROLE_USER') %}
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_settings' ? ' active' : '' }}" href="{{ path('app_shop_settings') }}">
+            Settings
+        </a>
+    </li>
+    {% endif %}
+    {% if app.user and is_granted('ROLE_SUPER_ADMIN') %}
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') == 'app_shop_admin' ? ' active' : '' }}" href="{{ path('app_shop_admin') }}">
+            Admin
+        </a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link{{ app.request.get('_route') starts with 'app_shop_blog' ? ' active' : '' }}" href="{{ path('app_shop_blog') }}">
+            Blog
+        </a>
+    </li>
+</ul>

@@ -297,6 +297,21 @@
             "ref": "42a2dc11276d447efefa639b95f9c7a4edd7031a"
         }
     },
+    "symfony/asset-mapper": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "5ad1308aa756d58f999ffbe1540d1189f5d7d14a"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/styles/app.css",
+            "config/packages/asset_mapper.yaml",
+            "importmap.php"
+        ]
+    },
     "symfony/console": {
         "version": "7.1",
         "recipe": {
@@ -605,6 +620,9 @@
         "files": [
             "config/packages/workflow.yaml"
         ]
+    },
+    "symfonycasts/sass-bundle": {
+        "version": "v0.8.2"
     },
     "theofidry/alice-data-fixtures": {
         "version": "1.7",
