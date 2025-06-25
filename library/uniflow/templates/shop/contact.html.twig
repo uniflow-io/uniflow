@@ -10,7 +10,7 @@
                 You got a question about Uniflow? Write more here.
             </p>
 
-            {{ form_start(form, {'attr': {'data-controller': 'contact-form'}}) }}
+            {{ form_start(form) }}
                 {% if form_errors(form) %}
                     <div class="alert alert-danger" role="alert">
                         {{ form_errors(form) }}
