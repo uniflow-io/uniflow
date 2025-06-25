@@ -80,22 +80,6 @@ class UserService
         return $this->userRepository->findOneByEmailOrUsername($username);
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByFacebookId(string $facebookId): ?User
-    {
-        return $this->userRepository->findOneByFacebookId($facebookId);
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByGithubId(string $githubId): ?User
-    {
-        return $this->userRepository->findOneByGithubId($githubId);
-    }
-
     public function findOneByApiKey(string $apiKey): ?User
     {
         return $this->userRepository->findOneBy(['apiKey' => $apiKey]);

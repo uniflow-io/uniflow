@@ -40,6 +40,13 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    # Configure LoginController with specific user provider
+    App\Controller\Shop\LoginController:
+        arguments:
+            $userProvider: '@sylius.shop_user_provider.email_or_name_based'
+            $passwordHasher: '@security.user_password_hasher'
+            $eventDispatcher: '@event_dispatcher'
+
     #App\Services\AuthService:
     #    arguments:
     #        $em: '@doctrine.orm.entity_manager'

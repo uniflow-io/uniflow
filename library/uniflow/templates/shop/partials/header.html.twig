@@ -84,8 +84,8 @@
         {% endif %}
         {% if app.user and is_granted('ROLE_USER') %}
         <li class="nav-item">
-            <a class="nav-link" href="{{ path('app_shop_logout') }}">
-                <i class="fas fa-power-off"></i>
+            <a class="nav-link" href="{{ path('sylius_shop_logout') }}">
+                <twig:ux:icon name="hugeicons:logout-04" class="svg-inline--fa" />
             </a>
         </li>
         {% endif %}

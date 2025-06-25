@@ -63,34 +63,4 @@ class ShopUserRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
-
-    public function findOneByFacebookId(string $facebookId): ?User
-    {
-        $qb = $this->createQueryBuilder('u')
-            ->select('u')
-        ;
-
-        $qb->where('u.facebookId = :facebookId')
-            ->setParameter('facebookId', $facebookId)
-        ;
-
-        $query = $qb->getQuery();
-
-        return $query->getOneOrNullResult();
-    }
-
-    public function findOneByGithubId(string $githubId): ?User
-    {
-        $qb = $this->createQueryBuilder('u')
-            ->select('u')
-        ;
-
-        $qb->where('u.githubId = :githubId')
-            ->setParameter('githubId', $githubId)
-        ;
-
-        $query = $qb->getQuery();
-
-        return $query->getOneOrNullResult();
-    }
 }
