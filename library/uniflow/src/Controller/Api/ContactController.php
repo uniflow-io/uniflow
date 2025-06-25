@@ -6,7 +6,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Contact;
 use App\Form\ContactType;
-use App\Services\ContactService;
+use App\Service\ContactService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

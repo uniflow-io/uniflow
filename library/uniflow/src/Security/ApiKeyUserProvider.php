@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Entity\User\ShopUser;
-use App\Services\UserService;
+use App\Service\UserService;
 use Sylius\Component\User\Model\UserInterface as SyliusUserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;

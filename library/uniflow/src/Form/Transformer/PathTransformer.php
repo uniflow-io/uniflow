@@ -6,7 +6,7 @@ namespace App\Form\Transformer;
 
 use App\Entity\Folder;
 use App\Entity\User\ShopUser as User;
-use App\Services\FolderService;
+use App\Service\FolderService;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class PathTransformer implements DataTransformerInterface

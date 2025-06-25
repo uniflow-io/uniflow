@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[Route('/', name: 'app_shop_')]
 class RegisterController extends AbstractController
@@ -46,6 +47,7 @@ class RegisterController extends AbstractController
             } else {
                 // Create a new user
                 $user = new ShopUser();
+                $user->setUid(Uuid::v7()->toString());
 
                 // Create a customer and set it on the user
                 $customer = new Customer();

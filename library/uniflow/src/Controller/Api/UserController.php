@@ -6,10 +6,10 @@ namespace App\Controller\Api;
 
 use App\Entity\User\ShopUser as User;
 use App\Form\SettingsType;
-use App\Services\ConfigService;
-use App\Services\FolderService;
-use App\Services\ProgramService;
-use App\Services\UserService;
+use App\Service\ConfigService;
+use App\Service\FolderService;
+use App\Service\ProgramService;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Shop;
 
 use App\Model\Page;
+use App\Service\ChangelogService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/', name: 'app_shop_')]
 class ChangelogController extends AbstractController
 {
+
+    public function __construct(
+        private ChangelogService $changelogService
+    ) {
+    }
+
     #[Route('/changelog', name: 'changelog', methods: ['GET'])]
     public function changelog(): Response
     {
@@ -25,6 +32,7 @@ class ChangelogController extends AbstractController
                 title: 'Changelog',
                 description: 'Changelog',
             ),
+            'changelogItems' => $this->changelogService->getChangelogItems(),
         ]);
     }
 }

@@ -47,10 +47,10 @@ services:
             $passwordHasher: '@security.user_password_hasher'
             $eventDispatcher: '@event_dispatcher'
 
-    #App\Services\AuthService:
+    #App\Service\AuthService:
     #    arguments:
     #        $em: '@doctrine.orm.entity_manager'
-    #        $userService: '@App\Services\UserService'
+    #        $userService: '@App\Service\UserService'
     #        $passwordHasher: '@security.user_password_hasher'
     #        $jwtManager: '@lexik_jwt_authentication.jwt_manager'
     #        $httpClient: '@http_client'
@@ -63,6 +63,10 @@ services:
         arguments:
             - '@cache.app'
 
+    App\Service\ChangelogService:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'
+    
     # Explicitly define the kernel service
 #    App\Kernel:
 #        public: true

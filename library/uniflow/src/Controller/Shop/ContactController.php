@@ -7,7 +7,7 @@ namespace App\Controller\Shop;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Model\Page;
-use App\Services\ContactService;
+use App\Service\ContactService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

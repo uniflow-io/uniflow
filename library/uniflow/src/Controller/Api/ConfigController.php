@@ -7,7 +7,7 @@ namespace App\Controller\Api;
 use App\Entity\Config;
 use App\Entity\User\ShopUser as User;
 use App\Form\ConfigType;
-use App\Services\ConfigService;
+use App\Service\ConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Entity\Client;
 use App\Repository\ClientRepository;

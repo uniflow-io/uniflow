@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\DataFixture;
 
 use App\Entity\User\ShopUser as User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixture extends Fixture
 {
     /**
      * @var UserPasswordHasherInterface

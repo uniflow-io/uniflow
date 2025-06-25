@@ -1,8 +1,7 @@
 - tag: "v1.1.17"
   label: |-
-    Add Sylius
-    Add api tests
-  date: "2025-05-10"
+    Migrate to Symfony UX
+  date: "2025-06-25"
 -
   tag: "v1.1.16"
   label: |-

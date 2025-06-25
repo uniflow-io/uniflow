@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Transformer;
 
 use App\Entity\Tag;
-use App\Services\TagService;
+use App\Service\TagService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Uid\Uuid;

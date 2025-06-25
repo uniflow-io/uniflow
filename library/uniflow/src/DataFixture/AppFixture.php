@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\DataFixture;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class AppFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

@@ -7,7 +7,7 @@ namespace App\Form;
 use App\Entity\Folder;
 use App\Form\Transformer\PathTransformer;
 use App\Form\Type\ArrayType;
-use App\Services\FolderService;
+use App\Service\FolderService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

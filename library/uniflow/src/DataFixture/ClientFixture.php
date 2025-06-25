@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\DataFixtures;
+namespace App\DataFixture;
 
 use App\Entity\Client;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class ClientFixtures extends Fixture
+class ClientFixture extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

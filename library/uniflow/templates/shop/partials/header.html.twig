@@ -55,7 +55,7 @@
     <ul class="navbar-nav flex-row ms-auto">
         <li class="nav-item">
             <a class="nav-item nav-link{{ app.request.get('_route') == 'app_shop_changelog' ? ' active' : '' }}" href="{{ path('app_shop_changelog') }}">
-                {{ changelog_version|default('v1.0.0') }}
+                {{ display_version() }}
             </a>
         </li>
         <li class="nav-item">
