@@ -1,3 +1,7 @@
+##
+##usage :
+##-------
+
 .PHONY: run
 
 DOCKER_COMPOSE ?= docker compose
@@ -19,16 +23,20 @@ nix: ## Start nix development
 
 init: ## init
 	@make -s docker-compose-check
-	@if [ ! -e compose.override.yml ]; then \
-		cp compose.override.dist.yml compose.override.yml; \
-	fi
-	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp composer install --no-interaction --no-scripts
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php composer install --no-interaction --no-scripts
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm nodejs
 	@make -s install
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) up -d
 
 run: ## run
 	@make -s up
+
+asset: ## Build
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console sass:build
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console asset-map:compile
+
+cache: ## cache
+    @ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec rm -rf var/cache/* && php -d memory_limit=512M bin/console cache:clear --env=prod --no-warmup && php -d memory_limit=512M bin/console cache:warmup --env=prod
 
 debug: ## debug
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) -f compose.yml -f compose.override.yml -f compose.debug.yml up -d
@@ -40,13 +48,15 @@ down: ## down
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down
 
 install: ## install
-	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm frankenphp bin/console sylius:install -s default -n
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console doctrine:database:create
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console doctrine:schema:update --force
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console sylius:install -s default -n
 
 clean: ## clean
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down -v
 
 php-shell: ## php-shell
-	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec frankenphp sh
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec php sh
 
 node-shell: ## node-shell
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm -i nodejs sh
@@ -58,18 +68,23 @@ docker-compose-check: ## docker-compose-check
 	@$(DOCKER_COMPOSE) version >/dev/null 2>&1 || (echo "Please install docker compose binary or set DOCKER_COMPOSE=\"docker-compose\" for legacy binary" && exit 1)
 	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
 	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
+
+
 ##
 ##DevOps
 ##-------------
 
 php-cs-fixer: ## Check and fix coding styles using PHP CS Fixer
-	composer php-cs-fixer
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec php "(cd tools/php-cs-fixer && composer install && ./vendor/bin/php-cs-fixer fix --config ./.php-cs-fixer.php)"
 
 phpstan: ## Execute PHPStan analysis
-	composer phpstan
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec php "(cd tools/phpstan && composer install && ./vendor/bin/phpstan --configuration=../../phpstan.neon)"
 
 phpunit: ## Launch PHPUnit test suite
 	composer phpunit
+
+rector: ## Instant Upgrades and Automated Refactoring
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) exec php "(cd tools/rector && composer install && ./vendor/bin/rector process)"
 
 
 ##
@@ -90,9 +105,9 @@ upsun-db-dump: ## Create database dump from Upsun
 upsun-redeploy: ## Trigger a redeployment on Upsun
 	upsun redeploy
 
-
 # DEFAULT
 .DEFAULT_GOAL := help
 help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
+##
