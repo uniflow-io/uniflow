@@ -1,6 +1,7 @@
 services:
     php:
-        image: ghcr.io/sylius/sylius-php:8.3-fixuid-xdebug-alpine
+        image: ghcr.io/sylius/sylius-php:8.3-alpine
+        # image: ghcr.io/sylius/sylius-php:8.3-fixuid-xdebug-alpine
         user: ${DOCKER_USER:-1000:1000}
         depends_on:
             mysql:
@@ -30,12 +31,12 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
         volumes:
-          - .:/srv/sylius:rw,cached
+          - .:/srv/sylius:rw
           # if you develop on Linux, you may use a bind-mounted host directory instead
-          - ./var:/srv/sylius/var:rw
-          - ./public:/srv/sylius/public:rw,delegated
+          #- ./var:/srv/sylius/var:rw
+          #- ./public:/srv/sylius/public:rw,delegated
           # if you develop on Linux, you may use a bind-mounted host directory instead
-          - ./public/media:/srv/sylius/public/media:rw
+          #- ./public/media:/srv/sylius/public/media:rw
 #          - public-media:/srv/sylius/public/media:rw
     mysql:
         image: mysql:8.4
@@ -60,7 +61,7 @@ services:
         volumes:
             - ./public:/srv/sylius/public:ro
             # if you develop on Linux, you may use a bind-mounted host directory instead
-            - ./public/media:/srv/sylius/public/media:ro
+            #- ./public/media:/srv/sylius/public/media:ro
 #            - public-media:/srv/sylius/public/media:ro,nocopy
         ports:
             - "8016:80" # HTTP

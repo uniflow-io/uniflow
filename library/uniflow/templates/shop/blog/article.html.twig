@@ -1,0 +1,82 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <figure class="figure-fluid">
+        {% if article.data.cover is defined %}
+            {% if article.data.cover ends with '.svg' %}
+                <img
+                class="figure-img img-fluid"
+                style="width:100%; object-fit: cover;"
+                src="{{ asset('docs/blog/' ~ article.data.slug ~ '/' ~ article.data.cover) }}"
+                alt="Cover"
+                />
+            {% else %}
+                <img
+                class="figure-img img-fluid"
+                src="{{ asset('docs/blog/' ~ article.data.slug ~ '/' ~ article.data.cover) }}"
+                style="width:100%; object-fit: cover;"
+                alt="Cover"
+                />
+            {% endif %}
+        {% endif %}
+        <figcaption class="figure-caption text-center">
+            credit
+            <a href="{{ article.data.coverOriginalUrl }}" target="_blank" rel="noopener noreferrer">
+                {{ article.data.coverAuthor }}
+            </a>
+        </figcaption>
+    </figure>
+
+    <h3 class="my-4">{{ article.data.title }}</h3>
+
+    <div class="row pt-4 mb-3">
+        <div class="col-sm-12 text-center">
+            <small>
+                Posted {{ article.data.date|format_datetime('medium', 'short') }} by
+                <img
+                    src="{{ asset('docs/contributors/' ~ article.data.author.image) }}"
+                    alt="{{ article.data.author.name }}"
+                    class="rounded-circle mx-2"
+                    style="vertical-align: middle; display: inline-block; width: 30px; height: 30px;"
+                />
+                <a href="{{ path('app_shop_contributor', {'slug': article.data.author.slug}) }}">
+                    {{ article.data.author.name }}
+                </a>
+            </small>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-12">
+            {{ article.markdown|markdown_to_html }}
+            <p>
+                <a
+                    href="https://github.com/uniflow-io/uniflow/edit/1.x/docs/blog/{{ article.data.slug }}/index.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <twig:ux:icon name="lucide:edit" class="svg-inline--fa" /> Edit this page on GitHub
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-auto">
+            {% if previous is defined and previous %}
+                <a href="{{ path('app_shop_article', {'slug': previous.data.slug}) }}" class="pull-left">
+                    <twig:ux:icon name="lucide:arrow-left" class="svg-inline--fa" /> {{ previous.data.title }}
+                </a>
+            {% endif %}
+        </div>
+        <div class="col-auto ms-auto">
+            {% if next is defined and next %}
+                <a href="{{ path('app_shop_article', {'slug': next.data.slug}) }}" class="pull-right">
+                    {{ next.data.title }} <twig:ux:icon name="lucide:arrow-right" class="svg-inline--fa" />
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -25,6 +25,7 @@
     ],
     "require": {
         "php": "^8.2",
+        "league/commonmark": "^2.7",
         "nelmio/cors-bundle": "^2.5",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sylius/mollie-plugin": "^3.0",
@@ -34,7 +35,9 @@
         "symfony/dotenv": "^6.4 || ^7.2",
         "symfony/flex": "^2.7",
         "symfony/runtime": "^6.4 || ^7.2",
-        "symfonycasts/sass-bundle": "^0.8.2"
+        "symfonycasts/sass-bundle": "^0.8.2",
+        "twig/extra-bundle": "^3.21",
+        "twig/markdown-extra": "^3.21"
     },
     "require-dev": {
         "behat/behat": "^3.14",
