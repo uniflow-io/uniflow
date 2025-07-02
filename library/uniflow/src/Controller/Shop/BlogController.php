@@ -21,7 +21,6 @@ use Twig\Extra\Markdown\DefaultMarkdown as Markdown;
 #[Route('/', name: 'app_shop_')]
 class BlogController extends AbstractController
 {
-
     public function __construct(
         private readonly AppService $appService,
         private readonly Markdown $markdown,
@@ -129,8 +128,6 @@ class BlogController extends AbstractController
 
     private function getBlogArticles(?string $slug = null): array|null
     {
-        $contributors = $this->getContributors();
-
         $blogDir = $this->getParameter('kernel.project_dir') . '/assets/docs/blog';
         $finder = new \Symfony\Component\Finder\Finder();
         $articles = [];

@@ -1,0 +1,50 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row flex-sm-nowrap">
+    {% include 'shop/docs/navigation.html.twig' with {'docs': docs, 'slug': doc.data.slug} %}
+    <section class="section section-with-sidebar col">
+        <h3 class="mb-3">{{ doc.data.title }}</h3>
+
+        <div class="row mb-3">
+        <div class="col-sm-12">
+            {{ doc.markdown|markdown_to_html }}
+            <p>
+            <a
+                href="https://github.com/uniflow-io/uniflow/edit/1.x/docs/docs/{{ doc.data.slug }}/index.md"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <twig:ux:icon name="lucide:edit" class="svg-inline--fa" /> Edit this page on GitHub
+            </a>
+            </p>
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-auto">
+            {% if previous is defined and previous %}
+            <a
+                href="{{ path('app_shop_doc', previous.data.slug ? {'slug': previous.data.slug} : {}) }}"
+                class="pull-left"
+            >
+                <twig:ux:icon name="lucide:arrow-left" class="svg-inline--fa" /> {{ previous.data.title }}
+            </a>
+            {% endif %}
+        </div>
+        <div class="col-auto ms-auto">
+            {% if next is defined and next %}
+            <a
+                href="{{ path('app_shop_doc', next.data.slug ? {'slug': next.data.slug} : {}) }}"
+                class="pull-right"
+            >
+                {{ next.data.title }} <twig:ux:icon name="lucide:arrow-right" class="svg-inline--fa" />
+            </a>
+            {% endif %}
+        </div>
+        </div>
+    </section>
+    </div>
+</div>
+{% endblock %}

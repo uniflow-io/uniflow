@@ -1,5 +1,5 @@
 ---
-title: Frequently Asked Questions
+title: FAQ
 ---
 
 ## [#](https://uniflow.io/docs/faq#why-do-i-receive-emails-from-uniflow) Why do I receive emails from Uniflow?
