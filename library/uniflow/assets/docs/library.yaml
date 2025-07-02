@@ -1,0 +1,27 @@
+#- package: '@uniflow-io/uniflow-client'
+#  catalogs: ['client']
+#  title: 'Uniflow client'
+- package: '@uniflow-io/uniflow-client-node'
+  catalogs: ['client']
+  title: 'Uniflow node client'
+- package: '@uniflow-io/uniflow-client-vscode'
+  catalogs: ['client']
+  title: 'Uniflow vscode client'
+- package: '@uniflow-io/uniflow-flow-assets'
+  catalogs: ['flow']
+  title: 'Uniflow assets'
+- package: '@uniflow-io/uniflow-flow-canvas'
+  catalogs: ['flow']
+  title: 'Uniflow canvas'
+- package: '@uniflow-io/uniflow-flow-function'
+  catalogs: ['flow']
+  title: 'Uniflow function'
+- package: '@uniflow-io/uniflow-flow-object'
+  catalogs: ['flow']
+  title: 'Uniflow object'
+- package: '@uniflow-io/uniflow-flow-prompt'
+  catalogs: ['flow']
+  title: 'Uniflow prompt'
+- package: '@uniflow-io/uniflow-flow-text'
+  catalogs: ['flow']
+  title: 'Uniflow text'

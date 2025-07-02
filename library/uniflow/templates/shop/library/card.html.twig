@@ -1,0 +1,32 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row flex-sm-nowrap">
+    {% include 'shop/library/navigation.html.twig' with {'library': library, 'slug': card.slug} %}
+    <section class="section section-with-sidebar col">
+        <div class="row mb-3">
+        <div class="col-sm-12">
+            <div class="row text-secondary">
+                <div class="col-auto">
+                    <p>
+                        <a href="https://github.com/uniflow-io/uniflow/tree/1.x/library/{{ card.package|replace({'@uniflow-io/': ''}) }}" target="_blank" rel="noopener noreferrer">
+                            <twig:ux:icon name="lucide:github" class="svg-inline--fa" /> View on GitHub
+                        </a>
+                    </p>
+                </div>
+                <div class="col-auto">
+                    {% for catalog in card.catalogs %}
+                    <span class="badge badge-light mr-1">
+                        {{ catalog }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {{ card.readme|markdown_to_html }}
+        </div>
+        </div>
+    </section>
+    </div>
+</div>
+{% endblock %}
