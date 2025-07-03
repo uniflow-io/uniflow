@@ -43,7 +43,7 @@ class LibraryController extends AbstractController
         }
 
         $card['readme'] = file_get_contents(sprintf(
-            'https://raw.githubusercontent.com/uniflow-io/uniflow/refs/heads/1.x/library/%s/README.md',
+            __DIR__ . '/../../../library/%s/README.md',
             str_replace('@uniflow-io/', '', $card['package'])
         ));
 
