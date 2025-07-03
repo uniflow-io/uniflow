@@ -16,8 +16,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/', name: 'app_shop_')]
 class FeedController extends AbstractController
 {
-    #[Route('/feed', name: 'feed', methods: ['GET'])]
-    public function feed(): Response
+    #[Route('/feed/{username}/{slug}', name: 'feed', methods: ['GET'], requirements: ['username' => '[a-zA-Z0-9-]+', 'slug' => '.+'])]
+    public function feed(string $username, string $slug): Response
     {
         return $this->render('shop/changelog.html.twig', [
             'page' => new Page(
