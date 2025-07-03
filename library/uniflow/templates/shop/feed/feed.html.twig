@@ -1,0 +1,15 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row flex-sm-nowrap">
+    {% include 'shop/feed/navigation.html.twig' with {'type': currentItem is defined ? currentItem.type : null} %}
+    {% if program is defined %}
+        {% include 'shop/feed/program.html.twig' %}
+    {% endif %}
+    {% if folder is defined %}
+        {% include 'shop/feed/folder.html.twig' %}
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

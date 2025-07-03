@@ -1,0 +1,163 @@
+<section class="section section-with-sidebar col">
+    <div class="row">
+        <div class="col">
+            <h3>Infos</h3>
+        </div>
+        <div class="d-block col-auto">
+            <div class="btn-toolbar" role="toolbar" aria-label="flow actions">
+                <div class="btn-group-sm" role="group">
+                    <button type="button" class="btn text-secondary">
+                        <i class="fas fa-clone"></i>
+                    </button>
+                    <button type="button" class="btn text-secondary">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_start(programForm) }}
+        {{ form_errors(programForm) }}
+
+        {{ form_row(programForm.name) }}
+        {{ form_row(programForm.slug) }}
+        {{ form_row(programForm.clients) }}
+        {{ form_row(programForm.tags) }}
+        {{ form_row(programForm.description) }}
+    {{ form_end(programForm) }}
+    {#<form class="form-sm-horizontal">
+        {% if errors.form is defined %}
+            {% for message in errors.form %}
+                <div class="alert alert-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {{ form_row(programForm.name) }}
+
+        {#<div class="row mb-3">
+            <label for="program-slug" class="col-sm-2 col-form-label">Slug</label>
+            <div class="col-sm-10">
+                <input type="text" id="program-slug" class="form-control" value="{{ program.slug }}">
+                {% if errors.slug is defined %}
+                    <div class="invalid-feedback">{{ errors.slug }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="program-path" class="col-sm-2 col-form-label">Path</label>
+            <div class="col-sm-10">
+                {% if folderTreeEdit is defined and folderTreeEdit %}
+                    <select id="program-path" class="form-control">
+                        {% for path in folderTree %}
+                            <option value="{{ path }}" {% if program.path == path %}selected{% endif %}>{{ path }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <div>
+                        <button type="button" class="btn btn-secondary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        {{ program.path }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="program-clients" class="col-sm-2 col-form-label">Clients</label>
+            <div class="col-sm-10">
+                <select id="program-clients" class="form-control" multiple>
+                    {% for key, value in clients %}
+                        <option value="{{ key }}" {% if key in program.clients %}selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                {% if errors.clients is defined %}
+                    <div class="invalid-feedback">{{ errors.clients }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="program-tags" class="col-sm-2 col-form-label">Tags</label>
+            <div class="col-sm-10">
+                <select id="program-tags" class="form-control" multiple>
+                    {% for tag in tags %}
+                        <option value="{{ tag }}" {% if tag in program.tags %}selected{% endif %}>{{ tag }}</option>
+                    {% endfor %}
+                </select>
+                {% if errors.tags is defined %}
+                    <div class="invalid-feedback">{{ errors.tags }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-10 offset-sm-2">
+                <div class="form-check">
+                    <input type="checkbox" id="program-public" class="form-check-input" {% if program.isPublic %}checked{% endif %}>
+                    <label for="program-public" class="form-check-label">Public</label>
+                    {% if errors.isPublic is defined %}
+                        <div class="invalid-feedback">{{ errors.isPublic }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="program-description" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <textarea id="program-description" class="form-control">{{ program.description }}</textarea>
+                {% if errors.description is defined %}
+                    <div class="invalid-feedback">{{ errors.description }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </form>#}
+
+    {# for client in program.clients %}
+        {% if client == 'uniflow' %}
+            <div class="row mb-3">
+                <div class="col-sm-10 offset-sm-2">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play"></i> Play
+                    </button>
+                </div>
+            </div>
+        {% elseif client == 'php' %}
+            <div class="row mb-3">
+                <label for="program-php-api-key" class="col-sm-2 col-form-label">PHP usage</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <button type="button" class="input-group-text">
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                        <input type="text" class="form-control" id="program-php-api-key" value="{{ phpClipboard|default('') }}" readonly placeholder="api key">
+                    </div>
+                </div>
+            </div>
+        {% elseif client == 'node' %}
+            <div class="row mb-3">
+                <label for="program-node-api-key" class="col-sm-2 col-form-label">Node usage</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <button type="button" class="input-group-text">
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                        <input type="text" class="form-control" id="program-node-api-key" value="{{ nodeClipboard|default('') }}" readonly placeholder="api key">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor #}
+
+    <hr />
+
+    {# include 'components/flows.html.twig' with {
+        'clients': program.clients,
+        'graph': graph,
+        'programFlows': programFlows
+    } #}
+</section>

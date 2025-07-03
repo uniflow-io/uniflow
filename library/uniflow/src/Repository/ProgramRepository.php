@@ -75,14 +75,15 @@ class ProgramRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findOneByUserAndPath(User $user, array $path): ?Program
+    public function findOneByUserAndPath(User $user, string $path): ?Program
     {
-        $level = count($path);
+        $paths = explode('/', $path);
+        $level = count($paths);
         if ($level === 0) {
             return null;
         }
 
-        $slug = $path[$level - 1];
+        $slug = array_pop($paths);
 
         $qb = $this->createQueryBuilder('p')
             ->select('p')
@@ -90,7 +91,7 @@ class ProgramRepository extends ServiceEntityRepository
             ->andWhere('p.slug = :slug')->setParameter('slug', $slug)
         ;
 
-        if ($level === 1) {
+        /*if ($level === 1) {
             $qb->andWhere('p.folder IS NULL');
         } elseif ($level > 1) {
             for ($i = $level - 2; $i >= 0; $i--) {
@@ -105,13 +106,33 @@ class ProgramRepository extends ServiceEntityRepository
             }
 
             $qb->andWhere('f0.parent IS NULL');
-        }
+        }*/
 
         $qb->setMaxResults(1);
 
         $query = $qb->getQuery();
 
         return $query->getOneOrNullResult();
+    }
+
+    /**
+     * @return Program[]
+     */
+    public function findByUserAndFolder(User $user, ?Folder $folder): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p')
+            ->andWhere('p.user = :user')->setParameter('user', $user)
+            ->addOrderBy('p.updated', 'DESC')
+        ;
+
+        if ($folder instanceof Folder) {
+            $qb->andWhere('p.folder = :folder')->setParameter('folder', $folder);
+        } else {
+            $qb->andWhere('p.folder is NULL');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

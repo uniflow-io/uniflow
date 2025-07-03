@@ -8,7 +8,7 @@
         <dl class="row">
         {% for program in programs %}
             <dt class="col-md-2 text-md-end fw-normal">
-            <a href="{{ path('app_shop_feed', {'username': program.user.username, 'slug': program.slug}) }}">{{ program.name }}</a>
+            <a href="{{ path('app_shop_feed', {'user': program.user, 'path': program.path}) }}">{{ program.name }}</a>
             </dt>
             <dd class="col-md-10">
             {{ program.description|markdown_to_html|raw }}

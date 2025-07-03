@@ -54,37 +54,6 @@ class UserService
         $this->entityManager->flush();
     }
 
-    public function findOne(?int $id = null): ?User
-    {
-        return $this->userRepository->findOne($id);
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByEmail(string $email): ?User
-    {
-        return $this->userRepository->findOneByEmail($email);
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findOneByUsername(string $username): ?User
-    {
-        return $this->userRepository->findOneByUsername($username);
-    }
-
-    public function findOneByEmailOrUsername(string $username): ?User
-    {
-        return $this->userRepository->findOneByEmailOrUsername($username);
-    }
-
-    public function findOneByApiKey(string $apiKey): ?User
-    {
-        return $this->userRepository->findOneBy(['apiKey' => $apiKey]);
-    }
-
     /**
      * @throws NonUniqueResultException
      * @throws ORMException
@@ -97,7 +66,7 @@ class UserService
         $user->setCustomer(new Customer());
 
         if (isset($data['email'])) {
-            $existingUser = $this->findOneByEmail($data['email']);
+            $existingUser = $this->userRepository->findOneByEmail($data['email']);
             if ($existingUser !== null) {
                 throw new AuthenticationException('User with this email already exists');
             }
@@ -133,7 +102,7 @@ class UserService
      */
     public function login(string $username, string $password): array
     {
-        $user = $this->findOneByUsername($username) ?? $this->findOneByEmail($username);
+        $user = $this->userRepository->findOneByUsername($username) ?? $this->userRepository->findOneByEmail($username);
 
         if (!$user || !$user->getPassword()) {
             throw new AuthenticationException('Bad credentials');
@@ -152,125 +121,6 @@ class UserService
             'token' => $this->jwtManager->create($user),
         ];
     }
-
-    /**
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    /*
-    public function facebookLogin(string $accessToken, ?User $currentUser = null): array
-    {
-        // Get the token's Facebook app info
-        $appResponse = $this->httpClient->request('GET', "https://graph.facebook.com/app/?access_token={$accessToken}");
-        $appData = json_decode($appResponse->getContent(), true);
-
-        if (!isset($appData['id']) || $appData['id'] !== $this->facebookAppId) {
-            throw new AuthenticationException('Bad credentials');
-        }
-
-        // Get the token's Facebook user info
-        $userResponse = $this->httpClient->request('GET', "https://graph.facebook.com/me/?access_token={$accessToken}");
-        $userData = json_decode($userResponse->getContent(), true);
-
-        if (!isset($userData['id'])) {
-            throw new AuthenticationException('Bad credentials');
-        }
-
-        $facebookId = $userData['id'];
-        $facebookEmail = "{$userData['id']}@facebook.com";
-
-        $user = $currentUser;
-        if (!$user) {
-            $user = $this->findOneByFacebookId($facebookId);
-            if (!$user) {
-                $user = $this->findOneByEmail($facebookEmail);
-            }
-        }
-
-        if (!$user) {
-            $user = $this->create([
-                'email' => $facebookEmail,
-                'facebookId' => $facebookId,
-            ]);
-        } elseif (!$user->getFacebookId()) {
-            $user->setFacebookId($facebookId);
-            $this->save($user);
-        }
-
-        return [
-            'user' => $user,
-            'token' => $this->jwtManager->create($user),
-        ];
-    }
-    */
-
-    /**
-     * @throws NonUniqueResultException
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
-    /*
-    public function githubLogin(string $code, ?User $currentUser = null): array
-    {
-        // Get the token's Github app
-        $tokenResponse = $this->httpClient->request('POST', 'https://github.com/login/oauth/access_token', [
-            'headers' => [
-                'Accept' => 'application/json',
-            ],
-            'body' => [
-                'client_id' => $this->githubAppId,
-                'client_secret' => $this->githubAppSecret,
-                'code' => $code,
-            ],
-        ]);
-
-        $tokenData = json_decode($tokenResponse->getContent(), true);
-        if (!isset($tokenData['access_token'])) {
-            throw new AuthenticationException('Bad credentials');
-        }
-
-        // Get the token's Github user info
-        $userResponse = $this->httpClient->request('GET', 'https://api.github.com/user', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'User-Agent' => 'Uniflow App',
-                'Authorization' => "Bearer {$tokenData['access_token']}",
-            ],
-        ]);
-
-        $userData = json_decode($userResponse->getContent(), true);
-        if (!isset($userData['id'])) {
-            throw new AuthenticationException('Bad credentials');
-        }
-
-        $githubId = (string) $userData['id'];
-        $githubEmail = "{$userData['id']}@github.com";
-
-        $user = $currentUser;
-        if (!$user) {
-            $user = $this->findOneByGithubId($githubId);
-            if (!$user) {
-                $user = $this->findOneByEmail($githubEmail);
-            }
-        }
-
-        if (!$user) {
-            $user = $this->create([
-                'email' => $githubEmail,
-                'githubId' => $githubId,
-            ]);
-        } elseif (!$user->getGithubId()) {
-            $user->setGithubId($githubId);
-            $this->save($user);
-        }
-
-        return [
-            'user' => $user,
-            'token' => $this->jwtManager->create($user),
-        ];
-    }
-    */
 
     public function getJsonSettings(User $user): array
     {

@@ -1,0 +1,86 @@
+<div class="sidebar">
+    {#<form class="sidebar-search d-flex align-items-center" role="search">
+        <div class="input-group">
+            <input
+                type="search"
+                class="form-control ds-input"
+                placeholder="Search..."
+                aria-label="Search for..."
+                value="{{ search }}"
+            />
+            {% if search %}
+            <button class="input-group-text" type="button">
+                <i class="fas fa-folder"></i>
+            </button>
+            {% endif %}
+        </div>
+        <button
+            class="btn d-sm-none py-0 px-0 ms-3 isCollapsedd"
+            type="button"
+        >
+            {% if isCollapsed %}
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                class="bi bi-expand"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <title>Expand</title>
+                <use xlink:href="#nav-expand" />
+            </svg>
+            {% else %}
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                class="bi bi-expand"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+            >
+                <title>Collapse</title>
+                <use xlink:href="#nav-collapse" />
+            </svg>
+            {% endif %}
+        </button>
+    </form>#}
+    <nav class="sidebar-nav{# if isCollapsed %} d-none d-sm-block{% endif #}">
+        <div class="sidebar-section">
+            <ul class="sidebar-items">
+                {# if feed.parentFolder %}
+                    <li>
+                        <span class="link">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </span>
+                        <a href="{{ path('app_shop_feed', {'folder': feed.parentFolder, 'user': user, 'back': true}) }}">Back</a>
+                    </li>
+                    <li class="{{ folderActiveClass }}">
+                        <span class="link">.</span>
+                        <a href="{{ path('app_shop_feed', {'folder': feed.parentFolder, 'user': user}) }}">.</a>
+                    </li>
+                {% endif #}
+                {% for item in navigation %}
+                    <li class="{# itemActiveClass(item) #}">
+                        <span class="link">
+                            {% if item.type == 'folder' %}
+                                <i class="fas fa-folder"></i> {{ item.entity.name }}
+                            {% endif %}
+                            {% if item.type == 'program' %}
+                                {{ item.entity.name }}
+                            {% endif %}
+                            {% if item.type == 'program' and item.entity.tags is defined %}
+                                {% for tag in item.entity.tags %}
+                                    <span class="badge badge-light mr-1">
+                                        {{ tag }}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                        <a href="{{ path('app_shop_feed', {'path': item.entity.path, 'user': item.entity.user}) }}">{{ item.entity.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</div>

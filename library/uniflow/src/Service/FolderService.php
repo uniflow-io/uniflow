@@ -139,17 +139,22 @@ class FolderService
         }
     }
 
-    public function toPath(?Folder $folder): string
+    public function toPath(?Folder $folder = null): string
     {
         $paths = [];
 
-        while ($folder) {
+        while ($folder !== null) {
             array_unshift($paths, $folder->getSlug());
 
             $folder = $folder->getParent();
         }
 
         return '/' . implode('/', $paths);
+    }
+
+    public function toUser(Folder $folder): string
+    {
+        return $folder->getUser()->getUsername() ?? $folder->getUser()->getUid();
     }
 
     public function getJsonFolder(Folder $folder): array
@@ -159,6 +164,7 @@ class FolderService
             'name' => $folder->getName(),
             'slug' => $folder->getSlug(),
             'path' => $this->toPath($folder->getParent()),
+            'user' => $this->toUser($folder),
             'created' => $folder->getCreated()->format('c'),
             'updated' => $folder->getUpdated()->format('c'),
         ];

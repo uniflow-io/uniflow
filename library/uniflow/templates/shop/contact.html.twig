@@ -17,30 +17,21 @@
                     </div>
                 {% endif %}
 
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        {{ form_row(form.email, {
-                            'attr': {
-                                'class': 'form-control',
-                                'placeholder': 'Email'
-                            },
-                            'label': false
-                        }) }}
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-12">
-                        {{ form_row(form.message, {
-                            'attr': {
-                                'class': 'form-control',
-                                'placeholder': 'Message',
-                                'rows': '15'
-                            },
-                            'label': false
-                        }) }}
-                    </div>
-                </div>
+                {{ form_row(form.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Email'
+                    },
+                    'label': false
+                }) }}
+                {{ form_row(form.message, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Message',
+                        'rows': '15'
+                    },
+                    'label': false
+                }) }}
 
                 <div class="row mb-3">
                     <div class="col-md-12">

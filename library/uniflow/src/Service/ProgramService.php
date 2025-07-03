@@ -45,66 +45,6 @@ class ProgramService
         $this->em->flush();
     }
 
-    public function findOne(?int $id = null): ?Program
-    {
-        return $this->programRepository->findOne($id);
-    }
-
-    public function findOneByUid(?User $user, ?string $uid = null): ?Program
-    {
-        return $this->programRepository->findOneByUid($user, $uid);
-    }
-
-    public function findOneByUser(User $user, ?int $id = null): ?Program
-    {
-        return $this->programRepository->findOneByUser($user, $id);
-    }
-
-    public function findOneByUserAndPath(User $user, array $path): ?Program
-    {
-        return $this->programRepository->findOneByUserAndPath($user, $path);
-    }
-
-    /**
-     * @return Program[]
-     */
-    public function findLastByUserAndClient(User $user, ?string $client): array
-    {
-        return $this->programRepository->findLastByUserAndClient($user, $client);
-    }
-
-    /**
-     * @return Program[]
-     */
-    public function findLastByUserAndClientAndFolder(User $user, ?string $client, ?Folder $folder): array
-    {
-        return $this->programRepository->findLastByUserAndClientAndFolder($user, $client, $folder);
-    }
-
-    /**
-     * @return Program[]
-     */
-    public function findLastPublicByUserAndClient(User $user, ?string $client): array
-    {
-        return $this->programRepository->findLastPublicByUserAndClient($user, $client);
-    }
-
-    /**
-     * @return Program[]
-     */
-    public function findLastPublicByUserAndClientAndFolder(User $user, ?string $client, ?Folder $folder): array
-    {
-        return $this->programRepository->findLastPublicByUserAndClientAndFolder($user, $client, $folder);
-    }
-
-    /**
-     * @return Program[]
-     */
-    public function findLastPublic(?int $limit): array
-    {
-        return $this->programRepository->findLastPublic($limit);
-    }
-
     public function getUserPrograms(string $uid, int $page, int $perPage, ?string $path = null): array
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
@@ -177,6 +117,16 @@ class ProgramService
         }
     }
 
+    public function toPath(Program $program): string
+    {
+        return $this->folderService->toPath($program->getFolder()) . $program->getSlug();
+    }
+
+    public function toUser(Program $program): string
+    {
+        return $program->getUser()->getUsername() ?? $program->getUser()->getUid();
+    }
+
     public function getJsonProgram(Program $program): array
     {
         $clients = [];
@@ -193,12 +143,12 @@ class ProgramService
             'uid' => $program->getUid(),
             'name' => $program->getName(),
             'slug' => $program->getSlug(),
-            'path' => $this->folderService->toPath($program->getFolder()),
+            'path' => $this->toPath($program),
             'clients' => $clients,
             'tags' => $tags,
             'description' => $program->getDescription(),
             'isPublic' => $program->getPublic(),
-            'user' => $program->getUser()->getUsername() ?? $program->getUser()->getUid(),
+            'user' => $this->toUser($program),
             'created' => $program->getCreated()->format('c'),
             'updated' => $program->getUpdated()->format('c'),
         ];
