@@ -70,7 +70,10 @@ docker-compose-check: ## docker-compose-check
 	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
 
 dump-database: ## dump-database
-    docker compose exec mysql mysqldump -u root uniflow_dev > dump.sql
+	docker compose exec mysql mysqldump -u root uniflow_dev > dump.sql
+
+import-database: ## import-database
+	cat dump.sql | docker compose exec -T mysql mysql -u root uniflow_dev
 
 ##
 ##DevOps
