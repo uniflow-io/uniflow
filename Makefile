@@ -69,6 +69,8 @@ docker-compose-check: ## docker-compose-check
 	@echo "You are using \"$(DOCKER_COMPOSE)\" binary"
 	@echo "Current version is \"$$($(DOCKER_COMPOSE) version)\""
 
+dump-database: ## dump-database
+    docker compose exec mysql mysqldump -u root uniflow_dev > dump.sql
 
 ##
 ##DevOps
