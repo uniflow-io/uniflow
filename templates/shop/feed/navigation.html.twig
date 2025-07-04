@@ -61,7 +61,7 @@
                     </li>
                 {% endif #}
                 {% for item in navigation %}
-                    <li class="{# itemActiveClass(item) #}">
+                    <li class="{% if (program is defined and item.type == 'program' and item.entity.uid == program.uid) or (folder is defined and item.type == 'folder' and item.entity.uid == folder.uid) %}active{% endif %}">
                         <span class="link">
                             {% if item.type == 'folder' %}
                                 <i class="fas fa-folder"></i> {{ item.entity.name }}
