@@ -1,7 +1,7 @@
 <div{{ attributes }}>
     <twig:Search />
     {% for flow in this.flows %}
-    <twig:Flow />
+    <twig:Flow flow="{{ flow }}" />
     <twig:Search />
     {% endfor %}
 </div>

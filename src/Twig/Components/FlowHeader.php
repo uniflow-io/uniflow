@@ -6,9 +6,7 @@ use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent]
-final class Flow
+final class FlowHeader
 {
     use DefaultActionTrait;
-
-    public array $flow;
 }

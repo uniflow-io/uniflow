@@ -53,17 +53,17 @@ class FeedController extends AbstractController
 
         $navigation = [];
         $navigationFolders = $this->folderRepository->findByUserAndParent($user, $program->getFolder());
-        foreach($navigationFolders as $folder) {
+        foreach($navigationFolders as $navigationFolder) {
             $navigation[] = [
                 'type' => 'folder',
-                'entity' => $this->folderService->getJsonFolder($folder),
+                'entity' => $this->folderService->getJsonFolder($navigationFolder),
             ];
         }
         $navigationPrograms = $this->programRepository->findByUserAndFolder($user, $program->getFolder());
-        foreach($navigationPrograms as $program) {
+        foreach($navigationPrograms as $navigationProgram) {
             $navigation[] = [
                 'type' => 'program',
-                'entity' => $this->programService->getJsonProgram($program),
+                'entity' => $this->programService->getJsonProgram($navigationProgram),
             ];
         }
 
