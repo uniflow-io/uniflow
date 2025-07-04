@@ -2,18 +2,11 @@
 
 namespace App\Twig\Components;
 
-use App\Entity\Program;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 #[AsLiveComponent]
-final class Flows
+final class Flow
 {
     use DefaultActionTrait;
-
-    public Program $program;
-
-    public function getFlows() {
-        return json_decode($this->program->getData(), true);
-    }
 }
