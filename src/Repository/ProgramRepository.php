@@ -75,8 +75,12 @@ class ProgramRepository extends ServiceEntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findOneByUserAndPath(User $user, string $path): ?Program
+    public function findOneByUserAndPath(User $user, ?string $path = null): ?Program
     {
+        if($path === null) {
+            return null;
+        }
+
         $paths = explode('/', $path);
         $level = count($paths);
         if ($level === 0) {

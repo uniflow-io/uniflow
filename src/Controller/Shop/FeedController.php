@@ -30,8 +30,8 @@ class FeedController extends AbstractController
         private FolderService $folderService,
     ) {}
 
-    #[Route('/feed/{user}{path}', name: 'feed', methods: ['GET'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
-    public function feed(string $user, string $path): Response
+    #[Route('/feed/{user?me}{path?}', name: 'feed', methods: ['GET'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
+    public function feed(string $user = 'me', ?string $path = null): Response
     {
         if($user === 'me') {
             $user = $this->getUser();
@@ -44,22 +44,22 @@ class FeedController extends AbstractController
         }
 
         $program = $this->programRepository->findOneByUserAndPath($user, $path);
-
-        if(!$program) {
-            throw $this->createNotFoundException('Program not found');
+        $folder = null;
+        if($program !== null) {
+            $folder = $program->getFolder();
         }
 
         $programForm = $this->createForm(ProgramType::class, $program);
 
         $navigation = [];
-        $navigationFolders = $this->folderRepository->findByUserAndParent($user, $program->getFolder());
+        $navigationFolders = $this->folderRepository->findByUserAndParent($user, $folder);
         foreach($navigationFolders as $navigationFolder) {
             $navigation[] = [
                 'type' => 'folder',
                 'entity' => $this->folderService->getJsonFolder($navigationFolder),
             ];
         }
-        $navigationPrograms = $this->programRepository->findByUserAndFolder($user, $program->getFolder());
+        $navigationPrograms = $this->programRepository->findByUserAndFolder($user, $folder);
         foreach($navigationPrograms as $navigationProgram) {
             $navigation[] = [
                 'type' => 'program',
@@ -73,6 +73,7 @@ class FeedController extends AbstractController
                 title: 'Feed',
                 description: 'Feed',
             ),
+            'folder' => $folder,
             'program' => $program,
             'programForm' => $programForm->createView(),
             'navigation' => $navigation,

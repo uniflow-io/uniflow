@@ -4,10 +4,10 @@
 <div class="container-fluid">
     <div class="row flex-sm-nowrap">
     {% include 'shop/feed/navigation.html.twig' with {'type': currentItem is defined ? currentItem.type : null} %}
-    {% if program is defined %}
+    {% if program is defined and program is not null %}
         <twig:Program program="{{ program }}" />
     {% endif %}
-    {% if folder is defined %}
+    {% if folder is defined and folder is not null %}
         <twig:Folder folder="{{ folder }}" />
     {% endif %}
     </div>

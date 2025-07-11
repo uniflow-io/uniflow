@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Twig\Components\Flow\Flow;
+namespace App\Twig\Components\Flow;
 
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
