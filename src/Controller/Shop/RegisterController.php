@@ -60,8 +60,8 @@ class RegisterController extends AbstractController
                 $user->setPassword($hashedPassword);
 
                 // Set username to email
-                $user->setUsername($formData['email']);
-                $user->setUsernameCanonical($formData['email']);
+                //$user->setUsername($formData['email']);
+                //$user->setUsernameCanonical($formData['email']);
 
                 // Set default role and enable the user
                 $user->setRoles(['ROLE_USER']);

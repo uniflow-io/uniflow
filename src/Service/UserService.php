@@ -71,20 +71,12 @@ class UserService
                 throw new AuthenticationException('User with this email already exists');
             }
             $user->setEmail($data['email']);
-            $user->setUsername($data['email']); // Using email as username
+            //$user->setUsername($data['email']); // Using email as username
         }
 
         if (isset($data['plainPassword'])) {
             $hashedPassword = $this->passwordHasher->hashPassword($user, $data['plainPassword']);
             $user->setPassword($hashedPassword);
-        }
-
-        if (isset($data['facebookId'])) {
-            $user->setFacebookId($data['facebookId']);
-        }
-
-        if (isset($data['githubId'])) {
-            $user->setGithubId($data['githubId']);
         }
 
         // Set default role and enable the user

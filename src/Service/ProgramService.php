@@ -108,13 +108,9 @@ class ProgramService
         $program->setCreated(new DateTime());
         $program->setUpdated(new DateTime());
 
-        try {
-            $this->save($program);
+        $this->save($program);
 
-            return $program;
-        } catch (Exception $e) {
-            return null;
-        }
+        return $program;
     }
 
     public function toPath(Program $program): string

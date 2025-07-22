@@ -14,7 +14,29 @@
       let
         php = pkgs.api.buildPhpFromComposer {
           src = inputs.self;
-          php = pkgs.php83; # Change to php56, php70, ..., php81, php82, php83 etc.
+          php = pkgs.php83.withExtensions ({ all, ... }: with all; [
+            # Core extensions
+            filter
+            openssl
+            curl
+            simplexml
+            tokenizer
+            dom
+            mbstring
+            xmlwriter
+            zip
+            session
+            fileinfo
+            # Additional extensions that might be needed
+            iconv
+            ctype
+            pdo
+            pdo_mysql
+            pdo_sqlite
+            intl
+            gd
+            imagick
+          ]);
         };
       in
       {

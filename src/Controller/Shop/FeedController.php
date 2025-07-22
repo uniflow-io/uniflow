@@ -30,8 +30,8 @@ class FeedController extends AbstractController
         private FolderService $folderService,
     ) {}
 
-    #[Route('/feed/{user?me}{path?}', name: 'feed', methods: ['GET'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
-    public function feed(string $user = 'me', ?string $path = null): Response
+    #[Route('/feed/{user?me}{path?}', name: 'feed', methods: ['GET', 'POST'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
+    public function feed(Request $request, string $user = 'me', ?string $path = null): Response
     {
         if($user === 'me') {
             $user = $this->getUser();
@@ -41,6 +41,13 @@ class FeedController extends AbstractController
 
         if(!$user) {
             throw $this->createNotFoundException('User not found');
+        }
+
+        $search = $request->get('search');
+        if($search !== null) {
+            $program = $this->programService->createProgram($user, ['name' => $search]);
+            $program = $this->programService->getJsonProgram($program);
+            return $this->redirectToRoute('app_shop_feed', ['user' => $program['user'], 'path' => $program['path']]);
         }
 
         $program = $this->programRepository->findOneByUserAndPath($user, $path);

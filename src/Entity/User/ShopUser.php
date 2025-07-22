@@ -21,12 +21,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     use UidTrait;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $facebookId = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    protected ?string $githubId = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $apiKey = null;
 
     /**
@@ -58,30 +52,6 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFacebookId(): ?string
-    {
-        return $this->facebookId;
-    }
-
-    public function setFacebookId(?string $facebookId): self
-    {
-        $this->facebookId = $facebookId;
-
-        return $this;
-    }
-
-    public function getGithubId(): ?string
-    {
-        return $this->githubId;
-    }
-
-    public function setGithubId(?string $githubId): self
-    {
-        $this->githubId = $githubId;
-
-        return $this;
     }
 
     public function getApiKey(): ?string
