@@ -7,6 +7,9 @@ framework:
             - '*/assets/styles/_*.scss'
             - '*/assets/styles/**/_*.scss'
         missing_import_mode: strict
+        # Enable JSX transformation with the JSX plugin
+        extensions:
+            jsx: text/javascript
 
 when@prod:
     framework:

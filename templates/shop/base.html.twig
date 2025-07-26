@@ -25,7 +25,9 @@
 
         <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
         {# <link rel="manifest" href="/site.webmanifest"> #}
-        {{ importmap('app') }}
+        {# importmap('app') #}
+        {# encore_entry_link_tags('app') #}
+        {{ encore_entry_script_tags('app-shop-entry', null, 'app.shop') }}
     </head>
     <body id="{{ page.page }}" class="theme-light">
         {% include 'shop/partials/header.html.twig' %}
