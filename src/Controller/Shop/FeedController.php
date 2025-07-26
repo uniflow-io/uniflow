@@ -11,6 +11,7 @@ use App\Service\FolderService;
 use App\Service\ProgramService;
 use App\Repository\User\ShopUserRepository;
 use App\Repository\ProgramRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class FeedController extends AbstractController
         private ProgramService $programService,
         private FolderRepository $folderRepository,
         private FolderService $folderService,
+        private JWTTokenManagerInterface $jwtManager,
     ) {}
 
     #[Route('/feed/{user?me}{path?}', name: 'feed', methods: ['GET', 'POST'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
@@ -74,6 +76,8 @@ class FeedController extends AbstractController
             ];
         }
 
+        $token = $this->jwtManager->create($user);
+
         return $this->render('shop/feed/feed.html.twig', [
             'page' => new Page(
                 page: 'feed',
@@ -84,6 +88,7 @@ class FeedController extends AbstractController
             'program' => $program,
             'programForm' => $programForm->createView(),
             'navigation' => $navigation,
+            'token' => $token,
         ]);
     }
 }

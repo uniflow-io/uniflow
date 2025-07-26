@@ -38,4 +38,16 @@ return [
     '@symfony/ux-live-component' => [
         'path' => './vendor/symfony/ux-live-component/assets/dist/live_controller.js',
     ],
+    'react' => [
+        'version' => '19.1.0',
+    ],
+    'react-dom' => [
+        'version' => '19.1.0',
+    ],
+    'react-dom/client' => [
+        'version' => '19.1.0',
+    ],
+    'scheduler' => [
+        'version' => '0.23.0',
+    ],
 ];

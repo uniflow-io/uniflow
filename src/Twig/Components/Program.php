@@ -18,6 +18,7 @@ final class Program extends AbstractController
     use DefaultActionTrait;
 
     public $program;
+    public $token;
 
     protected function instantiateForm(): FormInterface
     {

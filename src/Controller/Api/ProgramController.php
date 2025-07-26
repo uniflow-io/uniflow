@@ -7,6 +7,7 @@ namespace App\Controller\Api;
 use App\Entity\Program;
 use App\Entity\User\ShopUser as User;
 use App\Form\ProgramType;
+use App\Repository\ProgramRepository;
 use App\Service\FolderService;
 use App\Service\ProgramService;
 use App\Service\TagService;
@@ -30,6 +31,7 @@ class ProgramController extends AbstractController
 {
     public function __construct(
         protected ProgramService $programService,
+        protected ProgramRepository $programRepository,
         protected TagService $tagService,
         protected UserService $userService,
         protected FolderService $folderService
@@ -196,7 +198,7 @@ class ProgramController extends AbstractController
     #[Route(path: '/{uid}/flows', name: 'api_program_get_flows', methods: ['GET'])]
     public function getFlows($uid): JsonResponse
     {
-        $entity = $this->programService->findOneByUid(null, $uid);
+        $entity = $this->programRepository->findOneByUid(null, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');

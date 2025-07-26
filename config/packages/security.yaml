@@ -8,6 +8,8 @@ security:
             id: sylius.shop_user_provider.email_or_name_based
         sylius_api_shop_user_provider:
             id: sylius.shop_user_provider.email_or_name_based
+        uid_provider:
+            id: App\Provider\UidProvider
 
     password_hashers:
         Sylius\Component\User\Model\UserInterface: argon2i
@@ -104,7 +106,7 @@ security:
         
         api_uniflow:
             pattern: ^/api/v1/uniflow
-            provider: sylius_shop_user_provider
+            provider: uid_provider
             stateless: true
             jwt: true
             custom_authenticators:

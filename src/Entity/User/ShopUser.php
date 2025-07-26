@@ -149,4 +149,9 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
             // $this->salt
         ] = unserialize($serialized, ['allowed_classes' => false]);
     }
+
+    public function getJwtUsername()
+    {
+        return $this->getUsername() ?? $this->getUid();
+    }
 }

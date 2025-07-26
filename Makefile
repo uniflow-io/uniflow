@@ -21,6 +21,13 @@ SYMFONY         = symfony
 nix: ## Start nix development
 	$(NIX)
 
+php-serve: ## Start php server
+	(cd public && php -d memory_limit=-1 -S localhost:8016)
+
+php-asset:
+	# php -d memory_limit=-1 bin/console sass:build
+	php -d memory_limit=-1 bin/console asset-map:compile
+
 init: ## init
 	@make -s docker-compose-check
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php composer install --no-interaction --no-scripts
