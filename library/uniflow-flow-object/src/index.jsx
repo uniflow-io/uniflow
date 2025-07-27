@@ -1,17 +1,12 @@
-import React, { ChangeEvent, useImperativeHandle } from 'react'
+import React, { useImperativeHandle } from 'react'
 import FlowHeader from '../../uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
+import { flow } from '../../uniflow-client/src/components/flow/flow'
 import PropertyAccessor from 'property-accessor'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export interface ObjectFlowData {
-  variable?: string
-  keyValueList?: {key: string, value: string|number}[]
-}
-
-const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
+const ObjectFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
@@ -19,7 +14,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
       let object = transform()
       return JSON.stringify([data?.variable, object])
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       let [variable, object] = data ? JSON.parse(data) : [undefined, []]
       let keyValueList = reverseTransform(object)
 
@@ -33,7 +28,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
       let object = transform()
       return data.variable + ' = ' + JSON.stringify(object)
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       if (data?.variable) {
         let context = runner.getContext()
         if (context[data.variable]) {
@@ -47,10 +42,10 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     }
   }), [data])
 
-  const transform = (): {[key: string]: string|number} => {
+  const transform = () => {
     return data?.keyValueList?.reduce(function(object, item) {
       if (item.key) {
-        let value: string|number = item.value
+        let value = item.value
         if (typeof value === 'string' && /^[0-9]+$/.test(value)) {
           value = Number.parseInt(value)
         }
@@ -64,11 +59,11 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     }, {}) || {}
   }
 
-  const reverseTransform = (object: {[key: string]: string|number}): {key: string, value: string|number}[] => {
-    let flatten = function(data: any, accessors = []) {
-      return Object.entries(data).reduce(function(list: {key: string, value: string|number}[], item: any) {
+  const reverseTransform = (object) => {
+    let flatten = function(data, accessors = []) {
+      return Object.entries(data).reduce(function(list, item) {
         if (typeof item[1] === 'object') {
-          list = list.concat(flatten(item[1], accessors.concat([item[0] as never])))
+          list = list.concat(flatten(item[1], accessors.concat([item[0]])))
         } else {
           let key = item[0]
           for (let i = accessors.length - 1; i >= 0; i--) {
@@ -91,14 +86,14 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     return flatten(object)
   }
 
-  const onChangeVariable = (variable: string) => {
+  const onChangeVariable = (variable) => {
     onUpdate({
       ...data,
       variable
     })
   }
 
-  const onUpdateItemKey = (event: ChangeEvent<HTMLInputElement>, index: number) => {
+  const onUpdateItemKey = (event, index) => {
     onUpdate(
       {
         ...data,
@@ -116,7 +111,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     )
   }
 
-  const onUpdateItemValue = (event: ChangeEvent<HTMLInputElement>, index: number) => {
+  const onUpdateItemValue = (event, index) => {
     onUpdate(
       {
         ...data,
@@ -134,7 +129,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     )
   }
 
-  const onRemoveItem = (event: any, index: number) => {
+  const onRemoveItem = (event, index) => {
     event.preventDefault()
 
     let keyValueList = data?.keyValueList?.slice() || []
@@ -142,7 +137,7 @@ const ObjectFlow = flow<ObjectFlowData>((props, ref) => {
     onUpdate({ ...data, keyValueList })
   }
 
-  const onAddItem = (event: any) => {
+  const onAddItem = (event) => {
     event.preventDefault()
 
     let keyValueList = data?.keyValueList?.slice() || []

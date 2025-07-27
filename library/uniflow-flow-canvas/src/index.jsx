@@ -4,28 +4,29 @@ import FormInput, { FormInputType } from '../../uniflow-client/src/components/fo
 import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import { useRef } from 'react'
 
-export interface CanvasFlowData {
-  variable?: string
-  width?: number,
-  height?: number,
-}
+// Canvas flow data shape:
+// {
+//   variable: string
+//   width: number,
+//   height: number,
+// }
 
-const CanvasFlow = flow<CanvasFlowData>((props, ref) => {
+const CanvasFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef(null)
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.width, data?.height])
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       const [variable, width, height] = data ? JSON.parse(data) : [undefined, undefined, undefined]
       return { variable, width: Number(width), height: Number(height) }
     },
     onCompile: () => {
       return ''
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       let context = runner.getContext()
       if (data?.variable && canvasRef.current) {
         context[data?.variable] = canvasRef.current
@@ -33,23 +34,21 @@ const CanvasFlow = flow<CanvasFlowData>((props, ref) => {
     }
   }), [data])
 
-  const onChangeVariable = (variable: string) => {
+  const onChangeVariable = (variable) => {
     onUpdate({
       ...data,
       variable
     })
   }
 
-
-  const onChangeWidth = (width: string) => {
+  const onChangeWidth = (width) => {
     onUpdate({
       ...data,
       width: Number(width)
     })
   }
 
-
-  const onChangeHeight = (height: string) => {
+  const onChangeHeight = (height) => {
     onUpdate({
       ...data,
       height: Number(height)

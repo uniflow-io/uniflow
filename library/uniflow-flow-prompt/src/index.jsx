@@ -7,30 +7,32 @@ import { ChangeEventHandler } from 'react'
 import { useStateRef } from '../../uniflow-client/src/hooks/use-state-ref'
 import { ClientType } from '../../uniflow-client/src/models/interfaces'
 
-enum PromptChoicheType {
-  STRING = 'string',
-  TEXT = 'text',
-  FILE = 'file',
+// Enum replacement
+const PromptChoiceType = {
+  STRING: 'string',
+  TEXT: 'text',
+  FILE: 'file',
 }
 
-export interface PromptFlowData {
-  variable?: string
-  messageVariable?: string,
-  type?: string,
-}
+/**
+ * @typedef {Object} PromptFlowData
+ * @property {string} [variable]
+ * @property {string} [messageVariable]
+ * @property {string} [type]
+ */
 
-const PromptFlow = flow<PromptFlowData>((props, ref) => {
+const PromptFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
-  const [promptInput, setPromptInput] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>()
-  const [input, setInput, inputRef] = useStateRef<string|undefined>(undefined)
-  const inputResolve = useRef<(value: unknown) => void>()
+  const [promptInput, setPromptInput] = useState(false)
+  const [message, setMessage] = useState()
+  const [input, setInput, inputRef] = useStateRef(undefined)
+  const inputResolve = useRef()
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.messageVariable, data?.type])
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       const [variable, messageVariable, type] = data ? JSON.parse(data) : [undefined, undefined, undefined]
       return { variable, messageVariable, type }
     },
@@ -68,7 +70,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
 
       return data.variable + ' = ' + JSON.stringify(inputRef.current || '')
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       let context = runner.getContext()
       if (data?.messageVariable && context[data.messageVariable]) {
         setMessage(context[data.messageVariable])
@@ -85,40 +87,41 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
     }
   }), [data])
 
-  const onChangeVariable = (variable: string) => {
+  const onChangeVariable = (variable) => {
     onUpdate({
       ...data,
       variable
     })
   }
 
-  const onChangeMessageVariable = (messageVariable: string) => {
+  const onChangeMessageVariable = (messageVariable) => {
     onUpdate({
       ...data,
       messageVariable
     })
   }
 
-  const onChangeType = (type: string) => {
+  const onChangeType = (type) => {
     onUpdate({
       ...data,
       type
     })
   }
 
-  const onChangeInputString = (input: string) => {
+  const onChangeInputString = (input) => {
     setInput(input)
   }
 
-  const onChangeInputText = (input: string) => {
+  const onChangeInputText = (input) => {
     setInput(input)
   }
 
-  const onChangeInputFile: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeInputFile = (event) => {
     event.persist()
     event.preventDefault()
 
-    let file = event.target.files![0]
+    let file = event.target.files && event.target.files[0]
+    if (!file) return
 
     return new Promise((resolve, error) => {
       let reader = new FileReader()
@@ -131,31 +134,32 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
     })
   }
 
-  const onInputSave: MouseEventHandler<HTMLButtonElement> = event => {
+  const onInputSave = event => {
     event.preventDefault()
 
     if (inputResolve.current) {
       inputResolve.current(undefined)
     }
   }
-  const allChoices: {[key in PromptChoicheType]: string} = {
-    [PromptChoicheType.STRING]: 'String',
-    [PromptChoicheType.TEXT]: 'Text',
-    [PromptChoicheType.FILE]: 'File',
+
+  const allChoices = {
+    [PromptChoiceType.STRING]: 'String',
+    [PromptChoiceType.TEXT]: 'Text',
+    [PromptChoiceType.FILE]: 'File',
   }
 
-  let choices: {[key: string]: string} = {},
-    clientKeyChoices: PromptChoicheType[] = []
+  let choices = {},
+    clientKeyChoices = []
   if (clients.length === 1 && clients.indexOf('uniflow') !== -1) {
-    clientKeyChoices = [PromptChoicheType.STRING, PromptChoicheType.TEXT, PromptChoicheType.FILE]
+    clientKeyChoices = [PromptChoiceType.STRING, PromptChoiceType.TEXT, PromptChoiceType.FILE]
   } else if (clients.length === 1 && clients.indexOf('node') !== -1) {
-    clientKeyChoices = [PromptChoicheType.STRING]
+    clientKeyChoices = [PromptChoiceType.STRING]
   } else if (
     clients.length === 2 &&
     clients.indexOf('node') !== -1 &&
     clients.indexOf('uniflow') !== -1
   ) {
-    clientKeyChoices = [PromptChoicheType.STRING]
+    clientKeyChoices = [PromptChoiceType.STRING]
   }
   choices = clientKeyChoices.reduce(function(value, key) {
     value[key] = allChoices[key]
@@ -192,7 +196,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
           label="Type"
           value={data?.type}
           onChange={onChangeType}
-          options={Object.keys(choices).map((type: string) => {
+          options={Object.keys(choices).map((type) => {
             return { value: type, label: choices[type] }
           })}
           />
@@ -202,7 +206,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
           </div>
         )}
 
-        {promptInput && data?.type === PromptChoicheType.STRING && (
+        {promptInput && data?.type === PromptChoiceType.STRING && (
           <FormInput
             id="input-string"
             type={FormInputType.TEXT}
@@ -212,7 +216,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
             />
         )}
 
-        {promptInput && data?.type === PromptChoicheType.TEXT && (
+        {promptInput && data?.type === PromptChoiceType.TEXT && (
           <FormInput
             id="input-text"
             type={FormInputType.EDITOR}
@@ -222,7 +226,7 @@ const PromptFlow = flow<PromptFlowData>((props, ref) => {
             />
         )}
 
-        {promptInput && data?.type === PromptChoicheType.FILE && (
+        {promptInput && data?.type === PromptChoiceType.FILE && (
           <div className="row mb-3">
             <label
               htmlFor="input-file"

@@ -4,11 +4,13 @@
       "targets": {
         "node": "6"
       }
-    }]
+    }],
+    "@babel/preset-react"
   ],
   "plugins": [
     ["@babel/plugin-proposal-object-rest-spread", {
       "useBuiltIns": true
-    }]
+    }],
+    "@babel/plugin-syntax-jsx"
   ]
 }

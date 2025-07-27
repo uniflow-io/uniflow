@@ -1,17 +1,12 @@
-import React, { ChangeEvent, ChangeEventHandler, MouseEventHandler, useImperativeHandle } from 'react'
+import React, { useImperativeHandle } from 'react'
 import FlowHeader from '../../uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
+import { flow } from '../../uniflow-client/src/components/flow/flow'
 import LZString from 'lz-string'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
 
-export interface AssetsFlowData {
-  variable?: string
-  assets?: any[]
-}
-
-const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
+const AssetsFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
@@ -20,7 +15,7 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
         JSON.stringify([data?.variable, data?.assets])
       )
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       const decompressedData = data ? LZString.decompressFromEncodedURIComponent(data) : undefined
       let [variable, assets] = decompressedData
       ? JSON.parse(decompressedData)
@@ -40,21 +35,21 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
 
       return data.variable + ' = ' + JSON.stringify(assets)
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       if (data?.variable) {
         return runner.run()
       }
     }
   }), [data])
 
-  const onChangeVariable = (variable: string) => {
+  const onChangeVariable = (variable) => {
     onUpdate({
       ...data,
       variable
     })
   }
 
-  const onFiles: ChangeEventHandler<HTMLInputElement> = async (event) => {
+  const onFiles = async (event) => {
     event.persist()
     event.preventDefault()
 
@@ -87,14 +82,14 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
       })
   }
 
-  const onDownloadFile = (event: any, index: number) => {
+  const onDownloadFile = (event, index) => {
     let a = document.createElement('a')
 
-    let blob = new Blob([data?.assets![index][1]], { type: 'octet/stream' })
+    let blob = new Blob([data?.assets?.[index][1]], { type: 'octet/stream' })
 
     let url = window.URL.createObjectURL(blob)
     a.href = url
-    a.download = data?.assets![index][0]
+    a.download = data?.assets?.[index][0]
     a.style.cssText = 'display: none'
     document.body.appendChild(a)
     a.click()
@@ -102,7 +97,7 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
     window.URL.revokeObjectURL(url)
   }
 
-  const onUpdateFile = (event: ChangeEvent<HTMLInputElement>, index: number) => {
+  const onUpdateFile = (event, index) => {
     onUpdate(
       {
         ...data,
@@ -117,7 +112,7 @@ const AssetsFlow = flow<AssetsFlowData>((props, ref) => {
     )
   }
 
-  const onRemoveFile = (event: any, index: number) => {
+  const onRemoveFile = (event, index) => {
     let newStateAssets = data?.assets?.slice() || []
     newStateAssets.splice(index, 1)
     onUpdate({ ...data, assets: newStateAssets })

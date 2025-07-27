@@ -6,6 +6,9 @@
     "watch": "encore dev --watch"
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "@sylius-ui/admin": "file:vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle",
     "@sylius-ui/shop": "file:vendor/sylius/sylius/src/Sylius/Bundle/ShopBundle",
     "@sylius/admin-bundle": "file:vendor/sylius/sylius/src/Sylius/Bundle/AdminBundle/Resources/assets",
@@ -15,8 +18,12 @@
     "bazinga-translator": "^7.0.0",
     "intl-messageformat": "^10.7.16",
     "lodash.get": "^4.4.2",
+    "prism-react-renderer": "^2.4.1",
+    "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-prism-editor": "^1.1.2",
+    "react-select": "^5.10.2",
     "shepherd.js": "11.0"
   },
   "devDependencies": {

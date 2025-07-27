@@ -3,19 +3,14 @@ import FlowHeader from '../../uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
 import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 
-export interface TextFlowData {
-  variable?: string
-  text?: string
-}
-
-const TextFlow = flow<TextFlowData>((props, ref) => {
+const TextFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.text])
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       const [variable, text] = data ? JSON.parse(data) : [undefined, undefined]
       return { variable, text }
     },
@@ -29,7 +24,7 @@ const TextFlow = flow<TextFlowData>((props, ref) => {
 
       return data.variable + ' = ' + text
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       if (data && data.variable) {
         let context = runner.getContext()
         if (context[data.variable]) {
@@ -44,14 +39,14 @@ const TextFlow = flow<TextFlowData>((props, ref) => {
     }
   }), [data])
 
-  const onChangeVariable = (variable: string) => {
+  const onChangeVariable = (variable) => {
     onUpdate({
       ...data,
       variable
     })
   }
 
-  const onChangeText = (text: string) => {
+  const onChangeText = (text) => {
     onUpdate({
       ...data,
       text
@@ -88,4 +83,3 @@ const TextFlow = flow<TextFlowData>((props, ref) => {
 })
 
 export default TextFlow
-

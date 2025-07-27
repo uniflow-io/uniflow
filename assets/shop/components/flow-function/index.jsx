@@ -1,32 +1,33 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '../../uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
+import FlowHeader from '../flow/header.jsx'
+import FormInput, { FormInputType } from '../form-input.jsx'
+import { flow } from '../flow/flow.jsx'
 
-export interface FunctionFlowData {
-  code?: string
-}
+/**
+ * @typedef {Object} FunctionFlowData
+ * @property {string} [code] - The function code
+ */
 
-const FunctionFlow = flow<FunctionFlowData>((props, ref) => {
+const FunctionFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
     onSerialize: () => {
       return JSON.stringify(data?.code)
     },
-    onDeserialize: (data?: string) => {
+    onDeserialize: (data) => {
       const code = data ? JSON.parse(data) : undefined
       return { code }
     },
     onCompile: () => {
       return data?.code || ''
     },
-    onExecute: async (runner: FlowRunner) => {
+    onExecute: async (runner) => {
       return runner.run()
     }
   }), [data])
 
-  const onChangeCode = (code: string) => {
+  const onChangeCode = (code) => {
     onUpdate({
       ...data,
       ...{code}

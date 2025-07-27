@@ -1,10 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import Flows from './components/flows';
 
 class Program extends React.Component {
   constructor(props) {
     super(props);
-    
 
     this.state = {
       folderTreeEdit: false,
@@ -288,14 +288,16 @@ class Program extends React.Component {
           </div>
         </form>
         <hr />
-        <div className="flows-container">
-          <h4>Flows</h4>
-          <div className="flow-actions">
-            <button className="btn btn-primary" onClick={() => this.onPlay()}>
-              Play
-            </button>
-          </div>
-        </div>
+        <Flows
+          ref={this.flowsRef}
+          clients={this.state.program.clients}
+          graph={this.state.graph}
+          programFlows={this.state.fetchedFlows}
+          onPush={this.onPushFlow}
+          onPop={this.onPopFlow}
+          onUpdate={this.onUpdateFlow}
+          onPlay={this.onPlay}
+        />
       </div>
     );
   }
