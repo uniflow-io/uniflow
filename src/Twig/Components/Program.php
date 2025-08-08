@@ -19,6 +19,7 @@ final class Program extends AbstractController
 
     public $program;
     public $token;
+    public $apiHost;
 
     protected function instantiateForm(): FormInterface
     {

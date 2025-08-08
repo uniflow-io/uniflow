@@ -161,14 +161,26 @@ class ProgramController extends AbstractController
      * return new JsonResponse($data);
      * }
      */
+
+    #[Route(path: '/{uid}', name: 'api_program_get', methods: ['GET'])]
+    public function get(Request $request, $uid): JsonResponse
+    {
+        $user = $this->getUser();
+
+        $entity = $this->programRepository->findOneByUid($user, $uid);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Program entity.');
+        }
+
+        return new JsonResponse($this->programService->getJsonProgram($entity));
+    }
+
     #[Route(path: '/create', name: 'api_program_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
 
         $entity = new Program();
         $entity->setUid(Uuid::v7()->toString());
@@ -182,11 +194,8 @@ class ProgramController extends AbstractController
     public function update(Request $request, $uid): JsonResponse
     {
         $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
 
-        $entity = $this->programService->findOneByUid($user, $uid);
+        $entity = $this->programRepository->findOneByUid($user, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');
@@ -204,6 +213,7 @@ class ProgramController extends AbstractController
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
+        // Authentication is required only for non-public programs
         if (!$entity->getPublic()) {
             /** @var User $user */
             $user = $this->getUser();

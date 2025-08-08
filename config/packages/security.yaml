@@ -111,6 +111,7 @@ security:
             jwt: true
             custom_authenticators:
                 - App\Security\ApiKeyAuthenticator
+            #security: false
 
         image_resolver:
             pattern: ^/media/cache/resolve
@@ -138,6 +139,11 @@ security:
         - { path: "%sylius.security.api_shop_account_regex%/.*", role: ROLE_USER }
         - { path: "%sylius.security.api_shop_route%/customers/token", role: PUBLIC_ACCESS }
         - { path: "%sylius.security.api_shop_regex%/.*", role: PUBLIC_ACCESS }
+        
+        # API Uniflow public routes
+        #- { path: "^/api/v1/uniflow/program/.*/list", role: PUBLIC_ACCESS }
+        #- { path: "^/api/v1/uniflow/program/public", role: PUBLIC_ACCESS }
+        #- { path: "^/api/v1/uniflow/program/.*/flows", role: PUBLIC_ACCESS, methods: [GET] }
 
 when@test: &security_test
     security:

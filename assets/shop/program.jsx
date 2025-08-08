@@ -1,6 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import debounce from 'lodash/debounce';
 import Flows from './components/flows';
+import Api from './services/api';
 
 class Program extends React.Component {
   constructor(props) {
@@ -29,6 +31,9 @@ class Program extends React.Component {
     this.flowsRef = React.createRef();
     this.uid = '';
 
+    // Create debounced update function
+    this.debouncedUpdateProgram = debounce(this.updateProgram, 1000);
+
     // Bind methods
     this.onPushFlow = this.onPushFlow.bind(this);
     this.onPopFlow = this.onPopFlow.bind(this);
@@ -44,6 +49,7 @@ class Program extends React.Component {
     this.onDuplicate = this.onDuplicate.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onFolderEdit = this.onFolderEdit.bind(this);
+    this.updateProgram = this.updateProgram.bind(this);
   }
 
   componentDidMount() {
@@ -52,18 +58,45 @@ class Program extends React.Component {
     if (programContainer) {
       const uid = programContainer.dataset.uid;
       const token = programContainer.dataset.token;
+      const apiHost = programContainer.dataset.apiHost;
 
       this.uid = uid;
       this.token = token;
+      this.api = new Api(apiHost);
 
-      // Fetch program data
-      this.fetchProgramData();
+      this.onFetchProgram();
+      this.onFetchFlowData();
     }
   }
 
-  fetchProgramData() {
-    // In a real implementation, this would call an API
-    // For now, just update the state with mock data
+  async onFetchProgram() {
+    const options = {
+        token: this.token
+    };
+    const program = await this.api.getProgram(this.uid, options);
+    program.description = program.description || '';
+
+    this.setState({ program });
+  }
+
+  async updateProgram() {
+    const options = {
+      token: this.token
+    };
+    const { program } = this.state;
+
+    const programData = {
+      name: program.name,
+      slug: program.slug,
+      clients: program.clients,
+      tags: program.tags,
+      description: program.description
+    };
+
+    return await this.api.updateProgram(this.uid, programData, options);
+  }
+
+  onFetchFlowData() {
     const program = {
       ...this.state.program,
       uid: this.uid,
@@ -73,7 +106,6 @@ class Program extends React.Component {
   }
 
   onPlay(index) {
-    // Mock implementation
     console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
   }
 
@@ -128,6 +160,8 @@ class Program extends React.Component {
         ...this.state.program,
         name
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -137,6 +171,8 @@ class Program extends React.Component {
         ...this.state.program,
         slug
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -146,6 +182,8 @@ class Program extends React.Component {
         ...this.state.program,
         path
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -155,6 +193,8 @@ class Program extends React.Component {
         ...this.state.program,
         clients
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -164,6 +204,8 @@ class Program extends React.Component {
         ...this.state.program,
         tags
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -173,6 +215,8 @@ class Program extends React.Component {
         ...this.state.program,
         description
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -182,6 +226,8 @@ class Program extends React.Component {
         ...this.state.program,
         isPublic
       }
+    }, () => {
+      this.debouncedUpdateProgram();
     });
   }
 
@@ -251,6 +297,7 @@ class Program extends React.Component {
               />
             </div>
           </div>
+          {/*
           <div className="row mb-3">
             <label htmlFor="program-path" className="col-sm-2 col-form-label">Path</label>
             <div className="col-sm-10">
@@ -275,6 +322,7 @@ class Program extends React.Component {
               )}
             </div>
           </div>
+          */}
           <div className="row mb-3">
             <label htmlFor="program-description" className="col-sm-2 col-form-label">Description</label>
             <div className="col-sm-10">
