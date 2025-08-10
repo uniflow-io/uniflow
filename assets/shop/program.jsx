@@ -3,6 +3,15 @@ import { createRoot } from 'react-dom/client';
 import debounce from 'lodash/debounce';
 import Flows from './components/flows';
 import Api from './services/api';
+import Select from './components/select';
+import { ClientType } from './models/client-type';
+
+const clients = {
+  [ClientType.UNIFLOW]: 'Uniflow',
+  [ClientType.PHP]: 'Php',
+  [ClientType.NODE]: 'Node',
+  [ClientType.VSCODE]: 'VSCode',
+};
 
 class Program extends React.Component {
   constructor(props) {
@@ -49,6 +58,7 @@ class Program extends React.Component {
     this.onDuplicate = this.onDuplicate.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.onFolderEdit = this.onFolderEdit.bind(this);
+    this.onDeserializeFlowsData = this.onDeserializeFlowsData.bind(this);
     this.updateProgram = this.updateProgram.bind(this);
   }
 
@@ -96,14 +106,43 @@ class Program extends React.Component {
     return await this.api.updateProgram(this.uid, programData, options);
   }
 
-  onFetchFlowData() {
+  onFetchFlowData = debounce(async () => {
     const program = {
       ...this.state.program,
       uid: this.uid,
     };
 
-    this.setState({ program });
-  }
+    // Clear current flows
+    this.setState({
+      program,
+      graph: {
+        ...this.state.graph,
+        flows: []
+      }
+    });
+
+    // Fetch program data if needed
+    let data = null;
+    try {
+      const options = {
+        token: this.token
+      };
+      data = await this.api.getProgramFlows(this.uid, options);
+    } catch (error) {
+      console.error("Error fetching program data:", error);
+    }
+
+    if (data) {
+      // Deserialize flow data
+      const graphData = this.onDeserializeFlowsData(data);
+      this.setState({ fetchedFlows: graphData });
+
+      // Add each flow to the graph
+      for (let index = 0; index < graphData.length; index++) {
+        this.onPushFlow(index, graphData[index].type);
+      }
+    }
+  }, 1000);
 
   onPlay(index) {
     console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
@@ -250,6 +289,21 @@ class Program extends React.Component {
     });
   }
 
+  onDeserializeFlowsData(data) {
+    let flowsData = [];
+    try {
+      if (typeof data === 'string') {
+        flowsData = JSON.parse(data);
+      } else {
+        flowsData = data;
+      }
+    } catch (error) {
+      console.error("Error parsing flow data:", error);
+    }
+
+    return Array.isArray(flowsData) ? flowsData : [];
+  }
+
   render() {
     const { program } = this.state;
 
@@ -294,6 +348,35 @@ class Program extends React.Component {
                 id="program-slug"
                 value={program.slug}
                 onChange={(e) => this.onChangeSlug(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <label htmlFor="program-clients" className="col-sm-2 col-form-label">Clients</label>
+            <div className="col-sm-10">
+              <Select
+                id="program-clients"
+                value={program.clients}
+                onChange={this.onChangeClients}
+                multiple={true}
+                options={Object.keys(clients).map((client) => {
+                  return { value: client, label: clients[client] };
+                })}
+              />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <label htmlFor="program-tags" className="col-sm-2 col-form-label">Tags</label>
+            <div className="col-sm-10">
+              <Select
+                id="program-tags"
+                value={program.tags}
+                onChange={this.onChangeTags}
+                multiple={true}
+                edit={true}
+                options={this.state.program.tags.map((tag) => {
+                  return { value: tag, label: tag };
+                })}
               />
             </div>
           </div>
