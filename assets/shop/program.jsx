@@ -21,7 +21,7 @@ class Program extends React.Component {
       folderTreeEdit: false,
       folderTree: [],
       errors: {},
-      fetchedFlows: [],
+      programFlows: [],
       program: {
         name: '',
         slug: '',
@@ -39,27 +39,6 @@ class Program extends React.Component {
 
     this.flowsRef = React.createRef();
     this.uid = '';
-
-    // Create debounced update function
-    this.debouncedUpdateProgram = debounce(this.updateProgram, 1000);
-
-    // Bind methods
-    this.onPushFlow = this.onPushFlow.bind(this);
-    this.onPopFlow = this.onPopFlow.bind(this);
-    this.onUpdateFlow = this.onUpdateFlow.bind(this);
-    this.onPlay = this.onPlay.bind(this);
-    this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeSlug = this.onChangeSlug.bind(this);
-    this.onChangePath = this.onChangePath.bind(this);
-    this.onChangeClients = this.onChangeClients.bind(this);
-    this.onChangeTags = this.onChangeTags.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangePublic = this.onChangePublic.bind(this);
-    this.onDuplicate = this.onDuplicate.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-    this.onFolderEdit = this.onFolderEdit.bind(this);
-    this.onDeserializeFlowsData = this.onDeserializeFlowsData.bind(this);
-    this.updateProgram = this.updateProgram.bind(this);
   }
 
   componentDidMount() {
@@ -79,17 +58,19 @@ class Program extends React.Component {
     }
   }
 
-  async onFetchProgram() {
+  onFetchProgram = async () => {
     const options = {
         token: this.token
     };
     const program = await this.api.getProgram(this.uid, options);
     program.description = program.description || '';
 
-    this.setState({ program });
+    this.setState({
+        program
+    });
   }
 
-  async updateProgram() {
+  updateProgram = debounce(async () => {
     const options = {
       token: this.token
     };
@@ -104,7 +85,7 @@ class Program extends React.Component {
     };
 
     return await this.api.updateProgram(this.uid, programData, options);
-  }
+  }, 1000);
 
   onFetchFlowData = debounce(async () => {
     const program = {
@@ -144,11 +125,11 @@ class Program extends React.Component {
     }
   }, 1000);
 
-  onPlay(index) {
+  onPlay = (index) => {
     console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
   }
 
-  onPushFlow(index, flowType) {
+  onPushFlow = (index, flowType) => {
     const { graph } = this.state;
     const flows = [...graph.flows];
 
@@ -162,7 +143,7 @@ class Program extends React.Component {
     });
   }
 
-  onPopFlow(index) {
+  onPopFlow = (index) => {
     const { graph } = this.state;
     const flows = [...graph.flows];
 
@@ -176,7 +157,7 @@ class Program extends React.Component {
     });
   }
 
-  onUpdateFlow(index, data) {
+  onUpdateFlow = (index, data) => {
     const { graph } = this.state;
     const flows = [...graph.flows];
 
@@ -193,94 +174,80 @@ class Program extends React.Component {
     });
   }
 
-  onChangeName(name) {
+  onChangeName = (name) => {
     this.setState({
       program: {
         ...this.state.program,
         name
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangeSlug(slug) {
+  onChangeSlug = (slug) => {
     this.setState({
       program: {
         ...this.state.program,
         slug
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangePath(path) {
+  onChangePath = (path) => {
     this.setState({
       program: {
         ...this.state.program,
         path
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangeClients(clients) {
+  onChangeClients = (clients) => {
     this.setState({
       program: {
         ...this.state.program,
         clients
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangeTags(tags) {
+  onChangeTags = (tags) => {
     this.setState({
       program: {
         ...this.state.program,
         tags
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangeDescription(description) {
+  onChangeDescription = (description) => {
     this.setState({
       program: {
         ...this.state.program,
         description
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onChangePublic(isPublic) {
+  onChangePublic = (isPublic) => {
     this.setState({
       program: {
         ...this.state.program,
         isPublic
       }
-    }, () => {
-      this.debouncedUpdateProgram();
-    });
+    }, this.updateProgram);
   }
 
-  onDuplicate(event) {
+  onDuplicate = (event) => {
     event.preventDefault();
     console.log('Duplicate program');
   }
 
-  onDelete(event) {
+  onDelete = (event) => {
     event.preventDefault();
     console.log('Delete program');
   }
 
-  onFolderEdit(event) {
+  onFolderEdit = (event) => {
     event.preventDefault();
 
     this.setState({
@@ -289,7 +256,7 @@ class Program extends React.Component {
     });
   }
 
-  onDeserializeFlowsData(data) {
+  onDeserializeFlowsData = (data) => {
     let flowsData = [];
     try {
       if (typeof data === 'string') {
@@ -423,7 +390,7 @@ class Program extends React.Component {
           ref={this.flowsRef}
           clients={this.state.program.clients}
           graph={this.state.graph}
-          programFlows={this.state.fetchedFlows}
+          programFlows={this.state.programFlows}
           onPush={this.onPushFlow}
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}

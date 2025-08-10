@@ -3,6 +3,7 @@ import FlowHeader from '../../uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
 import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import { useRef } from 'react'
+import { ClientType } from '../../models/client-type';
 
 // Canvas flow data shape:
 // {
@@ -16,6 +17,9 @@ const CanvasFlow = flow((props, ref) => {
   const canvasRef = useRef(null)
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [ClientType.UNIFLOW]
+    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.width, data?.height])
     },

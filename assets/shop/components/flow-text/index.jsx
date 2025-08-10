@@ -2,11 +2,15 @@ import React, { useImperativeHandle } from 'react'
 import FlowHeader from '../../uniflow-client/src/components/flow/header'
 import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
 import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
+import { ClientType } from '../../models/client-type';
 
 const TextFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [ClientType.UNIFLOW]
+    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.text])
     },

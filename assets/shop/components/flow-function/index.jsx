@@ -2,6 +2,7 @@ import React, { useImperativeHandle } from 'react'
 import FlowHeader from '../flow/header.jsx'
 import FormInput, { FormInputType } from '../form-input.jsx'
 import { flow } from '../flow/flow.jsx'
+import { ClientType } from '../../models/client-type';
 
 /**
  * @typedef {Object} FunctionFlowData
@@ -12,6 +13,14 @@ const FunctionFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [
+            ClientType.UNIFLOW,
+            ClientType.PHP,
+            ClientType.NODE,
+            ClientType.VSCODE,
+        ]
+    },
     onSerialize: () => {
       return JSON.stringify(data?.code)
     },

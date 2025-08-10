@@ -5,11 +5,15 @@ import { flow } from '../../uniflow-client/src/components/flow/flow'
 import PropertyAccessor from 'property-accessor'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ClientType } from '../../models/client-type';
 
 const ObjectFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [ClientType.UNIFLOW]
+    },
     onSerialize: () => {
       let object = transform()
       return JSON.stringify([data?.variable, object])

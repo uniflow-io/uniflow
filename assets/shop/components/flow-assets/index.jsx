@@ -5,11 +5,15 @@ import { flow } from '../../uniflow-client/src/components/flow/flow'
 import LZString from 'lz-string'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { ClientType } from '../../models/client-type';
 
 const AssetsFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [ClientType.UNIFLOW]
+    },
     onSerialize: () => {
       return LZString.compressToEncodedURIComponent(
         JSON.stringify([data?.variable, data?.assets])

@@ -5,7 +5,7 @@ import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
 import { MouseEventHandler } from 'react'
 import { ChangeEventHandler } from 'react'
 import { useStateRef } from '../../uniflow-client/src/hooks/use-state-ref'
-import { ClientType } from '../../uniflow-client/src/models/interfaces'
+import { ClientType } from '../../models/client-type';
 
 // Enum replacement
 const PromptChoiceType = {
@@ -29,6 +29,9 @@ const PromptFlow = flow((props, ref) => {
   const inputResolve = useRef()
 
   useImperativeHandle(ref, () => ({
+    onClients: () => {
+        return [ClientType.UNIFLOW]
+    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.messageVariable, data?.type])
     },
