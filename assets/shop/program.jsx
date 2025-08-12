@@ -83,6 +83,7 @@ class Program extends React.Component {
       slug: program.slug,
       clients: program.clients,
       tags: program.tags,
+      public: program.isPublic,
       description: program.description
     };
 
@@ -411,6 +412,20 @@ class Program extends React.Component {
                 value={program.description}
                 onChange={(e) => this.onChangeDescription(e.target.value)}
               />
+            </div>
+          </div>
+          <div className="row mb-3">
+            <label htmlFor="program-public" className="col-sm-2 col-form-label">Public</label>
+            <div className="col-sm-10">
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="program-public"
+                  checked={program.isPublic}
+                  onChange={(e) => this.onChangePublic(e.target.checked)}
+                />
+              </div>
             </div>
           </div>
         </form>

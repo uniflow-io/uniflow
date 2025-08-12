@@ -42,7 +42,7 @@ class ProgramType extends AbstractType
             'allow_delete' => true,
         ]);
         $builder->add('description', TextareaType::class);
-        // $builder->add('public', CheckboxType::class);
+        $builder->add('public', CheckboxType::class);
         /*$builder->add('path', ArrayType::class, [
             'property_path' => 'folder',
         ]);*/
