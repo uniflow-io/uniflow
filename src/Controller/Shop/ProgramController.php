@@ -49,10 +49,6 @@ class ProgramController extends AbstractController
         $duplicate->setUser($program->getUser());
         $duplicate->setFolder($program->getFolder());
         $duplicate->setData($program->getData());
-        // $duplicate->setIsPublic($program->isPublic());
-        // $duplicate->setClients($program->getClients());
-        // $duplicate->setTags($program->getTags());
-        // $duplicate->setUid(uniqid('', true)); // Generate a new unique ID
         $duplicate->setCreated(new \DateTime());
         $duplicate->setUpdated(new \DateTime());
 
