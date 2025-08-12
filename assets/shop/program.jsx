@@ -5,6 +5,8 @@ import Flows from './components/flows';
 import Api from './services/api';
 import Select from './components/select';
 import { ClientType } from './models/client-type';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const clients = {
   [ClientType.UNIFLOW]: 'Uniflow',
@@ -124,6 +126,33 @@ class Program extends React.Component {
       }
     }
   }, 1000);
+
+  onUpdateProgramFlow = () => {
+    const flowLabels = [];
+    const keys = Object.keys(clients);
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const canPushFlow = program.clients.reduce((bool, client) => {
+        return bool && allFlows[key].clients.indexOf(client) !== -1;
+      }, program.clients.length > 0);
+
+      if (canPushFlow) {
+        flowLabels.push({
+          key: key,
+          label: allFlows[key].tags.join(' - ') + ' : ' + allFlows[key].name,
+        });
+      }
+    }
+
+    flowLabels.sort(function (flow1, flow2) {
+      const x = flow1.label;
+      const y = flow2.label;
+      return x < y ? -1 : x > y ? 1 : 0;
+    });
+
+    return flowLabels;
+  }
 
   onPlay = (index) => {
     console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
@@ -283,12 +312,12 @@ class Program extends React.Component {
           <div className="d-block col-auto">
             <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
               <div className="btn-group-sm" role="group">
-                <button type="button" className="btn text-secondary" onClick={this.onDuplicate}>
-                  Clone
-                </button>
-                <button type="button" className="btn text-secondary" onClick={this.onDelete}>
-                  Delete
-                </button>
+                <a class="btn btn-primary" className="btn text-secondary" href={`/program/duplicate/${this.uid}`}>
+                    <FontAwesomeIcon icon={faClone} />
+                </a>
+                <a class="btn btn-primary" className="btn text-secondary" href={`/program/remove/${this.uid}`}>
+                    <FontAwesomeIcon icon={faTimes} />
+                </a>
               </div>
             </div>
           </div>
