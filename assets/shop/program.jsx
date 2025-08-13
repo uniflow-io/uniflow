@@ -128,9 +128,9 @@ class Program extends React.Component {
     }
   }, 1000);
 
-  onUpdateProgramFlow = () => {
+  updateProgramFlows = () => {
     const flowLabels = [];
-    const keys = Object.keys(clients);
+    const keys = Object.keys(this.state.program.clients);
 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
@@ -151,6 +151,10 @@ class Program extends React.Component {
       const y = flow2.label;
       return x < y ? -1 : x > y ? 1 : 0;
     });
+
+    this.setState({
+        programFlows: flowLabels
+      })
 
     return flowLabels;
   }
@@ -237,7 +241,10 @@ class Program extends React.Component {
         ...this.state.program,
         clients
       }
-    }, this.updateProgram);
+    }, () => {
+        this.updateProgramFlows()
+        this.updateProgram()
+    });
   }
 
   onChangeTags = (tags) => {
