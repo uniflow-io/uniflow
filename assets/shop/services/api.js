@@ -1,6 +1,6 @@
-import { ApiValidateException } from '../models/api-exceptions';
-import { ApiNotAuthorizedException } from '../models/api-exceptions';
-import { ApiNotFoundException } from '../models/api-exceptions';
+import { ApiValidateException } from '../models/api-exceptions.js';
+import { ApiNotAuthorizedException } from '../models/api-exceptions.js';
+import { ApiNotFoundException } from '../models/api-exceptions.js';
 
 class Api {
   constructor(baseUrl) {
