@@ -199,6 +199,45 @@ class Program extends React.Component {
     return flowLabels;
   }
 
+  onSerializeFlowsData = (flows) => {
+    const data = [];
+
+    for (let index = 0; index < flows.length; index++) {
+      const flow = flows[index]
+      data.push({
+        flow: flow.type,
+        data: this.flowsRef.current?.onSerialize(index),
+      });
+    }
+
+    return JSON.stringify(data);
+  }
+
+  onUpdateFlowData = debounce(async () => {
+    //const programRef = getProgramRef();
+
+    const { graph } = this.state;
+    if (graph && graph.flows) {
+      const data = this.onSerializeFlowsData(graph.flows);
+      console.log(data)
+      /*if (
+        auth.token &&
+        (feedRef.current.uid === 'me' || user.uid === feedRef.current.uid) &&
+        programRef.data !== data
+      ) {
+        programRef.data = data;
+
+        try {
+          await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
+        } catch (error) {
+          if(error instanceof Error) {
+            commitAddLog(error.message)(logsDispatch);
+          }
+        }
+      }*/
+    }
+  }, 1000)
+
   onPlay = (index) => {
     console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
   }
@@ -214,7 +253,7 @@ class Program extends React.Component {
         ...graph,
         flows
       }
-    });
+    }, this.onUpdateFlowData);
   }
 
   onPopFlow = (index) => {
@@ -228,7 +267,7 @@ class Program extends React.Component {
         ...graph,
         flows
       }
-    });
+    }, this.onUpdateFlowData);
   }
 
   onUpdateFlow = (index, data) => {
@@ -245,7 +284,7 @@ class Program extends React.Component {
         ...graph,
         flows
       }
-    });
+    }, this.onUpdateFlowData);
   }
 
   onChangeName = (name) => {
