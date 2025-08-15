@@ -6,7 +6,7 @@ import Api from './services/api';
 import Select from './components/select';
 import { ClientType } from './models/client-type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faClone, faEdit, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faClone, faEdit, faPlay, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 const clients = {
   [ClientType.UNIFLOW]: 'Uniflow',
@@ -348,6 +348,36 @@ class Program extends React.Component {
     return Array.isArray(flowsData) ? flowsData : [];
   }
 
+  getPhpClipboard = () => {
+    /*if (user.apiKey) {
+      return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key=${user.apiKey} ${program.slug}`;
+    }*/
+
+    return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key={your-api-key} ${program.slug}`;
+  };
+
+  getNodeClipboard = () => {
+    /*if (user.apiKey) {
+      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
+    }*/
+
+    return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`;
+  };
+
+  onCopyPhpUsage = (event) => {
+    event.preventDefault();
+
+    const clipboard = getPhpClipboard();
+    ui.copyTextToClipboard(clipboard);
+  };
+
+  onCopyNodeUsage = (event) => {
+    event.preventDefault();
+
+    const clipboard = getNodeClipboard();
+    ui.copyTextToClipboard(clipboard);
+  };
+
   render() {
     const { program } = this.state;
 
@@ -476,6 +506,77 @@ class Program extends React.Component {
             </div>
           </div>
         </form>
+        {program.clients.map((client) => {
+            if (client === ClientType.UNIFLOW) {
+            return (
+                <div key={`client-${client}`} className="row mb-3">
+                <div className="col-sm-10 offset-sm-2">
+                    <button
+                    className="btn btn-primary"
+                    onClick={(event) => {
+                        event.preventDefault();
+                        onPlay();
+                    }}
+                    >
+                    <FontAwesomeIcon icon={faPlay} /> Play
+                    </button>
+                </div>
+                </div>
+            );
+            } else if (client === ClientType.PHP) {
+                const clipboard = this.getPhpClipboard();
+
+                return (
+                <div key={`client-${client}`} className="row mb-3">
+                    <label htmlFor="program-php-api-key" className="col-sm-2 col-form-label">
+                    PHP usage
+                    </label>
+                    <div className="col-sm-10">
+                    <div className="input-group">
+                        <button type="button" className="input-group-text" onClick={this.onCopyPhpUsage}>
+                        <FontAwesomeIcon icon={faClipboard} />
+                        </button>
+                        <input
+                        type="text"
+                        className="form-control"
+                        id="program-php-api-key"
+                        value={clipboard || ''}
+                        readOnly
+                        placeholder="api key"
+                        />
+                    </div>
+                    </div>
+                </div>
+                );
+            } else if (client === ClientType.NODE) {
+            const clipboard = this.getNodeClipboard();
+
+            return (
+                <div key={`client-${client}`} className="row mb-3">
+                <label htmlFor="program-node-api-key" className="col-sm-2 col-form-label">
+                    Node usage
+                </label>
+                <div className="col-sm-10">
+                    <div className="input-group">
+                    <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
+                        <FontAwesomeIcon icon={faClipboard} />
+                    </button>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="program-node-api-key"
+                        value={clipboard || ''}
+                        readOnly
+                        placeholder="api key"
+                    />
+                    </div>
+                </div>
+                </div>
+            );
+            }
+
+            return null;
+        })}
         <hr />
         <Flows
           ref={this.flowsRef}
