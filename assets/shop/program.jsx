@@ -19,32 +19,26 @@ const allFlows = {
   '@uniflow-io/uniflow-flow-function': {
     name: 'Function Flow',
     clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-    tags: ['function', 'code']
   },
   '@uniflow-io/uniflow-flow-prompt': {
     name: 'Prompt Flow',
     clients: [ClientType.UNIFLOW],
-    tags: ['prompt', 'ai']
   },
   '@uniflow-io/uniflow-flow-text': {
     name: 'Text Flow',
     clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-    tags: ['text', 'string']
   },
   '@uniflow-io/uniflow-flow-assets': {
     name: 'Assets Flow',
     clients: [ClientType.UNIFLOW],
-    tags: ['assets', 'files']
   },
   '@uniflow-io/uniflow-flow-canvas': {
     name: 'Canvas Flow',
     clients: [ClientType.UNIFLOW],
-    tags: ['canvas', 'drawing']
   },
   '@uniflow-io/uniflow-flow-object': {
     name: 'Object Flow',
     clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-    tags: ['object', 'data']
   }
 };
 
