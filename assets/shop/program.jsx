@@ -15,6 +15,39 @@ const clients = {
   [ClientType.VSCODE]: 'VSCode',
 };
 
+const allFlows = {
+  '@uniflow-io/uniflow-flow-function': {
+    name: 'Function Flow',
+    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
+    tags: ['function', 'code']
+  },
+  '@uniflow-io/uniflow-flow-prompt': {
+    name: 'Prompt Flow',
+    clients: [ClientType.UNIFLOW],
+    tags: ['prompt', 'ai']
+  },
+  '@uniflow-io/uniflow-flow-text': {
+    name: 'Text Flow',
+    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
+    tags: ['text', 'string']
+  },
+  '@uniflow-io/uniflow-flow-assets': {
+    name: 'Assets Flow',
+    clients: [ClientType.UNIFLOW],
+    tags: ['assets', 'files']
+  },
+  '@uniflow-io/uniflow-flow-canvas': {
+    name: 'Canvas Flow',
+    clients: [ClientType.UNIFLOW],
+    tags: ['canvas', 'drawing']
+  },
+  '@uniflow-io/uniflow-flow-object': {
+    name: 'Object Flow',
+    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
+    tags: ['object', 'data']
+  }
+};
+
 class Program extends React.Component {
   constructor(props) {
     super(props);
@@ -69,6 +102,8 @@ class Program extends React.Component {
 
     this.setState({
         program
+    }, () => {
+      this.updateProgramFlows();
     });
   }
 
@@ -130,18 +165,29 @@ class Program extends React.Component {
 
   updateProgramFlows = () => {
     const flowLabels = [];
-    const keys = Object.keys(this.state.program.clients);
 
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      const canPushFlow = program.clients.reduce((bool, client) => {
-        return bool && allFlows[key].clients.indexOf(client) !== -1;
-      }, program.clients.length > 0);
+    // Check if program and clients exist
+    if (!this.state.program || !this.state.program.clients) {
+      this.setState({ programFlows: flowLabels });
+      return flowLabels;
+    }
+
+    // Iterate over available flows instead of program clients
+    const flowKeys = Object.keys(allFlows);
+
+    for (let i = 0; i < flowKeys.length; i++) {
+      const flowKey = flowKeys[i];
+      const flow = allFlows[flowKey];
+
+      // Check if the flow supports any of the program's clients
+      const canPushFlow = this.state.program.clients.some(client =>
+        flow.clients.indexOf(client) !== -1
+      );
 
       if (canPushFlow) {
         flowLabels.push({
-          key: key,
-          label: allFlows[key].tags.join(' - ') + ' : ' + allFlows[key].name,
+          key: flowKey,
+          label: flow.tags.join(' - ') + ' : ' + flow.name,
         });
       }
     }

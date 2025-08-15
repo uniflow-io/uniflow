@@ -42,6 +42,9 @@ const Flows = forwardRef((props, ref) => {
   );
 
   useImperativeHandle(ref, () => ({
+    onClients: (index) => {
+        return flowRefs[index].current?.onClients()
+    },
     onSerialize: (index) => {
       return flowRefs[index].current?.onSerialize()
     },
