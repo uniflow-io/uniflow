@@ -181,7 +181,7 @@ class Program extends React.Component {
       if (canPushFlow) {
         flowLabels.push({
           key: flowKey,
-          label: flow.tags.join(' - ') + ' : ' + flow.name,
+          label: flow.name,
         });
       }
     }
