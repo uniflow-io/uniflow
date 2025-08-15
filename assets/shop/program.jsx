@@ -320,10 +320,10 @@ class Program extends React.Component {
           <div className="d-block col-auto">
             <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
               <div className="btn-group-sm" role="group">
-                <a class="btn btn-primary" className="btn text-secondary" href={`/program/duplicate/${this.uid}`}>
+                <a className="btn text-secondary" href={`/program/duplicate/${this.uid}`}>
                     <FontAwesomeIcon icon={faClone} />
                 </a>
-                <a class="btn btn-primary" className="btn text-secondary" href={`/program/remove/${this.uid}`}>
+                <a className="btn text-secondary" href={`/program/remove/${this.uid}`}>
                     <FontAwesomeIcon icon={faTimes} />
                 </a>
               </div>
