@@ -233,18 +233,14 @@ class ProgramController extends AbstractController
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        $entity = $this->programService->findOneByUid($user, $uid);
+        $entity = $this->programRepository->findOneByUid($user, $uid);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
         if ('PUT' === $request->getMethod()) {
-            $content = $request->getContent();
-            $data = null;
-            if (!empty($content)) {
-                $data = json_decode($content, true)['data'];
-            }
+            $data = $request->getContent();
 
             $entity->setData($data);
 

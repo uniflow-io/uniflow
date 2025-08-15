@@ -210,7 +210,7 @@ class Program extends React.Component {
       });
     }
 
-    return JSON.stringify(data);
+    return data;
   }
 
   onUpdateFlowData = debounce(async () => {
@@ -219,22 +219,13 @@ class Program extends React.Component {
     const { graph } = this.state;
     if (graph && graph.flows) {
       const data = this.onSerializeFlowsData(graph.flows);
-      console.log(data)
-      /*if (
-        auth.token &&
-        (feedRef.current.uid === 'me' || user.uid === feedRef.current.uid) &&
-        programRef.data !== data
-      ) {
-        programRef.data = data;
 
-        try {
-          await setProgramData(programRef, auth.token)(feedDispatch, userDispatch, authDispatch);
-        } catch (error) {
-          if(error instanceof Error) {
-            commitAddLog(error.message)(logsDispatch);
-          }
-        }
-      }*/
+      if(this.token) {
+        const options = {
+            token: this.token
+        };
+        await this.api.updateProgramFlows(this.uid, data, options);
+      }
     }
   }, 1000)
 
