@@ -142,7 +142,7 @@ class ProgramService
             'path' => $this->toPath($program),
             'clients' => $clients,
             'tags' => $tags,
-            'description' => $program->getDescription(),
+            'description' => $program->getDescription() || '',
             'isPublic' => $program->getPublic(),
             'user' => $this->toUser($program),
             'created' => $program->getCreated()->format('c'),

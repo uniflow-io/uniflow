@@ -1,7 +1,5 @@
 import consoleBridge from '../bridges/console';
 import fetchBridge from '../bridges/fetch';
-import { RefObject } from 'react';
-import { FlowsHandle } from '../components/flows';
 import { ClientType } from './client-type';
 
 export default class Runner {
