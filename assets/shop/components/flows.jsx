@@ -4,35 +4,20 @@ import { forwardRef } from 'react';
 import { createRef } from 'react';
 
 import FunctionFlow from './flow-function/index.jsx'
-//import PromptFlow from './flow-prompt/index.jsx'
-//import AssetsFlow from './flow-assets/index.jsx'
-//import TextFlow from './flow-text/index.jsx'
-//import CanvasFlow from './flow-canvas/index.jsx'
-//import ObjectFlow from './flow-object/index.jsx'
+import PromptFlow from './flow-prompt/index.jsx'
+import AssetsFlow from './flow-assets/index.jsx'
+import TextFlow from './flow-text/index.jsx'
+import CanvasFlow from './flow-canvas/index.jsx'
+import ObjectFlow from './flow-object/index.jsx'
 
 const flowImports = {
   '@uniflow-io/uniflow-flow-function': FunctionFlow,
-  //'@uniflow-io/uniflow-flow-prompt': PromptFlow,
-  //'@uniflow-io/uniflow-flow-text': TextFlow,
-  //'@uniflow-io/uniflow-flow-assets': AssetsFlow,
-  //'@uniflow-io/uniflow-flow-canvas': CanvasFlow,
-  //'@uniflow-io/uniflow-flow-object': ObjectFlow,
+  '@uniflow-io/uniflow-flow-prompt': PromptFlow,
+  '@uniflow-io/uniflow-flow-text': TextFlow,
+  '@uniflow-io/uniflow-flow-assets': AssetsFlow,
+  '@uniflow-io/uniflow-flow-canvas': CanvasFlow,
+  '@uniflow-io/uniflow-flow-object': ObjectFlow,
 };
-
-// FlowsHandle defines the methods that can be called on the Flows component
-// onSerialize: (index) => string | undefined
-// onDeserialize: (index, data) => object
-// onCompile: (index, client) => string
-// onExecute: (index, runner) => Promise<void>
-
-// FlowsProps defines the props for the Flows component
-// graph: GraphProviderState
-// programFlows: Array of { key: string, label: string }
-// clients: Array of strings
-// onPush: (index, flowType) => void
-// onPop: (index) => void
-// onUpdate: (index, data) => void
-// onPlay: (index?) => void
 
 const Flows = forwardRef((props, ref) => {
   const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;

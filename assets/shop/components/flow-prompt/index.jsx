@@ -1,10 +1,8 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
-import FlowHeader from '../../uniflow-client/src/components/flow/header'
-import FormInput, { FormInputType } from '../../uniflow-client/src/components/form-input'
-import { flow, FlowRunner } from '../../uniflow-client/src/components/flow/flow'
-import { MouseEventHandler } from 'react'
-import { ChangeEventHandler } from 'react'
-import { useStateRef } from '../../uniflow-client/src/hooks/use-state-ref'
+import FlowHeader from '../flow/header.jsx'
+import FormInput, { FormInputType } from '../form-input.jsx'
+import { flow } from '../flow/flow.jsx'
+import { useStateRef } from '../../hooks/use-state-ref'
 import { ClientType } from '../../models/client-type';
 
 // Enum replacement
