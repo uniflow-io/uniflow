@@ -92,8 +92,8 @@ class Program implements Stringable
     #[ORM\Column(name: 'is_public', type: Types::BOOLEAN, nullable: false)]
     protected bool $public = false;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    protected ?string $data = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    protected ?array $data = null;
 
     public function __construct()
     {
@@ -225,12 +225,12 @@ class Program implements Stringable
         return $this;
     }
 
-    public function getData(): ?string
+    public function getData(): ?array
     {
         return $this->data;
     }
 
-    public function setData(?string $data): self
+    public function setData(?array $data): self
     {
         $this->data = $data;
 

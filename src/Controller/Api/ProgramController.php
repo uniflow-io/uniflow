@@ -222,7 +222,7 @@ class ProgramController extends AbstractController
             }
         }
 
-        return new JsonResponse(['data' => $entity->getData()]);
+        return new JsonResponse($entity->getData());
     }
 
     #[Route(path: '/{uid}/flows', name: 'api_program_set_flows', methods: ['PUT'])]
@@ -240,8 +240,7 @@ class ProgramController extends AbstractController
         }
 
         if ('PUT' === $request->getMethod()) {
-            $data = $request->getContent();
-
+            $data = $request->toArray();
             $entity->setData($data);
 
             $this->programService->save($entity);

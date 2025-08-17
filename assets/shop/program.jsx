@@ -125,7 +125,6 @@ class Program extends React.Component {
       uid: this.uid,
     };
 
-    // Clear current flows
     this.setState({
       program,
       graph: {
@@ -134,26 +133,14 @@ class Program extends React.Component {
       }
     });
 
-    // Fetch program data if needed
     let data = null;
-    try {
-      const options = {
+    const options = {
         token: this.token
-      };
-      data = await this.api.getProgramFlows(this.uid, options);
-    } catch (error) {
-      console.error("Error fetching program data:", error);
-    }
+    };
+    data = await this.api.getProgramFlows(this.uid, options);
 
     if (data) {
-      // Deserialize flow data
-      const graphData = this.onDeserializeFlowsData(data);
-      this.setState({ fetchedFlows: graphData });
-
-      // Add each flow to the graph
-      for (let index = 0; index < graphData.length; index++) {
-        this.onPushFlow(index, graphData[index].type);
-      }
+      this.onDeserializeFlowsData(data);
     }
   }, 1000);
 
@@ -206,11 +193,37 @@ class Program extends React.Component {
       const flow = flows[index]
       data.push({
         flow: flow.type,
-        data: this.flowsRef.current?.onSerialize(index),
+        data: this.flowsRef.current.onSerialize(index),
       });
     }
 
     return data;
+  }
+
+  onDeserializeFlowsData = (data) => {
+    data = Array.isArray(data) ? data : [];
+
+    let flows = []
+    for (let index = 0; index < data.length; index++) {
+        const flow = data[index]
+        flows.splice(index, 0, { type: flow.flow, data: {} });
+    }
+
+    const { graph } = this.state;
+    this.setState({
+      graph: {
+        ...graph,
+        flows
+      }
+    }, () => {
+        for (let index = 0; index < data.length; index++) {
+            const flow = data[index]
+            flows.splice(index, 0, {
+                type: flow.flow,
+                data: this.flowsRef.current.onDeserialize(index, flow.data)
+            });
+        }
+    });
   }
 
   onUpdateFlowData = debounce(async () => {
@@ -361,21 +374,6 @@ class Program extends React.Component {
       folderTreeEdit: true,
       folderTree: ['/', '/path1', '/path2']
     });
-  }
-
-  onDeserializeFlowsData = (data) => {
-    let flowsData = [];
-    try {
-      if (typeof data === 'string') {
-        flowsData = JSON.parse(data);
-      } else {
-        flowsData = data;
-      }
-    } catch (error) {
-      console.error("Error parsing flow data:", error);
-    }
-
-    return Array.isArray(flowsData) ? flowsData : [];
   }
 
   getPhpClipboard = () => {
