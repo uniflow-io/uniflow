@@ -1,23 +1,31 @@
 import consoleBridge from '../bridges/console';
 import fetchBridge from '../bridges/fetch';
-import vm from 'vm';
-//import { commitPlayFlow, commitStopFlow, GraphDispath, GraphProviderState } from '../contexts';
 import { RefObject } from 'react';
 import { FlowsHandle } from '../components/flows';
 import { ClientType } from './client-type';
 
 export default class Runner {
   async run(flows, flowsRef) {
-    const context = vm.createContext({
+    const context = {
       console: consoleBridge,
       axios: fetchBridge,
-    });
+    };
 
     for(let index = 0; index < flows.length; index++) {
       const runner = {
         run: () => {
           const code = flowsRef.current?.onCompile(index, ClientType.UNIFLOW)
-          return vm.runInContext(code || '', context);
+          try {
+            const func = new Function('context', `
+              with (context) {
+                ${code || ''}
+              }
+            `);
+            return func(context);
+          } catch (error) {
+            console.error('Error executing flow code:', error);
+            return null;
+          }
         },
         getContext: () => {
           return context;
