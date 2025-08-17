@@ -7,6 +7,7 @@ import Select from './components/select';
 import { ClientType } from './models/client-type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import Runner from './models/runner';
 
 const clients = {
   [ClientType.UNIFLOW]: 'Uniflow',
@@ -266,9 +267,12 @@ class Program extends React.Component {
     }
   }, 1000)
 
-  onPlay = (index) => {
-    console.log('Play flows', index !== undefined ? `up to index ${index}` : 'all');
-  }
+  onPlay = async (index) => {
+    const { graph } = this.state;
+    const runner = new Runner();
+    await runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1), this.flowsRef);
+  };
+
 
   onPushFlow = (index, flowType) => {
     const { graph } = this.state;
@@ -562,17 +566,17 @@ class Program extends React.Component {
             if (client === ClientType.UNIFLOW) {
             return (
                 <div key={`client-${client}`} className="row mb-3">
-                <div className="col-sm-10 offset-sm-2">
-                    <button
-                    className="btn btn-primary"
-                    onClick={(event) => {
-                        event.preventDefault();
-                        onPlay();
-                    }}
-                    >
-                    <FontAwesomeIcon icon={faPlay} /> Play
-                    </button>
-                </div>
+                    <div className="col-sm-10 offset-sm-2">
+                        <button
+                        className="btn btn-primary"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            this.onPlay();
+                        }}
+                        >
+                        <FontAwesomeIcon icon={faPlay} /> Play
+                        </button>
+                    </div>
                 </div>
             );
             } else if (client === ClientType.PHP) {
@@ -580,23 +584,21 @@ class Program extends React.Component {
 
                 return (
                 <div key={`client-${client}`} className="row mb-3">
-                    <label htmlFor="program-php-api-key" className="col-sm-2 col-form-label">
-                    PHP usage
-                    </label>
+                    <label htmlFor="program-php-api-key" className="col-sm-2 col-form-label">PHP usage</label>
                     <div className="col-sm-10">
-                    <div className="input-group">
-                        <button type="button" className="input-group-text" onClick={this.onCopyPhpUsage}>
-                        <FontAwesomeIcon icon={faClipboard} />
-                        </button>
-                        <input
-                        type="text"
-                        className="form-control"
-                        id="program-php-api-key"
-                        value={clipboard || ''}
-                        readOnly
-                        placeholder="api key"
-                        />
-                    </div>
+                        <div className="input-group">
+                            <button type="button" className="input-group-text" onClick={this.onCopyPhpUsage}>
+                                <FontAwesomeIcon icon={faClipboard} />
+                            </button>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="program-php-api-key"
+                                value={clipboard || ''}
+                                readOnly
+                                placeholder="api key"
+                            />
+                        </div>
                     </div>
                 </div>
                 );
@@ -605,9 +607,7 @@ class Program extends React.Component {
 
             return (
                 <div key={`client-${client}`} className="row mb-3">
-                <label htmlFor="program-node-api-key" className="col-sm-2 col-form-label">
-                    Node usage
-                </label>
+                <label htmlFor="program-node-api-key" className="col-sm-2 col-form-label">Node usage</label>
                 <div className="col-sm-10">
                     <div className="input-group">
                     <button type="button" className="input-group-text" onClick={this.onCopyNodeUsage}>
