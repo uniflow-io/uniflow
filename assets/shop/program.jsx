@@ -216,14 +216,38 @@ class Program extends React.Component {
         flows
       }
     }, () => {
-        for (let index = 0; index < data.length; index++) {
-            const flow = data[index]
-            flows.splice(index, 0, {
-                type: flow.flow,
-                data: this.flowsRef.current.onDeserialize(index, flow.data)
-            });
-        }
+      // Store the data to deserialize for later use
+      this.pendingDeserialization = data;
     });
+  }
+
+  onDeserializePendingFlows = () => {
+    if (!this.pendingDeserialization || !this.flowsRef.current) {
+      return;
+    }
+
+    const data = this.pendingDeserialization;
+    const updatedFlows = [...this.state.graph.flows];
+
+    for (let index = 0; index < data.length; index++) {
+      const flow = data[index];
+      const deserializedData = this.flowsRef.current.onDeserialize(index, flow.data);
+
+      updatedFlows[index] = {
+        ...updatedFlows[index],
+        data: deserializedData
+      };
+    }
+
+    this.setState({
+      graph: {
+        ...this.state.graph,
+        flows: updatedFlows
+      }
+    });
+
+    // Clear the pending deserialization
+    this.pendingDeserialization = null;
   }
 
   onUpdateFlowData = debounce(async () => {
@@ -615,6 +639,7 @@ class Program extends React.Component {
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}
           onPlay={this.onPlay}
+          onDeserializeReady={this.onDeserializePendingFlows}
         />
       </div>
     );

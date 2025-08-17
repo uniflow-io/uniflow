@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useMemo } from 'react';
+import React, { useImperativeHandle, useMemo, useEffect } from 'react';
 import Search from './search.jsx';
 import { forwardRef } from 'react';
 import { createRef } from 'react';
@@ -58,6 +58,12 @@ const Flows = forwardRef((props, ref) => {
       return flowRefs[index].current?.onExecute(runner)
     }
   }), [graph.flows])
+
+  useEffect(() => {
+    if (props.onDeserializeReady) {
+      props.onDeserializeReady();
+    }
+  }, [graph.flows.length]);
 
   return (
     <>
