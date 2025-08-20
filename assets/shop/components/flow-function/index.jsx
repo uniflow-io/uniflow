@@ -13,14 +13,6 @@ const FunctionFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
-    onClients: () => {
-        return [
-            ClientType.UNIFLOW,
-            ClientType.PHP,
-            ClientType.NODE,
-            ClientType.VSCODE,
-        ]
-    },
     onSerialize: () => {
       return JSON.stringify(data?.code)
     },

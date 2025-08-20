@@ -2,22 +2,7 @@ import React, { useImperativeHandle, useMemo, useEffect } from 'react';
 import Search from './search.jsx';
 import { forwardRef } from 'react';
 import { createRef } from 'react';
-
-import FunctionFlow from './flow-function/index.jsx'
-import PromptFlow from './flow-prompt/index.jsx'
-import AssetsFlow from './flow-assets/index.jsx'
-import TextFlow from './flow-text/index.jsx'
-import CanvasFlow from './flow-canvas/index.jsx'
-import ObjectFlow from './flow-object/index.jsx'
-
-const flowImports = {
-  '@uniflow-io/uniflow-flow-function': FunctionFlow,
-  '@uniflow-io/uniflow-flow-prompt': PromptFlow,
-  '@uniflow-io/uniflow-flow-text': TextFlow,
-  '@uniflow-io/uniflow-flow-assets': AssetsFlow,
-  '@uniflow-io/uniflow-flow-canvas': CanvasFlow,
-  '@uniflow-io/uniflow-flow-object': ObjectFlow,
-};
+import { flows as flowImports } from './../models/flows'
 
 const Flows = forwardRef((props, ref) => {
   const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;
@@ -27,9 +12,6 @@ const Flows = forwardRef((props, ref) => {
   );
 
   useImperativeHandle(ref, () => ({
-    onClients: (index) => {
-        return flowRefs[index].current?.onClients()
-    },
     onSerialize: (index) => {
       return flowRefs[index].current?.onSerialize()
     },

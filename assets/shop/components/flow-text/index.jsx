@@ -8,9 +8,6 @@ const TextFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
 
   useImperativeHandle(ref, () => ({
-    onClients: () => {
-        return [ClientType.UNIFLOW]
-    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.text])
     },

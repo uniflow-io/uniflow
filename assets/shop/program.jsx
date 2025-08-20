@@ -8,40 +8,7 @@ import { ClientType } from './models/client-type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faClone, faEdit, faPlay, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import Runner from './models/runner';
-
-const clients = {
-  [ClientType.UNIFLOW]: 'Uniflow',
-  [ClientType.PHP]: 'Php',
-  [ClientType.NODE]: 'Node',
-  [ClientType.VSCODE]: 'VSCode',
-};
-
-const allFlows = {
-  '@uniflow-io/uniflow-flow-function': {
-    name: 'Function Flow',
-    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-  },
-  '@uniflow-io/uniflow-flow-prompt': {
-    name: 'Prompt Flow',
-    clients: [ClientType.UNIFLOW],
-  },
-  '@uniflow-io/uniflow-flow-text': {
-    name: 'Text Flow',
-    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-  },
-  '@uniflow-io/uniflow-flow-assets': {
-    name: 'Assets Flow',
-    clients: [ClientType.UNIFLOW],
-  },
-  '@uniflow-io/uniflow-flow-canvas': {
-    name: 'Canvas Flow',
-    clients: [ClientType.UNIFLOW],
-  },
-  '@uniflow-io/uniflow-flow-object': {
-    name: 'Object Flow',
-    clients: [ClientType.UNIFLOW, ClientType.PHP, ClientType.NODE, ClientType.VSCODE],
-  }
-};
+import { flows, flowsNames, flowsClients } from './models/flows'
 
 class Program extends React.Component {
   constructor(props) {
@@ -72,7 +39,6 @@ class Program extends React.Component {
   }
 
   componentDidMount() {
-    // Get program data from the container
     const programContainer = document.getElementById('program');
     if (programContainer) {
       const uid = programContainer.dataset.uid;
@@ -97,8 +63,6 @@ class Program extends React.Component {
 
     this.setState({
         program
-    }, () => {
-      this.updateProgramFlows();
     });
   }
 
@@ -145,34 +109,33 @@ class Program extends React.Component {
     }
   }, 1000);
 
-  updateProgramFlows = () => {
-    const flowLabels = [];
-
-    // Check if program and clients exist
-    if (!this.state.program || !this.state.program.clients) {
-      this.setState({ programFlows: flowLabels });
-      return flowLabels;
-    }
-
-    // Iterate over available flows instead of program clients
-    const flowKeys = Object.keys(allFlows);
-
-    for (let i = 0; i < flowKeys.length; i++) {
-      const flowKey = flowKeys[i];
-      const flow = allFlows[flowKey];
-
-      // Check if the flow supports any of the program's clients
-      const canPushFlow = this.state.program.clients.some(client =>
-        flow.clients.indexOf(client) !== -1
-      );
-
-      if (canPushFlow) {
+  onUpdateProgramFlows = () => {
+    let clients = [
+        ClientType.UNIFLOW,
+        ClientType.PHP,
+        ClientType.NODE,
+        ClientType.VSCODE,
+    ];
+    let flowLabels = [];
+    Object.keys(flows).forEach((key) => {
         flowLabels.push({
-          key: flowKey,
-          label: flow.name,
-        });
-      }
-    }
+            key: key,
+            label: flowsNames[key],
+        })
+    })
+
+    this.state.graph.flows.forEach((flow, index) => {
+        if (flow.type && flowsClients[flow.type]) {
+            const flowClients = flowsClients[flow.type];
+
+            clients = clients.filter(client => flowClients.includes(client));
+
+            flowLabels = flowLabels.filter(flowLabel => {
+                const flowSupportedClients = flowsClients[flowLabel.key];
+                return flowSupportedClients && flowSupportedClients.some(client => clients.includes(client));
+            });
+        }
+    });
 
     flowLabels.sort(function (flow1, flow2) {
       const x = flow1.label;
@@ -181,10 +144,12 @@ class Program extends React.Component {
     });
 
     this.setState({
-        programFlows: flowLabels
-      })
-
-    return flowLabels;
+        program: {
+            ...this.state.program,
+            clients
+        },
+        programFlows: flowLabels,
+    })
   }
 
   onSerializeFlowsData = (flows) => {
@@ -273,7 +238,6 @@ class Program extends React.Component {
     await runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1), this.flowsRef);
   };
 
-
   onPushFlow = (index, flowType) => {
     const { graph } = this.state;
     const flows = [...graph.flows];
@@ -347,7 +311,7 @@ class Program extends React.Component {
   }
 
   onChangeClients = (clients) => {
-    this.setState({
+    /*this.setState({
       program: {
         ...this.state.program,
         clients
@@ -355,7 +319,7 @@ class Program extends React.Component {
     }, () => {
         this.updateProgramFlows()
         this.updateProgram()
-    });
+    });*/
   }
 
   onChangeTags = (tags) => {
@@ -489,9 +453,12 @@ class Program extends React.Component {
                 value={program.clients}
                 onChange={this.onChangeClients}
                 multiple={true}
-                options={Object.keys(clients).map((client) => {
-                  return { value: client, label: clients[client] };
-                })}
+                options={[
+                  { value: ClientType.UNIFLOW, label: 'Uniflow' },
+                  { value: ClientType.PHP, label: 'PHP' },
+                  { value: ClientType.NODE, label: 'Node' },
+                  { value: ClientType.VSCODE, label: 'VSCode' }
+                ]}
               />
             </div>
           </div>
@@ -639,7 +606,10 @@ class Program extends React.Component {
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}
           onPlay={this.onPlay}
-          onDeserializeReady={this.onDeserializePendingFlows}
+          onDeserializeReady={() => {
+            this.onDeserializePendingFlows()
+            this.onUpdateProgramFlows()
+          }}
         />
       </div>
     );

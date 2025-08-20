@@ -17,9 +17,6 @@ const CanvasFlow = flow((props, ref) => {
   const canvasRef = useRef(null)
 
   useImperativeHandle(ref, () => ({
-    onClients: () => {
-        return [ClientType.UNIFLOW]
-    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.width, data?.height])
     },

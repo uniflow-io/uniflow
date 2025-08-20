@@ -27,9 +27,6 @@ const PromptFlow = flow((props, ref) => {
   const inputResolve = useRef()
 
   useImperativeHandle(ref, () => ({
-    onClients: () => {
-        return [ClientType.UNIFLOW]
-    },
     onSerialize: () => {
       return JSON.stringify([data?.variable, data?.messageVariable, data?.type])
     },
