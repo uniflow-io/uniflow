@@ -6,7 +6,7 @@ import Api from './services/api';
 import Select from './components/select';
 import { ClientType } from './models/client-type';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faClone, faEdit, faPlay, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faClone, faPlay, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import Runner from './models/runner';
 import { flows, flowsNames, flowsClients } from './models/flows'
 
@@ -235,7 +235,10 @@ class Program extends React.Component {
   onPlay = async (index) => {
     const { graph } = this.state;
     const runner = new Runner();
-    await runner.run(graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1), this.flowsRef);
+    await runner.run(
+        graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1),
+        this.flowsRef
+    );
   };
 
   onPushFlow = (index, flowType) => {

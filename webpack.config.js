@@ -39,7 +39,10 @@ Encore
 
 const appShopConfig = Encore.getWebpackConfig();
 
-appShopConfig.externals = Object.assign({}, appShopConfig.externals, { window: 'window', document: 'document' });
+appShopConfig.externals = Object.assign({}, appShopConfig.externals, {
+  window: 'window',
+  document: 'document'
+});
 appShopConfig.name = 'app.shop';
 
 Encore.reset();
@@ -59,7 +62,7 @@ Encore
     .enableSassLoader()
     //.enableStimulusBridge(path.resolve(__dirname, './assets/admin/controllers.json'))
     // remove the following line if you don't want to add automatically controllers provided by plugins
-    // You then have to copy them to assets/admin/controllers.json
+    // You then have to copy them to assets/shop/controllers.json
     .enableStimulusBridge(mergeControllers(
       'admin',
       [common_controllers, path.resolve(__dirname, './assets/admin/controllers.json')]
@@ -68,7 +71,10 @@ Encore
 
 const appAdminConfig = Encore.getWebpackConfig();
 
-appAdminConfig.externals = Object.assign({}, appAdminConfig.externals, { window: 'window', document: 'document' });
+appAdminConfig.externals = Object.assign({}, appAdminConfig.externals, {
+  window: 'window',
+  document: 'document'
+});
 appAdminConfig.name = 'app.admin';
 
 module.exports = [shopConfig, adminConfig, appShopConfig, appAdminConfig];
