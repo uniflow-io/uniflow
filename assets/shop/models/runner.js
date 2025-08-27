@@ -171,11 +171,6 @@ import { ClientType } from './client-type';
 
     // Combine declarations and transformed code
     var finalCode = variableDeclarations + transformedCode;
-
-    console.log('Original code:', code);
-    console.log('Transformed code:', transformedCode);
-    console.log('Final code:', finalCode);
-
     var func = new Function(finalCode);
     var result = func.call(executionScope);
 
