@@ -122,8 +122,8 @@ class UserService
             'username' => $user->getUsername(),
             'firstname' => $user->getCustomer()->getFirstName(),
             'lastname' => $user->getCustomer()->getLastName(),
-            'facebookId' => $user->getFacebookId(),
-            'githubId' => $user->getGithubId(),
+            //'facebookId' => $user->getFacebookId(),
+            //'githubId' => $user->getGithubId(),
             'apiKey' => $user->getApiKey(),
             'roles' => $user->getRoles(),
             'links' => [
