@@ -194,6 +194,9 @@ class ProgramController extends AbstractController
     public function update(Request $request, $uid): JsonResponse
     {
         $user = $this->getUser();
+        if (!$user) {
+            throw $this->createNotFoundException('Unable to find Program entity.');
+        }
 
         $entity = $this->programRepository->findOneByUid($user, $uid);
 

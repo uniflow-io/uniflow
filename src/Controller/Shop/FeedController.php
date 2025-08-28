@@ -76,7 +76,12 @@ class FeedController extends AbstractController
             ];
         }
 
-        $token = $this->jwtManager->create($user);
+
+        $token = null;
+        $currentUser = $this->getUser();
+        if($currentUser && $currentUser->getId() === $user->getId()) {
+            $token = $this->jwtManager->create($user);
+        }
 
         return $this->render('shop/feed/feed.html.twig', [
             'page' => new Page(

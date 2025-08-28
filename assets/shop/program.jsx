@@ -81,7 +81,9 @@ class Program extends React.Component {
       description: program.description
     };
 
-    return await this.api.updateProgram(this.uid, programData, options);
+    if(this.token) {
+        await this.api.updateProgram(this.uid, programData, options);
+    }
   }, 1000);
 
   onFetchFlowData = debounce(async () => {
