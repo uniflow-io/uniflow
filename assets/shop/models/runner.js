@@ -3,9 +3,7 @@ import fetchBridge from '../bridges/fetch';
 import { ClientType } from './client-type';
 
 // Browser-compatible vm module using safer execution context
-/*
-// IFRAME IMPLEMENTATION (BACKUP) - This version worked but caused prism.js conflicts
-// Uncomment this section and comment out the current implementation to rollback
+// IFRAME IMPLEMENTATION
 (function () {
   var vm = {};
   var contextifiedSandboxes = [];
@@ -93,10 +91,9 @@ import { ClientType } from './client-type';
 
   window.vm = vm;
 }());
-*/
 
-// CURRENT IMPLEMENTATION - Object-based execution with variable persistence
-(function () {
+// OBJECT IMPLEMENTATION - Object-based execution with variable persistence
+/*(function () {
   var vm = {};
   var contextifiedSandboxes = [];
 
@@ -230,7 +227,7 @@ import { ClientType } from './client-type';
   };
 
   window.vm = vm;
-}());
+}());*/
 
 export default class Runner {
   async run(flows, flowsRef) {
