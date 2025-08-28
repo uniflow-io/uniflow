@@ -29,6 +29,12 @@ php-asset:
 	# php -d memory_limit=-1 bin/console sass:build
 	php -d memory_limit=-1 bin/console asset-map:compile
 
+front:
+	npm run watch
+
+front-build:
+	npm run build
+
 init: ## init
 	@make -s docker-compose-check
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php composer install --no-interaction --no-scripts
