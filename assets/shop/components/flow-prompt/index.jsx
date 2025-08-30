@@ -20,7 +20,7 @@ const PromptChoiceType = {
  */
 
 const PromptFlow = flow((props, ref) => {
-  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
+  const { onPop, onUpdate, onPlay, onStop, isPlaying, data, clients } = props
   const [promptInput, setPromptInput] = useState(false)
   const [message, setMessage] = useState()
   const [input, setInput, inputRef] = useStateRef(undefined)
@@ -171,6 +171,7 @@ const PromptFlow = flow((props, ref) => {
         clients={clients}
         isPlaying={isPlaying}
         onPlay={onPlay}
+        onStop={onStop}
         onPop={onPop}
       />
       <form className="form-sm-horizontal">

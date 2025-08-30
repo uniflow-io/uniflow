@@ -230,7 +230,7 @@ import { ClientType } from './client-type';
 }());*/
 
 export default class Runner {
-  async run(flows, flowsRef) {
+  async run(flows, flowsRef, onFlowStateChange) {
     // Create a shared context that persists across iterations
     const sharedContext = {
       console: consoleBridge,
@@ -244,6 +244,8 @@ export default class Runner {
     const context = vm.createContext(sharedContext);
 
     for(let index = 0; index < flows.length; index++) {
+      onFlowStateChange(index, true);
+
       const runner = {
         run: () => {
           const code = flowsRef.current?.onCompile(index, ClientType.UNIFLOW)
@@ -257,12 +259,11 @@ export default class Runner {
         },
       };
 
-      //commitPlayFlow(index)(graphDispatch);
       await flowsRef.current?.onExecute(index, runner)
       await new Promise((resolve) => {
         setTimeout(resolve, 500);
       });
-      //commitStopFlow(index)(graphDispatch);
+      onFlowStateChange(index, false);
     }
   }
 }

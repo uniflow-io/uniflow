@@ -5,7 +5,7 @@ import { createRef } from 'react';
 import { flows as flowImports } from './../models/flows'
 
 const Flows = forwardRef((props, ref) => {
-  const { graph, onPush, onPop, onUpdate, onPlay, programFlows, clients } = props;
+  const { graph, onPush, onPop, onUpdate, onPlay, onStop, onStopFlow, programFlows, clients } = props;
   const flowRefs = useMemo(() =>
     Array(graph.flows.length).fill(null).map(() => createRef()),
     [graph.flows]
@@ -58,6 +58,9 @@ const Flows = forwardRef((props, ref) => {
               }}
               onPlay={() => {
                 onPlay(index);
+              }}
+              onStop={() => {
+                onStopFlow(index);
               }}
             />
             <Search

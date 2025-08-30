@@ -19,6 +19,7 @@ class Program extends React.Component {
       folderTree: [],
       errors: {},
       programFlows: [],
+      isPlaying: false,
       user: {
         apiKey: null
       },
@@ -197,7 +198,7 @@ class Program extends React.Component {
     let flows = []
     for (let index = 0; index < data.length; index++) {
         const flow = data[index]
-        flows.splice(index, 0, { type: flow.flow, data: {} });
+        flows.splice(index, 0, { type: flow.flow, data: {}, isPlaying: false });
     }
 
     const { graph } = this.state;
@@ -226,7 +227,8 @@ class Program extends React.Component {
 
       updatedFlows[index] = {
         ...updatedFlows[index],
-        data: deserializedData
+        data: deserializedData,
+        isPlaying: false // Initialize isPlaying to false
       };
     }
 
@@ -258,19 +260,65 @@ class Program extends React.Component {
   }, 1000)
 
   onPlay = async (index) => {
+    // Set playing state to true
+    this.setState({ isPlaying: true });
+
     const { graph } = this.state;
     const runner = new Runner();
+
+    // Create a callback to update flow playing state
+    const onFlowStateChange = (flowIndex, isPlaying) => {
+      this.setState(prevState => ({
+        graph: {
+          ...prevState.graph,
+          flows: prevState.graph.flows.map((flow, i) =>
+            i === flowIndex ? { ...flow, isPlaying } : flow
+          )
+        }
+      }));
+    };
+
+    // If index is provided, play from that flow to the end
+    // If no index, play all flows from the beginning
+    const flowsToExecute = index !== undefined ? graph.flows.slice(index) : graph.flows;
+
     await runner.run(
-        graph.flows.slice(0, index === undefined ? graph.flows.length : index + 1),
-        this.flowsRef
+        flowsToExecute,
+        this.flowsRef,
+        onFlowStateChange
     );
+    this.setState({ isPlaying: false });
+  };
+
+  onStop = () => {
+    // Reset all flow states to not playing
+    this.setState(prevState => ({
+      isPlaying: false,
+      graph: {
+        ...prevState.graph,
+        flows: prevState.graph.flows.map(flow => ({ ...flow, isPlaying: false }))
+      }
+    }));
+  };
+
+  onStopFlow = (flowIndex) => {
+    // Stop a specific flow and reset global playing state
+    this.setState(prevState => ({
+      isPlaying: false,
+      graph: {
+        ...prevState.graph,
+        flows: prevState.graph.flows.map((flow, i) =>
+          i === flowIndex ? { ...flow, isPlaying: false } : flow
+        )
+      }
+    }));
   };
 
   onPushFlow = (index, flowType) => {
     const { graph } = this.state;
     const flows = [...graph.flows];
 
-    flows.splice(index, 0, { type: flowType, data: {} });
+    flows.splice(index, 0, { type: flowType, data: {}, isPlaying: false });
 
     this.setState({
       graph: {
@@ -582,15 +630,27 @@ class Program extends React.Component {
             return (
                 <div key={`client-${client}`} className="row mb-3">
                     <div className="col-sm-10 offset-sm-2">
-                        <button
-                        className="btn btn-primary"
-                        onClick={(event) => {
-                            event.preventDefault();
-                            this.onPlay();
-                        }}
-                        >
-                        <FontAwesomeIcon icon={faPlay} /> Play
-                        </button>
+                        {!this.state.isPlaying ? (
+                            <button
+                            className="btn btn-primary"
+                            onClick={(event) => {
+                                event.preventDefault();
+                                this.onPlay();
+                            }}
+                            >
+                            <FontAwesomeIcon icon={faPlay} /> Play
+                            </button>
+                        ) : (
+                            <button
+                            className="btn btn-secondary"
+                            onClick={(event) => {
+                                event.preventDefault();
+                                this.onStop();
+                            }}
+                            >
+                            <FontAwesomeIcon icon={faTimes} /> Stop
+                            </button>
+                        )}
                     </div>
                 </div>
             );
@@ -654,6 +714,8 @@ class Program extends React.Component {
           onPop={this.onPopFlow}
           onUpdate={this.onUpdateFlow}
           onPlay={this.onPlay}
+          onStop={this.onStop}
+          onStopFlow={this.onStopFlow}
           onDeserializeReady={() => {
             this.onDeserializePendingFlows()
             this.onUpdateProgramFlows()

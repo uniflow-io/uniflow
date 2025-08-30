@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faTimes, faStop } from '@fortawesome/free-solid-svg-icons';
 
 const FlowHeader = (props) => {
   const onDelete = (event) => {
@@ -23,13 +23,18 @@ const FlowHeader = (props) => {
               </button>
             )}
             {props.clients.indexOf('uniflow') !== -1 && props.isPlaying === true && (
-              <button type="button" className="btn">
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-              </button>
+              <div className="btn-group" role="group">
+                <button type="button" className="btn btn-warning">
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={props.onStop}>
+                  <FontAwesomeIcon icon={faStop} />
+                </button>
+              </div>
             )}
           </div>
         </div>

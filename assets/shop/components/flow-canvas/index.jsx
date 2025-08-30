@@ -13,7 +13,7 @@ import { ClientType } from '../../models/client-type';
 // }
 
 const CanvasFlow = flow((props, ref) => {
-  const { onPop, onUpdate, onPlay, isPlaying, data, clients } = props
+  const { onPop, onUpdate, onPlay, onStop, isPlaying, data, clients } = props
   const canvasRef = useRef(null)
 
   useImperativeHandle(ref, () => ({
@@ -63,6 +63,7 @@ const CanvasFlow = flow((props, ref) => {
         clients={clients}
         isPlaying={isPlaying}
         onPlay={onPlay}
+        onStop={onStop}
         onPop={onPop}
       />
       <form className="form-sm-horizontal">
