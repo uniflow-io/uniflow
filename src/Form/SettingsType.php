@@ -20,17 +20,7 @@ class SettingsType extends AbstractType
     {
         $builder->add('customer', SettingsCustomerType::class);
         $builder->add('username', TextType::class, [
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Username is required.',
-                ]),
-                new Assert\Length([
-                    'min' => 3,
-                    'max' => 50,
-                    'minMessage' => 'Username must be at least {{ limit }} characters long.',
-                    'maxMessage' => 'Username cannot be longer than {{ limit }} characters.',
-                ]),
-            ],
+            'required' => false,
         ]);
         $builder->add('apiKey', TextType::class, [
             'required' => false,

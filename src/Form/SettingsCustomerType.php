@@ -19,30 +19,10 @@ class SettingsCustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('firstname', TextType::class, [
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Firstname is required.',
-                ]),
-                new Assert\Length([
-                    'min' => 2,
-                    'max' => 100,
-                    'minMessage' => 'Firstname must be at least {{ limit }} characters long.',
-                    'maxMessage' => 'Firstname cannot be longer than {{ limit }} characters.',
-                ]),
-            ],
+            'required' => false,
         ]);
         $builder->add('lastname', TextType::class, [
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Lastname is required.',
-                ]),
-                new Assert\Length([
-                    'min' => 2,
-                    'max' => 100,
-                    'minMessage' => 'Lastname must be at least {{ limit }} characters long.',
-                    'maxMessage' => 'Lastname cannot be longer than {{ limit }} characters.',
-                ]),
-            ],
+            'required' => false,
         ]);
     }
 

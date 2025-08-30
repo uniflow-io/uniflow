@@ -17,7 +17,6 @@
             </div>
         {% endif %}
 
-        {# Customer Information #}
         <div class="row mb-3">
             <label for="settings-firstname" class="col-sm-2 col-form-label">Firstname</label>
             <div class="col-sm-10">
@@ -54,7 +53,6 @@
             </div>
         </div>
 
-        {# Username #}
         <div class="row mb-3">
             <label for="settings-username" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-10">
@@ -73,7 +71,6 @@
             </div>
         </div>
 
-        {# API Key #}
         <div class="row mb-3">
             <label for="settings-apiKeyGenerate" class="col-sm-2 col-form-label">Api key</label>
             <div class="col-sm-10">
@@ -95,13 +92,12 @@
             </div>
         </div>
 
-        {# API Usage Display #}
         <div class="row mb-3">
             <label for="settings-apiKey" class="col-sm-2 col-form-label">Api usage</label>
             <div class="col-sm-10">
                 <div class="input-group">
                     <button type="button" class="input-group-text" id="copyApiUsage">
-                        <i class="bi bi-clipboard"></i>
+                        <twig:ux:icon name="mdi:clipboard" class="svg-inline--fa" />
                     </button>
                     <input
                         type="text"
@@ -115,7 +111,6 @@
             </div>
         </div>
 
-        {# Submit Button #}
         <div class="row mb-3">
             <div class="offset-sm-2 col-sm-10">
                 <div class="d-grid">
