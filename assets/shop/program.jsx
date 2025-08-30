@@ -19,6 +19,9 @@ class Program extends React.Component {
       folderTree: [],
       errors: {},
       programFlows: [],
+      user: {
+        apiKey: null
+      },
       program: {
         name: '',
         slug: '',
@@ -51,6 +54,26 @@ class Program extends React.Component {
 
       this.onFetchProgram();
       this.onFetchFlowData();
+      this.onFetchUserSettings();
+    }
+  }
+
+  onFetchUserSettings = async () => {
+    if (this.token) {
+      try {
+        const options = {
+          token: this.token
+        };
+        const userSettings = await this.api.getUserSettings(this.uid, options);
+
+        this.setState({
+          user: {
+            apiKey: userSettings.apiKey
+          }
+        });
+      } catch (error) {
+        console.error('Failed to fetch user settings:', error);
+      }
     }
   }
 
@@ -374,33 +397,53 @@ class Program extends React.Component {
   }
 
   getPhpClipboard = () => {
-    /*if (user.apiKey) {
-      return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key=${user.apiKey} ${program.slug}`;
-    }*/
+    if (this.state.user.apiKey) {
+      return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key=${this.state.user.apiKey} ${this.state.program.slug}`;
+    }
 
-    return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key={your-api-key} ${program.slug}`;
+    return `php -e "$(curl -s https://uniflow.io/assets/php.php)" bin/console app:client --api-key={your-api-key} ${this.state.program.slug}`;
   };
 
   getNodeClipboard = () => {
-    /*if (user.apiKey) {
-      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${user.apiKey} ${program.slug}`;
-    }*/
+    if (this.state.user.apiKey) {
+      return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key=${this.state.user.apiKey} ${this.state.program.slug}`;
+    }
 
-    return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${program.slug}`;
+    return `node -e "$(curl -s https://uniflow.io/assets/node.js)" - --api-key={your-api-key} ${this.state.program.slug}`;
   };
 
   onCopyPhpUsage = (event) => {
     event.preventDefault();
 
-    const clipboard = getPhpClipboard();
-    ui.copyTextToClipboard(clipboard);
+    const clipboard = this.getPhpClipboard();
+    navigator.clipboard.writeText(clipboard).then(() => {
+      // Show feedback
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '✓';
+      setTimeout(() => {
+        button.innerHTML = originalText;
+      }, 1000);
+    }).catch((err) => {
+      console.error('Failed to copy to clipboard:', err);
+    });
   };
 
   onCopyNodeUsage = (event) => {
     event.preventDefault();
 
-    const clipboard = getNodeClipboard();
-    ui.copyTextToClipboard(clipboard);
+    const clipboard = this.getNodeClipboard();
+    navigator.clipboard.writeText(clipboard).then(() => {
+      // Show feedback
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '✓';
+      setTimeout(() => {
+        button.innerHTML = originalText;
+      }, 1000);
+    }).catch((err) => {
+      console.error('Failed to copy to clipboard:', err);
+    });
   };
 
   render() {

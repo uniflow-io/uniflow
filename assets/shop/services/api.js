@@ -123,6 +123,14 @@ class Api {
       body
     );
   }
+
+  async getUserSettings(uid, options) {
+    return this.fetchApi(
+      `${this.getBaseUrl()}/user/${uid}/settings`,
+      options,
+      'GET'
+    );
+  }
 }
 
 export default Api;
