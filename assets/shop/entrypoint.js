@@ -3,3 +3,4 @@ import './bootstrap.js';
 
 import './base.js';
 import './program.jsx';
+import './settings.js';
