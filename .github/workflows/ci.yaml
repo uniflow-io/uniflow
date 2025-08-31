@@ -77,11 +77,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          (cd library/uniflow-api && composer install)
-          (cd library/uniflow-api && composer install -d tools/php-cs-fixer)
+          composer install
+          composer install -d tools/php-cs-fixer
 
       - name: Check and fix coding styles using PHP CS Fixer
-        run: (cd library/uniflow-api/tools && php-cs-fixer/vendor/bin/php-cs-fixer fix --config php-cs-fixer/.php-cs-fixer.php  --diff --dry-run)
+        run: (cd tools && php-cs-fixer/vendor/bin/php-cs-fixer fix --config php-cs-fixer/.php-cs-fixer.php  --diff --dry-run)
 
 #  phpcbf:
 #    name: Clean code with PHP Code Beautifier and Fixer
@@ -178,11 +178,11 @@ jobs:
 
       - name: 'Install dependencies'
         run: |
-          (cd library/uniflow-api && composer install)
-          (cd library/uniflow-api && composer install -d tools/phpstan)
+          composer install
+          composer install -d tools/phpstan
 
       - name: Execute PHPStan analysis
-        run: (cd library/uniflow-api/tools && phpstan/vendor/bin/phpstan --configuration=phpstan/phpstan.neon.dist)
+        run: (cd tools && phpstan/vendor/bin/phpstan --configuration=phpstan/phpstan.neon.dist)
 
   phpunit:
     name: Launch PHPUnit test suite
@@ -212,8 +212,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          (cd library/uniflow-api && composer install)
-          (cd library/uniflow-api && composer install -d tools/phpunit)
+          composer install
+          composer install -d tools/phpunit
 
 #      - name: Load Fixtures
 #        run: |
@@ -221,7 +221,7 @@ jobs:
 #          (cd library/uniflow-api && bin/console --env=test doctrine:schema:update --force)
 
       - name: Launch PHPUnit test suite
-        run: (cd library/uniflow-api/tools && phpunit/vendor/bin/phpunit --configuration phpunit/phpunit.xml)
+        run: (cd tools && phpunit/vendor/bin/phpunit --configuration phpunit/phpunit.xml)
 
 #  psalm:
 #    name: Run PHP Mess Detector
