@@ -35,7 +35,8 @@ class RegisterType extends AbstractType
                         'message' => 'Please enter your password.',
                     ]),
                 ],
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

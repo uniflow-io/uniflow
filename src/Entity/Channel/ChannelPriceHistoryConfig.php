@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\ChannelPriceHistoryConfig as BaseChannelPriceHis
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_channel_price_history_config')]
-class ChannelPriceHistoryConfig extends BaseChannelPriceHistoryConfig
-{
-}
+class ChannelPriceHistoryConfig extends BaseChannelPriceHistoryConfig {}

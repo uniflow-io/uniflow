@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components;
 
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -10,7 +12,8 @@ final class Search
 {
     use DefaultActionTrait;
 
-    public function getFlowItems() {
+    public function getFlowItems()
+    {
         return [
             /*[
                 'key' => 'uniflow-flow-assets',

@@ -70,7 +70,7 @@ class Program implements Stringable
     protected ?Folder $folder = null;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Client>
+     * @var Collection<int, Client>
      */
     #[Assert\NotBlank(message: "The client can't be empty")]
     #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'clients', cascade: ['persist'])]
@@ -78,7 +78,7 @@ class Program implements Stringable
     protected Collection $clients;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Tag>
+     * @var Collection<int, Tag>
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'programs', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'uniflow_program_tag')]

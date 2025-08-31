@@ -6,17 +6,16 @@ namespace App\Controller\Shop;
 
 use App\Model\Page;
 use App\Service\AppService;
-use DOMDocument;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Extra\Markdown\DefaultMarkdown as Markdown;
+
+use function count;
+use function in_array;
 
 #[Route('/', name: 'app_shop_')]
 class BlogController extends AbstractController
@@ -47,8 +46,8 @@ class BlogController extends AbstractController
         $articles = $this->getBlogArticles();
         $tags = [];
 
-        foreach($articles as $article) {
-            foreach($article['data']['tags'] as $tag) {
+        foreach ($articles as $article) {
+            foreach ($article['data']['tags'] as $tag) {
                 $tags[$tag] = [
                     'tag' => $tag,
                     'count' => isset($tags[$tag]) ? $tags[$tag]['count'] + 1 : 1,
@@ -70,7 +69,7 @@ class BlogController extends AbstractController
     public function tag(string $slug): Response
     {
         $articles = $this->getBlogArticles();
-        $articles = array_filter($articles, fn($article) => in_array($slug, $article['data']['tags']));
+        $articles = array_filter($articles, static fn ($article) => in_array($slug, $article['data']['tags'], true));
 
         return $this->render('shop/blog/tag.html.twig', [
             'page' => new Page(
@@ -87,7 +86,7 @@ class BlogController extends AbstractController
     {
         $article = $this->getBlogArticles($slug);
 
-        if($article === null) {
+        if ($article === null) {
             throw $this->createNotFoundException('Article not found');
         }
 
@@ -108,12 +107,12 @@ class BlogController extends AbstractController
     {
         $contributor = $this->getContributors($slug);
 
-        if($contributor === null) {
+        if ($contributor === null) {
             throw $this->createNotFoundException('Contributor not found');
         }
 
         $articles = $this->getBlogArticles();
-        $articles = array_filter($articles, fn($article) => $article['data']['author']['slug'] === $slug);
+        $articles = array_filter($articles, static fn ($article) => $article['data']['author']['slug'] === $slug);
 
         return $this->render('shop/blog/contributor.html.twig', [
             'page' => new Page(
@@ -126,10 +125,10 @@ class BlogController extends AbstractController
         ]);
     }
 
-    private function getBlogArticles(?string $slug = null): array|null
+    private function getBlogArticles(?string $slug = null): ?array
     {
         $blogDir = $this->getParameter('kernel.project_dir') . '/assets/docs/blog';
-        $finder = new \Symfony\Component\Finder\Finder();
+        $finder = new Finder();
         $articles = [];
 
         if (is_dir($blogDir)) {
@@ -171,38 +170,40 @@ class BlogController extends AbstractController
         }
 
         // Sort by date in descending order (newest first)
-        usort($articles, function ($a, $b) {
+        usort($articles, static function ($a, $b) {
             return $b['data']['date'] - $a['data']['date'];
         });
 
         return $articles;
     }
 
-    private function getPreviousArticle(array $article): array|null
+    private function getPreviousArticle(array $article): ?array
     {
         $articles = $this->getBlogArticles();
-        $index = array_search($article['data']['slug'], array_map(fn($article) => $article['data']['slug'], $articles));
+        $index = array_search($article['data']['slug'], array_map(static fn ($article) => $article['data']['slug'], $articles), true);
         if ($index === false || $index === 0) {
             return null;
         }
+
         return $articles[$index - 1];
     }
 
-    private function getNextArticle(array $article): array|null
+    private function getNextArticle(array $article): ?array
     {
         $articles = $this->getBlogArticles();
-        $index = array_search($article['data']['slug'], array_map(fn($article) => $article['data']['slug'], $articles));
+        $index = array_search($article['data']['slug'], array_map(static fn ($article) => $article['data']['slug'], $articles), true);
         if ($index === false || $index === count($articles) - 1) {
             return null;
         }
+
         return $articles[$index + 1];
     }
 
-    private function getContributors(?string $nameOrSlug = null): array|null
+    private function getContributors(?string $nameOrSlug = null): ?array
     {
         $slugger = new AsciiSlugger();
 
-        if($nameOrSlug !== null) {
+        if ($nameOrSlug !== null) {
             $nameOrSlug = $slugger->slug($nameOrSlug)->lower()->toString();
         }
 

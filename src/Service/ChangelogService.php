@@ -21,7 +21,7 @@ class ChangelogService
         $data = Yaml::parse($yamlContent);
 
         // Sort by date in descending order (newest first)
-        usort($data, function ($a, $b) {
+        usort($data, static function ($a, $b) {
             return strtotime($b['date']) - strtotime($a['date']);
         });
 
@@ -31,6 +31,7 @@ class ChangelogService
     public function getLatestVersion(): string
     {
         $items = $this->getChangelogItems();
+
         return $items[0]['tag'];
     }
 }

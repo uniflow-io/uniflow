@@ -9,6 +9,4 @@ use Sylius\Component\Product\Model\ProductOptionValueTranslation as BaseProductO
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_product_option_value_translation')]
-class ProductOptionValueTranslation extends BaseProductOptionValueTranslation
-{
-}
+class ProductOptionValueTranslation extends BaseProductOptionValueTranslation {}

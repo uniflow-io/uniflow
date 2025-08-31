@@ -9,6 +9,4 @@ use Sylius\Component\Customer\Model\CustomerGroup as BaseCustomerGroup;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_customer_group')]
-class CustomerGroup extends BaseCustomerGroup
-{
-}
+class CustomerGroup extends BaseCustomerGroup {}

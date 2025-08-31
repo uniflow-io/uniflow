@@ -161,7 +161,6 @@ class ProgramController extends AbstractController
      * return new JsonResponse($data);
      * }
      */
-
     #[Route(path: '/{uid}', name: 'api_program_get', methods: ['GET'])]
     public function get(Request $request, $uid): JsonResponse
     {

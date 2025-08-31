@@ -9,6 +9,4 @@ use Sylius\Component\Promotion\Model\CatalogPromotionTranslation as BaseCatalogP
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_catalog_promotion_translation')]
-class CatalogPromotionTranslation extends BaseCatalogPromotionTranslation
-{
-}
+class CatalogPromotionTranslation extends BaseCatalogPromotionTranslation {}

@@ -9,6 +9,4 @@ use Sylius\Component\Payment\Model\PaymentRequest as BasePaymentRequest;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_payment_request')]
-class PaymentRequest extends BasePaymentRequest
-{
-}
+class PaymentRequest extends BasePaymentRequest {}

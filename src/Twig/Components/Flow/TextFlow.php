@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components\Flow;
 
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -35,7 +37,8 @@ final class TextFlow
             return ['variable' => null, 'text' => null];
         }
 
-        list($variable, $text) = json_decode($data, true);
+        [$variable, $text] = json_decode($data, true);
+
         return ['variable' => $variable, 'text' => $text];
     }
 

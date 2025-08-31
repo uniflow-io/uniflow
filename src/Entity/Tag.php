@@ -34,7 +34,7 @@ class Tag implements Stringable
     protected string $name = '';
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
+     * @var Collection<int, Program>
      */
     #[ORM\ManyToMany(targetEntity: Program::class, mappedBy: 'tags', cascade: ['persist'])]
     protected Collection $programs;

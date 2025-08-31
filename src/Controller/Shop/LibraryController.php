@@ -6,14 +6,12 @@ namespace App\Controller\Shop;
 
 use App\Model\Page;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Yaml\Yaml;
+
+use function sprintf;
 
 #[Route('/', name: 'app_shop_')]
 class LibraryController extends AbstractController
@@ -23,7 +21,7 @@ class LibraryController extends AbstractController
     {
         $library = $this->getLibrary();
 
-        if($slug === null) {
+        if ($slug === null) {
             return $this->render('shop/library/library.html.twig', [
                 'page' => new Page(
                     page: 'library',
@@ -33,12 +31,12 @@ class LibraryController extends AbstractController
                 'library' => $library,
                 'card' => [
                     'slug' => null,
-                ]
+                ],
             ]);
         }
 
         $card = $this->getCard($slug);
-        if($card === null) {
+        if ($card === null) {
             throw $this->createNotFoundException('Card not found');
         }
 
@@ -58,31 +56,31 @@ class LibraryController extends AbstractController
         ]);
     }
 
-    private function getLibrary(): array|null
+    private function getLibrary(): ?array
     {
         $slugger = new AsciiSlugger();
 
         $libraryContent = file_get_contents($this->getParameter('kernel.project_dir') . '/assets/docs/library.yaml');
         $library = Yaml::parse($libraryContent);
 
-        foreach($library as $key => $card) {
+        foreach ($library as $key => $card) {
             $library[$key]['slug'] = $slugger->slug($card['title'])->lower()->toString();
         }
 
         return $library;
     }
 
-    private function getCard(?string $slug = null): array|null
+    private function getCard(?string $slug = null): ?array
     {
         $library = $this->getLibrary();
 
-        foreach($library as $card) {
-            if($card['slug'] === $slug) {
+        foreach ($library as $card) {
+            if ($card['slug'] === $slug) {
                 return $card;
             }
         }
 
-        if($slug !== null) {
+        if ($slug !== null) {
             return null;
         }
 

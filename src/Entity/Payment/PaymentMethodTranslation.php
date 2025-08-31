@@ -9,6 +9,4 @@ use Sylius\Component\Payment\Model\PaymentMethodTranslation as BasePaymentMethod
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_payment_method_translation')]
-class PaymentMethodTranslation extends BasePaymentMethodTranslation
-{
-}
+class PaymentMethodTranslation extends BasePaymentMethodTranslation {}

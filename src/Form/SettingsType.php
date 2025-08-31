@@ -31,8 +31,8 @@ class SettingsType extends AbstractType
                 ]),
             ],
         ]);
-        //$builder->add('facebookId', TextType::class);
-        //$builder->add('githubId', TextType::class);
+        // $builder->add('facebookId', TextType::class);
+        // $builder->add('githubId', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

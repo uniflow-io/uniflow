@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\ProductReview as BaseProductReview;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_product_review')]
-class ProductReview extends BaseProductReview
-{
-}
+class ProductReview extends BaseProductReview {}

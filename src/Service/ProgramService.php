@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Folder;
 use App\Entity\Program;
 use App\Entity\User\ShopUser as User;
 use App\Repository\ProgramRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Uid\Uuid;
 

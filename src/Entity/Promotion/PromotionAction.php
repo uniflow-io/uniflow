@@ -9,6 +9,4 @@ use Sylius\Component\Promotion\Model\PromotionAction as BasePromotionAction;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_promotion_action')]
-class PromotionAction extends BasePromotionAction
-{
-}
+class PromotionAction extends BasePromotionAction {}

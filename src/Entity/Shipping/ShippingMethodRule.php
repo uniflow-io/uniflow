@@ -9,6 +9,4 @@ use Sylius\Component\Shipping\Model\ShippingMethodRule as BaseShippingMethodRule
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_shipping_method_rule')]
-class ShippingMethodRule extends BaseShippingMethodRule
-{
-}
+class ShippingMethodRule extends BaseShippingMethodRule {}

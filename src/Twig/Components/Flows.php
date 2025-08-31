@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components;
 
 use App\Entity\Program;
@@ -13,7 +15,8 @@ final class Flows
 
     public Program $program;
 
-    public function getFlows() {
+    public function getFlows()
+    {
         return json_decode($this->program->getData(), true);
     }
 }

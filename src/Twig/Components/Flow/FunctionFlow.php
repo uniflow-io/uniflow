@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components\Flow;
 
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -30,6 +32,7 @@ final class FunctionFlow
     public function onDeserialize(?string $data = null): array
     {
         $code = $data ? json_decode($data, true) : null;
+
         return ['code' => $code];
     }
 

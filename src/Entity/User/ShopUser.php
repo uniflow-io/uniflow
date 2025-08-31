@@ -24,13 +24,13 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     protected ?string $apiKey = null;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
+     * @var Collection<int, Program>
      */
     #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'user', cascade: ['persist'])]
     protected Collection $programs;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
+     * @var Collection<int, Folder>
      */
     #[ORM\OneToMany(targetEntity: Folder::class, mappedBy: 'user', cascade: ['persist'])]
     protected Collection $folders;

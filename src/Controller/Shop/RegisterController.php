@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Route('/', name: 'app_shop_')]
@@ -40,7 +37,8 @@ class RegisterController extends AbstractController
 
             // Check if user already exists by checking customer email
             $existingCustomer = $this->entityManager->getRepository(Customer::class)
-                ->findOneBy(['email' => $formData['email']]);
+                ->findOneBy(['email' => $formData['email']])
+            ;
 
             if ($existingCustomer) {
                 $errors['email'] = ['This email is already registered.'];
@@ -60,8 +58,8 @@ class RegisterController extends AbstractController
                 $user->setPassword($hashedPassword);
 
                 // Set username to email
-                //$user->setUsername($formData['email']);
-                //$user->setUsernameCanonical($formData['email']);
+                // $user->setUsername($formData['email']);
+                // $user->setUsernameCanonical($formData['email']);
 
                 // Set default role and enable the user
                 $user->setRoles(['ROLE_USER']);
@@ -74,6 +72,7 @@ class RegisterController extends AbstractController
 
                 // Redirect to login page with success message
                 $this->addFlash('success', 'Registration successful! Please log in.');
+
                 return $this->redirectToRoute('app_shop_login');
             }
         } elseif ($form->isSubmitted() && !$form->isValid()) {

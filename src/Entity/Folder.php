@@ -49,13 +49,13 @@ class Folder implements Stringable
     protected ?Folder $parent = null;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Folder>
+     * @var Collection<int, Folder>
      */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent', cascade: ['persist'])]
     protected Collection $children;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Program>
+     * @var Collection<int, Program>
      */
     #[ORM\OneToMany(targetEntity: Program::class, mappedBy: 'folder', cascade: ['persist'])]
     protected Collection $programs;

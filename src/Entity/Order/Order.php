@@ -16,8 +16,8 @@ use Sylius\MolliePlugin\Entity\RecurringOrderTrait;
 #[ORM\Table(name: 'sylius_order')]
 class Order extends BaseOrder implements OrderInterface
 {
+    use AbandonedEmailOrderTrait;
     use MolliePaymentIdOrderTrait;
     use QRCodeOrderTrait;
     use RecurringOrderTrait;
-    use AbandonedEmailOrderTrait;
 }

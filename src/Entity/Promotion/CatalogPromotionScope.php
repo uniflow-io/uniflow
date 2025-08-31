@@ -9,6 +9,4 @@ use Sylius\Component\Core\Model\CatalogPromotionScope as BaseCatalogPromotionSco
 
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_catalog_promotion_scope')]
-class CatalogPromotionScope extends BaseCatalogPromotionScope
-{
-}
+class CatalogPromotionScope extends BaseCatalogPromotionScope {}

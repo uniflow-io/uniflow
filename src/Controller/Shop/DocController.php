@@ -6,15 +6,14 @@ namespace App\Controller\Shop;
 
 use App\Model\Page;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Extra\Markdown\DefaultMarkdown as Markdown;
+
+use function count;
 
 #[Route('/', name: 'app_shop_')]
 class DocController extends AbstractController
@@ -27,7 +26,7 @@ class DocController extends AbstractController
     public function doc(?string $slug = null): Response
     {
         $doc = $this->getDoc($slug ?? 'introduction');
-        if($doc === null) {
+        if ($doc === null) {
             throw $this->createNotFoundException('Doc not found');
         }
 
@@ -46,15 +45,14 @@ class DocController extends AbstractController
         ]);
     }
 
-    private function getDocs(): array|null
+    private function getDocs(): ?array
     {
         $docsContent = file_get_contents($this->getParameter('kernel.project_dir') . '/assets/docs/docs.yaml');
-        $docs = Yaml::parse($docsContent);
 
-        return $docs;
+        return Yaml::parse($docsContent);
     }
 
-    private function getDoc(?string $slug = null): array|null
+    private function getDoc(?string $slug = null): ?array
     {
         $slugger = new AsciiSlugger();
 
@@ -62,7 +60,7 @@ class DocController extends AbstractController
 
         $docDatas = [];
         $docsDir = $this->getParameter('kernel.project_dir') . '/assets/docs/docs';
-        $finder = new \Symfony\Component\Finder\Finder();
+        $finder = new Finder();
         $finder->files()->in($docsDir)->depth(0);
         foreach ($finder as $markdownDoc) {
             $doc = [];
@@ -86,52 +84,55 @@ class DocController extends AbstractController
         }
 
         $index = 0;
-        foreach($docs as $doc) {
-            foreach($doc['items'] as $item) {
+        foreach ($docs as $doc) {
+            foreach ($doc['items'] as $item) {
                 $itemSlug = $slugger->slug($item['title'])->lower()->toString();
                 $index++;
 
-                foreach($docDatas as $i => $docData) {
-                    if($itemSlug === $docData['data']['slug']) {
+                foreach ($docDatas as $i => $docData) {
+                    if ($itemSlug === $docData['data']['slug']) {
                         $docDatas[$i]['data']['index'] = $index;
+
                         break;
                     }
                 }
             }
         }
 
-        foreach($docDatas as $docData) {
-            if($slug === $docData['data']['slug']) {
+        foreach ($docDatas as $docData) {
+            if ($slug === $docData['data']['slug']) {
                 return $docData;
             }
         }
 
-        if($slug !== null) {
+        if ($slug !== null) {
             return null;
         }
 
-        usort($docDatas, fn($a, $b) => $a['data']['index'] <=> $b['data']['index']);
+        usort($docDatas, static fn ($a, $b) => $a['data']['index'] <=> $b['data']['index']);
 
         return $docDatas;
     }
 
-    private function getPreviousDoc(array $doc): array|null
+    private function getPreviousDoc(array $doc): ?array
     {
         $docs = $this->getDoc();
-        $index = array_search($doc['data']['slug'], array_map(fn($doc) => $doc['data']['slug'], $docs));
+        $index = array_search($doc['data']['slug'], array_map(static fn ($doc) => $doc['data']['slug'], $docs), true);
         if ($index === false || $index === 0) {
             return null;
         }
+
         return $docs[$index - 1];
     }
 
-    private function getNextDoc(array $doc): array|null
+    private function getNextDoc(array $doc): ?array
     {
         $docs = $this->getDoc();
-        $index = array_search($doc['data']['slug'], array_map(fn($doc) => $doc['data']['slug'], $docs));
+        $index = array_search($doc['data']['slug'], array_map(static fn ($doc) => $doc['data']['slug'], $docs), true);
         if ($index === false || $index === count($docs) - 1) {
             return null;
         }
+
         return $docs[$index + 1];
     }
 }

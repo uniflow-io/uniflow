@@ -7,7 +7,12 @@ use PhpCsFixer\Finder;
 $finder = Finder::create()
     ->ignoreVCSIgnored(true)
     ->ignoreDotFiles(false)
-    ->in(dirname(__DIR__, 2))
+    ->in([
+        dirname(__DIR__, 2) . '/src',
+        dirname(__DIR__, 2) . '/config',
+        dirname(__DIR__, 2) . '/public',
+        dirname(__DIR__, 2) . '/tests',
+    ])
     ->append([
         __FILE__,
     ])

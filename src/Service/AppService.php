@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Tag;
-use App\Repository\TagRepository;
-use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use DOMDocument;
+
+use function in_array;
+use function is_string;
+use function strlen;
 
 class AppService
 {
@@ -16,6 +16,7 @@ class AppService
     {
         if (!is_string($html)) {
             trigger_error('Function \'truncate_html\' expects argument 1 to be an string', E_USER_ERROR);
+
             return false;
         }
 
@@ -23,11 +24,11 @@ class AppService
             return $html;
         }
         $total = mb_strlen($ending);
-        $open_tags = array();
+        $open_tags = [];
         $return = '';
         $finished = false;
         $final_segment = '';
-        $self_closing_elements = array(
+        $self_closing_elements = [
             'area',
             'base',
             'br',
@@ -38,9 +39,9 @@ class AppService
             'input',
             'link',
             'meta',
-            'param'
-            );
-        $inline_containers = array(
+            'param',
+        ];
+        $inline_containers = [
             'a',
             'b',
             'abbr',
@@ -51,12 +52,12 @@ class AppService
             'span',
             'strong',
             'sub',
-            'sup'
-            );
+            'sup',
+        ];
         while (!$finished) {
             if (preg_match('/^<(\w+)[^>]*>/', $html, $matches)) { // Does the remaining string start in an opening tag?
                 // If not self-closing, place tag in $open_tags array:
-                if (!in_array($matches[1], $self_closing_elements)) {
+                if (!in_array($matches[1], $self_closing_elements, true)) {
                     $open_tags[] = $matches[1];
                 }
                 // Remove tag from $html:
@@ -65,7 +66,7 @@ class AppService
                 $return .= $matches[0];
             } elseif (preg_match('/^<\/(\w+)>/', $html, $matches)) { // Does the remaining string start in an end tag?
                 // Remove matching opening tag from $open_tags array:
-                $key = array_search($matches[1], $open_tags);
+                $key = array_search($matches[1], $open_tags, true);
                 if ($key !== false) {
                     unset($open_tags[$key]);
                 }
@@ -85,7 +86,7 @@ class AppService
                         $remainder = $length - $total;
                         $entities_length = 0;
                         if (preg_match_all('/&[0-9a-z]{2,8};|&#[0-9]{1,7};|&#x[0-9a-f]{1,6};/i', $segment, $entities, PREG_OFFSET_CAPTURE)) {
-                            foreach($entities[0] as $entity) {
+                            foreach ($entities[0] as $entity) {
                                 if ($entity[1] + 1 - $entities_length <= $remainder) {
                                     $remainder--;
                                     $entities_length += mb_strlen($entity[0]);
@@ -114,7 +115,7 @@ class AppService
             // Remove opening tag from end of $return:
             $return = preg_replace('/<(\w+)[^>]*>$/', '', $return);
             // Remove opening tag from $open_tags:
-            $key = array_search($matches[3], $open_tags);
+            $key = array_search($matches[3], $open_tags, true);
             if ($key !== false) {
                 unset($open_tags[$key]);
             }
@@ -131,13 +132,14 @@ class AppService
         // Add closing tags:
         $closing_tags = array_reverse($open_tags);
         $ending_added = false;
-        foreach($closing_tags as $tag) {
-            if (!in_array($tag, $inline_containers) && !$ending_added) {
+        foreach ($closing_tags as $tag) {
+            if (!in_array($tag, $inline_containers, true) && !$ending_added) {
                 $return .= $ending;
                 $ending_added = true;
             }
             $return .= '</' . $tag . '>';
         }
+
         return $return;
     }
 }

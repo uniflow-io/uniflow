@@ -71,7 +71,7 @@ class UserService
                 throw new AuthenticationException('User with this email already exists');
             }
             $user->setEmail($data['email']);
-            //$user->setUsername($data['email']); // Using email as username
+            // $user->setUsername($data['email']); // Using email as username
         }
 
         if (isset($data['plainPassword'])) {
@@ -122,8 +122,8 @@ class UserService
             'username' => $user->getUsername(),
             'firstname' => $user->getCustomer()->getFirstName(),
             'lastname' => $user->getCustomer()->getLastName(),
-            //'facebookId' => $user->getFacebookId(),
-            //'githubId' => $user->getGithubId(),
+            // 'facebookId' => $user->getFacebookId(),
+            // 'githubId' => $user->getGithubId(),
             'apiKey' => $user->getApiKey(),
             'roles' => $user->getRoles(),
             'links' => [
