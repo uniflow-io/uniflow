@@ -1,6 +1,6 @@
 ---
 title: Symfony UX
-date: 2025-08-17
+date: 2025-08-31
 author: Mathieu Ledru
 cover: images/cover.png
 coverSeo: images/cover.png
