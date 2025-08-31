@@ -1,0 +1,34 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Changelog</h3>
+            <ul class="timeline">
+                {% for item in changelogItems %}
+                    <li>
+                        <a href="
+                            {% if loop.index < changelogItems|length %}
+                                https://github.com/uniflow-io/uniflow/compare/{{ changelogItems[loop.index].tag }}...{{ item.tag }}
+                            {% else %}
+                                https://github.com/uniflow-io/uniflow/releases/tag/{{ item.tag }}
+                            {% endif %}
+                        " target="_blank" rel="noopener noreferrer">
+                            {{ item.tag }}
+                        </a>
+                        <span class="float-end">{{ item.date|date('F jS Y') }}</span>
+                        <p>
+                            {% for line in item.label|split('\n') %}
+                                <span>{{ line }}</span>
+                                {% if not loop.last %}<br />{% endif %}
+                            {% endfor %}
+                        </p>
+                        <hr />
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

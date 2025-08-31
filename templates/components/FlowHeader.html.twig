@@ -1,0 +1,36 @@
+<div{{ attributes }}>
+    <div class="row">
+        <div class="col-4 col-sm-2">
+            <h4>{{ title }}</h4>
+        </div>
+        <div class="col">
+            <div class="btn-toolbar" role="toolbar" aria-label="flow actions">
+                <div class="btn-group-sm" role="group">
+                    {# if 'uniflow' in clients and not isPlaying %}
+                        <button type="button" class="btn btn-primary" data-action="live#action" data-action-name="play">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    {% endif %}
+                    {% if 'uniflow' in clients and isPlaying %}
+                        <button type="button" class="btn">
+                            <span
+                                class="spinner-border spinner-border-sm"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
+                    {% endif #}
+                </div>
+            </div>
+        </div>
+        <div class="d-block col-auto">
+            <div class="btn-toolbar" role="toolbar" aria-label="flow actions">
+                <div class="btn-group-sm" role="group">
+                    <button type="button" class="btn" data-action="live#action" data-action-name="pop">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

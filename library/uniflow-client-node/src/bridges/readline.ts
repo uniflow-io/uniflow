@@ -1,1 +1,1 @@
-module.exports = require('readline')
+export default require('readline')

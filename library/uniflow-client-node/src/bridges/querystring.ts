@@ -1,2 +1,2 @@
 const querystring = require('querystring')
-module.exports = querystring
+export default querystring

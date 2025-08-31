@@ -1,0 +1,18 @@
+framework:
+    asset_mapper:
+        # The paths to make available to the asset mapper.
+        paths:
+            - assets/
+        excluded_patterns:
+            - '*/assets/styles/_*.scss'
+            - '*/assets/styles/**/_*.scss'
+            - '*/assets/shop/**/*'
+        missing_import_mode: strict
+        # Enable JSX transformation with the JSX plugin
+        extensions:
+            jsx: text/javascript
+
+when@prod:
+    framework:
+        asset_mapper:
+            missing_import_mode: warn

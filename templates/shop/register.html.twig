@@ -1,0 +1,88 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <h3>Register</h3>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <div class="card">
+                <article class="card-body">
+                    {{ form_start(form, {'attr': {'data-controller': 'register-form'}}) }}
+                        {% if errors.form is defined %}
+                            {% for message in errors.form %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if form_errors(form) %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form_errors(form) }}
+                            </div>
+                        {% endif %}
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                       <twig:ux:icon name="mdi:user" class="svg-inline--fa" />
+                                    </span>
+                                    {{ form_widget(form.email, {
+                                        'attr': {
+                                            'class': 'form-control' ~ (errors.email is defined ? ' is-invalid' : ''),
+                                            'placeholder': 'Email',
+                                            'autocomplete': 'email'
+                                        }
+                                    }) }}
+                                </div>
+                                {% if errors.email is defined %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for message in errors.email %}
+                                            {{ message }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                       <twig:ux:icon name="bi:key-fill" class="svg-inline--fa" />
+                                    </span>
+                                    {{ form_widget(form.password, {
+                                        'attr': {
+                                            'class': 'form-control' ~ (errors.password is defined ? ' is-invalid' : ''),
+                                            'placeholder': 'Password',
+                                            'autocomplete': 'new-password'
+                                        }
+                                    }) }}
+                                </div>
+                                {% if errors.password is defined %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for message in errors.password %}
+                                            {{ message }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary" data-register-form-target="submitButton">
+                                        Register
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

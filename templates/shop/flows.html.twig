@@ -1,0 +1,21 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <div class="row">
+    <div class="col-md-12">
+        <h3>Flows</h3>
+        <dl class="row">
+        {% for program in programs %}
+            <dt class="col-md-2 text-md-end fw-normal">
+            <a href="{{ path('app_shop_feed', {'user': program.user, 'path': program.path}) }}">{{ program.name }}</a>
+            </dt>
+            <dd class="col-md-10">
+            {{ program.description|markdown_to_html|raw }}
+            </dd>
+        {% endfor %}
+        </dl>
+    </div>
+    </div>
+</section>
+{% endblock %}

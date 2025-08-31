@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="true"
+    bootstrap="../../vendor/autoload.php"
+    cacheDirectory=".phpunit.cache"
+    colors="true"
+    executionOrder="depends,defects"
+    failOnRisky="true"
+    failOnWarning="true"
+    requireCoverageMetadata="false">
+  <coverage/>
+  <testsuites>
+    <testsuite name="Test Suite">
+      <directory>../../tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
+  <source>
+    <include>
+      <directory suffix=".php">../../src</directory>
+    </include>
+  </source>
+  <php>
+	<env name="APP_SECRET" value="16aa17bccc9fa9c52386dda545354fa2" />
+	<env name="KERNEL_CLASS" value="App\Kernel" />
+	<env name="DATABASE_URL" value="mysql://root:root@127.0.0.1:3311/uniflow?serverVersion=16" />
+	<env name="MAILER_DSN" value="smtp://localhost:1080" />
+  </php>
+</phpunit>

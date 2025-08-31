@@ -1,0 +1,17 @@
+#sylius_locale:
+#    driver: doctrine/orm
+#    locale: '%locale%'
+#    resources:
+#        locale:
+#            classes:
+#                model: Sylius\Component\Locale\Model\Locale
+#                interface: Sylius\Component\Locale\Model\LocaleInterface 
+
+#sylius_locale:
+#    driver: doctrine/orm
+#    locale: '%locale%'
+#    resources:
+#        locale:
+#            classes:
+#                model: Sylius\Component\Locale\Model\Locale
+#                interface: Sylius\Component\Locale\Model\LocaleInterface 

@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 
-@Service()
+//@Service()
 class UI {
   copyTextToClipboard(text: string) {
     const textArea = document.createElement('textarea');

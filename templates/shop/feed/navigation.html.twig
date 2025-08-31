@@ -1,0 +1,41 @@
+<div class="sidebar">
+    <twig:NavigationSearch />
+    <nav class="sidebar-nav{# if isCollapsed %} d-none d-sm-block{% endif #}">
+        <div class="sidebar-section">
+            <ul class="sidebar-items">
+                {# if feed.parentFolder %}
+                    <li>
+                        <span class="link">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </span>
+                        <a href="{{ path('app_shop_feed', {'folder': feed.parentFolder, 'user': user, 'back': true}) }}">Back</a>
+                    </li>
+                    <li class="{{ folderActiveClass }}">
+                        <span class="link">.</span>
+                        <a href="{{ path('app_shop_feed', {'folder': feed.parentFolder, 'user': user}) }}">.</a>
+                    </li>
+                {% endif #}
+                {% for item in navigation %}
+                    <li class="{% if (item.entity is not null and program is not null and item.type == 'program' and item.entity.uid == program.uid) or (item.entity is not null and folder is not null and item.type == 'folder' and item.entity.uid == folder.uid) %}active{% endif %}">
+                        <span class="link">
+                            {% if item.type == 'folder' %}
+                                <i class="fas fa-folder"></i> {{ item.entity.name }}
+                            {% endif %}
+                            {% if item.type == 'program' %}
+                                {{ item.entity.name }}
+                            {% endif %}
+                            {% if item.type == 'program' and item.entity.tags is defined %}
+                                {% for tag in item.entity.tags %}
+                                    <span class="badge badge-light mr-1">
+                                        {{ tag }}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </span>
+                        <a href="{{ path('app_shop_feed', {'path': item.entity.path, 'user': item.entity.user}) }}">{{ item.entity.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</div>

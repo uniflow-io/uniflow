@@ -1,0 +1,93 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <div class="row mb-3">
+        <div class="col-sm-6 offset-sm-3">
+            <div class="user">
+                <div class="user-header">
+                    <div class="profile_pic">
+                        <img
+                            src="{{ asset('docs/contributors/' ~ contributor.image) }}"
+                            alt="{{ contributor.name }}"
+                            class="img-fluid"
+                        />
+                    </div>
+                </div>
+                <div class="user-body">
+                    <div class="d-flex justify-content-center flex-column">
+                        <div class="name_container">
+                            <div class="name">{{ contributor.name }}</div>
+                        </div>
+                        <div class="description_container">
+                            <div class="description">{{ contributor.description }}</div>
+                        </div>
+                    </div>
+                    <div class="follow">
+                        <a
+                            href="https://twitter.com/{{ contributor.twitter[1:] }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-social btn-twitter"
+                        >
+                            <twig:ux:icon name="lucide:twitter" class="svg-inline--fa" /> {{ contributor.twitter }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <h3 class="page-header">Blog articles</h3>
+            {% for article in articles %}
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="card card-link">
+                            <a class="btn btn-default" href="{{ path('app_shop_article', {'slug': article.data.slug}) }}">
+                                Read More
+                            </a>
+                            {% if article.data.cover is defined %}
+                                <img
+                                    class="card-img-top"
+                                    src="{{ asset('docs/blog/' ~ article.data.slug ~ '/' ~ article.data.cover) }}"
+                                    style="width:auto; max-height: 50vh; object-fit: cover;"
+                                    alt="Cover"
+                                />
+                            {% endif %}
+                            <div class="card-body">
+                                <h4 class="card-title text-center">{{ article.data.title }}</h4>
+                                <p class="card-text text-center">{{ article.data.short_description|raw }}</p>
+                                <div class="row pt-1">
+                                    <div class="col-auto">
+                                        <small>
+                                            Posted {{ article.data.date|format_datetime('medium', 'short') }} by
+                                            <img
+                                                src="{{ asset('docs/contributors/' ~ article.data.author.image) }}"
+                                                alt="{{ article.data.author.name }}"
+                                                class="rounded-circle mx-2"
+                                                style="vertical-align: middle; display: inline-block; width: 30px; height: 30px;"
+                                            />
+                                            <a href="{{ path('app_shop_contributor', {'slug': article.data.author.slug}) }}">{{ article.data.author.name }}</a>
+                                        </small>
+                                    </div>
+                                    <div class="col-auto ms-auto">
+                                        {% if article.data.tags is defined %}
+                                            {% for tag in article.data.tags %}
+                                                <a href="{{ path('app_shop_tag', {'slug': tag}) }}" class="btn btn-sm btn-primary">
+                                                    <twig:ux:icon name="lucide:tag" class="svg-inline--fa" /> {{ tag }}
+                                                </a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

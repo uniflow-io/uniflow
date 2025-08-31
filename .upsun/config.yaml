@@ -1,0 +1,85 @@
+applications:
+  uniflow-api:
+    type: php:8.2
+    source:
+      root: "/"
+
+    web:
+      locations:
+        "/":
+          root: "public"
+          passthru: "/index.php"
+          index:
+            - index.php
+          scripts: true
+          expires: -1
+          allow: true
+
+    dependencies:
+      nodejs:
+        yarn: "*"
+
+    mounts:
+      "/var/cache":
+        source: instance
+        source_path: cache
+      "/var/log":
+        source: instance
+        source_path: log
+      "/var/sessions":
+        source: instance
+        source_path: sessions
+      "/public/uploads":
+        source: storage
+        source_path: uploads
+      "/public/media":
+        source: storage
+        source_path: media
+        
+
+    hooks:
+        #build: |
+        #    set -e
+        #    n auto
+        #    hash -r
+        #    curl -sS https://get.symfony.com/cli/installer | bash
+        #    mv "$PLATFORM_APP_DIR/.symfony5/bin/symfony" "$PLATFORM_APP_DIR/.global/bin/symfony"
+        #    cat >> "$PLATFORM_APP_DIR/.global/environment" <<EOS
+        #        export \$(symfony var:export)
+        #    EOS
+        #    yarn install --frozen-lockfile
+        #    yarn build:prod
+
+        deploy: |
+            set -e
+            rm -rf var/cache/*
+            mkdir -p public/media/image
+            bin/console doctrine:database:create --if-not-exists
+            bin/console doctrine:schema:update --force
+            bin/console lexik:jwt:generate-keypair --skip-if-exists
+            bin/console assets:install --symlink --relative public
+            bin/console cache:clear
+
+   #crons:
+   #  sylius-cancel-unpaid-orders:
+   #    spec: "0 2 * * *"
+   #    commands:
+   #      start: "php bin/console --env=prod sylius:cancel-unpaid-orders"
+   #  sylius-remove-expired-carts:
+   #    spec: "0 2 * * *"
+   #    commands:
+   #      start: "php bin/console --env=prod sylius:remove-expired-carts"
+
+    variables:
+        env:
+            APP_ENV: "dev"
+            APP_DEBUG: 1
+
+    runtime:
+        extensions:
+            - pdo_pgsql
+            - sodium
+
+    relationships:
+        database: "db:postgresql"
+

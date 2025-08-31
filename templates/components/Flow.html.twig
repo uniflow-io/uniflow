@@ -1,0 +1,15 @@
+<div{{ attributes }}>
+{% if flow.flow == '@uniflow-io/uniflow-flow-function' %}
+    <twig:Flow:FunctionFlow data="{{ flow.data }}" />
+{% elseif flow.flow == '@uniflow-io/uniflow-flow-object' %}
+    <twig:Flow:ObjectFlow data="{{ flow.data }}" />
+{% elseif flow.flow == '@uniflow-io/uniflow-flow-prompt' %}
+    <twig:Flow:PromptFlow data="{{ flow.data }}" />
+{% elseif flow.flow == '@uniflow-io/uniflow-flow-text' %}
+    <twig:Flow:TextFlow data="{{ flow.data }}" />
+{% elseif flow.flow == '@uniflow-io/uniflow-flow-assets' %}
+    <twig:Flow:AssetsFlow data="{{ flow.data }}" />
+{% elseif flow.flow == '@uniflow-io/uniflow-flow-canvas' %}
+    <twig:Flow:CanvasFlow data="{{ flow.data }}" />
+{% endif %}
+</div>

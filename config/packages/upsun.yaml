@@ -1,0 +1,22 @@
+parameters:
+    # Adds a fallback DATABASE_URL if the environment variable is not set
+    # This allows you to run cache:warmup even if your
+    # environment variables are not available yet.
+    # You should not need to change this value.
+    env(DATABASE_URL): ''
+
+services:
+    # PlatformSH Database configuration
+    PlatformshConfig:
+        class: '\Platformsh\ConfigReader\Config'
+        factory: ['Platformsh\ConfigReader\Config', 'fromEnvironment']
+
+    database_config:
+        class: stdClass
+        factory: ['@PlatformshConfig', 'credentials']
+        arguments: ['db']
+
+    # Inject configuration
+    App\Service\PlatformshConfigurationInjector:
+        calls:
+            - [injectDatabaseConfiguration, ['@database_config']] 

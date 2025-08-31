@@ -32,14 +32,16 @@ export interface ApiOptions {
   token?: string;
 }
 
-@Service()
+//@Service()
 class Api {
-  @Inject(() => Env)
+  //@Inject(() => Env)
   // @ts-ignore
-  private env: Env;
+  //private env: Env;
+
+  constructor(private env: Env) {}
 
   private getBaseUrl() {
-    return `${this.env.get('apiUrl')}/api`;
+    return `${this.env.get('apiUrl')}/api/v1/uniflow`;
   }
 
   private getQuery(query?: { [key: string]: string | number | undefined }): string {
@@ -62,7 +64,7 @@ class Api {
     return options?.token
       ? {
           headers: {
-            'Uniflow-Authorization': `Bearer ${options.token}`,
+            'Authorization': `Bearer ${options.token}`,
           },
         }
       : {};
@@ -183,7 +185,7 @@ class Api {
 
   async createLead(body: Partial<LeadApiType>): Promise<LeadApiType> {
     try {
-      const response = await request.post(`${this.getBaseUrl()}/leads`, body);
+      const response = await request.post(`${this.getBaseUrl()}/lead`, body);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -192,7 +194,7 @@ class Api {
 
   async getLead(path: { uid: UuidType }): Promise<LeadApiType> {
     try {
-      const response = await request.get(`${this.getBaseUrl()}/leads/${path.uid}`);
+      const response = await request.get(`${this.getBaseUrl()}/lead/${path.uid}`);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -201,7 +203,7 @@ class Api {
 
   async updateLead(path: { uid: UuidType }, body: Partial<LeadApiType>): Promise<LeadApiType> {
     try {
-      const response = await request.put(`${this.getBaseUrl()}/leads/${path.uid}`, body);
+      const response = await request.put(`${this.getBaseUrl()}/lead/${path.uid}`, body);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -213,7 +215,7 @@ class Api {
     perPage?: PerPageType;
   }): Promise<PaginationType<ProgramApiType>> {
     try {
-      const response = await request.get(`${this.getBaseUrl()}/programs${this.getQuery(query)}`);
+      const response = await request.get(`${this.getBaseUrl()}/program${this.getQuery(query)}`);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -227,7 +229,7 @@ class Api {
   ): Promise<ProgramApiType> {
     try {
       const response = await request.put(
-        `${this.getBaseUrl()}/programs/${path.uid}`,
+        `${this.getBaseUrl()}/program/${path.uid}`,
         body,
         this.getOptions(options)
       );
@@ -243,7 +245,7 @@ class Api {
   ): Promise<boolean> {
     try {
       const response = await request.delete(
-        `${this.getBaseUrl()}/programs/${path.uid}`,
+        `${this.getBaseUrl()}/program/${path.uid}`,
         this.getOptions(options)
       );
       return response.data;
@@ -258,7 +260,7 @@ class Api {
   ): Promise<{ data: string | null }> {
     try {
       const response = await request.get(
-        `${this.getBaseUrl()}/programs/${path.uid}/flows`,
+        `${this.getBaseUrl()}/program/${path.uid}/flows`,
         this.getOptions(options)
       );
       return response.data;
@@ -274,7 +276,7 @@ class Api {
   ): Promise<boolean> {
     try {
       const response = await request.put(
-        `${this.getBaseUrl()}/programs/${path.uid}/flows`,
+        `${this.getBaseUrl()}/program/${path.uid}/flows`,
         body,
         this.getOptions(options)
       );
@@ -286,7 +288,7 @@ class Api {
 
   async createUser(body: { email: EmailType; password: PasswordType }): Promise<UserApiType> {
     try {
-      const response = await request.post(`${this.getBaseUrl()}/users`, body);
+      const response = await request.post(`${this.getBaseUrl()}/user`, body);
       return response.data;
     } catch (error) {
       throw this.handleApiError(error);
@@ -299,7 +301,7 @@ class Api {
   ): Promise<UserApiType> {
     try {
       const response = await request.get(
-        `${this.getBaseUrl()}/users/${path.uid}/settings`,
+        `${this.getBaseUrl()}/user/${path.uid}/settings`,
         this.getOptions(options)
       );
       return response.data;
@@ -315,7 +317,7 @@ class Api {
   ): Promise<UserApiType> {
     try {
       const response = await request.put(
-        `${this.getBaseUrl()}/users/${path.uid}/settings`,
+        `${this.getBaseUrl()}/user/${path.uid}/settings`,
         body,
         this.getOptions(options)
       );
@@ -331,7 +333,7 @@ class Api {
   ): Promise<ConfigApiType> {
     try {
       const response = await request.get(
-        `${this.getBaseUrl()}/users/${path.uid}/admin-config`,
+        `${this.getBaseUrl()}/user/${path.uid}/admin-config`,
         this.getOptions(options)
       );
       return response.data;
@@ -347,7 +349,7 @@ class Api {
   ): Promise<ConfigApiType> {
     try {
       const response = await request.put(
-        `${this.getBaseUrl()}/users/${path.uid}/admin-config`,
+        `${this.getBaseUrl()}/user/${path.uid}/admin-config`,
         body,
         this.getOptions(options)
       );
@@ -364,7 +366,7 @@ class Api {
   ): Promise<PaginationType<FolderApiType>> {
     try {
       const response = await request.get(
-        `${this.getBaseUrl()}/users/${path.uid}/folders${this.getQuery(query)}`,
+        `${this.getBaseUrl()}/user/${path.uid}/folders${this.getQuery(query)}`,
         this.getOptions(options)
       );
       return response.data;
@@ -380,7 +382,7 @@ class Api {
   ): Promise<FolderApiType> {
     try {
       const reponse = await request.post(
-        `${this.getBaseUrl()}/users/${path.uid}/folders`,
+        `${this.getBaseUrl()}/user/${path.uid}/folders`,
         body,
         this.getOptions(options)
       );
@@ -397,7 +399,7 @@ class Api {
   ): Promise<PaginationType<ProgramApiType>> {
     try {
       const response = await request.get(
-        `${this.getBaseUrl()}/users/${path.uid}/programs${this.getQuery(query)}`,
+        `${this.getBaseUrl()}/user/${path.uid}/programs${this.getQuery(query)}`,
         this.getOptions(options)
       );
       return response.data;
@@ -421,7 +423,7 @@ class Api {
   ): Promise<ProgramApiType> {
     try {
       const response = await request.post(
-        `${this.getBaseUrl()}/users/${path.uid}/programs`,
+        `${this.getBaseUrl()}/user/${path.uid}/programs`,
         body,
         this.getOptions(options)
       );

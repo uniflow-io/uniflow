@@ -1,0 +1,49 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Contact</h3>
+
+            <p class="text-center">
+                You got a question about Uniflow? Write more here.
+            </p>
+
+            {{ form_start(form) }}
+                {% if form_errors(form) %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+
+                {{ form_row(form.email, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Email'
+                    },
+                    'label': false
+                }) }}
+                {{ form_row(form.message, {
+                    'attr': {
+                        'class': 'form-control',
+                        'placeholder': 'Message',
+                        'rows': '15'
+                    },
+                    'label': false
+                }) }}
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary" data-contact-form-target="submitButton">
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</section>
+{% endblock %}

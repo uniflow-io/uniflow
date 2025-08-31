@@ -1,0 +1,25 @@
+<div{{ attributes }}>
+<twig:FlowHeader
+        title="Text"
+    />
+<form class="form-sm-horizontal">
+    <div class="form-group">
+        <label for="variable" class="form-label">Variable</label>
+        <input
+            type="text"
+            id="variable"
+            class="form-control"
+            value="{{ variable }}"
+            data-action="change->flow#updateVariable"
+        />
+    </div>
+    <div class="form-group">
+        <label for="text" class="form-label">Text</label>
+        <textarea
+            id="text"
+            class="form-control editor"
+            data-action="change->flow#updateText"
+        >{{ text }}</textarea>
+    </div>
+</form>
+</div>

@@ -1,0 +1,25 @@
+twig:
+    paths: ['%kernel.project_dir%/templates']
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    form_themes: ['bootstrap_5_horizontal_layout.html.twig']
+
+services:
+    _defaults:
+        public: false
+        autowire: true
+        autoconfigure: true
+
+    Twig\Extra\Intl\IntlExtension: ~
+    Twig\Extra\String\StringExtension: ~
+    Twig\Extra\Markdown\MarkdownExtension: ~
+    Twig\Extra\Markdown\MarkdownRuntime:
+        tags:
+            - { name: twig.runtime }
+        arguments:
+            $converter: '@Twig\Extra\Markdown\DefaultMarkdown'
+    Twig\Extra\Markdown\DefaultMarkdown: ~
+
+when@test_cached:
+    twig:
+        strict_variables: true

@@ -1,0 +1,78 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<section class="section container-fluid">
+    <h3>Login</h3>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <div class="card mb-3">
+                <article class="card-body">
+                    {{ form_start(form, {'attr': {'data-controller': 'login-form'}}) }}
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
+                        {% endif %}
+
+                        {% if form_errors(form) %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form_errors(form) }}
+                            </div>
+                        {% endif %}
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                       <twig:ux:icon name="mdi:user" class="svg-inline--fa" />
+                                    </span>
+                                    {{ form_widget(form.username, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Email or Username',
+                                            'autocomplete': 'username'
+                                        }
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                       <twig:ux:icon name="bi:key-fill" class="svg-inline--fa" />
+                                    </span>
+                                    {{ form_widget(form.password, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Password',
+                                            'autocomplete': 'current-password'
+                                        },
+                                        'label': false
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary" data-login-form-target="submitButton">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(form) }}
+                </article>
+            </div>
+            <p class="text-center">
+                <a href="{{ path('app_shop_register') }}">
+                    <twig:ux:icon name="stash:signin" class="svg-inline--fa" /> Register
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

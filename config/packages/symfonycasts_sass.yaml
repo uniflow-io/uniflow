@@ -1,0 +1,2 @@
+symfonycasts_sass:
+    binary: 'node_modules/.bin/sass'

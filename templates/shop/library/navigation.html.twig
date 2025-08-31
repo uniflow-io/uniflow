@@ -1,0 +1,42 @@
+<div class="sidebar col-12 col-sm-3">
+    {#<form class="sidebar-search d-flex align-items-center" role="search">
+        <div class="input-group">
+            <input
+                type="search"
+                class="form-control ds-input"
+                placeholder="Search..."
+                aria-label="Search for..."
+            />
+        </div>
+        <button
+            class="btn d-sm-none py-0 px-0 ms-3"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#sidebar-nav"
+            aria-expanded="false"
+            aria-controls="sidebar-nav"
+        >
+            <twig:ux:icon name="lucide:menu" class="svg-inline--fa" />
+        </button>
+    </form>#}
+    <nav id="sidebar-nav" class="sidebar-nav collapse d-sm-block">
+        <div class="sidebar-section">
+            <ul class="sidebar-items">
+                {% for cardItem in library %}
+                <li class="{% if card.slug == cardItem.slug %}active{% endif %}">
+                    <span class="link">
+                        {{ cardItem.title }}
+                        {% for catalog in cardItem.catalogs %}
+                            <span class="badge badge-light mr-1">
+                                {{ catalog }}
+                            </span>
+                        {% endfor %}
+                    </span>
+                    <span>{{ cardItem.package }}</span>
+                    <a href="{{ path('app_shop_library', {'slug': cardItem.slug}) }}">{{ cardItem.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</div>

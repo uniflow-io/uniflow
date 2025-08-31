@@ -1,0 +1,98 @@
+services:
+    php:
+        image: ghcr.io/sylius/sylius-php:8.3-alpine
+        # image: ghcr.io/sylius/sylius-php:8.3-fixuid-xdebug-alpine
+        user: ${DOCKER_USER:-1000:1000}
+        depends_on:
+            mysql:
+                condition: service_healthy
+        environment:
+            # You can move these environment variables to your .env.local file
+            APP_ENV: ${ENV:-dev}
+            APP_SECRET: EDITME
+            DATABASE_URL: "mysql://root@mysql/uniflow_%kernel.environment%"
+            MAILER_DSN: smtp://mailhog:1025
+            MESSENGER_TRANSPORT_DSN: doctrine://default
+            SYLIUS_MESSENGER_TRANSPORT_MAIN_DSN: doctrine://default
+            SYLIUS_MESSENGER_TRANSPORT_MAIN_FAILED_DSN: doctrine://default?queue_name=main_failed
+            SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_DSN: doctrine://default?queue_name=catalog_promotion_removal
+            SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_FAILED_DSN: doctrine://default?queue_name=catalog_promotion_removal_failed
+            SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN: sync://
+            SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN: sync://
+            PHP_DATE_TIMEZONE: ${PHP_DATE_TIMEZONE:-UTC}
+            XDEBUG_MODE: off
+            XDEBUG_CONFIG: >-
+                client_host=host.docker.internal
+                client_port=9003
+                log=/dev/stdout
+            # This should correspond to the server declared in PHPStorm `Preferences | Languages & Frameworks | PHP | Servers`
+            # Then PHPStorm will use the corresponding path mappings
+            PHP_IDE_CONFIG: serverName=sylius
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        volumes:
+          - .:/srv/sylius:rw
+          # if you develop on Linux, you may use a bind-mounted host directory instead
+          #- ./var:/srv/sylius/var:rw
+          #- ./public:/srv/sylius/public:rw,delegated
+          # if you develop on Linux, you may use a bind-mounted host directory instead
+          #- ./public/media:/srv/sylius/public/media:rw
+#          - public-media:/srv/sylius/public/media:rw
+    mysql:
+        image: mysql:8.4
+        platform: linux/amd64
+        healthcheck:
+            test: '/usr/bin/mysql --execute "SHOW databases;"'
+            timeout: 3s
+            interval: 1s
+            retries: 10
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        cap_add:
+            - SYS_NICE # prevent "mbind: Operation not permitted" errors
+        volumes:
+            - mysql-data:/var/lib/mysql:rw
+        ports:
+            - "8086:3306"
+    nginx:
+        image: ghcr.io/sylius/sylius-nginx:latest
+        depends_on:
+            - php
+        volumes:
+            - ./public:/srv/sylius/public:ro
+            # if you develop on Linux, you may use a bind-mounted host directory instead
+            #- ./public/media:/srv/sylius/public/media:ro
+#            - public-media:/srv/sylius/public/media:ro,nocopy
+        ports:
+            - "8016:80" # HTTP
+    nodejs:
+        image: node:${NODE_VERSION:-22}-alpine
+        user: ${DOCKER_USER:-1000:1000}
+        working_dir: /srv/sylius
+        entrypoint: [ "/bin/sh","-c" ]
+        command:
+            - |
+                npm install
+                npm run build
+        volumes:
+            - .:/srv/sylius:rw,cached
+            - ./public:/srv/sylius/public:rw,delegated
+    mailhog:
+        # do not use in production!
+        ports:
+            - "8025:8025"
+        image: mailhog/mailhog:latest
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        depends_on:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: root
+            PMA_PASSWORD: ""
+        ports:
+            - "8081:80"
+
+volumes:
+    mysql-data:
+    public-media:

@@ -1,0 +1,133 @@
+services:
+    # Default configuration for services in *this* file
+    _defaults:
+        # Automatically injects dependencies in your services
+        autowire: true
+
+        # Automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+
+        # Allows optimizing the container by removing unused services; this also means
+        # fetching services directly from the container via $container->get() won't work
+        public: false
+
+        #bind:
+        #    $appOauthFacebookId:   '%env(resolve:APP_FACEBOOK_ID)%'
+        #    $appOauthGithubId:     '%env(resolve:APP_GITHUB_ID)%'
+        #    $appOauthGithubSecret: '%env(resolve:APP_GITHUB_SECRET)%'
+        #    $appOauthMediumId:     '%env(resolve:APP_MEDIUM_ID)%'
+        #    $appOauthMediumSecret: '%env(resolve:APP_MEDIUM_SECRET)%'
+        #    $facebookAppId:        '%env(resolve:APP_FACEBOOK_ID)%'
+        #    $facebookAppSecret:    '%env(resolve:APP_FACEBOOK_SECRET)%'
+        #    $githubClientId:       '%env(resolve:APP_GITHUB_ID)%'
+        #    $githubClientSecret:   '%env(resolve:APP_GITHUB_SECRET)%'
+
+    _instanceof:
+        Sylius\Bundle\ResourceBundle\Controller\ResourceController:
+            autowire: false
+        Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType:
+            autowire: false
+
+    # Makes classes in src/ available to be used as services;
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{Entity,Kernel.php}'
+
+    # Controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # Configure LoginController with specific user provider
+    App\Controller\Shop\LoginController:
+        arguments:
+            $userProvider: '@sylius.shop_user_provider.email_or_name_based'
+            $passwordHasher: '@security.user_password_hasher'
+            $eventDispatcher: '@event_dispatcher'
+
+    #App\Service\AuthService:
+    #    arguments:
+    #        $em: '@doctrine.orm.entity_manager'
+    #        $userService: '@App\Service\UserService'
+    #        $passwordHasher: '@security.user_password_hasher'
+    #        $jwtManager: '@lexik_jwt_authentication.jwt_manager'
+    #        $httpClient: '@http_client'
+            #$facebookAppId: '%env(resolve:APP_FACEBOOK_ID)%'
+            #$facebookAppSecret: '%env(resolve:APP_FACEBOOK_SECRET)%'
+            #$githubClientId: '%env(resolve:APP_GITHUB_ID)%'
+            #$githubClientSecret: '%env(resolve:APP_GITHUB_SECRET)%'
+
+    Symfony\Component\Cache\Adapter\TagAwareAdapter:
+        arguments:
+            - '@cache.app'
+
+    App\Service\ChangelogService:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'
+    
+    # Explicitly define the kernel service
+#    App\Kernel:
+#        public: true
+
+    # Translation and locale services
+#    sylius.locale_provider:
+#        class: Sylius\Component\Locale\Provider\LocaleProvider
+#        arguments:
+#            $localeRepository: '@Sylius\Component\Locale\Provider\LocaleCollectionProviderInterface'
+#            $defaultLocaleCode: '%locale%'
+#
+#    sylius.translation.translatable_listener.doctrine.orm:
+#        class: Sylius\Bundle\ResourceBundle\EventListener\ORMTranslatableListener
+#        arguments:
+#            - '@sylius.locale_provider'
+#            - '@sylius.translatable_entity_locale_assigner'
+#        tags:
+#            - { name: doctrine.event_listener, event: postLoad }
+#            - { name: doctrine.event_listener, event: prePersist }
+#            - { name: doctrine.event_listener, event: preUpdate }
+
+    # Configure API Platform documentation modifiers
+#    sylius.api.openapi.documentation_modifier.accept_language_header:
+#        class: Sylius\Bundle\ApiBundle\OpenApi\Documentation\AcceptLanguageHeaderDocumentationModifier
+#        tags:
+#            - { name: sylius.openapi.documentation_modifier }
+
+    # Add routing loader services
+#    routing.loader:
+#        class: Symfony\Bundle\FrameworkBundle\Routing\DelegatingLoader
+#        public: true
+#        arguments:
+#            - '@routing.resolver'
+#
+#    routing.resolver:
+#        class: Symfony\Component\Config\Loader\LoaderResolver
+#        arguments:
+#            - ['@routing.loader.yaml'] #, '@routing.loader.annotation']
+#
+#    routing.loader.yaml:
+#        class: Symfony\Component\Routing\Loader\YamlFileLoader
+#        arguments: ['@file_locator']
+#        tags: [routing.loader]
+
+#    routing.loader.annotation:
+#        class: Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader
+#        arguments: ['@annotation_reader']
+#        tags: [routing.loader]
+
+    #gedmo.mapping.driver.attribute:
+    #    class: Gedmo\Mapping\Driver\AttributeReader
+
+    # Gedmo Sluggable Extension Listener
+    #gedmo.listener.sluggable:
+    #    class: Gedmo\Sluggable\SluggableListener
+    #    tags:
+    #        - { name: doctrine.event_listener, event: 'onFlush' }
+    #        - { name: doctrine.event_listener, event: 'loadClassMetadata' }
+    #        - { name: doctrine.event_listener, event: 'prePersist' }
+        # calls:
+            # Uncomment the below call if using attributes, and comment the call for the annotation reader
+            # - [ setAnnotationReader, [ '@gedmo.mapping.driver.attribute' ] ]
+            # The `annotation_reader` service was deprecated in Symfony 6.4 and removed in Symfony 7.0
+            # - [ setAnnotationReader, [ '@annotation_reader' ] ]

@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\DataFixture;
+
+use App\Entity\Client;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+
+class ClientFixture extends Fixture
+{
+    public function load(ObjectManager $manager): void
+    {
+        foreach (['uniflow', 'php', 'node', 'chome', 'jetbrains', 'rust'] as $name) {
+            $client = new Client();
+            $client->setName($name);
+
+            $manager->persist($client);
+        }
+
+        $manager->flush();
+    }
+}

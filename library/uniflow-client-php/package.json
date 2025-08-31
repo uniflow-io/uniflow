@@ -1,0 +1,31 @@
+{
+  "name": "@uniflow-io/uniflow-client-php",
+  "version": "1.1.15",
+  "description": "Uniflow php client",
+  "author": {
+    "name": "Mathieu Ledru",
+    "email": "matyo91@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/uniflow-io/uniflow/issues"
+  },
+  "homepage": "https://github.com/uniflow-io/uniflow/tree/1.x/library/uniflow-client-php#readme",
+  "keywords": [
+    "uniflow",
+    "uniflow-client"
+  ],
+  "license": "SEE LICENSE IN LICENSE.md",
+  "main": "./public/index.php",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uniflow-io/uniflow.git",
+    "directory": "library/uniflow-client-php"
+  },
+  "publisher": "matyo91",
+  "categories": [
+    "Other"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

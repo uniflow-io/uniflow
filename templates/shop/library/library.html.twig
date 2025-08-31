@@ -1,0 +1,18 @@
+{% extends 'shop/base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row flex-sm-nowrap">
+    {% include 'shop/library/navigation.html.twig' with {'library': library, 'slug': card.slug} %}
+    <section class="section section-with-sidebar col">
+        <h1>Library</h1>
+        <p>Uniflow Library list all Cards.</p>
+        <p>Each Card that can combine multiple Catalogs such as Flows and Clients.</p>
+        <p>Use the search bar to the left to find a Card.</p>
+        <p>Flows and Clients are <a href="{{ path('app_shop_doc', {'slug': 'concepts'}) }}">key</a> part of Uniflow.</p>
+        <p>To make you own Flow or Client public, you can get more information at <a href="{{ path('app_shop_doc', {'slug': 'submitting-to-library'}) }}">Submitting to Library</a></p>
+        <p>If you are looking why we structured the whole project around Library concept, be sure get more interest by reading <a href="https://en.wikipedia.org/wiki/The_Library_of_Babel">The Library of Babel</a></p>
+    </section>
+    </div>
+</div>
+{% endblock %}
