@@ -162,13 +162,13 @@ class ProgramController extends AbstractController
      * }
      */
     #[Route(path: '/{uid}', name: 'api_program_get', methods: ['GET'])]
-    public function get(Request $request, $uid): JsonResponse
+    public function get($uid): JsonResponse
     {
         $user = $this->getUser();
 
         $entity = $this->programRepository->findOneByUid($user, $uid);
 
-        if (!$entity) {
+        if (!$entity instanceof Program) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
@@ -193,13 +193,13 @@ class ProgramController extends AbstractController
     public function update(Request $request, $uid): JsonResponse
     {
         $user = $this->getUser();
-        if (!$user) {
+        if (!$user instanceof UserInterface) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
         $entity = $this->programRepository->findOneByUid($user, $uid);
 
-        if (!$entity) {
+        if (!$entity instanceof Program) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
@@ -211,7 +211,7 @@ class ProgramController extends AbstractController
     {
         $entity = $this->programRepository->findOneByUid(null, $uid);
 
-        if (!$entity) {
+        if (!$entity instanceof Program) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 
@@ -237,7 +237,7 @@ class ProgramController extends AbstractController
 
         $entity = $this->programRepository->findOneByUid($user, $uid);
 
-        if (!$entity) {
+        if (!$entity instanceof Program) {
             throw $this->createNotFoundException('Unable to find Program entity.');
         }
 

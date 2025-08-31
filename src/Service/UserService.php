@@ -70,6 +70,7 @@ class UserService
             if ($existingUser !== null) {
                 throw new AuthenticationException('User with this email already exists');
             }
+
             $user->setEmail($data['email']);
             // $user->setUsername($data['email']); // Using email as username
         }

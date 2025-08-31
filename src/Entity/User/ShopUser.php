@@ -10,6 +10,7 @@ use App\Entity\Traits\UidTrait;
 use App\Repository\User\ShopUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Core\Model\ShopUser as BaseShopUser;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -20,7 +21,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
 {
     use UidTrait;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $apiKey = null;
 
     /**

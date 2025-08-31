@@ -148,6 +148,7 @@ class BlogController extends AbstractController
                     $data = [];
                     $markdown = $fileContent;
                 }
+
                 $htmlMarkdown = $this->markdown->convert($markdown);
 
                 $data['slug'] = $articleSlug;
@@ -170,9 +171,7 @@ class BlogController extends AbstractController
         }
 
         // Sort by date in descending order (newest first)
-        usort($articles, static function ($a, $b) {
-            return $b['data']['date'] - $a['data']['date'];
-        });
+        usort($articles, static fn ($a, $b) => $b['data']['date'] - $a['data']['date']);
 
         return $articles;
     }

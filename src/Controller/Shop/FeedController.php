@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Shop;
 
+use App\Entity\Program;
 use App\Form\ProgramType;
 use App\Model\Page;
 use App\Repository\FolderRepository;
@@ -16,29 +17,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/', name: 'app_shop_')]
 class FeedController extends AbstractController
 {
     public function __construct(
-        private ShopUserRepository $shopUserRepository,
-        private ProgramRepository $programRepository,
-        private ProgramService $programService,
-        private FolderRepository $folderRepository,
-        private FolderService $folderService,
-        private JWTTokenManagerInterface $jwtManager,
+        private readonly ShopUserRepository $shopUserRepository,
+        private readonly ProgramRepository $programRepository,
+        private readonly ProgramService $programService,
+        private readonly FolderRepository $folderRepository,
+        private readonly FolderService $folderService,
+        private readonly JWTTokenManagerInterface $jwtManager,
     ) {}
 
     #[Route('/feed/{user?me}{path?}', name: 'feed', methods: ['GET', 'POST'], requirements: ['user' => '[a-zA-Z0-9-]+', 'path' => '.*'])]
     public function feed(Request $request, string $user = 'me', ?string $path = null): Response
     {
-        if ($user === 'me') {
-            $user = $this->getUser();
-        } else {
-            $user = $this->shopUserRepository->findOneByUidOrUsername($user);
-        }
+        $user = $user === 'me' ? $this->getUser() : $this->shopUserRepository->findOneByUidOrUsername($user);
 
-        if (!$user) {
+        if (!$user instanceof UserInterface) {
             throw $this->createNotFoundException('User not found');
         }
 
@@ -52,7 +50,7 @@ class FeedController extends AbstractController
 
         $program = $this->programRepository->findOneByUserAndPath($user, $path);
         $folder = null;
-        if ($program !== null) {
+        if ($program instanceof Program) {
             $folder = $program->getFolder();
         }
 
@@ -66,6 +64,7 @@ class FeedController extends AbstractController
                 'entity' => $this->folderService->getJsonFolder($navigationFolder),
             ];
         }
+
         $navigationPrograms = $this->programRepository->findByUserAndFolder($user, $folder);
         foreach ($navigationPrograms as $navigationProgram) {
             $navigation[] = [

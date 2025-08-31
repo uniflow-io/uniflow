@@ -9,7 +9,7 @@ use Twig\Attribute\AsTwigFunction;
 
 class AppExtension
 {
-    public function __construct(private ChangelogService $changelogService) {}
+    public function __construct(private readonly ChangelogService $changelogService) {}
 
     #[AsTwigFunction('display_version')]
     public function displayVersion(): string

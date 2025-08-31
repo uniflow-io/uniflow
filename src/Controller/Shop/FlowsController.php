@@ -15,17 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class FlowsController extends AbstractController
 {
     public function __construct(
-        private ProgramRepository $programRepository,
-        private ProgramService $programService,
+        private readonly ProgramRepository $programRepository,
+        private readonly ProgramService $programService,
     ) {}
 
     #[Route('/flows', name: 'flows', methods: ['GET'])]
     public function flows(): Response
     {
         $programs = $this->programRepository->findLastPublic(10);
-        $programs = array_map(function ($program) {
-            return $this->programService->getJsonProgram($program);
-        }, $programs);
+        $programs = array_map(fn ($program) => $this->programService->getJsonProgram($program), $programs);
 
         return $this->render('shop/flows.html.twig', [
             'page' => new Page(

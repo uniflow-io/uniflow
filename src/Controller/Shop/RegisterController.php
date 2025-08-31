@@ -20,8 +20,8 @@ use Symfony\Component\Uid\Uuid;
 class RegisterController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private UserPasswordHasherInterface $passwordHasher
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ) {}
 
     #[Route('/register', name: 'register', methods: ['GET', 'POST'])]
@@ -40,7 +40,7 @@ class RegisterController extends AbstractController
                 ->findOneBy(['email' => $formData['email']])
             ;
 
-            if ($existingCustomer) {
+            if ($existingCustomer !== null) {
                 $errors['email'] = ['This email is already registered.'];
             } else {
                 // Create a new user
@@ -82,6 +82,7 @@ class RegisterController extends AbstractController
                 if (!isset($errors[$fieldName])) {
                     $errors[$fieldName] = [];
                 }
+
                 $errors[$fieldName][] = $error->getMessage();
             }
         }

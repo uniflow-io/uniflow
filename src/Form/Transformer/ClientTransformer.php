@@ -45,7 +45,7 @@ class ClientTransformer implements DataTransformerInterface
         foreach ($arrayClients as $clientName) {
             $client = $this->clientService->findOneByClient($clientName);
 
-            if (!$client) {
+            if (!$client instanceof Client) {
                 $client = new Client();
                 $client->setUid(Uuid::v7()->toString());
                 $client->setName($clientName);

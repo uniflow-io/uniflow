@@ -75,6 +75,7 @@ class DocController extends AbstractController
                 $data = [];
                 $markdown = $fileContent;
             }
+
             $data['slug'] = $slugger->slug($data['title'])->lower()->toString();
 
             $doc['data'] = $data;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Entity\Folder;
+use App\Entity\Program;
 use App\Entity\User\ShopUser as User;
 use App\Form\SettingsType;
 use App\Service\ConfigService;
@@ -54,9 +56,9 @@ class UserController extends AbstractController
                 $this->userService->getJsonSettings($user),
                 Response::HTTP_CREATED
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return new JsonResponse([
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
@@ -166,7 +168,7 @@ class UserController extends AbstractController
         $content = json_decode($request->getContent(), true);
         $folder = $this->folderService->createFolder($user, $content);
 
-        if ($folder) {
+        if ($folder instanceof Folder) {
             return new JsonResponse(
                 $this->folderService->getJsonFolder($folder),
                 Response::HTTP_CREATED
@@ -204,7 +206,7 @@ class UserController extends AbstractController
         $content = json_decode($request->getContent(), true);
         $program = $this->programService->createProgram($user, $content);
 
-        if ($program) {
+        if ($program instanceof Program) {
             return new JsonResponse(
                 $this->programService->getJsonProgram($program),
                 Response::HTTP_CREATED

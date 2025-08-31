@@ -15,11 +15,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class AuthService
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private UserService $userService,
-        private UserPasswordHasherInterface $passwordHasher,
-        private JWTTokenManagerInterface $jwtManager,
-        private HttpClientInterface $httpClient,
+        private readonly EntityManagerInterface $em,
+        private readonly UserService $userService,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly JWTTokenManagerInterface $jwtManager,
+        private readonly HttpClientInterface $httpClient,
         // private string $facebookAppId,
         // private string $facebookAppSecret,
         // private string $githubClientId,

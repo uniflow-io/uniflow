@@ -23,9 +23,9 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class LoginController extends AbstractController
 {
     public function __construct(
-        private UserProviderInterface $userProvider,
-        private UserPasswordHasherInterface $passwordHasher,
-        private EventDispatcherInterface $eventDispatcher
+        private readonly UserProviderInterface $userProvider,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly EventDispatcherInterface $eventDispatcher
     ) {}
 
     #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
@@ -71,6 +71,7 @@ class LoginController extends AbstractController
 
                 return $this->redirectToRoute('app_shop_feed');
             }
+
             $error = new AuthenticationException('Invalid credentials.');
         }
 

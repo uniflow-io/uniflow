@@ -8,13 +8,14 @@ use App\Entity\Tag;
 use App\Repository\TagRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 class TagService
 {
     /**
      * @var TagRepository
      */
-    protected $tagRepository;
+    protected EntityRepository $tagRepository;
 
     public function __construct(
         protected EntityManagerInterface $em

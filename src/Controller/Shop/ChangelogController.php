@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChangelogController extends AbstractController
 {
     public function __construct(
-        private ChangelogService $changelogService
+        private readonly ChangelogService $changelogService
     ) {}
 
     #[Route('/changelog', name: 'changelog', methods: ['GET'])]

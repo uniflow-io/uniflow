@@ -9,6 +9,7 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\ProgramRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Uid\Uuid;
 
@@ -17,7 +18,7 @@ class ProgramService
     /**
      * @var ProgramRepository
      */
-    protected $programRepository;
+    protected EntityRepository $programRepository;
 
     public function __construct(
         protected EntityManagerInterface $em,
@@ -46,7 +47,7 @@ class ProgramService
     public function getUserPrograms(string $uid, int $page, int $perPage, ?string $path = null): array
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
-        if (!$user) {
+        if ($user === null) {
             return [];
         }
 
@@ -68,7 +69,7 @@ class ProgramService
     public function countUserPrograms(string $uid, ?string $path = null): int
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
-        if (!$user) {
+        if ($user === null) {
             return 0;
         }
 
@@ -88,7 +89,7 @@ class ProgramService
         $program->setName($data['name']);
 
         if (isset($data['path'])) {
-            $folder = $this->folderService->findOneByUserAndPath($user, explode('/', trim($data['path'], '/')));
+            $folder = $this->folderService->findOneByUserAndPath($user, explode('/', trim((string) $data['path'], '/')));
             $program->setFolder($folder);
         }
 

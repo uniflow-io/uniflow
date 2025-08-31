@@ -68,7 +68,7 @@ class ContactController extends AbstractController
             ->subject($subject)
         ;
 
-        if (!empty($htmlBody)) {
+        if ($htmlBody !== '' && $htmlBody !== '0') {
             $message
                 ->html($htmlBody)
                 ->text($textBody)

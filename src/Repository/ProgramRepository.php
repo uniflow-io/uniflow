@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Folder;
 use App\Entity\Program;
+use App\Entity\User\ShopUser;
 use App\Entity\User\ShopUser as User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -42,7 +43,7 @@ class ProgramRepository extends ServiceEntityRepository
             ->select('p')
         ;
 
-        if ($user) {
+        if ($user instanceof ShopUser) {
             $qb->andWhere('p.user = :user')->setParameter('user', $user);
         }
 

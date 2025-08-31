@@ -9,6 +9,7 @@ use App\Entity\User\ShopUser as User;
 use App\Repository\FolderRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Exception;
 use Symfony\Component\Uid\Uuid;
 
@@ -17,7 +18,7 @@ class FolderService
     /**
      * @var FolderRepository
      */
-    protected $folderRepository;
+    protected EntityRepository $folderRepository;
 
     public function __construct(
         protected EntityManagerInterface $em
@@ -75,7 +76,7 @@ class FolderService
     public function getUserFolders(string $uid, int $page, int $perPage, ?string $path = null): array
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
-        if (!$user) {
+        if ($user === null) {
             return [];
         }
 
@@ -97,7 +98,7 @@ class FolderService
     public function countUserFolders(string $uid, ?string $path = null): int
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['uid' => $uid]);
-        if (!$user) {
+        if ($user === null) {
             return 0;
         }
 
@@ -117,7 +118,7 @@ class FolderService
         $folder->setName($data['name']);
 
         if (isset($data['path'])) {
-            $parent = $this->findOneByUserAndPath($user, explode('/', trim($data['path'], '/')));
+            $parent = $this->findOneByUserAndPath($user, explode('/', trim((string) $data['path'], '/')));
             $folder->setParent($parent);
         }
 
@@ -134,7 +135,7 @@ class FolderService
             $this->save($folder);
 
             return $folder;
-        } catch (Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -143,7 +144,7 @@ class FolderService
     {
         $paths = [];
 
-        while ($folder !== null) {
+        while ($folder instanceof Folder) {
             array_unshift($paths, $folder->getSlug());
 
             $folder = $folder->getParent();

@@ -37,6 +37,7 @@ class FolderController extends AbstractController
         if ($username === 'me' && !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
+
         if ($username !== 'me') {
             $user = $this->userService->findOneByUsername($username);
             if ($user === null) {
@@ -82,7 +83,7 @@ class FolderController extends AbstractController
 
         $entity = $this->folderService->findOneByUser($user, $id);
 
-        if (!$entity) {
+        if (!$entity instanceof Folder) {
             throw $this->createNotFoundException('Unable to find Folder entity.');
         }
 
@@ -99,7 +100,7 @@ class FolderController extends AbstractController
 
         $entity = $this->folderService->findOneByUser($user, $id);
 
-        if (!$entity) {
+        if (!$entity instanceof Folder) {
             throw $this->createNotFoundException('Unable to find Folder entity.');
         }
 

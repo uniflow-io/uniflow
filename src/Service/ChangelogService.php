@@ -8,7 +8,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class ChangelogService
 {
-    private string $changelogPath;
+    private readonly string $changelogPath;
 
     public function __construct(string $kernelProjectDir)
     {
@@ -21,9 +21,7 @@ class ChangelogService
         $data = Yaml::parse($yamlContent);
 
         // Sort by date in descending order (newest first)
-        usort($data, static function ($a, $b) {
-            return strtotime($b['date']) - strtotime($a['date']);
-        });
+        usort($data, static fn ($a, $b) => strtotime((string) $b['date']) - strtotime((string) $a['date']));
 
         return $data;
     }

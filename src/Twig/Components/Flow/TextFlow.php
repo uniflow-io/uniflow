@@ -13,8 +13,9 @@ final class TextFlow
 {
     use DefaultActionTrait;
 
-    public ?string $variable;
-    public ?string $text;
+    public ?string $variable = null;
+
+    public ?string $text = null;
 
     #[PreMount]
     public function preMount(array $data)

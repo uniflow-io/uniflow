@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class AuthController extends AbstractController
 {
     public function __construct(
-        private AuthService $authService
+        private readonly AuthService $authService
     ) {}
 
     /*#[Route(path: '/login', name: 'api_auth_login', methods: ['POST'])]

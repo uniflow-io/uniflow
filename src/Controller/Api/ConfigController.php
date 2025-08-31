@@ -30,8 +30,9 @@ class ConfigController extends AbstractController
         if (!$user instanceof UserInterface) {
             throw new AccessDeniedException('This config does not have access to this section.');
         }
+
         $config = $this->configService->findOne();
-        if (!$config) {
+        if (!$config instanceof Config) {
             $config = new Config();
         }
 
@@ -48,7 +49,7 @@ class ConfigController extends AbstractController
         }
 
         $config = $this->configService->findOne();
-        if (!$config) {
+        if (!$config instanceof Config) {
             $config = new Config();
             $config->setUid(Uuid::v7()->toString());
         }

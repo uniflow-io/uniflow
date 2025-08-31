@@ -17,8 +17,8 @@ use Symfony\Component\Uid\Uuid;
 class ProgramController extends AbstractController
 {
     public function __construct(
-        private ProgramRepository $programRepository,
-        private EntityManagerInterface $entityManager,
+        private readonly ProgramRepository $programRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
 
     #[Route('/program/duplicate/{uid}', name: 'program_duplicate', methods: ['GET'])]
@@ -26,7 +26,7 @@ class ProgramController extends AbstractController
     {
         $user = $this->getUser();
         $program = $this->programRepository->findOneByUid($user, $uid);
-        if (!$program) {
+        if (!$program instanceof Program) {
             throw $this->createNotFoundException('Program not found');
         }
 

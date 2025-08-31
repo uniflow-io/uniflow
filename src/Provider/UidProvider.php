@@ -24,7 +24,7 @@ use function sprintf;
 class UidProvider implements UserProviderInterface
 {
     public function __construct(
-        private ShopUserRepository $shopUserRepository
+        private readonly ShopUserRepository $shopUserRepository
     ) {}
 
     public function refreshUser(UserInterface $user): UserInterface
@@ -41,7 +41,7 @@ class UidProvider implements UserProviderInterface
     {
         $user = $this->shopUserRepository->findOneByUidOrUsername($identifier);
 
-        if (null === $user) {
+        if (!$user instanceof ShopUser) {
             throw new UserNotFoundException(
                 sprintf('Username "%s" does not exist.', $identifier),
             );

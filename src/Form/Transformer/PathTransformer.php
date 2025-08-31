@@ -11,15 +11,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class PathTransformer implements DataTransformerInterface
 {
-    /**
-     * @var User
-     */
-    protected $user;
-
-    public function __construct(protected FolderService $folderService, User $user)
-    {
-        $this->user = $user;
-    }
+    public function __construct(protected FolderService $folderService, protected User $user) {}
 
     /**
      * @param null|Folder $value

@@ -24,7 +24,7 @@ use function sprintf;
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private ApiKeyUserProvider $userProvider,
+        private readonly ApiKeyUserProvider $userProvider,
     ) {}
 
     /**
@@ -93,9 +93,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($apiKey, function (string $apiKey) {
-                return $this->userProvider->loadUserByApiKey($apiKey);
-            })
+            new UserBadge($apiKey, fn (string $apiKey) => $this->userProvider->loadUserByApiKey($apiKey))
         );
     }
 

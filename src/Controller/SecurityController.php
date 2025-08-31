@@ -74,7 +74,7 @@ class SecurityController extends AbstractController
                 'token' => $result['token'],
                 'uid' => $result['user']->getUid(),
             ], Response::HTTP_CREATED);
-        } catch (AuthenticationException $e) {
+        } catch (AuthenticationException) {
             return new JsonResponse([
                 'message' => 'Bad credentials',
             ], Response::HTTP_UNAUTHORIZED);

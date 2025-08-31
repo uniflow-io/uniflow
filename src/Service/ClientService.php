@@ -8,13 +8,14 @@ use App\Entity\Client;
 use App\Repository\ClientRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 class ClientService
 {
     /**
      * @var ClientRepository
      */
-    protected $clientRepository;
+    protected EntityRepository $clientRepository;
 
     public function __construct(
         protected EntityManagerInterface $em
