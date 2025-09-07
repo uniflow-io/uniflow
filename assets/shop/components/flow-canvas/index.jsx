@@ -28,9 +28,16 @@ const CanvasFlow = flow((props, ref) => {
       return ''
     },
     onExecute: async (runner) => {
-      let context = runner.getContext()
-      if (data?.variable && canvasRef.current) {
-        context[data?.variable] = canvasRef.current
+      const context = runner.getContext();
+      const variable = data?.variable;
+      const canvasEl = canvasRef.current;
+
+      if (!variable || !canvasEl) return;
+
+      const renderer = context[variable];
+      if (typeof renderer === 'function') {
+        const g2d = canvasEl.getContext('2d');
+        await renderer(g2d);
       }
     }
   }), [data])
