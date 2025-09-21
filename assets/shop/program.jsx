@@ -503,7 +503,7 @@ class Program extends React.Component {
           <div className="col">
             <h3>Infos</h3>
           </div>
-          <div className="d-block col-auto">
+          {/*<div className="d-block col-auto">
             <div className="btn-toolbar" role="toolbar" aria-label="flow actions">
               <div className="btn-group-sm" role="group">
                 <a className="btn text-secondary" href={`/program/duplicate/${this.uid}`}>
@@ -514,7 +514,7 @@ class Program extends React.Component {
                 </a>
               </div>
             </div>
-          </div>
+          </div>*/}
         </div>
         <form className="form-sm-horizontal">
           <div className="row mb-3">
