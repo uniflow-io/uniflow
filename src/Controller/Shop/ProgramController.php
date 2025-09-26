@@ -21,7 +21,7 @@ class ProgramController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
-    #[Route('/program/duplicate/{uid}', name: 'program_duplicate', methods: ['GET'])]
+    /*#[Route('/program/duplicate/{uid}', name: 'program_duplicate', methods: ['GET'])]
     public function programDuplicate(string $uid): Response
     {
         $user = $this->getUser();
@@ -57,5 +57,5 @@ class ProgramController extends AbstractController
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_shop_feed');
-    }
+    }*/
 }

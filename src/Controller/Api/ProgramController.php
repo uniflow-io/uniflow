@@ -253,7 +253,7 @@ class ProgramController extends AbstractController
         return new JsonResponse(false, Response::HTTP_BAD_REQUEST);
     }
 
-    #[Route(path: '/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
+    /*#[Route(path: '/delete/{id}', name: 'api_program_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         $user = $this->getUser();
@@ -270,7 +270,7 @@ class ProgramController extends AbstractController
         $this->programService->remove($entity);
 
         return new JsonResponse($this->programService->getJsonProgram($entity));
-    }
+    }*/
 
     private function manage(Request $request, Program $entity): JsonResponse
     {
