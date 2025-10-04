@@ -1,11 +1,10 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '../flow/header.jsx'
+import FlowHeader from './header.jsx'
 import FormInput, { FormInputType } from '../form-input.jsx'
-import { flow } from '../flow/flow.jsx'
+import { flow } from './flow.jsx'
 import PropertyAccessor from 'property-accessor'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ClientType } from '../../models/client-type';
 
 const ObjectFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, onStop, isPlaying, data, clients } = props

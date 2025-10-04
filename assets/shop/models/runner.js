@@ -234,7 +234,7 @@ export default class Runner {
     // Create a shared context that persists across iterations
     const sharedContext = {
       console: consoleBridge,
-      axios: fetchBridge,
+      fetch: fetchBridge,
     };
 
     // Get the keys from shared context for dynamic exclusion

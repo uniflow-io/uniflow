@@ -16,6 +16,7 @@
     "@symfony/ux-autocomplete": "file:vendor/symfony/ux-autocomplete/assets",
     "@symfony/ux-live-component": "file:vendor/symfony/ux-live-component/assets",
     "bazinga-translator": "^7.0.0",
+    "dompurify": "^3.2.2",
     "intl-messageformat": "^10.7.16",
     "lodash.get": "^4.4.2",
     "prism-react-renderer": "^2.4.1",
