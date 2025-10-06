@@ -1,8 +1,7 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '../flow/header.jsx'
+import FlowHeader from './header.jsx'
 import FormInput, { FormInputType } from '../form-input.jsx'
-import { flow } from '../flow/flow.jsx'
-import { ClientType } from '../../models/client-type';
+import { flow } from './flow.jsx'
 
 const TextFlow = flow((props, ref) => {
   const { onPop, onUpdate, onPlay, onStop, isPlaying, data, clients } = props

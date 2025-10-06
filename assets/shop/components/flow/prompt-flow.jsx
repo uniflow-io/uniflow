@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from 'react'
-import FlowHeader from '../flow/header.jsx'
+import FlowHeader from './header.jsx'
 import FormInput, { FormInputType } from '../form-input.jsx'
-import { flow } from '../flow/flow.jsx'
+import { flow } from './flow.jsx'
 import { useStateRef } from '../../hooks/use-state-ref'
 import { ClientType } from '../../models/client-type';
 

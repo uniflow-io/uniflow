@@ -1,9 +1,8 @@
 import React, { useImperativeHandle } from 'react'
-import FlowHeader from '../flow/header.jsx'
+import FlowHeader from './header.jsx'
 import FormInput, { FormInputType } from '../form-input.jsx'
-import { flow } from '../flow/flow.jsx'
+import { flow } from './flow.jsx'
 import { useRef } from 'react'
-import { ClientType } from '../../models/client-type';
 
 // Canvas flow data shape:
 // {
