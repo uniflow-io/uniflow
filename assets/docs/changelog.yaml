@@ -1,3 +1,7 @@
+- tag: "v1.1.18"
+  label: |-
+    Add HTML Flow Component
+  date: "2025-10-06"
 - tag: "v1.1.17"
   label: |-
     Migrate to Symfony UX
