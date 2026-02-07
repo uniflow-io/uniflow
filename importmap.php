@@ -50,4 +50,12 @@ return [
     'scheduler' => [
         'version' => '0.23.0',
     ],
+    'tom-select/dist/css/tom-select.bootstrap4.css' => [
+        'version' => '2.4.6',
+        'type' => 'css',
+    ],
+    'tom-select/dist/css/tom-select.bootstrap5.css' => [
+        'version' => '2.4.6',
+        'type' => 'css',
+    ],
 ];
