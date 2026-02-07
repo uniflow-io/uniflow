@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Core\Model\ShopUser as BaseShopUser;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ShopUserRepository::class)]
 #[ORM\Table(name: 'sylius_shop_user')]
@@ -39,7 +40,7 @@ class ShopUser extends BaseShopUser implements PasswordAuthenticatedUserInterfac
     public function __construct()
     {
         parent::__construct();
-        // UidTrait::__construct();
+        $this->setUid(Uuid::v7()->toString());
 
         $this->programs = new ArrayCollection();
         $this->folders = new ArrayCollection();
