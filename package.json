@@ -26,7 +26,7 @@
     "react-dom": "^19.1.0",
     "react-prism-editor": "^1.1.2",
     "react-select": "^5.10.2",
-    "shepherd.js": "11.0"
+    "shepherd.js": "15.3.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
