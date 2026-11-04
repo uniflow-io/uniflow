@@ -14,3 +14,4 @@ framework:
         pools:
             cache.app.taggable:
                 adapter: cache.adapter.filesystem
+                tags: true
