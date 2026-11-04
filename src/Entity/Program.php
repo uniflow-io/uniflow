@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ORM\Table(name: 'uniflow_program')]
-#[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
+#[ORM\Index(name: 'idx_uniflow_program_search', columns: ['slug', 'name'])]
 #[ORM\UniqueConstraint(name: 'unique_slug', columns: ['user_id', 'slug'])]
 #[ORM\Entity(repositoryClass: ProgramRepository::class)]
 #[UniqueEntity(fields: ['user', 'slug'], message: "The slug '{{ value }}' is already taken.")]
@@ -73,7 +73,7 @@ class Program implements Stringable
      * @var Collection<int, Client>
      */
     #[Assert\NotBlank(message: "The client can't be empty")]
-    #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'clients', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'programs', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'uniflow_program_client')]
     protected Collection $clients;
 

@@ -81,6 +81,14 @@ class ProgramService
         return $this->programRepository->count(['user' => $user, 'folder' => $folder]);
     }
 
+    /**
+     * @return Program[]
+     */
+    public function findLastPublic(?int $limit = null): array
+    {
+        return $this->programRepository->findLastPublic($limit);
+    }
+
     public function createProgram(User $user, array $data): ?Program
     {
         $program = new Program();

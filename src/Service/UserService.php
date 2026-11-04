@@ -54,6 +54,12 @@ class UserService
         $this->entityManager->flush();
     }
 
+    public function findOneByEmailOrUsername(string $identifier): ?User
+    {
+        return $this->userRepository->findOneByUsername($identifier)
+            ?? $this->userRepository->findOneByEmail($identifier);
+    }
+
     /**
      * @throws NonUniqueResultException
      * @throws ORMException

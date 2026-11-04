@@ -25,6 +25,9 @@
     ],
     "require": {
         "php": "^8.2",
+        "doctrine/cache": "^2.2",
+        "friendsofsymfony/rest-bundle": "^3.0",
+        "knplabs/knp-gaufrette-bundle": "^1.0",
         "league/commonmark": "^2.7",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sylius/mollie-plugin": "^3.0",

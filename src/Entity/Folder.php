@@ -17,7 +17,7 @@ use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'uniflow_folder')]
-#[ORM\Index(name: 'index_search', columns: ['slug', 'name'])]
+#[ORM\Index(name: 'idx_uniflow_folder_search', columns: ['slug', 'name'])]
 #[ORM\Entity(repositoryClass: FolderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Folder implements Stringable
